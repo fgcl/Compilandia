@@ -1,0 +1,19 @@
+Compilândia 1.0 — aprenda Compiladores jogando
+
+Celular Android (7.0 ou mais novo)
+  Compilandia-1.0.apk
+  Copie para o celular, abra o arquivo e permita "instalar de fontes desconhecidas".
+
+Computador (Windows, Mac ou Linux)
+  Compilandia-1.0.jar
+  Precisa de Java 17 ou mais novo (por exemplo: https://adoptium.net).
+  Windows: dê dois cliques em abrir-windows.bat
+  Mac e Linux: rode ./abrir-mac-linux.sh no terminal
+  Ou, em qualquer sistema:  java -jar Compilandia-1.0.jar
+
+Navegador (pasta web/)
+  É a mesma versão publicada no GitHub Pages. Para abrir no seu computador:
+    cd web && python3 -m http.server 8080     e abra http://localhost:8080
+  Abrir o index.html com dois cliques não funciona: WebAssembly só carrega por http://.
+
+O jogo funciona sem internet e não coleta dados.

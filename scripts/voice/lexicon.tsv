@@ -1,0 +1,85 @@
+# Como o Kokoro deve falar cada termo. termo<TAB>grafia que soa certo.
+# Só afeta o áudio: o texto na tela continua normal. Confirme com scripts/voice/qa.py.
+Byte	Báite
+scanner	iskéner
+Scanner	iskéner
+token	tôquen
+tokens	tôquens
+parser	pársser
+parsers	párssers
+lexema	lequissema
+FIRST	férsti
+FOLLOW	fólou
+goto	gôu tu
+Flex	Fléx
+Bison	Báisson
+MIPS	mips
+LL(1)	éle éle um
+LR(1)	éle érre um
+LR(0)	éle érre zero
+SLR(1)	ésse éle érre um
+LALR(1)	éle á éle érre um
+SLR	ésse éle érre
+LALR	éle á éle érre
+LR	éle érre
+AFD	á éfe dê
+AFN	á éfe ene
+q0	quê zero
+q1	quê um
+t1	tê um
+int	ínti
+float	flôut
+if	ífe
+ifa	ífa
+fat	féti
+lw	éle dáblio
+sw	ésse dáblio
+mul	mul
+handle	rêndou
+spill	ispíl
+Bug	Bâgui
+Bugs	Bâguis
+Java	Djava
+conta2	conta dois
+left	léfti
+n	ene
+b	bê
+c	cê
+d	dê
+x	xis
+y	ípsilon
+X	xis
+T	tê
+B	bê
+C	cê
+D	dê
+else	élsi
+AST	á ésse tê
+regex	réguex
+add	édi
+Add	édi
+Lw	éle dáblio
+Sw	ésse dáblio
+If	ífe
+Float	flôut
+ifs	ífes
+shift	xífti
+Shift	xífti
+reduce	ridíus
+t2	tê dois
+t3	tê três
+q2	quê dois
+S-atribuída	ésse atribuída
+L-atribuída	éle atribuída
+main	mêin
+expr	éxpér
+struct	istrâct
+structs	istrâcts
+abb	a bê bê
+getchar	guét char
+ungetc	ân guét cê
+yyparse	uai uai parse
+yylex	uai uai léx
+yylval	uai uai vál
+gcc	gê cê cê
+lexer	léxer

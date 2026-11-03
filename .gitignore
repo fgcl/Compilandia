@@ -1,0 +1,12 @@
+.gradle/
+build/
+*/build/
+local.properties
+.idea/
+*.iml
+.kotlin/
+.DS_Store
+captures/
+
+# Prompts de trabalho: ficam só neste computador.
+docs/PROMPT*.md
