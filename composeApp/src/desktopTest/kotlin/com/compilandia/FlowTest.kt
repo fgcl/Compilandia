@@ -43,7 +43,7 @@ class FlowTest {
     private fun ComposeUiTest.anda(ms: Long = 1500) = mainClock.advanceTimeBy(ms)
 
     private fun ComposeUiTest.toca(shot: Shot, id: String) {
-        onNodeWithTag(STAGE_TAG).performTouchInput { click(stagePoint(shot, id, width.toFloat(), height.toFloat())) }
+        onNodeWithTag(STAGE_TAG).performTouchInput { click(stagePoint(shot, id, width.toFloat(), height.toFloat(), com.compilandia.ui.motion.alturaLogica(width.toFloat(), height.toFloat()))) }
         anda(300)
     }
 

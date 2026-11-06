@@ -194,7 +194,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
             }
 
             // Regras em blocos
-            Bloco("REGRAS") {
+            Bloco(tx("labbison_regras")) {
                 val linhas = spec.lines()
                 val ini = linhas.indexOfFirst { it.trim() == "%%" }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -364,9 +364,9 @@ private fun TresPilhas(quadros: List<MiniBison.Quadro>, passo: Int, onPasso: (In
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) { q.entrada.forEachIndexed { i, t -> Celula(t, if (i == 0) Palette.hazard else Palette.paperDark) } }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Pilha("ESTADOS", q.estados.map { it.toString() }, Palette.drawer, Modifier.weight(1f))
+            Pilha(tx("labbison_estados"), q.estados.map { it.toString() }, Palette.drawer, Modifier.weight(1f))
             Pilha(tx("labbisonscreen_simbolos"), listOf("$") + q.simbolos, Palette.orange, Modifier.weight(1f))
-            Pilha("VALORES", listOf("·") + q.valores.map { it?.toString() ?: "·" }, Palette.yellow, Modifier.weight(1f), destaqueTopo = q.acao is LRAction.Reduce)
+            Pilha(tx("labbison_valores"), listOf("·") + q.valores.map { it?.toString() ?: "·" }, Palette.yellow, Modifier.weight(1f), destaqueTopo = q.acao is LRAction.Reduce)
         }
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(8.dp)) {
             Text(tx("comum_passo_1_2", passo + 1, quadros.size), color = Color(0xFFA9B3B0), style = MaterialTheme.typography.labelSmall)
@@ -428,8 +428,8 @@ private fun Conflitos(bison: MiniBison) {
         ) {
             Text(tx("labbisonscreen_estado_1_chega_2", s, a), style = MaterialTheme.typography.titleSmall, color = Palette.ink)
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                if (empilha.isNotEmpty()) RegistroCard("EMPILHAR", empilha, Palette.teal, Modifier.weight(1f))
-                for (r in reduz) RegistroCard("REDUZIR", listOf(r), Palette.orange, Modifier.weight(1f))
+                if (empilha.isNotEmpty()) RegistroCard(tx("labbison_empilhar"), empilha, Palette.teal, Modifier.weight(1f))
+                for (r in reduz) RegistroCard(tx("labbison_reduzir"), listOf(r), Palette.orange, Modifier.weight(1f))
             }
             Text(
                 if (sobrou) tx("labbisonscreen_sobrou_1", decisao ?: tx("labbisonscreen_bison_escolhe_avisa")) else tx("labbisonscreen_resolvido_1", decisao ?: ""),

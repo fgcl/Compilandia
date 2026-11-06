@@ -118,3 +118,17 @@ tasks.withType<Test>().configureEach {
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
     }
 }
+
+// S2: o jogo em inglês. As aulas são montadas uma vez por processo,
+// então o teste em inglês roda numa JVM própria, logo depois do desktopTest.
+val desktopTestIngles by tasks.registering(Test::class) {
+    description = "Renderiza telas e aulas em inglês numa JVM separada."
+    group = "verification"
+    val base = tasks.named<Test>("desktopTest")
+    testClassesDirs = base.get().testClassesDirs
+    classpath = base.get().classpath
+    filter { includeTestsMatching("*InglesTest*") }
+    environment("IDIOMA", "en")
+    dependsOn("desktopTestClasses")
+}
+tasks.named("desktopTest") { finalizedBy(desktopTestIngles) }

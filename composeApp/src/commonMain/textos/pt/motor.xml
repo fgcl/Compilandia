@@ -2,7 +2,7 @@
 <!-- Textos do Compilândia. A chave é o que o código usa em tx("chave"); %1$s, %2$s são trocados pelos valores. -->
 <resources>
     <!-- Ast.kt -->
-    <string name="ast_expr_expr_t_t_expr">Expr expr() {                 // E → T (('+'|'-') T)*\n    Expr e = termo();\n    while (tok.equals("+") || tok.equals("-")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, termo());   // associa à esquerda\n    }\n    return e;\n}\nExpr termo() {                // T → F (('*'|'/') F)*\n    Expr e = fator();\n    while (tok.equals("*") || tok.equals("/")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, fator());\n    }\n    return e;\n}\nExpr fator() {                // F → ( E ) | id | num\n    if (tok.equals("(")) { casaToken("("); Expr e = expr(); casaToken(")"); return e; }\n    if (ehNumero(tok)) { int v = Integer.parseInt(tok); casaToken(tok); return new Num(v); }\n    String nome = tok; casaToken(tok); return new Var(nome);\n}</string>
+    <string name="ast_expr_expr_t_t_expr" translatable="false">Expr expr() {                 // E → T (('+'|'-') T)*\n    Expr e = termo();\n    while (tok.equals("+") || tok.equals("-")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, termo());   // associa à esquerda\n    }\n    return e;\n}\nExpr termo() {                // T → F (('*'|'/') F)*\n    Expr e = fator();\n    while (tok.equals("*") || tok.equals("/")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, fator());\n    }\n    return e;\n}\nExpr fator() {                // F → ( E ) | id | num\n    if (tok.equals("(")) { casaToken("("); Expr e = expr(); casaToken(")"); return e; }\n    if (ehNumero(tok)) { int v = Integer.parseInt(tok); casaToken(tok); return new Num(v); }\n    String nome = tok; casaToken(tok); return new Var(nome);\n}</string>
     <!-- Automata.kt -->
     <string name="automata_simbolo_inesperado_1">Símbolo inesperado '%1$s'</string>
     <string name="automata_seguido_quantos_b_quiser">um 'a' seguido de quantos 'b' quiser</string>
@@ -92,7 +92,7 @@
     <string name="minibison_nenhuma_regra_encontrada">Nenhuma regra encontrada</string>
     <string name="minibison_1_nao_regra_nem_token">'%1$s' não é regra nem token declarado (faltou %token %2$s?)</string>
     <string name="minibison_token_1_nao_aparece_em">o token %1$s não aparece em nenhuma regra</string>
-    <string name="minibison_syntax_error_1">syntax error (%1$s)</string>
+    <string name="minibison_syntax_error_1" translatable="false">syntax error (%1$s)</string>
     <string name="minibison_padrao_1">(padrão) $$ = $1</string>
     <string name="minibison_erro_na_acao_1">erro na ação: %1$s</string>
     <string name="minibison_acao_incompleta">ação incompleta</string>
@@ -113,7 +113,7 @@
     <string name="minibison_declare_right_uminus_por_ultimo">Declare %right UMINUS por último e a regra:  '-' expr %prec UMINUS { $$ = -$2; }</string>
     <string name="minibison_gramatica_sem_ambiguidade">Gramática sem ambiguidade</string>
     <string name="minibison_outro_jeito_resolver_em_vez">Outro jeito de resolver: em vez de %left, reescreva a gramática em camadas (expr, term, fator). Sem NENHUMA declaração de precedência!</string>
-    <string name="minibison_expr_expr_term_term_term">expr : expr '+' term | term ;   term : term '*' fator | fator ;   fator : NUM ;  (com as ações!)</string>
+    <string name="minibison_expr_expr_term_term_term" translatable="false">expr : expr '+' term | term ;   term : term '*' fator | fator ;   fator : NUM ;  (com as ações!)</string>
     <string name="minibison_erro_proposito">Erro de propósito</string>
     <string name="minibison_faca_1_2_3_dar">Faça 1&lt;2&lt;3 dar ERRO de sintaxe (comparações não se encadeiam). Os testes com um único '&lt;' devem funcionar (valor 1 = verdadeiro).</string>
     <string name="minibison_left_deixa_1_2_3">%left '&lt;' deixa 1&lt;2&lt;3 virar (1&lt;2)&lt;3. Troque por %nonassoc '&lt;': aí a&lt;b&lt;c vira erro de sintaxe, como em várias linguagens.</string>
@@ -129,11 +129,11 @@
     <string name="miniflex_aspas_sem_fechar_em_1">aspas sem fechar em %1$s</string>
     <string name="miniflex_palavra_chave_sequestrada">Palavra-chave sequestrada</string>
     <string name="miniflex_scanner_esta_chamando_if_id">O scanner está chamando 'if' de ID! Com o mesmo tamanho, quem vence é a regra que vem PRIMEIRO.</string>
-    <string name="miniflex_if_x1_iffy">if (x1) iffy</string>
+    <string name="miniflex_if_x1_iffy" translatable="false">if (x1) iffy</string>
     <string name="miniflex_suba_regra_if_para_antes">Suba a regra "if" para ANTES da regra de identificadores. Repare que 'iffy' continua ID: o maior casamento vence a ordem!</string>
     <string name="miniflex_maior_ou_igual">Maior ou igual?</string>
     <string name="miniflex_b_deveria_virar_id_ge">a&gt;=b deveria virar ID GE ID. Falta uma regra… e o flex pega o MAIOR lexema.</string>
-    <string name="miniflex_b_c_d_f">a&gt;=b c=d e&gt;f</string>
+    <string name="miniflex_b_c_d_f" translatable="false">a&gt;=b c=d e&gt;f</string>
     <string name="miniflex_adicione_regra_posicao_dela_nem">Adicione a regra "&gt;=". A posição dela nem importa: "&gt;=" casa 2 caracteres e "&gt;" só 1.</string>
     <string name="miniflex_numeros_com_virgula_ponto">Números com vírgula (ponto)</string>
     <string name="miniflex_3_14_esta_virando_num">3.14 está virando NUM, erro, NUM. Precisamos de uma regra para reais.</string>
@@ -170,9 +170,9 @@
     <string name="mipsvm_se_condicao_1_for_falsa">se a condição (%1$s) for FALSA, pula para %2$s, por isso o desvio usa o teste INVERSO de '%3$s'</string>
     <string name="mipsvm_terminou_entao_pula_senao">terminou o ENTÃO: pula o SENÃO</string>
     <string name="mipsvm_fim_corpo_volta_para_testar">fim do corpo: volta para testar a condição de novo</string>
-    <string name="mipsvm_1_word_2">%1$s: .word %2$s</string>
+    <string name="mipsvm_1_word_2" translatable="false">%1$s: .word %2$s</string>
     <!-- RegAlloc.kt -->
-    <string name="regalloc_move_1_2">move %1$s, %2$s</string>
+    <string name="regalloc_move_1_2" translatable="false">move %1$s, %2$s</string>
     <!-- Semantics.kt -->
     <string name="semantics_literal_1_2">literal %1$s é %2$s</string>
     <string name="semantics_1_nao_foi_declarada">'%1$s' não foi declarada!</string>
@@ -213,4 +213,8 @@
     <string name="transform_b_slr_1_sem_esforco">b a a a ...: SLR(1) sem esforço, LL(1) impossível sem transformar.</string>
     <string name="transform_atribuicao_com_ponteiros_lalr_mas">Atribuição com ponteiros (LALR mas não SLR)</string>
     <string name="transform_exemplo_famoso_slr_1_conflito">Exemplo famoso: o SLR(1) dá conflito shift/reduce em '=', o LALR(1) não.</string>
+    <string name="semantics_erro">erro</string>
+    <string name="solta_backend_1">lw de '%1$s': endereço sem valor (variável não inicializada)</string>
+    <string name="solta_minibison_1">símbolo inesperado '%1$s' na ação</string>
+    <string name="lr_nonassoc_erro">%nonassoc → erro de sintaxe</string>
 </resources>

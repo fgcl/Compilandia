@@ -37,7 +37,7 @@ val pegadinhasFim by lazy {
                 tx("eppegadinhas3_isso_int_passa_pelo_pai"),
             ) { hot() }
             cena(tx("eppegadinhas3_herdado_vem_pai_ou_irmao")) { hot("t", "l", "a", "b") }
-            palavra("HERDADO", tx("eppegadinhas3_atribuida_usa_so_sintetizado_l"), who = PROF, mood = EpMood.HAPPY)
+            palavra(tx("palavra_herdado"), tx("eppegadinhas3_atribuida_usa_so_sintetizado_l"), who = PROF, mood = EpMood.HAPPY)
         },
 
         episodio(Skill.SCOPE_SYMBOLS, tx("eppegadinhas3_sombra_variavel"), PEGADINHA) {

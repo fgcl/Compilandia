@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/trilha.xml. -->
+<resources>
+    <string name="trilha_etapa_bug">Bug ambush</string>
+    <string name="trilha_etapa_bug_sub">10 seconds to try before the explanation</string>
+    <string name="trilha_etapa_ver">Watch the animated lesson</string>
+    <string name="trilha_etapa_ver_sub">Byte shows the algorithm on stage</string>
+    <string name="trilha_etapa_pratica">Practice: you drive</string>
+    <string name="trilha_etapa_pegadinha">Trick question</string>
+    <string name="trilha_etapa_desafio">Challenge</string>
+    <string name="trilha_etapa_desafio_sub">A game at your level</string>
+    <string name="trilha_ler_com_calma">Read at your pace</string>
+    <string name="trilha_outro_jeito">Another way to see it: %1$s</string>
+    <string name="trilha_pular">skip</string>
+    <string name="trilha_pulada">skipped</string>
+    <string name="trilha_opcional">optional for you</string>
+    <string name="trilha_continuar">Continue: %1$s</string>
+    <string name="trilha_completa">Path complete. The Challenge stays open for practice.</string>
+    <string name="trilha_proximo_assunto">Next topic: %1$s</string>
+    <string name="trilha_treinar">Practice again</string>
+    <string name="trilha_pulou_aviso">Step skipped. It stays here if you want to come back.</string>
+    <string name="trilha_etapas_feitas">%1$s of %2$s steps</string>
+    <string name="seucompilador_titulo">Your compiler</string>
+    <string name="seucompilador_sub">The C lessons and the Project Guide, in compiler order</string>
+    <string name="seucompilador_trancado">Opens when you finish the Lexical Forest.</string>
+    <string name="seucompilador_aula_c">C lesson</string>
+    <string name="seucompilador_capitulo">Guide chapter %1$s</string>
+    <string name="episodio_proxima_etapa">Next step: %1$s</string>
+    <string name="fim_cena_confusa">Was any scene confusing?</string>
+    <string name="fim_cena_confusa_sub">Tap the scene. I'll note it and explain it another way.</string>
+    <string name="fim_cena_anotada">I noted scene %1$s. Want to see that part explained another way?</string>
+    <string name="diario_titulo">Journal notes</string>
+    <string name="diario_aviso">The journal left the game, but what you wrote is still saved here.</string>
+    <string name="diario_ver">See the old notes</string>
+    <string name="aula_tocar">Play on its own</string>
+    <string name="aula_pausar">Pause</string>
+    <string name="aula_tocando_aviso">The scenes go on by themselves. At questions, the lesson waits for your tap.</string>
+    <string name="aula_pausado_aviso">Paused. Tap Continue to go on.</string>
+    <string name="trilha_etapa_fazer">Try it with help</string>
+    <string name="trilha_etapa_fazer_sub">4 problems. Byte helps less each time.</string>
+    <string name="guiado_problema">Problem %1$s of 4</string>
+    <string name="guiado_nivel_0">Byte solves it all. Just follow along.</string>
+    <string name="guiado_nivel_1">Byte does everything except the last step.</string>
+    <string name="guiado_nivel_2">Byte does only the first step.</string>
+    <string name="guiado_nivel_3">Now it's your turn.</string>
+    <string name="guiado_proximo">Next problem</string>
+    <string name="guiado_concluir">Finish</string>
+    <string name="guiado_dica">Hint</string>
+    <string name="guiado_byte_resolve">%1$s Byte answers: %2$s.</string>
+    <string name="palco_texto_tocando">Scene %1$s of %2$s. Tap the stage to pause.</string>
+    <string name="palco_texto_pausado">Scene %1$s of %2$s. Paused. Tap to go on.</string>
+    <string name="trilha_etapa_revisao">Quick review</string>
+    <string name="trilha_etapa_revisao_sub">A 30-second clip and a challenge.</string>
+    <string name="revisao_desafio">Now a quick challenge</string>
+</resources>

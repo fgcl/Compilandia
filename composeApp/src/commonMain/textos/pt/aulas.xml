@@ -24,13 +24,13 @@
     <string name="epbackend_por_isso_x_igual_dois">Por isso x igual a dois fala do x global.</string>
     <string name="epbackend_arvore_enxuta">A árvore enxuta</string>
     <string name="epbackend_arvore_derivacao_guarda_tudo_ate">A árvore de derivação guarda tudo, até parêntese e regra de passagem.</string>
-    <string name="epbackend_b">a + ( b )</string>
+    <string name="epbackend_b" translatable="false">a + ( b )</string>
     <string name="epbackend_tem_no_sobrando_aqui_toque">Tem nó sobrando aqui. Toque nos dois parênteses: eles não mudam a conta.</string>
     <string name="epbackend_arvore_ja_mostra_ordem_parentese">A árvore já mostra a ordem. O parêntese fez o trabalho dele.</string>
     <string name="epbackend_isso_pontuacao_some_arvore_abstrata">Isso. Pontuação some da árvore abstrata.</string>
     <string name="epbackend_arvore_abstrata_guarda_so_que">A árvore abstrata guarda só o que importa: a operação e os dois lados.</string>
     <string name="epbackend_no_codigo_java_cada_no">No código Java, cada nó é um objeto.</string>
-    <string name="epbackend_new_binop_b">new BinOp('+', a, b)</string>
+    <string name="epbackend_new_binop_b" translatable="false">new BinOp('+', a, b)</string>
     <string name="epbackend_conta_por_linha">Uma conta por linha</string>
     <string name="epbackend_maquina_nao_entende_conta_comprida">Máquina não entende conta comprida. Código de três endereços faz uma conta por linha.</string>
     <string name="epbackend_qual_conta_tem_que_sair">Qual conta tem que sair primeiro? Toque no operador.</string>
@@ -149,8 +149,8 @@
     <string name="epclipes_tabela_guarda_cada_nome_com">A tabela guarda cada nome, com o tipo e o escopo.</string>
     <string name="epclipes_todo_uso_variavel_passa_por">Todo uso de variável passa por ela.</string>
     <string name="epclipes_arvore_derivacao_guarda_cada_regra">A árvore de derivação guarda cada regra usada.</string>
-    <string name="epclipes_b">(a + b)</string>
-    <string name="epclipes_t_t_f">( E )   E + T   T   F</string>
+    <string name="epclipes_b" translatable="false">(a + b)</string>
+    <string name="epclipes_t_t_f" translatable="false">( E )   E + T   T   F</string>
     <string name="epclipes_ast_guarda_so_que_importa">A AST guarda só o que importa para o significado.</string>
     <string name="epclipes_cada_linha_tem_no_maximo">Cada linha tem no máximo uma conta.</string>
     <string name="epclipes_conta_maior_quebra_em_temporarios">Conta maior quebra em temporários: t1, t2, t3.</string>
@@ -177,8 +177,8 @@
     <string name="epemc_isso_laco_para_ungetc_devolve">Isso. O laço para e o ungetc devolve o mais.</string>
     <string name="epemc_mais_foi_lido_mais_ungetc">O mais foi lido a mais. O ungetc devolve ele para a entrada.</string>
     <string name="epemc_sai_token_ele_struct_com">E sai o token. Ele é um struct com o tipo e o valor.</string>
-    <string name="epemc_tipo_num">tipo: NUM</string>
-    <string name="epemc_valor_1">valor: %1$s</string>
+    <string name="epemc_tipo_num" translatable="false">tipo: NUM</string>
+    <string name="epemc_valor_1" translatable="false">valor: %1$s</string>
     <string name="epemc_agora_corte_linha_inteira_como">Agora corte uma linha inteira, como o seu lexer em C faria.</string>
     <string name="epemc_maior_casamento_estique_pedaco_enquanto">Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token.</string>
     <string name="epemc_tokens_que_voce_cortou_sao">Os tokens que você cortou são os que o seu lexer devolveria.</string>
@@ -223,9 +223,9 @@
     <string name="epemc_exatamente_que_seu_gerador_em">É exatamente o que o seu gerador em C escreveria.</string>
     <string name="epemc_monte_mips_1">Monte o MIPS de %1$s.</string>
     <string name="epemc_em_c_5_flex_bison">Em C 5: flex, bison e o main</string>
-    <string name="epemc_e_e_e">e: e '+' e</string>
-    <string name="epemc_0_9_num">[0-9]+  NUM</string>
-    <string name="epemc_yylval_atoi_yytext">yylval = atoi(yytext)</string>
+    <string name="epemc_e_e_e" translatable="false">e: e '+' e</string>
+    <string name="epemc_0_9_num" translatable="false">[0-9]+  NUM</string>
+    <string name="epemc_yylval_atoi_yytext" translatable="false">yylval = atoi(yytext)</string>
     <string name="epemc_compilador_em_c_verdade_costuma">Um compilador em C de verdade costuma ter três arquivos.</string>
     <string name="epemc_flex_bison_c">flex + bison + C</string>
     <string name="epemc_main_chama_yyparse_parser_que">O main chama o yyparse, o parser que o Bison escreveu.</string>
@@ -235,9 +235,9 @@
     <string name="epemc_quem_pede_tokens_parser">Quem pede tokens é o parser.</string>
     <string name="epemc_isso_parser_pede_token_por">Isso. O parser pede um token por vez.</string>
     <string name="epemc_bison_flex_escrevem_arquivos_c">O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa.</string>
-    <string name="epemc_bison_d_calc_y">bison -d calc.y</string>
-    <string name="epemc_flex_calc_l">flex calc.l</string>
-    <string name="epemc_gcc_c_calc">gcc *.c -o calc</string>
+    <string name="epemc_bison_d_calc_y" translatable="false">bison -d calc.y</string>
+    <string name="epemc_flex_calc_l" translatable="false">flex calc.l</string>
+    <string name="epemc_gcc_c_calc" translatable="false">gcc *.c -o calc</string>
     <string name="epemc_roda_calc_digita_conta_sai">Roda o calc, digita a conta, e sai o resultado.</string>
     <!-- EpGramatica.kt -->
     <string name="epgramatica_regras_troca">Regras de troca</string>
@@ -299,9 +299,9 @@
     <string name="eplexico_linha_montagem">A linha de montagem</string>
     <string name="eplexico_seis_fases">Seis fases</string>
     <string name="eplexico_entra_seu_codigo_para_maquina">Entra o seu código. Para a máquina, ainda é só uma fila de letras.</string>
-    <string name="eplexico_x_2">x = a + 2</string>
+    <string name="eplexico_x_2" translatable="false">x = a + 2</string>
     <string name="eplexico_fase_lexica_corta_letras_em">A fase léxica corta as letras em tokens.</string>
-    <string name="eplexico_x_2_2">x  =  a  +  2</string>
+    <string name="eplexico_x_2_2" translatable="false">x  =  a  +  2</string>
     <string name="eplexico_sintatica_monta_arvore_com_esses">A sintática monta uma árvore com esses tokens.</string>
     <string name="eplexico_semantica_confere_sentido_como_tipos">A semântica confere o sentido, como os tipos de cada variável.</string>
     <string name="eplexico_arvore_com_tipos">árvore com tipos</string>
@@ -326,7 +326,7 @@
     <string name="eplexico_entram_letras_saem_tokens_agora">Entram letras, saem tokens. Agora quem corta é você.</string>
     <string name="eplexico_trem_automato">O trem do autômato</string>
     <string name="eplexico_expressao_regular_descreve_formato_esta">Uma expressão regular descreve um formato. Esta diz: um a, depois quantos b quiser.</string>
-    <string name="eplexico_b">a b*</string>
+    <string name="eplexico_b" translatable="false">a b*</string>
     <string name="eplexico_automato_maquina_que_confere_esse">O autômato é a máquina que confere esse formato. Cada círculo é um estado.</string>
     <string name="eplexico_trem_comeca_no_primeiro_estado">O trem começa no primeiro estado e lê uma letra por vez.</string>
     <string name="eplexico_leu_trem_anda_para_outro">Leu a. O trem anda para o outro estado.</string>
@@ -384,7 +384,7 @@
     <string name="epnovos_antes_aula_qual_cadeia_casa">Antes da aula: qual cadeia casa com ela?</string>
     <string name="epnovos_vale_b_quantos_quiser_b">Vale a a b. Quantos a quiser, e um b no fim.</string>
     <string name="epnovos_bug_duplicou_setas">O Bug duplicou as setas</string>
-    <string name="epnovos_q0_q1_q0_q2">q0 a q1\nq0 a q2</string>
+    <string name="epnovos_q0_q1_q0_q2" translatable="false">q0 a q1\nq0 a q2</string>
     <string name="epnovos_antes_aula_lendo_para_onde">Antes da aula: lendo a, para onde o autômato vai?</string>
     <string name="epnovos_dois">os dois</string>
     <string name="epnovos_para_dois_afd_guarda_esse">Para os dois. O AFD guarda esse conjunto como um estado só.</string>
@@ -397,8 +397,8 @@
     <string name="epnovos_vira_id_no_empate_ganha">Vira ID. No empate, ganha a regra que vem primeiro.</string>
     <string name="epnovos_bug_comeu_troca">O Bug comeu uma troca</string>
     <string name="epnovos_antes_aula_qual_frase_sai">Antes da aula: qual frase sai dessa regra?</string>
-    <string name="epnovos_c_b">a c b</string>
-    <string name="epnovos_b_c">a b c</string>
+    <string name="epnovos_c_b" translatable="false">a c b</string>
+    <string name="epnovos_b_c" translatable="false">a b c</string>
     <string name="epnovos_vale_c_b_vira_b">Vale a c b. S vira a S b, e o S de dentro vira c.</string>
     <string name="epnovos_bug_fez_duas_arvores">O Bug fez duas árvores</string>
     <string name="epnovos_antes_aula_se_mais_rodar">Antes da aula: se o mais rodar primeiro, dá quanto?</string>
@@ -463,7 +463,7 @@
     <string name="epnovos_nos_dois">nos dois</string>
     <string name="epnovos_no_dentro_busca_comeca_pelo">No de dentro. A busca começa pelo bloco mais próximo.</string>
     <string name="epnovos_bug_podou_arvore">O Bug podou a árvore</string>
-    <string name="epnovos_b">( a + b )</string>
+    <string name="epnovos_b" translatable="false">( a + b )</string>
     <string name="epnovos_antes_aula_parenteses_entram_na">Antes da aula: os parênteses entram na AST?</string>
     <string name="epnovos_so_2">só um</string>
     <string name="epnovos_nao_forma_arvore_ja_mostra">Não. A forma da árvore já mostra o agrupamento.</string>
@@ -607,7 +607,7 @@
     <string name="eppegadinhas1_ordem_decisao_primeiro_tamanho_depois">Ordem de decisão: primeiro o tamanho, depois a reservada.</string>
     <string name="eppegadinhas1_estrela_mais_interrogacao">Estrela, mais e interrogação</string>
     <string name="eppegadinhas1_tres_simbolos_parecidos_que_prova">Três símbolos parecidos, que a prova adora trocar.</string>
-    <string name="eppegadinhas1_a_a_a">a*   a+   a?</string>
+    <string name="eppegadinhas1_a_a_a" translatable="false">a*   a+   a?</string>
     <string name="eppegadinhas1_estrela_aceita_zero_ou_mais">A estrela aceita zero ou mais. Vale vazio, um a e dois a.</string>
     <string name="eppegadinhas1_mais_exige_pelo_menos_toque">O mais exige pelo menos um. Toque na casa em que a mais recusa a cadeia.</string>
     <string name="eppegadinhas1_pelo_menos_qual_cadeia_nao">Pelo menos um a. Qual cadeia não tem nenhum?</string>
@@ -637,7 +637,7 @@
     <string name="eppegadinhas1_if_vira_if">if vira IF</string>
     <string name="eppegadinhas1_else_solto">O else solto</string>
     <string name="eppegadinhas1_dois_ifs_else_so_qual">Dois ifs e um else só. De qual if é esse else?</string>
-    <string name="eppegadinhas1_if_if_b_x_else">if a if b x else y</string>
+    <string name="eppegadinhas1_if_if_b_x_else" translatable="false">if a if b x else y</string>
     <string name="eppegadinhas1_leitura_liga_else_ao_if">Uma leitura liga o else ao if de dentro.</string>
     <string name="eppegadinhas1_outra_liga_else_ao_if">A outra liga o else ao if de fora. Duas árvores, a gramática é ambígua.</string>
     <string name="eppegadinhas1_regra_das_linguagens_else_fica">A regra das linguagens: o else fica com o if mais perto. Toque nesse if.</string>
@@ -648,9 +648,9 @@
     <string name="eppegadinhas1_duas_derivacoes_arvore">Duas derivações, uma árvore</string>
     <string name="eppegadinhas1_olhe_esta_gramatica_pequena_frase">Olhe esta gramática pequena. A frase é a b.</string>
     <string name="eppegadinhas1_pela_esquerda_vira_b_depois">Pela esquerda: S vira A B, depois a B, depois a b.</string>
-    <string name="eppegadinhas1_b_b_b">S  A B  a B  a b</string>
+    <string name="eppegadinhas1_b_b_b" translatable="false">S  A B  a B  a b</string>
     <string name="eppegadinhas1_pela_direita_vira_b_depois">Pela direita: S vira A B, depois A b, depois a b.</string>
-    <string name="eppegadinhas1_b_b_b_2">S  A B  A b  a b</string>
+    <string name="eppegadinhas1_b_b_b_2" translatable="false">S  A B  A b  a b</string>
     <string name="eppegadinhas1_sao_duas_derivacoes_diferentes_isso">São duas derivações diferentes. Isso é ambiguidade?</string>
     <string name="eppegadinhas1_ambiguidade_pede_duas_arvores_ou">Ambiguidade pede duas árvores, ou duas derivações do mesmo lado.</string>
     <string name="eppegadinhas1_isso_duas_montam_mesma_arvore">Isso. As duas montam a mesma árvore. Só muda a ordem.</string>
@@ -703,7 +703,7 @@
     <string name="eppegadinhas2_first_primeira_opcao_follow_tem">O FIRST da primeira opção e o FOLLOW de A têm o mesmo símbolo.</string>
     <string name="eppegadinhas2_isso_com_b_na_entrada">Isso. Com b na entrada, o parser não sabe qual escolher.</string>
     <string name="eppegadinhas2_duas_regras_na_casa_gramatica">Duas regras na casa: a gramática não é LL(1). E ela nem tem recursão à esquerda.</string>
-    <string name="eppegadinhas2_b">b / ε</string>
+    <string name="eppegadinhas2_b" translatable="false">b / ε</string>
     <string name="eppegadinhas2_na_prova_confira_sempre_first">Na prova, confira sempre: FIRST da opção não pode bater com o FOLLOW de quem some.</string>
     <string name="eppegadinhas2_quem_avanca_token">Quem avança o token</string>
     <string name="eppegadinhas2_na_descida_recursiva_cada_regra">Na descida recursiva, cada regra vira uma função. Olhe a do F.</string>
@@ -861,7 +861,7 @@
     <string name="eppratica_scanner_verdade_faz_isso_milhoes">Scanner de verdade faz isso milhões de vezes por segundo.</string>
     <string name="eppratica_pilote_trem">Pilote o trem</string>
     <string name="eppratica_esta_regex_pede_quantos_mais">Esta regex pede um a, quantos a mais quiser, e um b no fim.</string>
-    <string name="eppratica_b">a a* b</string>
+    <string name="eppratica_b" translatable="false">a a* b</string>
     <string name="eppratica_automato_tem_estado_para_cada">O autômato tem um estado para cada situação. Cada letra é uma seta.</string>
     <string name="eppratica_laco_no_meio_estrela_para">O laço no meio é a estrela: dá para ficar ali lendo a.</string>
     <string name="eppratica_agora_pilote_chegue_no_circulo">Agora pilote. Chegue no círculo duplo com exatamente três letras.</string>

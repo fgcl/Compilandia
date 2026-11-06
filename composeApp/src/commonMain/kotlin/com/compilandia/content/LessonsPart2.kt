@@ -55,7 +55,7 @@ val cardsPart2: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart2_follow_conjunto_terminais_que_podem"),
         hook = tx("lessonspart2_dolar_vizinho_heranca_no_inicial"),
         feynmanPrompt = tx("lessonspart2_explique_para_sua_avo_como"),
-        keyTerms = listOf("depois", "\$", "first", "herda", "inicial", tx("lessonspart2_anulavel")),
+        keyTerms = listOf(tx("comum_kt_depois"), "\$", "first", tx("comum_kt_herda"), tx("comum_kt_inicial"), tx("lessonspart2_anulavel")),
         commonMistakes = listOf(
             tx("lessonspart2_colocar_em_follow_follow_nunca"),
             tx("lessonspart2_esquecer_no_follow_simbolo_inicial"),
@@ -79,7 +79,7 @@ val cardsPart2: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart2_tabela_preditiva_m_diz_qual"),
         hook = tx("lessonspart2_linha_variavel_coluna_token_primeiro"),
         feynmanPrompt = tx("lessonspart2_explique_para_colega_outro_curso"),
-        keyTerms = listOf("first", "follow", "ε", tx("lessonspart2_celula"), "conflito", "lookahead"),
+        keyTerms = listOf("first", "follow", "ε", tx("lessonspart2_celula"), tx("comum_kt_conflito"), "lookahead"),
         commonMistakes = listOf(
             tx("lessonspart2_por_em_colunas_first_em"),
             tx("lessonspart2_esquecer_coluna"),
@@ -103,7 +103,7 @@ val cardsPart2: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart2_analisador_preditivo_nao_recursivo_usa"),
         hook = tx("lessonspart2_terminal_no_topo_casa_anda"),
         feynmanPrompt = tx("lessonspart2_explique_para_amigo_como_se"),
-        keyTerms = listOf("pilha", "topo", "tabela", "casa", "invertid", "\$"),
+        keyTerms = listOf(tx("comum_kt_pilha"), tx("comum_kt_topo"), tx("comum_kt_tabela"), tx("comum_kt_casa"), tx("comum_kt_invertid"), "\$"),
         commonMistakes = listOf(
             tx("lessonspart2_empilhar_lado_direito_na_ordem"),
             tx("lessonspart2_avancar_entrada_numa_expansao_so"),
@@ -151,7 +151,7 @@ val cardsPart2: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart2_analise_empilha_reduz_bottom_up"),
         hook = tx("lessonspart2_empilha_ate_ver_alca_achou"),
         feynmanPrompt = tx("lessonspart2_explique_para_amigo_como_se_2"),
-        keyTerms = listOf("empilha", "reduz", "handle", "topo", tx("lessonspart2_mais_direita"), "conflito"),
+        keyTerms = listOf(tx("comum_kt_empilha"), tx("comum_kt_reduz"), "handle", tx("comum_kt_topo"), tx("lessonspart2_mais_direita"), tx("comum_kt_conflito")),
         commonMistakes = listOf(
             tx("lessonspart2_reduzir_qualquer_ocorrencia_lado_direito"),
             tx("lessonspart2_achar_que_reduzir_consome_token"),
@@ -174,7 +174,7 @@ val cardsPart2: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart2_item_lr_0_producao_com"),
         hook = tx("lessonspart2_ponto_voce_esta_aqui_closure"),
         feynmanPrompt = tx("lessonspart2_explique_para_colega_como_se"),
-        keyTerms = listOf("ponto", "item", "closure", "goto", "estado", "aumentada"),
+        keyTerms = listOf(tx("comum_kt_ponto"), "item", "closure", "goto", tx("comum_kt_estado"), tx("comum_kt_aumentada")),
         commonMistakes = listOf(
             tx("lessonspart2_esquecer_aplicar_fechamento_depois_goto"),
             tx("lessonspart2_no_fechamento_adicionar_itens_com"),
@@ -185,12 +185,12 @@ val cardsPart2: List<SkillCard> = listOf(
         flashcards = listOf(
             tx("lessonspart2_quantos_itens_gera_x_y") to "4",
             tx("lessonspart2_itens") to tx("lessonspart2_so"),
-            tx("lessonspart2_closure_item_b_adiciona") to "B → • γ para toda produção de B (e repete).",
+            tx("lessonspart2_closure_item_b_adiciona") to tx("solta_lessonspart2_1"),
             "GOTO(I, X)?" to tx("lessonspart2_avanca_ponto_sobre_x_nos"),
             tx("lessonspart2_para_que") to tx("lessonspart2_ter_unico_item_aceitacao"),
             tx("lessonspart2_item_completo_ponto_no_fim") to tx("lessonspart2_reducao"),
             tx("lessonspart2_quantos_estados_lr_0_tem") to tx("lessonspart2_7_i0_i6"),
-            tx("lessonspart2_item_nucleo_kernel") to "S' → • S ou item com o ponto fora do início.",
+            tx("lessonspart2_item_nucleo_kernel") to tx("solta_lessonspart2_2"),
         ),
     ),
 )

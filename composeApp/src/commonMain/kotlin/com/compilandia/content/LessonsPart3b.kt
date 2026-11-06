@@ -75,7 +75,7 @@ internal val bisonLessonsP3: List<Lesson> = listOf(
                 listOf(
                     tx("lessonspart3b_precedencia_regra_ultimo_terminal_dela"),
                     tx("lessonspart3b_precedencia_token_lookahead_linha_onde"),
-                    "Token mais forte → **shift**; regra mais forte → **reduce**",
+                    tx("solta_lessonspart3b_1"),
                     "Empate: %left → reduce; %right → shift; %nonassoc → erro de sintaxe",
                 ),
             ),
@@ -169,7 +169,7 @@ internal val bisonLessonsP3: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart3b_interface_com_resto_programa"),
                 listOf(
-                    "int yyparse(void) — o analisador LALR(1); retorna 0 em sucesso e 1 em erro de sintaxe",
+                    tx("solta_lessonspart3b_2"),
                     tx("lessonspart3b_int_yylex_void_chamado_pelo"),
                     tx("lessonspart3b_void_yyerror_const_char_chamado"),
                     tx("lessonspart3b_bison_d_gera_cabecalho_tab"),
@@ -200,7 +200,7 @@ internal val bisonLessonsP3: List<Lesson> = listOf(
             ),
             Callout(MNEMONIC, tx("lessonspart3b_pai_1_2_3_sao")),
             Predict(
-                "Na regra expr : '(' expr ')' { \$\$ = ???; }, o que vai no lugar de ???",
+                tx("solta_lessonspart3b_3"),
                 listOf("\$1", "\$2", "\$3"),
                 1,
                 tx("lessonspart3b_1_expr_2_3_valor"),
@@ -304,7 +304,7 @@ F → num       F.val = num.lexval""",
                 listOf(
                     tx("lessonspart3b_int_tabela_simbolos_x_float"),
                     tx("lessonspart3b_x_2_float_int_float"),
-                    "a + (x * 2): int + float → **float**, gera inttofloat(a)",
+                    tx("solta_lessonspart3b_4"),
                 ),
             ),
             Visual(VisualKind.ATTR_TREE, input = tx("comum_x_2"), caption = tx("lessonspart3b_confira_raiz_float_com_coercao")),

@@ -255,7 +255,7 @@ internal val slrLessonsP3: List<Lesson> = listOf(
                     tx("lessonspart3_item_em_ii_action_i"),
                 ),
             ),
-            Visual(VisualKind.FIRST_FOLLOW, grammar = P3_EXPR, caption = "Vamos precisar do FOLLOW: FOLLOW(E) = { +, ), \$ } e FOLLOW(T) = FOLLOW(F) = { +, *, ), \$ }."),
+            Visual(VisualKind.FIRST_FOLLOW, grammar = P3_EXPR, caption = tx("solta_lessonspart3_1")),
             Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_tabela_pronta_procure_linha_estado")),
             Say(BYTE, tx("lessonspart3_perai_estado_2_tem_t")),
             Predict(
@@ -270,7 +270,7 @@ internal val slrLessonsP3: List<Lesson> = listOf(
             Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = "S → L = R | R; L → * R | id; R → L. Ache a célula vermelha: estado 2, coluna '='."),
             Reveal(
                 tx("lessonspart3_por_que_entrou_em_follow"),
-                "L → * R joga FOLLOW(L) dentro de FOLLOW(R), e S → L = R coloca '=' em FOLLOW(L). Resultado: o SLR escreve r5 (R → L) em [2, =], junto com s6 de S → L • = R.",
+                tx("solta_lessonspart3_2"),
             ),
             Callout(BRAIN_POWER, tx("lessonspart3_essa_gramatica_nao_ambigua_conflito")),
         ),
@@ -285,15 +285,15 @@ internal val slrLessonsP3: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart3_linha_estado_1"),
                 listOf(
-                    "E' → E • está completo e é o item aumentado → ACTION[1, \$] = **acc**",
-                    "E → E • + T tem terminal depois do ponto, e há seta + → I6 → ACTION[1, +] = **s6**",
+                    tx("solta_lessonspart3_3"),
+                    tx("solta_lessonspart3_4"),
                     tx("lessonspart3_todo_resto_linha_fica_vazio"),
                 ),
             ),
             Steps(
                 tx("lessonspart3_linha_estado_2"),
                 listOf(
-                    "E → T • completo → **r2** nas colunas de FOLLOW(E): +, ) e \$",
+                    tx("solta_lessonspart3_5"),
                     "T → T • * F com seta * → I7 → ACTION[2, *] = **s7**",
                     tx("lessonspart3_alguma_celula_com_duas_acoes"),
                 ),
@@ -301,8 +301,8 @@ internal val slrLessonsP3: List<Lesson> = listOf(
             Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_confira_linhas_1_2_na")),
             Say(BYTE, tx("lessonspart3_deixa_eu_tentar_eu_consigo")),
             Reveal(
-                "Sua vez: estado 9 = { E → E + T • ; T → T • * F } com seta * → I7. Preencha a linha.",
-                "r1 em +, ) e \$ (FOLLOW(E)); s7 em *. Sem conflito, pelo mesmo motivo do estado 2.",
+                tx("solta_lessonspart3_6"),
+                tx("solta_lessonspart3_7"),
             ),
             Reveal(
                 "Agora o estado 10 = { T → T * F • }.",
@@ -333,7 +333,7 @@ internal val slrLessonsP3: List<Lesson> = listOf(
                 tx("lessonspart3_tabela_slr_nao_escolhe_nada"),
             ),
             Reveal(tx("lessonspart3_dois_itens_completos_b_no"), tx("lessonspart3_se_follow_follow_b_conflito")),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_AMBIG, caption = "E → E + E | E * E | ( E ) | id: conflitos nos estados 7 e 8, colunas + e *."),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_AMBIG, caption = tx("solta_lessonspart3_8")),
             Reveal(tx("lessonspart3_toda_gramatica_ambigua_gera_conflito"), tx("lessonspart3_sim_nenhuma_gramatica_ambigua_lr")),
             Reveal(tx("lessonspart3_por_que_follow_grosseiro_demais"), tx("lessonspart3_ele_junta_tudo_que_pode")),
             Callout(BRAIN_POWER, tx("lessonspart3_pense_como_voce_carregaria_dentro")),
@@ -389,7 +389,7 @@ internal val slrLessonsP3: List<Lesson> = listOf(
                 1,
                 tx("lessonspart3_porteiro_olha_so_prancheta_global"),
             ),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_LIST, caption = "S → S a | b: tabela pequena e sem conflitos. Recursão à esquerda não assusta o LR!"),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_LIST, caption = tx("solta_lessonspart3_9")),
             Callout(FIRESIDE, tx("lessonspart3_lr_0_eu_reduzo_sempre")),
             Reveal(tx("lessonspart3_recite_quatro_regras_tabela_slr"), tx("lessonspart3_terminal_apos_ponto_shift_nao")),
             Callout(MNEMONIC, tx("lessonspart3_contraste_no_ll_1_follow")),
@@ -478,7 +478,7 @@ LALR:   I6+I9 = { [A → c •, d/e]  [B → c •, d/e] }  ← R/R em d e em e!
                 listOf(
                     tx("lessonspart3_comeca_com"),
                     tx("lessonspart3_ponto_antes_que_vem_depois"),
-                    "De [S → • L = R, \$]: depois de L vem '= R', FIRST = { = } → [L → • * R, =] e [L → • id, =]",
+                    tx("solta_lessonspart3_10"),
                     tx("lessonspart3_r_depois_r_vem_nada"),
                     tx("lessonspart3_r_l_l_r_l"),
                     tx("lessonspart3_nada_novo_pronto_compactando_l"),

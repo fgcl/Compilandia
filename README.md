@@ -46,6 +46,9 @@ O teste `RenderSmokeTest` renderiza todas as telas, os 29 minijogos, as aulas, c
 
 As imagens ficam em `composeApp/build/screenshots`.
 
+O teste `RenderSmokeTest.larguras` fotografa as telas principais em 360, 412, 700 e 1200 dp de largura e no celular deitado (pasta `larguras`).
+A tarefa `desktopTestIngles` roda logo depois do `desktopTest`, numa JVM própria, e renderiza o jogo em inglês (pasta `ingles`).
+
 ## O que tem dentro
 
 ### A oficina do Byte
@@ -257,3 +260,10 @@ Em **Ajustes** você escolhe:
 - o tamanho do texto;
 - se quer **reduzir animações**, o que desliga confete, tremida, raios, portão, glitch, overclock e a sala viva;
 - voz do Byte e legenda.
+- o idioma: Português ou English. O padrão segue o idioma do aparelho. Save antigo continua em português. Em inglês não há voz: a fala aparece escrita e a boca do Byte mexe no ritmo da legenda. Trocar o idioma reabre o jogo.
+
+## Tela larga e celular deitado
+O jogo escolhe o arranjo pela largura da janela, com as três faixas do Material 3 (função `faixaDe` em `ui/Janela.kt`):
+- **Compacta** (menos de 600 dp): uma coluna, como no celular em pé.
+- **Média** (600 a 840 dp, e todo celular deitado): na região, cada assunto mostra as etapas abertas. Deitado, a aula e a sala ganham um painel lateral.
+- **Expandida** (840 dp ou mais): aula com o palco à esquerda e a fala à direita. Região e trilha ficam em duas colunas. Listas e textos ficam numa coluna central de até 760 dp, com o texto corrido em até 640 dp.

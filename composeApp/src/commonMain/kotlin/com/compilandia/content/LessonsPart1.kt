@@ -37,7 +37,7 @@ val cardsPart1: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart1_lexema_texto_real_token_classe"),
         hook = tx("lessonspart1_token_gaveta_lexema_meia_padrao"),
         feynmanPrompt = tx("lessonspart1_explique_para_sua_avo_diferenca"),
-        keyTerms = listOf("token", "lexema", tx("lessonspart1_padrao"), "atributo", tx("comum_maior_casamento_2"), "palavra-chave"),
+        keyTerms = listOf("token", tx("comum_kt_lexema"), tx("lessonspart1_padrao"), tx("comum_kt_atributo"), tx("comum_maior_casamento_2"), tx("comum_kt_palavra_chave")),
         commonMistakes = listOf(
             tx("lessonspart1_contar_espacos_comentarios_como_tokens"),
             tx("lessonspart1_separar_em_dois_tokens_maior"),
@@ -60,7 +60,7 @@ val cardsPart1: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart1_expressoes_regulares_descrevem_padroes_dos"),
         hook = tx("lessonspart1_thompson_transforma_er_afn_subconjuntos"),
         feynmanPrompt = tx("lessonspart1_explique_para_amigo_como_trem"),
-        keyTerms = listOf(tx("lessonspart1_expressao_regular"), "afn", "afd", "estado", tx("lessonspart1_transicao"), "subconjuntos", "thompson"),
+        keyTerms = listOf(tx("lessonspart1_expressao_regular"), tx("comum_kt_afn"), tx("comum_kt_afd"), tx("comum_kt_estado"), tx("lessonspart1_transicao"), tx("comum_kt_subconjuntos"), "thompson"),
         commonMistakes = listOf(
             tx("lessonspart1_achar_que_afn_reconhece_mais"),
             tx("lessonspart1_esquecer_aplicar_fecho_depois_move"),
@@ -107,7 +107,7 @@ val cardsPart1: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart1_gramatica_ambigua_se_alguma_sentenca"),
         hook = tx("lessonspart1_ambi_dois_duas_arvores_para"),
         feynmanPrompt = tx("lessonspart1_explique_para_amigo_por_que"),
-        keyTerms = listOf(tx("comum_ambigua"), tx("lessonspart1_duas_arvores"), tx("lessonspart1_mais_esquerda"), tx("comum_precedencia"), "associatividade"),
+        keyTerms = listOf(tx("comum_ambigua"), tx("lessonspart1_duas_arvores"), tx("lessonspart1_mais_esquerda"), tx("comum_precedencia"), tx("comum_kt_associatividade")),
         commonMistakes = listOf(
             tx("lessonspart1_tentar_provar_ambiguidade_com_derivacao"),
             tx("lessonspart1_achar_que_recursao_esquerda_causa"),
@@ -127,10 +127,10 @@ val cardsPart1: List<SkillCard> = listOf(
     ),
     SkillCard(
         skill = Skill.LEFT_RECURSION,
-        oneLiner = "A → Aα | β faz o analisador descendente entrar em laço infinito; troque por A → βA' e A' → αA' | ε, que gera a mesma linguagem βα*.",
+        oneLiner = tx("solta_lessonspart1_1"),
         hook = tx("lessonspart1_beta_comeca_alfa_repete_epsilon"),
         feynmanPrompt = tx("lessonspart1_explique_para_seu_irmao_mais"),
-        keyTerms = listOf(tx("comum_recursao_esquerda"), "descendente", tx("lessonspart1_laco_infinito"), tx("lessonspart1_novo_nao_terminal"), tx("lessonspart1_mesma_linguagem")),
+        keyTerms = listOf(tx("comum_recursao_esquerda"), tx("comum_kt_descendente"), tx("lessonspart1_laco_infinito"), tx("lessonspart1_novo_nao_terminal"), tx("lessonspart1_mesma_linguagem")),
         commonMistakes = listOf(
             tx("lessonspart1_esquecer_em"),
             tx("lessonspart1_trocar_na_receita"),
@@ -143,7 +143,7 @@ val cardsPart1: List<SkillCard> = listOf(
             "A → Aα | β vira o quê?" to "A → βA'; A' → αA' | ε",
             tx("lessonspart1_linguagem") to "βα*",
             tx("lessonspart1_quem_sofre_com_recursao_esquerda") to tx("lessonspart1_analisadores_descendentes_ll_descida_recursi"),
-            "E → E + T | T sem recursão à esquerda?" to "E → T E'; E' → + T E' | ε",
+            tx("solta_lessonspart1_2") to "E → T E'; E' → + T E' | ε",
             tx("lessonspart1_pre_condicoes_algoritmo_geral") to tx("lessonspart1_sem_ciclos_sem_producoes"),
             tx("lessonspart1_exemplo_recursao_indireta") to "S → A a | b; A → S c | d",
             tx("lessonspart1_lr_precisa_eliminar_recursao_esquerda") to tx("lessonspart1_nao_lr_lida_bem_com"),
@@ -154,7 +154,7 @@ val cardsPart1: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart1_quando_duas_alternativas_comecam_com"),
         hook = tx("lessonspart1_ab_ac_b_c_coloque"),
         feynmanPrompt = tx("lessonspart1_explique_para_amigo_como_menu"),
-        keyTerms = listOf(tx("comum_prefixo_comum"), tx("comum_fatoracao"), tx("lessonspart1_novo_nao_terminal"), "adiar", "preditivo"),
+        keyTerms = listOf(tx("comum_prefixo_comum"), tx("comum_fatoracao"), tx("lessonspart1_novo_nao_terminal"), tx("comum_kt_adiar"), tx("comum_kt_preditivo")),
         commonMistakes = listOf(
             tx("lessonspart1_achar_que_fatoracao_elimina_ambiguidade"),
             tx("lessonspart1_parar_na_primeira_rodada_sem"),

@@ -56,7 +56,7 @@ sealed class LLAction {
     fun label(): String = when (this) {
         is Match -> tx("ll1_casar_1", terminal)
         is Expand -> tx("ll1_expandir_1", production)
-        Accept -> "aceitar"
+        Accept -> tx("ll1_aceitar")
         is Error -> tx("comum_erro_1", message)
     }
 }

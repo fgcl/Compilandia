@@ -1,5 +1,6 @@
 package com.compilandia.ui.room
 
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
@@ -65,6 +66,7 @@ import com.compilandia.platform.nowMs
 import com.compilandia.resources.Res
 import com.compilandia.resources.prop_gear
 import com.compilandia.resources.room_base
+import androidx.compose.foundation.layout.fillMaxHeight
 import com.compilandia.ui.AppState
 import com.compilandia.ui.BigButton
 import com.compilandia.ui.GearIcon
@@ -98,43 +100,69 @@ fun RoomScreen(app: AppState) {
     val quests = remember(ls) { l.quests(now) }
     var gaveta by remember { mutableStateOf(false) }
     var metasAbertas by remember { mutableStateOf(false) }
+    val ladoALado = com.compilandia.ui.LocalJanela.current.ladoALado
+    val cumpridas = quests.count { it.progress >= 1f }
+    // T2: as três metas viram um anel; o detalhe abre ao toque.
+    val metas: @Composable () -> Unit = {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Row(
+                Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).clickable { metasAbertas = !metasAbertas }.padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(26.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+            }
+            ToolTag(tx("sala_jogar"), highlighted = ls.desafioDia != now / 86_400_000L) { gaveta = true }
+        }
+    }
+    val proximo: @Composable () -> Unit = {
+        Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
+            // O Continuar segue a trilha do assunto que o modelo do aluno escolheu.
+            val passo = remember(ls) { com.compilandia.content.Trilha.proximo(l, next.skill, now) }
+            Text(tx("comum_proximo"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+            Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = if (ladoALado) 3 else 1)
+            Spacer(Modifier.height(8.dp))
+            BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
+                if (passo != null) com.compilandia.ui.screens.abrirPasso(app, next.skill, passo)
+                else app.go(Screen.Play(next.skill, next.game, next.level, seed = nowMs()))
+            }
+        }
+    }
+    val sala: @Composable (Modifier) -> Unit = { mod ->
+        BoxWithConstraints(mod.clipToBounds(), contentAlignment = Alignment.Center) {
+            // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
+            val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
+            RoomScene(app, side)
+        }
+    }
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
             RoomHud(app)
-            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds(), contentAlignment = Alignment.Center) {
-                // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
-                val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
-                RoomScene(app, side)
-            }
-            // T2: as três metas viram um anel; o detalhe abre ao toque.
-            val cumpridas = quests.count { it.progress >= 1f }
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                Row(
-                    Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).clickable { metasAbertas = !metasAbertas }.padding(4.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(26.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+            if (ladoALado) {
+                // T1: janela larga ou celular deitado. A sala à esquerda, o próximo passo num painel à direita.
+                Row(Modifier.weight(1f).fillMaxWidth()) {
+                    sala(Modifier.weight(1f).fillMaxHeight())
+                    Column(Modifier.width(if (com.compilandia.ui.LocalJanela.current.faixa == com.compilandia.ui.Faixa.EXPANDIDA) 320.dp else 260.dp).fillMaxHeight().background(Palette.paper)) {
+                        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(top = 6.dp)) {
+                            metas()
+                            Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                for (q in quests) QuestChip(q, Modifier.fillMaxWidth(), Palette.paperDark)
+                            }
+                        }
+                        proximo()
+                    }
                 }
-                ToolTag(tx("sala_jogar"), highlighted = ls.desafioDia != now / 86_400_000L) { gaveta = true }
-            }
-            if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                for (q in quests) QuestChip(q, Modifier.weight(1f))
-            }
-            Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
-                // O Continuar segue a trilha do assunto que o modelo do aluno escolheu.
-                val passo = remember(ls) { com.compilandia.content.Trilha.proximo(l, next.skill, now) }
-                Text(tx("comum_proximo"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-                Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = 1)
-                Spacer(Modifier.height(8.dp))
-                BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
-                    if (passo != null) com.compilandia.ui.screens.abrirPasso(app, next.skill, passo)
-                    else app.go(Screen.Play(next.skill, next.game, next.level, seed = nowMs()))
+            } else {
+                sala(Modifier.weight(1f).fillMaxWidth())
+                metas()
+                if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    for (q in quests) QuestChip(q, Modifier.weight(1f))
                 }
+                proximo()
             }
         }
         if (gaveta) GavetaJogar(app, now) { gaveta = false }
@@ -232,8 +260,8 @@ private fun Ring(p: Float, modifier: Modifier) {
 }
 
 @Composable
-private fun QuestChip(q: Quest, modifier: Modifier) {
-    Column(modifier.clip(RoundedCornerShape(6.dp)).background(Palette.paper).padding(horizontal = 8.dp, vertical = 5.dp)) {
+private fun QuestChip(q: Quest, modifier: Modifier, fundo: Color = Palette.paper) {
+    Column(modifier.clip(RoundedCornerShape(6.dp)).background(fundo).padding(horizontal = 8.dp, vertical = 5.dp)) {
         Text(q.title, style = MaterialTheme.typography.labelSmall, color = Palette.ink, maxLines = 1)
         Spacer(Modifier.height(3.dp))
         ProgressBar(q.progress, if (q.progress >= 1f) Palette.green else Palette.hazard, Modifier.fillMaxWidth(), 5.dp)
@@ -307,11 +335,12 @@ private fun GhostLayer(layer: RoomLayer, side: Dp, item: RoomItem, canBuy: Boole
     Box(Modifier.offset(side * layer.x, side * layer.y).size(side * layer.w, side * layer.h).clickable(remember { MutableInteractionSource() }, null) { onClick() }) {
         Image(painterResource(layer.ghost), item.title, Modifier.fillMaxSize().alpha(if (canBuy) a else 0.55f), contentScale = ContentScale.FillBounds)
         Row(
-            Modifier.align(Alignment.Center).clip(RoundedCornerShape(5.dp)).background(Palette.hazard).padding(horizontal = 5.dp, vertical = 1.dp),
+            // O preço não quebra linha, mesmo quando o móvel fica estreito na sala pequena.
+            Modifier.align(Alignment.Center).wrapContentSize(unbounded = true).clip(RoundedCornerShape(5.dp)).background(Palette.hazard).padding(horizontal = 5.dp, vertical = 1.dp),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Image(painterResource(Res.drawable.prop_gear), null, Modifier.size(13.dp))
-            Text("${item.price}", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium)
+            Text("${item.price}", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium, softWrap = false)
         }
     }
 }

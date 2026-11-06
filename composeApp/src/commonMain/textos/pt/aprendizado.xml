@@ -72,7 +72,7 @@
     <string name="learner_minha_rede_neural_acertou_1">🤖 Minha rede neural acertou %1$s% das previsões sobre você nas últimas tentativas.</string>
     <string name="learner_1_dias_seguidos_estudar_pouco">🔥 %1$s dias seguidos. Estudar um pouco todo dia rende mais que estudar muito de uma vez.</string>
     <string name="learner_jogue_algumas_missoes_eu_comeco">👋 Jogue algumas missões e eu começo a entender como você aprende melhor.</string>
-    <string name="learner_aaaaaeeeeiiiiooooouuuucn">áàâãäéèêëíìîïóòôõöúùûüçñ</string>
+    <string name="learner_aaaaaeeeeiiiiooooouuuucn" translatable="false">áàâãäéèêëíìîïóòôõöúùûüçñ</string>
     <!-- Skills.kt -->
     <string name="skills_porto_partida">Porto da Partida</string>
     <string name="skills_onde_codigo_fonte_embarca">Onde o código-fonte embarca</string>
@@ -202,4 +202,5 @@
     <string name="skills_radio">Rádio</string>
     <string name="skills_cantinho_cafe">Cantinho do café</string>
     <string name="skills_sofa">Sofá</string>
+    <string name="solta_skills_1">AFN → AFD (construção de subconjuntos)</string>
 </resources>

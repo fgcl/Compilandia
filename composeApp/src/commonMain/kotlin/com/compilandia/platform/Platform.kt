@@ -49,3 +49,11 @@ expect object Compartilha {
 }
 
 expect fun nowMs(): Long
+
+/** O idioma do aparelho e o jeito de reabrir o jogo depois de trocar de idioma (S2). */
+expect object Idioma {
+    /** Código de duas letras do idioma do aparelho, como "pt" ou "en". */
+    fun doAparelho(): String
+    /** Fecha e abre o jogo de novo. Devolve false onde não dá: a pessoa reabre à mão. */
+    fun reabrir(): Boolean
+}

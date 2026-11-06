@@ -1,5 +1,6 @@
 package com.compilandia.ui.screens
 
+import com.compilandia.ui.larguraDeLeitura
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -84,7 +85,7 @@ fun GuideChapterScreen(app: AppState, number: Int) {
     Column(Modifier.fillMaxSize()) {
         Header("${c.number}. ${c.title}", tx("guidescreens_guia_tp_relacionado_1", c.skill.title), guideColor)
         ProgressBar(shown.toFloat() / c.beats.size, guideColor, Modifier.fillMaxWidth(), 6.dp)
-        Column(Modifier.weight(1f).verticalScroll(scroll).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.weight(1f).verticalScroll(scroll).padding(16.dp).larguraDeLeitura(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             c.beats.take(shown).forEachIndexed { i, b -> BeatView(b, i, answered, revealed) }
             if (finished) {
                 PaperCard(color = guideColor.copy(alpha = 0.08f), border = guideColor) {

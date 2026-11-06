@@ -78,3 +78,11 @@ actual object Compartilha {
 
 private fun agora(): Double = js("Date.now()")
 actual fun nowMs(): Long = agora().toLong()
+
+private fun idiomaDoNavegador(): String = js("(navigator.language || 'pt').slice(0, 2)")
+private fun recarregar() { js("window.location.reload()") }
+
+actual object Idioma {
+    actual fun doAparelho(): String = idiomaDoNavegador()
+    actual fun reabrir(): Boolean { recarregar(); return true }
+}

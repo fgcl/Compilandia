@@ -3,7 +3,7 @@
 <resources>
     <string name="comum_1_2">%1$s de %2$s</string>
     <string name="comum_1_acerto">%1$s% de acerto</string>
-    <string name="comum_2_3">a + 2 * 3</string>
+    <string name="comum_2_3" translatable="false">a + 2 * 3</string>
     <string name="comum_aceitar">Aceitar</string>
     <string name="comum_acho_que_sei">Acho que sei</string>
     <string name="comum_afd_1">AFD: %1$s</string>
@@ -19,18 +19,18 @@
     <string name="comum_arvore_2">Árvore 2</string>
     <string name="comum_ast_ou_arvore_derivacao">AST ou árvore de derivação</string>
     <string name="comum_atributo_sintetizado_herdado">Atributo sintetizado e herdado</string>
-    <string name="comum_b">b a a</string>
-    <string name="comum_b_2">a + b</string>
-    <string name="comum_b_2_2">a b</string>
+    <string name="comum_b" translatable="false">b a a</string>
+    <string name="comum_b_2" translatable="false">a + b</string>
+    <string name="comum_b_2_2" translatable="false">a b</string>
     <string name="comum_b_3">a e b</string>
-    <string name="comum_b_b">a a b b</string>
-    <string name="comum_b_c">a + b * c</string>
-    <string name="comum_b_c_2">(a + b) * c</string>
-    <string name="comum_b_c_3">( a + b ) * c</string>
-    <string name="comum_b_c_d">a * b + c * d</string>
-    <string name="comum_b_c_d_2">a + b + c + d</string>
-    <string name="comum_b_c_d_2_2">( a + b ) * ( c - d )</string>
-    <string name="comum_b_ok">a &lt; b &amp;&amp; ok</string>
+    <string name="comum_b_b" translatable="false">a a b b</string>
+    <string name="comum_b_c" translatable="false">a + b * c</string>
+    <string name="comum_b_c_2" translatable="false">(a + b) * c</string>
+    <string name="comum_b_c_3" translatable="false">( a + b ) * c</string>
+    <string name="comum_b_c_d" translatable="false">a * b + c * d</string>
+    <string name="comum_b_c_d_2" translatable="false">a + b + c + d</string>
+    <string name="comum_b_c_d_2_2" translatable="false">( a + b ) * ( c - d )</string>
+    <string name="comum_b_ok" translatable="false">a &lt; b &amp;&amp; ok</string>
     <string name="comum_cada_nao_terminal_vira_funcao">Cada não terminal vira uma função.</string>
     <string name="comum_casar_2">Casar</string>
     <string name="comum_coercao_tipo">Coerção de tipo</string>
@@ -55,7 +55,7 @@
     <string name="comum_dobra_constantes">Dobra de constantes</string>
     <string name="comum_dominio">domínio</string>
     <string name="comum_duas_arvores">Duas árvores</string>
-    <string name="comum_e">( E )</string>
+    <string name="comum_e" translatable="false">( E )</string>
     <string name="comum_empilhar_2">Empilhar</string>
     <string name="comum_empilhar_ou_reduzir">Empilhar ou reduzir</string>
     <string name="comum_enfeite">Enfeite</string>
@@ -72,14 +72,14 @@
     <string name="comum_estado_1">Estado %1$s</string>
     <string name="comum_exatamente">Exatamente uma</string>
     <string name="comum_expandir">Expandir</string>
-    <string name="comum_expr_termo_termo">expr:  termo ('+' termo)*</string>
+    <string name="comum_expr_termo_termo" translatable="false">expr:  termo ('+' termo)*</string>
     <string name="comum_expressao_1">expressão: %1$s</string>
     <string name="comum_falta">Falta ')'</string>
-    <string name="comum_fator_num">fator: NUM</string>
+    <string name="comum_fator_num" translatable="false">fator: NUM</string>
     <string name="comum_fatoracao">fatoração</string>
     <string name="comum_fatorar_adiar_escolha">Fatorar é adiar a escolha</string>
     <string name="comum_fecho">Fecho</string>
-    <string name="comum_first">FIRST(β a)</string>
+    <string name="comum_first" translatable="false">FIRST(β a)</string>
     <string name="comum_frase_nao_pertence_linguagem">A frase não pertence à linguagem.</string>
     <string name="comum_geracao">Geração</string>
     <string name="comum_geracao_codigo">Geração de código</string>
@@ -102,7 +102,7 @@
     <string name="comum_nao_entendi">Não entendi</string>
     <string name="comum_nao_terminal">não-terminal</string>
     <string name="comum_nenhuma">Nenhuma</string>
-    <string name="comum_new_num_1">new Num(%1$s)</string>
+    <string name="comum_new_num_1" translatable="false">new Num(%1$s)</string>
     <string name="comum_nunca">Nunca</string>
     <string name="comum_oficina">Oficina</string>
     <string name="comum_otimizacao">otimização</string>
@@ -134,7 +134,7 @@
     <string name="comum_que_quer_dizer_ll_1">O que quer dizer LL(1)</string>
     <string name="comum_que_spill">O que é spill</string>
     <string name="comum_quem_retorna_primeiro_toque_no">Quem retorna primeiro? Toque no registro.</string>
-    <string name="comum_r_1">r = %1$s</string>
+    <string name="comum_r_1" translatable="false">r = %1$s</string>
     <string name="comum_recursao_esquerda">recursão à esquerda</string>
     <string name="comum_reducao_forca">Redução de força</string>
     <string name="comum_reduzir">Reduzir</string>
@@ -154,8 +154,8 @@
     <string name="comum_sintatica_2">sintática</string>
     <string name="comum_sintetizado">Sintetizado</string>
     <string name="comum_sobrou_1">Sobrou '%1$s'</string>
-    <string name="comum_t1_b">t1 = a + b</string>
-    <string name="comum_t2_t1">t2 = a + t1</string>
+    <string name="comum_t1_b" translatable="false">t1 = a + b</string>
+    <string name="comum_t2_t1" translatable="false">t2 = a + t1</string>
     <string name="comum_tabela_ll_1">A tabela LL(1)</string>
     <string name="comum_tabela_ll_1_2">Tabela LL(1)</string>
     <string name="comum_tabela_simbolos">Tabela de símbolos</string>
@@ -164,13 +164,74 @@
     <string name="comum_tenho_certeza">Tenho certeza</string>
     <string name="comum_tentar_novo">Tentar de novo</string>
     <string name="comum_terminal_nao_terminal">Terminal e não terminal</string>
-    <string name="comum_termo_fator_fator">termo: fator ('*' fator)*</string>
-    <string name="comum_text_main">.text\nmain:</string>
+    <string name="comum_termo_fator_fator" translatable="false">termo: fator ('*' fator)*</string>
+    <string name="comum_text_main" translatable="false">.text\nmain:</string>
     <string name="comum_token">Token</string>
     <string name="comum_token_lexema">Token e lexema</string>
     <string name="comum_tres_enderecos">Três endereços</string>
     <string name="comum_voltar">Voltar</string>
     <string name="comum_voltar_oficina">Voltar à oficina</string>
-    <string name="comum_x_2">a + x * 2</string>
-    <string name="comum_x_y">{x, y, ε}</string>
+    <string name="comum_x_2" translatable="false">a + x * 2</string>
+    <string name="comum_x_y" translatable="false">{x, y, ε}</string>
+    <string name="comum_conflito_maiusc">CONFLITO</string>
+    <string name="comum_kt_abstrat">abstrat</string>
+    <string name="comum_kt_arvore">arvore</string>
+    <string name="comum_kt_ativa">ativa</string>
+    <string name="comum_kt_aumentada">aumentada</string>
+    <string name="comum_kt_casa">casa</string>
+    <string name="comum_kt_chamad">chamad</string>
+    <string name="comum_kt_classe">classe</string>
+    <string name="comum_kt_conflito">conflito</string>
+    <string name="comum_kt_conjunto">conjunto</string>
+    <string name="comum_kt_depois">depois</string>
+    <string name="comum_kt_desvi">desvi</string>
+    <string name="comum_kt_empilha">empilha</string>
+    <string name="comum_kt_escopo">escopo</string>
+    <string name="comum_kt_estado">estado</string>
+    <string name="comum_kt_fecho">fecho</string>
+    <string name="comum_kt_herdado">herdado</string>
+    <string name="comum_kt_inicial">inicial</string>
+    <string name="comum_kt_invertid">invertid</string>
+    <string name="comum_kt_lexema">lexema</string>
+    <string name="comum_kt_maior">maior</string>
+    <string name="comum_kt_marca">marca</string>
+    <string name="comum_kt_memoria">memoria</string>
+    <string name="comum_kt_morto">morto</string>
+    <string name="comum_kt_padr">padr</string>
+    <string name="comum_kt_par">par</string>
+    <string name="comum_kt_parentes">parentes</string>
+    <string name="comum_kt_pilha">pilha</string>
+    <string name="comum_kt_ponto">ponto</string>
+    <string name="comum_kt_primeir">primeir</string>
+    <string name="comum_kt_reduz">reduz</string>
+    <string name="comum_kt_registrador">registrador</string>
+    <string name="comum_kt_regra">regra</string>
+    <string name="comum_kt_retorno">retorno</string>
+    <string name="comum_kt_sintetizado">sintetizado</string>
+    <string name="comum_kt_tabela">tabela</string>
+    <string name="comum_kt_viv">viv</string>
+    <string name="ll1_aceitar">aceitar</string>
+    <string name="comum_kt_adiar">adiar</string>
+    <string name="comum_kt_afd">afd</string>
+    <string name="comum_kt_afn">afn</string>
+    <string name="comum_kt_aninhamento">aninhamento</string>
+    <string name="comum_kt_associatividade">associatividade</string>
+    <string name="comum_kt_atributo">atributo</string>
+    <string name="comum_kt_descart">descart</string>
+    <string name="comum_kt_descendente">descendente</string>
+    <string name="comum_kt_erro">erro</string>
+    <string name="comum_kt_herda">herda</string>
+    <string name="comum_kt_palavra_chave">palavra-chave</string>
+    <string name="comum_kt_preditivo">preditivo</string>
+    <string name="comum_kt_prefixo">prefixo</string>
+    <string name="comum_kt_reduzir_reduzir">reduzir/reduzir</string>
+    <string name="comum_kt_sincroniza">sincroniza</string>
+    <string name="comum_kt_sombreamento">sombreamento</string>
+    <string name="comum_kt_subconjuntos">subconjuntos</string>
+    <string name="comum_kt_tipo">tipo</string>
+    <string name="comum_kt_topo">topo</string>
+    <string name="comum_kt_tripla">tripla</string>
+    <string name="comum_vazio_minusc">vazio</string>
+    <string name="comum_afd">AFD</string>
+    <string name="comum_afn">AFN</string>
 </resources>

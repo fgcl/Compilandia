@@ -1,5 +1,6 @@
 package com.compilandia.ui.screens
 
+import com.compilandia.ui.larguraDeLeitura
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -70,7 +71,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
     val color = Palette.region(s.skill.region)
     if (lesson == null) {
         Column(Modifier.fillMaxSize()) {
-            Header(s.skill.title, "aula", color)
+            Header(s.skill.title, tx("lessonscreen_aula"), color)
             CenterText(tx("lessonscreen_ainda_nao_ha_aula_para"))
         }
         return
@@ -96,7 +97,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
         Header("${lesson.style.emoji} ${lesson.title}", "${s.skill.title} · ${lesson.style.title}", color)
         ProgressBar(shown.toFloat() / beats.size, color, Modifier.fillMaxWidth(), 6.dp)
         Column(
-            Modifier.weight(1f).verticalScroll(scroll).padding(16.dp),
+            Modifier.weight(1f).verticalScroll(scroll).padding(16.dp).larguraDeLeitura(),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             // A6: a aula de texto também anima. O palco repassa as cenas da aula animada do assunto, sem som.
@@ -245,7 +246,7 @@ fun FeynmanScreen(app: AppState, skill: Skill) {
     val color = Palette.region(skill.region)
     Column(Modifier.fillMaxSize()) {
         Header(tx("lessonscreen_explique_com_suas_palavras"), skill.title, color)
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp).larguraDeLeitura(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             SpeechBubble("🦉", tx("comum_profa_gramatica"), tx("lessonscreen_quem_consegue_explicar_entendeu_verdade"))
             PaperCard { RichText(card?.feynmanPrompt ?: tx("lessonscreen_explique_1_para_colega_que", skill.title), style = MaterialTheme.typography.titleSmall) }
             OutlinedTextField(text, { text = it; checked = false }, Modifier.fillMaxWidth(), minLines = 5, label = { Text(tx("lessonscreen_minha_explicacao")) })

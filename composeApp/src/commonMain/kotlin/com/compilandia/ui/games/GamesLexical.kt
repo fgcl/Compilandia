@@ -430,7 +430,7 @@ fun RegexSorterGame(ctx: GameCtx) {
     fun judge(letIn: Boolean?) {
         val ok = letIn == accept
         if (ok) correct++
-        last = ok to tx("gameslexical_1_2_com_3", s.ifEmpty { "ε" }, if (accept) "CASA" else tx("gameslexical_nao_casa"), entry.regex)
+        last = ok to tx("gameslexical_1_2_com_3", s.ifEmpty { "ε" }, if (accept) tx("gameslexical_casa") else tx("gameslexical_nao_casa"), entry.regex)
         if (ok) Juice.correct() else Juice.wrong()
         i++
     }

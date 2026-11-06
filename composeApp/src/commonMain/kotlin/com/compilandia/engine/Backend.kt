@@ -170,7 +170,7 @@ object Mips {
             fun r(x: String) = regs[x] ?: 0L
             when (p[0]) {
                 "li" -> regs[p[1]] = p[2].toLong()
-                "lw" -> regs[p[1]] = mem[p[2]] ?: error("lw de '${p[2]}': endereço sem valor (variável não inicializada)")
+                "lw" -> regs[p[1]] = mem[p[2]] ?: error(tx("solta_backend_1", p[2]))
                 "sw" -> mem[p[2]] = r(p[1])
                 "add" -> regs[p[1]] = r(p[2]) + r(p[3])
                 "sub" -> regs[p[1]] = r(p[2]) - r(p[3])

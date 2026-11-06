@@ -46,7 +46,14 @@ import com.compilandia.textos.tx
 
 @Composable
 fun App(injected: AppState? = null) {
-    val app = remember { injected ?: AppState(Learner.load(Storage.load())) }
+    val app = remember {
+        injected ?: run {
+            val salvo = Storage.load()
+            // O idioma vem antes de tudo: aulas e nomes são montados uma vez, no idioma da abertura.
+            com.compilandia.textos.Txt.idioma = com.compilandia.textos.Txt.idiomaInicial(salvo, com.compilandia.platform.Idioma.doAparelho())
+            AppState(Learner.load(salvo))
+        }
+    }
     CompilandiaTheme {
         LaunchedEffect(Unit) {
             com.compilandia.ui.voice.VoiceBank.load()
@@ -70,34 +77,36 @@ fun App(injected: AppState? = null) {
                 },
                 label = "tela",
             ) { (_, screen) ->
+                // T1: telas de lista e de texto ficam numa coluna central na janela larga.
+                // Sala, aula, região, trilha e Laboratório Bison têm arranjo próprio e usam a largura toda.
                 when (screen) {
-                    Screen.Onboarding -> OnboardingScreen(app)
+                    Screen.Onboarding -> ColunaCentral { OnboardingScreen(app) }
                     Screen.Room -> com.compilandia.ui.room.RoomScreen(app)
-                    Screen.Shop -> com.compilandia.ui.room.ShopScreen(app)
+                    Screen.Shop -> ColunaCentral { com.compilandia.ui.room.ShopScreen(app) }
                     is Screen.Episode -> com.compilandia.ui.screens.EpisodeScreen(app, screen)
-                    Screen.Map -> MapScreen(app)
+                    Screen.Map -> ColunaCentral { MapScreen(app) }
                     is Screen.RegionView -> RegionScreen(app, screen.region)
                     is Screen.Trilha -> com.compilandia.ui.screens.TrilhaScreen(app, screen.skill)
-                    Screen.SeuCompilador -> com.compilandia.ui.screens.SeuCompiladorScreen(app)
-                    is Screen.FazerComAjuda -> com.compilandia.ui.screens.FazerComAjudaScreen(app, screen)
-                    is Screen.Lesson -> LessonScreen(app, screen)
-                    is Screen.Feynman -> FeynmanScreen(app, screen.skill)
-                    is Screen.Play -> PlayScreen(app, screen)
-                    is Screen.Flashcards -> FlashcardScreen(app, screen.skills)
-                    Screen.Brain -> BrainScreen(app)
-                    Screen.Journal -> JournalScreen(app)
-                    Screen.Settings -> SettingsScreen(app)
-                    Screen.Lab -> com.compilandia.ui.lab.LabScreen(app)
+                    Screen.SeuCompilador -> ColunaCentral { com.compilandia.ui.screens.SeuCompiladorScreen(app) }
+                    is Screen.FazerComAjuda -> ColunaCentral { com.compilandia.ui.screens.FazerComAjudaScreen(app, screen) }
+                    is Screen.Lesson -> ColunaCentral { LessonScreen(app, screen) }
+                    is Screen.Feynman -> ColunaCentral { FeynmanScreen(app, screen.skill) }
+                    is Screen.Play -> ColunaCentral { PlayScreen(app, screen) }
+                    is Screen.Flashcards -> ColunaCentral { FlashcardScreen(app, screen.skills) }
+                    Screen.Brain -> ColunaCentral { BrainScreen(app) }
+                    Screen.Journal -> ColunaCentral { JournalScreen(app) }
+                    Screen.Settings -> ColunaCentral { SettingsScreen(app) }
+                    Screen.Lab -> ColunaCentral { com.compilandia.ui.lab.LabScreen(app) }
                     is Screen.LabBison -> com.compilandia.ui.lab.LabBisonScreen(app, screen.spec)
-                    is Screen.Exemplo -> com.compilandia.ui.lab.ExemploScreen(app, screen.skill)
-                    Screen.Album -> com.compilandia.ui.album.AlbumScreen(app)
-                    is Screen.CacaBug -> com.compilandia.ui.album.CacaBugScreen(app, screen.id)
-                    Screen.Corrida -> com.compilandia.ui.corrida.CorridaScreen(app)
-                    Screen.Desafio -> com.compilandia.ui.desafio.DesafioScreen(app)
-                    Screen.Feed -> com.compilandia.ui.feed.FeedScreen(app)
-                    is Screen.BossFight -> com.compilandia.ui.games.BossScreen(app, screen.region)
-                    Screen.Guide -> com.compilandia.ui.screens.GuideScreen(app)
-                    is Screen.GuideChapter -> com.compilandia.ui.screens.GuideChapterScreen(app, screen.number)
+                    is Screen.Exemplo -> ColunaCentral { com.compilandia.ui.lab.ExemploScreen(app, screen.skill) }
+                    Screen.Album -> ColunaCentral { com.compilandia.ui.album.AlbumScreen(app) }
+                    is Screen.CacaBug -> ColunaCentral { com.compilandia.ui.album.CacaBugScreen(app, screen.id) }
+                    Screen.Corrida -> ColunaCentral { com.compilandia.ui.corrida.CorridaScreen(app) }
+                    Screen.Desafio -> ColunaCentral { com.compilandia.ui.desafio.DesafioScreen(app) }
+                    Screen.Feed -> ColunaCentral { com.compilandia.ui.feed.FeedScreen(app) }
+                    is Screen.BossFight -> ColunaCentral { com.compilandia.ui.games.BossScreen(app, screen.region) }
+                    Screen.Guide -> ColunaCentral { com.compilandia.ui.screens.GuideScreen(app) }
+                    is Screen.GuideChapter -> ColunaCentral { com.compilandia.ui.screens.GuideChapterScreen(app, screen.number) }
                 }
             }
             JuiceOverlay()

@@ -267,8 +267,8 @@
     <string name="comojogar_veja_quem_esta_vivo_pinte">Veja quem está vivo e pinte o grafo com poucos registradores.</string>
     <string name="comojogar_complete_desvios_if_while_rode">Complete os desvios do if e do while, e rode o programa.</string>
     <!-- ContentModel.kt -->
-    <string name="contentmodel_byte">Byte</string>
-    <string name="contentmodel_lexi">Lexi</string>
+    <string name="contentmodel_byte" translatable="false">Byte</string>
+    <string name="contentmodel_lexi" translatable="false">Lexi</string>
     <string name="contentmodel_pilha">Pilha</string>
     <string name="contentmodel_narrador">Narrador</string>
     <string name="contentmodel_nao_existem_perguntas_idiotas">Não existem perguntas idiotas</string>
@@ -286,7 +286,7 @@
     <string name="diagramas_1_reduz_2">%1$s reduz %2$s</string>
     <string name="diagramas_1_vai_2">%1$s vai → %2$s</string>
     <string name="diagramas_nome_1">nome: %1$s</string>
-    <string name="diagramas_node">Node</string>
+    <string name="diagramas_node" translatable="false">Node</string>
     <!-- Episode.kt -->
     <string name="episode_basico">Básico</string>
     <string name="episode_pegadinhas">Pegadinhas</string>
@@ -347,4 +347,35 @@
     <string name="toy_regra_topo_ainda_precisa_outra">A regra do topo ainda precisa de outra função.</string>
     <string name="toy_token_fita_que_essa_funcao">O token da fita é o que essa função espera. Case.</string>
     <string name="toy_essa_funcao_ja_fez_tudo">Essa função já fez tudo. Volte.</string>
+    <string name="palavra_minimo">MÍNIMO</string>
+    <string name="palavra_maior_casamento">MAIOR CASAMENTO</string>
+    <string name="palavra_fecho">FECHO</string>
+    <string name="palavra_herdado">HERDADO</string>
+    <string name="ab_apagar">apagar</string>
+    <string name="ab_juntar">juntar</string>
+    <string name="ab_deixar">deixar</string>
+    <string name="ab_sim">sim</string>
+    <string name="ab_nenhuma">nenhuma</string>
+    <string name="ab_casar">casar</string>
+    <string name="ab_expandir">expandir</string>
+    <string name="ab_depois_pv">depois do ;</string>
+    <string name="ab_reduz">reduz</string>
+    <string name="ab_empilha">empilha</string>
+    <string name="ab_para">para</string>
+    <string name="ab_empate">empate</string>
+    <string name="palco_empilhar">empilhar</string>
+    <string name="palco_reduzir">reduzir</string>
+    <string name="palco_esquerda">esquerda</string>
+    <string name="palco_nome">nome</string>
+    <string name="palco_reservada">reservada</string>
+    <string name="palco_pai">pai</string>
+    <string name="palco_filho">filho</string>
+    <string name="palco_identificador">identificador</string>
+    <string name="palco_ttt_fim">+ T + T + T  fim</string>
+    <string name="palco_uma">uma</string>
+    <string name="palco_duas">duas</string>
+    <string name="palco_vazia">vazia</string>
+    <string name="palco_item_com">%1$s   com %2$s</string>
+    <string name="palco_registradores">registradores</string>
+    <string name="palco_vai_em">X -&gt; ε  vai em  M[X, )]</string>
 </resources>

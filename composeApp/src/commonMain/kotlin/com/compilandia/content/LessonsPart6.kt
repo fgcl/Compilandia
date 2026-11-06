@@ -11,7 +11,7 @@ private val p6Cards: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart6_minimizar_afd_fundir_estados_equivalentes"),
         hook = tx("lessonspart6_mpj_marca_propaga_junta_morto"),
         feynmanPrompt = tx("lessonspart6_explique_para_amigo_12_anos"),
-        keyTerms = listOf("equivalen", "distingu", "par", "marca", "final", "morto", "tabela"),
+        keyTerms = listOf("equivalen", "distingu", tx("comum_kt_par"), tx("comum_kt_marca"), "final", tx("comum_kt_morto"), tx("comum_kt_tabela")),
         commonMistakes = listOf(
             tx("lessonspart6_esquecer_completar_afd_com_estado"),
             tx("lessonspart6_marcar_par_com_base_num"),
@@ -36,7 +36,7 @@ private val p6Cards: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart6_arvore_sintatica_abstrata_guarda_so"),
         hook = tx("lessonspart6_ast_arvore_sem_tralha_corta"),
         feynmanPrompt = tx("lessonspart6_explique_para_amigo_12_anos_2"),
-        keyTerms = listOf("abstrat", "arvore", "classe", "binop", "parentes", "precedenc", "parser"),
+        keyTerms = listOf(tx("comum_kt_abstrat"), tx("comum_kt_arvore"), tx("comum_kt_classe"), "binop", tx("comum_kt_parentes"), "precedenc", "parser"),
         commonMistakes = listOf(
             tx("lessonspart6_criar_nos_para_parenteses_ou"),
             tx("lessonspart6_montar_ast_pendurada_para_direita"),
@@ -48,7 +48,7 @@ private val p6Cards: List<SkillCard> = listOf(
             tx("lessonspart6_que_ast_joga_fora") to tx("lessonspart6_correntes_nao_terminais_parenteses_pontuacao"),
             tx("lessonspart6_nos_derivacao_ast_em_b") to "13 × 5",
             tx("lessonspart6_onde_mora_precedencia_na_ast") to tx("lessonspart6_na_forma_quem_esta_mais"),
-            tx("lessonspart6_linha_chave_associatividade_esquerda_no") to "e = new BinOp(op, e, termo()); dentro do while",
+            tx("lessonspart6_linha_chave_associatividade_esquerda_no") to tx("solta_lessonspart6_1"),
             tx("lessonspart6_acao_bison_para_t") to "\$\$ = new BinOp('+', \$1, \$3);",
             tx("lessonspart6_acao_bison_para_f") to tx("lessonspart6_2_parentese_some"),
             tx("lessonspart6_classes_comando_tipicas") to tx("lessonspart6_atrib_se_enquanto_bloco_estendem"),
@@ -61,7 +61,7 @@ private val p6Cards: List<SkillCard> = listOf(
         oneLiner = tx("lessonspart6_alocar_registradores_manter_temporarios_em"),
         hook = tx("lessonspart6_vigor_vivacidade_grafo_colorir_registradores"),
         feynmanPrompt = tx("lessonspart6_explique_para_amigo_12_anos_3"),
-        keyTerms = listOf("registrador", "viv", "interferen", "color", "spill", "memoria"),
+        keyTerms = listOf(tx("comum_kt_registrador"), tx("comum_kt_viv"), "interferen", "color", "spill", tx("comum_kt_memoria")),
         commonMistakes = listOf(
             tx("lessonspart6_fazer_analise_vivacidade_cima_para"),
             tx("lessonspart6_achar_que_vivo_ja_foi"),

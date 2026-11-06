@@ -309,7 +309,7 @@ object ActionEval {
                     args[n - 1]
                 }
                 c.isDigit() -> { val s = i; while (i < src.length && src[i].isDigit()) i++; src.substring(s, i).toLong() }
-                else -> throw IllegalArgumentException("símbolo inesperado '$c' na ação")
+                else -> throw IllegalArgumentException(tx("solta_minibison_1", c))
             }
         }
         fun power(): Long {

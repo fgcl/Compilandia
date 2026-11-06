@@ -129,6 +129,49 @@ class RenderSmokeTest {
         com.compilandia.ui.ThemeState.mode = com.compilandia.ui.ThemeMode.OFICINA
     }
 
+    /**
+     * T1: as telas principais em três larguras (360, 700 e 1200 dp) e no celular deitado.
+     * As capturas ficam em build/screenshots/larguras.
+     */
+    @Test fun larguras() {
+        val pasta = File(out, "larguras").apply { mkdirs() }
+        val tamanhos = listOf("360" to (360 to 760), "412alto" to (412 to 900), "700" to (700 to 1000), "1200" to (1200 to 800), "deitado" to (780 to 360))
+        val telas: List<Pair<String, () -> AppState>> = listOf(
+            "sala" to { stateWith() },
+            "mapa" to { stateWith(Screen.Map) },
+            "regiao" to { stateWith(Screen.RegionView(Region.TEMPLO_TOPDOWN)) },
+            "trilha" to { stateWith(Screen.Trilha(Skill.FOLLOW)) },
+            "aula" to { stateWith(Screen.Episode(Skill.FOLLOW, abertura = false)) },
+            "aula_texto" to { stateWith(Screen.Lesson(Skill.FIRST, Style.VISUAL)) },
+            "jogo" to { stateWith(Screen.Play(GameId.SHIFT_REDUCE_RUSH.skills.first(), GameId.SHIFT_REDUCE_RUSH, 2, seed = 3)).also { it.learner.setAskConfidence(false); it.commit() } },
+            "laboratorio" to { stateWith(Screen.Lab) },
+            "ajustes" to { stateWith(Screen.Settings) },
+            "fazer_com_ajuda" to { stateWith(Screen.FazerComAjuda(Skill.FIRST, semente = 42)) },
+        )
+        val so = System.getenv("TELAS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
+        for ((tela, cria) in telas) {
+            if (so.isNotEmpty() && tela !in so) continue
+            for ((rotulo, wh) in tamanhos) {
+                val st = cria()
+                shot("larguras/${tela}_$rotulo", wh.first, wh.second) { App(st) }
+            }
+        }
+        // Aula com o Byte dentro do palco: a posição dele depende da escala do palco.
+        val ep = com.compilandia.content.episodes.Episodes.all.first { e -> e.passos.any { it.shot.actor != null && it.shot.camera == null } }
+        val comAtor = ep.passos.indexOfFirst { it.shot.actor != null && it.shot.camera == null }
+        val prof = com.compilandia.content.episodes.Episodes.all.first { e -> e.passos.any { it.fala.who == com.compilandia.content.Speaker.PROF } }
+        val comProf = prof.passos.indexOfFirst { it.fala.who == com.compilandia.content.Speaker.PROF }
+        if (so.isEmpty() || "aula" in so) for ((rotulo, wh) in tamanhos) {
+            shot("larguras/aula_byte_no_palco_$rotulo", wh.first, wh.second) {
+                CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(stateWith(), Screen.Episode(ep.skill, id = ep.id), onStep = comAtor, abertura = false) }
+            }
+            shot("larguras/aula_prof_$rotulo", wh.first, wh.second) {
+                val st = stateWith().also { it.learner.setCaptions(true); it.commit() }
+                CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(st, Screen.Episode(prof.skill, id = prof.id), onStep = comProf, abertura = false) }
+            }
+        }
+    }
+
     /** Fotografa todos os passos de todos os episódios: nenhum pode quebrar. */
     @Test fun everyEpisodeStep() {
         val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY) + com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA

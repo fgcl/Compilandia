@@ -23,7 +23,7 @@ enum class Skill(val title: String, val region: Region, val prereqs: List<Skill>
     PHASES(tx("skills_fases_compilador"), Region.PORTO),
     TOKENS(tx("skills_tokens_lexemas_padroes"), Region.FLORESTA_LEXICA, listOf(PHASES)),
     REGEX_DFA(tx("skills_expressoes_regulares_automatos"), Region.FLORESTA_LEXICA, listOf(TOKENS)),
-    NFA_TO_DFA("AFN → AFD (construção de subconjuntos)", Region.FLORESTA_LEXICA, listOf(REGEX_DFA)),
+    NFA_TO_DFA(tx("solta_skills_1"), Region.FLORESTA_LEXICA, listOf(REGEX_DFA)),
     DFA_MINIMIZATION(tx("skills_minimizacao_afd_tabela_pares"), Region.FLORESTA_LEXICA, listOf(REGEX_DFA)),
     LEX_FLEX(tx("skills_lex_flex_arquivo_l"), Region.FLORESTA_LEXICA, listOf(TOKENS, REGEX_DFA)),
     CFG_DERIVATION(tx("skills_gramaticas_derivacoes"), Region.VALE_GRAMATICAS, listOf(PHASES)),

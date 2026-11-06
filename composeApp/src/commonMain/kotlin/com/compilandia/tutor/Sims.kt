@@ -199,8 +199,8 @@ object Sims {
             val (diz, painel) = when (acao) {
                 is LLAction.Expand -> tx("sims_topo_1_vem_2_tabela", topo, a, acao.production.rhsText()) to "M[$topo, $a]\n$topo → ${acao.production.rhsText()}"
                 is LLAction.Match -> tx("sims_topo_entrada_sao_1_casou", a) to tx("sims_casar_1", a)
-                LLAction.Accept -> tx("sims_pilha_entrada_acabaram_juntas_frase") to "aceita"
-                is LLAction.Error -> tx("sims_travou_1_frase_nao_pertence", acao.message) to "erro"
+                LLAction.Accept -> tx("sims_pilha_entrada_acabaram_juntas_frase") to tx("sims_aceita")
+                is LLAction.Error -> tx("sims_travou_1_frase_nao_pertence", acao.message) to tx("sims_erro")
             }
             val cor = when (acao) { is LLAction.Error -> Tint.RED; LLAction.Accept -> Tint.GREEN; else -> Tint.YELLOW }
             val caixa = Box("m", painel, 262f, 158f, 168f, 62f, Look.CELL, cor, size = 13f)
@@ -216,7 +216,7 @@ object Sims {
                 else -> null
             }
             passos += SimStep(
-                Shot(fitaTokens(tudo, pos, 46f) + rotulo("rp", "pilha", 104f, 396f) + pilha + caixa, actor = Actor(290f, 372f, 0.82f)),
+                Shot(fitaTokens(tudo, pos, 46f) + rotulo("rp", tx("sims_pilha"), 104f, 396f) + pilha + caixa, actor = Actor(290f, 372f, 0.82f)),
                 diz, if (k % 2 == 0) ask else null, erro = acao is LLAction.Error,
             )
             when (acao) {
@@ -255,8 +255,8 @@ object Sims {
                     val p = tab.grammar.productions[acao.prodId]
                     Triple(tx("sims_topo_forma_1_reduz_para", p.rhsText(), p.lhs), tx("sims_reduzir_1", p), Tint.ORANGE)
                 }
-                LRAction.Accept -> Triple(tx("sims_sobrou_so_1_entrada_acabou", g.start), "aceita", Tint.GREEN)
-                null -> Triple(tx("sims_sem_acao_na_tabela_com", a), "erro", Tint.RED)
+                LRAction.Accept -> Triple(tx("sims_sobrou_so_1_entrada_acabou", g.start), tx("sims_aceita"), Tint.GREEN)
+                null -> Triple(tx("sims_sem_acao_na_tabela_com", a), tx("sims_erro"), Tint.RED)
                 else -> Triple(st.note, "", Tint.NONE)
             }
             val fita = fitaTokens(tudo, pos, 60f).filterIndexed { i, _ -> i >= pos }
@@ -267,7 +267,7 @@ object Sims {
                 else -> null
             }
             passos += SimStep(
-                Shot(fita + caixa + rotulo("rp", "pilha", 180f, 276f) + pilha, actor = Actor(310f, 372f, 0.72f)),
+                Shot(fita + caixa + rotulo("rp", tx("sims_pilha"), 180f, 276f) + pilha, actor = Actor(310f, 372f, 0.72f)),
                 diz, if (k % 2 == 1) ask else null, erro = acao == null,
             )
             when (acao) {

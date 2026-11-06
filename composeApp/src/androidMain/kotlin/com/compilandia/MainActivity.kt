@@ -23,6 +23,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         Storage.dir = filesDir
         com.compilandia.platform.Compartilha.ctx = applicationContext
+        com.compilandia.platform.Idioma.ctx = applicationContext
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (!AppState.current.back()) finish()

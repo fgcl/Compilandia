@@ -143,11 +143,11 @@ object Diagnostico {
         else tx("diagnostico_duas_opcoes_1_comecam_com", a, c)
     }
 
-    private fun descreve(t: LRTable, acoes: List<LRAction>): String = acoes.joinToString(" ou ") {
+    private fun descreve(t: LRTable, acoes: List<LRAction>): String = acoes.joinToString(tx("diagnostico_ou")) {
         when (it) {
-            is LRAction.Shift -> "empilhar"
+            is LRAction.Shift -> tx("diagnostico_empilhar")
             is LRAction.Reduce -> tx("diagnostico_reduzir_por_1", t.grammar.productions[it.prodId])
-            else -> "aceitar"
+            else -> tx("ll1_aceitar")
         }
     }
 

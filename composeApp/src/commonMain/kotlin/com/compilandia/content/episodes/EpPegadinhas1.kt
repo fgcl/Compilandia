@@ -71,12 +71,12 @@ val pegadinhasFrente by lazy {
                 add(fileira("t", listOf("ifa" to Tint.TEAL, "=" to Tint.ORANGE, "1" to Tint.YELLOW, ";" to Tint.BLUE), 270f, w = 62f))
             }
             cena(tx("eppegadinhas1_palavra_reservada_so_ganha_no"), who = PROF) { hot() }
-            palavra("MAIOR CASAMENTO", tx("eppegadinhas1_ordem_decisao_primeiro_tamanho_depois"), mood = EpMood.HAPPY)
+            palavra(tx("palavra_maior_casamento"), tx("eppegadinhas1_ordem_decisao_primeiro_tamanho_depois"), mood = EpMood.HAPPY)
         },
 
         episodio(Skill.REGEX_DFA, tx("eppegadinhas1_estrela_mais_interrogacao"), PEGADINHA) {
             val linhas = listOf(
-                listOf("", "vazia", "a", "aa"),
+                listOf("", tx("palco_vazia"), "a", "aa"),
                 listOf("a*", "", "", ""),
                 listOf("a+", "", "", ""),
                 listOf("a?", "", "", ""),
@@ -126,7 +126,7 @@ val pegadinhasFrente by lazy {
                 add(Box("p", tx("eppegadinhas1_move_depois_fecho"), 180f, 344f, 240f, 40f, Look.CELL, Tint.TEAL, size = 15f))
                 hot("p")
             }
-            palavra("FECHO", tx("eppegadinhas1_nunca_pule_fecho_ele_vale"), mood = EpMood.HAPPY)
+            palavra(tx("palavra_fecho"), tx("eppegadinhas1_nunca_pule_fecho_ele_vale"), mood = EpMood.HAPPY)
         },
 
         episodio(Skill.LEX_FLEX, tx("eppegadinhas1_ordem_das_regras_no_flex"), PEGADINHA) {
@@ -241,8 +241,8 @@ val pegadinhasFrente by lazy {
                 tx("eppegadinhas1_isso_duas_opcoes_conflito_mesmo"),
             ) {
                 hot()
-                add(Box("n1", "uma", 110f, 230f, 110f, 56f, Look.TOKEN, Tint.TEAL, size = 18f))
-                add(Box("n2", "duas", 250f, 230f, 110f, 56f, Look.TOKEN, Tint.ORANGE, size = 18f))
+                add(Box("n1", tx("palco_uma"), 110f, 230f, 110f, 56f, Look.TOKEN, Tint.TEAL, size = 18f))
+                add(Box("n2", tx("palco_duas"), 250f, 230f, 110f, 56f, Look.TOKEN, Tint.ORANGE, size = 18f))
             }
             cena(tx("eppegadinhas1_primeiro_coloque_b_dentro_depois")) {
                 drop("n1", "n2")

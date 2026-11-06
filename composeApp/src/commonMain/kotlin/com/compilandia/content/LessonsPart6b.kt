@@ -85,7 +85,7 @@ internal val p6AstLessons: List<Lesson> = listOf(
                     tx("lessonspart6b_folha_id_num_var_ou"),
                     tx("lessonspart6b_producao_com_operador_t_binop"),
                     tx("lessonspart6b_producao_corrente_t_t_f"),
-                    "F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.",
+                    tx("solta_lessonspart6b_1"),
                     tx("lessonspart6b_em_expressoes_binarias_nos_ast"),
                 ),
             ),
@@ -172,7 +172,7 @@ internal val p6AstLessons: List<Lesson> = listOf(
             Text(tx("lessonspart6b_construcao_dirigida_pela_sintaxe_cada")),
             Code(P6_AST_BISON, tx("lessonspart6b_no_bison_ascendente_valor_lado")),
             Predict(
-                "Na regra `fator : '(' exp ')' { \$\$ = \$2; }`, por que \$2?",
+                tx("solta_lessonspart6b_2"),
                 listOf(tx("lessonspart6b_porque_parentese_2o_simbolo"), tx("lessonspart6b_porque_exp_2o_simbolo_lado"), tx("lessonspart6b_para_criar_no_parenteses")),
                 1,
                 tx("lessonspart6b_1_exp_2_3_repassar"),
@@ -196,7 +196,7 @@ internal val p6AstLessons: List<Lesson> = listOf(
             Callout(MNEMONIC, tx("lessonspart6b_quem_esta_mais_fundo_trabalha")),
             Predict(
                 tx("lessonspart6b_qual_linha_codigo_segredo_associatividade"),
-                listOf("return new BinOp(op, termo(), expr());", "e = new BinOp(op, e, termo()); dentro de um while", "if (tok.equals(\"(\")) return expr();"),
+                listOf("return new BinOp(op, termo(), expr());", tx("solta_lessonspart6b_3"), "if (tok.equals(\"(\")) return expr();"),
                 1,
                 tx("lessonspart6b_velho_vai_para_esquerda_resultado"),
             ),

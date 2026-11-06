@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.horizontalScroll
@@ -57,6 +58,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.layout.onPlaced
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.compilandia.content.EpMood
@@ -257,77 +260,37 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
         EpMood.NEUTRAL -> Mood.NEUTRAL
     }
 
-    Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
-        EpisodeTop(app.ls.captionsOn,
-            onClose = { Narrator.stop(); app.back() },
-            onCaptions = { app.learner.setCaptions(!app.ls.captionsOn); app.commit() },
-            onSkip = {
-                Narrator.stop()
-                if (ep.temporada == Temporada.BASICO) app.learner.markEpisode(s.skill) else app.learner.markEpisodeId(ep.id)
-                app.commit()
-                goPractice(app, s)
-            })
-        FitaDeCenas(ep.passos, index, maisLonge) { irPara(it) }
-        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
-            val k = maxWidth / STAGE_W
-            val shot = if (toy != null) remember(toyTick, toy) { toy.shot } else passo.shot
-            val inScene = shot.actor != null
-            val line = speaking ?: passo.fala
-            val showText = !Narrator.canSpeak(line) || app.ls.captionsOn || legendaForcada
-            val narrator by animateDpAsState(
-                when {
-                    !inScene -> NARRATOR_H
-                    showText -> NARRATOR_CAPTION
-                    else -> NARRATOR_SMALL
-                },
-                spring(stiffness = 300f),
-            )
-            val stageH = maxHeight - narrator
-            val profFala = line.who == Speaker.PROF
-            val narradorW by animateDpAsState(if (profFala) NARRADOR_COM_PROF else NARRADOR_W, spring(dampingRatio = 0.7f, stiffness = 300f))
-            Box(Modifier.fillMaxWidth().height(stageH).background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f))) {
-                MotionStage(shot, Modifier.fillMaxSize().testTag(STAGE_TAG), if (ask != null && !solved) ask.right + ask.wrong else emptySet(), found) { tap(it) }
+    val janela = com.compilandia.ui.LocalJanela.current
+    val ladoALado = janela.ladoALado
+    val shot = if (toy != null) remember(toyTick, toy) { toy.shot } else passo.shot
+    val inScene = shot.actor != null
+    val line = speaking ?: passo.fala
+    val showText = !Narrator.canSpeak(line) || app.ls.captionsOn || legendaForcada
+    val profFala = line.who == Speaker.PROF
+
+    // A fala escrita (ou as barrinhas do som) e o "não entendi". Igual nos dois arranjos.
+    val falaEscrita: @Composable (Modifier, Boolean) -> Unit = { mod, estreito ->
+        Column(mod, verticalArrangement = if (ladoALado) Arrangement.Top else Arrangement.Center) {
+            val talking = Narrator.speaker != null
+            Box(Modifier.weight(1f, fill = false).fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+                if (showText) {
+                    RichText(line.text, Modifier.fillMaxWidth().testTag(FALA_TAG), style = if (estreito) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge)
+                } else if (talking) SoundBars(Modifier.size(90.dp, 56.dp))
             }
-            Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(narrator).background(Palette.paper)) {
-                HazardStripe()
-                // Com a Profª no canto, o Byte encolhe e olha para ela. A fala fica com o meio da faixa.
-                val inicio = if (inScene) 14.dp else narradorW + 8.dp
-                val fimDaFala = if (profFala) PROF_W + 8.dp else 14.dp
-                Column(Modifier.fillMaxSize().padding(start = inicio, end = fimDaFala, top = 4.dp, bottom = 2.dp), verticalArrangement = Arrangement.Center) {
-                    val talking = Narrator.speaker != null
-                    Box(Modifier.weight(1f, fill = false).fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
-                        if (showText) {
-                            val estreito = inScene || profFala
-                            RichText(line.text, Modifier.fillMaxWidth().testTag(FALA_TAG), style = if (estreito) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge)
-                        } else if (talking) SoundBars(Modifier.size(90.dp, 56.dp))
-                    }
-                    // Sensor de texto ruim: guarda exatamente qual fala não foi entendida.
-                    Text(
-                        tx("episodescreen_nao_entendi"), color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall,
-                        modifier = Modifier.align(Alignment.End).clickable {
-                            app.learner.naoEntendiFala(s.skill, line.id, nowMs()); app.commit()
-                            legendaForcada = true
-                            replay++
-                            app.say(tx("episodescreen_anotado_veja_com_calma_toque"))
-                        }.padding(horizontal = 6.dp, vertical = 2.dp),
-                    )
-                }
-            }
-            // O mesmo Byte narra embaixo e entra no palco: ele só muda de lugar.
-            val actor = shot.actor
-            val size by animateDpAsState(if (actor != null) 86.dp * actor.scale else narradorW, spring(dampingRatio = 0.6f, stiffness = 260f))
-            val figH = size * 1.2f
-            val x by animateDpAsState(if (actor != null) k * actor.x - size / 2 else 4.dp, spring(dampingRatio = 0.62f, stiffness = 220f))
-            val y by animateDpAsState(if (actor != null) k * actor.y - figH else maxHeight - figH - 2.dp, spring(dampingRatio = 0.62f, stiffness = 220f))
-            ByteFigure(
-                Modifier.offset(x, y).width(size), mood,
-                lookY = if (actor == null && !profFala) -0.5f else 0f,
-                lookX = if (actor == null) (if (profFala) 1f else 0.5f) else 0f,
-                hop = hop, armsUp = armsUp,
+            // Sensor de texto ruim: guarda exatamente qual fala não foi entendida.
+            Text(
+                tx("episodescreen_nao_entendi"), color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.align(Alignment.End).clickable {
+                    app.learner.naoEntendiFala(s.skill, line.id, nowMs()); app.commit()
+                    legendaForcada = true
+                    replay++
+                    app.say(tx("episodescreen_anotado_veja_com_calma_toque"))
+                }.padding(horizontal = 6.dp, vertical = 2.dp),
             )
-            ProfPop(profFala, Modifier.align(Alignment.BottomEnd).padding(end = 6.dp, bottom = 2.dp))
-            if (finished) EpisodeEnd(app, s, ep, onReplay = { index = 0; finished = false }) { goPractice(app, s) }
         }
+    }
+    // Embaixo de tudo: brinquedo, dica ou play/pause e Continuar.
+    val controles: @Composable () -> Unit = {
         if (!finished) Column(
             Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -348,6 +311,112 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                 }
             }
         }
+    }
+    val palco: @Composable (Modifier, Float) -> Unit = { mod, alturaLogica ->
+        Box(mod.background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f))) {
+            MotionStage(shot, Modifier.fillMaxSize().testTag(STAGE_TAG), if (ask != null && !solved) ask.right + ask.wrong else emptySet(), found, stageH = alturaLogica) { tap(it) }
+        }
+    }
+
+    Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
+        EpisodeTop(app.ls.captionsOn,
+            onClose = { Narrator.stop(); app.back() },
+            onCaptions = { app.learner.setCaptions(!app.ls.captionsOn); app.commit() },
+            onSkip = {
+                Narrator.stop()
+                if (ep.temporada == Temporada.BASICO) app.learner.markEpisode(s.skill) else app.learner.markEpisodeId(ep.id)
+                app.commit()
+                goPractice(app, s)
+            })
+        if (!ladoALado) FitaDeCenas(ep.passos, index, maisLonge) { irPara(it) }
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
+            val altura = maxHeight
+            val largura = maxWidth
+            // Lado a lado: o palco à esquerda, a fita, a fala e os botões num painel à direita.
+            val painelW = if (!ladoALado) 0.dp else if (janela.faixa == com.compilandia.ui.Faixa.EXPANDIDA) (largura * 0.36f).coerceIn(340.dp, 440.dp) else (largura * 0.42f).coerceIn(280.dp, 360.dp)
+            val palcoW = largura - painelW
+            val narradorBase = when {
+                ladoALado -> 0.dp
+                !inScene -> NARRATOR_H
+                showText -> NARRATOR_CAPTION
+                else -> NARRATOR_SMALL
+            }
+            val narrator by animateDpAsState(narradorBase, spring(stiffness = 300f))
+            val palcoH = altura - narrator
+            // O palco cresce até a fala. Se a largura limita, a altura lógica passa de 410 e as peças descem para o meio.
+            val k = minOf(palcoW / STAGE_W, palcoH / com.compilandia.ui.motion.STAGE_H)
+            val alturaLogica = com.compilandia.ui.motion.alturaLogica(palcoW.value, palcoH.value)
+            val esquerda = (palcoW - k * STAGE_W) / 2
+            val descida = com.compilandia.ui.motion.descidaExtra(shot, alturaLogica)
+            // Num janela baixa, o Byte do painel encolhe para a fala caber.
+            val byteDoPainel = if (altura < 420.dp) 84.dp else 120.dp
+            val narradorW by animateDpAsState(
+                if (ladoALado) byteDoPainel else if (profFala) NARRADOR_COM_PROF else NARRADOR_W,
+                spring(dampingRatio = 0.7f, stiffness = 300f),
+            )
+            // Onde o Byte fica quando narra: embaixo à esquerda (empilhado) ou no alto do painel (lado a lado).
+            var topoDoPainel by remember { mutableStateOf(44.dp) }
+            if (ladoALado) {
+                Row(Modifier.fillMaxSize()) {
+                    palco(Modifier.width(palcoW).fillMaxHeight(), alturaLogica)
+                    Column(Modifier.width(painelW).fillMaxHeight().background(Palette.paper)) {
+                        FitaDeCenas(ep.passos, index, maisLonge) { irPara(it) }
+                        val dens = androidx.compose.ui.platform.LocalDensity.current
+                        Column(
+                            Modifier.weight(1f).fillMaxWidth().onPlaced { topoDoPainel = with(dens) { it.positionInParent().y.toDp() } }
+                                .padding(horizontal = 14.dp),
+                        ) {
+                            // O lugar do Byte e da Profª no alto; a fala embaixo, com a largura toda do painel.
+                            Spacer(Modifier.height(narradorW * 1.2f + 6.dp))
+                            falaEscrita(Modifier.weight(1f).fillMaxWidth(), false)
+                        }
+                        controles()
+                    }
+                }
+            } else {
+                palco(Modifier.fillMaxWidth().height(palcoH), alturaLogica)
+                Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(narrator).background(Palette.paper)) {
+                    HazardStripe()
+                    // Com a Profª no canto, o Byte encolhe e olha para ela. A fala fica com o meio da faixa.
+                    val inicio = if (inScene) 14.dp else narradorW + 8.dp
+                    val fimDaFala = if (profFala) PROF_W + 8.dp else 14.dp
+                    falaEscrita(Modifier.fillMaxSize().padding(start = inicio, end = fimDaFala, top = 4.dp, bottom = 2.dp), inScene || profFala)
+                }
+            }
+            // O mesmo Byte narra e entra no palco: ele só muda de lugar.
+            val actor = shot.actor
+            val size by animateDpAsState(if (actor != null) 86.dp * actor.scale * k.value else narradorW, spring(dampingRatio = 0.6f, stiffness = 260f))
+            val figH = size * 1.2f
+            val x by animateDpAsState(
+                when {
+                    actor != null -> esquerda + k * actor.x - size / 2
+                    ladoALado -> palcoW + 10.dp
+                    else -> 4.dp
+                },
+                spring(dampingRatio = 0.62f, stiffness = 220f),
+            )
+            val y by animateDpAsState(
+                when {
+                    actor != null -> k * (actor.y + descida) - figH
+                    ladoALado -> topoDoPainel + 4.dp
+                    else -> altura - figH - 2.dp
+                },
+                spring(dampingRatio = 0.62f, stiffness = 220f),
+            )
+            ByteFigure(
+                Modifier.offset(x, y).width(size), mood,
+                lookY = if (actor == null && !profFala && !ladoALado) -0.5f else 0f,
+                lookX = if (actor == null) (if (profFala) 1f else 0.5f) else 0f,
+                hop = hop, armsUp = armsUp,
+            )
+            if (ladoALado) {
+                ProfPop(profFala, Modifier.align(Alignment.TopEnd).offset(y = topoDoPainel).padding(end = 10.dp, top = 4.dp))
+            } else {
+                ProfPop(profFala, Modifier.align(Alignment.BottomEnd).padding(end = 6.dp, bottom = 2.dp))
+            }
+            if (finished) EpisodeEnd(app, s, ep, onReplay = { index = 0; finished = false }) { goPractice(app, s) }
+        }
+        if (!ladoALado) controles()
     }
 }
 
@@ -377,7 +446,7 @@ private fun FitaDeCenas(passos: List<Passo>, index: Int, maisLonge: Int, onSeek:
     val n = passos.size
     fun cena(x: Float, w: Float) = (x / w * n).toInt().coerceIn(0, n - 1)
     Canvas(
-        Modifier.fillMaxWidth().height(44.dp).background(Palette.paper).padding(horizontal = 8.dp, vertical = 3.dp)
+        Modifier.fillMaxWidth().height(34.dp).background(Palette.paper).padding(horizontal = 8.dp, vertical = 3.dp)
             .testTag(FITA_TAG)
             .pointerInput(n) { detectTapGestures { onSeek(cena(it.x, size.width.toFloat())) } }
             .pointerInput(n) { detectHorizontalDragGestures { c, _ -> onSeek(cena(c.position.x, size.width.toFloat())) } },

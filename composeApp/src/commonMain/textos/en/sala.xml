@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/sala.xml. -->
+<resources>
+    <string name="sala_jogar">Play</string>
+    <string name="sala_metas">Daily goals: %1$s of %2$s</string>
+    <string name="sala_corrida">Gate race</string>
+    <string name="sala_aulas_30">30-second lessons</string>
+    <string name="sala_fechar">Close</string>
+    <string name="sala_proximo">%1$s, %2$s</string>
+</resources>

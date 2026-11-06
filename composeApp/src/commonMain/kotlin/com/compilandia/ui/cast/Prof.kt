@@ -25,7 +25,7 @@ private val BEAK = Color(0xFFF5B700)
 /** Profª Gramática: coruja chapada, mesmo estilo do Byte. O bico abre com a fala. */
 @Composable
 fun ProfFigure(modifier: Modifier = Modifier, lookX: Float = 0f, animate: Boolean = true) {
-    val clock = rememberRigClock(animate) { Narrator.speaker == Speaker.PROF }
+    val clock = rememberRigClock(animate) { Narrator.falando(Speaker.PROF) }
     Canvas(modifier.aspectRatio(1f)) {
         val u = size.width / 300f
         val t = clock.time.floatValue

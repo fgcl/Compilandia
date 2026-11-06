@@ -51,7 +51,7 @@ internal val tpCap7 = GuideChapter(
         ),
         Callout(WATCH_OUT, tx("tpguidec_bug_campeao_em_exprrel_esquecer")),
         Steps(
-            "Os tipos subindo em `ok <- c + 1 > n e nao ok;` (c caractere, n inteiro, ok logico)",
+            tx("solta_tpguidec_1"),
             listOf(
                 "`primario` de c → CARACTERE; de 1 → INTEIRO.",
                 tx("tpguidec_expradd_numerico_numerico_inteiro"),
@@ -181,8 +181,8 @@ internal val tpCap8 = GuideChapter(
             """.trimIndent(),
             tx("tpguidec_cola_mips_tp_so_isto"),
         ),
-        Visual(VK.MIPS, input = tx("comum_b_c_d"), caption = "O widget usa o estilo 'tudo na memória' (cada temporário vira um .word). Nosso gerador vai guardar os temporários em registradores \$t0–\$t9."),
-        Text("A estratégia de expressões: os registradores `\$t0…\$t9` funcionam como uma **pilha**. Cada método de expressão pega o próximo registrador livre, deixa o resultado nele e devolve QUAL é. Uma operação binária faz `esq = esq op dir` e devolve o `dir` ao estoque — ele sempre é o mais novo."),
+        Visual(VK.MIPS, input = tx("comum_b_c_d"), caption = tx("solta_tpguidec_2")),
+        Text(tx("solta_tpguidec_3")),
         Code(
             $$"""
                 private record Res(TipoDado tipo, String reg) {}             // tipo + onde está o valor
@@ -278,7 +278,7 @@ internal val tpCap8 = GuideChapter(
             tx("tpguidec_quantos_registradores_t_ficam_ocupados"),
             listOf("1", "2", "3", "5"),
             2,
-            "a → \$t0; o `+` chama exprMul: b → \$t1, c → \$t2 (pico: 3!). `mul \$t1, \$t1, \$t2` libera o \$t2; `add \$t0, \$t0, \$t1` libera o \$t1. Sobra só o \$t0 com o resultado.",
+            tx("solta_tpguidec_4"),
         ),
         Steps(
             "`soma <- soma + n * 2;` virando MIPS",
@@ -288,7 +288,7 @@ internal val tpCap8 = GuideChapter(
                 "`*` → `primario(2)` → `li \$t2, 2`",
                 "binaria → `mul \$t1, \$t1, \$t2` (libera \$t2)",
                 "binaria → `add \$t0, \$t0, \$t1` (libera \$t1)",
-                "atribuicao → `sw \$t0, soma_1` (libera \$t0 — de volta a zero registradores ocupados)",
+                tx("solta_tpguidec_5"),
             ),
         ),
         Code(
@@ -414,10 +414,10 @@ internal val tpCap8 = GuideChapter(
                 tx("tpguidec_run_assemble_f3_erro_aqui"),
                 tx("tpguidec_run_go_f5_saida_aparece"),
                 tx("tpguidec_linha_comando_otimo_para_testes"),
-                "Depurando: use Step (F7) e olhe a aba Registers — dá para ver \$t0 mudar a cada instrução.",
+                tx("solta_tpguidec_6"),
             ),
         ),
-        Callout(WATCH_OUT, "Esqueceu o `li \$v0, 10` + `syscall` no final? O processador continua executando o que estiver depois do seu código, e o MARS termina com um aviso de 'dropped off bottom'. Encerre sempre explicitamente."),
+        Callout(WATCH_OUT, tx("solta_tpguidec_7")),
         Predict(
             tx("tpguidec_se_novorotulo_devolvesse_sempre_fimse"),
             listOf(
@@ -431,6 +431,6 @@ internal val tpCap8 = GuideChapter(
         ),
         Callout(NO_DUMB_QUESTIONS, tx("tpguidec_p_por_que_word_4")),
         Callout(REAL_WORLD, tx("tpguidec_esse_estilo_toda_variavel_na")),
-        Reveal("Uma expressão aninhada à direita com 11 operandos (`a + (b + (c + …))`) esgota \$t0–\$t9. Como resolver?", "Opções: (1) **derramar** (spill) para a pilha: `addi \$sp, \$sp, -4` + `sw \$t9, 0(\$sp)` e desempilhar depois; (2) usar também \$s0–\$s7; (3) avaliar primeiro o lado que precisa de mais registradores (numeração de Sethi-Ullman). Para o TP, documentar o limite já costuma bastar."),
+        Reveal(tx("solta_tpguidec_8"), tx("solta_tpguidec_9")),
     ),
 )

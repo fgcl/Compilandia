@@ -1,0 +1,91 @@
+português	english	nota
+# Glossário único da tradução (S2). Termos da literatura em inglês (Aho, Lam, Sethi, Ullman; manual do Bison).
+# O Gradle lê só os .xml desta pasta; este arquivo é para quem traduz.
+analisador léxico	scanner	"lexer" quando o texto fala do código C
+analisador sintático	parser
+árvore sintática	parse tree
+árvore sintática abstrata	abstract syntax tree (AST)
+AFD	DFA
+AFN	NFA
+autômato	automaton	plural automata
+construção de subconjuntos	subset construction
+minimização	minimization
+tabela de pares	table of pairs
+lexema	lexeme
+padrão	pattern
+token	token
+gramática	grammar
+gramática livre de contexto	context-free grammar
+produção / regra	production / rule
+símbolo terminal	terminal
+não-terminal	nonterminal
+cadeia	string
+vazio, épsilon	empty, epsilon (ε)
+derivação mais à esquerda	leftmost derivation
+ambiguidade, ambígua	ambiguity, ambiguous
+recursão à esquerda	left recursion
+fatoração à esquerda	left factoring
+FIRST, FOLLOW	FIRST, FOLLOW	nunca traduzir
+ponto fixo	fixed point
+tabela LL(1)	LL(1) table
+analisador preditivo	predictive parser
+descida recursiva	recursive descent
+empilha-reduz	shift-reduce
+empilhar / reduzir / aceitar	shift / reduce / accept
+handle	handle
+lookahead	lookahead
+item LR(0)	LR(0) item
+fecho	closure
+desvio (goto)	goto
+conflito empilha-reduz	shift-reduce conflict
+conflito reduz-reduz	reduce-reduce conflict
+precedência, associatividade	precedence, associativity
+recuperação de erros	error recovery
+modo pânico	panic mode
+atributo sintetizado / herdado	synthesized / inherited attribute
+verificação de tipos	type checking
+escopo	scope
+tabela de símbolos	symbol table
+código de três endereços	three-address code
+temporário (t1)	temporary (t1)
+registro de ativação	activation record
+pilha de chamadas	call stack
+alocação de registradores	register allocation
+derramamento	spill
+otimização	optimization
+dobra de constantes	constant folding
+código morto	dead code
+geração de código	code generation
+# Nomes do jogo
+Compilândia	Compilândia
+Byte	Byte
+Profª Gramática	Prof. Grammar
+o Bug	the Bug
+Porto da Partida	Starting Port
+Floresta Léxica	Lexical Forest
+Vale das Gramáticas	Grammar Valley
+Ponte da Transformação	Transformation Bridge
+Templo Top-Down	Top-Down Temple
+Fortaleza Bottom-Up	Bottom-Up Fortress
+Oficina Yacc/Bison	Yacc/Bison Workshop
+Cidade Semântica	Semantic City
+Forja do Código	Code Forge
+Oficina do Byte	Byte's Workshop
+Laboratório	Lab
+Laboratório Bison	Bison Lab
+Seu compilador	Your compiler
+Guia do TP	Project Guide	TP = trabalho prático da disciplina
+trilha	path
+etapa	step
+Abertura com o Bug	Bug ambush
+Ver a aula animada	Watch the animated lesson
+Fazer com ajuda	Try it with help
+Pegadinha	Trick question
+Desafio	Challenge
+Ler com calma	Read at your pace
+engrenagens	gears
+chefão	boss
+Álbum de bugs	Bug album
+Corrida de portas	Gate race
+metas do dia	daily goals
+não entendi	I didn't get it

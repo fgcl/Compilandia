@@ -5,7 +5,7 @@ enum class Tipo { VAZIO, GRAMATICA, BISON, FLEX, MIPS, REGEX, EXPRESSAO, CODIGO,
 
 object Entrada {
     private val pergunta = Regex(
-        "^(o que|oque|oq|como|por que|porque|pq|qual|quais|quando|onde|quem|pra que|para que|explica|explique|me explica|me ensina|ensina|diferença|diferenca|define|defina|significa|cade|cadê)\\b",
+        "^(o que|oque|oq|como|por que|porque|pq|qual|quais|quando|onde|quem|pra que|para que|explica|explique|me explica|me ensina|ensina|diferença|diferenca|define|defina|significa|cade|cadê|what|whats|which|how|why|when|where|who|explain|define|difference|meaning)\\b",
         RegexOption.IGNORE_CASE,
     )
     private val instrucao = Regex("^\\s*(li|la|lw|sw|add|addi|sub|mul|move|syscall|jal|jr|beq|bne|ble|j)\\b", RegexOption.MULTILINE)

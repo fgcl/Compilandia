@@ -37,7 +37,7 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
                     tx("lessonspart5a_cada_pedido_em_preparo_ativacao"),
                     tx("lessonspart5a_prato_com_bilhete_registro_ativacao"),
                     tx("lessonspart5a_ingredientes_pedido_parametros"),
-                    "Para qual mesa devolver → **endereço de retorno** (no MIPS, o registrador `\$ra`)",
+                    tx("solta_lessonspart5a_1"),
                     tx("lessonspart5a_rascunhos_cozinheiro_variaveis_locais_tempor"),
                     tx("lessonspart5a_pilha_pratos_na_bancada_pilha"),
                     tx("lessonspart5a_molho_que_precisa_outro_molho"),
@@ -65,7 +65,7 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
         listOf(
             Say(PROF, tx("lessonspart5a_hoje_gente_assiste_memoria_durante")),
             Code(P5_CHAIN1_CODE, tx("lessonspart5a_f_chama_g_g_chama")),
-            Visual(VK.CALL_STACK, input = "chain1", caption = "Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA."),
+            Visual(VK.CALL_STACK, input = "chain1", caption = tx("solta_lessonspart5a_2")),
             Steps(
                 tx("lessonspart5a_que_voce_acabou_ver"),
                 listOf(
@@ -123,20 +123,20 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
                     tx("lessonspart5a_2_3_1_entao_fat"),
                     "3. fat(2) chama fat(1): quadro {n=1, volta para: fat, linha 3}. Pilha: main, fat(3), fat(2), fat(1) — 4 quadros",
                     tx("lessonspart5a_4_fat_1_cai_no"),
-                    "5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai",
+                    tx("solta_lessonspart5a_3"),
                     "6. fat(3) retoma: 3 * 2 = 6; devolve 6 e sai",
                     tx("lessonspart5a_7_main_recebe_6"),
                 ),
             ),
-            Text("Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `\$ra` e o `n`."),
+            Text(tx("solta_lessonspart5a_4")),
             Code(P5_FAT_ASM, tx("lessonspart5a_fat_asm_prologo_abre_quadro")),
             Steps(
                 tx("lessonspart5a_quem_faz_que_na_chamada"),
                 listOf(
-                    "**Chamador:** põe o argumento em `\$a0` e executa `jal fat` (que guarda o endereço de volta em `\$ra`)",
+                    tx("solta_lessonspart5a_5"),
                     "**Chamado, na entrada (prólogo):** `addi \$sp, \$sp, -8` abre o quadro; salva `\$ra` e `\$a0` nele",
-                    "**Chamado, na saída (epílogo):** põe o resultado em `\$v0`, restaura `\$ra`, `addi \$sp, \$sp, 8` fecha o quadro e `jr \$ra` volta",
-                    "**Chamador, depois:** usa o valor que chegou em `\$v0`",
+                    tx("solta_lessonspart5a_6"),
+                    tx("solta_lessonspart5a_7"),
                 ),
             ),
             Say(BYTE, tx("lessonspart5a_deixa_eu_tentar_sozinho_acho")),
@@ -145,7 +145,7 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
             Reveal(tx("lessonspart5a_que_valor_cada_chamada_devolve"), "h(4) = 5; g(2) = 5; depois f chama h(2) = 3; f devolve 5 + 3 = 8; main devolve 8."),
             Reveal(tx("lessonspart5a_para_onde_volta_segundo_h"), tx("lessonspart5a_para_f_na_linha_8")),
             Visual(VK.CALL_STACK, input = "chain2", caption = tx("lessonspart5a_confira_suas_tres_respostas")),
-            Callout(WATCH_OUT, "Esqueceu de salvar `\$ra` antes do `jal` interno? A chamada recursiva sobrescreve `\$ra`, e o `jr \$ra` final volta para o lugar errado — o programa entra em laço. Função que chama outra SEMPRE salva `\$ra` na pilha."),
+            Callout(WATCH_OUT, tx("solta_lessonspart5a_8")),
             Callout(EXAM_TIP, tx("lessonspart5a_na_prova_desenhe_pilha_como")),
         ),
     ),
@@ -158,8 +158,8 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
             Reveal(tx("lessonspart5a_ideia_mais_simples_cada_variavel"), tx("lessonspart5a_so_existe_n_para_funcao")),
             Reveal(tx("lessonspart5a_entao_cada_chamada_precisa_sua"), tx("lessonspart5a_ultima_chamada_comecar_primeira_terminar")),
             Say(BYTE, tx("lessonspart5a_ta_mas_alem_n_que")),
-            Reveal(tx("lessonspart5a_quando_fat_1_termina_como"), "Ela guardou o **endereço de retorno** na hora da chamada. No MIPS, `jal` coloca esse endereço em `\$ra`; como a próxima chamada sobrescreveria `\$ra`, ele é salvo no quadro."),
-            Reveal(tx("lessonspart5a_como_devolver_resultado_voltar_usar"), "O resultado vai num lugar combinado (no MIPS, `\$v0`). Para reencontrar o quadro anterior, guarda-se o **vínculo de controle** (link dinâmico), um ponteiro para o quadro do chamador — ou, no MIPS simples, basta desfazer o `\$sp`."),
+            Reveal(tx("lessonspart5a_quando_fat_1_termina_como"), tx("solta_lessonspart5a_9")),
+            Reveal(tx("lessonspart5a_como_devolver_resultado_voltar_usar"), tx("solta_lessonspart5a_10")),
             Predict(
                 tx("lessonspart5a_quem_deve_abrir_espaco_das"),
                 listOf(
@@ -197,10 +197,10 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart5a_sequencia_chamada_retorno"),
                 listOf(
-                    "**Chamador:** avalia os parâmetros reais e os coloca onde o chamado espera (no quadro, ou em `\$a0`–`\$a3`)",
+                    tx("solta_lessonspart5a_11"),
                     tx("lessonspart5a_chamador_registra_endereco_retorno_vinculo"),
-                    "**Chamado (prólogo):** aloca o quadro (`\$sp` -= tamanho), salva registradores (incluindo `\$ra`) e inicializa as locais",
-                    "**Chamado (retorno):** põe o valor de retorno no lugar combinado (`\$v0`), restaura registradores e `\$sp`, desvia para o endereço de retorno (`jr \$ra`)",
+                    tx("solta_lessonspart5a_12"),
+                    tx("solta_lessonspart5a_13"),
                     tx("lessonspart5a_chamador_recupera_valor_devolvido_continua"),
                 ),
             ),
@@ -240,7 +240,7 @@ internal val p5RuntimeLessons: List<Lesson> = listOf(
             Callout(MNEMONIC, tx("lessonspart5a_heap_sobe_pilha_desce_se")),
             Callout(MNEMONIC, tx("lessonspart5a_controle_chama_acesso_aninha_vinculo")),
             Callout(MNEMONIC, tx("lessonspart5a_cafe_manha_quadro_pao_vitamina")),
-            Callout(MNEMONIC, "**jal = Jump And Link**: pula e deixa um bilhete de volta em `\$ra` (**r**eturn **a**ddress). **jr \$ra = Jump Register**: volta seguindo o bilhete."),
+            Callout(MNEMONIC, tx("solta_lessonspart5a_14")),
             Say(BYTE, tx("lessonspart5a_pra_lembrar_quem_faz_que")),
             Say(PROF, tx("lessonspart5a_recepcao_hotel_hospede_chamador_chega")),
             Predict(

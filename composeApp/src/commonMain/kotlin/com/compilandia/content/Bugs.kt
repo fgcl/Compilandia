@@ -100,7 +100,7 @@ object Album {
         Especie("casa-dupla", tx("bugs_bug_casa_dupla"), Skill.LL1_TABLE, tx("bugs_duas_regras_na_mesma_casa"), tx("bugs_casa_com_duas_regras_conflito"), listOf(
             v(tx("bugs_regra_entra_na_coluna_cada")),
             v(tx("bugs_se_lado_direito_pode_sumir")),
-            f(tx("bugs_toda_gramatica_sem_recursao_esquerda"), "S -> A b, A -> b | ε não tem recursão e não é LL(1)."),
+            f(tx("bugs_toda_gramatica_sem_recursao_esquerda"), tx("solta_bugs_1")),
         )),
         Especie("pilha-invertida", tx("bugs_bug_pilha_invertida"), Skill.LL1_PARSING, tx("bugs_lado_direito_entra_na_pilha"), tx("bugs_entra_tras_para_frente_para"), listOf(
             v(tx("bugs_terminal_no_topo_precisa_casar")),

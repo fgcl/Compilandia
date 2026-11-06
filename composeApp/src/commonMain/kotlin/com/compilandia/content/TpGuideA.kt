@@ -124,7 +124,7 @@ internal val tpCap2 = GuideChapter(
             listOf(
                 tx("tpguidea_tipos_inteiro_32_bits_logico"),
                 tx("tpguidea_comandos_declaracao_inteiro_b_atribuicao"),
-                "**Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.",
+                tx("solta_tpguidea_1"),
                 tx("tpguidea_expressoes_aritmetica_relacionais_logicas_ou"),
                 tx("tpguidea_comentarios_ate_fim_linha_bloco"),
                 tx("tpguidea_strings_so_aparecem_dentro_escreva"),
@@ -170,7 +170,7 @@ internal val tpCap2 = GuideChapter(
         Callout(REAL_WORLD, tx("tpguidea_exigir_chaves_no_se_fecha")),
         Reveal("Quem pega cada erro? (1) `x <- 3 # 2;`  (2) `x <- 3 + ;`  (3) `x <- verdadeiro + 1;`", tx("tpguidea_1_lexico_nao_pertence_nenhum")),
         Predict(
-            "E `inteiro 2x;`? Que tipo de erro a Byteiro deve dar?",
+            tx("solta_tpguidea_2"),
             listOf(
                 tx("tpguidea_lexico_numero_malformado_2x"),
                 tx("tpguidea_sintatico_esperava_identificador_encontrou_2"),

@@ -47,7 +47,7 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
             Visual(LL1_TABLE, P2_ABC, caption = tx("lessonspart2b_caderninho_completo_repare_em_nas")),
             Say(BYTE, tx("lessonspart2b_se_porteiro_tiver_duas_portas")),
             Say(PROF, tx("lessonspart2b_ai_ele_trava_conflito_gramatica")),
-            Visual(LL1_TABLE, P2_FACT, caption = "S → a b | a c: as duas produções começam com a, e caem juntas em M[S, a]. O porteiro não sabe qual porta abrir."),
+            Visual(LL1_TABLE, P2_FACT, caption = tx("solta_lessonspart2b_1")),
             Reveal(tx("lessonspart2b_celula_vazia_no_caderninho_significa"), tx("lessonspart2b_erro_sintaxe_nenhuma_producao_pode")),
             Callout(REAL_WORLD, tx("lessonspart2b_gcc_clang_compiladores_c_c")),
             Say(PROF, tx("lessonspart2b_resumo_porteiro_first_abre_porta")),
@@ -63,9 +63,9 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
                 tx("lessonspart2b_que_olhar"),
                 listOf(
                     tx("lessonspart2b_linhas_nao_terminais_colunas_terminais"),
-                    "E → T E' aparece em ( e id: é FIRST(T E').",
-                    "E' → ε aparece em ) e \$: é FOLLOW(E').",
-                    "T' → ε aparece em +, ) e \$: é FOLLOW(T').",
+                    tx("solta_lessonspart2b_2"),
+                    tx("solta_lessonspart2b_3"),
+                    tx("solta_lessonspart2b_4"),
                     tx("lessonspart2b_nenhuma_celula_tem_duas_producoes"),
                 )
             ),
@@ -91,7 +91,7 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart2b_producao_por_producao"),
                 listOf(
-                    "D → T L ; : FIRST(T L ;) = {int, float}. Anote em M[D, int] e M[D, float].",
+                    tx("solta_lessonspart2b_5"),
                     "T → int : M[T, int].",
                     "T → float : M[T, float].",
                     "L → id R : M[L, id].",
@@ -116,7 +116,7 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
         listOf(
             Say(PROF, tx("lessonspart2b_pergunta_raiz_analisador_esta_em")),
             Predict(
-                "A → x y | z w. Chega o token z. Qual produção?",
+                tx("solta_lessonspart2b_6"),
                 listOf("A → x y", "A → z w", tx("lessonspart2b_precisa_testar_duas"), tx("comum_nenhuma")), 1,
                 tx("lessonspart2b_z_first_z_w_z")
             ),
@@ -131,7 +131,7 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
                 tx("lessonspart2b_z_nao_abre_x_y")
             ),
             Predict(
-                "A → x y | ε, mas agora FOLLOW(A) = {x, z}. Chega x. Qual?",
+                tx("solta_lessonspart2b_7"),
                 listOf("A → x y", "A → ε", tx("lessonspart2b_conflito_duas"), tx("comum_erro")), 2,
                 tx("lessonspart2b_x_abre_x_y_first")
             ),
@@ -200,7 +200,7 @@ internal val p2Ll1TableLessons: List<Lesson> = listOf(
                 )
             ),
             Predict(
-                "A → ε e FOLLOW(A) = {), \$}. Em quais colunas vai A → ε?",
+                tx("solta_lessonspart2b_8"),
                 listOf(tx("lessonspart2b_na_coluna"), tx("lessonspart2b_nas_colunas"), tx("lessonspart2b_so_na_coluna"), tx("lessonspart2b_em_todas_colunas")), 1,
                 tx("lessonspart2b_nao_existe_coluna_producao_vazia")
             ),
@@ -291,7 +291,7 @@ internal val p2Ll1ParsingLessons: List<Lesson> = listOf(
             Say(BYTE, tx("lessonspart2b_olha_so_ficou_la_embaixo")),
             Say(PILHA, tx("lessonspart2b_paciencia_meu_forte")),
             Text(tx("lessonspart2b_agora_passos_finais_sao_seus")),
-            Reveal(tx("lessonspart2b_proxima_acao"), "Casar id. A pilha fica \$ ; R e a entrada ; \$."),
+            Reveal(tx("lessonspart2b_proxima_acao"), tx("solta_lessonspart2b_9")),
             Reveal(tx("lessonspart2b_topo_r_entrada_acao"), tx("lessonspart2b_expandir_r_m_r_pilha")),
             Reveal(tx("lessonspart2b_depois"), "Casar ';'. Pilha \$ e entrada \$ → aceitar!"),
             Visual(LL1_TRACE, P2_DECL, "int id , id ;", tx("lessonspart2b_confira_com_motor_11_linhas")),

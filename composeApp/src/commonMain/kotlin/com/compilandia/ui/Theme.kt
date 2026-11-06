@@ -238,6 +238,11 @@ fun CompilandiaTheme(content: @Composable () -> Unit) {
         androidx.compose.material3.LocalContentColor provides Palette.ink,
         androidx.compose.ui.platform.LocalDensity provides androidx.compose.ui.unit.Density(d.density, d.fontScale * ThemeState.fontScale),
     ) {
-        MaterialTheme(colorScheme = colors, typography = typography, content = content)
+        MaterialTheme(colorScheme = colors, typography = typography) {
+            // A faixa de largura (T1) vale para todas as telas, inclusive as renderizadas nos testes.
+            androidx.compose.foundation.layout.BoxWithConstraints {
+                androidx.compose.runtime.CompositionLocalProvider(LocalJanela provides Janela(maxWidth, maxHeight), content = content)
+            }
+        }
     }
 }

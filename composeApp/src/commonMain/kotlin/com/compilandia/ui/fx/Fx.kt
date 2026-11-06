@@ -66,7 +66,7 @@ object Fx {
 
     var glitchTick by mutableIntStateOf(0)
     var portao by mutableStateOf<Portao?>(null)
-    private val carimbos = listOf("TOKEN INESPERADO", tx("fx_erro_compilacao"), tx("fx_falha_na_pilha"), "CONFLITO", "SEGMENTATION FAULT")
+    private val carimbos = listOf(tx("fx_token_inesperado"), tx("fx_erro_compilacao"), tx("fx_falha_na_pilha"), tx("comum_conflito_maiusc"), "SEGMENTATION FAULT")
     var carimbo by mutableStateOf("")
         private set
 

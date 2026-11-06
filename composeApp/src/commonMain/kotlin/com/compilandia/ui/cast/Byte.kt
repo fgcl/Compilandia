@@ -51,7 +51,7 @@ fun ByteFigure(
     armsUp: Float = 0f,
     animate: Boolean = true,
 ) {
-    val clock = rememberRigClock(animate) { Narrator.speaker == Speaker.BYTE || Narrator.speaker == Speaker.NARRADOR }
+    val clock = rememberRigClock(animate) { Narrator.falando(Speaker.BYTE) || Narrator.falando(Speaker.NARRADOR) }
     val jump = remember { Animatable(0f) }
     LaunchedEffect(hop) {
         if (hop > 0) {

@@ -1,5 +1,8 @@
 package com.compilandia.ui.screens
 
+import com.compilandia.ui.larguraDeLeitura
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -67,40 +70,91 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
 /** A trilha de um assunto (A1): uma linha de etapas e um botão só. */
 @Composable
 fun TrilhaScreen(app: AppState, s: Skill) {
+    val cor = Palette.region(s.region)
+    val janela = com.compilandia.ui.LocalJanela.current
+    Column(Modifier.fillMaxSize()) {
+        Header(s.region.title, s.region.tagline, cor)
+        if (janela.faixa == com.compilandia.ui.Faixa.EXPANDIDA) {
+            // T1: janela larga. Os assuntos da região à esquerda, a trilha à direita.
+            Row(Modifier.weight(1f).fillMaxWidth()) {
+                AssuntosDaRegiao(app, s.region, s, Modifier.width(340.dp).fillMaxHeight()) { if (it != s) app.replace(Screen.Trilha(it)) }
+                TrilhaCorpo(app, s, Modifier.weight(1f).fillMaxHeight())
+            }
+        } else {
+            TrilhaCorpo(app, s, Modifier.weight(1f).fillMaxWidth())
+        }
+    }
+}
+
+/** O miolo da trilha: anel, etapas e o botão de seguir. A tela da trilha e a região larga usam o mesmo. */
+@Composable
+fun TrilhaCorpo(app: AppState, s: Skill, modifier: Modifier) {
     val l = app.learner
     val ls = app.ls
     val cor = Palette.region(s.region)
     val passos = remember(s) { Trilha.passos(s) }
-    val proximo = remember(ls) { Trilha.proximo(l, s, nowMs()) }
-    val feitas = remember(ls) { Trilha.feitas(l, s) }
-    Column(Modifier.fillMaxSize()) {
-        Header(s.region.title, s.region.tagline, cor)
-        Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                MasteryRing(l.mastery(s), cor)
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(s.title, style = MaterialTheme.typography.headlineSmall)
-                    Text(tx("trilha_etapas_feitas", feitas, passos.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+    val proximo = remember(ls, s) { Trilha.proximo(l, s, nowMs()) }
+    val feitas = remember(ls, s) { Trilha.feitas(l, s) }
+    Column(modifier) {
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(16.dp)) {
+            Column(Modifier.larguraDeLeitura()) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    MasteryRing(l.mastery(s), cor)
+                    Spacer(Modifier.width(12.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(s.title, style = MaterialTheme.typography.headlineSmall)
+                        Text(tx("trilha_etapas_feitas", feitas, passos.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+                    }
                 }
+                VSpace(16)
+                passos.forEachIndexed { i, p ->
+                    EtapaLinha(app, s, p, ultima = i == passos.lastIndex, atual = p == proximo)
+                }
+                VSpace(24)
             }
-            VSpace(16)
-            passos.forEachIndexed { i, p ->
-                EtapaLinha(app, s, p, ultima = i == passos.lastIndex, atual = p == proximo)
-            }
-            VSpace(24)
         }
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 16.dp, vertical = 12.dp)) {
-            if (proximo != null) {
-                BigButton(tx("trilha_continuar", proximo.titulo), Modifier.fillMaxWidth()) { abrirPasso(app, s, proximo) }
-            } else {
-                Text(tx("trilha_completa"), style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
-                VSpace(8)
-                val outro = remember(ls) { Trilha.proximoAssunto(l, s) }
-                if (outro != null) {
-                    BigButton(tx("trilha_proximo_assunto", outro.title), Modifier.fillMaxWidth()) { app.replace(Screen.Trilha(outro)) }
+            Column(Modifier.larguraDeLeitura()) {
+                if (proximo != null) {
+                    BigButton(tx("trilha_continuar", proximo.titulo), Modifier.fillMaxWidth()) { abrirPasso(app, s, proximo) }
                 } else {
-                    BigButton(tx("trilha_treinar"), Modifier.fillMaxWidth()) { abrirPasso(app, s, passos.last()) }
+                    Text(tx("trilha_completa"), style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
+                    VSpace(8)
+                    val outro = remember(ls, s) { Trilha.proximoAssunto(l, s) }
+                    if (outro != null) {
+                        BigButton(tx("trilha_proximo_assunto", outro.title), Modifier.fillMaxWidth()) { app.replace(Screen.Trilha(outro)) }
+                    } else {
+                        BigButton(tx("trilha_treinar"), Modifier.fillMaxWidth()) { abrirPasso(app, s, passos.last()) }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** A coluna de assuntos da região, na janela larga. O escolhido fica aceso. */
+@Composable
+fun AssuntosDaRegiao(app: AppState, region: com.compilandia.learning.Region, escolhido: Skill?, modifier: Modifier, onEscolhe: (Skill) -> Unit) {
+    val l = app.learner
+    val ls = app.ls
+    val cor = Palette.region(region)
+    val skills = remember(region) { Skill.entries.filter { it.region == region } }
+    Column(modifier.background(Palette.paperDark).verticalScroll(rememberScrollState()).padding(10.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        for (k in skills) {
+            val aceso = k == escolhido
+            val feitas = remember(ls, k) { Trilha.feitas(l, k) }
+            val total = remember(k) { Trilha.passos(k).size }
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(if (aceso) Palette.paper else Palette.paperDark)
+                    .border(2.dp, if (aceso) Palette.hazard else Palette.paperDark, RoundedCornerShape(10.dp))
+                    .clickable { onEscolhe(k) }.padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                MasteryRing(l.mastery(k), cor, size = 38.dp)
+                Spacer(Modifier.width(10.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(k.title, style = MaterialTheme.typography.titleSmall)
+                    Text(tx("trilha_etapas_feitas", feitas, total), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
                 }
             }
         }

@@ -156,4 +156,9 @@
     <string name="sims_ask_lr0_nao">Não, só empilha</string>
     <string name="sims_ask_lr0_porque_sim">Um item tem o ponto no fim da regra. Ali o parser pode reduzir.</string>
     <string name="sims_ask_lr0_porque_nao">Todo item ainda tem símbolo depois do ponto. Ali só se empilha.</string>
+    <string name="sims_aceita">aceita</string>
+    <string name="sims_erro">erro</string>
+    <string name="sims_pilha">pilha</string>
+    <string name="diagnostico_ou"> ou </string>
+    <string name="diagnostico_empilhar">empilhar</string>
 </resources>

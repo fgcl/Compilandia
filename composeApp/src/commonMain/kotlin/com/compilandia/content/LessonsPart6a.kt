@@ -32,7 +32,7 @@ internal val p6MinLessons: List<Lesson> = listOf(
             Say(BYTE, tx("lessonspart6a_ue_demite_quem_trabalha_menos")),
             Say(PROF, tx("lessonspart6a_nao_bem_isso_ele_faz")),
             Steps(
-                "Lanchonete → minimização de AFD",
+                tx("solta_lessonspart6a_1"),
                 listOf(
                     tx("lessonspart6a_cada_atendente_estado_afd"),
                     tx("lessonspart6a_cada_pedido_cliente_b_simbolo"),
@@ -44,7 +44,7 @@ internal val p6MinLessons: List<Lesson> = listOf(
             ),
             Say(LEXI, tx("lessonspart6a_na_floresta_lexica_isso_importa")),
             Predict(
-                "Atendente X entrega o lanche quando a fila de pedidos acaba nele; atendente Y nunca entrega. Eles podem ser equivalentes?",
+                tx("solta_lessonspart6a_2"),
                 listOf(tx("lessonspart6a_sim_se_repassarem_pedidos_para"), tx("lessonspart6a_nao_com_fila_vazia_entrega"), tx("lessonspart6a_depende_tamanho_alfabeto")),
                 1,
                 tx("lessonspart6a_cadeia_vazia_ja_separa_por"),

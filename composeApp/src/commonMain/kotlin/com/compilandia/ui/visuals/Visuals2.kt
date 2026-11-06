@@ -90,7 +90,7 @@ fun NfaSubsetView(id: String) {
         val shown = res.steps.take(i)
         val known = res.states.filter { st -> st == res.states[0] || shown.any { it.to == st } }
         Column(Modifier.horizontalScroll(rememberScrollState())) {
-            Row { Cell("AFD", header = true, w = 56); Cell("conjunto", header = true, w = 96); for (c in nfa.alphabet) Cell("$c", header = true, w = 56) }
+            Row { Cell(tx("comum_afd"), header = true, w = 56); Cell(tx("comum_kt_conjunto"), header = true, w = 96); for (c in nfa.alphabet) Cell("$c", header = true, w = 56) }
             for (st in known) Row {
                 val idx = res.states.indexOf(st)
                 Cell((if (idx in res.accepting) "*" else "") + dfaLetter(idx), header = true, w = 56)
@@ -131,7 +131,7 @@ fun FlexView(spec: String, input: String) {
         }
     }
     r.error?.let { Text("❌ $it", color = Palette.red) }
-    Text("Regras: o MAIOR lexema vence; empate → a regra que vem primeiro.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    Text(tx("solta_visuals2_1"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
 }
 
 // ------------------------------------------------------------------ Modo pânico

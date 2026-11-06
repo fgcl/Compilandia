@@ -80,7 +80,24 @@ private fun centering(shot: Shot, stageH: Float): Float {
     val topo = corpo.minOf { it.y - it.h / 2 }
     val base = corpo.maxOf { it.y + it.h / 2 }
     val alvo = (56f + stageH - (topo + base)) / 2 - 8f
-    return alvo.coerceIn(0f, 70f)
+    // Palco mais alto que o padrão (celular comprido): o conjunto pode descer até o meio dele.
+    return alvo.coerceIn(0f, 70f + max(0f, stageH - STAGE_H))
+}
+
+/**
+ * Altura lógica do palco da aula numa área de largura [w] e altura [h] (em qualquer unidade).
+ * Quando a largura limita a escala, o palco fica mais alto que 410 e as peças descem para o meio (T3).
+ */
+fun alturaLogica(w: Float, h: Float): Float = max(STAGE_H, h / minOf(w / STAGE_W, h / STAGE_H))
+
+/**
+ * Quanto as peças descem a mais num palco de altura [stageH] do que no palco padrão.
+ * O Byte em cena soma isso à posição dele para continuar ao lado das peças.
+ */
+fun descidaExtra(shot: Shot, stageH: Float): Float {
+    val c = shot.camera
+    if (c != null) return if (c.zoom == 1f) 0f else (stageH - STAGE_H) / 2
+    return centering(shot, stageH) - centering(shot, STAGE_H)
 }
 
 /** Onde uma peça aparece na tela, em pixels. Fora daqui só os testes precisam disso. */

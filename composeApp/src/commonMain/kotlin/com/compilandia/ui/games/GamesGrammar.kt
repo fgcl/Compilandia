@@ -316,7 +316,7 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
         ctx,
         tx("gamesgrammar_first_olhe_inicio_cada_producao"),
         tx("gamesgrammar_follow_procure_no_lado_direito"),
-        tx("gamesgrammar_anulaveis_podem_virar") + ff.nullable.ifEmpty { setOf("nenhum") }.joinToString(),
+        tx("gamesgrammar_anulaveis_podem_virar") + ff.nullable.ifEmpty { setOf(tx("lessonspart2a_nenhum")) }.joinToString(),
     )
     Column(Modifier.horizontalScroll(rememberScrollState())) {
         Row { Cell("", header = true, w = 48); Cell("⚗️ FIRST", header = true, w = 140); if (withFollow) Cell("🧪 FOLLOW", header = true, w = 140) }
@@ -478,7 +478,7 @@ private fun StackTowerRound(ctx: GameCtx, g: Grammar, input: List<String>, done:
     BeltStage(cur.stack, cur.input)
     Text(tx("gamesgrammar_topo_1_proximo_2", cur.stack.last(), cur.input.first()), style = MaterialTheme.typography.titleSmall)
     HintBox(ctx, tx("gamesgrammar_topo_terminal_igual_ao_token"),
-        "M[${cur.stack.last()}, ${cur.input.first()}] = " + (if (g.isNonTerminal(cur.stack.last())) t.cell(cur.stack.last(), cur.input.first()).joinToString().ifEmpty { "vazio" } else tx("gamesgrammar_nao_se_aplica_topo_terminal")))
+        "M[${cur.stack.last()}, ${cur.input.first()}] = " + (if (g.isNonTerminal(cur.stack.last())) t.cell(cur.stack.last(), cur.input.first()).joinToString().ifEmpty { tx("comum_vazio_minusc") } else tx("gamesgrammar_nao_se_aplica_topo_terminal")))
     msg?.let { FeedbackBanner(it.first, it.second) }
     fun choose(a: LLAction) {
         val right = cur.action

@@ -16,7 +16,7 @@ internal val tpCap9 = GuideChapter(
     tx("tpguided_dobrar_constantes_cortar_codigo_morto"),
     Skill.OPTIMIZATION,
     listOf(
-        Say(BYTE, "`x <- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?"),
+        Say(BYTE, tx("solta_tpguided_1")),
         Say(PROF, tx("tpguided_vai_nao_ser_que_compilador")),
         Visual(VK.TAC, input = tx("comum_2_3"), caption = tx("tpguided_repare_na_instrucao_2_3")),
         Text(tx("tpguided_truque_para_encaixar_isso_no")),
@@ -38,7 +38,7 @@ internal val tpCap9 = GuideChapter(
             tx("tpguided_seis_instrucoes_viram_duas"),
         ),
         Predict(
-            "Com esse dobramento, `y <- a + 2 + 3;` vira `a + 5`?",
+            tx("solta_tpguided_2"),
             listOf(
                 tx("tpguided_sim_2_3_dobrado"),
                 tx("tpguided_nao_arvore_2_3_nenhuma"),
@@ -49,7 +49,7 @@ internal val tpCap9 = GuideChapter(
             tx("tpguided_associa_esquerda_primeiro_2_lado"),
         ),
         Callout(WATCH_OUT, tx("tpguided_nunca_dobre_x_0_com")),
-        Say(LEXI, "E aquele `se (1 > 2) { … }`? O bloco nunca roda. Corta fora!"),
+        Say(LEXI, tx("solta_tpguided_3")),
         Code(
             $$"""
                 private boolean emitindo = true;
@@ -105,7 +105,7 @@ internal val tpCap9 = GuideChapter(
             """.trimIndent(),
             tx("tpguided_otimizacao_peephole_janela_2_instrucoes"),
         ),
-        Callout(WATCH_OUT, "Peephole nunca atravessa um RÓTULO. Em `sw \$t0, n_0` / `enquanto0:` / `lw \$t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em \$t0. Remover aquele `lw` quebra o laço."),
+        Callout(WATCH_OUT, tx("solta_tpguided_4")),
         Say(PILHA, tx("tpguided_otimizou_entao_prove_que_nada")),
         Steps(
             tx("tpguided_bateria_testes_que_pega_bug"),
@@ -182,8 +182,8 @@ internal val tpCap10 = GuideChapter(
             tx("tpguided_em_java_entre_strings_pergunta"),
         ),
         Callout(WATCH_OUT, tx("tpguided_rotulos_nomes_colidindo_dois_se")),
-        Callout(WATCH_OUT, "**Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a < b < c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada."),
-        Callout(WATCH_OUT, "**Variável em laço não reinicia.** Na Byteiro, `inteiro t;` dentro de um `enquanto` NÃO gera código: o `.word` é o mesmo a cada volta e guarda o valor da volta anterior. Ou documente isso ('variáveis valem 0 só no início do programa'), ou gere um `sw \$zero, rotulo` em cada declaração."),
+        Callout(WATCH_OUT, tx("solta_tpguided_5")),
+        Callout(WATCH_OUT, tx("solta_tpguided_6")),
         Callout(REAL_WORLD, tx("tpguided_integridade_academica_copiar_compilador_cole")),
         Callout(EXAM_TIP, tx("tpguided_treine_arguicao_em_voz_alta")),
         Reveal(tx("tpguided_arguicao_por_que_sua_gramatica"), tx("tpguided_porque_nao_tem_recursao_esquerda")),

@@ -26,6 +26,21 @@ object Txt {
 
     operator fun get(chave: String): String = atual[chave] ?: pt[chave] ?: chave
 
+    /** O texto de uma chave num idioma dado, qualquer que seja o atual. */
+    fun em(lingua: String, chave: String): String = (if (lingua == "en") en[chave] else null) ?: pt[chave] ?: chave
+
+    private val idiomaSalvo = Regex("\"idioma\"\\s*:\\s*\"(pt|en)\"")
+
+    /**
+     * O idioma da abertura do jogo. Vale o que a pessoa escolheu nos Ajustes.
+     * Save antigo, de antes da escolha, continua em português. Jogo novo segue o aparelho.
+     */
+    fun idiomaInicial(save: String?, aparelho: String): String {
+        if (save != null) idiomaSalvo.find(save)?.let { return it.groupValues[1] }
+        if (!save.isNullOrBlank()) return "pt"
+        return if (aparelho.lowercase().startsWith("pt")) "pt" else "en"
+    }
+
     /** O texto em português de uma chave, qualquer que seja o idioma. */
     fun pt(chave: String): String = pt[chave] ?: chave
 

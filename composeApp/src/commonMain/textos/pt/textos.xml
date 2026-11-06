@@ -62,7 +62,7 @@
     <string name="lessonspart1_precedencia_dos_operadores_er">Precedência dos operadores de ER?</string>
     <string name="lessonspart1_r_escrito_com">r+ escrito com *?</string>
     <string name="lessonspart1_r_escrito_com_2">r? escrito com |?</string>
-    <string name="lessonspart1_r">r | ε</string>
+    <string name="lessonspart1_r" translatable="false">r | ε</string>
     <string name="lessonspart1_algoritmo_er_afn">Algoritmo ER → AFN?</string>
     <string name="lessonspart1_construcao_thompson">Construção de Thompson</string>
     <string name="lessonspart1_algoritmo_afn_afd">Algoritmo AFN → AFD?</string>
@@ -94,7 +94,7 @@
     <string name="lessonspart1_folhas_arvore_lidas_esquerda_para">Folhas da árvore lidas da esquerda para a direita?</string>
     <string name="lessonspart1_produto_arvore_sentenca">O produto da árvore: a sentença</string>
     <string name="lessonspart1_linguagem_b">Linguagem de S → a S b | ε?</string>
-    <string name="lessonspart1_anbn_n_0">{ aⁿbⁿ | n ≥ 0 }</string>
+    <string name="lessonspart1_anbn_n_0" translatable="false">{ aⁿbⁿ | n ≥ 0 }</string>
     <string name="lessonspart1_por_que_livre_contexto">Por que 'livre de contexto'?</string>
     <string name="lessonspart1_lado_esquerdo_unico_nt_trocado">O lado esquerdo é um único NT, trocado sem olhar o que está em volta</string>
     <string name="lessonspart1_gramatica_ambigua_se_alguma_sentenca">Uma gramática é ambígua se alguma sentença tem duas árvores de derivação (duas derivações mais à esquerda); resolve-se com níveis de precedência ou regras de desambiguação.</string>
@@ -221,7 +221,7 @@
     <string name="lessonspart1a_codigo_intermediario_tres_enderecos">**Código intermediário** (três endereços)?</string>
     <string name="lessonspart1a_otimizacao_para_melhorar">**Otimização**: dá para melhorar?</string>
     <string name="lessonspart1a_sim_eliminar_temporario_id1_id2">Sim: eliminar o temporário → id1 = id2 * 2. Um otimizador esperto ainda poderia trocar `* 2` por um deslocamento à esquerda (redução de força).</string>
-    <string name="lessonspart1a_2">a * 2</string>
+    <string name="lessonspart1a_2" translatable="false">a * 2</string>
     <string name="lessonspart1a_confira_com_motor_no_lugar">Confira com o motor (a no lugar de preco).</string>
     <string name="lessonspart1a_questao_classica_mostre_saida_cada">Questão clássica: 'mostre a saída de cada fase para a atribuição X'. Treine com position = initial + rate * 60 até fazer de olhos fechados.</string>
     <string name="lessonspart1a_por_que_tantas_fases">Por que tantas fases?</string>
@@ -383,7 +383,7 @@
     <string name="lessonspart1a_maior_casamento_guloso_lexi_sempre">**Maior casamento = guloso**: a Lexi sempre morde o maior pedaço que dá. `&gt;=` inteiro, `count2` inteiro, `iff` inteiro.</string>
     <string name="lessonspart1a_reservada_vip_em_empate_tamanho">**Reservada é VIP**: em empate de tamanho, palavra-chave fura a fila na frente do identificador.</string>
     <string name="lessonspart1a_lendo_y_42_qual_lexema">Lendo `y = 42;`, qual é o LEXEMA do token ⟨num, 42⟩?</string>
-    <string name="lessonspart1a_num_42">⟨num, 42⟩</string>
+    <string name="lessonspart1a_num_42" translatable="false">⟨num, 42⟩</string>
     <string name="lessonspart1a_lexema_texto_42_num_nome">O lexema é o texto `42`. 'num' é o nome do token; o par inteiro é o token.</string>
     <string name="lessonspart1a_confusoes_classicas_1_achar_que">Confusões clássicas: (1) achar que `x` e `y` são tokens diferentes, mesmo token id, lexemas diferentes; (2) achar que o léxico pega erro de digitação em palavra-chave (`whlie` é um id válido!); (3) contar espaços como tokens.</string>
     <string name="lessonspart1a_complete_lexema_casa_com_padrao">Complete: 'O lexema ___ casa com o padrão ___ e vira o token ___.'</string>
@@ -436,7 +436,7 @@
     <string name="lessonspart1a_inicio_fecho_0_0">Início: A = ε-fecho({0}) = {0}.</string>
     <string name="lessonspart1a_com_b_move_0_b">A com b: move({0}, b) = {0} → é o próprio **A**.</string>
     <string name="lessonspart1a_finais_conjuntos_que_contem_estado">Finais: os conjuntos que contêm o estado 2 → só **C**. Pronto: AFD com 3 estados.</string>
-    <string name="lessonspart1a_b_b_b_b_c">      a    b\n→A    B    A\n B    B    C\n*C    B    A</string>
+    <string name="lessonspart1a_b_b_b_b_c" translatable="false">      a    b\n→A    B    A\n B    B    C\n*C    B    A</string>
     <string name="lessonspart1a_tabela_transicao_afd_inicial_final">Tabela de transição do AFD (→ inicial, * final)</string>
     <string name="lessonspart1a_motor_chega_ao_mesmo_afd">O motor chega ao mesmo AFD de 3 estados. Compare!</string>
     <string name="lessonspart1a_agora_esmaecido_afn_para_cadeias">Agora esmaecido: AFN para cadeias que terminam em **bb**: 0 --a,b--&gt; 0, 0 --b--&gt; 1, 1 --b--&gt; 2 (final).</string>
@@ -507,7 +507,7 @@
     <string name="lessonspart1b_entao_vamos_odiar_juntos_mas">Então vamos odiar juntos, mas entendendo. Uma frase é feita de partes, e cada parte tem uma regra de montagem.</string>
     <string name="lessonspart1b_minigramatica_portugues">Uma minigramática do português</string>
     <string name="lessonspart1b_cada_linha_producao_frase_sintagma">Cada linha é uma **produção**: 'uma Frase é um sintagma nominal (SN) seguido de um sintagma verbal (SV)'. Quem aparece à esquerda da seta é **não-terminal** (uma categoria). As palavras de verdade, o, gato, come, são **terminais**.</string>
-    <string name="lessonspart1b_gato_come_peixe">o gato come o peixe</string>
+    <string name="lessonspart1b_gato_come_peixe" translatable="false">o gato come o peixe</string>
     <string name="lessonspart1b_veja_frase_nascer_trocando_sempre">Veja a frase nascer, trocando sempre o não-terminal mais à esquerda.</string>
     <string name="lessonspart1b_cada_passo_troca_nao_terminal">Cada passo troca UM não-terminal pelo lado direito de uma de suas produções. Isso é uma **derivação**. Quando sempre trocamos o mais à esquerda, é uma **derivação mais à esquerda**.</string>
     <string name="lessonspart1b_essa_gramatica_gera_menina_ama">Essa gramática gera 'a menina ama o gato'?</string>
@@ -529,7 +529,7 @@
     <string name="lessonspart1b_arvore_mesma_coisa_que_derivacao">E a árvore? É a mesma coisa que a derivação?</string>
     <string name="lessonspart1b_arvore_resumo_derivacao_mostra_qual">A árvore é o 'resumo' da derivação: mostra QUAL produção foi usada em cada nó, mas esquece a ORDEM das trocas.</string>
     <string name="lessonspart1b_leia_folhas_esquerda_para_direita">Leia as folhas da esquerda para a direita: dá a sentença.</string>
-    <string name="lessonspart1b_b_b_b">a a a b b b</string>
+    <string name="lessonspart1b_b_b_b" translatable="false">a a a b b b</string>
     <string name="lessonspart1b_quantos_passos_teve_derivacao_b">Quantos passos teve a derivação de `a a a b b b`? Por quê?</string>
     <string name="lessonspart1b_4_passos_tres_vezes_b">4 passos: três vezes S → a S b e uma vez S → ε. Cada a ganha o seu b casado.</string>
     <string name="lessonspart1b_parenteses_balanceados_repare_como_faz">Parênteses balanceados. Repare como o ε faz S sumir.</string>
@@ -538,12 +538,12 @@
     <string name="lessonspart1b_derivando_esquerda_direita">Derivando à esquerda e à direita</string>
     <string name="lessonspart1b_exercicio_derivacao_mais_esquerda_mais">Exercício: derivação mais à esquerda E mais à direita de `id + id * id`.</string>
     <string name="lessonspart1b_mais_esquerda_lm_troque_sempre">Mais à esquerda (⇒lm): troque sempre o NT mais à esquerda</string>
-    <string name="lessonspart1b_t">E ⇒ E + T</string>
+    <string name="lessonspart1b_t" translatable="false">E ⇒ E + T</string>
     <string name="lessonspart1b_id_id_id_8_passos">⇒ id + id * id ✔ (8 passos)</string>
     <string name="lessonspart1b_agora_mais_direita_rm_troque">Agora mais à direita (⇒rm): troque sempre o NT mais à DIREITA. Eu começo:</string>
-    <string name="lessonspart1b_t_t_f_t_id">E ⇒ E + T\n  ⇒ E + T * F\n  ⇒ E + T * id</string>
+    <string name="lessonspart1b_t_t_f_t_id" translatable="false">E ⇒ E + T\n  ⇒ E + T * F\n  ⇒ E + T * id</string>
     <string name="lessonspart1b_proximos_dois_passos">Próximos dois passos?</string>
-    <string name="lessonspart1b_f_id_id_id">⇒ E + F * id ⇒ E + id * id</string>
+    <string name="lessonspart1b_f_id_id_id" translatable="false">⇒ E + F * id ⇒ E + id * id</string>
     <string name="lessonspart1b_tres_passos_finais">E os três passos finais?</string>
     <string name="lessonspart1b_p_duas_derivacoes_dao_arvores">P: As duas derivações dão árvores diferentes? R: Não! Mesmas produções, mesma árvore, só muda a ordem das trocas. Cada árvore tem exatamente UMA derivação mais à esquerda e UMA mais à direita.</string>
     <string name="lessonspart1b_arvore_comum_duas_derivacoes">A árvore comum às duas derivações.</string>
@@ -632,7 +632,7 @@
     <string name="lessonspart1b_na_gramatica_t_f_recursao">Na gramática E/T/F a recursão à esquerda força (id + id) + id.</string>
     <string name="lessonspart1b_famoso_else_pendurado">E o famoso 'else pendurado'?</string>
     <string name="lessonspart1b_i_if_cond_then_else">i = 'if (cond) then', e = 'else', x = um comando qualquer</string>
-    <string name="lessonspart1b_i_i_x_x">i i x e x</string>
+    <string name="lessonspart1b_i_i_x_x" translatable="false">i i x e x</string>
     <string name="lessonspart1b_else_pertence_ao_primeiro_if">O else pertence ao primeiro if ou ao segundo?</string>
     <string name="lessonspart1b_c_java_companhia_decidem_else">C, Java e companhia decidem: o else casa com o if **mais próximo** que ainda não tem else. O Yacc/Bison implementa isso preferindo shift no conflito.</string>
     <string name="lessonspart1b_por_que_ambiguidade_problema_para">Por que ambiguidade é um problema para um compilador?</string>
@@ -640,20 +640,20 @@
     <string name="lessonspart1b_provando_que_gramatica_ambigua">Provando que uma gramática é ambígua</string>
     <string name="lessonspart1b_para_provar_ambiguidade_basta_exibir">Para PROVAR ambiguidade, basta exibir UMA sentença com duas derivações mais à esquerda diferentes. Vamos lá.</string>
     <string name="lessonspart1b_derivacao_mais_esquerda_no_1">Derivação mais à esquerda nº 1 (+ na raiz)</string>
-    <string name="lessonspart1b_e_e_e">E ⇒ E + E</string>
-    <string name="lessonspart1b_id_2">⇒ id + E</string>
-    <string name="lessonspart1b_id_3">⇒ id + E * E</string>
-    <string name="lessonspart1b_id_id">⇒ id + id * E</string>
+    <string name="lessonspart1b_e_e_e" translatable="false">E ⇒ E + E</string>
+    <string name="lessonspart1b_id_2" translatable="false">⇒ id + E</string>
+    <string name="lessonspart1b_id_3" translatable="false">⇒ id + E * E</string>
+    <string name="lessonspart1b_id_id" translatable="false">⇒ id + id * E</string>
     <string name="lessonspart1b_derivacao_mais_esquerda_no_2">Derivação mais à esquerda nº 2 (* na raiz)</string>
-    <string name="lessonspart1b_e_e_e_2">E ⇒ E * E</string>
-    <string name="lessonspart1b_e_e_e_3">⇒ E + E * E</string>
+    <string name="lessonspart1b_e_e_e_2" translatable="false">E ⇒ E * E</string>
+    <string name="lessonspart1b_e_e_e_3" translatable="false">⇒ E + E * E</string>
     <string name="lessonspart1b_duas_derivacoes_mais_esquerda_distintas">Duas derivações mais à esquerda distintas para a mesma sentença ⇒ duas árvores ⇒ **gramática ambígua**. ∎</string>
     <string name="lessonspart1b_derivacao_lm_outra_rm_diferentes">Uma derivação ⇒lm e outra ⇒rm diferentes NÃO provam nada: a mesma árvore tem as duas! Compare sempre lm com lm (ou rm com rm), ou compare árvores.</string>
     <string name="lessonspart1b_sua_vez_esmaecido_mostre_que">Sua vez, esmaecido: mostre que `id * id + id` também tem duas árvores.</string>
     <string name="lessonspart1b_primeira_derivacao_lm_na_raiz">Primeira derivação ⇒lm (+ na raiz)?</string>
-    <string name="lessonspart1b_id_id_id_id_id">E ⇒ E + E ⇒ E * E + E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id</string>
+    <string name="lessonspart1b_id_id_id_id_id" translatable="false">E ⇒ E + E ⇒ E * E + E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id</string>
     <string name="lessonspart1b_segunda_derivacao_lm_na_raiz">Segunda derivação ⇒lm (* na raiz)?</string>
-    <string name="lessonspart1b_id_id_id_id_id_2">E ⇒ E * E ⇒ id * E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id</string>
+    <string name="lessonspart1b_id_id_id_id_id_2" translatable="false">E ⇒ E * E ⇒ id * E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id</string>
     <string name="lessonspart1b_confira_duas_arvores">Confira: duas árvores.</string>
     <string name="lessonspart1b_qual_das_duas_respeita_precedencia">Qual das duas respeita a precedência usual?</string>
     <string name="lessonspart1b_com_na_raiz_id_id">A com + na raiz: (id * id) + id, o * fica embaixo e é calculado primeiro.</string>
@@ -689,7 +689,7 @@
     <string name="lessonspart1b_linguagem_inerentemente_ambigua_se_toda">Uma linguagem é **inerentemente ambígua** se toda GLC que a gera é ambígua. Exemplo: { aⁱbʲcᵏ | i = j ou j = k }.</string>
     <string name="lessonspart1b_fato_nao_existe_algoritmo_que">**Fato.** Não existe algoritmo que decida se uma GLC arbitrária é ambígua (o problema é indecidível).</string>
     <string name="lessonspart1b_desambiguacao_expressoes_nivel_por_precedenc">Desambiguação de expressões (um nível por precedência):\n  E → E + T | T        (+ : menor precedência, assoc. à esquerda)\n  T → T * F | F        (* : maior precedência, assoc. à esquerda)\n  F → ( E ) | id       (átomos)\nRegras:\n  operador de MENOR precedência fica mais perto da raiz;\n  recursão à ESQUERDA → associatividade à esquerda;\n  recursão à DIREITA  → associatividade à direita (ex.: ^).</string>
-    <string name="lessonspart1b_stmt_matched_stmt_open_stmt">stmt → matched_stmt | open_stmt\nmatched_stmt → if ( expr ) matched_stmt else matched_stmt | other\nopen_stmt → if ( expr ) stmt\n          | if ( expr ) matched_stmt else open_stmt</string>
+    <string name="lessonspart1b_stmt_matched_stmt_open_stmt" translatable="false">stmt → matched_stmt | open_stmt\nmatched_stmt → if ( expr ) matched_stmt else matched_stmt | other\nopen_stmt → if ( expr ) stmt\n          | if ( expr ) matched_stmt else open_stmt</string>
     <string name="lessonspart1b_else_pendurado_sem_ambiguidade_livro">Else pendurado sem ambiguidade (Livro do Dragão, §4.3.2)</string>
     <string name="lessonspart1b_para_provar_que_g_ambigua">Para provar que G é ambígua, é suficiente mostrar…</string>
     <string name="lessonspart1b_derivacao_lm_outra_rm_diferentes_2">uma derivação ⇒lm e outra ⇒rm diferentes para w</string>
@@ -840,7 +840,7 @@
     <string name="lessonspart1c_fatorando_ao_vivo">Fatorando ao vivo</string>
     <string name="lessonspart1c_olhe_antes_depois_primeiro_classico">Olhe o antes e o depois. Primeiro, o clássico do else.</string>
     <string name="lessonspart1c_motor_procurou_maior_prefixo_comum">O motor procurou o MAIOR prefixo comum entre as alternativas que começam com o mesmo símbolo: `i E t S`. O que sobrou (ε e `e S`) foi para S'.</string>
-    <string name="lessonspart1c_i_b_t">i b t a e a</string>
+    <string name="lessonspart1c_i_b_t" translatable="false">i b t a e a</string>
     <string name="lessonspart1c_derivando_com_gramatica_fatorada">Derivando com a gramática fatorada.</string>
     <string name="lessonspart1c_antes_duas_producoes_disputando_celula">Antes: duas produções disputando a célula [S, i].</string>
     <string name="lessonspart1c_depois_i_resolvida_mas_olhe">Depois: [S, i] resolvida… mas olhe [S', e]! A ambiguidade do else continua.</string>
@@ -875,8 +875,8 @@
     <string name="lessonspart1c_isso_seria_ll_2_mas">Isso seria LL(2). Mas queremos LL(1), mais simples e rápido. Em vez de olhar mais longe, mudamos a gramática.</string>
     <string name="lessonspart1c_como_reescrever_para_decidir_so">Como reescrever A para decidir só depois de consumir o 'a'?</string>
     <string name="lessonspart1c_em_b_b_c_qual">Em `A -&gt; a B | a B c`, qual o prefixo comum?</string>
-    <string name="lessonspart1c_b_2">a B</string>
-    <string name="lessonspart1c_b_c">a B c</string>
+    <string name="lessonspart1c_b_2" translatable="false">a B</string>
+    <string name="lessonspart1c_b_c" translatable="false">a B c</string>
     <string name="lessonspart1c_duas_comecam_com_b_segunda">As duas começam com `a B`; a segunda continua com c, a primeira acaba.</string>
     <string name="lessonspart1c_fatore">Fatore.</string>
     <string name="lessonspart1c_esta_gramatica_tem_prefixo_comum">Esta gramática tem prefixo comum? `S -&gt; A x | B y`, `A -&gt; c`, `B -&gt; c`</string>
@@ -944,7 +944,7 @@
     <string name="lessonspart2_regra_1_follow">Regra 1 do FOLLOW?</string>
     <string name="lessonspart2_follow_simbolo_inicial">$ ∈ FOLLOW(símbolo inicial).</string>
     <string name="lessonspart2_em_b_que_entra_em">Em A → α B β, o que entra em FOLLOW(B)?</string>
-    <string name="lessonspart2_first">FIRST(β) − {ε}</string>
+    <string name="lessonspart2_first" translatable="false">FIRST(β) − {ε}</string>
     <string name="lessonspart2_quando_follow_entra_em_follow">Quando FOLLOW(A) entra em FOLLOW(B)?</string>
     <string name="lessonspart2_se_b_ou_b_com">Se A → α B, ou A → α B β com β ⇒* ε.</string>
     <string name="lessonspart2_follow_pode_conter">FOLLOW pode conter ε?</string>
@@ -1138,8 +1138,8 @@
     <string name="lessonspart2a_comeca_com_b_b_comeca">A começa com B, e B começa com x. FIRST(A) herda FIRST(B) = {x}. Não-terminal nunca entra no conjunto: só terminais (e talvez ε).</string>
     <string name="lessonspart2a_entao_quando_comeca_com_variavel">Então quando começa com variável, eu copio o FIRST dela. Saquei.</string>
     <string name="lessonspart2a_se_b_x_em_b">E se B → x | ε? Em A → B c, FIRST(A) = ?</string>
-    <string name="lessonspart2a_x">{x, ε}</string>
-    <string name="lessonspart2a_x_c">{x, c, ε}</string>
+    <string name="lessonspart2a_x" translatable="false">{x, ε}</string>
+    <string name="lessonspart2a_x_c" translatable="false">{x, c, ε}</string>
     <string name="lessonspart2a_se_b_sumir_cadeia_comeca">Se B sumir, a cadeia começa com c. Então entram x e c. O ε não entra, porque o c nunca some.</string>
     <string name="lessonspart2a_se_for_b_c_com">E se for A → B C, com B → x | ε e C → y | ε?</string>
     <string name="lessonspart2a_x_b_aparece_y_b">x (B aparece), y (B some e C aparece) e ε (os dois somem: A pode gerar a cadeia vazia).</string>
@@ -1166,7 +1166,7 @@
     <string name="lessonspart2a_por_que_so_crescem_garante">Por que 'só crescem' garante que termina?</string>
     <string name="lessonspart2a_porque_ha_numero_finito_terminais">Porque há um número finito de terminais. Cada volta que muda algo acrescenta pelo menos um elemento; uma hora acaba o que acrescentar.</string>
     <string name="lessonspart2a_em_b_c_b_b">Em S → A B c, A → a | ε, B → b | ε, quanto vale FIRST(A B)?</string>
-    <string name="lessonspart2a_b_2">{a, b, ε}</string>
+    <string name="lessonspart2a_b_2" translatable="false">{a, b, ε}</string>
     <string name="lessonspart2a_anulavel_olho_b_b_tambem">A é anulável → olho B; B também é anulável → ε entra. FIRST(A B) = {a, b, ε}. O c não faz parte da cadeia A B!</string>
     <string name="lessonspart2a_confira_cada_regra_aplicada_no">Confira cada regra aplicada no passo a passo.</string>
     <string name="lessonspart2a_na_prova_1_liste_anulaveis">Na prova: (1) liste os anuláveis primeiro; (2) comece pelos não-terminais cujas produções começam com terminal; (3) escreva os conjuntos com chaves e diga explicitamente se ε pertence. ε em FIRST: pode. $ em FIRST: nunca.</string>
@@ -1186,7 +1186,7 @@
     <string name="lessonspart2a_first_olha_producoes_follow_olha">FIRST(A) olha as produções DE A; FOLLOW(A) olha as produções ONDE A aparece.</string>
     <string name="lessonspart2a_first_terminal_ele_mesmo_first">FIRST de um terminal é ele mesmo: FIRST(id) = {id}.</string>
     <string name="lessonspart2a_qual_destes_conjuntos_impossivel_ser">Qual destes conjuntos é IMPOSSÍVEL ser um FIRST?</string>
-    <string name="lessonspart2a_a">{a, ε}</string>
+    <string name="lessonspart2a_a" translatable="false">{a, ε}</string>
     <string name="lessonspart2a_marcador_fim_entrada_mora_no">$ é o marcador de fim de entrada: mora no FOLLOW, nunca no FIRST. Já {ε} é possível, por exemplo com A → ε sozinho.</string>
     <string name="lessonspart2a_teste_gancho_em_quem_abre">Teste o gancho em S → ( S ) S | ε: quem abre a fila? '(': ou ninguém (ε).</string>
     <string name="lessonspart2a_diga_rima_cabeca_aplique_em">Diga a rima de cabeça e aplique em S → ( S ) S | ε.</string>
@@ -1257,11 +1257,11 @@
     <string name="lessonspart2a_entao_follow_b_mas_por">Então FOLLOW(S) = {b, $}. Mas por que olhar as regras em vez de derivar tudo?</string>
     <string name="lessonspart2a_porque_derivacoes_sao_infinitas_regras">Porque as derivações são infinitas! As regras resumem tudo: onde S aparece num lado direito, olho o que está à direita dele.</string>
     <string name="lessonspart2a_nova_gramatica_x_b_y">Nova gramática: A → x B y. O que você conclui sobre FOLLOW(B)?</string>
-    <string name="lessonspart2a_follow_b_follow">FOLLOW(B) ⊆ FOLLOW(A)</string>
+    <string name="lessonspart2a_follow_b_follow" translatable="false">FOLLOW(B) ⊆ FOLLOW(A)</string>
     <string name="lessonspart2a_b_seguido_y_first_que">B é seguido de y. O FIRST do que vem à direita (aqui, y) entra em FOLLOW(B).</string>
     <string name="lessonspart2a_se_for_x_b_com">E se for A → x B, com B no fim?</string>
     <string name="lessonspart2a_follow_b_fica_vazio">FOLLOW(B) fica vazio</string>
-    <string name="lessonspart2a_follow_follow_b">FOLLOW(A) ⊆ FOLLOW(B)</string>
+    <string name="lessonspart2a_follow_follow_b" translatable="false">FOLLOW(A) ⊆ FOLLOW(B)</string>
     <string name="lessonspart2a_tudo_que_pode_vir_depois">Tudo que pode vir depois de A pode vir depois de B, porque B termina A. A herança vai do PAI (lado esquerdo) para o filho do fim.</string>
     <string name="lessonspart2a_se_for_x_b_c">E se for A → x B C, com C anulável?</string>
     <string name="lessonspart2a_so_first_c">Só FIRST(C) − {ε}</string>
@@ -1283,8 +1283,8 @@
     <string name="lessonspart2a_repare_first_por_isso_quando">Repare: FIRST(ε) = {ε}. Por isso, quando B está no fim (β vazio), a regra 3 dispara.</string>
     <string name="lessonspart2a_qual_afirmacao_sempre_verdadeira">Qual afirmação é SEMPRE verdadeira?</string>
     <string name="lessonspart2a_pode_estar_em_follow">ε pode estar em FOLLOW</string>
-    <string name="lessonspart2a_follow_simbolo_inicial">$ ∈ FOLLOW(símbolo inicial)</string>
-    <string name="lessonspart2a_follow_first">FOLLOW(A) ⊆ FIRST(A)</string>
+    <string name="lessonspart2a_follow_simbolo_inicial" translatable="false">$ ∈ FOLLOW(símbolo inicial)</string>
+    <string name="lessonspart2a_follow_first" translatable="false">FOLLOW(A) ⊆ FIRST(A)</string>
     <string name="lessonspart2a_follow_terminal_ele_mesmo">FOLLOW de um terminal é ele mesmo</string>
     <string name="lessonspart2a_regra_1_follow_nunca_contem">É a regra 1. FOLLOW nunca contém ε, e não existe relação geral entre FOLLOW(A) e FIRST(A).</string>
     <string name="lessonspart2a_cada_passo_widget_cita_regra">Cada passo do widget cita a regra usada. Tente prever o próximo antes de avançar.</string>
@@ -1341,7 +1341,7 @@
     <string name="lessonspart2b_linhas_nao_terminais_colunas_terminais">Linhas = não-terminais; colunas = terminais + $.</string>
     <string name="lessonspart2b_nenhuma_celula_tem_duas_producoes">Nenhuma célula tem duas produções: a gramática é LL(1).</string>
     <string name="lessonspart2b_em_qual_celula_fica_f">Em qual célula fica F → ( E )?</string>
-    <string name="lessonspart2b_m">M[E, (]</string>
+    <string name="lessonspart2b_m" translatable="false">M[E, (]</string>
     <string name="lessonspart2b_first_entao_m_f_f">FIRST(( E )) = {(}. Então M[F, (] = F → ( E ).</string>
     <string name="lessonspart2b_aquela_gramatica_bonita_t_t">E aquela gramática bonita, E → E + T | T, com recursão à esquerda?</string>
     <string name="lessonspart2b_versao_recursiva_esquerda_veja_celulas">A versão recursiva à esquerda: veja as células em conflito.</string>
@@ -1434,9 +1434,9 @@
     <string name="lessonspart2b_qualquer_outra_situacao_erro">Qualquer outra situação? **Erro**.</string>
     <string name="lessonspart2b_tras_pra_frente_porque_primeiro">De… trás… pra… frente… porque… o primeiro… tem que… ficar… em cima.</string>
     <string name="lessonspart2b_pilha_topo_direita_entrada_comecando">Pilha $ E (topo à direita), entrada começando com id, e M[E, id] = E → T E'. Como fica a pilha?</string>
-    <string name="lessonspart2b_t">$ T E'</string>
-    <string name="lessonspart2b_t_2">$ E' T</string>
-    <string name="lessonspart2b_t_3">$ E T E'</string>
+    <string name="lessonspart2b_t" translatable="false">$ T E'</string>
+    <string name="lessonspart2b_t_2" translatable="false">$ E' T</string>
+    <string name="lessonspart2b_t_3" translatable="false">$ E T E'</string>
     <string name="lessonspart2b_tira_empilha_t_ao_contrario">Tira o E e empilha T E' ao contrário: primeiro E', depois T. O T fica no topo, pronto para ser atendido primeiro.</string>
     <string name="lessonspart2b_acompanhe_golem_pilha_entrada_acao">Acompanhe o golem: pilha, entrada e ação a cada passo.</string>
     <string name="lessonspart2b_p_por_que_pilha_nao">P: Por que pilha e não fila? R: Porque a árvore é aninhada: ao expandir T, tudo que é de T precisa ser resolvido antes de voltar ao E'. Quem entrou por último sai primeiro: pilha!</string>
@@ -1548,7 +1548,7 @@
     <string name="lessonspart2c_recebeu_senha_begin_qual_sequencia">S recebeu a senha 'begin'. Qual é a sequência de ações do funcionário S?</string>
     <string name="lessonspart2c_chama">Chama E()</string>
     <string name="lessonspart2c_roteiro_begin_l_end_confere">É o roteiro de S → begin L end: confere 'begin', manda para o L, confere 'end'.</string>
-    <string name="lessonspart2c_begin_print_id_end">begin print id end</string>
+    <string name="lessonspart2c_begin_print_id_end" translatable="false">begin print id end</string>
     <string name="lessonspart2c_arvore_sintatica_organograma_das_chamadas">A árvore sintática é o organograma das chamadas: cada nó interno é uma função que foi chamada.</string>
     <string name="lessonspart2c_l_que_pode_ser_como">E o L, que pode ser ε? Como ele sabe que deve ficar quieto?</string>
     <string name="lessonspart2c_se_senha_for_end_que">Se a senha for 'end' (que está em FOLLOW(L)), o L retorna sem fazer nada: a lista acabou. Se for if, print ou begin (FIRST(S)), ele chama S() e depois L() de novo.</string>
@@ -1616,7 +1616,7 @@
     <string name="lessonspart2c_veja_fatoracao_deixando_gramatica_pronta">Veja a fatoração deixando a gramática pronta para virar funções.</string>
     <string name="lessonspart2c_resuma_com_suas_palavras_como">Resuma com suas palavras como construir uma descida recursiva.</string>
     <string name="lessonspart2c_funcao_por_nao_terminal_lookahead">Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, match para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).</string>
-    <string name="lessonspart2c_if_id_then_print_id">if id then print id</string>
+    <string name="lessonspart2c_if_id_then_print_id" translatable="false">if id then print id</string>
     <string name="lessonspart2c_treino_imagine_match_if_match">Treino: imagine S() → match(if), E(), match(then), S()… e confira com a árvore.</string>
     <string name="lessonspart2c_descida_recursiva_definicao_prova">Descida recursiva: definição de prova</string>
     <string name="lessonspart2c_definicao_prova_no_estilo_livro">Definição de prova, no estilo do Livro do Dragão.</string>
@@ -1740,7 +1740,7 @@
     <string name="lessonspart2c_conflito_reduz_reduz">Conflito reduz-reduz</string>
     <string name="lessonspart2c_aceite">Aceite</string>
     <string name="lessonspart2c_conflito_shift_reduce_se_ele">Conflito shift/reduce. Se ele não souber QUAL redução fazer, é reduce/reduce.</string>
-    <string name="lessonspart2c_b_b_c_d">a b b c d e</string>
+    <string name="lessonspart2c_b_b_c_d" translatable="false">a b b c d e</string>
     <string name="lessonspart2c_veja_analisador_acertando_handle_em">Veja o analisador acertando o handle em cada passo.</string>
     <string name="lessonspart2c_escreva_sequencia_reducoes_analise_b">Escreva a sequência de reduções da análise de a b b c d e.</string>
     <string name="lessonspart2c_voce_reconstruiu_sozinho_ideia_central">Você reconstruiu sozinho a ideia central do bottom-up. Achar handles é o que o resto da Fortaleza ensina a automatizar.</string>
@@ -1872,7 +1872,7 @@
     <string name="lessonspart2c_gramatica_aumentada_g_g_com">**Gramática aumentada** G': G com um novo símbolo inicial S' e a produção S' → S. O analisador aceita quando reduziria por S' → S.</string>
     <string name="lessonspart2c_closure_i_j_i_repita">CLOSURE(I):\n  J := I\n  repita\n    para cada item A → α • B β em J:\n      para cada produção B → γ de G':\n        se B → • γ não está em J:\n          adicione B → • γ a J\n  até nenhum item ser adicionado\n  retorne J</string>
     <string name="lessonspart2c_fechamento_conjunto_itens">Fechamento de um conjunto de itens.</string>
-    <string name="lessonspart2c_goto_i_x_closure_x">GOTO(I, X) = CLOSURE({ A → α X • β  |  A → α • X β ∈ I })</string>
+    <string name="lessonspart2c_goto_i_x_closure_x" translatable="false">GOTO(I, X) = CLOSURE({ A → α X • β  |  A → α • X β ∈ I })</string>
     <string name="lessonspart2c_desvio_avanca_ponto_sobre_x">Desvio: avança o ponto sobre X e fecha.</string>
     <string name="lessonspart2c_itens_g_c_closure_repita">ITENS(G'):\n  C := { CLOSURE({ S' → • S }) }\n  repita\n    para cada conjunto I em C:\n      para cada símbolo gramatical X:\n        se GOTO(I, X) ≠ ∅ e GOTO(I, X) ∉ C:\n          adicione GOTO(I, X) a C\n  até nenhum conjunto ser adicionado</string>
     <string name="lessonspart2c_colecao_canonica_conjuntos_itens_lr">Coleção canônica de conjuntos de itens LR(0).</string>
@@ -1945,9 +1945,9 @@
     <string name="lessonspart3_essa_gramatica_nao_ambigua_conflito">Essa gramática NÃO é ambígua. O conflito é culpa do SLR ser míope: nenhuma forma sentencial começa com 'R ='. Guarde essa: é a porta de entrada do LALR.</string>
     <string name="lessonspart3_preenchendo_linhas_tabela_com_calma">Preenchendo linhas da tabela com calma</string>
     <string name="lessonspart3_exercicio_classico_prova_preencher_linhas">Exercício clássico de prova: preencher linhas da tabela SLR da gramática de expressões. Vou fazer duas; você faz as outras.</string>
-    <string name="lessonspart3_1_t_2_t_3">(1) E → E + T     (2) E → T\n(3) T → T * F     (4) T → F\n(5) F → ( E )     (6) F → id</string>
+    <string name="lessonspart3_1_t_2_t_3" translatable="false">(1) E → E + T     (2) E → T\n(3) T → T * F     (4) T → F\n(5) F → ( E )     (6) F → id</string>
     <string name="lessonspart3_producoes_numeradas_numero_vira_rn">Produções numeradas (o número vira o rN)</string>
-    <string name="lessonspart3_i1_t_i6_i2_t">I1: E' → E •      E → E • + T          (+ → I6)\nI2: E → T •       T → T • * F          (* → I7)\nI9: E → E + T •   T → T • * F          (* → I7)</string>
+    <string name="lessonspart3_i1_t_i6_i2_t" translatable="false">I1: E' → E •      E → E • + T          (+ → I6)\nI2: E → T •       T → T • * F          (* → I7)\nI9: E → E + T •   T → T • * F          (* → I7)</string>
     <string name="lessonspart3_tres_estados_automato_lr_0">Três estados do autômato LR(0)</string>
     <string name="lessonspart3_linha_estado_1">Linha do estado 1</string>
     <string name="lessonspart3_todo_resto_linha_fica_vazio">Todo o resto da linha fica vazio = **erro**</string>
@@ -2052,7 +2052,7 @@
     <string name="lessonspart3_bison_lalr_aceita_x_y">O Bison (LALR) aceita '*x = y' sem nenhum conflito, onde o SLR travava.</string>
     <string name="lessonspart3_agora_lado_sombrio_fusao">Agora o lado sombrio da fusão.</string>
     <string name="lessonspart3_gramatica_lr_1_mas_nao">Gramática LR(1) mas não LALR(1)</string>
-    <string name="lessonspart3_c_d">a c d</string>
+    <string name="lessonspart3_c_d" translatable="false">a c d</string>
     <string name="lessonspart3_bison_avisa_2_conflitos_reduzir">O Bison avisa 2 conflitos reduzir/reduzir e escolhe a regra que aparece primeiro (x : c).</string>
     <string name="lessonspart3_com_essa_escolha_padrao_bison">Com essa escolha padrão do Bison, o que acontece com a frase válida 'a c e'?</string>
     <string name="lessonspart3_aceita">É aceita</string>
@@ -2584,7 +2584,7 @@
     <string name="lessonspart3c_nao_tabela_bloco_1_foi">Não, a tabela do bloco 1 foi desempilhada</string>
     <string name="lessonspart3c_so_se_for_float">Só se for float</string>
     <string name="lessonspart3c_saiu_bloco_tabela_daquele_escopo">Saiu do bloco, a tabela daquele escopo sai do topo. O próximo print(x) só enxerga o x (1).</string>
-    <string name="lessonspart3c_z">a + z</string>
+    <string name="lessonspart3c_z" translatable="false">a + z</string>
     <string name="lessonspart3c_se_nome_nao_esta_em">E se o nome não está em tabela nenhuma? A busca falha: 'z' não foi declarada, e o erro sobe pela árvore.</string>
     <string name="lessonspart3c_repare_busca_percorre_pilha_topo">Repare: a busca percorre a pilha do TOPO para a BASE. Isso é toda a regra de escopo estático, em uma frase.</string>
     <string name="lessonspart3c_ligando_cada_uso_sua_declaracao">Ligando cada uso à sua declaração</string>
@@ -2662,7 +2662,7 @@
     <string name="lessonspart3c_por_que_nao_transformar_arvore">Por que não transformar a árvore direto em Assembly?</string>
     <string name="lessonspart3c_porque_existem_dezenas_processadores_mais">Porque existem dezenas de processadores. É mais esperto traduzir para uma linguagem intermediária simples, e só no fim para cada máquina.</string>
     <string name="lessonspart3c_imagine_receita_para_ajudante_cozinha">Imagine uma receita para um ajudante de cozinha que só sabe fazer **uma operação por vez**, com **no máximo dois ingredientes**, e sempre coloca o resultado **numa tigela com etiqueta**.</string>
-    <string name="lessonspart3c_t1_b_c_t2_t1">t1 = b * c\nt2 = a + t1</string>
+    <string name="lessonspart3c_t1_b_c_t2_t1" translatable="false">t1 = b * c\nt2 = a + t1</string>
     <string name="lessonspart3c_operacao_por_vez_dois_ingredientes">Uma operação por vez, dois ingredientes → **instrução de três endereços**: x = y op z</string>
     <string name="lessonspart3c_tigelas_com_etiqueta_t1_t2">Tigelas com etiqueta t1, t2... → **temporários** gerados pelo compilador</string>
     <string name="lessonspart3c_ordem_receita_pos_ordem_arvore">Ordem da receita → **pós-ordem** da árvore: filhos antes do pai</string>
@@ -2684,7 +2684,7 @@
     <string name="lessonspart3c_no_operador_gera_codigo_filho">Nó operador: gera o código do filho esquerdo, depois o do direito</string>
     <string name="lessonspart3c_cria_temporario_novo_tn_emite">Cria um temporário novo tN e emite: tN = esq op dir</string>
     <string name="lessonspart3c_endereco_no_passa_ser_tn">O endereço do nó passa a ser tN</string>
-    <string name="lessonspart3c_b_b">(a + b) * (a + b)</string>
+    <string name="lessonspart3c_b_b" translatable="false">(a + b) * (a + b)</string>
     <string name="lessonspart3c_repare_b_calculado_duas_vezes">Repare: a + b é calculado DUAS vezes (t1 e t2). O gerador ingênuo não percebe, a otimização vai.</string>
     <string name="lessonspart3c_com_comparacao_logica_funciona_igual">E com comparação e lógica? Funciona igual?</string>
     <string name="lessonspart3c_para_x_2_int_x">Para a + x * 2 (a int, x float), um compilador real gera...</string>
@@ -2703,13 +2703,13 @@
     <string name="lessonspart3c_quadruplas_triplas_op_arg1_arg2">quádruplas                      triplas\n     op  arg1  arg2  res             op  arg1  arg2\n(0)  +   a     b     t1        (0)   +   a     b\n(1)  -   a     c     t2        (1)   -   a     c\n(2)  *   t1    t2    t3        (2)   *   (0)   (1)\n(3)  =   t3          x         (3)   =   x     (2)</string>
     <string name="lessonspart3c_duas_representacoes_das_mesmas_instrucoes">Duas representações das mesmas instruções</string>
     <string name="lessonspart3c_exercicio_2_comandos_com_desvio">Exercício 2: comandos com desvio. if (a &lt; b) x = 1; else x = 2;</string>
-    <string name="lessonspart3c_iffalse_b_goto_l1_x">    ifFalse a &lt; b goto L1\n    x = 1\n    goto L2\nL1: x = 2\nL2: ...</string>
+    <string name="lessonspart3c_iffalse_b_goto_l1_x" translatable="false">    ifFalse a &lt; b goto L1\n    x = 1\n    goto L2\nL1: x = 2\nL2: ...</string>
     <string name="lessonspart3c_rotulos_desvios_if_vira_pule">Rótulos e desvios: o if vira 'pule se for falso'</string>
     <string name="lessonspart3c_agora_eu_faco">Agora eu faço!</string>
     <string name="lessonspart3c_tac_y_b_b">TAC de y = a * b + a * b.</string>
     <string name="lessonspart3c_t1_b_t2_b_t3">t1 = a * b; t2 = a * b; t3 = t1 + t2; y = t3. (Sim, a * b duas vezes, o gerador ingênuo não otimiza.)</string>
     <string name="lessonspart3c_triplas_y_b_b">As triplas de y = a * b + a * b.</string>
-    <string name="lessonspart3c_b_b_2">a * b + a * b</string>
+    <string name="lessonspart3c_b_b_2" translatable="false">a * b + a * b</string>
     <string name="lessonspart3c_confira_primeira_resposta">Confira a primeira resposta.</string>
     <string name="lessonspart3c_em_triplas_resultado_referenciado_pela">Em triplas, o resultado é referenciado pela POSIÇÃO: (2) * (0) (1). Na prova, numere as linhas desde o começo, senão as referências viram bagunça.</string>
     <string name="lessonspart3c_por_que_linguagem_no_meio">Por que uma linguagem no meio do caminho?</string>
@@ -2742,8 +2742,8 @@
     <string name="lessonspart3c_triplas_op_arg1_arg2_resultado">**Triplas:** (op, arg1, arg2), o resultado é a posição da instrução; economiza espaço</string>
     <string name="lessonspart3c_ssa_cada_variavel_atribuida_unica">**SSA:** cada variável é atribuída uma única vez (x1, x2...), com funções φ nas junções</string>
     <string name="lessonspart3c_qual_nao_instrucao_tres_enderecos">Qual NÃO é uma instrução de três endereços válida?</string>
-    <string name="lessonspart3c_t2_b_c">t2 = a + b * c</string>
-    <string name="lessonspart3c_b_c">a + b - c</string>
+    <string name="lessonspart3c_t2_b_c" translatable="false">t2 = a + b * c</string>
+    <string name="lessonspart3c_b_c" translatable="false">a + b - c</string>
     <string name="lessonspart3c_associatividade_esquerda_b_primeiro_depois">Associatividade à esquerda: (a + b) primeiro, depois - c.</string>
     <string name="lessonspart3c_questao_comum_traduza_para_quadruplas">Questão comum: 'traduza para quádruplas E triplas'. Faça primeiro o TAC em texto, numere as linhas, e só então preencha as duas tabelas.</string>
     <string name="lessonspart3c_nao_confunda_tres_nome_com">Não confunda o 'três' do nome com 'três instruções'. É no máximo três ENDEREÇOS por instrução.</string>
@@ -2760,7 +2760,7 @@
     <string name="lessonspart3c_resultado_instrucao_posicao_0">O resultado da instrução da posição 0</string>
     <string name="lessonspart3c_temporario_t0">O temporário t0</string>
     <string name="lessonspart3c_triplas_apontam_pela_posicao_0">Triplas apontam pela posição. '(0)' = 'o que a instrução 0 calculou'.</string>
-    <string name="lessonspart3c_b_c_2">a * b + c * a</string>
+    <string name="lessonspart3c_b_c_2" translatable="false">a * b + c * a</string>
     <string name="lessonspart3c_dois_entram_sai_tres_vezes">Dois entram, um sai, três vezes.</string>
     <string name="lessonspart3c_recite_tres_representacoes_que_diferencia">Recite as três representações e o que as diferencia.</string>
     <string name="lessonspart3c_quadruplas_resultado_com_nome_triplas">Quádruplas (resultado com nome), triplas (resultado = posição) e triplas indiretas (lista de ponteiros para reordenar).</string>
@@ -2778,9 +2778,9 @@
     <string name="lessonspart3c_riscar_fermento_que_ninguem_usa">Riscar o fermento que ninguém usa → **eliminação de código morto**</string>
     <string name="lessonspart3c_trecho_mercado_sem_desvios_entra">Trecho do mercado sem desvios, entra e sai por um lugar só → **bloco básico**</string>
     <string name="lessonspart3c_qual_linha_pode_ser_calculada">Qual linha pode ser calculada inteiramente pelo compilador?</string>
-    <string name="lessonspart3c_t1_2">t1 = a * 2</string>
+    <string name="lessonspart3c_t1_2" translatable="false">t1 = a * 2</string>
     <string name="lessonspart3c_so_2_3_depende_apenas">Só 2 * 3 depende apenas de constantes. Vira t1 = 6 antes do programa rodar.</string>
-    <string name="lessonspart3c_2_3">2 * 3 + a</string>
+    <string name="lessonspart3c_2_3" translatable="false">2 * 3 + a</string>
     <string name="lessonspart3c_gerador_produz_t1_2_3">O gerador produz t1 = 2 * 3; com dobra de constantes, sobra só uma instrução: 6 + a.</string>
     <string name="lessonspart3c_regra_ouro_otimizacao_nunca_pode">Regra de ouro: otimização NUNCA pode mudar o que o programa faz. Na dúvida (efeitos colaterais, divisão por zero...), o compilador não otimiza.</string>
     <string name="lessonspart3c_na_analogia_por_que_comprar">Na analogia, por que 'comprar leite' duas vezes só pode virar uma se 'nada mudou entre uma e outra'?</string>
@@ -2788,7 +2788,7 @@
     <string name="lessonspart3c_antes_depois_polimento">Antes e depois do polimento</string>
     <string name="lessonspart3c_vamos_ver_tac_antes_depois">Vamos ver o TAC antes e depois de cada otimização.</string>
     <string name="lessonspart3c_antes_t2_3_4_com">Antes: t2 = 3 * 4. Com dobra: o 3 * 4 vira 12 e some uma instrução.</string>
-    <string name="lessonspart3c_4_2_3">a * 4 + 2 * 3</string>
+    <string name="lessonspart3c_4_2_3" translatable="false">a * 4 + 2 * 3</string>
     <string name="lessonspart3c_mesmo_truque_2_3_vira">Mesmo truque: 2 * 3 vira 6. O a * 4 fica: a só é conhecido em execução.</string>
     <string name="lessonspart3c_subexpressao_comum_t1_b_t2">Subexpressão comum: t1 = a + b e t2 = a + b.</string>
     <string name="lessonspart3c_antes_depois_t1_b_t1">antes:            depois:\nt1 = a + b        t1 = a + b\nt2 = a + b        t3 = t1 * t1\nt3 = t1 * t2</string>
@@ -2806,7 +2806,7 @@
     <string name="lessonspart3c_otimizacao_local_trabalha_dentro_bloco">Otimização local trabalha dentro de UM bloco básico, onde a execução é linear, sem surpresas. A global olha o grafo de fluxo inteiro.</string>
     <string name="lessonspart3c_polindo_trecho_otimizacao_cada_vez">Polindo um trecho, uma otimização de cada vez</string>
     <string name="lessonspart3c_vamos_otimizar_este_bloco_basico">Vamos otimizar este bloco básico. Suponha que, depois dele, só x e y são usados.</string>
-    <string name="lessonspart3c_1_t1_4_2_2">(1) t1 = 4 * 2\n(2) t2 = a + t1\n(3) t3 = a + t1\n(4) x = t2 * t3\n(5) y = 0\n(6) y = x</string>
+    <string name="lessonspart3c_1_t1_4_2_2" translatable="false">(1) t1 = 4 * 2\n(2) t2 = a + t1\n(3) t3 = a + t1\n(4) x = t2 * t3\n(5) y = 0\n(6) y = x</string>
     <string name="lessonspart3c_bloco_original">Bloco original</string>
     <string name="lessonspart3c_passada_cada_vez">Uma passada de cada vez</string>
     <string name="lessonspart3c_dobra_1_t1_4_2">**Dobra:** (1) t1 = 4 * 2 → t1 = 8</string>
@@ -2815,7 +2815,7 @@
     <string name="lessonspart3c_propagacao_copias_4_x_t2">**Propagação de cópias:** (4) x = t2 * t2</string>
     <string name="lessonspart3c_codigo_morto_t1_t3_nao">**Código morto:** t1 e t3 não são mais usados → remove (1) e (3)</string>
     <string name="lessonspart3c_codigo_morto_5_y_0">**Código morto:** (5) y = 0 é sobrescrito em (6) sem uso → remove (5)</string>
-    <string name="lessonspart3c_t2_8_x_t2_t2">t2 = a + 8\nx = t2 * t2\ny = x</string>
+    <string name="lessonspart3c_t2_8_x_t2_t2" translatable="false">t2 = a + 8\nx = t2 * t2\ny = x</string>
     <string name="lessonspart3c_resultado_6_instrucoes_para_3">Resultado: de 6 instruções para 3</string>
     <string name="lessonspart3c_ordem_importa_posso_fazer_codigo">Ordem importa? Posso fazer código morto primeiro?</string>
     <string name="lessonspart3c_pode_mas_otimizacao_costuma_abrir">Pode, mas uma otimização costuma abrir espaço para outra. Compiladores repetem as passadas até nada mudar.</string>
@@ -2871,8 +2871,8 @@
     <string name="lessonspart3c_codigo_morto_se_ninguem_le">Código morto: **'se ninguém lê a carta, não precisa escrever'**. Valor não vivo = instrução descartável.</string>
     <string name="lessonspart3c_juramento">E o juramento?</string>
     <string name="lessonspart3c_mais_rapido_nunca_diferente_programa">**'Mais rápido, nunca diferente.'** O programa otimizado tem que dar exatamente o mesmo resultado.</string>
-    <string name="lessonspart3c_x_10">x = 10 + a</string>
-    <string name="lessonspart3c_x_2_5">x = 2 * 5 + a</string>
+    <string name="lessonspart3c_x_10" translatable="false">x = 10 + a</string>
+    <string name="lessonspart3c_x_2_5" translatable="false">x = 2 * 5 + a</string>
     <string name="lessonspart3c_dobra_t1_10_propaga_x">DObra: t1 = 10. PropagA: x = 10 + a. E aí o MOrto leva o t1 = 10, se t1 não for usado de novo.</string>
     <string name="lessonspart3c_dopa_sumo_em_acao_2">DOPA SUMO em ação: o 2 * 3 vira 6.</string>
     <string name="lessonspart3c_recite_dopa_sumo_pad">Recite DOPA SUMO e PAD.</string>
@@ -2927,7 +2927,7 @@
     <string name="lessonspart4_descarta_lexema_yylex_continua">Descarta o lexema e yylex() continua</string>
     <string name="lessonspart4_como_valor_numero_chega_ao">Como o valor de um número chega ao Bison?</string>
     <string name="lessonspart4_como_compilar_scanner_tp">Como compilar o scanner do TP?</string>
-    <string name="lessonspart4_lex_scanner_l_gcc_lex">lex scanner.l &amp;&amp; gcc lex.yy.c</string>
+    <string name="lessonspart4_lex_scanner_l_gcc_lex" translatable="false">lex scanner.l &amp;&amp; gcc lex.yy.c</string>
     <string name="lessonspart4_analisador_detecta_erro_no_primeiro">O analisador detecta o erro no primeiro token que torna a entrada impossível (prefixo viável), relata linha e 'esperado × encontrado' e se recupera para achar mais erros; no LL(1), o modo pânico descarta tokens até um de FIRST(A) (continua) ou de FOLLOW(A) ∪ {$} (desempilha A).</string>
     <string name="lessonspart4_first_fica_follow_foge_panico">FIRST Fica, FOLLOW Foge. Pânico Pula, Frase Faz remendo, Produção Prevê, Global é Gênio.</string>
     <string name="lessonspart4_explique_para_amigo_12_anos_3">Explique para um amigo de 12 anos como um corretor de redação que acha um erro continua lendo a partir do próximo ponto final, e por que isso é melhor do que parar na primeira falha.</string>
@@ -3129,7 +3129,7 @@
     <string name="lessonspart4b_cada_widget_abaixo_scanner_l">Cada widget abaixo é um scanner .l de verdade rodando. Embaixo de cada token aparece o número da regra que venceu. Mude a entrada à vontade!</string>
     <string name="lessonspart4b_espacos_casam_com_regra_1">Espaços casam com a regra 1, que não tem return: somem.</string>
     <string name="lessonspart4b_repare_em_duas_regras_comecam">Repare em `==` e `=`: as duas regras começam com '='. Em `x == 1`, a regra de `==` casa 2 caracteres e vence. Em `y = 2`, só a de `=` casa.</string>
-    <string name="lessonspart4b_b_c_d_f">a&gt;=b c==d e=f</string>
+    <string name="lessonspart4b_b_c_d_f" translatable="false">a&gt;=b c==d e=f</string>
     <string name="lessonspart4b_desta_vez_esta_antes_na">Desta vez "&gt;" está ANTES de "&gt;=" na folha. Mesmo assim, &gt;= vira GE. Por quê?</string>
     <string name="lessonspart4b_com_essa_mesma_folha_como">Com essa mesma folha, como fica 'x===y'?</string>
     <string name="lessonspart4b_guloso_esquerda_para_direita_primeiro">Guloso, da esquerda para a direita: primeiro o maior pedaço que casa a partir do '=' é '==' (EQ). Sobra um '=' (ATRIB). Teste digitando no widget acima!</string>
@@ -3173,7 +3173,7 @@
     <string name="lessonspart4b_na_folha_abaixo_vem_antes">Na folha abaixo, "&lt;" vem ANTES de "&lt;=". O que vira 'a&lt;=b'?</string>
     <string name="lessonspart4b_erro_falta_regra">Erro: falta a regra do '='</string>
     <string name="lessonspart4b_robo_guloso_casa_2_caracteres">O robô é guloso: "&lt;=" casa 2 caracteres, "&lt;" só 1. A ordem só desempata lexemas do MESMO tamanho.</string>
-    <string name="lessonspart4b_b_c_d">a&lt;=b c&lt;d</string>
+    <string name="lessonspart4b_b_c_d" translatable="false">a&lt;=b c&lt;d</string>
     <string name="lessonspart4b_confira_le_em_b_lt">Confira: LE em 'a&lt;=b', LT em 'c&lt;d'.</string>
     <string name="lessonspart4b_entao_ordem_das_regras_nunca">Então a ordem das regras nunca importa?</string>
     <string name="lessonspart4b_quando_ordem_das_regras_importa">Quando a ordem das regras IMPORTA?</string>
@@ -3292,7 +3292,7 @@
     <string name="lessonspart4c_com_t_no_topo_m">O '*'. Com T no topo, M[T, *] está vazia; '*' não está em FIRST(T) = {(, id} nem em FOLLOW(T) = {+, ), $}. O próximo, 'id', está em FIRST(T): o parser segue com T.</string>
     <string name="lessonspart4c_rastreando_panico_na_mao">Rastreando o pânico na mão</string>
     <string name="lessonspart4c_vamos_rastrear_com_calma_modo">Vamos rastrear com calma o modo pânico em `id = ; id = num ;`: o programador esqueceu o valor da primeira atribuição.</string>
-    <string name="lessonspart4c_first_p_id_first_id">FIRST(P) = {id, ε}   FIRST(S) = {id}   FIRST(E) = {id, num}\nFOLLOW(P) = {$}   FOLLOW(S) = {;}   FOLLOW(E) = {;}</string>
+    <string name="lessonspart4c_first_p_id_first_id" translatable="false">FIRST(P) = {id, ε}   FIRST(S) = {id}   FIRST(E) = {id, num}\nFOLLOW(P) = {$}   FOLLOW(S) = {;}   FOLLOW(E) = {;}</string>
     <string name="lessonspart4c_resolvido_topo_pilha_direita">Resolvido (topo da pilha à direita)</string>
     <string name="lessonspart4c_m_esta_vazia_erro_detectado">🚨 M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.</string>
     <string name="lessonspart4c_panico_first_mas_follow_nada">Pânico: ';' ∉ FIRST(E), mas ';' ∈ FOLLOW(E). Nada a descartar: **desempilha E**.</string>
@@ -3565,7 +3565,7 @@
     <string name="lessonspart5b_receita_traduzida_ficha_tac_por">A receita traduzida, uma ficha TAC por bloco</string>
     <string name="lessonspart5b_cada_instrucao_tac_tipo_t">Cada instrução TAC do tipo t = a op b virou quantas instruções MIPS no código acima?</string>
     <string name="lessonspart5b_busca_lw_ou_li_busca">Busca (lw ou li), busca (lw ou li), mistura (op), guarda (sw): quatro. A cópia final x = t2 vira só lw + sw.</string>
-    <string name="lessonspart5b_b_2">a + b * 2</string>
+    <string name="lessonspart5b_b_2" translatable="false">a + b * 2</string>
     <string name="lessonspart5b_rode_mars_bolso_4_b">Rode o 'MARS de bolso' (a=4, b=2) e acompanhe a bancada e a despensa mudando.</string>
     <string name="lessonspart5b_mas_ir_despensa_toda_hora">Mas ir à despensa toda hora não é lento?</string>
     <string name="lessonspart5b_muito_cozinheiro_esperto_deixa_na">Muito! Um cozinheiro esperto deixa na bancada o que vai usar de novo. Isso tem nome: **alocação de registradores**. Primeiro a gente faz funcionar; depois deixa rápido.</string>
@@ -3587,7 +3587,7 @@
     <string name="lessonspart5b_executa_then_depois_cai_no">Executa o then e DEPOIS cai no else: x termina valendo b</string>
     <string name="lessonspart5b_erro_montagem_no_mars">Erro de montagem no MARS</string>
     <string name="lessonspart5b_processador_nao_conhece_chaves_ele">O processador não conhece chaves: ele segue linha a linha. Sem o j, ele 'escorrega' do then para dentro de L0 e sobrescreve x com 2. O MARS monta numa boa, o erro é de lógica.</string>
-    <string name="lessonspart5b_b_2_2">(a + b) / 2</string>
+    <string name="lessonspart5b_b_2_2" translatable="false">(a + b) / 2</string>
     <string name="lessonspart5b_bonus_media_inteira_div_tres">Bônus: média inteira. O div de três registradores é pseudoinstrução no MARS (por baixo: div + mflo).</string>
     <string name="lessonspart5b_programas_asm_completos_expressao_if">Programas .asm completos: expressão, if/else e while</string>
     <string name="lessonspart5b_exercicio_1_com_cara_trabalho">Exercício 1, com cara de trabalho prático: gere o programa MIPS completo para `x = a + b * 2; print(x);`, com a = 4 e b = 2.</string>
@@ -3650,7 +3650,7 @@
     <string name="lessonspart5b_para_rotulo_teste_no_comeco">Para o rótulo do TESTE, no começo</string>
     <string name="lessonspart5b_para_main">Para main</string>
     <string name="lessonspart5b_while_volta_testa_novo_unico">while = 'volta e testa de novo'. O único salto para trás é esse j; o desvio para FRENTE (beq/bne) é a porta de saída.</string>
-    <string name="lessonspart5b_d_c">d * (a - c)</string>
+    <string name="lessonspart5b_d_c" translatable="false">d * (a - c)</string>
     <string name="lessonspart5b_bata_ritmo_busca_busca_mistura">Bata o ritmo: busca, busca, mistura, guarda, duas vezes, e a cópia final. (d=5, a=4, c=3 → 5)</string>
     <string name="lessonspart5b_recite_duas_secoes_asm_que">Recite: as duas seções de um .asm e o que vai em cada uma.</string>
     <string name="lessonspart5b_memoria_eu_guardo_tudo_sou">Memória: 'Eu guardo tudo, sou enorme!' Registrador: 'E eu sou muito mais rápido.' Memória: 'Mas só cabem 32 de vocês...' Alocador de registradores: 'Calma, gente, é para isso que eu existo.'</string>
@@ -3840,7 +3840,7 @@
     <string name="lessonspart6a_minimizaporparticoes_d_moore_hopcroft_versao">MinimizaPorPartições(D):        // Moore; Hopcroft é a versão otimizada\n    Π ← { F, S − F }\n    repita\n        para cada grupo G de Π:\n            divida G: p e q ficam juntos se, para todo c,\n            δ(p,c) e δ(q,c) caem no MESMO grupo de Π\n    até Π não mudar</string>
     <string name="lessonspart6a_alternativa_refinar_particoes_caminho_livro">Alternativa: refinar partições (o caminho do Livro do Dragão, Alg. 3.39)</string>
     <string name="lessonspart6a_particoes_no_afd_livro_b">Partições no AFD do livro ((a|b)*abb)</string>
-    <string name="lessonspart6a_0_q0_q1_q2_q3">Π₀ = { {q0,q1,q2,q3}, {q4} }</string>
+    <string name="lessonspart6a_0_q0_q1_q2_q3" translatable="false">Π₀ = { {q0,q1,q2,q3}, {q4} }</string>
     <string name="lessonspart6a_com_b_q3_vai_para">Com 'b', q3 vai para {q4} e os outros ficam no grupo grande: Π₁ = { {q0,q1,q2}, {q3}, {q4} }</string>
     <string name="lessonspart6a_com_b_q1_vai_para">Com 'b', q1 vai para {q3} e q0, q2 vão para o grupo grande: Π₂ = { {q0,q2}, {q1}, {q3}, {q4} }</string>
     <string name="lessonspart6a_q0_q2_tem_destinos_identicos">q0 e q2 têm destinos idênticos: Π não muda mais. Mesmo resultado da tabela: q0 ≡ q2.</string>
@@ -3875,9 +3875,9 @@
     <string name="lessonspart6a_contraste_que_construcao_subconjuntos_faz">Contraste: o que a construção de subconjuntos faz e o que a minimização faz?</string>
     <string name="lessonspart6a_subconjuntos_tira_nao_determinismo_afn">Subconjuntos tira o NÃO-DETERMINISMO (AFN → AFD), podendo criar estados sobrando. Minimização tira a REDUNDÂNCIA (AFD → menor AFD equivalente). Uma não substitui a outra.</string>
     <!-- LessonsPart6b.kt -->
-    <string name="lessonspart6b_abstract_class_cmd_class_atrib">abstract class Cmd { }\n\nclass Atrib extends Cmd {          // x = expr;\n    String var; Expr valor;\n}\nclass Se extends Cmd {             // if (cond) entao else senao\n    Expr cond; Cmd entao, senao;   // senao == null quando não há else\n}\nclass Enquanto extends Cmd {       // while (cond) corpo\n    Expr cond; Cmd corpo;\n}\nclass Bloco extends Cmd {          // { c1 c2 ... }\n    List&lt;Cmd&gt; cmds = new ArrayList&lt;&gt;();\n}</string>
-    <string name="lessonspart6b_exp_exp_termo_new_binop">\n    exp   : exp '+' termo     { §§ = new BinOp('+', §1, §3); }\n          | exp '-' termo     { §§ = new BinOp('-', §1, §3); }\n          | termo             { §§ = §1; }          /* corrente: só repassa */\n          ;\n    termo : termo '*' fator   { §§ = new BinOp('*', §1, §3); }\n          | fator             { §§ = §1; }\n          ;\n    fator : '(' exp ')'       { §§ = §2; }          /* o parêntese SOME aqui */\n          | ID                { §§ = new Var(§1); }\n          | NUM               { §§ = new Num(§1); }\n          ;\n    </string>
-    <string name="lessonspart6b_abstract_class_expr_abstract_int">abstract class Expr {\n    abstract int avaliar(Map&lt;String, Integer&gt; mem);\n    abstract String gerar(Gerador g);          // devolve onde ficou o valor\n}\nclass Num extends Expr {\n    int valor;\n    int avaliar(Map&lt;String, Integer&gt; mem) { return valor; }\n    String gerar(Gerador g) { return String.valueOf(valor); }\n}\nclass Var extends Expr {\n    String nome;\n    int avaliar(Map&lt;String, Integer&gt; mem) { return mem.get(nome); }\n    String gerar(Gerador g) { return nome; }\n}\nclass BinOp extends Expr {\n    char op; Expr esq, dir;\n    int avaliar(Map&lt;String, Integer&gt; mem) {\n        int x = esq.avaliar(mem), y = dir.avaliar(mem);   // filhos primeiro (pós-ordem)\n        switch (op) { case '+': return x + y; case '-': return x - y;\n                      case '*': return x * y; default:  return x / y; }\n    }\n    String gerar(Gerador g) {\n        String x = esq.gerar(g), y = dir.gerar(g);\n        String t = g.novoTemp();\n        g.emite(t + " = " + x + " " + op + " " + y);       // TAC!\n        return t;\n    }\n}</string>
+    <string name="lessonspart6b_abstract_class_cmd_class_atrib" translatable="false">abstract class Cmd { }\n\nclass Atrib extends Cmd {          // x = expr;\n    String var; Expr valor;\n}\nclass Se extends Cmd {             // if (cond) entao else senao\n    Expr cond; Cmd entao, senao;   // senao == null quando não há else\n}\nclass Enquanto extends Cmd {       // while (cond) corpo\n    Expr cond; Cmd corpo;\n}\nclass Bloco extends Cmd {          // { c1 c2 ... }\n    List&lt;Cmd&gt; cmds = new ArrayList&lt;&gt;();\n}</string>
+    <string name="lessonspart6b_exp_exp_termo_new_binop" translatable="false">\n    exp   : exp '+' termo     { §§ = new BinOp('+', §1, §3); }\n          | exp '-' termo     { §§ = new BinOp('-', §1, §3); }\n          | termo             { §§ = §1; }          /* corrente: só repassa */\n          ;\n    termo : termo '*' fator   { §§ = new BinOp('*', §1, §3); }\n          | fator             { §§ = §1; }\n          ;\n    fator : '(' exp ')'       { §§ = §2; }          /* o parêntese SOME aqui */\n          | ID                { §§ = new Var(§1); }\n          | NUM               { §§ = new Num(§1); }\n          ;\n    </string>
+    <string name="lessonspart6b_abstract_class_expr_abstract_int" translatable="false">abstract class Expr {\n    abstract int avaliar(Map&lt;String, Integer&gt; mem);\n    abstract String gerar(Gerador g);          // devolve onde ficou o valor\n}\nclass Num extends Expr {\n    int valor;\n    int avaliar(Map&lt;String, Integer&gt; mem) { return valor; }\n    String gerar(Gerador g) { return String.valueOf(valor); }\n}\nclass Var extends Expr {\n    String nome;\n    int avaliar(Map&lt;String, Integer&gt; mem) { return mem.get(nome); }\n    String gerar(Gerador g) { return nome; }\n}\nclass BinOp extends Expr {\n    char op; Expr esq, dir;\n    int avaliar(Map&lt;String, Integer&gt; mem) {\n        int x = esq.avaliar(mem), y = dir.avaliar(mem);   // filhos primeiro (pós-ordem)\n        switch (op) { case '+': return x + y; case '-': return x - y;\n                      case '*': return x * y; default:  return x / y; }\n    }\n    String gerar(Gerador g) {\n        String x = esq.gerar(g), y = dir.gerar(g);\n        String t = g.novoTemp();\n        g.emite(t + " = " + x + " " + op + " " + y);       // TAC!\n        return t;\n    }\n}</string>
     <string name="lessonspart6b_resumo_livro_inteiro">O resumo e o livro inteiro</string>
     <string name="lessonspart6b_vespera_prova_literatura_byte_tem">Véspera de prova de Literatura. Byte tem duas opções: reler o livro inteiro, com prefácio, índice e notas de rodapé, ou ler o resumo de duas páginas da colega.</string>
     <string name="lessonspart6b_resumo_obvio_mas_nao_perde">O resumo, óbvio! Mas... não perde nada importante?</string>
@@ -3899,7 +3899,7 @@
     <string name="lessonspart6b_arvore_derivacao_ast_nao_terminal">Árvore de derivação, AST, não-terminal em corrente (E → T → F), parênteses/pontuação.</string>
     <string name="lessonspart6b_dieta_arvores_ao_vivo">Dieta de árvores, ao vivo</string>
     <string name="lessonspart6b_hoje_cada_widget_mostra_mesma">Hoje cada widget mostra a mesma expressão duas vezes: a árvore de derivação (gorda) e a AST (magra), com a contagem de nós e o código Java que monta a AST.</string>
-    <string name="lessonspart6b_a">( ( a ) )</string>
+    <string name="lessonspart6b_a" translatable="false">( ( a ) )</string>
     <string name="lessonspart6b_caso_extremo_14_nos_na">O caso extremo: 14 nós na árvore de derivação, 1 nó na AST. Tudo era parêntese e corrente.</string>
     <string name="lessonspart6b_que_restou_na_ast">O que restou na AST de '( ( a ) )'?</string>
     <string name="lessonspart6b_binop_com_dois_filhos">BinOp com dois filhos</string>
@@ -3907,16 +3907,16 @@
     <string name="lessonspart6b_dois_nos_parenteses">Dois nós de parênteses</string>
     <string name="lessonspart6b_nada_ast_fica_vazia">Nada: a AST fica vazia</string>
     <string name="lessonspart6b_parenteses_so_agrupavam_nao_ha">Os parênteses só agrupavam; não há operação nenhuma. A AST é apenas new Var("a").</string>
-    <string name="lessonspart6b_b_c">a - b - c</string>
+    <string name="lessonspart6b_b_c" translatable="false">a - b - c</string>
     <string name="lessonspart6b_associatividade_14_nos_contra_5">Associatividade: 14 nós contra 5. Veja qual '-' ficou embaixo.</string>
     <string name="lessonspart6b_na_ast_b_c_qual">Na AST de 'a - b - c', qual subtração fica mais funda (é feita primeiro)?</string>
     <string name="lessonspart6b_esquerda_b_c">A da esquerda: (a - b) - c</string>
     <string name="lessonspart6b_direita_b_c">A da direita: a - (b - c)</string>
     <string name="lessonspart6b_tanto_faz_mesmo_valor">Tanto faz: dá o mesmo valor</string>
     <string name="lessonspart6b_gramatica_t_recursiva_esquerda_entao">A gramática E → E - T é recursiva à ESQUERDA, então a árvore cresce para a esquerda: new BinOp('-', new BinOp('-', a, b), c). E não dá o mesmo valor: com a=10, b=3, c=2, (10-3)-2 = 5 mas 10-(3-2) = 9.</string>
-    <string name="lessonspart6b_b_c_2">a - ( b - c )</string>
+    <string name="lessonspart6b_b_c_2" translatable="false">a - ( b - c )</string>
     <string name="lessonspart6b_agora_com_parenteses_direita_19">Agora com parênteses à direita: 19 nós contra 5. A forma da AST mudou, mesmo sem nenhum nó de parêntese.</string>
-    <string name="lessonspart6b_b_c_x">( a + b ) * ( c - x )</string>
+    <string name="lessonspart6b_b_c_x" translatable="false">( a + b ) * ( c - x )</string>
     <string name="lessonspart6b_28_nos_na_derivacao_7">28 nós na derivação, 7 na AST: 4 folhas e 3 operadores.</string>
     <string name="lessonspart6b_regras_que_voce_acabou_ver">Regras que você acabou de ver acontecendo</string>
     <string name="lessonspart6b_folha_id_num_var_ou">Folha id/num → **Var** ou **Num** (um nó só, sem a corrente F → id).</string>
@@ -3942,7 +3942,7 @@
     <string name="lessonspart6b_que_fator_devolve_ao_encontrar">O que fator() devolve ao encontrar '('?</string>
     <string name="lessonspart6b_casa_chama_expr_que_monta">Casa '(', chama expr(), que monta new BinOp('-', Var(b), Var(c)), casa ')' e devolve ESSE BinOp. Nenhum nó de parêntese é criado.</string>
     <string name="lessonspart6b_escreva_codigo_java_completo_ast">Escreva o código Java completo da AST.</string>
-    <string name="lessonspart6b_new_binop_new_var_new">new BinOp('-', new Var("a"), new BinOp('-', new Var("b"), new Var("c")))</string>
+    <string name="lessonspart6b_new_binop_new_var_new" translatable="false">new BinOp('-', new Var("a"), new BinOp('-', new Var("b"), new Var("c")))</string>
     <string name="lessonspart6b_quantos_nos_tem_cada_arvore">Quantos nós tem cada árvore?</string>
     <string name="lessonspart6b_arvore_derivacao_19_nos_ast">Árvore de derivação: 19 nós. AST: 5 nós (2 BinOp + 3 Var).</string>
     <string name="lessonspart6b_questao_comum_dada_gramatica_com">Questão comum: 'dada a gramática com ações semânticas, desenhe a AST de tal expressão'. Faça em dois passos: primeiro a árvore de derivação (rascunho), depois risque correntes e parênteses e troque cada produção com operador por um BinOp.</string>
@@ -4049,7 +4049,7 @@
     <string name="lessonspart6c_porque_sao_mesmo_tipo">Porque são do mesmo tipo</string>
     <string name="lessonspart6c_t2_morre_em_t3_t1">t2 morre em 't3 = t1 + t2' e t3 nasce ali mesmo. Sem sobreposição, sem aresta no grafo, mesma cor.</string>
     <string name="lessonspart6c_cadeia_cada_temporario_morre_quando">Cadeia: cada temporário morre quando o próximo nasce. Grafo sem arestas: 1 registrador basta!</string>
-    <string name="lessonspart6c_b_c_d_c">a * b + ( c * d + a * c )</string>
+    <string name="lessonspart6c_b_c_d_c" translatable="false">a * b + ( c * d + a * c )</string>
     <string name="lessonspart6c_agora_ha_3_temporarios_vivos">Agora há 3 temporários vivos ao mesmo tempo. Procure o triângulo no grafo.</string>
     <string name="lessonspart6c_com_triangulo_t1_t2_t3">Com o triângulo t1—t2—t3, qual o menor número de registradores sem spill?</string>
     <string name="lessonspart6c_num_triangulo_cada_vertice_vizinho">Num triângulo, cada vértice é vizinho dos outros dois: três cores diferentes são obrigatórias. χ = 3.</string>
@@ -4144,4 +4144,156 @@
     <string name="lessonspart6c_11_no_ingenuo_5_com">11 no ingênuo, 5 com alocação (2 registradores). Em a * b + ( c * d + a * c ): 17 → 7 com 3 registradores, ou 9 com 2 (t1 derramado).</string>
     <string name="lessonspart6c_sem_olhar_4_passos_formula">Sem olhar: os 4 passos, a fórmula e a convenção.</string>
     <string name="lessonspart6c_vigor_vivacidade_tras_para_frente">VIGOR: vivacidade (de trás para frente), grafo de interferência, colorir com k cores (Chaitin: simplifica grau &lt; k, empilha, colore), registradores. in = use ∪ (out − def). $t: salvos pelo chamador; $s: salvos pelo chamado.</string>
+    <string name="lessonspart2a_nenhum">nenhum</string>
+    <string name="solta_bugs_1">S -&gt; A b, A -&gt; b | ε não tem recursão e não é LL(1).</string>
+    <string name="solta_lessonspart1_1">A → Aα | β faz o analisador descendente entrar em laço infinito; troque por A → βA' e A' → αA' | ε, que gera a mesma linguagem βα*.</string>
+    <string name="solta_lessonspart1_2">E → E + T | T sem recursão à esquerda?</string>
+    <string name="solta_lessonspart1a_1">Quem detecta o erro em `int x = 3 @ 4;`?</string>
+    <string name="solta_lessonspart1a_2">E `y = 5;` sem nunca ter declarado y (em C)?</string>
+    <string name="solta_lessonspart1a_3">Porto → Floresta Léxica → Vale das Gramáticas → Ponte da Transformação → Templo Top-Down → Fortaleza Bottom-Up → Oficina Bison → Cidade Semântica → Forja do Código. Do Vale até a Oficina é tudo análise sintática!</string>
+    <string name="solta_lessonspart1a_4">Como a Lexi corta `x = a+++b;`? Pense no maior casamento antes de tocar.</string>
+    <string name="solta_lessonspart1a_5">x, =, a, ++, +, b, ; — ela morde `++` primeiro (o maior), e sobra um `+`.</string>
+    <string name="solta_lessonspart1a_6">A com a: move({0}, a) = {0, 1} → novo estado **B**.</string>
+    <string name="solta_lessonspart1a_7">Dtran[A, a] = {0} = A. Dtran[A, b] = {0, 1} = novo estado B.</string>
+    <string name="solta_lessonspart1a_8">B com a: {0} = A. B com b: {0, 1, 2} = novo estado C.</string>
+    <string name="solta_lessonspart1b_1">S -&gt; a S b | ε: cada passo põe um a na frente e um b atrás. Nenhuma ER faz isso!</string>
+    <string name="solta_lessonspart1b_2">S → ε direto: zero passos de 'a S b'.</string>
+    <string name="solta_lessonspart1c_1">E → E + T e E → T começam, ambas, com algo que deriva id ou '('. Olhando só o próximo token, não dá para escolher. Recursão à esquerda SEMPRE causa esse conflito.</string>
+    <string name="solta_lessonspart1c_2">S' → e S entra pela coluna e (FIRST), e S' → ε entra pelas colunas de FOLLOW(S'), que inclui e. É a ambiguidade, não a fatoração.</string>
+    <string name="solta_lessonspart1c_3">3. Primeira rodada: A → a A' | f; A' → b c | b d | e.</string>
+    <string name="solta_lessonspart1c_4">5. Segunda rodada: A' → b A'' | e; A'' → c | d.</string>
+    <string name="solta_lessonspart1c_5">A → a A'; A' → b | c. Ao ver 'a' há uma única opção; b ou c é decidido em A', com o token certo à vista.</string>
+    <string name="solta_lessonspart1c_6">A → a B A'; A' → c | ε. (O ε aparece porque uma alternativa era exatamente o prefixo.)</string>
+    <string name="solta_lessonspart2_1">B → • γ para toda produção de B (e repete).</string>
+    <string name="solta_lessonspart2_2">S' → • S ou item com o ponto fora do início.</string>
+    <string name="solta_lessonspart2a_1">Isso! FOLLOW(B) = {c}. E depois de A?</string>
+    <string name="solta_lessonspart2a_2">E → T E': depois de T vem E', então FIRST(E') − {ε} = {+} entra em FOLLOW(T).</string>
+    <string name="solta_lessonspart2a_3">2) Em D → T L ;, depois de T vem L. FIRST(L) = {id} entra em FOLLOW(T). FOLLOW(T) = {id}.</string>
+    <string name="solta_lessonspart2a_4">3) Na mesma regra, depois de L vem ';'. FOLLOW(L) = {;}.</string>
+    <string name="solta_lessonspart2a_5">{c}. Em S → A B c, depois de B vem o terminal c.</string>
+    <string name="solta_lessonspart2b_1">S → a b | a c: as duas produções começam com a, e caem juntas em M[S, a]. O porteiro não sabe qual porta abrir.</string>
+    <string name="solta_lessonspart2b_2">E → T E' aparece em ( e id: é FIRST(T E').</string>
+    <string name="solta_lessonspart2b_3">E' → ε aparece em ) e $: é FOLLOW(E').</string>
+    <string name="solta_lessonspart2b_4">T' → ε aparece em +, ) e $: é FOLLOW(T').</string>
+    <string name="solta_lessonspart2b_5">D → T L ; : FIRST(T L ;) = {int, float}. Anote em M[D, int] e M[D, float].</string>
+    <string name="solta_lessonspart2b_6">A → x y | z w. Chega o token z. Qual produção?</string>
+    <string name="solta_lessonspart2b_7">A → x y | ε, mas agora FOLLOW(A) = {x, z}. Chega x. Qual?</string>
+    <string name="solta_lessonspart2b_8">A → ε e FOLLOW(A) = {), $}. Em quais colunas vai A → ε?</string>
+    <string name="solta_lessonspart2b_9">Casar id. A pilha fica $ ; R e a entrada ; $.</string>
+    <string name="solta_lessonspart2c_1">S → a B c. Qual é o corpo mais natural de S()?</string>
+    <string name="solta_lessonspart2c_2">E → E + T | T. O que acontece se E() começar chamando E()?</string>
+    <string name="solta_lessonspart2c_3">A → b A | ε. Com que tokens A() deve escolher o ε?</string>
+    <string name="solta_lessonspart2c_4">A → x y | x z. A descida recursiva preditiva funciona direto?</string>
+    <string name="solta_lessonspart2c_5">Os conjuntos que decidem cada if: FIRST(S) = {if, print, begin} e FOLLOW(L) = {end}.</string>
+    <string name="solta_lessonspart2c_6">A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada.</string>
+    <string name="solta_lessonspart2c_7">Empilha + e o segundo id; reduz F → id e T → F.</string>
+    <string name="solta_lessonspart2c_8">E → T. A raiz da árvore é sempre a última peça encaixada.</string>
+    <string name="solta_lessonspart2c_9">A → b, A → A b c, B → d, S → a A B e. Lida ao contrário, é a derivação mais à direita: S ⇒ a A B e ⇒ a A d e ⇒ a A b c d e ⇒ a b b c d e.</string>
+    <string name="solta_lessonspart2c_10">S → • C C, S → C • C e S → C C •. Uma produção com n símbolos dá n + 1 itens.</string>
+    <string name="solta_lessonspart2c_11">S' → • S, S → • C C, C → • c C, C → • d. O S convidou S → • C C; o C convidou as duas produções de C.</string>
+    <string name="solta_lessonspart2c_12">I0: o estado inicial, fechamento de { S' → • S }.</string>
+    <string name="solta_lessonspart2c_13">C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento.</string>
+    <string name="solta_lessonspart2c_14">Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?</string>
+    <string name="solta_lessonspart3_1">Vamos precisar do FOLLOW: FOLLOW(E) = { +, ), $ } e FOLLOW(T) = FOLLOW(F) = { +, *, ), $ }.</string>
+    <string name="solta_lessonspart3_2">L → * R joga FOLLOW(L) dentro de FOLLOW(R), e S → L = R coloca '=' em FOLLOW(L). Resultado: o SLR escreve r5 (R → L) em [2, =], junto com s6 de S → L • = R.</string>
+    <string name="solta_lessonspart3_3">E' → E • está completo e é o item aumentado → ACTION[1, $] = **acc**</string>
+    <string name="solta_lessonspart3_4">E → E • + T tem terminal depois do ponto, e há seta + → I6 → ACTION[1, +] = **s6**</string>
+    <string name="solta_lessonspart3_5">E → T • completo → **r2** nas colunas de FOLLOW(E): +, ) e $</string>
+    <string name="solta_lessonspart3_6">Sua vez: estado 9 = { E → E + T • ; T → T • * F } com seta * → I7. Preencha a linha.</string>
+    <string name="solta_lessonspart3_7">r1 em +, ) e $ (FOLLOW(E)); s7 em *. Sem conflito, pelo mesmo motivo do estado 2.</string>
+    <string name="solta_lessonspart3_8">E → E + E | E * E | ( E ) | id: conflitos nos estados 7 e 8, colunas + e *.</string>
+    <string name="solta_lessonspart3_9">S → S a | b: tabela pequena e sem conflitos. Recursão à esquerda não assusta o LR!</string>
+    <string name="solta_lessonspart3_10">De [S → • L = R, $]: depois de L vem '= R', FIRST = { = } → [L → • * R, =] e [L → • id, =]</string>
+    <string name="solta_lessonspart3cards_1">Esquecer o ';' no fim da regra ou o %token de um token com nome</string>
+    <string name="solta_lessonspart3b_1">Token mais forte → **shift**; regra mais forte → **reduce**</string>
+    <string name="solta_lessonspart3b_2">int yyparse(void) — o analisador LALR(1); retorna 0 em sucesso e 1 em erro de sintaxe</string>
+    <string name="solta_lessonspart3b_3">Na regra expr : '(' expr ')' { $$ = ???; }, o que vai no lugar de ???</string>
+    <string name="solta_lessonspart3b_4">a + (x * 2): int + float → **float**, gera inttofloat(a)</string>
+    <string name="solta_lessonspart3c_1">(1). Estamos de volta ao bloco 0; o x float (3) morreu com o bloco 1.</string>
+    <string name="solta_lessonspart3c_2">Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?</string>
+    <string name="solta_lessonspart3c_3">**'Abre chave, empilha; fecha chave, desempilha.'** A pilha de tabelas segue as chaves do programa.</string>
+    <string name="solta_lessonspart3c_4">'Junte b com c (multiplicando) na tigela t1; depois junte a com t1 na tigela t2.' — a + b * c</string>
+    <string name="solta_lessonspart3c_5">**Triplas indiretas:** lista de ponteiros para triplas; reordena-se a lista</string>
+    <string name="solta_lessonspart3c_6">t2 = a + b * c tem dois operadores. Precisa virar t1 = b * c; t2 = a + t1.</string>
+    <string name="solta_lessonspart4b_1">O que acontece com `int x@ = 2;`?</string>
+    <string name="solta_lessonspart4b_2">Com as regras `"if" {…}` e `[a-z]+ {…}` nessa ordem, a entrada 'ifa' produz:</string>
+    <string name="solta_lessonspart4b_3">Receita do TP para nunca esquecer: `lex scanner.l` → `gcc lex.yy.c` → `./a.out &lt; teste.txt`. Com Bison: `yacc -d parser.y` gera y.tab.h com os tokens, que o scanner.l inclui no %{ %}.</string>
+    <string name="solta_lessonspart4c_1">Faltou um ';' depois do primeiro comando. Veja em que token o erro aparece e como o parser segue em frente.</string>
+    <string name="solta_lessonspart4c_2">O que o parser fez com o ';' que faltou?</string>
+    <string name="solta_lessonspart4c_3">E em `id num ; id = num ;`, o que muda?</string>
+    <string name="solta_lessonspart4c_4">Em `id = num num ; id = id ;`, em qual token o parser LL(1) PERCEBE o erro?</string>
+    <string name="solta_lessonspart5_1">Não salvar $ra na pilha antes de um jal dentro de uma função que chama outra</string>
+    <string name="solta_lessonspart5_2">Guarda PC + 4 em $ra e desvia para a função</string>
+    <string name="solta_lessonspart5_3">Esquecer de declarar os temporários na .data ou de encerrar com li $v0, 10 + syscall</string>
+    <string name="solta_lessonspart5_4">Confundir t1 (variável na memória) com $t1 (registrador)</string>
+    <string name="solta_lessonspart5_5">Para que serve $zero?</string>
+    <string name="solta_lessonspart5a_1">Para qual mesa devolver → **endereço de retorno** (no MIPS, o registrador `$ra`)</string>
+    <string name="solta_lessonspart5a_2">Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA.</string>
+    <string name="solta_lessonspart5a_3">5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai</string>
+    <string name="solta_lessonspart5a_4">Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.</string>
+    <string name="solta_lessonspart5a_5">**Chamador:** põe o argumento em `$a0` e executa `jal fat` (que guarda o endereço de volta em `$ra`)</string>
+    <string name="solta_lessonspart5a_6">**Chamado, na saída (epílogo):** põe o resultado em `$v0`, restaura `$ra`, `addi $sp, $sp, 8` fecha o quadro e `jr $ra` volta</string>
+    <string name="solta_lessonspart5a_7">**Chamador, depois:** usa o valor que chegou em `$v0`</string>
+    <string name="solta_lessonspart5a_8">Esqueceu de salvar `$ra` antes do `jal` interno? A chamada recursiva sobrescreve `$ra`, e o `jr $ra` final volta para o lugar errado — o programa entra em laço. Função que chama outra SEMPRE salva `$ra` na pilha.</string>
+    <string name="solta_lessonspart5a_9">Ela guardou o **endereço de retorno** na hora da chamada. No MIPS, `jal` coloca esse endereço em `$ra`; como a próxima chamada sobrescreveria `$ra`, ele é salvo no quadro.</string>
+    <string name="solta_lessonspart5a_10">O resultado vai num lugar combinado (no MIPS, `$v0`). Para reencontrar o quadro anterior, guarda-se o **vínculo de controle** (link dinâmico), um ponteiro para o quadro do chamador — ou, no MIPS simples, basta desfazer o `$sp`.</string>
+    <string name="solta_lessonspart5a_11">**Chamador:** avalia os parâmetros reais e os coloca onde o chamado espera (no quadro, ou em `$a0`–`$a3`)</string>
+    <string name="solta_lessonspart5a_12">**Chamado (prólogo):** aloca o quadro (`$sp` -= tamanho), salva registradores (incluindo `$ra`) e inicializa as locais</string>
+    <string name="solta_lessonspart5a_13">**Chamado (retorno):** põe o valor de retorno no lugar combinado (`$v0`), restaura registradores e `$sp`, desvia para o endereço de retorno (`jr $ra`)</string>
+    <string name="solta_lessonspart5a_14">**jal = Jump And Link**: pula e deixa um bilhete de volta em `$ra` (**r**eturn **a**ddress). **jr $ra = Jump Register**: volta seguindo o bilhete.</string>
+    <string name="solta_lessonspart5b_1">Na bancada cabem só 32 potinhos com etiqueta (`$t0`, `$t1`, ...). Ele **só cozinha o que está na bancada**: para usar a farinha, vai à despensa buscar (**lw**) e, quando termina, leva o resultado de volta (**sw**).</string>
+    <string name="solta_lessonspart5b_2">Potinhos da bancada → **registradores** (`$t0`–`$t9`, `$s0`–`$s7`, ...): rápidos e poucos</string>
+    <string name="solta_lessonspart5b_3">Buscar na despensa → **lw** (*load word*); guardar de volta → **sw** (*store word*)</string>
+    <string name="solta_lessonspart5b_4">`t1` (sem cifrão) é uma **prateleira** da despensa: uma variável na .data que o gerador criou para o temporário. `$t1` (com cifrão) é um **potinho** da bancada. Nomes parecidos, lugares diferentes! No seu trabalho, chamar os temporários de `_t1` evita confusão.</string>
+    <string name="solta_lessonspart5b_5">É tocar a campainha do salão: o cozinheiro pede ao gerente (o sistema / o MARS) algo que ele não faz sozinho, como mostrar o prato ao cliente (imprimir) ou fechar a cozinha (encerrar). O pedido vai em `$v0`: 1 = imprimir inteiro, 4 = imprimir texto, 10 = encerrar.</string>
+    <string name="solta_lessonspart5b_6">Cada linha TAC vira um bloquinho. Avance e veja $t1, $t2, $t3 e a memória.</string>
+    <string name="solta_lessonspart5b_7">Com a=1, b=2: $t3 = 0, o beq pula para L0 e x = b</string>
+    <string name="solta_lessonspart5b_8">Repare que o gerador ingênuo faz `sw $t3, t1` e logo depois `lw $t1, t1`: guarda e busca a mesma coisa. Dá para cortar isso? (Spoiler: é a primeira coisa que a alocação de registradores elimina.)</string>
+    <string name="solta_lessonspart5b_9">`bne $t3, $zero, L1`: se a condição de SAÍDA (i &gt; 3) é verdadeira (≠ 0), pula para fora do laço. (Equivalente: calcular i &lt;= 3 com `sle` e usar `beq $t3, $zero, L1`.)</string>
+    <string name="solta_lessonspart5b_10">Não há o que buscar na memória: usa-se `li $t2, 2` (carrega imediato). Para somar uma constante existe até atalho: `addi $t3, $t1, 2`.</string>
+    <string name="solta_lessonspart5b_11">Calcule a condição num registrador (sgt/slt deixam 1 ou 0). Se ela for 0, pule para o rótulo do else (`beq $t3, $zero, L0`). No fim do then, um `j L1` pula o else.</string>
+    <string name="solta_lessonspart5b_12">Para que serve o registrador `$zero`?</string>
+    <string name="solta_lessonspart5b_13">Vale sempre 0 — ótimo para comparar com 'falso' (beq $t3, $zero, L0) e para copiar</string>
+    <string name="solta_lessonspart5b_14">Escrever nele não adianta: ele é fixo em 0. `beq $t3, $zero, L0` se lê 'se $t3 é falso, pule'. E `move $t0, $t1` é, por baixo, uma soma com `$zero`.</string>
+    <string name="solta_lessonspart5b_15">Pede ao sistema: põe o código do serviço em `$v0` (1 = inteiro, 4 = string, 10 = sair), o argumento em `$a0` (o número, ou o endereço da string, obtido com `la`) e executa `syscall`.</string>
+    <string name="solta_lessonspart5b_16">Três: buscar a, buscar b e guardar x. Os temporários podem viver em registradores: `lw $t0, a / lw $t1, b / li $t2, 2 / mul $t1, $t1, $t2 / add $t0, $t0, $t1 / sw $t0, x`. Decidir quem fica em qual registrador é a **alocação de registradores**.</string>
+    <string name="solta_lessonspart5b_17">Em 'gere o código MIPS', escreva SEMPRE as duas seções (.data com variáveis e temporários; .text começando em main:), comente cada bloco com a instrução TAC correspondente e termine com `li $v0, 10` + `syscall`. Sem isso o MARS até para ('dropped off bottom'), mas o professor desconta.</string>
+    <string name="solta_lessonspart5b_18">Em `lw` e `sw` o REGISTRADOR vem primeiro nos dois, mas a direção muda: `lw $t1, a` leva a → $t1; `sw $t1, a` leva $t1 → a. E o `div` de três operandos é pseudo: o real é `div $t1, $t2` seguido de `mflo $t3` (quociente; o resto fica em hi, lido com `mfhi`).</string>
+    <string name="solta_lessonspart5b_19">**Load = Leva para a bancada; Store = Salva na despensa.** Nos dois, o registrador vem PRIMEIRO: `lw $t1, a` e `sw $t1, a` — só muda a direção da seta.</string>
+    <string name="solta_lessonspart5b_20">**Família de registradores pela inicial:** `$t` = **t**emporário (pode sujar), `$s` = **s**alvo (guarde antes de usar), `$a` = **a**rgumento, `$v` = **v**alor de retorno, `$ra` = **r**eturn **a**ddress, `$sp` = **s**tack **p**ointer.</string>
+    <string name="solta_lessonspart5b_21">**beq = Branch if EQual (pula se igual); bne = Branch if Not Equal.** O if testa AO CONTRÁRIO: 'se a condição é falsa (igual a $zero), pula o then'.</string>
+    <string name="solta_lessonspart5b_22">**syscall 1, 4, 10: 'um número, uma fila de letras e dez-liga'.** 1 imprime inteiro; 4 imprime string ('fila' tem 4 letras; use `la $a0, msg`); 10 encerra (dez... desliga!).</string>
+    <string name="solta_lessonspart5b_23">.data: as variáveis (`x: .word 0`) e as strings (`msg: .asciiz "..."`). .text: as instruções, começando em `main:` e terminando com `li $v0, 10` + `syscall`.</string>
+    <string name="solta_lessonspart6_1">e = new BinOp(op, e, termo()); dentro do while</string>
+    <string name="solta_lessonspart6a_1">Lanchonete → minimização de AFD</string>
+    <string name="solta_lessonspart6a_2">Atendente X entrega o lanche quando a fila de pedidos acaba nele; atendente Y nunca entrega. Eles podem ser equivalentes?</string>
+    <string name="solta_lessonspart6b_1">F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.</string>
+    <string name="solta_lessonspart6b_2">Na regra `fator : '(' exp ')' { $$ = $2; }`, por que $2?</string>
+    <string name="solta_lessonspart6b_3">e = new BinOp(op, e, termo()); dentro de um while</string>
+    <string name="solta_lessonspart6c_1">Cozinha → alocação de registradores</string>
+    <string name="solta_lessonspart6c_2">No código alocado, por que t2 e t3 podem ficar os dois em $s0?</string>
+    <string name="solta_lessonspart6c_3">Só t2—t1 (em i=1, t2 é definido com t1 vivo). t3 fica sozinho. χ = 2: por exemplo, t1 → $s1, t2 e t3 → $s0.</string>
+    <string name="solta_lessonspart6c_4">Por causa das chamadas de função. Quem chama não sabe quais registradores a função vai usar. A convenção divide a responsabilidade: $t0–$t9 podem ser destruídos pela função (se o chamador precisa deles, ele salva); $s0–$s7 devem ser devolvidos intactos (se a função usa, ela salva e restaura).</string>
+    <string name="solta_lessonspart6c_5">Convenção do MIPS: $s0 é salvo pelo CHAMADO. dobro usa $s0, mas salva e restaura; main encontra o 7 intacto e imprime 17.</string>
+    <string name="solta_lessonspart6c_6">**Convenção MIPS**: $t0–$t9 são **salvos pelo chamador** (caller-saved): uma função pode sobrescrevê-los à vontade. $s0–$s7 são **salvos pelo chamado** (callee-saved): quem os usa salva na pilha e restaura antes do `jr $ra`. Regra prática: valor que atravessa uma chamada → $s; valor de vida curta → $t.</string>
+    <string name="solta_tpguidea_1">**Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.</string>
+    <string name="solta_tpguidea_2">E `inteiro 2x;`? Que tipo de erro a Byteiro deve dar?</string>
+    <string name="solta_tpguideb_1">A pilha de chamadas para `x &lt;- a + 2 * b;`</string>
+    <string name="solta_tpguideb_2">O que o compilador diz na linha 11 (`y &lt;- 3;`)?</string>
+    <string name="solta_tpguideb_3">`}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.</string>
+    <string name="solta_tpguidec_1">Os tipos subindo em `ok &lt;- c + 1 &gt; n e nao ok;` (c caractere, n inteiro, ok logico)</string>
+    <string name="solta_tpguidec_2">O widget usa o estilo 'tudo na memória' (cada temporário vira um .word). Nosso gerador vai guardar os temporários em registradores $t0–$t9.</string>
+    <string name="solta_tpguidec_3">A estratégia de expressões: os registradores `$t0…$t9` funcionam como uma **pilha**. Cada método de expressão pega o próximo registrador livre, deixa o resultado nele e devolve QUAL é. Uma operação binária faz `esq = esq op dir` e devolve o `dir` ao estoque — ele sempre é o mais novo.</string>
+    <string name="solta_tpguidec_4">a → $t0; o `+` chama exprMul: b → $t1, c → $t2 (pico: 3!). `mul $t1, $t1, $t2` libera o $t2; `add $t0, $t0, $t1` libera o $t1. Sobra só o $t0 com o resultado.</string>
+    <string name="solta_tpguidec_5">atribuicao → `sw $t0, soma_1` (libera $t0 — de volta a zero registradores ocupados)</string>
+    <string name="solta_tpguidec_6">Depurando: use Step (F7) e olhe a aba Registers — dá para ver $t0 mudar a cada instrução.</string>
+    <string name="solta_tpguidec_7">Esqueceu o `li $v0, 10` + `syscall` no final? O processador continua executando o que estiver depois do seu código, e o MARS termina com um aviso de 'dropped off bottom'. Encerre sempre explicitamente.</string>
+    <string name="solta_tpguidec_8">Uma expressão aninhada à direita com 11 operandos (`a + (b + (c + …))`) esgota $t0–$t9. Como resolver?</string>
+    <string name="solta_tpguidec_9">Opções: (1) **derramar** (spill) para a pilha: `addi $sp, $sp, -4` + `sw $t9, 0($sp)` e desempilhar depois; (2) usar também $s0–$s7; (3) avaliar primeiro o lado que precisa de mais registradores (numeração de Sethi-Ullman). Para o TP, documentar o limite já costuma bastar.</string>
+    <string name="solta_tpguided_1">`x &lt;- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?</string>
+    <string name="solta_tpguided_2">Com esse dobramento, `y &lt;- a + 2 + 3;` vira `a + 5`?</string>
+    <string name="solta_tpguided_3">E aquele `se (1 &gt; 2) { … }`? O bloco nunca roda. Corta fora!</string>
+    <string name="solta_tpguided_4">Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço.</string>
+    <string name="solta_tpguided_5">**Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a &lt; b &lt; c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada.</string>
+    <string name="solta_tpguided_6">**Variável em laço não reinicia.** Na Byteiro, `inteiro t;` dentro de um `enquanto` NÃO gera código: o `.word` é o mesmo a cada volta e guarda o valor da volta anterior. Ou documente isso ('variáveis valem 0 só no início do programa'), ou gere um `sw $zero, rotulo` em cada declaração.</string>
 </resources>

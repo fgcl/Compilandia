@@ -69,6 +69,8 @@ data class LearnerState(
     // ---- reforma: voz, sala e metas do dia (saves antigos caem nos valores padrão)
     val voiceOn: Boolean = true,
     val captionsOn: Boolean = false,
+    /** "pt" ou "en". Vazio: o jogo decide na abertura (save antigo fica em português, jogo novo segue o aparelho). */
+    val idioma: String = "",
     val gears: Int = 0,
     val gearsSeeded: Boolean = false,    // quem já jogava antes da sala ganha engrenagens uma vez
     val roomItems: List<String> = emptyList(),
@@ -311,6 +313,7 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun setSound(v: Boolean) { state = state.copy(soundOn = v) }
     fun setVoice(v: Boolean) { state = state.copy(voiceOn = v) }
     fun setCaptions(v: Boolean) { state = state.copy(captionsOn = v) }
+    fun setIdioma(v: String) { state = state.copy(idioma = v) }
     fun setTheme(t: String) { state = state.copy(theme = t, themeVersion = 1) }
     fun setFontScale(f: Float) { state = state.copy(fontScale = f) }
     fun setReduceMotion(v: Boolean) { state = state.copy(reduceMotion = v) }

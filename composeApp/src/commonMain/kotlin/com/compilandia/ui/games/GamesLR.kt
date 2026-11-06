@@ -131,7 +131,7 @@ private fun ShiftReduceRound(ctx: GameCtx, g: Grammar, input: List<String>, done
     BeltStage(stackView, cur.input)
     HintBox(
         ctx,
-        tx("gameslr_olhe_estado_topo_1_token", cur.states.last(), cur.input.first(), cur.states.last(), cur.input.first(), t.action[cur.states.last() to cur.input.first()]?.short() ?: "vazio"),
+        tx("gameslr_olhe_estado_topo_1_token", cur.states.last(), cur.input.first(), cur.states.last(), cur.input.first(), t.action[cur.states.last() to cur.input.first()]?.short() ?: tx("comum_vazio_minusc")),
         tx("gameslr_abaixo_tabela_slr_inteira"),
     )
     if (ctx.hints >= 2) LRTableView(t, setOf(cur.states.last() to cur.input.first()))
@@ -357,7 +357,7 @@ fun BisonWorkshopGame(ctx: GameCtx) {
     PaperCard(color = Palette.paper, border = Palette.orange) {
         Text("🦬 ${ch.title}", style = MaterialTheme.typography.headlineSmall)
         RichText(ch.story, style = MaterialTheme.typography.bodyMedium)
-        Text(tx("gameslr_testes") + ch.tests.joinToString("   ") { "${it.first} → ${it.second ?: "erro"}" }, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+        Text(tx("gameslr_testes") + ch.tests.joinToString("   ") { "${it.first} → ${it.second ?: tx("sims_erro")}" }, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     }
     HintBox(ctx, ch.hint, tx("gameslr_regra_ouro_bison_em_conflito"))
     OutlinedTextField(

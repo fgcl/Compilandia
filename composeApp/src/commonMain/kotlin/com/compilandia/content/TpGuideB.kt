@@ -250,7 +250,7 @@ internal val tpCap5 = GuideChapter(
         ),
         Reveal(tx("tpguideb_por_que_exprrel_usa_if"), tx("tpguideb_porque_b_c_permitido_repeticao")),
         Steps(
-            "A pilha de chamadas para `x <- a + 2 * b;`",
+            tx("solta_tpguideb_1"),
             listOf(
                 tx("tpguideb_atribuicao_casa_id_x_depois"),
                 tx("tpguideb_expr_expre_exprrel_expradd_exprmul"),
@@ -305,7 +305,7 @@ internal val tpCap6 = GuideChapter(
         ),
         Visual(VK.SCOPE, caption = tx("tpguideb_toque_em_cada_uso_veja")),
         Predict(
-            "O que o compilador diz na linha 11 (`y <- 3;`)?",
+            tx("solta_tpguideb_2"),
             listOf(
                 tx("tpguideb_nada_y_foi_declarado_no"),
                 tx("tpguideb_linha_11_erro_semantico_y"),
@@ -321,7 +321,7 @@ internal val tpCap6 = GuideChapter(
                 "`{` → **abreEscopo**: empilha um HashMap vazio.",
                 tx("tpguideb_inteiro_x_declara_poe_x"),
                 tx("tpguideb_uso_x_busca_procura_topo"),
-                "`}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.",
+                tx("solta_tpguideb_3"),
             ),
         ),
         Code(

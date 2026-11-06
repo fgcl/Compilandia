@@ -223,7 +223,7 @@ internal val p2FollowLessons: List<Lesson> = listOf(
             Text(tx("lessonspart2a_follow_conjunto_terminais_que_podem")),
             Code(P2_ABC, tx("lessonspart2a_novo_nossa_gramatica_fila")),
             Say(BYTE, tx("lessonspart2a_quem_vem_depois_b_facil")),
-            Say(PROF, "Isso! FOLLOW(B) = {c}. E depois de A?"),
+            Say(PROF, tx("solta_lessonspart2a_1")),
             Predict(
                 tx("lessonspart2a_em_b_c_com_b"),
                 listOf(tx("lessonspart2a_so_b"), tx("lessonspart2a_so_c"), tx("lessonspart2a_b_c_3"), tx("lessonspart2a_b_c_4")), 2,
@@ -253,7 +253,7 @@ internal val p2FollowLessons: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart2a_que_observar"),
                 listOf(
-                    "E → T E': depois de T vem E', então FIRST(E') − {ε} = {+} entra em FOLLOW(T).",
+                    tx("solta_lessonspart2a_2"),
                     tx("lessonspart2a_como_anulavel_follow_tambem_entra"),
                     tx("lessonspart2a_esta_no_fim_t_follow"),
                     "T → F T': FOLLOW(F) ganha FIRST(T') − {ε} = {*} e, como T' pode sumir, herda FOLLOW(T).",
@@ -278,8 +278,8 @@ internal val p2FollowLessons: List<Lesson> = listOf(
                 tx("lessonspart2a_follow_passo_passo"),
                 listOf(
                     tx("lessonspart2a_1_d_inicial_follow_d"),
-                    "2) Em D → T L ;, depois de T vem L. FIRST(L) = {id} entra em FOLLOW(T). FOLLOW(T) = {id}.",
-                    "3) Na mesma regra, depois de L vem ';'. FOLLOW(L) = {;}.",
+                    tx("solta_lessonspart2a_3"),
+                    tx("solta_lessonspart2a_4"),
                     tx("lessonspart2a_4_em_l_id_r"),
                     tx("lessonspart2a_5_em_r_id_r"),
                     tx("lessonspart2a_6_mais_volta_nada_muda"),
@@ -290,7 +290,7 @@ internal val p2FollowLessons: List<Lesson> = listOf(
             Visual(FIRST_FOLLOW, P2_DECL, caption = "Confira: FOLLOW(D) = {\$}, FOLLOW(T) = {id}, FOLLOW(L) = FOLLOW(R) = {;}."),
             Say(PROF, tx("lessonspart2a_agora_desbotado_gramatica_b_c")),
             Text(tx("lessonspart2a_eu_faco_primeiro_inicial_entao")),
-            Reveal(tx("lessonspart2a_sua_vez_follow_b"), "{c}. Em S → A B c, depois de B vem o terminal c."),
+            Reveal(tx("lessonspart2a_sua_vez_follow_b"), tx("solta_lessonspart2a_5")),
             Reveal(tx("lessonspart2a_follow_cuidado_com_b_anulavel"), tx("lessonspart2a_b_c_depois_vem_b")),
             Callout(WATCH_OUT, tx("lessonspart2a_colocou_em_follow_normal_acontece")),
         )
@@ -302,7 +302,7 @@ internal val p2FollowLessons: List<Lesson> = listOf(
             Visual(DERIVATION, P2_ANBN, tx("comum_b_b"), tx("lessonspart2a_olhe_formas_sentenciais_b_b")),
             Predict(
                 tx("lessonspart2a_olhando_derivacao_que_terminal_aparece"),
-                listOf("a", "b", "ε", "nenhum"), 1,
+                listOf("a", "b", "ε", tx("lessonspart2a_nenhum")), 1,
                 tx("lessonspart2a_em_b_b_b_esta")
             ),
             Predict(

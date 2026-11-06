@@ -45,7 +45,7 @@ val clipesTodos by lazy {
             }
             cena(tx("epclipes_token_classe_dele_como_identificador")) {
                 add(titulo(tx("comum_token")))
-                add(Box("b", "identificador", 180f, 280f, 200f, 50f, Look.TOKEN, Tint.TEAL, size = 18f))
+                add(Box("b", tx("palco_identificador"), 180f, 280f, 200f, 50f, Look.TOKEN, Tint.TEAL, size = 18f))
                 wire("a", "b")
             }
         },
@@ -61,7 +61,7 @@ val clipesTodos by lazy {
             cena(tx("epclipes_if_casa_com_regra_nome")) {
                 add(titulo(tx("epclipes_empate")))
                 add(Box("a", "if", 180f, 140f, 100f, 56f, Look.CELL, Tint.YELLOW, size = 24f))
-                add(fileira("r", listOf("nome" to Tint.TEAL, "reservada" to Tint.PINK), 270f, w = 130f, h = 50f))
+                add(fileira("r", listOf(tx("palco_nome") to Tint.TEAL, tx("palco_reservada") to Tint.PINK), 270f, w = 130f, h = 50f))
             }
             cena(tx("epclipes_quando_tamanho_empata_reservada_ganha")) { hot("r1"); tint("r0", Tint.DARK) }
         },
@@ -77,12 +77,12 @@ val clipesTodos by lazy {
         episodio(Skill.NFA_TO_DFA, tx("comum_afn_afd"), CLIPE) {
             val pos = listOf(70f to 200f, 280f to 120f, 280f to 280f)
             cena(tx("epclipes_no_afd_cada_letra_leva")) {
-                add(titulo("AFD"))
+                add(titulo(tx("comum_afd")))
                 add(estados(pos))
                 wire("q0", "q1", "a")
             }
             cena(tx("epclipes_no_afn_mesma_letra_pode")) {
-                add(titulo("AFN"))
+                add(titulo(tx("comum_afn")))
                 wire("q0", "q2", "a", hot = true)
             }
         },
@@ -166,12 +166,12 @@ val clipesTodos by lazy {
                 add(titulo("X -> + T X | ε"))
                 grande("ε")
             }
-            cena(tx("epclipes_assim_que_lista_consegue_terminar")) { text("big", "+ T + T + T  fim") }
+            cena(tx("epclipes_assim_que_lista_consegue_terminar")) { text("big", tx("palco_ttt_fim")) }
         },
         episodio(Skill.LL1_TABLE, tx("comum_que_quer_dizer_ll_1"), CLIPE) {
             cena(tx("epclipes_le_esquerda_deriva_pela_esquerda")) {
                 add(titulo("L  L  (1)"))
-                add(fileira("f", listOf("esquerda" to Tint.TEAL, "esquerda" to Tint.ORANGE, tx("epclipes_token_2") to Tint.YELLOW), 200f, w = 104f, h = 56f, size = 15f))
+                add(fileira("f", listOf(tx("palco_esquerda") to Tint.TEAL, tx("palco_esquerda") to Tint.ORANGE, tx("epclipes_token_2") to Tint.YELLOW), 200f, w = 104f, h = 56f, size = 15f))
             }
             cena(tx("epclipes_se_casa_tabela_tem_duas")) {
                 dropAll("f")
@@ -224,7 +224,7 @@ val clipesTodos by lazy {
         episodio(Skill.SLR_TABLE, tx("comum_conflito_shift_reduce"), CLIPE) {
             cena(tx("epclipes_no_mesmo_estado_com_mesmo")) {
                 add(titulo(tx("epclipes_duas_ordens")))
-                add(fileira("f", listOf("empilhar" to Tint.TEAL, "reduzir" to Tint.ORANGE), 200f, w = 130f, h = 60f, size = 17f))
+                add(fileira("f", listOf(tx("palco_empilhar") to Tint.TEAL, tx("palco_reduzir") to Tint.ORANGE), 200f, w = 130f, h = 60f, size = 17f))
             }
             cena(tx("epclipes_bison_escolhe_empilhar_avisa")) { hot("f0"); tint("f1", Tint.DARK) }
         },
@@ -248,8 +248,8 @@ val clipesTodos by lazy {
         episodio(Skill.ATTRIBUTES_TYPES, tx("comum_atributo_sintetizado_herdado"), CLIPE) {
             cena(tx("epclipes_sintetizado_sobe_dos_filhos_para")) {
                 add(titulo(tx("epclipes_sobe")))
-                add(Box("p", "pai", 180f, 120f, 110f, 50f, Look.NODE, Tint.YELLOW, size = 17f))
-                add(Box("f", "filho", 180f, 280f, 110f, 50f, Look.NODE, Tint.TEAL, size = 17f))
+                add(Box("p", tx("palco_pai"), 180f, 120f, 110f, 50f, Look.NODE, Tint.YELLOW, size = 17f))
+                add(Box("f", tx("palco_filho"), 180f, 280f, 110f, 50f, Look.NODE, Tint.TEAL, size = 17f))
                 wire("f", "p", hot = true)
             }
             cena(tx("epclipes_herdado_desce_pai_ou_vem")) {

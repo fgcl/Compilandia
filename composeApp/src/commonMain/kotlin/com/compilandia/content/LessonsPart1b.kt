@@ -65,7 +65,7 @@ private val p1bCfg: List<Lesson> = listOf(
             Say(BYTE, tx("lessonspart1b_arvore_mesma_coisa_que_derivacao")),
             Say(PROF, tx("lessonspart1b_arvore_resumo_derivacao_mostra_qual")),
             Visual(VK.PARSE_TREE, grammar = p1bExpr, input = "id + id * id", caption = tx("lessonspart1b_leia_folhas_esquerda_para_direita")),
-            Visual(VK.DERIVATION, grammar = p1bAnbn, input = tx("lessonspart1b_b_b_b"), caption = "S -> a S b | ε: cada passo põe um a na frente e um b atrás. Nenhuma ER faz isso!"),
+            Visual(VK.DERIVATION, grammar = p1bAnbn, input = tx("lessonspart1b_b_b_b"), caption = tx("solta_lessonspart1b_1")),
             Reveal(tx("lessonspart1b_quantos_passos_teve_derivacao_b"), tx("lessonspart1b_4_passos_tres_vezes_b")),
             Visual(VK.DERIVATION, grammar = p1bParens, input = "( ( ) ) ( )", caption = tx("lessonspart1b_parenteses_balanceados_repare_como_faz")),
             Reveal(tx("lessonspart1b_diferenca_entre_forma_sentencial_sentenca"), tx("lessonspart1b_forma_sentencial_qualquer_coisa_derivavel")),
@@ -107,7 +107,7 @@ private val p1bCfg: List<Lesson> = listOf(
                 tx("lessonspart1b_qual_menor_cadeia_que_ela"),
                 listOf("ab", "a", tx("lessonspart1b_cadeia_vazia"), "b"),
                 2,
-                "S → ε direto: zero passos de 'a S b'.",
+                tx("solta_lessonspart1b_2"),
             ),
             Reveal(tx("lessonspart1b_descreva_linguagem_inteira_em_frase"), tx("lessonspart1b_anbn_n_0_n_seguidos")),
             Predict(

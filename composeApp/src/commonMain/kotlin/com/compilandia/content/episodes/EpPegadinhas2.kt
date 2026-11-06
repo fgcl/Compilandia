@@ -131,7 +131,7 @@ val pegadinhasMeio by lazy {
                 tx("eppegadinhas2_isso_empilha_porque_vezes_liga"),
             ) {
                 add(alvo("sobe", 240f, 174f, 92f, 40f, "*"))
-                add(Box("red", "reduzir", 90f, 320f, 110f, 44f, Look.TOKEN, Tint.ORANGE, size = 15f))
+                add(Box("red", tx("palco_reduzir"), 90f, 320f, 110f, 44f, Look.TOKEN, Tint.ORANGE, size = 15f))
             }
             cena(tx("eppegadinhas2_quem_decide_que_vem_na")) {
                 drop("sobe", "red", "in")
@@ -181,16 +181,16 @@ val pegadinhasMeio by lazy {
                 add(Box("rr", "reduce reduce", 262f, 310f, 148f, 50f, Look.TOKEN, Tint.NONE, size = 15f))
             }
             cena(tx("eppegadinhas2_slr_olha_so_follow_que"), who = PROF) { drop("sr", "rr") }
-            palavra("CONFLITO", tx("eppegadinhas2_conflito_diz_que_tecnica_nao"), mood = EpMood.HAPPY)
+            palavra(tx("comum_conflito_maiusc"), tx("eppegadinhas2_conflito_diz_que_tecnica_nao"), mood = EpMood.HAPPY)
         },
 
         episodio(Skill.LALR, tx("eppegadinhas2_juntar_estados_tem_preco"), PEGADINHA) {
             cena(tx("eppegadinhas2_lr_1_tem_muitos_estados")) {
                 add(titulo(tx("eppegadinhas2_juntar_estados")))
-                add(Box("a", "A -> c .   com d", 100f, 150f, 150f, 46f, Look.CELL, Tint.TEAL, size = 13f))
-                add(Box("b", "B -> c .   com e", 100f, 206f, 150f, 46f, Look.CELL, Tint.TEAL, size = 13f))
-                add(Box("c", "A -> c .   com e", 260f, 150f, 150f, 46f, Look.CELL, Tint.ORANGE, size = 13f))
-                add(Box("d", "B -> c .   com d", 260f, 206f, 150f, 46f, Look.CELL, Tint.ORANGE, size = 13f))
+                add(Box("a", tx("palco_item_com", "A -> c .", "d"), 100f, 150f, 150f, 46f, Look.CELL, Tint.TEAL, size = 13f))
+                add(Box("b", tx("palco_item_com", "B -> c .", "e"), 100f, 206f, 150f, 46f, Look.CELL, Tint.TEAL, size = 13f))
+                add(Box("c", tx("palco_item_com", "A -> c .", "e"), 260f, 150f, 150f, 46f, Look.CELL, Tint.ORANGE, size = 13f))
+                add(Box("d", tx("palco_item_com", "B -> c .", "d"), 260f, 206f, 150f, 46f, Look.CELL, Tint.ORANGE, size = 13f))
             }
             cena(tx("eppegadinhas2_separados_cada_estado_sabe_que")) { hot("a", "b") }
             cena(tx("eppegadinhas2_miolo_igual_entao_lalr_junta")) {
@@ -204,8 +204,8 @@ val pegadinhasMeio by lazy {
                 tx("eppegadinhas2_isso_duas_reducoes_com_mesmo"),
             ) {
                 drop("a", "b", "c", "d")
-                add(Box("x", "A -> c .   com d, e", 180f, 150f, 230f, 46f, Look.CELL, Tint.RED, size = 14f))
-                add(Box("y", "B -> c .   com d, e", 180f, 206f, 230f, 46f, Look.CELL, Tint.RED, size = 14f))
+                add(Box("x", tx("palco_item_com", "A -> c .", "d, e"), 180f, 150f, 230f, 46f, Look.CELL, Tint.RED, size = 14f))
+                add(Box("y", tx("palco_item_com", "B -> c .", "d, e"), 180f, 206f, 230f, 46f, Look.CELL, Tint.RED, size = 14f))
                 add(Box("z", "S -> a . A d", 180f, 262f, 230f, 46f, Look.CELL, size = 14f))
             }
             cena(tx("eppegadinhas2_essa_unica_briga_que_lalr"), who = PROF, mood = EpMood.HAPPY) { drop("z") }

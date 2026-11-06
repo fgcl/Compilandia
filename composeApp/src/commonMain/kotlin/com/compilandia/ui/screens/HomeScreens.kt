@@ -1,5 +1,6 @@
 package com.compilandia.ui.screens
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -208,13 +209,13 @@ private fun RegionDrawer(app: AppState, r: Region, number: Int, open: Boolean, r
         val cor = Palette.region(r)
         OpenDrawer("$number ${r.title}", tx("homescreens_entrar"), onClick = { com.compilandia.ui.fx.Fx.porta(r.title, cor) { app.go(Screen.RegionView(r)) } }) {
             DrawerBin("$percent%", if (recommended) tx("homescreens_proxima") else tx("comum_dominio"))
-            DrawerBin("${skills.size}", "assuntos")
-            DrawerBin("${GameId.entries.count { g -> g != GameId.FLASHCARDS && g.skills.any { it in skills } }}", "jogos")
+            DrawerBin("${skills.size}", tx("homescreens_assuntos"))
+            DrawerBin("${GameId.entries.count { g -> g != GameId.FLASHCARDS && g.skills.any { it in skills } }}", tx("homescreens_jogos"))
         }
     } else {
         Drawer(
             "$number ${r.title}",
-            note = if (bossDown) "vencida" else if (percent > 0) "$percent%" else null,
+            note = if (bossDown) tx("homescreens_vencida") else if (percent > 0) "$percent%" else null,
             dimmed = skills.none { app.learner.prereqsMet(it) },
             onClick = onOpen,
         )
@@ -231,34 +232,51 @@ fun RegionScreen(app: AppState, region: Region) {
     val skills = Skill.entries.filter { it.region == region }
     // O destaque vai para o primeiro assunto com trilha por terminar.
     val nextHere = remember(ls) { skills.firstOrNull { !com.compilandia.content.Trilha.completa(l, it) } }
+    val faixa = com.compilandia.ui.LocalJanela.current.faixa
+    var escolhido by remember { mutableStateOf(nextHere ?: skills.first()) }
+    val extras: @Composable () -> Unit = {
+        if (region == com.compilandia.learning.Region.OFICINA_BISON) {
+            PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.teal) {
+                Text(tx("comum_laboratorio_bison"), style = MaterialTheme.typography.titleSmall)
+                Text(tx("homescreens_mexa_no_y_arraste_precedencia"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                BigButton(tx("homescreens_abrir_laboratorio"), Modifier.fillMaxWidth(), color = Palette.teal) { app.go(Screen.LabBison()) }
+            }
+        }
+        val boss = com.compilandia.learning.Boss.of(region)
+        val beaten = region.name in ls.bossesDefeated
+        PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.yellow) {
+            Text(if (beaten) tx("comum_maquina_religada") else tx("homescreens_chefao_1", boss.bossName), style = MaterialTheme.typography.titleSmall)
+            BigButton(if (beaten) tx("homescreens_religar_novo") else tx("homescreens_enfrentar"), Modifier.fillMaxWidth(), color = Palette.hazard) { app.go(Screen.BossFight(region)) }
+        }
+    }
     Column(Modifier.fillMaxSize()) {
         Header(region.title, region.tagline, color)
-        com.compilandia.ui.SceneBanner(com.compilandia.ui.regionArt(region), 110) {
+        // Janela baixa (celular deitado): a faixa com o desenho sai para sobrar lugar para a lista.
+        if (com.compilandia.ui.LocalJanela.current.altura >= 480.dp) com.compilandia.ui.SceneBanner(com.compilandia.ui.regionArt(region), 110) {
             ByteFigure(Modifier.align(Alignment.BottomStart).padding(start = 16.dp).height(96.dp), lookX = 0.6f)
         }
-        Column(Modifier.verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (s in skills) SkillRow(app, s, color, s == nextHere)
-            if (region == com.compilandia.learning.Region.OFICINA_BISON) {
-                PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.teal) {
-                    Text(tx("comum_laboratorio_bison"), style = MaterialTheme.typography.titleSmall)
-                    Text(tx("homescreens_mexa_no_y_arraste_precedencia"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-                    BigButton(tx("homescreens_abrir_laboratorio"), Modifier.fillMaxWidth(), color = Palette.teal) { app.go(Screen.LabBison()) }
+        if (faixa == com.compilandia.ui.Faixa.EXPANDIDA) {
+            // T1: janela larga. Os assuntos à esquerda; a trilha do escolhido à direita.
+            Row(Modifier.weight(1f).fillMaxWidth()) {
+                Column(Modifier.width(380.dp).fillMaxHeight().background(Palette.paperDark)) {
+                    AssuntosDaRegiao(app, region, escolhido, Modifier.weight(1f).fillMaxWidth()) { escolhido = it }
+                    Column(Modifier.padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { extras() }
                 }
+                TrilhaCorpo(app, escolhido, Modifier.weight(1f).fillMaxHeight())
             }
-            val boss = com.compilandia.learning.Boss.of(region)
-            val beaten = region.name in ls.bossesDefeated
-            PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.yellow) {
-                Text(if (beaten) tx("comum_maquina_religada") else tx("homescreens_chefao_1", boss.bossName), style = MaterialTheme.typography.titleSmall)
-                BigButton(if (beaten) tx("homescreens_religar_novo") else tx("homescreens_enfrentar"), Modifier.fillMaxWidth(), color = Palette.hazard) { app.go(Screen.BossFight(region)) }
+        } else {
+            Column(Modifier.verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                for (s in skills) SkillRow(app, s, color, s == nextHere, etapasAbertas = faixa == com.compilandia.ui.Faixa.MEDIA)
+                extras()
+                VSpace(24)
             }
-            VSpace(24)
         }
     }
 }
 
 /** Um assunto na região: anel de domínio, quantas etapas faltam e um botão só. Tocar no cartão abre a trilha. */
 @Composable
-private fun SkillRow(app: AppState, s: Skill, color: Color, isNext: Boolean) {
+private fun SkillRow(app: AppState, s: Skill, color: Color, isNext: Boolean, etapasAbertas: Boolean = false) {
     val l = app.learner
     val ls = app.ls
     val passos = remember(s) { com.compilandia.content.Trilha.passos(s) }
@@ -274,6 +292,24 @@ private fun SkillRow(app: AppState, s: Skill, color: Color, isNext: Boolean) {
             Column(Modifier.weight(1f)) {
                 Text(s.title, style = MaterialTheme.typography.titleSmall)
                 Text(tx("trilha_etapas_feitas", feitas, passos.size), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+            }
+        }
+        // Faixa média: as etapas aparecem abertas, cada uma tocável.
+        if (etapasAbertas) androidx.compose.foundation.layout.FlowRow(
+            Modifier.fillMaxWidth().padding(vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            for (p in passos) {
+                val estado = com.compilandia.content.Trilha.estado(l, s, p)
+                val feita = estado == com.compilandia.content.EstadoEtapa.FEITA
+                val atual = p == proximo
+                Text(
+                    (if (feita) "✓ " else "") + p.titulo,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (atual) Palette.on(Palette.hazard) else if (feita) Palette.green else Palette.ink,
+                    modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(if (atual) Palette.hazard else Palette.paperDark)
+                        .clickable { abrirPasso(app, s, p) }.padding(horizontal = 8.dp, vertical = 4.dp),
+                )
             }
         }
         if (proximo != null) {

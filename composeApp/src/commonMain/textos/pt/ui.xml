@@ -220,9 +220,9 @@
     <string name="gameslr_toda_gramatica_lr_sem_conflitos">Toda gramática LR (sem conflitos) é não ambígua. Mas ela pode NÃO ser LL(1), esta tem recursão à esquerda!</string>
     <string name="gameslr_testes">Testes: </string>
     <string name="gameslr_regra_ouro_bison_em_conflito">Regra de ouro do Bison: em conflito, compara a precedência do TOKEN que chega com a da REGRA (dada pelo último terminal da regra).</string>
-    <string name="gameslr_calc_y">calc.y</string>
+    <string name="gameslr_calc_y" translatable="false">calc.y</string>
     <string name="gameslr_blocos_inserem_no_cursor">Blocos (inserem no cursor):</string>
-    <string name="gameslr_bison_calc_y_calc">▶ bison calc.y &amp;&amp; ./calc</string>
+    <string name="gameslr_bison_calc_y_calc" translatable="false">▶ bison calc.y &amp;&amp; ./calc</string>
     <string name="gameslr_detalhes_dos_conflitos">Detalhes dos conflitos:</string>
     <string name="gameslr_estado_1_token_2_3">estado %1$s, token %2$s: %3$s → %4$s</string>
     <string name="gameslr_todos_testes_passaram_em_1">Todos os testes passaram em %1$s execução(ões)! Você acabou de programar um gerador de analisadores. 🎉</string>
@@ -315,8 +315,8 @@
     <string name="gamessemantic_que_1">o que dá %1$s?</string>
     <string name="gamessemantic_toque_num_no_cujos_filhos">Toque num nó cujos filhos já estão prontos (verdes).</string>
     <string name="gamessemantic_raiz_tipo_1_valor_2">Raiz: tipo %1$s, valor %2$s. Você fez uma avaliação em PÓS-ORDEM, é assim que um analisador LR avalia uma SDD S-atribuída.</string>
-    <string name="gamessemantic_b_6_2">a + b * ( 6 / 2 )</string>
-    <string name="gamessemantic_1_2_3_3">( 1 + 2 ) * ( a + 3 * 3 )</string>
+    <string name="gamessemantic_b_6_2" translatable="false">a + b * ( 6 / 2 )</string>
+    <string name="gamessemantic_1_2_3_3" translatable="false">( 1 + 2 ) * ( a + 3 * 3 )</string>
     <string name="gamessemantic_dobra_constantes_toque_nos_operadores">⚡ Dobra de constantes: toque nos OPERADORES que o compilador pode calcular já em tempo de compilação.</string>
     <string name="gamessemantic_no_constante_se_todas_folhas">Um nó é constante se TODAS as folhas abaixo dele são números (nenhuma variável).</string>
     <string name="gamessemantic_dobrar">Dobrar! ✔</string>
@@ -352,7 +352,7 @@
     <string name="gamesv2_esperado_1">esperado: %1$s</string>
     <string name="gamesv2_scanner_l_regras_cima_para">scanner.l: regras (de cima para baixo):</string>
     <string name="gamesv2_regras_disponiveis_para_adicionar_vao">Regras disponíveis para adicionar (vão para o fim):</string>
-    <string name="gamesv2_flex_scanner_l_out">▶ flex scanner.l &amp;&amp; ./a.out</string>
+    <string name="gamesv2_flex_scanner_l_out" translatable="false">▶ flex scanner.l &amp;&amp; ./a.out</string>
     <string name="gamesv2_saida">saída: </string>
     <string name="gamesv2_lexemas">lexemas: </string>
     <string name="gamesv2_scanner_certo_em_1_execucao">Scanner certo em %1$s execução(ões)!</string>
@@ -373,10 +373,10 @@
     <string name="gamesv2_que_acontece_agora">O que acontece agora?</string>
     <string name="gamesv2_olhe_registro_topo_em_qual">Olhe o registro do TOPO: em qual linha ele está? Se ele chama alguém, EMPILHA. Se termina, DESEMPILHA e devolve o valor.</string>
     <string name="gamesv2_nao_pense_no_registro_topo">Não. Pense no registro do topo da pilha.</string>
-    <string name="gamesv2_1">a - 1</string>
-    <string name="gamesv2_1_b_c">( a + 1 ) * ( b - c )</string>
-    <string name="gamesv2_d_b_2">d * ( a - b ) / 2</string>
-    <string name="gamesv2_r_1_4_b_2">r = %1$s     (a=4, b=2, c=3, d=5)</string>
+    <string name="gamesv2_1" translatable="false">a - 1</string>
+    <string name="gamesv2_1_b_c" translatable="false">( a + 1 ) * ( b - c )</string>
+    <string name="gamesv2_d_b_2" translatable="false">d * ( a - b ) / 2</string>
+    <string name="gamesv2_r_1_4_b_2" translatable="false">r = %1$s     (a=4, b=2, c=3, d=5)</string>
     <string name="gamesv2_rodando_no_mars_bolso_r">Rodando no "MARS de bolso": r = %1$s. Seu assembly funciona! 🎉</string>
     <string name="gamesv2_traduza_1_tijolo_por_vez">Traduza **%1$s** (um tijolo por vez, na ordem):</string>
     <string name="gamesv2_padrao_carrega_operandos_em_registradores">Padrão: carrega os operandos em registradores (lw ou li para constantes), faz a conta no registrador, guarda o resultado na memória (sw).</string>
@@ -404,16 +404,16 @@
     <string name="gamesv3_codigo_1">código: %1$s</string>
     <string name="gamesv3_arvore_derivacao_acima_ast_ela">Árvore de derivação acima: a AST é ela "espremida", só operadores e operandos.</string>
     <string name="gamesv3_raiz_operador_que_feito_por">A raiz é o operador que é feito POR ÚLTIMO (o de menor precedência, fora dos parênteses).</string>
-    <string name="gamesv3_expr_arvore">Expr arvore = </string>
+    <string name="gamesv3_expr_arvore" translatable="false">Expr arvore = </string>
     <string name="gamesv3_parser_monta_isto">o parser monta isto</string>
     <string name="gamesv3_ast_completa_1_nos_contra">AST completa! %1$s nós, contra %2$s na árvore de derivação.</string>
     <string name="gamesv3_qual_no_vai_no_proximo">Qual nó vai no próximo ▢?</string>
     <string name="gamesv3_nao_pense_neste_ponto_expressao">Não. Pense: neste ponto da expressão, qual operação ou operando vem primeiro (de fora para dentro)?</string>
-    <string name="gamesv3_b_c_d">a * b + c * d - a</string>
-    <string name="gamesv3_b_c_d_2">( a + b ) * ( c + d ) * 2</string>
-    <string name="gamesv3_b_c_d_c">a * b + c * d + a * c</string>
-    <string name="gamesv3_b_c_d_b_d">( a + b ) * ( c - d ) + b * d</string>
-    <string name="gamesv3_b_c_d_b">a * ( b + c ) - ( d - a ) * b</string>
+    <string name="gamesv3_b_c_d" translatable="false">a * b + c * d - a</string>
+    <string name="gamesv3_b_c_d_2" translatable="false">( a + b ) * ( c + d ) * 2</string>
+    <string name="gamesv3_b_c_d_c" translatable="false">a * b + c * d + a * c</string>
+    <string name="gamesv3_b_c_d_b_d" translatable="false">( a + b ) * ( c - d ) + b * d</string>
+    <string name="gamesv3_b_c_d_b" translatable="false">a * ( b + c ) - ( d - a ) * b</string>
     <string name="gamesv3_passo_1_vivacidade_marque_quais">**Passo 1: vivacidade:** marque quais temporários estão VIVOS logo DEPOIS de cada instrução (ainda serão usados mais abaixo).</string>
     <string name="gamesv3_trabalhe_baixo_para_cima_depois">Trabalhe de BAIXO para CIMA: depois da última instrução nada está vivo.</string>
     <string name="gamesv3_in_use_out_def_temporario">in = use ∪ (out − def): um temporário fica vivo de onde é definido até o último uso.</string>
@@ -705,9 +705,9 @@
     <string name="visuals_eliminando_recursao_esquerda">eliminando recursão à esquerda</string>
     <string name="visuals_fatorando_esquerda">fatorando à esquerda</string>
     <string name="visuals_codigo_fonte">Código-fonte</string>
-    <string name="visuals_posicao_inicial_taxa_60">posicao = inicial + taxa * 60</string>
+    <string name="visuals_posicao_inicial_taxa_60" translatable="false">posicao = inicial + taxa * 60</string>
     <string name="visuals_analise_lexica_scanner">Análise léxica (scanner)</string>
-    <string name="visuals_id_1_id_2_id">&lt;id,1&gt; &lt;=&gt; &lt;id,2&gt; &lt;+&gt; &lt;id,3&gt; &lt;*&gt; &lt;num,60&gt;</string>
+    <string name="visuals_id_1_id_2_id" translatable="false">&lt;id,1&gt; &lt;=&gt; &lt;id,2&gt; &lt;+&gt; &lt;id,3&gt; &lt;*&gt; &lt;num,60&gt;</string>
     <string name="visuals_analise_sintatica_parser">Análise sintática (parser)</string>
     <string name="visuals_arvore_sintatica">árvore sintática</string>
     <string name="visuals_arvore_anotada_tipos">árvore anotada (tipos)</string>
@@ -784,7 +784,7 @@
     <string name="visuals2_chama_1_2_empilha_registro">📥 chama %1$s(%2$s) → EMPILHA um registro de ativação</string>
     <string name="visuals2_1_retorna_2_desempilha_registro">📤 %1$s retorna %2$s → DESEMPILHA o registro</string>
     <string name="visuals2_resultado_final_1_profundidade_maxima">Resultado final: %1$s. Profundidade máxima: %2$s registros.</string>
-    <string name="visuals2_r_1_4_b_2">r = %1$s    (a=4, b=2, c=3, d=5)</string>
+    <string name="visuals2_r_1_4_b_2" translatable="false">r = %1$s    (a=4, b=2, c=3, d=5)</string>
     <string name="visuals2_memoria_data">Memória (.data)</string>
     <string name="visuals2_r_1_isso_que_mars">✅ r = %1$s: é isso que o MARS mostraria na memória.</string>
     <string name="visuals2_parser_java_metodo_por_nao">Parser.java (um método por não-terminal)</string>
@@ -814,4 +814,23 @@
     <string name="visuals3_programa_terminou"> · programa terminou</string>
     <string name="visuals3_console">Console</string>
     <string name="visuals3_compilado_para_mips_desvios_em">Compilado para MIPS, desvios em rosa:</string>
+    <!-- S2: idioma -->
+    <string name="ajustes_idioma">Idioma</string>
+    <string name="ajustes_idioma_pt" translatable="false">Português</string>
+    <string name="ajustes_idioma_en" translatable="false">English</string>
+    <string name="ajustes_idioma_nota">Em inglês não tem voz. A fala do Byte aparece escrita.</string>
+    <string name="ajustes_idioma_reabra">Feche o jogo e abra de novo para trocar o idioma.</string>
+    <string name="fx_token_inesperado">TOKEN INESPERADO</string>
+    <string name="gameslexical_casa">CASA</string>
+    <string name="labbison_regras">REGRAS</string>
+    <string name="labbison_estados">ESTADOS</string>
+    <string name="labbison_valores">VALORES</string>
+    <string name="labbison_empilhar">EMPILHAR</string>
+    <string name="labbison_reduzir">REDUZIR</string>
+    <string name="ajustes_exemplo_fonte">Exemplo: FIRST(E) = { (, id }</string>
+    <string name="solta_visuals2_1">Regras: o MAIOR lexema vence; empate → a regra que vem primeiro.</string>
+    <string name="homescreens_assuntos">assuntos</string>
+    <string name="homescreens_jogos">jogos</string>
+    <string name="homescreens_vencida">vencida</string>
+    <string name="lessonscreen_aula">aula</string>
 </resources>

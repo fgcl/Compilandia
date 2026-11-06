@@ -121,7 +121,7 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
         listOf(
             Say(PROF, tx("lessonspart2c_vamos_inventar_descida_recursiva_zero")),
             Predict(
-                "S → a B c. Qual é o corpo mais natural de S()?",
+                tx("solta_lessonspart2c_1"),
                 listOf("match(a); B(); match(c)", "B(); match(a); match(c)", "match(a); match(B); match(c)", "S(); B()"), 0,
                 tx("lessonspart2c_siga_lado_direito_esquerda_para")
             ),
@@ -131,19 +131,19 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
                 tx("lessonspart2c_com_first_disjuntos_token_basta")
             ),
             Predict(
-                "E → E + T | T. O que acontece se E() começar chamando E()?",
+                tx("solta_lessonspart2c_2"),
                 listOf(tx("lessonspart2c_funciona_normal"), tx("lessonspart2c_laco_infinito_estouro_pilha"), tx("comum_erro_sintaxe"), tx("lessonspart2c_le")), 1,
                 tx("lessonspart2c_chama_sem_consumir_token_nenhum")
             ),
             Predict(
-                "A → b A | ε. Com que tokens A() deve escolher o ε?",
+                tx("solta_lessonspart2c_3"),
                 listOf(tx("lessonspart2c_com_b"), tx("lessonspart2c_com_tokens_follow"), tx("lessonspart2c_com_qualquer_token"), tx("comum_nunca")), 1,
                 tx("lessonspart2c_se_token_nao_abre_b")
             ),
             Say(BYTE, tx("lessonspart2c_entao_descida_recursiva_tabela_ll")),
             Say(PROF, tx("lessonspart2c_exatamente_cada_when_look_linha")),
             Predict(
-                "A → x y | x z. A descida recursiva preditiva funciona direto?",
+                tx("solta_lessonspart2c_4"),
                 listOf(tx("comum_sim"), tx("lessonspart2c_nao_precisa_fatorar_esquerda_x"), tx("lessonspart2c_sim_se_usar_follow"), tx("lessonspart2c_nao_precisa_eliminar")), 1,
                 tx("lessonspart2c_mesmo_token_x_abre_duas")
             ),
@@ -178,7 +178,7 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
             ),
             Code(P2_CMD, tx("lessonspart2c_exercicio_tipico_escreva_l")),
             Reveal(tx("lessonspart2c_escreva_l_para_l_l"), tx("lessonspart2c_l_se_look_if_print")),
-            Visual(FIRST_FOLLOW, P2_CMD, caption = "Os conjuntos que decidem cada if: FIRST(S) = {if, print, begin} e FOLLOW(L) = {end}."),
+            Visual(FIRST_FOLLOW, P2_CMD, caption = tx("solta_lessonspart2c_5")),
             Callout(EXAM_TIP, tx("lessonspart2c_na_prova_1_elimine_recursao")),
             Reveal(tx("lessonspart2c_por_que_recursao_direita_l"), tx("lessonspart2c_porque_antes_chamar_l_novo")),
         )
@@ -205,7 +205,7 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
             Predict(
                 tx("lessonspart2c_qual_gramatica_nao_serve_para"),
                 listOf("E → T E'", "L → S L | ε", "A → A b | c", "R → , id R | ε"), 2,
-                "A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada."
+                tx("solta_lessonspart2c_6")
             ),
             Visual(PARSE_TREE, P2_DECL, "float id ;", tx("lessonspart2c_cada_no_interno_porta_aberta")),
             Reveal(tx("lessonspart2c_recite_dois_ganchos_principais"), tx("lessonspart2c_variavel_funcao_terminal_match_recursao")),
@@ -247,7 +247,7 @@ internal val p2ShiftReduceLessons: List<Lesson> = listOf(
                 "Momentos-chave",
                 listOf(
                     tx("lessonspart2c_empilha_id_reduz_f_id"),
-                    "Empilha + e o segundo id; reduz F → id e T → F.",
+                    tx("solta_lessonspart2c_7"),
                     tx("lessonspart2c_agora_topo_t_vem_ele"),
                     tx("lessonspart2c_monta_t_f_reduz_t"),
                     tx("lessonspart2c_pilha_com_entrada_aceita"),
@@ -261,7 +261,7 @@ internal val p2ShiftReduceLessons: List<Lesson> = listOf(
             Visual(PARSE_TREE, P2_EXPR, "id + id * id", tx("lessonspart2c_arvore_montada_baixo_para_cima")),
             Say(BYTE, tx("lessonspart2c_entao_trace_lido_tras_pra")),
             Say(PROF, tx("lessonspart2c_isso_reducoes_lidas_ao_contrario")),
-            Reveal(tx("lessonspart2c_na_entrada_id_id_qual"), "E → T. A raiz da árvore é sempre a última peça encaixada."),
+            Reveal(tx("lessonspart2c_na_entrada_id_id_qual"), tx("solta_lessonspart2c_8")),
             Callout(BRAIN_POWER, tx("lessonspart2c_analisador_nunca_precisa_procurar_handle")),
             Reveal(tx("comum_responda_poder_cerebro"), tx("lessonspart2c_porque_basta_olhar_topo_pilha")),
         )
@@ -325,7 +325,7 @@ internal val p2ShiftReduceLessons: List<Lesson> = listOf(
                 tx("lessonspart2c_conflito_shift_reduce_se_ele")
             ),
             Visual(LR_TRACE, P2_HANDLE, tx("lessonspart2c_b_b_c_d"), tx("lessonspart2c_veja_analisador_acertando_handle_em")),
-            Reveal(tx("lessonspart2c_escreva_sequencia_reducoes_analise_b"), "A → b, A → A b c, B → d, S → a A B e. Lida ao contrário, é a derivação mais à direita: S ⇒ a A B e ⇒ a A d e ⇒ a A b c d e ⇒ a b b c d e."),
+            Reveal(tx("lessonspart2c_escreva_sequencia_reducoes_analise_b"), tx("solta_lessonspart2c_9")),
             Say(PROF, tx("lessonspart2c_voce_reconstruiu_sozinho_ideia_central")),
         )
     ),
@@ -407,13 +407,13 @@ internal val p2Lr0Lessons: List<Lesson> = listOf(
             Predict(
                 tx("lessonspart2c_quantos_itens_lr_0_producao"),
                 listOf("1", "2", "3", "4"), 2,
-                "S → • C C, S → C • C e S → C C •. Uma produção com n símbolos dá n + 1 itens."
+                tx("solta_lessonspart2c_10")
             ),
             Say(PROF, tx("lessonspart2c_agora_magica_fechamento_closure_se")),
             Callout(MNEMONIC, tx("lessonspart2c_fechamento_convite_em_cascata_nao")),
             Say(PROF, tx("lessonspart2c_desvio_goto_andar_ponto_por")),
             Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_predio_inteiro_7_andares_estados")),
-            Reveal(tx("lessonspart2c_no_estado_i0_quais_itens"), "S' → • S, S → • C C, C → • c C, C → • d. O S convidou S → • C C; o C convidou as duas produções de C."),
+            Reveal(tx("lessonspart2c_no_estado_i0_quais_itens"), tx("solta_lessonspart2c_11")),
             Callout(NO_DUMB_QUESTIONS, tx("lessonspart2c_p_que_esse_r_gramatica")),
             Say(BYTE, tx("lessonspart2c_marcador_convite_passo_itens_closure")),
         )
@@ -427,7 +427,7 @@ internal val p2Lr0Lessons: List<Lesson> = listOf(
             Steps(
                 tx("lessonspart2c_roteiro_exploracao"),
                 listOf(
-                    "I0: o estado inicial, fechamento de { S' → • S }.",
+                    tx("solta_lessonspart2c_12"),
                     tx("lessonspart2c_i0_i1_estado_aceitacao"),
                     tx("lessonspart2c_i0_c_i2_c_c"),
                     tx("lessonspart2c_i0_c_i3_c_c"),
@@ -536,7 +536,7 @@ internal val p2Lr0Lessons: List<Lesson> = listOf(
             Predict(
                 tx("lessonspart2c_qual_destes_item_nucleo"),
                 listOf("C → • c C", "S → • C C", "C → c • C", "C → • d"), 2,
-                "C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento."
+                tx("solta_lessonspart2c_13")
             ),
             Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_identifique_em_cada_estado_quais")),
             Callout(EXAM_TIP, tx("lessonspart2c_pergunta_tipica_calcule_closure_ou")),
@@ -561,7 +561,7 @@ internal val p2Lr0Lessons: List<Lesson> = listOf(
                 )
             ),
             Predict(
-                "Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?",
+                tx("solta_lessonspart2c_14"),
                 listOf(tx("comum_nada"), tx("lessonspart2c_fechar_c_c_c_c"), tx("lessonspart2c_adicionar_c_c"), tx("lessonspart2c_remover_ponto")), 1,
                 tx("lessonspart2c_goto_avancar_fechar_como_ponto")
             ),

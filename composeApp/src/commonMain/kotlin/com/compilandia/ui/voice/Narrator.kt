@@ -45,7 +45,7 @@ object Narrator {
     private var clip: VoiceBank.Clip? = null
 
     /** A fala tem áudio pronto para tocar? Sem isso, a tela mostra a legenda. */
-    fun canSpeak(f: Fala): Boolean = enabled && !silent && VoiceBank.clip(f.id) != null
+    fun canSpeak(f: Fala): Boolean = com.compilandia.textos.Txt.idioma == "pt" && enabled && !silent && VoiceBank.clip(f.id) != null
 
     private var serial = 0
     private var waiting: CompletableDeferred<Unit>? = null
@@ -56,7 +56,10 @@ object Narrator {
      */
     suspend fun say(f: Fala) {
         stop()
-        if (!enabled || silent) return
+        if (silent) return
+        // S2: fora do português não há dublagem. A legenda aparece e a boca segue o ritmo dela.
+        if (com.compilandia.textos.Txt.idioma != "pt") { lerLegenda(f); return }
+        if (!enabled) return
         val c = VoiceBank.clip(f.id) ?: return
         val mine = ++serial
         val bytes = try { Res.readBytes("files/voice/${f.id}.ogg") } catch (e: Exception) { return }
@@ -73,10 +76,45 @@ object Narrator {
         }
     }
 
+    /** A fala sem áudio: quanto tempo a boca mexe e em que letra está. */
+    private var legenda: String? = null
+    private var legendaInicio = 0L
+
+    /** O mesmo tempo de leitura que a aula usa para seguir sozinha sem voz. */
+    fun tempoDeLeitura(texto: String): Long = 1200L + texto.length * 55L
+
+    private fun lerLegenda(f: Fala) {
+        legenda = f.text
+        legendaInicio = com.compilandia.platform.nowMs()
+        speaker = f.who
+    }
+
+    /**
+     * Este personagem está falando agora? Na legenda sem áudio, a fala acaba quando o tempo de leitura acaba.
+     * Os bonecos leem daqui para mexer a boca.
+     */
+    fun falando(who: Speaker): Boolean {
+        if (speaker != who) return false
+        val t = legenda ?: return true
+        return com.compilandia.platform.nowMs() - legendaInicio < t.length * 55L
+    }
+
+    /** Forma da boca para uma letra: a vogal abre, a consoante fecha. A ordem é a de [com.compilandia.ui.cast.mouthShapes]. */
+    private fun bocaDaLetra(c: Char): Int = when (c.lowercaseChar()) {
+        'a', 'á', 'ã', 'â' -> 1
+        'e', 'é', 'ê', 'i', 'í', 'y' -> 2
+        'o', 'ó', 'ô', 'õ', 'u', 'ú', 'w' -> 3
+        'f', 'v' -> 4
+        'l', 't', 'd', 'n', 'r', 'k', 'g' -> 5
+        's', 'z', 'c', 'j', 'x', 'ç' -> 6
+        else -> 0
+    }
+
     fun stop() {
         serial++
         speaker = null
         clip = null
+        legenda = null
         VoicePlayer.stop()
         waiting?.complete(Unit)
         waiting = null
@@ -84,6 +122,10 @@ object Narrator {
 
     /** Forma da boca neste instante da fala (ver Mouth). */
     fun viseme(): Int {
+        legenda?.let { t ->
+            val i = ((com.compilandia.platform.nowMs() - legendaInicio) / 55L).toInt()
+            return if (i in t.indices) bocaDaLetra(t[i]) else 0
+        }
         val c = clip ?: return 0
         val t = VoicePlayer.positionMs().toInt()
         var lo = 0

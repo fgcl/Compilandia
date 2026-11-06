@@ -92,7 +92,7 @@ fun SubsetFactoryGame(ctx: GameCtx) {
     }
     // tabela até aqui
     Column(Modifier.horizontalScroll(rememberScrollState())) {
-        Row { Cell("AFD", header = true, w = 52); Cell("conjunto", header = true, w = 92); for (c in nfa.alphabet) Cell("$c", header = true, w = 52) }
+        Row { Cell(tx("comum_afd"), header = true, w = 52); Cell(tx("comum_kt_conjunto"), header = true, w = 92); for (c in nfa.alphabet) Cell("$c", header = true, w = 52) }
         val done = steps.take(k)
         val known = res.states.filter { st -> st == res.states[0] || done.any { it.to == st } }
         for (st in known) Row {

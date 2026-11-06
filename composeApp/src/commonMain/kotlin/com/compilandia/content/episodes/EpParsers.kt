@@ -39,7 +39,7 @@ val topDown by lazy {
             val n = 4
             cena(tx("epparsers_parser_preditivo_tem_pilha_entrada")) {
                 add(titulo("id + id"))
-                add(rotulo("rs", "pilha", 74f, 326f), rotulo("ra", tx("epparsers_topo_token_id"), 240f, 200f, Tint.YELLOW, 17f))
+                add(rotulo("rs", tx("sims_pilha"), 74f, 326f), rotulo("ra", tx("epparsers_topo_token_id"), 240f, 200f, Tint.YELLOW, 17f))
                 parser(listOf("$", "E"), listOf("id", "+", "id", "$"), n)
                 hot("p1", "i0")
             }
@@ -69,7 +69,7 @@ val topDown by lazy {
             }
             cena(tx("epparsers_sobrou_cifrao_na_pilha_cifrao"), mood = EpMood.HAPPY) {
                 parser(listOf("$"), listOf("$"), n)
-                text("ra", "aceita")
+                text("ra", tx("sims_aceita"))
                 hot("p0", "i3")
             }
         },
@@ -150,7 +150,7 @@ val bottomUp by lazy {
             cena(tx("epparsers_agora_gente_monta_arvore_baixo")) {
                 add(titulo("E -> E + n | n"))
                 esteira(listOf(0 to "n", 1 to "+", 2 to "n", 3 to "$"))
-                add(rotulo("rp", "pilha", 300f, 372f))
+                add(rotulo("rp", tx("sims_pilha"), 300f, 372f))
                 actor(Actor(190f, 250f, 0.9f))
             }
             cena(tx("epparsers_empilhar_puxar_proximo_token_para")) {

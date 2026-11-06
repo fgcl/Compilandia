@@ -12,7 +12,8 @@ Lê build/voice-lines.tsv (gerado pelo teste VoiceExportTest) e aponta o que atr
 O índice é alerta, nunca meta: ele não mede coesão, e o próprio ALT avisa disso.
 O que nenhum filtro mede vem do jogo: a pessoa toca em "não entendi" e a fala fica marcada.
 
-Uso: scripts/text_lint.py [--lt http://localhost:8010] [--aulas] [arquivo.tsv]
+Uso: scripts/text_lint.py [--lt http://localhost:8010] [--aulas] [--ingles] [arquivo.tsv]
+  --ingles revisa os textos em inglês (textos/en) com o LanguageTool em en-US.
   --aulas varre as aulas antigas em content/ e só informa, sem reprovar.
   --extra varre também o texto que aparece na tela sem voz (álbum, Laboratório, dicas).
 Sai com código 1 se alguma fala nova reprova.
@@ -68,6 +69,35 @@ VICIOS = [
     (r"\bótima pergunta\b|\bboa pergunta\b|\bespero que ajude\b|\bfico feliz\b|\bclaro!", "sobra de chatbot"),
 ]
 VOGAIS = "aeiouáéíóúâêôãõàü"
+
+# S2: vícios de texto de IA em inglês. Mesmo espírito da lista em português.
+VICIOS_EN = [
+    (r"\bdelve\b|\bdelving\b|\bembark\b|\bjourney\b|\btapestry\b|\blandscape\b|\brealm\b", "metáfora de IA"),
+    (r"\bcrucial\b|\bpivotal\b|\bvital\b|\bessential\b|\bfundamental\b", "ênfase vazia"),
+    (r"\bpowerful\b|\brobust\b|\bseamless(ly)?\b|\bfascinating\b|\bincredible\b", "elogio vazio"),
+    (r"\bit'?s not (just|only|merely)\b|\bnot just\b.*\bbut\b", "paralelismo negativo: diga o que é"),
+    (r"\bthe (secret|key) is\b|\bthe truth is\b|\band that'?s where\b", "frase de efeito"),
+    (r"\blet'?s (dive|explore|unpack)\b|\bin this (episode|module|chapter)\b|\bdid you know\b", "abertura de IA"),
+    (r"\bplays? a (key|crucial|vital) role\b|\bserves as\b|\bacts as\b", "rodeio: use um verbo direto"),
+    (r"\bit'?s (important|worth) (to note|noting)\b|\bin conclusion\b|\bin summary\b", "enrolação"),
+    (r" — ", "travessão de enfeite"),
+]
+
+
+def ingles():
+    """Os textos em inglês (textos/en/*.xml): vícios de IA e gramática no LanguageTool en-US."""
+    import html
+    pasta = ROOT / "composeApp/src/commonMain/textos/en"
+    pad = re.compile(r'<string name="([^"]+)">(.*?)</string>', re.S)
+    textos = []
+    for f in sorted(pasta.glob("*.xml")):
+        for m in pad.finditer(f.read_text(encoding="utf8")):
+            t = html.unescape(m.group(2)).replace("\\n", "\n")
+            # Código e diagramas (com quebra de linha ou cara de programa) ficam de fora.
+            if "\\n" in m.group(2) or "{" in t or ";" in t and "(" in t:
+                continue
+            textos.append((f.name, m.group(1), t))
+    return textos
 
 
 def silabas(palavra: str) -> int:
@@ -158,11 +188,12 @@ def tela():
     return achados
 
 
-def languagetool(url: str, textos):
+def languagetool(url: str, textos, lingua: str = "pt-BR"):
     """Devolve os problemas por texto. Sem servidor, avisa e segue."""
     achados = {}
     for t in textos:
-        data = urllib.parse.urlencode({"text": t, "language": "pt-BR", "disabledRules": "WHITESPACE_RULE"}).encode()
+        regras = "WHITESPACE_RULE" if lingua == "pt-BR" else "WHITESPACE_RULE,MORFOLOGIK_RULE_EN_US,UPPERCASE_SENTENCE_START,EN_QUOTES,DASH_RULE,COMMA_PARENTHESIS_WHITESPACE"
+        data = urllib.parse.urlencode({"text": t, "language": lingua, "disabledRules": regras}).encode()
         res = None
         for tentativa in range(5):
             try:
@@ -216,7 +247,25 @@ def main():
     ap.add_argument("--aulas", action="store_true")
     ap.add_argument("--extra", action="store_true")
     ap.add_argument("--sem-lt", action="store_true")
+    ap.add_argument("--ingles", action="store_true", help="revisa os textos em inglês (S2)")
     a = ap.parse_args()
+
+    if a.ingles:
+        textos = ingles()
+        erros = 0
+        for arq, chave, t in textos:
+            baixo = t.lower()
+            for pad, motivo in VICIOS_EN:
+                if re.search(pad, baixo):
+                    print(f"[{arq}:{chave}] {t}\n   -> {motivo}")
+                    erros += 1
+        gram = {} if a.sem_lt else languagetool(a.lt, [t for _, _, t in textos], "en-US")
+        for t, ms in gram.items():
+            for m in ms:
+                print(f"[gramática] {t}\n   -> {m}")
+                erros += 1
+        print(f"{len(textos)} textos em inglês, {erros} problema(s)")
+        return 1 if erros else 0
 
     if a.extra:
         textos = tela()

@@ -78,7 +78,7 @@ val aulasLongas2 by lazy {
             }
             pergunta(tx("ll_l_06"), setOf("r2"), setOf("r1", "r3"), tx("ll_l_06_dica"), tx("ll_l_06_ok")) {
                 hot()
-                add(codigo("q", listOf("X -> ε  vai em  M[X, )]"), 300f, x = 70f, size = 15f))
+                add(codigo("q", listOf(tx("palco_vai_em")), 300f, x = 70f, size = 15f))
             }
             cena(tx("epparsers_se_casa_receber_duas_regras"), who = PROF) { drop("q"); hot("r3") }
             cena(tx("ll_l_08")) {
@@ -297,7 +297,7 @@ val aulasLongas2 by lazy {
                 110f, cw = 62f, ch = 46f, size = 16f,
             )
             cena(tx("min_l_01"), mood = EpMood.THINK) {
-                add(titulo("AFD"))
+                add(titulo(tx("comum_afd")))
                 add(estados(listOf(70f to 150f, 180f to 110f, 180f to 230f, 290f to 170f), finais = setOf(3), nomes = listOf("A", "B", "C", "D")))
                 wire("q0", "q1", "a"); wire("q0", "q2", "b"); wire("q1", "q3", "b"); wire("q2", "q3", "b")
             }
@@ -305,7 +305,7 @@ val aulasLongas2 by lazy {
                 hot()
             }
             cena(tx("min_l_02")) { hot("q1", "q2") }
-            palavra("MÍNIMO", tx("min_l_03"))
+            palavra(tx("palavra_minimo"), tx("min_l_03"))
             cena(tx("min_l_04")) {
                 clear()
                 add(titulo(tx("eplexico_tabela_pares")))
@@ -349,7 +349,7 @@ val aulasLongas2 by lazy {
             cena(tx("min_l_07")) { hot("r3") }
             cena(tx("min_l_08")) {
                 clear()
-                add(titulo("AFD"))
+                add(titulo(tx("comum_afd")))
                 add(estados(listOf(70f to 160f, 180f to 160f, 290f to 160f), finais = setOf(2), nomes = listOf("P", "Q", "R")))
                 wire("q0", "q1", "0"); wire("q1", "q1", "0"); wire("q0", "q2", "1", bend = -40f); wire("q1", "q2", "1"); wire("q2", "q2", "0,1")
                 add(Box("pq", "P, Q", 90f, 300f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("pr", "P, R", 180f, 300f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("qr", "Q, R", 270f, 300f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
@@ -443,7 +443,7 @@ val aulasLongas2 by lazy {
             cena(tx("epbackend_mips_so_faz_conta_com")) {
                 clear()
                 add(titulo(tac[0].toString()))
-                add(Box("mem", tx("comum_memoria"), 90f, 110f, 130f, 46f, Look.TOKEN, Tint.BLUE, size = 15f), Box("reg", "registradores", 270f, 110f, 150f, 46f, Look.TOKEN, Tint.ORANGE, size = 15f))
+                add(Box("mem", tx("comum_memoria"), 90f, 110f, 130f, 46f, Look.TOKEN, Tint.BLUE, size = 15f), Box("reg", tx("palco_registradores"), 270f, 110f, 150f, 46f, Look.TOKEN, Tint.ORANGE, size = 15f))
                 wire("mem", "reg", "lw")
             }
             cena(tx("epbackend_por_isso_toda_conta_tem")) {

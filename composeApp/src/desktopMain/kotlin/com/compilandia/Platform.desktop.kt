@@ -96,3 +96,8 @@ actual object Compartilha {
 }
 
 actual fun nowMs(): Long = System.currentTimeMillis()
+
+actual object Idioma {
+    actual fun doAparelho(): String = java.util.Locale.getDefault().language
+    actual fun reabrir(): Boolean = false
+}

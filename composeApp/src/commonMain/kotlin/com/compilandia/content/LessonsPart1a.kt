@@ -102,7 +102,7 @@ private val p1aPhases: List<Lesson> = listOf(
         listOf(
             Say(PROF, tx("lessonspart1a_hoje_eu_nao_vou_explicar")),
             Predict(
-                "Quem detecta o erro em `int x = 3 @ 4;`?",
+                tx("solta_lessonspart1a_1"),
                 listOf(tx("lessonspart1a_analise_lexica"), tx("lessonspart1a_analise_sintatica"), tx("comum_analise_semantica"), tx("lessonspart1a_ninguem_compila_normal")),
                 0,
                 tx("lessonspart1a_nao_pertence_nenhum_padrao_token"),
@@ -120,7 +120,7 @@ private val p1aPhases: List<Lesson> = listOf(
                 tx("lessonspart1a_tokens_ok_estrutura_ok_atribuicao"),
             ),
             Predict(
-                "E `y = 5;` sem nunca ter declarado y (em C)?",
+                tx("solta_lessonspart1a_2"),
                 listOf(tx("lessonspart1a_analise_lexica"), tx("lessonspart1a_analise_sintatica"), tx("comum_analise_semantica"), tx("lessonspart1a_ninguem_compila_normal")),
                 2,
                 tx("lessonspart1a_estrutura_atribuicao_perfeita_saber_se"),
@@ -182,7 +182,7 @@ private val p1aPhases: List<Lesson> = listOf(
             Callout(MNEMONIC, tx("lessonspart1a_l_empre_ai_i_sso")),
             Say(PROF, tx("lessonspart1a_imagine_narrador_radio_gritando_toda")),
             Text(tx("lessonspart1a_palacio_memoria_mapa_compilandia_pipeline")),
-            Reveal(tx("lessonspart1a_feche_olhos_ande_pelo_mapa"), "Porto → Floresta Léxica → Vale das Gramáticas → Ponte da Transformação → Templo Top-Down → Fortaleza Bottom-Up → Oficina Bison → Cidade Semântica → Forja do Código. Do Vale até a Oficina é tudo análise sintática!"),
+            Reveal(tx("lessonspart1a_feche_olhos_ande_pelo_mapa"), tx("solta_lessonspart1a_3")),
             Callout(MNEMONIC, tx("lessonspart1a_zoom_crescente_letra_palavra_frase")),
             Text(tx("lessonspart1a_frase_famosa_chomsky_ideias_verdes")),
             Predict(
@@ -250,8 +250,8 @@ private val p1aTokens: List<Lesson> = listOf(
             Say(BYTE, tx("lessonspart1a_dl_foi_rejeitada_faz_sentido")),
             Visual(VK.DFA, input = "d+(pd+)?", caption = tx("lessonspart1a_padrao_numero_d_digito_p")),
             Callout(WATCH_OUT, tx("lessonspart1a_em_dp_como_3_automato")),
-            Callout(BRAIN_POWER, "Como a Lexi corta `x = a+++b;`? Pense no maior casamento antes de tocar."),
-            Reveal(tx("comum_resposta"), "x, =, a, ++, +, b, ; — ela morde `++` primeiro (o maior), e sobra um `+`."),
+            Callout(BRAIN_POWER, tx("solta_lessonspart1a_4")),
+            Reveal(tx("comum_resposta"), tx("solta_lessonspart1a_5")),
             Visual(VK.TOKENIZE, input = "x = a+++b;", caption = tx("lessonspart1a_confira_mordida_gulosa")),
             Reveal(tx("lessonspart1a_por_que_token_id_carrega"), tx("lessonspart1a_sintatico_so_precisa_saber_que")),
         ),
@@ -444,7 +444,7 @@ private val p1aRegex: List<Lesson> = listOf(
                 tx("comum_resolvido"),
                 listOf(
                     tx("lessonspart1a_inicio_fecho_0_0"),
-                    "A com a: move({0}, a) = {0, 1} → novo estado **B**.",
+                    tx("solta_lessonspart1a_6"),
                     tx("lessonspart1a_com_b_move_0_b"),
                     "B com a: move({0, 1}, a) = {0, 1} → **B**.",
                     "B com b: move({0, 1}, b) = {0, 2} → novo estado **C**.",
@@ -455,8 +455,8 @@ private val p1aRegex: List<Lesson> = listOf(
             Code(tx("lessonspart1a_b_b_b_b_c"), tx("lessonspart1a_tabela_transicao_afd_inicial_final")),
             Visual(VK.DFA, input = "(a|b)*ab", caption = tx("lessonspart1a_motor_chega_ao_mesmo_afd")),
             Text(tx("lessonspart1a_agora_esmaecido_afn_para_cadeias")),
-            Reveal("A = {0}. Calcule Dtran[A, a] e Dtran[A, b].", "Dtran[A, a] = {0} = A. Dtran[A, b] = {0, 1} = novo estado B."),
-            Reveal("Agora B = {0, 1}: com a? com b?", "B com a: {0} = A. B com b: {0, 1, 2} = novo estado C."),
+            Reveal("A = {0}. Calcule Dtran[A, a] e Dtran[A, b].", tx("solta_lessonspart1a_7")),
+            Reveal("Agora B = {0, 1}: com a? com b?", tx("solta_lessonspart1a_8")),
             Reveal(tx("lessonspart1a_c_0_1_2_com"), tx("lessonspart1a_c_com_0_c_com")),
             Visual(VK.DFA, input = "(a|b)*bb", caption = tx("lessonspart1a_confira_motor_tambem_3_estados")),
             Callout(EXAM_TIP, tx("lessonspart1a_na_prova_organize_em_tabela")),

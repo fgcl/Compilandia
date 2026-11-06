@@ -3,7 +3,7 @@ package com.compilandia.engine
 import kotlin.random.Random
 import com.compilandia.textos.tx
 
-enum class Type(val label: String) { INT("int"), FLOAT("float"), BOOL("bool"), ERROR("erro") }
+enum class Type(val label: String) { INT("int"), FLOAT("float"), BOOL("bool"), ERROR(tx("semantics_erro")) }
 
 /** Nó de AST para expressões com atributos sintetizados (tipo e valor). */
 data class Expr(

@@ -216,7 +216,7 @@ class LRTable(
                             tp.level < rp.level -> r.also { resolution = tx("lr_regra_tem_precedencia_maior_que", key.second) }
                             tp.assoc == Assoc.LEFT -> r.also { resolution = tx("lr_mesma_precedencia_left_reduce_associa") }
                             tp.assoc == Assoc.RIGHT -> shifts[0].also { resolution = tx("lr_mesma_precedencia_right_shift_associa") }
-                            else -> null.also { resolution = "%nonassoc → erro de sintaxe" }
+                            else -> null.also { resolution = tx("lr_nonassoc_erro") }
                         }
                     } else {
                         pick = shifts[0]
@@ -230,7 +230,7 @@ class LRTable(
                     resolution = tx("lr_varios_reduces_shift_bison_prefere")
                 }
                 decisoes[key] = resolution!!
-                val stillWarn = resolution!!.startsWith("sem precedência") || shifts.isEmpty()
+                val stillWarn = resolution == tx("lr_sem_precedencia_declarada_bison_escolhe") || shifts.isEmpty()
                 if (stillWarn) {
                     conflicts += LRConflict(key.first, key.second, acts.toList(), kindTxt, resolution)
                 }

@@ -264,13 +264,29 @@ fun SettingsScreen(app: AppState) {
                 }
             }
             PaperCard {
+                // S2: o idioma. A troca reabre o jogo, porque as aulas são montadas uma vez só.
+                Text(tx("ajustes_idioma"), style = MaterialTheme.typography.titleSmall)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    for (lingua in com.compilandia.textos.Txt.idiomas) {
+                        val nome = if (lingua == "en") tx("ajustes_idioma_en") else tx("ajustes_idioma_pt")
+                        Chip(nome, selected = com.compilandia.textos.Txt.idioma == lingua, color = Palette.teal) {
+                            if (com.compilandia.textos.Txt.idioma != lingua) {
+                                app.learner.setIdioma(lingua); app.commit()
+                                if (!com.compilandia.platform.Idioma.reabrir()) app.say(com.compilandia.textos.Txt.em(lingua, "ajustes_idioma_reabra"))
+                            }
+                        }
+                    }
+                }
+                Text(tx("ajustes_idioma_nota"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            }
+            PaperCard {
                 Text(tx("toolscreens_tamanho_texto"), style = MaterialTheme.typography.titleSmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     for ((label, f) in listOf("A" to 0.9f, "A+" to 1f, "A++" to 1.15f, "A+++" to 1.3f)) {
                         Chip(label, selected = app.ls.fontScale == f, color = Palette.purple) { app.learner.setFontScale(f); app.commit() }
                     }
                 }
-                Text("Exemplo: FIRST(E) = { (, id }", style = MaterialTheme.typography.bodyLarge)
+                Text(tx("ajustes_exemplo_fonte"), style = MaterialTheme.typography.bodyLarge)
             }
             SettingRow(tx("toolscreens_reduzir_animacoes_sem_confete_tremida"), app.ls.reduceMotion) { app.learner.setReduceMotion(it); app.commit() }
             SettingRow(tx("toolscreens_perguntar_minha_confianca_antes_dos"), app.ls.askConfidence) { app.learner.setAskConfidence(it); app.commit() }

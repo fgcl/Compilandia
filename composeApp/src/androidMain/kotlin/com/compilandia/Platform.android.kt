@@ -97,3 +97,19 @@ actual object Compartilha {
 }
 
 actual fun nowMs(): Long = System.currentTimeMillis()
+
+actual object Idioma {
+    var ctx: android.content.Context? = null
+    actual fun doAparelho(): String = java.util.Locale.getDefault().language
+    /** As aulas são montadas uma vez por processo: trocar de idioma pede um processo novo. */
+    actual fun reabrir(): Boolean {
+        val c = ctx ?: return false
+        return try {
+            val abre = c.packageManager.getLaunchIntentForPackage(c.packageName) ?: return false
+            abre.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            c.startActivity(abre)
+            Runtime.getRuntime().exit(0)
+            true
+        } catch (e: Exception) { false }
+    }
+}

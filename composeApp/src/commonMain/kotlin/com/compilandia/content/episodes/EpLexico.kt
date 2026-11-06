@@ -83,7 +83,7 @@ val lexicos by lazy {
                 add(Box("l", "x1", 110f, 150f, 110f, 56f, Look.CELL, size = 20f))
                 add(Box("t", "ID", 260f, 150f, 110f, 56f, Look.TOKEN, Tint.TEAL, size = 20f))
                 wire("l", "t")
-                add(rotulo("ll", "lexema", 110f, 200f), rotulo("tl", "token", 260f, 200f, Tint.TEAL))
+                add(rotulo("ll", tx("comum_kt_lexema"), 110f, 200f), rotulo("tl", "token", 260f, 200f, Tint.TEAL))
             }
             cena(tx("eplexico_entram_letras_saem_tokens_agora"), mood = EpMood.HAPPY) { hot("t") }
         },

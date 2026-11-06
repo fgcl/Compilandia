@@ -101,14 +101,14 @@ class ToyEmpilhaReduz(g: Grammar, private val entrada: List<String>, override va
             val pos = tudo.size - p.input.size
             val fita = fitaTokens(tudo, pos, 40f)
             val pilha = p.symbols.mapIndexed { i, s -> Box("p$i-$s", s, 180f, 340f - i * 40f, 84f, 36f, Look.TOKEN, if (s.first().isUpperCase()) Tint.ORANGE else Tint.TEAL) }
-            return Shot(listOf(rotulo("rp", "pilha", 180f, 374f)) + fita + pilha)
+            return Shot(listOf(rotulo("rp", tx("sims_pilha"), 180f, 374f)) + fita + pilha)
         }
 
     override fun aperta(tecla: String): Boolean {
         val a = passos.getOrNull(k)?.action
         val certo = when (a) {
-            is LRAction.Shift -> tecla == "Empilhar"
-            is LRAction.Reduce -> tecla == "Reduzir"
+            is LRAction.Shift -> tecla == tx("comum_empilhar_2")
+            is LRAction.Reduce -> tecla == tx("comum_reduzir")
             else -> false
         }
         aviso = if (certo) null else if (a is LRAction.Shift) tx("toy_ainda_nao_forma_regra_empilhe") else tx("toy_topo_ja_forma_regra_reduza")
@@ -134,12 +134,12 @@ class ToyPilhaLL(g: Grammar, private val entrada: List<String>, override val met
             val tudo = entrada + EOF
             val fita = fitaTokens(tudo, tudo.size - p.input.size, 40f)
             val pilha = p.stack.takeLast(7).mapIndexed { i, s -> Box("p$i-$s", s, 180f, 340f - i * 40f, 84f, 36f, Look.TOKEN, if (s == EOF) Tint.NONE else if (s.first().isUpperCase()) Tint.ORANGE else Tint.TEAL) }
-            return Shot(listOf(rotulo("rp", "pilha", 180f, 374f)) + fita + pilha)
+            return Shot(listOf(rotulo("rp", tx("sims_pilha"), 180f, 374f)) + fita + pilha)
         }
 
     override fun aperta(tecla: String): Boolean {
         val a = passos.getOrNull(k)?.action
-        val certo = (a is LLAction.Expand && tecla == "Trocar pela regra") || (a is LLAction.Match && tecla == "Casar")
+        val certo = (a is LLAction.Expand && tecla == tx("toy_trocar_pela_regra")) || (a is LLAction.Match && tecla == tx("comum_casar_2"))
         aviso = if (certo) null else if (a is LLAction.Expand) tx("toy_topo_nao_terminal_olhe_tabela") else tx("toy_topo_entrada_sao_iguais_case")
         if (certo) k++
         return certo
@@ -176,7 +176,7 @@ class ToyCorte(private val linha: String, override val meta: String) : Toy {
 
     override fun aperta(tecla: String): Boolean {
         val atual = tokens.getOrNull(t) ?: return false
-        if (tecla == "Mais uma letra") {
+        if (tecla == tx("toy_mais_letra")) {
             if (fim >= atual.end) { aviso = tx("toy_passou_token_proxima_letra_ja"); return false }
             fim++
             aviso = null
