@@ -51,15 +51,16 @@ import com.compilandia.ui.games.GameCtx
 import com.compilandia.ui.games.GameHost
 import com.compilandia.ui.pegboard
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 private const val SALAS = 9
 private const val INTEGRIDADE = 5
 
 private enum class Peca(val nome: String, val desc: String) {
-    ESCUDO("Escudo", "Ignora uma falha"),
-    DICA("Dica extra", "Cada sala começa com uma dica"),
-    REPARO("Reparo", "Devolve 2 de integridade"),
-    IMA("Ímã", "Rende 50% mais engrenagens"),
+    ESCUDO(tx("corridascreen_escudo"), tx("corridascreen_ignora_falha")),
+    DICA(tx("corridascreen_dica_extra"), tx("corridascreen_cada_sala_comeca_com_dica")),
+    REPARO(tx("corridascreen_reparo"), tx("corridascreen_devolve_2_integridade")),
+    IMA(tx("corridascreen_ima"), tx("corridascreen_rende_50_mais_engrenagens")),
 }
 
 private enum class Fase { PORTAS, OFICINA, SALA, BALANCO, FIM }
@@ -94,7 +95,7 @@ fun CorridaScreen(app: AppState) {
             return
         }
         val prox = sala + 1
-        Fx.porta("Sala ${prox + 1} de $SALAS", Palette.drawer) { sala = prox; fase = Fase.PORTAS }
+        Fx.porta(tx("corridascreen_sala_1_2", prox + 1, SALAS), Palette.drawer) { sala = prox; fase = Fase.PORTAS }
     }
 
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
@@ -107,7 +108,7 @@ fun CorridaScreen(app: AppState) {
             })
             Fase.OFICINA -> Column(Modifier.weight(1f).fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 ByteFigure(Modifier.height(150.dp), Mood.HAPPY)
-                Text("Oficina: escolha uma peça", style = MaterialTheme.typography.headlineSmall)
+                Text(tx("corridascreen_oficina_escolha_peca"), style = MaterialTheme.typography.headlineSmall)
                 for (o in ofertas) Column(
                     Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Palette.white).clickable {
                         Juice.drop()
@@ -154,19 +155,19 @@ fun CorridaScreen(app: AppState) {
             Fase.BALANCO -> Column(Modifier.weight(1f).fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 val passou = ultimo >= 0.6
                 ByteFigure(Modifier.height(170.dp), if (passou) Mood.HAPPY else Mood.SAD, hop = 1)
-                Text(if (passou) "Sala limpa: +$ganhouSala" else "Essa sala te acertou", style = MaterialTheme.typography.headlineSmall)
-                Text("${(ultimo * 100).toInt()}% de acerto", style = MaterialTheme.typography.bodyLarge, color = Palette.inkSoft)
+                Text(if (passou) tx("corridascreen_sala_limpa_1", ganhouSala) else tx("corridascreen_essa_sala_te_acertou"), style = MaterialTheme.typography.headlineSmall)
+                Text(tx("comum_1_acerto", (ultimo * 100).toInt()), style = MaterialTheme.typography.bodyLarge, color = Palette.inkSoft)
                 Spacer(Modifier.weight(1f))
-                BigButton(if (vida <= 0 || sala + 1 >= SALAS) "Ver o resultado" else "Próxima sala", Modifier.fillMaxWidth()) { avanca() }
+                BigButton(if (vida <= 0 || sala + 1 >= SALAS) tx("corridascreen_ver_resultado") else tx("corridascreen_proxima_sala"), Modifier.fillMaxWidth()) { avanca() }
             }
             Fase.FIM -> Column(Modifier.weight(1f).fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 val venceu = vida > 0
                 ByteFigure(Modifier.height(190.dp), if (venceu) Mood.HAPPY else Mood.SAD, armsUp = if (venceu) 1f else 0f, hop = 1)
-                Text(if (venceu) "Corrida completa" else "Parou na sala ${sala + 1}", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-                Text("+$ganhos engrenagens. Melhor corrida: ${app.ls.melhorCorrida} salas.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+                Text(if (venceu) tx("corridascreen_corrida_completa") else tx("corridascreen_parou_na_sala_1", sala + 1), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                Text(tx("corridascreen_1_engrenagens_melhor_corrida_2", ganhos, app.ls.melhorCorrida), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 Spacer(Modifier.weight(1f))
-                BigButton("Correr de novo", Modifier.fillMaxWidth()) { app.replace(com.compilandia.ui.Screen.Corrida) }
-                BigButton("Voltar à oficina", Modifier.fillMaxWidth(), color = Palette.drawer) { app.home() }
+                BigButton(tx("corridascreen_correr_novo"), Modifier.fillMaxWidth()) { app.replace(com.compilandia.ui.Screen.Corrida) }
+                BigButton(tx("comum_voltar_oficina"), Modifier.fillMaxWidth(), color = Palette.drawer) { app.home() }
             }
         }
     }
@@ -176,7 +177,7 @@ fun CorridaScreen(app: AppState) {
 private fun Hud(sala: Int, vida: Int, pecas: List<Peca>) {
     Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Corrida · sala ${sala + 1} de $SALAS", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+            Text(tx("corridascreen_corrida_sala_1_2", sala + 1, SALAS), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
                 for (i in 0 until INTEGRIDADE) Box(Modifier.size(22.dp, 13.dp).clip(RoundedCornerShape(3.dp)).background(if (i < vida) Palette.green else Palette.drawerLo))
             }
@@ -192,9 +193,9 @@ private fun Hud(sala: Int, vida: Int, pecas: List<Peca>) {
 @Composable
 private fun androidx.compose.foundation.layout.ColumnScope.Portas(m: Mission, onEscolhe: (Porta) -> Unit) {
     val portas = listOf(
-        Porta("Tranquila", "${m.game.title}, nível ${m.level}", "+10", Color(0xFF2E7D4F), Color(0xFF17472D), false, false),
-        Porta("Perigosa", "Mais difícil e sem dica", "+20", Color(0xFFB23A2A), Color(0xFF6A1F15), true, false),
-        Porta("Oficina", "Pule a sala e pegue uma peça", "peça", Color(0xFF1F6F8F), Color(0xFF10435A), false, true),
+        Porta(tx("corridascreen_tranquila"), tx("corridascreen_1_nivel_2", m.game.title, m.level), "+10", Color(0xFF2E7D4F), Color(0xFF17472D), false, false),
+        Porta(tx("corridascreen_perigosa"), tx("corridascreen_mais_dificil_sem_dica"), "+20", Color(0xFFB23A2A), Color(0xFF6A1F15), true, false),
+        Porta(tx("comum_oficina"), tx("corridascreen_pule_sala_pegue_peca"), tx("corridascreen_peca"), Color(0xFF1F6F8F), Color(0xFF10435A), false, true),
     )
     Row(
         Modifier.weight(1f).fillMaxWidth().pegboard(Palette.drawerHi.copy(alpha = 0.14f)).padding(horizontal = 10.dp).padding(top = 14.dp),
@@ -215,7 +216,7 @@ private fun androidx.compose.foundation.layout.ColumnScope.Portas(m: Mission, on
         }
     }
     Text(
-        "Escolha uma porta. Assuntos misturados ficam mais na memória.",
+        tx("corridascreen_escolha_porta_assuntos_misturados_ficam"),
         Modifier.fillMaxWidth().background(Palette.paper).padding(12.dp), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center,
     )
     @Suppress("UNUSED_EXPRESSION") Offset.Zero

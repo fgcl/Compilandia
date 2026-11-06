@@ -54,6 +54,7 @@ import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 private const val BUG_SEGMENTS = 5
 private val BOLT = Color(0xFF8FF5E2)
@@ -193,7 +194,7 @@ private fun HpBar(left: Int, modifier: Modifier) {
 @Composable
 private fun ComboPill(c: Int, modifier: Modifier) {
     Box(modifier.clip(RoundedCornerShape(5.dp)).background(if (c >= 6) Palette.hazard else Color(0xFFFFA477)).padding(horizontal = 8.dp, vertical = 2.dp)) {
-        Text("COMBO x$c", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium)
+        Text(tx("arena_combo_x_1", c), color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium)
     }
 }
 

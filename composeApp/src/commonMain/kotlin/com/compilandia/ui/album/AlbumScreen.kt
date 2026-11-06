@@ -70,6 +70,7 @@ import com.compilandia.ui.cast.BugFigure
 import com.compilandia.ui.cast.ByteFigure
 import com.compilandia.ui.cast.Mood
 import com.compilandia.ui.pegboard
+import com.compilandia.textos.tx
 
 private val PAPEL = Color(0xFFE9E0C8)
 private val SOMBRA = Color(0xFF8D8875)
@@ -94,7 +95,7 @@ fun AlbumScreen(app: AppState) {
     val pegos = app.ls.bugsPegos
     var escolhido by remember { mutableStateOf(Album.especies.lastOrNull { it.id in pegos }) }
     Column(Modifier.fillMaxSize()) {
-        Header("Álbum de Bugs", "${pegos.size} de ${Album.especies.size}", Palette.drawer)
+        Header(tx("albumscreen_album_bugs"), tx("comum_1_2", pegos.size, Album.especies.size), Palette.drawer)
         LazyVerticalGrid(
             GridCells.Fixed(4),
             Modifier.weight(1f).fillMaxWidth().background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f)),
@@ -103,7 +104,7 @@ fun AlbumScreen(app: AppState) {
         ) {
             item(span = { GridItemSpan(4) }) {
                 val e = escolhido
-                if (e != null) Destaque(e) else Text("Cada erro comum de prova é um Bug. Pegue o primeiro para abrir o álbum.", style = MaterialTheme.typography.bodyLarge)
+                if (e != null) Destaque(e) else Text(tx("albumscreen_cada_erro_comum_prova_bug"), style = MaterialTheme.typography.bodyLarge)
             }
             items(Album.especies) { e ->
                 val tem = e.id in pegos
@@ -111,7 +112,7 @@ fun AlbumScreen(app: AppState) {
             }
         }
         Box(Modifier.fillMaxWidth().background(Palette.paper).padding(12.dp)) {
-            BigButton("Caçar o Bug de hoje", Modifier.fillMaxWidth()) { doDia(app)?.let { app.go(Screen.CacaBug(it.id)) } }
+            BigButton(tx("albumscreen_cacar_bug_hoje"), Modifier.fillMaxWidth()) { doDia(app)?.let { app.go(Screen.CacaBug(it.id)) } }
         }
     }
 }
@@ -216,26 +217,26 @@ fun CacaBugScreen(app: AppState, id: String) {
             if (fim) {
                 val venceu = erros == 0
                 if (venceu) Colada(e)
-                Text(if (venceu) "Pegou o ${e.nome}" else "Escapou por pouco", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Text(if (venceu) tx("albumscreen_pegou_1", e.nome) else tx("albumscreen_escapou_por_pouco"), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
                 Text(e.verdade, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
-                if (pago) Text("+15 engrenagens", style = MaterialTheme.typography.titleMedium, color = Palette.yellow)
+                if (pago) Text(tx("albumscreen_15_engrenagens"), style = MaterialTheme.typography.titleMedium, color = Palette.yellow)
                 Spacer(Modifier.weight(1f))
-                if (!venceu) BigButton("Tentar de novo", Modifier.fillMaxWidth()) { app.replace(Screen.CacaBug(e.id)) }
-                BigButton("Voltar ao álbum", Modifier.fillMaxWidth(), color = Palette.drawer) { app.replace(Screen.Album) }
+                if (!venceu) BigButton(tx("comum_tentar_novo"), Modifier.fillMaxWidth()) { app.replace(Screen.CacaBug(e.id)) }
+                BigButton(tx("albumscreen_voltar_ao_album"), Modifier.fillMaxWidth(), color = Palette.drawer) { app.replace(Screen.Album) }
             } else if (t != null) {
-                Text("Verdade ou conversa do Bug?", style = MaterialTheme.typography.titleSmall, color = Palette.inkSoft)
+                Text(tx("albumscreen_verdade_ou_conversa_bug"), style = MaterialTheme.typography.titleSmall, color = Palette.inkSoft)
                 Carta(t.texto, k, resposta == null) { julga(it) }
                 val r = resposta
                 if (r != null) {
-                    Text(if (r == t.verdade) "Boa." else "O Bug te pegou.", style = MaterialTheme.typography.titleMedium, color = if (r == t.verdade) Palette.green else Palette.red)
+                    Text(if (r == t.verdade) tx("albumscreen_boa") else tx("albumscreen_bug_te_pegou"), style = MaterialTheme.typography.titleMedium, color = if (r == t.verdade) Palette.green else Palette.red)
                     Text(t.porque, style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                     Spacer(Modifier.weight(1f))
-                    BigButton("Continuar", Modifier.fillMaxWidth()) { proxima() }
+                    BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) { proxima() }
                 } else {
                     Spacer(Modifier.weight(1f))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        BigButton("É do Bug", Modifier.weight(1f), color = Palette.action) { julga(false) }
-                        BigButton("Verdade", Modifier.weight(1f), color = Palette.teal, textColor = Palette.hazardDark) { julga(true) }
+                        BigButton(tx("albumscreen_bug"), Modifier.weight(1f), color = Palette.action) { julga(false) }
+                        BigButton(tx("albumscreen_verdade"), Modifier.weight(1f), color = Palette.teal, textColor = Palette.hazardDark) { julga(true) }
                     }
                 }
             }

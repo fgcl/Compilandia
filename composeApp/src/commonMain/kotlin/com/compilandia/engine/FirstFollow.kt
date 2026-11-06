@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /** Um passo do cálculo de ponto fixo — usado para animar/explicar o algoritmo. */
 data class SetStep(
     val kind: Kind,
@@ -57,16 +59,16 @@ class FirstFollow(val grammar: Grammar) {
                         val fx = first.getValue(x) - EPS
                         if ((fx - target).isNotEmpty()) {
                             add += fx - target
-                            why.append("FIRST($x) entra em FIRST(${p.lhs}) ")
+                            why.append(tx("firstfollow_first_1_entra_em_first", x, p.lhs))
                         }
                         if (x !in nullable) { allNullable = false; break }
-                        why.append("($x pode sumir, olho o próximo) ")
+                        why.append(tx("firstfollow_1_pode_sumir_olho_proximo", x))
                     } else {
-                        if (x !in target) { add += x; why.append("'$x' começa a produção ") }
+                        if (x !in target) { add += x; why.append(tx("firstfollow_1_comeca_producao", x)) }
                         allNullable = false; break
                     }
                 }
-                if (allNullable && EPS !in target) { add += EPS; why.append("tudo à direita pode virar ε ") }
+                if (allNullable && EPS !in target) { add += EPS; why.append(tx("firstfollow_tudo_direita_pode_virar")) }
                 add -= target
                 if (add.isNotEmpty()) {
                     target += add; changed = true
@@ -82,7 +84,7 @@ class FirstFollow(val grammar: Grammar) {
         follow.getValue(g.start) += EOF
         steps += SetStep(
             SetStep.Kind.FOLLOW, g.start, setOf(EOF), g.productions.first { it.lhs == g.start },
-            "${g.start} é o símbolo inicial: depois dele vem o fim da entrada ($EOF)"
+            tx("firstfollow_1_simbolo_inicial_depois_dele", g.start, EOF)
         )
         rounds = 0
         changed = true
@@ -99,17 +101,17 @@ class FirstFollow(val grammar: Grammar) {
                         target += add1; changed = true
                         steps += SetStep(
                             SetStep.Kind.FOLLOW, b, add1, p,
-                            "Em ${p}, depois de $b vem ${beta.joinToString(" ")}: FIRST disso entra em FOLLOW($b)"
+                            tx("firstfollow_em_1_depois_2_vem", p, b, beta.joinToString(" "), b)
                         )
                     }
                     if (EPS in fb) {
                         val add2 = follow.getValue(p.lhs) - target
                         if (add2.isNotEmpty()) {
                             target += add2; changed = true
-                            val tail = if (beta.isEmpty()) "$b está no fim" else "o que vem depois de $b pode sumir"
+                            val tail = if (beta.isEmpty()) tx("firstfollow_1_esta_no_fim", b) else tx("firstfollow_que_vem_depois_1_pode", b)
                             steps += SetStep(
                                 SetStep.Kind.FOLLOW, b, add2, p,
-                                "Em ${p}, $tail: FOLLOW(${p.lhs}) entra em FOLLOW($b)"
+                                tx("firstfollow_em_1_2_follow_3", p, tail, p.lhs, b)
                             )
                         }
                     }

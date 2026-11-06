@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * Minimização de AFD pelo MÉTODO DA TABELA (pares distinguíveis), do jeito que se faz à mão na prova:
  *  1. marque todo par (final, não-final);
@@ -40,7 +42,7 @@ object Minimizer {
         fun nm(i: Int) = if (i == dead) "∅" else "q$i"
         for (p in 0 until n) for (q in p + 1 until n) {
             if ((p in d.accepting) != (q in d.accepting))
-                marked[p to q] = Mark(p, q, 1, "${nm(if (p in d.accepting) p else q)} é final e ${nm(if (p in d.accepting) q else p)} não")
+                marked[p to q] = Mark(p, q, 1, tx("minimize_1_final_2_nao", nm(if (p in d.accepting) p else q), nm(if (p in d.accepting) q else p)))
         }
         var round = 1
         var changed = true
@@ -52,7 +54,7 @@ object Minimizer {
                 for (c in d.alphabet) {
                     val a = d.delta.getValue(p to c); val b = d.delta.getValue(q to c)
                     if (a != b && key(a, b) in snapshot) {
-                        marked[p to q] = Mark(p, q, round, "com '$c': ${nm(p)}→${nm(a)} e ${nm(q)}→${nm(b)}, e {${nm(minOf(a, b))},${nm(maxOf(a, b))}} já está marcado")
+                        marked[p to q] = Mark(p, q, round, tx("minimize_com_1_2_3_4", c, nm(p), nm(a), nm(q), nm(b), nm(minOf(a, b)), nm(maxOf(a, b))))
                         changed = true
                         break
                     }
@@ -104,18 +106,18 @@ object Minimizer {
     val bank: List<Pair<String, DFA>> by lazy {
         val out = mutableListOf<Pair<String, DFA>>()
         // Exemplo clássico do Livro do Dragão (fig. 3.36): A e C são equivalentes
-        out += "(a|b)*abb — AFD do livro" to DFA(5, 0, setOf(4), listOf('a', 'b'), mapOf(
+        out += tx("minimize_b_abb_afd_livro") to DFA(5, 0, setOf(4), listOf('a', 'b'), mapOf(
             (0 to 'a') to 1, (0 to 'b') to 2, (1 to 'a') to 1, (1 to 'b') to 3,
             (2 to 'a') to 1, (2 to 'b') to 2, (3 to 'a') to 1, (3 to 'b') to 4,
             (4 to 'a') to 1, (4 to 'b') to 2))
-        out += "quantidade par de a's (com sobra)" to DFA(4, 0, setOf(0, 2), listOf('a'), mapOf(
+        out += tx("minimize_quantidade_par_com_sobra") to DFA(4, 0, setOf(0, 2), listOf('a'), mapOf(
             (0 to 'a') to 1, (1 to 'a') to 2, (2 to 'a') to 3, (3 to 'a') to 0))
-        out += "termina em b (redundante)" to DFA(4, 0, setOf(1, 3), listOf('a', 'b'), mapOf(
+        out += tx("minimize_termina_em_b_redundante") to DFA(4, 0, setOf(1, 3), listOf('a', 'b'), mapOf(
             (0 to 'a') to 2, (0 to 'b') to 1, (1 to 'a') to 2, (1 to 'b') to 3,
             (2 to 'a') to 0, (2 to 'b') to 3, (3 to 'a') to 0, (3 to 'b') to 1))
         for (re in listOf("ab*", "(ab)*", "a*b*", "(a|b)*a")) {
             val d = rawFromRegex(re)
-            if (d.stateCount in 3..6 && run(d).minimized.stateCount < d.stateCount) out += "$re (via subconjuntos)" to d
+            if (d.stateCount in 3..6 && run(d).minimized.stateCount < d.stateCount) out += tx("minimize_1_via_subconjuntos", re) to d
         }
         out
     }

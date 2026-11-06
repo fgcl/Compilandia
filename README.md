@@ -38,8 +38,13 @@ Versão desktop (útil para testar no PC):
 ```
 
 ## Capturas de tela
-O CI renderiza todas as telas, os 29 minijogos, as aulas, cada passo dos episódios e o Guia do TP a cada push (isso também serve de teste contra erros em tempo de execução).
-As imagens ficam no branch [`ci-screenshots`](../../tree/ci-screenshots).
+O teste `RenderSmokeTest` renderiza todas as telas, os 29 minijogos, as aulas, cada passo dos episódios e o Guia do TP. Isso também serve de teste contra erros em tempo de execução.
+
+```bash
+./gradlew :composeApp:desktopTest --tests '*RenderSmokeTest*'
+```
+
+As imagens ficam em `composeApp/build/screenshots`.
 
 ## O que tem dentro
 
@@ -149,7 +154,7 @@ Esse motor está em `composeApp/src/commonMain/kotlin/com/compilandia/engine` e 
 - **Conquistas** no Painel do Cérebro.
 
 ### 🛠️ Guia do Trabalho Prático
-A pesquisa mostrou que o TP de Compiladores da PUC Minas pede um compilador completo:
+A pesquisa mostrou que o TP da disciplina pede um compilador completo:
 - léxico por AFD;
 - gramática LL(1) e descida recursiva;
 - tabela de símbolos com escopos e verificação de tipos;

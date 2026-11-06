@@ -63,6 +63,7 @@ import com.compilandia.ui.Palette
 import com.compilandia.ui.VSpace
 import com.compilandia.ui.cast.ByteFigure
 import com.compilandia.ui.cast.Mood
+import com.compilandia.textos.tx
 
 /** Os .y prontos do laboratório. Cada um mostra uma coisa diferente do Bison. */
 object BisonExemplos {
@@ -112,10 +113,10 @@ object BisonExemplos {
     """.trimIndent()
 
     val todos = listOf(
-        Triple("Calculadora", calculadora, "2+3*4"),
-        Triple("Sem precedência", semPrecedencia, "2+3*4"),
-        Triple("Potência", potencia, "2^3^2"),
-        Triple("Menos unário", menosUnario, "-5+2"),
+        Triple(tx("labbisonscreen_calculadora"), calculadora, "2+3*4"),
+        Triple(tx("labbisonscreen_sem_precedencia"), semPrecedencia, "2+3*4"),
+        Triple(tx("labbisonscreen_potencia"), potencia, "2^3^2"),
+        Triple(tx("labbisonscreen_menos_unario"), menosUnario, "-5+2"),
     )
 }
 
@@ -143,7 +144,7 @@ private fun giraAssociatividade(spec: String, i: Int): String {
     return l.joinToString("\n")
 }
 
-private enum class Aba(val titulo: String) { PASSOS("Passo a passo"), CONFLITOS("Conflitos"), ESTADOS("Estados") }
+private enum class Aba(val titulo: String) { PASSOS(tx("labbisonscreen_passo_passo")), CONFLITOS(tx("comum_conflitos")), ESTADOS(tx("labbisonscreen_estados")) }
 
 /**
  * O Laboratório Bison: o .y em blocos, o veredito ao vivo e três jeitos de olhar o parser.
@@ -166,7 +167,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
     if (passo > quadros.lastIndex) passo = quadros.lastIndex.coerceAtLeast(0)
 
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
-        Header("Laboratório Bison", "Mexa no .y e veja o parser mudar")
+        Header(tx("comum_laboratorio_bison"), tx("labbisonscreen_mexa_no_y_veja_parser"))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             // Exemplos prontos
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -179,7 +180,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
             Veredito(bison, compilado.exceptionOrNull()?.message, entrada, resultado)
 
             // Declarações: a régua de precedência
-            Bloco("DECLARAÇÕES") {
+            Bloco(tx("labbisonscreen_declaracoes")) {
                 val linhas = spec.lines()
                 val fim = linhas.indexOfFirst { it.trim() == "%%" }.let { if (it < 0) linhas.size else it }
                 for (i in 0 until fim) {
@@ -187,8 +188,8 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
                     if (t.isNotEmpty() && PREC.none { t.startsWith(it) }) LinhaMono(t, Palette.inkSoft)
                 }
                 val prec = linhasDePrecedencia(spec)
-                if (prec.isEmpty()) Text("Sem %left nem %right. Toque num exemplo para ver a régua.", color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
-                else Text("Arraste pela alça. Mais embaixo liga mais forte. Toque no %left para girar.", color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
+                if (prec.isEmpty()) Text(tx("labbisonscreen_sem_left_nem_right_toque"), color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
+                else Text(tx("labbisonscreen_arraste_pela_alca_mais_embaixo"), color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
                 Regua(spec, prec, onTroca = { a, b -> spec = trocaLinhas(spec, a, b); passo = 0; Sound.play(Sfx.DROP) }, onGira = { spec = giraAssociatividade(spec, it); passo = 0; Sound.play(Sfx.CLICK) })
             }
 
@@ -203,7 +204,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
                         }
                     }
                 }
-                Text(if (editando) "Fechar o texto" else "Editar o texto do .y", color = Palette.yellow, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { editando = !editando }.padding(vertical = 4.dp))
+                Text(if (editando) tx("labbisonscreen_fechar_texto") else tx("labbisonscreen_editar_texto_y"), color = Palette.yellow, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { editando = !editando }.padding(vertical = 4.dp))
                 if (editando) {
                     BasicTextField(
                         spec, { spec = it; passo = 0 },
@@ -216,7 +217,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
 
             // Entrada
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("entrada", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium)
+                Text(tx("comum_entrada"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium)
                 BasicTextField(
                     entrada, { entrada = it.take(24); passo = 0 },
                     Modifier.weight(1f).clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(horizontal = 10.dp, vertical = 8.dp),
@@ -331,16 +332,16 @@ private fun Veredito(bison: MiniBison?, erro: String?, entrada: String, r: MiniB
         ByteFigure(Modifier.width(52.dp), if (ok) Mood.HAPPY else if (bison == null) Mood.SAD else Mood.THINK, animate = false)
         Column(Modifier.weight(1f)) {
             if (bison == null) {
-                Text("O .y não compilou", style = MaterialTheme.typography.titleSmall, color = Palette.ink)
+                Text(tx("labbisonscreen_y_nao_compilou"), style = MaterialTheme.typography.titleSmall, color = Palette.ink)
                 Text(erro ?: "", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             } else {
                 val n = bison.conflicts.size
                 val resolvidos = bison.resolvedByPrecedence
                 Text(
-                    "${if (n == 0) "0 conflitos" else "$n conflito${if (n > 1) "s" else ""}"} · ${bison.table.automaton.states.size} estados",
+                    tx("labbisonscreen_1_2_estados", if (n == 0) tx("labbisonscreen_0_conflitos") else tx("labbisonscreen_1_conflito_2", n, if (n > 1) "s" else ""), bison.table.automaton.states.size),
                     style = MaterialTheme.typography.titleMedium, color = Palette.ink,
                 )
-                if (resolvidos > 0) Text("A precedência decidiu $resolvidos célula${if (resolvidos > 1) "s" else ""}.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                if (resolvidos > 0) Text(tx("labbisonscreen_precedencia_decidiu_1_celula_2", resolvidos, if (resolvidos > 1) "s" else ""), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
                 val res = if (r == null) "" else if (r.accepted) "$entrada  →  ${r.value}" else "$entrada  →  ${r.error}"
                 Text(res, fontFamily = LocalFonts.current.mono, fontSize = 14.sp, color = if (r?.accepted == true) Palette.yellow else Palette.red, fontWeight = FontWeight.Bold)
             }
@@ -353,29 +354,29 @@ private fun Veredito(bison: MiniBison?, erro: String?, entrada: String, r: MiniB
 private fun TresPilhas(quadros: List<MiniBison.Quadro>, passo: Int, onPasso: (Int) -> Unit) {
     val q = quadros.getOrNull(passo)
     if (q == null) {
-        Text("A entrada não virou tokens. Use números, + - * / ^ e parênteses.", color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
+        Text(tx("labbisonscreen_entrada_nao_virou_tokens_use"), color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
         return
     }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(Palette.paper).padding(10.dp).testTag("lab-bison-pilhas"), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("falta ler", color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall)
+            Text(tx("labbisonscreen_falta_ler"), color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall)
             Spacer(Modifier.width(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) { q.entrada.forEachIndexed { i, t -> Celula(t, if (i == 0) Palette.hazard else Palette.paperDark) } }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Pilha("ESTADOS", q.estados.map { it.toString() }, Palette.drawer, Modifier.weight(1f))
-            Pilha("SÍMBOLOS", listOf("$") + q.simbolos, Palette.orange, Modifier.weight(1f))
+            Pilha(tx("labbisonscreen_simbolos"), listOf("$") + q.simbolos, Palette.orange, Modifier.weight(1f))
             Pilha("VALORES", listOf("·") + q.valores.map { it?.toString() ?: "·" }, Palette.yellow, Modifier.weight(1f), destaqueTopo = q.acao is LRAction.Reduce)
         }
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(8.dp)) {
-            Text("passo ${passo + 1} de ${quadros.size}", color = Color(0xFFA9B3B0), style = MaterialTheme.typography.labelSmall)
+            Text(tx("comum_passo_1_2", passo + 1, quadros.size), color = Color(0xFFA9B3B0), style = MaterialTheme.typography.labelSmall)
             Text(q.texto, fontFamily = LocalFonts.current.mono, fontSize = 13.sp, color = Color(0xFFE8E4D8))
             if (q.conta != null) Text(q.conta, fontFamily = LocalFonts.current.mono, fontSize = 14.sp, color = Palette.hazard, fontWeight = FontWeight.Bold)
         }
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            BigButton("Voltar", Modifier.weight(1f), color = Palette.drawer, small = true, enabled = passo > 0) { onPasso(passo - 1); Sound.play(Sfx.TICK) }
-            BigButton("Próximo", Modifier.weight(2f), enabled = passo < quadros.lastIndex) { onPasso(passo + 1); Sound.play(Sfx.DROP) }
-            BigButton("Até o fim", Modifier.weight(1f), color = Palette.drawer, small = true, enabled = passo < quadros.lastIndex) { onPasso(quadros.lastIndex) }
+            BigButton(tx("comum_voltar"), Modifier.weight(1f), color = Palette.drawer, small = true, enabled = passo > 0) { onPasso(passo - 1); Sound.play(Sfx.TICK) }
+            BigButton(tx("comum_proximo"), Modifier.weight(2f), enabled = passo < quadros.lastIndex) { onPasso(passo + 1); Sound.play(Sfx.DROP) }
+            BigButton(tx("labbisonscreen_ate_fim"), Modifier.weight(1f), color = Palette.drawer, small = true, enabled = passo < quadros.lastIndex) { onPasso(quadros.lastIndex) }
         }
     }
 }
@@ -411,7 +412,7 @@ private fun Conflitos(bison: MiniBison) {
     val g = t.grammar
     val celulas = t.rawConflictCells
     if (celulas.isEmpty()) {
-        Text("Nenhuma célula da tabela tem duas ações. O Bison não reclama de nada.", color = Palette.inkSoft, style = MaterialTheme.typography.bodyMedium)
+        Text(tx("labbisonscreen_nenhuma_celula_tabela_tem_duas"), color = Palette.inkSoft, style = MaterialTheme.typography.bodyMedium)
         return
     }
     for ((s, a) in celulas) {
@@ -425,13 +426,13 @@ private fun Conflitos(bison: MiniBison) {
                 .border(2.dp, if (sobrou) Palette.red else Palette.green, RoundedCornerShape(8.dp)).padding(10.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text("Estado $s, chega $a", style = MaterialTheme.typography.titleSmall, color = Palette.ink)
+            Text(tx("labbisonscreen_estado_1_chega_2", s, a), style = MaterialTheme.typography.titleSmall, color = Palette.ink)
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 if (empilha.isNotEmpty()) RegistroCard("EMPILHAR", empilha, Palette.teal, Modifier.weight(1f))
                 for (r in reduz) RegistroCard("REDUZIR", listOf(r), Palette.orange, Modifier.weight(1f))
             }
             Text(
-                if (sobrou) "Sobrou: ${decisao ?: "o Bison escolhe e avisa"}" else "Resolvido: ${decisao ?: ""}",
+                if (sobrou) tx("labbisonscreen_sobrou_1", decisao ?: tx("labbisonscreen_bison_escolhe_avisa")) else tx("labbisonscreen_resolvido_1", decisao ?: ""),
                 color = if (sobrou) Palette.red else Palette.green, style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold,
             )
         }
@@ -445,11 +446,11 @@ private fun Estados(bison: MiniBison, q: MiniBison.Quadro?) {
     val t = bison.table
     val topo = q?.estados?.lastOrNull()
     val naPilha = q?.estados.orEmpty().toSet()
-    Text("Como no arquivo .output. Amarelo é o topo da pilha no passo atual. Verde-água está na pilha.", color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
+    Text(tx("labbisonscreen_como_no_arquivo_output_amarelo"), color = Palette.inkSoft, style = MaterialTheme.typography.bodySmall)
     FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         for (s in t.automaton.states.indices) {
             val cor = when (s) { topo -> Palette.hazard; in naPilha -> Palette.teal; else -> Palette.drawer }
-            RegistroCard("Estado $s", linhasDoEstado(t, s), cor, Modifier.widthIn(min = 150.dp, max = 330.dp))
+            RegistroCard(tx("comum_estado_1", s), linhasDoEstado(t, s), cor, Modifier.widthIn(min = 150.dp, max = 330.dp))
         }
     }
 }

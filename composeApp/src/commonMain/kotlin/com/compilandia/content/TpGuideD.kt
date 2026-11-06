@@ -5,71 +5,26 @@ import com.compilandia.content.CalloutKind.*
 import com.compilandia.content.Speaker.*
 import com.compilandia.content.VisualKind as VK
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 // Guia do Trabalho Prático — capítulos 9 e 10 (otimizações e testes, checklist de entrega).
 
 // ───────────────────────────── Capítulo 9 ─────────────────────────────
 
 internal val tpCap9 = GuideChapter(
-    9, "Otimizações simples e bateria de testes",
-    "Dobrar constantes, cortar código morto, um peephole de leve — e testes que provam que nada quebrou.",
+    9, tx("tpguided_otimizacoes_simples_bateria_testes"),
+    tx("tpguided_dobrar_constantes_cortar_codigo_morto"),
     Skill.OPTIMIZATION,
     listOf(
         Say(BYTE, "`x <- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?"),
-        Say(PROF, "Vai — a não ser que o compilador calcule antes. Isso é **dobramento de constantes** (constant folding): se os dois lados de uma operação são conhecidos na compilação, faça a conta no Java e emita só o resultado."),
-        Visual(VK.TAC, input = "a + 2 * 3", caption = "Repare na instrução de `2 * 3`: os dois operandos são constantes. O compilador pode fazer essa conta sozinho."),
-        Text("O truque para encaixar isso no gerador de uma passada: o `Res` ganha um terceiro campo, `constante`. Uma folha numérica **reserva** o registrador, mas **adia** o `li`. Se a próxima operação também recebe uma constante, a conta é feita em Java e nenhum código sai. Só quando alguém realmente precisa do valor num registrador é que o `li` é emitido."),
+        Say(PROF, tx("tpguided_vai_nao_ser_que_compilador")),
+        Visual(VK.TAC, input = tx("comum_2_3"), caption = tx("tpguided_repare_na_instrucao_2_3")),
+        Text(tx("tpguided_truque_para_encaixar_isso_no")),
         Code(
-            $$"""
-                private record Res(TipoDado tipo, String reg, Integer constante) {
-                    Res(TipoDado tipo, String reg) { this(tipo, reg, null); }   // valor só em execução
-                }
-
-                private Res constante(TipoDado tipo, int valor) {     // reserva o registrador, NÃO emite li
-                    return new Res(tipo, novoTemp(), valor);
-                }
-
-                private String noRegistrador(Res r) {                 // materializa quando precisar
-                    if (r.constante() != null) emite("li " + r.reg() + ", " + r.constante());
-                    return r.reg();
-                }
-
-                private Res binaria(Token op, String instr, Res esq, Res dir, TipoDado tipoRes) {
-                    if (esq.constante() != null && dir.constante() != null) {
-                        Integer v = calcula(op.tipo, esq.constante(), dir.constante());
-                        if (v != null) {                               // DOBROU: zero instruções
-                            liberaTemp();
-                            return new Res(tipoRes, esq.reg(), v);
-                        }
-                    }
-                    String a = noRegistrador(esq), b = noRegistrador(dir);
-                    emite(instr + " " + a + ", " + a + ", " + b);
-                    liberaTemp();
-                    return new Res(tipoRes, a);
-                }
-
-                private static Integer calcula(TipoToken op, int a, int b) {
-                    return switch (op) {
-                        case MAIS        -> a + b;
-                        case MENOS       -> a - b;
-                        case VEZES       -> a * b;
-                        case DIV         -> b == 0 ? null : a / b;     // por zero: deixa para a execução
-                        case MOD         -> b == 0 ? null : a % b;
-                        case IGUAL       -> a == b ? 1 : 0;
-                        case DIFERENTE   -> a != b ? 1 : 0;
-                        case MENOR       -> a < b ? 1 : 0;
-                        case MAIOR       -> a > b ? 1 : 0;
-                        case MENOR_IGUAL -> a <= b ? 1 : 0;
-                        case MAIOR_IGUAL -> a >= b ? 1 : 0;
-                        case E           -> a & b;
-                        case OU          -> a | b;
-                        default          -> null;
-                    };
-                }
-            """.trimIndent(),
-            "Dobramento de constantes: o Res agora pode carregar um valor conhecido",
+            tx("tpguided_private_record_res_tipodado_tipo"),
+            tx("tpguided_dobramento_constantes_res_agora_pode"),
         ),
-        Text("No resto do gerador são três trocas mecânicas: (1) em `primario`, literais viram `return constante(tipo, valor);` em vez de `novoTemp()` + `li`; (2) cada `binaria(instr, esq, dir); esq = new Res(...)` vira `esq = binaria(op, instr, esq, dir, tipo);`; (3) todo lugar que usava `x.reg()` para emitir (`sw`, `move`, `beq`, `xori`, `sub`) passa a usar `noRegistrador(x)`. Nos unários: se o operando é constante, devolva `-c` ou `1 - c` sem emitir nada."),
+        Text(tx("tpguided_no_resto_gerador_sao_tres")),
         Code(
             $$"""
             # x <- 2 * 60 + 1;   SEM dobramento        # COM dobramento
@@ -80,20 +35,20 @@ internal val tpCap9 = GuideChapter(
                 add $t0, $t0, $t1
                 sw  $t0, x_0
             """.trimIndent(),
-            "Seis instruções viram duas",
+            tx("tpguided_seis_instrucoes_viram_duas"),
         ),
         Predict(
             "Com esse dobramento, `y <- a + 2 + 3;` vira `a + 5`?",
             listOf(
-                "Sim, 2 + 3 é dobrado",
-                "Não: a árvore é (a + 2) + 3 e nenhuma operação tem DOIS lados constantes",
-                "Não, porque `a` é variável e estraga a expressão inteira",
-                "Sim, mas só se `a` for zero",
+                tx("tpguided_sim_2_3_dobrado"),
+                tx("tpguided_nao_arvore_2_3_nenhuma"),
+                tx("tpguided_nao_porque_variavel_estraga_expressao"),
+                tx("tpguided_sim_mas_so_se_for"),
             ),
             1,
-            "O `+` associa à esquerda: primeiro `a + 2` (um lado variável), depois `(…) + 3`. Já `2 + 3 + a` vira `5 + a`. Compiladores reais reordenam (reassociação) para pegar o primeiro caso — um bom 'trabalho futuro' para o relatório.",
+            tx("tpguided_associa_esquerda_primeiro_2_lado"),
         ),
-        Callout(WATCH_OUT, "Nunca dobre `x / 0` com uma conta em Java: ela lança ArithmeticException e o SEU COMPILADOR cai com um stack trace. Devolva `null` (não dobra) e deixe o erro para a execução — ou emita um aviso com a linha. E repare: Java e MIPS truncam a divisão de inteiros do mesmo jeito (`-7 / 2 = -3`), então dobrar não muda o resultado."),
+        Callout(WATCH_OUT, tx("tpguided_nunca_dobre_x_0_com")),
         Say(LEXI, "E aquele `se (1 > 2) { … }`? O bloco nunca roda. Corta fora!"),
         Code(
             $$"""
@@ -134,9 +89,9 @@ internal val tpCap9 = GuideChapter(
                     // ... o resto igual ao capítulo 8
                 }
             """.trimIndent(),
-            "Eliminação de código morto: o bloco continua sendo ANALISADO (erros ainda aparecem), só não gera MIPS",
+            tx("tpguided_eliminacao_codigo_morto_bloco_continua"),
         ),
-        Callout(NO_DUMB_QUESTIONS, "P: Por que não simplesmente pular os tokens do bloco morto? R: Porque o bloco ainda precisa estar CERTO: um erro de sintaxe ou de tipo dentro de `se (falso) { … }` continua sendo erro. Por isso ele passa pelo parser normalmente, só com a 'caneta' desligada. (A string de um `escreva` morto ainda vai para o .data — inofensivo.)"),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguided_p_por_que_nao_simplesmente")),
         Code(
             $$"""
             # antes                          # depois (peephole)
@@ -148,132 +103,106 @@ internal val tpCap9 = GuideChapter(
                 sw   $t0, n_0                    sw   $t0, n_0
                 lw   $t0, n_0                    # lw removido: $t0 já tem esse valor
             """.trimIndent(),
-            "Otimização peephole: uma janela de 2 instruções deslizando sobre o .asm pronto",
+            tx("tpguided_otimizacao_peephole_janela_2_instrucoes"),
         ),
         Callout(WATCH_OUT, "Peephole nunca atravessa um RÓTULO. Em `sw \$t0, n_0` / `enquanto0:` / `lw \$t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em \$t0. Remover aquele `lw` quebra o laço."),
-        Say(PILHA, "Otimizou? Então… prove… que nada… quebrou."),
+        Say(PILHA, tx("tpguided_otimizou_entao_prove_que_nada")),
         Steps(
-            "Bateria de testes que pega bug de verdade",
+            tx("tpguided_bateria_testes_que_pega_bug"),
             listOf(
-                "**Precedência e associatividade**: `escreva(2 + 3 * 4);` → 14; `escreva((2 + 3) * 4);` → 20; `escreva(10 - 3 - 2);` → 5 (e não 9!).",
+                tx("tpguided_precedencia_associatividade_escreva_2_3"),
                 "**Negativos e resto**: `escreva(-7 / 2, \" \", -7 % 2);` → -3 -1.",
-                "**Laços**: `enquanto` que roda 0 vezes, 1 vez e N vezes.",
-                "**Aninhamento**: `se` dentro de `se` dentro de `enquanto` (rótulos únicos!).",
-                "**Escopos**: sombreamento (x interno e externo com valores diferentes, imprima os dois).",
-                "**Erros**: um arquivo por mensagem de erro — léxico, sintático, cada regra semântica.",
-                "**Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, `'A' + 1` impresso como número.",
+                tx("tpguided_lacos_enquanto_que_roda_0"),
+                tx("tpguided_aninhamento_se_dentro_se_dentro"),
+                tx("tpguided_escopos_sombreamento_x_interno_externo"),
+                tx("tpguided_erros_arquivo_por_mensagem_erro"),
+                tx("tpguided_bordas_arquivo_vazio_so_comentario"),
             ),
         ),
-        Visual(VK.MIPS, input = "(a + b) * (c - d)", caption = "Treine a conferência à mão: com a=4, b=2, c=3, d=5, o resultado tem que ser -12. Calcule ANTES de rodar."),
+        Visual(VK.MIPS, input = tx("tpguided_b_c_d"), caption = tx("tpguided_treine_conferencia_mao_com_4")),
         Code(
-            $$"""
-            #!/bin/bash
-            # roda_testes.sh — compila cada teste e compara com a saída esperada
-            javac -d bin src/*.java || exit 1
-            passou=0; falhou=0
-            for f in testes/ok/*.byt; do
-              java -cp bin Main "$f" /tmp/t.asm > /dev/null
-              java -jar Mars4_5.jar nc /tmp/t.asm > /tmp/t.out
-              if diff -q /tmp/t.out "${f%.byt}.esperado" > /dev/null; then passou=$((passou+1))
-              else echo "FALHOU: $f"; falhou=$((falhou+1)); fi
-            done
-            for f in testes/erro/*.byt; do
-              java -cp bin Main "$f" /tmp/t.asm > /tmp/t.out
-              if diff -q /tmp/t.out "${f%.byt}.esperado" > /dev/null; then passou=$((passou+1))
-              else echo "FALHOU: $f"; falhou=$((falhou+1)); fi
-            done
-            echo "$passou passaram, $falhou falharam"
-            """.trimIndent(),
-            "Testes de regressão automáticos (Linux/macOS/Git Bash). Gere cada .esperado UMA vez, confira à mão, e congele.",
+            tx("tpguided_bin_bash_roda_testes_sh"),
+            tx("tpguided_testes_regressao_automaticos_linux_macos"),
         ),
-        Callout(REAL_WORLD, "Isso é teste de **regressão**: depois de cada otimização ou correção, rode a bateria inteira. É exatamente assim que GCC e LLVM trabalham — milhares de programas de teste rodando a cada mudança."),
-        Callout(EXAM_TIP, "Prova adora: 'aplique dobramento de constantes e eliminação de código morto neste código de três endereços'. Primeiro dobre, depois veja quais desvios ficaram com condição constante, depois corte o que nunca é alcançado."),
-        Reveal("Por que gerar o `.esperado` rodando o próprio compilador é perigoso?", "Porque se o compilador está errado, você congela o erro como 'resposta certa'. Confira cada `.esperado` à mão (ou calcule antes de rodar) na primeira vez — depois ele protege contra regressões."),
+        Callout(REAL_WORLD, tx("tpguided_isso_teste_regressao_depois_cada")),
+        Callout(EXAM_TIP, tx("tpguided_prova_adora_aplique_dobramento_constantes")),
+        Reveal(tx("tpguided_por_que_gerar_esperado_rodando"), tx("tpguided_porque_se_compilador_esta_errado")),
     ),
 )
 
 // ───────────────────────────── Capítulo 10 ─────────────────────────────
 
 internal val tpCap10 = GuideChapter(
-    10, "Checklist de entrega e erros que tiram ponto",
-    "O que conferir na véspera, o que vai no relatório e as perguntas da arguição.",
+    10, tx("tpguided_checklist_entrega_erros_que_tiram"),
+    tx("tpguided_que_conferir_na_vespera_que"),
     Skill.ERROR_RECOVERY,
     listOf(
-        Say(NARRADOR, "Véspera da entrega. 23h47. A geladeira faz um barulho estranho. O cursor pisca."),
-        Say(BYTE, "Tá tudo funcionando! …Eu acho."),
-        Say(PROF, "'Eu acho' não é teste. Vamos passar o checklist, item por item."),
+        Say(NARRADOR, tx("tpguided_vespera_entrega_23h47_geladeira_faz")),
+        Say(BYTE, tx("tpguided_ta_tudo_funcionando_eu_acho")),
+        Say(PROF, tx("tpguided_eu_acho_nao_teste_vamos")),
         Steps(
-            "Checklist do código",
+            tx("tpguided_checklist_codigo"),
             listOf(
-                "Compila do zero, fora da IDE: `javac -d bin src/*.java` sem erros nem avisos estranhos.",
-                "Roda exatamente como o enunciado manda (ex.: `java Main programa.byt`).",
-                "Nenhum caminho absoluto (`C:\\Users\\…`) e nenhum `System.out.println` de depuração esquecido.",
-                "Mensagens de erro no formato pedido, com a linha certa, e o programa PARA no primeiro erro (se for o pedido).",
-                "Toda a bateria de testes passa — rode o script uma última vez.",
-                "O `.asm` gerado monta e roda no MARS sem nenhuma edição manual.",
-                "README com: como compilar, como rodar, versão do Java.",
+                tx("tpguided_compila_zero_fora_ide_javac"),
+                tx("tpguided_roda_exatamente_como_enunciado_manda"),
+                tx("tpguided_nenhum_caminho_absoluto_c_users"),
+                tx("tpguided_mensagens_erro_no_formato_pedido"),
+                tx("tpguided_toda_bateria_testes_passa_rode"),
+                tx("tpguided_asm_gerado_monta_roda_no"),
+                tx("tpguided_readme_com_como_compilar_como"),
             ),
         ),
         Steps(
-            "Checklist do relatório",
+            tx("tpguided_checklist_relatorio"),
             listOf(
-                "Especificação da linguagem: tokens (com regex), precedência, gramática.",
-                "O AFD do léxico desenhado + a lista de erros léxicos.",
-                "Gramática LL(1) em EBNF + FIRST/FOLLOW como prova de que não há conflitos.",
-                "Decisões de projeto: maiúsculas, sombreamento, conversões implícitas, `<-` vs `<` `-`.",
-                "Esquemas de tradução: o molde MIPS de cada comando (se, enquanto, escreva…).",
-                "Otimizações implementadas, com exemplo antes/depois.",
-                "Testes: tabela com programa, saída esperada e saída obtida. E as limitações conhecidas (ex.: 10 registradores).",
+                tx("tpguided_especificacao_linguagem_tokens_com_regex"),
+                tx("tpguided_afd_lexico_desenhado_lista_erros"),
+                tx("tpguided_gramatica_ll_1_em_ebnf"),
+                tx("tpguided_decisoes_projeto_maiusculas_sombreamento_con"),
+                tx("tpguided_esquemas_traducao_molde_mips_cada"),
+                tx("tpguided_otimizacoes_implementadas_com_exemplo_antes"),
+                tx("tpguided_testes_tabela_com_programa_saida"),
             ),
         ),
-        Callout(WATCH_OUT, "**Linha errada nas mensagens.** O erro mais comum de todos. Causas: não contar '\\n' dentro de comentário de bloco, contar '\\r' também, ou usar a linha do token ANTERIOR quando o enunciado quer a do token encontrado (ou vice-versa). Tenha um teste de erro DEPOIS de um comentário de várias linhas."),
-        Callout(WATCH_OUT, "**Registradores vazando.** Esquecer um `liberaTemp()` não quebra programas pequenos… até o 11º comando, quando aparece 'faltaram registradores' do nada. Teste com um programa de 30 atribuições seguidas."),
+        Callout(WATCH_OUT, tx("tpguided_linha_errada_nas_mensagens_erro")),
+        Callout(WATCH_OUT, tx("tpguided_registradores_vazando_esquecer_liberatemp_na")),
         Code(
-            """
-                private void comando() {
-                    int antes = proxTemp;
-                    switch (tok.tipo) {
-                        // ... os mesmos casos de antes ...
-                    }
-                    if (proxTemp != antes)               // rede de segurança: pega o bug na hora
-                        throw new IllegalStateException("BUG: registrador vazou no comando antes da linha " + tok.linha);
-                }
-            """.trimIndent(),
-            "Uma linha de 'assert' que economiza uma noite de depuração",
+            tx("tpguided_private_void_comando_int_antes"),
+            tx("tpguided_linha_assert_que_economiza_noite"),
         ),
         Predict(
-            "Alguém escreveu no léxico: `if (lexema == \"senao\") …`. O que acontece?",
+            tx("tpguided_alguem_escreveu_no_lexico_if"),
             listOf(
-                "Funciona sempre",
-                "Às vezes não reconhece a palavra: `==` em String compara REFERÊNCIAS, não conteúdo",
-                "Erro de compilação do Java",
-                "Funciona só no Windows",
+                tx("tpguided_funciona_sempre"),
+                tx("tpguided_vezes_nao_reconhece_palavra_em"),
+                tx("comum_erro_compilacao_java"),
+                tx("tpguided_funciona_so_no_windows"),
             ),
             1,
-            "Em Java, `==` entre Strings pergunta 'é o mesmo objeto?'. O lexema montado num StringBuilder é um objeto NOVO, então a comparação falha. Use `equals` — ou, melhor ainda, o HashMap de reservadas e enums como no capítulo 3.",
+            tx("tpguided_em_java_entre_strings_pergunta"),
         ),
-        Callout(WATCH_OUT, "**Rótulos e nomes colidindo.** Dois `se` aninhados gerando o mesmo rótulo, ou uma variável chamada `main`, `j` ou `b` virando rótulo cru. O contador nos rótulos e o sufixo `_N` nas variáveis resolvem — tenha um teste com `inteiro j, b, main;`."),
+        Callout(WATCH_OUT, tx("tpguided_rotulos_nomes_colidindo_dois_se")),
         Callout(WATCH_OUT, "**Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a < b < c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada."),
         Callout(WATCH_OUT, "**Variável em laço não reinicia.** Na Byteiro, `inteiro t;` dentro de um `enquanto` NÃO gera código: o `.word` é o mesmo a cada volta e guarda o valor da volta anterior. Ou documente isso ('variáveis valem 0 só no início do programa'), ou gere um `sw \$zero, rotulo` em cada declaração."),
-        Callout(REAL_WORLD, "Integridade acadêmica: copiar o compilador de um colega, de um semestre anterior ou pedir para uma IA escrever sem entender aparece na arguição em dois minutos — e costuma zerar o trabalho. Use este guia como MAPA: os exemplos são da Byteiro, a sua linguagem é outra, e o código precisa ser seu."),
-        Callout(EXAM_TIP, "Treine a arguição em voz alta, um integrante perguntando para o outro. As perguntas abaixo são as clássicas."),
-        Reveal("Arguição: 'Por que a sua gramática é LL(1)?'", "Porque não tem recursão à esquerda, está fatorada e, em cada não-terminal com alternativas, os FIRST são disjuntos (e não cruzam com o FOLLOW quando há ε). Mostre a tabela FIRST/FOLLOW do relatório e aponte o `if`/`switch` correspondente no código."),
-        Reveal("Arguição: 'Mostre onde o tipo de `a + 'b'` é calculado.'", "Em `exprAdd`: `primario` devolve INTEIRO para `a` e CARACTERE para `'b'`; os dois são numéricos, então o resultado é INTEIRO. Nenhuma instrução extra: o caractere já é um número na memória."),
-        Reveal("Arguição: 'Como o seu léxico sabe que `<-` é um token só?'", "Estado 3 do AFD: depois de ler '<', ele olha o próximo caractere. Se for '-', consome e devolve ATRIB (maior lexema). Se for outra coisa, devolve MENOR sem consumir."),
-        Reveal("Arguição: 'O que acontece com a pilha de escopos quando o bloco do enquanto fecha?'", "`fechaEscopo()` desempilha o HashMap do bloco: os nomes declarados lá deixam de ser visíveis. Mas o `.word` continua no `.data` — escopo é uma regra de COMPILAÇÃO, não de memória."),
+        Callout(REAL_WORLD, tx("tpguided_integridade_academica_copiar_compilador_cole")),
+        Callout(EXAM_TIP, tx("tpguided_treine_arguicao_em_voz_alta")),
+        Reveal(tx("tpguided_arguicao_por_que_sua_gramatica"), tx("tpguided_porque_nao_tem_recursao_esquerda")),
+        Reveal(tx("tpguided_arguicao_mostre_onde_tipo_b"), tx("tpguided_em_expradd_primario_devolve_inteiro")),
+        Reveal(tx("tpguided_arguicao_como_seu_lexico_sabe"), tx("tpguided_estado_3_afd_depois_ler")),
+        Reveal(tx("tpguided_arguicao_que_acontece_com_pilha"), tx("tpguided_fechaescopo_desempilha_hashmap_bloco_nomes")),
         Steps(
-            "Plano para as últimas 48 horas",
+            tx("tpguided_plano_para_ultimas_48_horas"),
             listOf(
-                "48h: congele funcionalidades. Nada de recurso novo — só correção de bug.",
-                "36h: rode a bateria inteira, conserte o que falhar, rode de novo.",
-                "24h: relatório — figuras do AFD, gramática, moldes MIPS, tabela de testes.",
-                "12h: clone o repositório numa pasta limpa e siga o README como se fosse o professor.",
-                "2h: entregue. Sim, antes do prazo. O Canvas também cai.",
+                tx("tpguided_48h_congele_funcionalidades_nada_recurso"),
+                tx("tpguided_36h_rode_bateria_inteira_conserte"),
+                tx("tpguided_24h_relatorio_figuras_afd_gramatica"),
+                tx("tpguided_12h_clone_repositorio_numa_pasta"),
+                tx("tpguided_2h_entregue_sim_antes_prazo"),
             ),
         ),
-        Say(LEXI, "Tokens cortados."),
-        Say(PILHA, "Gramática… empilhada."),
-        Say(PROF, "Tipos conferidos, MIPS rodando, testes passando. Você não 'fez um trabalho de compiladores' — você **construiu um compilador**. Pouca gente pode dizer isso."),
-        Reveal("Última recuperação: recite as fases do seu compilador e a classe Java de cada uma.", "Léxico → `Lexico` (AFD com switch). Sintático → `Sintatico` (descida recursiva, casaToken). Semântico → `TabelaSimbolos` + checagens no `Sintatico`. Geração → métodos do `Sintatico` emitindo MIPS. Otimização → dobramento de constantes e código morto no gerador. E o `Main` costurando tudo."),
+        Say(LEXI, tx("tpguided_tokens_cortados")),
+        Say(PILHA, tx("tpguided_gramatica_empilhada")),
+        Say(PROF, tx("tpguided_tipos_conferidos_mips_rodando_testes")),
+        Reveal(tx("tpguided_ultima_recuperacao_recite_fases_seu"), tx("tpguided_lexico_lexico_afd_com_switch")),
     ),
 )

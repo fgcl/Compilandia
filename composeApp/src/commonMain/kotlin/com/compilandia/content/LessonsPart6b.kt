@@ -7,6 +7,7 @@ import com.compilandia.content.VisualKind as VK
 import com.compilandia.engine.AstTools
 import com.compilandia.learning.Skill
 import com.compilandia.learning.Style
+import com.compilandia.textos.tx
 
 // Parte 6b do conteúdo: AST_BUILD (Cidade Semântica — Fábrica de AST).
 // Contagens de nós conferidas com AstTools.concreteTree / countNodes (gramática E/T/F do motor):
@@ -16,250 +17,194 @@ import com.compilandia.learning.Style
 /** Assembly / Bison em strings cruas: '§' vira '$'. */
 internal fun p6Asm(s: String): String = s.trimIndent().replace('§', '$')
 
-private val P6_AST_CMDS: String = """
-abstract class Cmd { }
-
-class Atrib extends Cmd {          // x = expr;
-    String var; Expr valor;
-}
-class Se extends Cmd {             // if (cond) entao else senao
-    Expr cond; Cmd entao, senao;   // senao == null quando não há else
-}
-class Enquanto extends Cmd {       // while (cond) corpo
-    Expr cond; Cmd corpo;
-}
-class Bloco extends Cmd {          // { c1 c2 ... }
-    List<Cmd> cmds = new ArrayList<>();
-}
-""".trimIndent()
+private val P6_AST_CMDS: String = tx("lessonspart6b_abstract_class_cmd_class_atrib")
 
 private val P6_AST_BISON: String = p6Asm(
-    """
-    exp   : exp '+' termo     { §§ = new BinOp('+', §1, §3); }
-          | exp '-' termo     { §§ = new BinOp('-', §1, §3); }
-          | termo             { §§ = §1; }          /* corrente: só repassa */
-          ;
-    termo : termo '*' fator   { §§ = new BinOp('*', §1, §3); }
-          | fator             { §§ = §1; }
-          ;
-    fator : '(' exp ')'       { §§ = §2; }          /* o parêntese SOME aqui */
-          | ID                { §§ = new Var(§1); }
-          | NUM               { §§ = new Num(§1); }
-          ;
-    """,
+    tx("lessonspart6b_exp_exp_termo_new_binop"),
 )
 
-private val P6_AST_VISIT: String = """
-abstract class Expr {
-    abstract int avaliar(Map<String, Integer> mem);
-    abstract String gerar(Gerador g);          // devolve onde ficou o valor
-}
-class Num extends Expr {
-    int valor;
-    int avaliar(Map<String, Integer> mem) { return valor; }
-    String gerar(Gerador g) { return String.valueOf(valor); }
-}
-class Var extends Expr {
-    String nome;
-    int avaliar(Map<String, Integer> mem) { return mem.get(nome); }
-    String gerar(Gerador g) { return nome; }
-}
-class BinOp extends Expr {
-    char op; Expr esq, dir;
-    int avaliar(Map<String, Integer> mem) {
-        int x = esq.avaliar(mem), y = dir.avaliar(mem);   // filhos primeiro (pós-ordem)
-        switch (op) { case '+': return x + y; case '-': return x - y;
-                      case '*': return x * y; default:  return x / y; }
-    }
-    String gerar(Gerador g) {
-        String x = esq.gerar(g), y = dir.gerar(g);
-        String t = g.novoTemp();
-        g.emite(t + " = " + x + " " + op + " " + y);       // TAC!
-        return t;
-    }
-}
-""".trimIndent()
+private val P6_AST_VISIT: String = tx("lessonspart6b_abstract_class_expr_abstract_int")
 
 internal val p6AstLessons: List<Lesson> = listOf(
     // ───────────────────────────── STORY ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.STORY, "O resumo e o livro inteiro",
+        Skill.AST_BUILD, Style.STORY, tx("lessonspart6b_resumo_livro_inteiro"),
         listOf(
-            Say(NARRADOR, "Véspera de prova de Literatura. Byte tem duas opções: reler o livro inteiro, com prefácio, índice e notas de rodapé, ou ler o resumo de duas páginas da colega."),
-            Say(BYTE, "O resumo, óbvio! Mas... não perde nada importante?"),
-            Say(PROF, "Um BOM resumo não perde nada que importa para a prova: personagens, quem fez o quê, em que ordem. Ele joga fora só o que servia para o livro ser LIDO: capítulos de transição, numeração, notas. A **árvore sintática abstrata (AST)** é o resumo; a **árvore de derivação** é o livro inteiro."),
+            Say(NARRADOR, tx("lessonspart6b_vespera_prova_literatura_byte_tem")),
+            Say(BYTE, tx("lessonspart6b_resumo_obvio_mas_nao_perde")),
+            Say(PROF, tx("lessonspart6b_bom_resumo_nao_perde_nada")),
             Steps(
-                "Livro × resumo → árvore de derivação × AST",
+                tx("lessonspart6b_livro_resumo_arvore_derivacao_ast"),
                 listOf(
-                    "📖 Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.",
-                    "🔁 Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.",
-                    "📑 Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.",
-                    "🗒️ Páginas em branco → produções **ε**: somem.",
-                    "⭐ Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.",
+                    tx("lessonspart6b_livro_inteiro_arvore_derivacao_concreta"),
+                    tx("lessonspart6b_capitulos_transicao_vira_t_que"),
+                    tx("lessonspart6b_numeracao_indice_parenteses_pontuacao_so"),
+                    tx("lessonspart6b_paginas_em_branco_producoes_somem"),
+                    tx("lessonspart6b_personagens_acoes_operadores_operandos_viram"),
                 ),
             ),
             Predict(
-                "Para 'a + b * c', a árvore de derivação da gramática E/T/F tem 13 nós. Quantos tem a AST?",
+                tx("lessonspart6b_para_b_c_arvore_derivacao"),
                 listOf("13", "9", "5", "3"),
                 2,
-                "Só sobram os 3 operandos e os 2 operadores: BinOp('+') com Var(a) e BinOp('*') com Var(b) e Var(c). 13 → 5: um resumo de verdade!",
+                tx("lessonspart6b_so_sobram_3_operandos_2"),
             ),
-            Visual(VK.AST, input = "a + b * c", caption = "Lado a lado: o livro (derivação) e o resumo (AST). Repare que o * continua mais FUNDO que o +: a precedência sobreviveu."),
-            Say(BYTE, "Então a AST é só uma árvore mais magrinha. Por que ela é tão importante?"),
-            Say(PROF, "Porque, depois da análise sintática, TODO o resto do compilador estuda pelo resumo: o verificador de tipos, a tabela de símbolos, o gerador de código. Ninguém quer reler o livro inteiro três vezes."),
-            Callout(REAL_WORLD, "No trabalho prático da PUC (o compilador em Java), muitos grupos traduzem direto dentro do parser: lê um token, já emite assembly. Funciona, mas é como fazer a prova lendo o livro uma vez só, sem poder voltar. Com a AST você lê uma vez, monta o resumo e depois pode passar por ele quantas vezes quiser: uma vez para checar tipos, outra para gerar código."),
-            Callout(NO_DUMB_QUESTIONS, "P: Se eu jogo fora os parênteses, como o compilador sabe que (a + b) * c é diferente de a + b * c? R: Pela FORMA da árvore. Em (a + b) * c, o + fica embaixo do *; em a + b * c, é o * que fica embaixo do +. Quem está mais fundo é calculado primeiro."),
-            Reveal("Na analogia, quem é: livro inteiro, resumo, capítulo de transição, numeração das páginas?", "Árvore de derivação, AST, não-terminal em corrente (E → T → F), parênteses/pontuação."),
+            Visual(VK.AST, input = tx("comum_b_c"), caption = tx("lessonspart6b_lado_lado_livro_derivacao_resumo")),
+            Say(BYTE, tx("lessonspart6b_entao_ast_so_arvore_mais")),
+            Say(PROF, tx("lessonspart6b_porque_depois_analise_sintatica_todo")),
+            Callout(REAL_WORLD, tx("lessonspart6b_no_trabalho_pratico_java")),
+            Callout(NO_DUMB_QUESTIONS, tx("lessonspart6b_p_se_eu_jogo_fora")),
+            Reveal(tx("lessonspart6b_na_analogia_quem_livro_inteiro"), tx("lessonspart6b_arvore_derivacao_ast_nao_terminal")),
         ),
     ),
 
     // ───────────────────────────── VISUAL ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.VISUAL, "Dieta de árvores, ao vivo",
+        Skill.AST_BUILD, Style.VISUAL, tx("lessonspart6b_dieta_arvores_ao_vivo"),
         listOf(
-            Say(PROF, "Hoje cada widget mostra a mesma expressão duas vezes: a árvore de derivação (gorda) e a AST (magra), com a contagem de nós e o código Java que monta a AST."),
-            Visual(VK.AST, input = "( ( a ) )", caption = "O caso extremo: 14 nós na árvore de derivação, 1 nó na AST. Tudo era parêntese e corrente."),
+            Say(PROF, tx("lessonspart6b_hoje_cada_widget_mostra_mesma")),
+            Visual(VK.AST, input = tx("lessonspart6b_a"), caption = tx("lessonspart6b_caso_extremo_14_nos_na")),
             Predict(
-                "O que restou na AST de '( ( a ) )'?",
-                listOf("BinOp com dois filhos", "Um único Var(a)", "Dois nós de parênteses", "Nada: a AST fica vazia"),
+                tx("lessonspart6b_que_restou_na_ast"),
+                listOf(tx("lessonspart6b_binop_com_dois_filhos"), tx("lessonspart6b_unico_var"), tx("lessonspart6b_dois_nos_parenteses"), tx("lessonspart6b_nada_ast_fica_vazia")),
                 1,
-                "Os parênteses só agrupavam; não há operação nenhuma. A AST é apenas new Var(\"a\").",
+                tx("lessonspart6b_parenteses_so_agrupavam_nao_ha"),
             ),
-            Visual(VK.AST, input = "a - b - c", caption = "Associatividade: 14 nós contra 5. Veja qual '-' ficou embaixo."),
+            Visual(VK.AST, input = tx("lessonspart6b_b_c"), caption = tx("lessonspart6b_associatividade_14_nos_contra_5")),
             Predict(
-                "Na AST de 'a - b - c', qual subtração fica mais funda (é feita primeiro)?",
-                listOf("A da esquerda: (a - b) - c", "A da direita: a - (b - c)", "Tanto faz: dá o mesmo valor"),
+                tx("lessonspart6b_na_ast_b_c_qual"),
+                listOf(tx("lessonspart6b_esquerda_b_c"), tx("lessonspart6b_direita_b_c"), tx("lessonspart6b_tanto_faz_mesmo_valor")),
                 0,
-                "A gramática E → E - T é recursiva à ESQUERDA, então a árvore cresce para a esquerda: new BinOp('-', new BinOp('-', a, b), c). E não dá o mesmo valor: com a=10, b=3, c=2, (10-3)-2 = 5 mas 10-(3-2) = 9.",
+                tx("lessonspart6b_gramatica_t_recursiva_esquerda_entao"),
             ),
-            Visual(VK.AST, input = "a - ( b - c )", caption = "Agora com parênteses à direita: 19 nós contra 5. A forma da AST mudou, mesmo sem nenhum nó de parêntese."),
-            Visual(VK.AST, input = "( a + b ) * ( c - x )", caption = "28 nós na derivação, 7 na AST: 4 folhas e 3 operadores."),
+            Visual(VK.AST, input = tx("lessonspart6b_b_c_2"), caption = tx("lessonspart6b_agora_com_parenteses_direita_19")),
+            Visual(VK.AST, input = tx("lessonspart6b_b_c_x"), caption = tx("lessonspart6b_28_nos_na_derivacao_7")),
             Steps(
-                "Regras que você acabou de ver acontecendo",
+                tx("lessonspart6b_regras_que_voce_acabou_ver"),
                 listOf(
-                    "Folha id/num → **Var** ou **Num** (um nó só, sem a corrente F → id).",
-                    "Produção com operador (E → E + T) → **BinOp** com o operador e os dois filhos.",
-                    "Produção de corrente (E → T, T → F) → nenhum nó novo: só repassa o filho.",
+                    tx("lessonspart6b_folha_id_num_var_ou"),
+                    tx("lessonspart6b_producao_com_operador_t_binop"),
+                    tx("lessonspart6b_producao_corrente_t_t_f"),
                     "F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.",
-                    "Em expressões binárias: nós da AST = 2 × (nº de operadores) + 1.",
+                    tx("lessonspart6b_em_expressoes_binarias_nos_ast"),
                 ),
             ),
-            Visual(VK.MINILANG, input = "m = a;\nif (b > m) { m = b; }\nprint(m);", caption = "Comandos também viram nós (Atrib, Se...). O gerador anda nessa árvore e emite os desvios. Com a=4 e b=7, imprime 7."),
-            Callout(BRAIN_POWER, "Uma expressão com 10 operadores binários: quantos nós tem a AST? E por que a árvore de derivação sempre tem MAIS nós que isso?"),
-            Reveal("Resposta", "21 nós (10 BinOp + 11 folhas). A árvore de derivação tem, no mínimo, um nó de não-terminal para cada nó da AST, mais os nós de corrente, de parênteses e dos próprios tokens de operador como folhas."),
+            Visual(VK.MINILANG, input = "m = a;\nif (b > m) { m = b; }\nprint(m);", caption = tx("lessonspart6b_comandos_tambem_viram_nos_atrib")),
+            Callout(BRAIN_POWER, tx("lessonspart6b_expressao_com_10_operadores_binarios")),
+            Reveal(tx("comum_resposta"), tx("lessonspart6b_21_nos_10_binop_11")),
         ),
     ),
 
     // ───────────────────────────── WORKED ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.WORKED, "Construindo a AST na descida recursiva",
+        Skill.AST_BUILD, Style.WORKED, tx("lessonspart6b_construindo_ast_na_descida_recursiva"),
         listOf(
-            Say(PROF, "Lembra do parser descendente recursivo, com um método por não-terminal? A mudança é pequena: em vez de void, cada método **devolve uma Expr**."),
-            Code(AstTools.javaClasses, "As classes da AST (Java, como no trabalho prático)"),
-            Code(AstTools.javaParserBuildingAst, "O parser que CONSTRÓI a AST. O while em expr() e termo() garante associatividade à esquerda."),
+            Say(PROF, tx("lessonspart6b_lembra_parser_descendente_recursivo_com")),
+            Code(AstTools.javaClasses, tx("lessonspart6b_classes_ast_java_como_no")),
+            Code(AstTools.javaParserBuildingAst, tx("lessonspart6b_parser_que_constroi_ast_while")),
             Steps(
-                "Rastreando '2 * x + y'",
+                tx("lessonspart6b_rastreando_2_x_y"),
                 listOf(
                     "expr() chama termo(); termo() chama fator().",
-                    "fator() vê '2' (número) → devolve **new Num(2)**. Em termo(), e = Num(2).",
-                    "termo() vê '*': casa, chama fator(), que devolve **Var(x)**. e = **new BinOp('*', Num(2), Var(x))**.",
-                    "termo() vê '+', que não é * nem /: sai do while e devolve o BinOp('*').",
-                    "De volta em expr(): e = BinOp('*'). Vê '+': casa, chama termo(), que devolve **Var(y)**.",
-                    "e = **new BinOp('+', BinOp('*', Num(2), Var(x)), Var(y))**. Fim da entrada: devolve e.",
+                    tx("lessonspart6b_fator_ve_2_numero_devolve"),
+                    tx("lessonspart6b_termo_ve_casa_chama_fator"),
+                    tx("lessonspart6b_termo_ve_que_nao_nem"),
+                    tx("lessonspart6b_volta_em_expr_binop_ve"),
+                    tx("lessonspart6b_new_binop_binop_num_2"),
                 ),
             ),
-            Visual(VK.AST, input = "2 * x + y", caption = "Confira: 13 nós na derivação, 5 na AST, e o código Java gerado."),
-            Callout(WATCH_OUT, "A linha mais importante é `e = new BinOp(op, e, termo());`: o resultado ANTERIOR vira o filho ESQUERDO do novo nó. É assim que 'a - b - c' vira (a - b) - c. Se você escrever recursão (`e = new BinOp(op, e, expr())`), a árvore fica pendurada para a direita e a subtração dá errado."),
-            Text("Agora é com você (exemplo esmaecido): **a - ( b - c )**."),
-            Reveal("O que fator() devolve ao encontrar '('?", "Casa '(', chama expr() — que monta new BinOp('-', Var(b), Var(c)) — casa ')' e devolve ESSE BinOp. Nenhum nó de parêntese é criado."),
-            Reveal("Escreva o código Java completo da AST.", "new BinOp('-', new Var(\"a\"), new BinOp('-', new Var(\"b\"), new Var(\"c\")))"),
-            Reveal("Quantos nós tem cada árvore?", "Árvore de derivação: 19 nós. AST: 5 nós (2 BinOp + 3 Var)."),
-            Visual(VK.AST, input = "a - ( b - c )", caption = "Confira suas respostas."),
-            Callout(EXAM_TIP, "Questão comum: 'dada a gramática com ações semânticas, desenhe a AST de tal expressão'. Faça em dois passos: primeiro a árvore de derivação (rascunho), depois risque correntes e parênteses e troque cada produção com operador por um BinOp."),
+            Visual(VK.AST, input = "2 * x + y", caption = tx("lessonspart6b_confira_13_nos_na_derivacao")),
+            Callout(WATCH_OUT, tx("lessonspart6b_linha_mais_importante_new_binop")),
+            Text(tx("lessonspart6b_agora_com_voce_exemplo_esmaecido")),
+            Reveal(tx("lessonspart6b_que_fator_devolve_ao_encontrar"), tx("lessonspart6b_casa_chama_expr_que_monta")),
+            Reveal(tx("lessonspart6b_escreva_codigo_java_completo_ast"), tx("lessonspart6b_new_binop_new_var_new")),
+            Reveal(tx("lessonspart6b_quantos_nos_tem_cada_arvore"), tx("lessonspart6b_arvore_derivacao_19_nos_ast")),
+            Visual(VK.AST, input = tx("lessonspart6b_b_c_2"), caption = tx("comum_confira_suas_respostas")),
+            Callout(EXAM_TIP, tx("lessonspart6b_questao_comum_dada_gramatica_com")),
         ),
     ),
 
     // ───────────────────────────── SOCRATIC ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.SOCRATIC, "O que o compilador realmente precisa saber?",
+        Skill.AST_BUILD, Style.SOCRATIC, tx("lessonspart6b_que_compilador_realmente_precisa_saber"),
         listOf(
-            Say(PROF, "Hoje eu pergunto, você descobre. Comece olhando a árvore de derivação de '( a + b ) * c'."),
-            Visual(VK.AST, input = "( a + b ) * c", caption = "18 nós na derivação. Olhe primeiro só o lado esquerdo."),
+            Say(PROF, tx("lessonspart6b_hoje_eu_pergunto_voce_descobre")),
+            Visual(VK.AST, input = tx("comum_b_c_3"), caption = tx("lessonspart6b_18_nos_na_derivacao_olhe")),
             Predict(
-                "Para GERAR CÓDIGO dessa expressão, de que informação o compilador precisa?",
-                listOf("Quais operações, em que ordem, sobre quais operandos", "Quais não-terminais foram usados", "Onde estavam os parênteses no texto", "Quantos espaços havia entre os tokens"),
+                tx("lessonspart6b_para_gerar_codigo_dessa_expressao"),
+                listOf(tx("lessonspart6b_quais_operacoes_em_que_ordem"), tx("lessonspart6b_quais_nao_terminais_foram_usados"), tx("lessonspart6b_onde_estavam_parenteses_no_texto"), tx("lessonspart6b_quantos_espacos_havia_entre_tokens")),
                 0,
-                "Gerar t1 = a + b; t2 = t1 * c só exige operações, operandos e ordem. Todo o resto era andaime para o PARSER decidir essa ordem.",
+                tx("lessonspart6b_gerar_t1_b_t2_t1"),
             ),
             Predict(
-                "Se a AST não tem parênteses, onde está guardada a informação 'some antes de multiplicar'?",
-                listOf("Num campo prioridade em cada nó", "Na forma da árvore: o + é FILHO do *", "Numa tabela à parte", "Ela se perde"),
+                tx("lessonspart6b_se_ast_nao_tem_parenteses"),
+                listOf(tx("lessonspart6b_num_campo_prioridade_em_cada"), tx("lessonspart6b_na_forma_arvore_filho"), tx("lessonspart6b_numa_tabela_parte"), tx("lessonspart6b_ela_se_perde")),
                 1,
-                "Quem está mais fundo é avaliado primeiro (pós-ordem). A estrutura É a precedência.",
+                tx("lessonspart6b_quem_esta_mais_fundo_avaliado"),
             ),
-            Say(BYTE, "E o nó T no meio da corrente E → T → F? Ele não faz nada?"),
-            Reveal("Faz alguma coisa?", "Na derivação, ele registra que a gramática passou pelo nível de precedência do *. Mas, como não houve nenhum *, não há operação a representar. Na AST, ele simplesmente some: o método termo() devolve o que fator() devolveu."),
+            Say(BYTE, tx("lessonspart6b_no_t_no_meio_corrente")),
+            Reveal(tx("lessonspart6b_faz_alguma_coisa"), tx("lessonspart6b_na_derivacao_ele_registra_que")),
             Predict(
-                "No TP, seu grupo gera assembly direto no parser. Aí surge: 'a variável x é usada antes de ser declarada mais abaixo no arquivo'. O que fica difícil?",
-                listOf("Nada", "Você já emitiu código para x antes de conhecer a declaração; seria preciso voltar atrás", "O analisador léxico quebra"),
+                tx("lessonspart6b_no_tp_seu_grupo_gera"),
+                listOf(tx("comum_nada"), tx("lessonspart6b_voce_ja_emitiu_codigo_para"), tx("lessonspart6b_analisador_lexico_quebra")),
                 1,
-                "Tradução direta é UMA passada só. Com uma AST, você faz uma passada para coletar declarações e checar tipos e OUTRA para gerar código, quantas forem necessárias.",
+                tx("lessonspart6b_traducao_direta_passada_so_com"),
             ),
-            Reveal("Cite duas outras vantagens de construir a AST antes de gerar código.", "1) Separação de responsabilidades: o parser só reconhece e monta; a semântica e o gerador vivem em métodos das classes (avaliar, verificarTipo, gerar), mais fáceis de testar. 2) Otimizações como dobra de constantes viram 'trocar um BinOp(Num, Num) por um Num' na árvore. Bônus: dá para imprimir a AST e depurar."),
+            Reveal(tx("lessonspart6b_cite_duas_outras_vantagens_construir"), tx("lessonspart6b_1_separacao_responsabilidades_parser_so")),
             Predict(
-                "E comandos, como if e while? Eles viram o quê na AST?",
-                listOf("Somem, como os parênteses", "Nós próprios, como Se(cond, entao, senao) e Enquanto(cond, corpo)", "Folhas Var"),
+                tx("lessonspart6b_comandos_como_if_while_eles"),
+                listOf(tx("lessonspart6b_somem_como_parenteses"), tx("lessonspart6b_nos_proprios_como_se_cond"), tx("lessonspart6b_folhas_var")),
                 1,
-                "Cada construção com significado vira uma classe. Palavras-chave, chaves e ponto e vírgula somem; condição e corpo ficam como filhos.",
+                tx("lessonspart6b_cada_construcao_com_significado_vira"),
             ),
-            Visual(VK.MINILANG, input = "i = 0;\ns = 0;\nwhile (i < 4) { s = s + i; i = i + 1; }\nprint(s);", caption = "Um Enquanto com Bloco de duas Atrib dentro. O gerador percorre a árvore e produz o laço com desvios. Imprime 6."),
-            Callout(FIRESIDE, "Árvore de derivação: 'Eu tenho TUDO, cada detalhe!' AST: 'E por isso ninguém aguenta andar em você três vezes.' Árvore de derivação: 'Hmpf. Pelo menos o parser me ama.' AST: 'O parser te usa e me entrega para o resto do compilador.'"),
+            Visual(VK.MINILANG, input = "i = 0;\ns = 0;\nwhile (i < 4) { s = s + i; i = i + 1; }\nprint(s);", caption = tx("lessonspart6b_enquanto_com_bloco_duas_atrib")),
+            Callout(FIRESIDE, tx("lessonspart6b_arvore_derivacao_eu_tenho_tudo")),
         ),
     ),
 
     // ───────────────────────────── FORMAL ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.FORMAL, "AST: definição de prova",
+        Skill.AST_BUILD, Style.FORMAL, tx("lessonspart6b_ast_definicao_prova"),
         listOf(
-            Text("**Árvore de derivação (concreta)**: raiz = símbolo inicial; cada nó interno é um não-terminal A cujos filhos são o lado direito de uma produção A → α usada; folhas, lidas da esquerda para a direita, formam a sentença."),
-            Text("**Árvore sintática abstrata (AST)**: cada nó interno é um **operador ou construção** da linguagem e seus filhos são os **operandos/componentes** com significado. Omite não-terminais de cadeia (A → B), parênteses, pontuação e ε. A AST não é única da gramática: é uma escolha de projeto do compilador."),
-            Code(P6_AST_CMDS, "Comandos como classes (junto com Expr, Num, Var, BinOp)"),
-            Text("**Construção dirigida pela sintaxe**: cada produção recebe uma regra semântica que sintetiza o atributo `nodo` (a AST do lado esquerdo) a partir dos `nodo` dos filhos. É uma definição **S-atribuída**: os atributos sobem da folha para a raiz."),
-            Code(P6_AST_BISON, "No Bison (ascendente): \$\$ é o valor do lado esquerdo; \$1, \$2, \$3 os dos símbolos do lado direito"),
+            Text(tx("lessonspart6b_arvore_derivacao_concreta_raiz_simbolo")),
+            Text(tx("lessonspart6b_arvore_sintatica_abstrata_ast_cada")),
+            Code(P6_AST_CMDS, tx("lessonspart6b_comandos_como_classes_junto_com")),
+            Text(tx("lessonspart6b_construcao_dirigida_pela_sintaxe_cada")),
+            Code(P6_AST_BISON, tx("lessonspart6b_no_bison_ascendente_valor_lado")),
             Predict(
                 "Na regra `fator : '(' exp ')' { \$\$ = \$2; }`, por que \$2?",
-                listOf("Porque o parêntese é o 2º símbolo", "Porque exp é o 2º símbolo do lado direito, e a AST do fator é simplesmente a AST de exp", "Para criar um nó de parênteses"),
+                listOf(tx("lessonspart6b_porque_parentese_2o_simbolo"), tx("lessonspart6b_porque_exp_2o_simbolo_lado"), tx("lessonspart6b_para_criar_no_parenteses")),
                 1,
-                "'(' é \$1, exp é \$2, ')' é \$3. Repassar \$2 é exatamente 'jogar fora o parêntese'.",
+                tx("lessonspart6b_1_exp_2_3_repassar"),
             ),
-            Text("**Descendente recursivo**: cada método de não-terminal devolve a AST do que reconheceu. Para A → A op B (recursiva à esquerda, eliminada como A → B (op B)*), use um **laço** que acumula: `e = new BinOp(op, e, B())`, preservando a associatividade à esquerda."),
-            Code(P6_AST_VISIT, "Percorrendo a AST: cada fase é um método (ou um Visitor). Repare na pós-ordem: filhos antes do pai."),
-            Callout(REAL_WORLD, "Com muitas fases, em vez de pôr avaliar/gerar/verificarTipo em cada classe, usa-se o padrão **Visitor**: uma classe por fase (VerificadorDeTipos, GeradorMips) com um método visitar por tipo de nó. javac, Roslyn (C#) e o Clang são organizados em torno da AST assim."),
-            Callout(EXAM_TIP, "Três perguntas que caem: (1) desenhar a AST de uma expressão (lembre: sem parênteses, associativa à esquerda); (2) escrever as ações \$\$ = new ... de uma gramática Bison; (3) 'diferencie árvore de derivação de AST' — responda com a definição + um exemplo com contagem de nós."),
-            Reveal("Defina AST e cite três coisas que ela descarta em relação à árvore de derivação.", "Árvore em que nós internos são operadores/construções e filhos são operandos com significado. Descarta: não-terminais de cadeia (E → T → F), parênteses/pontuação e produções ε (e, com elas, as palavras-chave que só marcavam a construção)."),
+            Text(tx("lessonspart6b_descendente_recursivo_cada_metodo_nao")),
+            Code(P6_AST_VISIT, tx("lessonspart6b_percorrendo_ast_cada_fase_metodo")),
+            Callout(REAL_WORLD, tx("lessonspart6b_com_muitas_fases_em_vez")),
+            Callout(EXAM_TIP, tx("lessonspart6b_tres_perguntas_que_caem_1")),
+            Reveal(tx("lessonspart6b_defina_ast_cite_tres_coisas"), tx("lessonspart6b_arvore_em_que_nos_internos")),
         ),
     ),
 
     // ───────────────────────────── MNEMONIC ─────────────────────────────
     Lesson(
-        Skill.AST_BUILD, Style.MNEMONIC, "A árvore de dieta",
+        Skill.AST_BUILD, Style.MNEMONIC, tx("lessonspart6b_arvore_dieta"),
         listOf(
-            Callout(MNEMONIC, "**AST = Árvore Sem Tralha.** Tira três tralhas: **C**orrentes (E → T → F), **P**arênteses (e pontuação) e **E**psilons. 'Corta o CPE.'"),
-            Text("📍 **Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** 🪵, uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso."),
-            Callout(MNEMONIC, "**Parênteses são andaimes**: indispensáveis enquanto o prédio está sendo construído (parsing), retirados quando ele fica pronto. A forma do prédio (a árvore) já guarda o que eles seguravam."),
-            Callout(MNEMONIC, "**Corrente de WhatsApp**: E → T → F → a é como mensagem encaminhada cinco vezes. O conteúdo é o 'a'; os encaminhamentos não acrescentam nada. Na AST: Var(a), e só."),
-            Callout(MNEMONIC, "**Quem está mais fundo trabalha primeiro.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência."),
+            Callout(MNEMONIC, tx("lessonspart6b_ast_arvore_sem_tralha_tira")),
+            Text(tx("lessonspart6b_palacio_memoria_na_cidade_semantica")),
+            Callout(MNEMONIC, tx("lessonspart6b_parenteses_sao_andaimes_indispensaveis_enqua")),
+            Callout(MNEMONIC, tx("lessonspart6b_corrente_whatsapp_t_f_como")),
+            Callout(MNEMONIC, tx("lessonspart6b_quem_esta_mais_fundo_trabalha")),
             Predict(
-                "Qual linha de código é o 'segredo' da associatividade à esquerda no parser descendente?",
+                tx("lessonspart6b_qual_linha_codigo_segredo_associatividade"),
                 listOf("return new BinOp(op, termo(), expr());", "e = new BinOp(op, e, termo()); dentro de um while", "if (tok.equals(\"(\")) return expr();"),
                 1,
-                "'O velho vai para a esquerda': o resultado acumulado vira filho esquerdo do novo nó, a cada volta do laço.",
+                tx("lessonspart6b_velho_vai_para_esquerda_resultado"),
             ),
-            Callout(MNEMONIC, "**Bison em três palavras: 'filho vira pai'.** \$\$ = new BinOp('+', \$1, \$3) — os filhos \$1 e \$3 se tornam filhos do nó novo \$\$. Corrente? \$\$ = \$1. Parêntese? \$\$ = \$2."),
-            Callout(WATCH_OUT, "Contrastes que confundem: **árvore de derivação** tem não-terminais e todos os tokens; a **AST** tem só operadores e operandos. **AST** é estrutura; **TAC** é uma lista de instruções gerada a partir dela. **Parse tree** = árvore de derivação = árvore sintática concreta (três nomes, uma coisa)."),
-            Visual(VK.AST, input = "( a + b ) * c", caption = "Corta o CPE: conte as correntes, os parênteses e veja 18 virar 5."),
-            Reveal("Sem olhar: o que é jogado fora, o que fica e onde mora a precedência?", "Fora: correntes, parênteses/pontuação, ε. Fica: operadores (BinOp) e operandos (Var, Num), e construções (Atrib, Se, Enquanto, Bloco). Precedência e associatividade moram na FORMA da árvore."),
-            Reveal("Por que vale a pena montar a AST no TP em vez de gerar código direto no parser?", "Porque aí o compilador pode percorrer o programa várias vezes (tipos, depois código), com cada fase separada e testável, e otimizar mexendo na árvore. Tradução direta é uma passada só, sem volta."),
+            Callout(MNEMONIC, tx("lessonspart6b_bison_em_tres_palavras_filho")),
+            Callout(WATCH_OUT, tx("lessonspart6b_contrastes_que_confundem_arvore_derivacao")),
+            Visual(VK.AST, input = tx("comum_b_c_3"), caption = tx("lessonspart6b_corta_cpe_conte_correntes_parenteses")),
+            Reveal(tx("lessonspart6b_sem_olhar_que_jogado_fora"), tx("lessonspart6b_fora_correntes_parenteses_pontuacao_fica")),
+            Reveal(tx("lessonspart6b_por_que_vale_pena_montar"), tx("lessonspart6b_porque_ai_compilador_pode_percorrer")),
         ),
     ),
 )

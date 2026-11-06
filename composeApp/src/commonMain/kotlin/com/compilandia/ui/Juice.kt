@@ -68,6 +68,7 @@ import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /**
  * "Juice": a camada que faz o jogo PARECER um jogo — confete, tremida, combo, mascote reagindo,
@@ -177,7 +178,7 @@ fun BoxScope.JuiceOverlay() {
         Box(
             Modifier.scale(pulse).clip(RoundedCornerShape(50)).background(Brush3(c)).border(3.dp, Palette.onAccent, RoundedCornerShape(50))
                 .padding(horizontal = 18.dp, vertical = 6.dp)
-        ) { Text("🔥 COMBO x$c", color = Palette.onAccent, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = LocalFonts.current.display) }
+        ) { Text(tx("juice_combo_x_1", c), color = Palette.onAccent, fontSize = 20.sp, fontWeight = FontWeight.Bold, fontFamily = LocalFonts.current.display) }
     }
 
     // mascote
@@ -189,7 +190,8 @@ fun BoxScope.JuiceOverlay() {
         visible = false
     }
     AnimatedVisibility(
-        visible = visible && Juice.mood != null && !Juice.inArena, modifier = Modifier.align(Alignment.BottomEnd).padding(end = 8.dp, bottom = 70.dp),
+        visible = visible && Juice.mood != null && !Juice.inArena, // C3: no meio da lateral, longe dos botões que moram embaixo.
+        modifier = Modifier.align(Alignment.CenterEnd).padding(end = 8.dp),
         enter = slideInHorizontally { it } + fadeIn(), exit = slideOutHorizontally { it } + fadeOut(),
     ) {
         val m = Juice.mood ?: Juice.Mood.HAPPY

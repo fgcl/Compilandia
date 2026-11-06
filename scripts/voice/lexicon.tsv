@@ -83,3 +83,6 @@ yylex	uai uai léx
 yylval	uai uai vál
 gcc	gê cê cê
 lexer	léxer
+P	pê
+Q	quê
+R	érre

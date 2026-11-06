@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * Um "Bison de bolso": lê uma especificação no formato Yacc/Bison,
  * monta a tabela LALR(1) com precedência/associatividade e executa as
@@ -56,7 +58,7 @@ class MiniBison private constructor(
         for (st in steps) {
             when (val a = st.action) {
                 is LRAction.Shift -> {
-                    out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, "empilha ${st.input.first()} e vai para o estado ${a.state}", null)
+                    out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, tx("minibison_empilha_1_vai_para_estado", st.input.first(), a.state), null)
                     valores += if (toks[k].first == "NUM") toks[k].second else null
                     k++
                 }
@@ -74,12 +76,12 @@ class MiniBison private constructor(
                         val trocado = Regex("\\$(\\d+)").replace(lado) { m -> args.getOrNull(m.groupValues[1].toInt() - 1)?.toString() ?: "?" }
                         "\$\$ = $trocado = ${v ?: "?"}"
                     }
-                    out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, "reduz $p", conta)
+                    out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, tx("minibison_reduz_1", p), conta)
                     repeat(n) { valores.removeAt(valores.lastIndex) }
                     valores += v
                 }
-                LRAction.Accept -> out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, "aceita: o valor final é ${valores.lastOrNull() ?: "?"}", null)
-                null -> out += Quadro(st.states, st.symbols, valores.toList(), st.input, null, "erro de sintaxe: nada a fazer com ${st.input.firstOrNull() ?: "o fim"} no estado ${st.states.last()}", null)
+                LRAction.Accept -> out += Quadro(st.states, st.symbols, valores.toList(), st.input, a, tx("minibison_aceita_valor_final_1", valores.lastOrNull() ?: "?"), null)
+                null -> out += Quadro(st.states, st.symbols, valores.toList(), st.input, null, tx("minibison_erro_sintaxe_nada_fazer_com", st.input.firstOrNull() ?: tx("minibison_fim"), st.states.last()), null)
             }
         }
         return out
@@ -94,7 +96,7 @@ class MiniBison private constructor(
                 .replace(Regex("%\\{[\\s\\S]*?%\\}"), "")
                 .replace(Regex("%union\\s*\\{[\\s\\S]*?\\}"), "")
             val parts = cleaned.split(Regex("(?m)^\\s*%%\\s*$"))
-            if (parts.size < 2) throw SpecError("Faltou o separador %% entre as declarações e as regras")
+            if (parts.size < 2) throw SpecError(tx("minibison_faltou_separador_entre_declaracoes_regras"))
             val decls = parts[0]
             val rules = parts[1]
 
@@ -115,7 +117,7 @@ class MiniBison private constructor(
                     }
                     "%start" -> start = words.getOrNull(1)
                     "%type", "%define", "%expect", "%locations", "%error-verbose", "%debug" -> {}
-                    else -> throw SpecError("Declaração desconhecida: '$line'")
+                    else -> throw SpecError(tx("minibison_declaracao_desconhecida_1", line))
                 }
             }
 
@@ -132,9 +134,9 @@ class MiniBison private constructor(
                 val ls = i
                 while (i < body.length && (body[i].isLetterOrDigit() || body[i] == '_')) i++
                 val lhs = body.substring(ls, i)
-                if (lhs.isEmpty()) throw SpecError("Esperava o nome de uma regra perto de '${body.substring(i).take(15)}'")
+                if (lhs.isEmpty()) throw SpecError(tx("minibison_esperava_nome_regra_perto_1", body.substring(i).take(15)))
                 skipWs()
-                if (i >= body.length || body[i] != ':') throw SpecError("Faltou ':' depois de '$lhs'")
+                if (i >= body.length || body[i] != ':') throw SpecError(tx("minibison_faltou_depois_1", lhs))
                 i++
                 if (start == null) start = lhs
                 // alternativas
@@ -155,11 +157,11 @@ class MiniBison private constructor(
                                     if (body[i] == '}') { depth--; if (depth == 0) break }
                                     i++
                                 }
-                                if (i >= body.length) throw SpecError("Ação sem '}'")
+                                if (i >= body.length) throw SpecError(tx("minibison_acao_sem"))
                                 action = body.substring(s + 1, i).trim(); i++
                             }
                             c == '\'' -> {
-                                if (i + 2 >= body.length || body[i + 2] != '\'') throw SpecError("Literal mal formado perto de ${body.substring(i).take(5)}")
+                                if (i + 2 >= body.length || body[i + 2] != '\'') throw SpecError(tx("minibison_literal_mal_formado_perto_1", body.substring(i).take(5)))
                                 syms += body.substring(i, i + 3); i += 3
                             }
                             body.startsWith("%prec", i) -> {
@@ -172,7 +174,7 @@ class MiniBison private constructor(
                                 while (i < body.length && (body[i].isLetterOrDigit() || body[i] == '_')) i++
                                 syms += body.substring(s, i)
                             }
-                            else -> throw SpecError("Caractere inesperado '$c' na regra '$lhs'")
+                            else -> throw SpecError(tx("minibison_caractere_inesperado_1_na_regra", c, lhs))
                         }
                     }
                     val pid = prods.size
@@ -182,7 +184,7 @@ class MiniBison private constructor(
                     if (body[i] == ';') { i++; break } else i++
                 }
             }
-            if (prods.isEmpty()) throw SpecError("Nenhuma regra encontrada")
+            if (prods.isEmpty()) throw SpecError(tx("minibison_nenhuma_regra_encontrada"))
             val ordered = prods.filter { it.lhs == start } + prods.filter { it.lhs != start }
             val idMap = ordered.withIndex().associate { it.value.id to it.index }
             val g = Grammar(start!!, ordered)
@@ -190,7 +192,7 @@ class MiniBison private constructor(
             val ruleNames = g.nonTerminals.toSet()
             for (p in g.productions) for (s in p.rhs) {
                 if (s !in ruleNames && !s.startsWith("'") && s !in tokens)
-                    throw SpecError("'$s' não é regra nem token declarado (faltou %token $s?)")
+                    throw SpecError(tx("minibison_1_nao_regra_nem_token", s, s))
             }
             // +1 por causa da produção aumentada S' → S
             val explicit = precOverride.entries.associate { idMap.getValue(it.key) + 1 to it.value }
@@ -247,8 +249,8 @@ class MiniBison private constructor(
         val unknown = terminals.firstOrNull { it !in grammar.terminals }
         val result = LRParser.parse(table, terminals)
         if (!result.accepted) {
-            val msg = if (unknown != null) "o token $unknown não aparece em nenhuma regra" else
-                "syntax error (${result.steps.lastOrNull()?.note ?: ""})"
+            val msg = if (unknown != null) tx("minibison_token_1_nao_aparece_em", unknown) else
+                tx("minibison_syntax_error_1", result.steps.lastOrNull()?.note ?: "")
             return RunResult(false, null, result.steps, null, msg, emptyList())
         }
         // Reexecuta as reduções com valores semânticos (pilha de valores paralela, como no Bison)
@@ -267,16 +269,16 @@ class MiniBison private constructor(
                         val act = actions[a.prodId - 1]
                         val v = if (act.isNullOrBlank()) args.firstOrNull() ?: 0L else ActionEval.eval(act, args)
                         values += v
-                        val shown = if (act.isNullOrBlank()) "(padrão) \$\$ = \$1" else act
+                        val shown = if (act.isNullOrBlank()) tx("minibison_padrao_1") else act
                         reductions += "$p   ⇒  $shown  →  $v"
                     }
                     else -> {}
                 }
             }
         } catch (e: ArithmeticException) {
-            return RunResult(false, null, result.steps, result.tree, "erro na ação: ${e.message}", reductions)
+            return RunResult(false, null, result.steps, result.tree, tx("minibison_erro_na_acao_1", e.message), reductions)
         } catch (e: IllegalArgumentException) {
-            return RunResult(false, null, result.steps, result.tree, "erro na ação: ${e.message}", reductions)
+            return RunResult(false, null, result.steps, result.tree, tx("minibison_erro_na_acao_1", e.message), reductions)
         }
         return RunResult(true, values.lastOrNull(), result.steps, result.tree, null, reductions)
     }
@@ -294,16 +296,16 @@ object ActionEval {
         lateinit var expr: () -> Long
         fun atom(): Long {
             ws()
-            require(i < src.length) { "ação incompleta" }
+            require(i < src.length) { tx("minibison_acao_incompleta") }
             val c = src[i]
             return when {
-                c == '(' -> { i++; val v = expr(); ws(); require(i < src.length && src[i] == ')') { "faltou ')'" }; i++; v }
+                c == '(' -> { i++; val v = expr(); ws(); require(i < src.length && src[i] == ')') { tx("minibison_faltou") }; i++; v }
                 c == '-' -> { i++; -atom() }
                 c == '$' -> {
                     i++; val s = i
                     while (i < src.length && src[i].isDigit()) i++
                     val n = src.substring(s, i).toIntOrNull() ?: throw IllegalArgumentException("use \$1, \$2, ...")
-                    require(n in 1..args.size) { "\$$n não existe: a regra só tem ${args.size} símbolo(s)" }
+                    require(n in 1..args.size) { tx("minibison_1_nao_existe_regra_so", n, args.size) }
                     args[n - 1]
                 }
                 c.isDigit() -> { val s = i; while (i < src.length && src[i].isDigit()) i++; src.substring(s, i).toLong() }
@@ -355,7 +357,7 @@ object ActionEval {
         }
         val v = expr()
         ws()
-        require(i == src.length) { "sobrou '${src.substring(i)}' na ação" }
+        require(i == src.length) { tx("minibison_sobrou_1_na_acao", src.substring(i)) }
         return v
     }
 }
@@ -382,52 +384,52 @@ object BisonChallenges {
 
     val all = listOf(
         Challenge(
-            "b1", "A calculadora confusa",
-            "A calculadora do Byte diz que 2+3*4 = 20. O Bison avisou conflitos, mas ninguém leu. Ensine precedência a ele!",
+            "b1", tx("minibison_calculadora_confusa"),
+            tx("minibison_calculadora_byte_diz_que_2"),
             "%token NUM\n%%\n$CALC_RULES\n",
             listOf("2+3*4" to 14L, "2*3+4" to 10L, "(2+3)*4" to 20L),
             true,
-            "Linhas de %left mais EMBAIXO ligam MAIS FORTE. Coloque '+' '-' numa linha e '*' '/' na de baixo."
+            tx("minibison_linhas_left_mais_embaixo_ligam")
         ),
         Challenge(
-            "b2", "Menos com menos",
-            "8-3-2 deveria dar 3 (associa à esquerda: (8-3)-2). Mas a calculadora está achando 7!",
+            "b2", tx("minibison_menos_com_menos"),
+            tx("minibison_8_3_2_deveria_dar"),
             "%token NUM\n%right '+' '-'\n%right '*' '/'\n%%\n$CALC_RULES\n",
             listOf("8-3-2" to 3L, "100/10/5" to 2L, "1+2*3" to 7L),
             true,
-            "%right faz a-b-c virar a-(b-c). Subtração e divisão associam à ESQUERDA."
+            tx("minibison_right_faz_b_c_virar")
         ),
         Challenge(
-            "b3", "Torre de potências",
-            "Adicione o operador '^' (potência). Ele liga mais forte que * e associa à DIREITA: 2^3^2 = 2^9 = 512.",
+            "b3", tx("minibison_torre_potencias"),
+            tx("minibison_adicione_operador_potencia_ele_liga"),
             "%token NUM\n%left '+' '-'\n%left '*' '/'\n%%\n$CALC_RULES\n",
             listOf("2^3^2" to 512L, "2*3^2" to 18L, "(2^3)^2" to 64L),
             true,
-            "Você precisa de: uma linha %right '^' (por último!) e uma regra  expr '^' expr { $$ = $1 ^ $3; }"
+            tx("minibison_voce_precisa_linha_right_por")
         ),
         Challenge(
-            "b4", "O menos solitário",
-            "Faça -5+2 dar -3. O menos unário precisa de precedência própria: use %prec.",
+            "b4", tx("minibison_menos_solitario"),
+            tx("minibison_faca_5_2_dar_3"),
             "%token NUM\n%left '+' '-'\n%left '*' '/'\n%%\n$CALC_RULES\n",
             listOf("-5+2" to -3L, "-2*3" to -6L, "4--1" to 5L),
             true,
-            "Declare %right UMINUS por último e a regra:  '-' expr %prec UMINUS { $$ = -$2; }"
+            tx("minibison_declare_right_uminus_por_ultimo")
         ),
         Challenge(
-            "b5", "Gramática sem ambiguidade",
-            "Outro jeito de resolver: em vez de %left, reescreva a gramática em camadas (expr, term, fator). Sem NENHUMA declaração de precedência!",
+            "b5", tx("minibison_gramatica_sem_ambiguidade"),
+            tx("minibison_outro_jeito_resolver_em_vez"),
             "%token NUM\n%%\nexpr : expr '+' expr { $$ = $1 + $3; }\n     | expr '*' expr { $$ = $1 * $3; }\n     | NUM\n     ;\n",
             listOf("2+3*4" to 14L, "2*3+4" to 10L, "1+1+1" to 3L),
             true,
-            "expr : expr '+' term | term ;   term : term '*' fator | fator ;   fator : NUM ;  (com as ações!)"
+            tx("minibison_expr_expr_term_term_term")
         ),
         Challenge(
-            "b6", "Erro de propósito",
-            "Faça 1<2<3 dar ERRO de sintaxe (comparações não se encadeiam). Os testes com um único '<' devem funcionar (valor 1 = verdadeiro).",
+            "b6", tx("minibison_erro_proposito"),
+            tx("minibison_faca_1_2_3_dar"),
             "%token NUM\n%left '<'\n%left '+'\n%%\nexpr : expr '<' expr { $$ = $1 < $3; }\n     | expr '+' expr { $$ = $1 + $3; }\n     | NUM\n     ;\n",
             listOf("1<2" to 1L, "1+1<3" to 1L, "1<2<3" to null),
             true,
-            "%left '<' deixa 1<2<3 virar (1<2)<3. Troque por %nonassoc '<': aí a<b<c vira erro de sintaxe, como em várias linguagens."
+            tx("minibison_left_deixa_1_2_3")
         ),
     )
 
@@ -435,20 +437,20 @@ object BisonChallenges {
 
     fun check(ch: Challenge, spec: String): Verdict {
         val bison = try { MiniBison.compile(spec) } catch (e: Exception) {
-            return Verdict(false, listOf(false to "Erro na especificação: ${e.message}"))
+            return Verdict(false, listOf(false to tx("minibison_erro_na_especificacao_1", e.message)))
         }
         val lines = mutableListOf<Pair<Boolean, String>>()
         if (ch.requireNoConflicts) {
             val ok = bison.conflicts.isEmpty()
-            lines += ok to (if (ok) "Sem conflitos" else "${bison.conflicts.size} conflito(s): " +
-                bison.conflicts.take(2).joinToString("; ") { "estado ${it.state} com ${it.terminal} (${it.kind})" })
+            lines += ok to (if (ok) tx("minibison_sem_conflitos") else tx("minibison_1_conflito", bison.conflicts.size) +
+                bison.conflicts.take(2).joinToString("; ") { tx("minibison_estado_1_com_2_3", it.state, it.terminal, it.kind) })
         }
         for ((input, expected) in ch.tests) {
             val r = bison.run(input)
             val ok = if (expected == null) !r.accepted else r.accepted && r.value == expected
-            val got = if (r.accepted) "${r.value}" else "erro de sintaxe"
-            val exp = expected?.toString() ?: "erro de sintaxe"
-            lines += ok to "$input  →  $got   (esperado: $exp)"
+            val got = if (r.accepted) "${r.value}" else tx("minibison_erro_sintaxe")
+            val exp = expected?.toString() ?: tx("minibison_erro_sintaxe")
+            lines += ok to tx("minibison_1_2_esperado_3", input, got, exp)
         }
         return Verdict(lines.all { it.first }, lines)
     }

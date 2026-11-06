@@ -5,6 +5,7 @@ import com.compilandia.content.CalloutKind.*
 import com.compilandia.content.Speaker.*
 import com.compilandia.content.VisualKind as VK
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 // Guia do Trabalho Prático — capítulos 1 a 3 (planejamento, a linguagem Byteiro, o léxico).
 // Todo o código Java/MIPS do guia é original, escrito para a linguagem-exemplo Byteiro.
@@ -30,45 +31,29 @@ internal const val TP_PROGRAMA_CONTAGEM = """programa contagem {
 // ───────────────────────────── Capítulo 1 ─────────────────────────────
 
 internal val tpCap1 = GuideChapter(
-    1, "Visão geral e planejamento",
-    "O TP é um compilador inteiro — mas são cinco programinhas que conversam. Planeje antes de codar.",
+    1, tx("tpguidea_visao_geral_planejamento"),
+    tx("tpguidea_tp_compilador_inteiro_mas_sao"),
     Skill.PHASES,
     listOf(
-        Say(NARRADOR, "Semana 3 do semestre. O enunciado cai no Canvas: 'Construir um compilador completo para uma linguagem imperativa simples, em Java, gerando assembly MIPS executável no MARS'. Você lê duas vezes. Depois lê de novo."),
-        Say(BYTE, "Um compilador INTEIRO? Eu mal faço um for em Java sem olhar a internet…"),
-        Say(PROF, "Respira. Ninguém escreve um compilador de uma vez. Você vai escrever **cinco pedaços pequenos** que conversam entre si — e cada um você já treinou aqui no Compilândia."),
-        Visual(VK.PIPELINE, caption = "Cada estação da esteira vira uma classe Java no seu TP."),
+        Say(NARRADOR, tx("tpguidea_semana_3_semestre_enunciado_cai")),
+        Say(BYTE, tx("tpguidea_compilador_inteiro_eu_mal_faco")),
+        Say(PROF, tx("tpguidea_respira_ninguem_escreve_compilador_vez")),
+        Visual(VK.PIPELINE, caption = tx("tpguidea_cada_estacao_esteira_vira_classe")),
         Steps(
-            "As peças do TP (e o arquivo Java de cada uma)",
+            tx("tpguidea_pecas_tp_arquivo_java_cada"),
             listOf(
-                "🔪 **Léxico** (`Lexico.java`): texto → tokens. Um AFD escrito com `switch` de estados.",
-                "🌳 **Sintático** (`Sintatico.java`): tokens → 'o programa está bem formado?'. Descida recursiva: um método por não-terminal.",
-                "🏙️ **Semântico** (`TabelaSimbolos.java` + checagens dentro do `Sintatico`): declarou? o tipo bate?",
-                "⚒️ **Gerador** (também dentro do `Sintatico`): cada método emite o seu pedaço de assembly MIPS.",
-                "✨ **Otimização** (opcional/bônus): dobrar constantes, cortar código morto.",
-                "🧪 **Testes**: uma pasta de programas que DEVEM compilar e outra de programas que DEVEM dar erro.",
+                tx("tpguidea_lexico_lexico_java_texto_tokens"),
+                tx("tpguidea_sintatico_sintatico_java_tokens_programa"),
+                tx("tpguidea_semantico_tabelasimbolos_java_checagens_dent"),
+                tx("tpguidea_gerador_tambem_dentro_sintatico_cada"),
+                tx("tpguidea_otimizacao_opcional_bonus_dobrar_constantes"),
+                tx("tpguidea_testes_pasta_programas_que_devem"),
             ),
         ),
-        Text("Repare num detalhe: semântico e gerador moram **dentro** do sintático. É o esquema de **tradução dirigida pela sintaxe em uma passada**: o parser pede um token ao léxico quando precisa, confere a semântica na hora e já cospe o MIPS. Sem árvore gigante na memória, sem segunda passada. É o formato que cabe num TP de semestre."),
+        Text(tx("tpguidea_repare_num_detalhe_semantico_gerador")),
         Code(
-            """
-            byteiro/
-            ├── src/
-            │   ├── Main.java              // lê o .byt, chama o compilador, grava o .asm
-            │   ├── ErroCompilacao.java    // exceção que carrega o número da linha
-            │   ├── TipoToken.java         // enum com as categorias de token
-            │   ├── Token.java
-            │   ├── Lexico.java            // o AFD (capítulo 3)
-            │   ├── Sintatico.java         // descida recursiva + semântica + MIPS
-            │   ├── TipoDado.java
-            │   ├── Simbolo.java
-            │   └── TabelaSimbolos.java    // pilha de escopos (capítulo 6)
-            ├── testes/
-            │   ├── ok/                    // programas que DEVEM compilar
-            │   └── erro/                  // programas que DEVEM falhar (um erro por arquivo!)
-            └── README.md                  // como compilar e rodar
-            """.trimIndent(),
-            "Estrutura de pastas sugerida",
+            tx("tpguidea_byteiro_src_main_java_le"),
+            tx("tpguidea_estrutura_pastas_sugerida"),
         ),
         Code(
             """
@@ -81,145 +66,91 @@ internal val tpCap1 = GuideChapter(
                 }
             }
             """.trimIndent(),
-            "ErroCompilacao.java — TODO erro do compilador passa por aqui, sempre com a linha",
+            tx("tpguidea_errocompilacao_java_todo_erro_compilador"),
         ),
         Code(
-            """
-            import java.nio.file.Files;
-            import java.nio.file.Path;
-
-            public class Main {
-                public static void main(String[] args) throws Exception {
-                    if (args.length < 1) {
-                        System.err.println("uso: java Main programa.byt [saida.asm]");
-                        return;
-                    }
-                    String fonte = Files.readString(Path.of(args[0]));
-                    String saida = args.length > 1 ? args[1] : "saida.asm";
-                    try {
-                        Sintatico s = new Sintatico(new Lexico(fonte));
-                        String asm = s.compila();           // análise + geração numa passada só
-                        Files.writeString(Path.of(saida), asm);
-                        System.out.println("compilado com sucesso -> " + saida);
-                    } catch (ErroCompilacao e) {
-                        System.out.println(e.getMessage()); // ex.: linha 7: erro sintático: esperava ';'...
-                        System.exit(1);
-                    }
-                }
-            }
-            """.trimIndent(),
-            "Main.java — o maestro (Java 17)",
+            tx("tpguidea_import_java_nio_file_files"),
+            tx("tpguidea_main_java_maestro_java_17"),
         ),
         Predict(
-            "Qual ordem de implementação dá MENOS dor de cabeça?",
+            tx("tpguidea_qual_ordem_implementacao_menos_dor"),
             listOf(
-                "Escrever tudo de uma vez e testar na última semana",
-                "Léxico → sintático → semântico → geração, testando cada fase antes de seguir",
-                "Começar pela geração de MIPS, que é o que vale mais ponto",
-                "Começar pela tabela de símbolos, que todo mundo usa",
+                tx("tpguidea_escrever_tudo_vez_testar_na"),
+                tx("tpguidea_lexico_sintatico_semantico_geracao_testando"),
+                tx("tpguidea_comecar_pela_geracao_mips_que"),
+                tx("tpguidea_comecar_pela_tabela_simbolos_que"),
             ),
             1,
-            "Cada fase CONSOME a saída da anterior. Se o léxico tem bug, o parser parece quebrado sem estar. Construa de baixo para cima e teste cada camada antes de empilhar a próxima.",
+            tx("tpguidea_cada_fase_consome_saida_anterior"),
         ),
         Steps(
-            "Cronograma de 8 semanas (ajuste à data do seu enunciado)",
+            tx("tpguidea_cronograma_8_semanas_ajuste_data"),
             listOf(
-                "Semana 1 — Definir a linguagem e escrever 10 programas-exemplo (5 certos, 5 com erro).",
-                "Semana 2 — Léxico + um `TesteLexico` que imprime os tokens.",
-                "Semanas 3–4 — Gramática LL(1) no papel (FIRST/FOLLOW!) e o parser descendente.",
-                "Semana 5 — Tabela de símbolos e verificação de tipos.",
-                "Semanas 6–7 — Geração de MIPS, testando cada comando no MARS.",
-                "Semana 8 — Otimização, bateria de testes, relatório. E uma folga: algo SEMPRE atrasa.",
+                tx("tpguidea_semana_1_definir_linguagem_escrever"),
+                tx("tpguidea_semana_2_lexico_testelexico_que"),
+                tx("tpguidea_semanas_3_4_gramatica_ll"),
+                tx("tpguidea_semana_5_tabela_simbolos_verificacao"),
+                tx("tpguidea_semanas_6_7_geracao_mips"),
+                tx("tpguidea_semana_8_otimizacao_bateria_testes"),
             ),
         ),
         Code(
-            """
-            git init byteiro && cd byteiro
-            git checkout -b lexico
-            # ... escreve, testa ...
-            git add src/Lexico.java testes/
-            git commit -m "lexico: reconhece <- e comentarios de bloco"
-            git checkout main
-            git merge lexico
-            """.trimIndent(),
-            "Git desde o dia 1: um branch por fase, commits pequenos",
+            tx("tpguidea_git_init_byteiro_cd_byteiro"),
+            tx("tpguidea_git_desde_dia_1_branch"),
         ),
-        Callout(REAL_WORLD, "Commit pequeno salva vida: quando a geração de código quebrar o parser às 23h, `git diff` mostra exatamente o que mudou. E o histórico de commits prova que o trabalho é da equipe."),
-        Say(LEXI, "Dupla? Um começa o léxico enquanto o outro escreve a gramática no papel. Trio? O terceiro escreve a bateria de testes desde o primeiro dia."),
-        Say(PROF, "Mas atenção: **todo mundo** precisa entender **tudo**. Na arguição, o professor aponta para qualquer método e pergunta 'por que isso está aqui?' para qualquer integrante."),
-        Callout(WATCH_OUT, "Leia o enunciado com marca-texto. Formato da mensagem de erro, nome do arquivo de saída, se para no primeiro erro, se palavras-chave ignoram maiúsculas… Alguns professores corrigem com scripts que comparam a saída caractere por caractere — um espaço a mais vira 'teste falhou'."),
-        Callout(NO_DUMB_QUESTIONS, "P: Posso usar ANTLR, JavaCC ou outro gerador? R: Na maioria das turmas, NÃO — o objetivo é escrever léxico e parser à mão. Em alguns campi o léxico é feito com lex/flex (a Oficina Flex do app treina isso). Na dúvida, pergunte ao professor ANTES de começar."),
-        Reveal("Em uma frase: o que o seu `Main` faz?", "Lê o arquivo-fonte, entrega ao `Sintatico` (que puxa tokens do `Lexico`, consulta a `TabelaSimbolos` e emite MIPS) e grava o `.asm` — ou imprime a linha e a mensagem do primeiro erro."),
-        Say(PILHA, "Devagar… e sempre… uma fase… por vez."),
+        Callout(REAL_WORLD, tx("tpguidea_commit_pequeno_salva_vida_quando")),
+        Say(LEXI, tx("tpguidea_dupla_comeca_lexico_enquanto_outro")),
+        Say(PROF, tx("tpguidea_mas_atencao_todo_mundo_precisa")),
+        Callout(WATCH_OUT, tx("tpguidea_leia_enunciado_com_marca_texto")),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguidea_p_posso_usar_antlr_javacc")),
+        Reveal(tx("tpguidea_em_frase_que_seu_main"), tx("tpguidea_le_arquivo_fonte_entrega_ao")),
+        Say(PILHA, tx("tpguidea_devagar_sempre_fase_por_vez")),
     ),
 )
 
 // ───────────────────────────── Capítulo 2 ─────────────────────────────
 
 internal val tpCap2 = GuideChapter(
-    2, "Definindo a linguagem Byteiro",
-    "Antes do Java: tokens, precedência e uma gramática informal de uma linguagem pequena e completa.",
+    2, tx("tpguidea_definindo_linguagem_byteiro"),
+    tx("tpguidea_antes_java_tokens_precedencia_gramatica"),
     Skill.TOKENS,
     listOf(
-        Say(PROF, "Antes de uma linha de Java, você precisa de uma linguagem. No TP a turma inventa (ou recebe) a sua. Neste guia vamos inventar a **Byteiro** — pequenininha de propósito."),
-        Say(BYTE, "Posso pôr classes, lambdas, vetores, funções recursivas…?"),
-        Say(PROF, "NÃO. Cada recurso a mais é um capítulo a mais de dor. **Pequena e completa ganha de grande e quebrada.** Funções e vetores ficam como 'trabalhos futuros' no relatório."),
-        Code(TP_PROGRAMA_CONTAGEM, "contagem.byt — um programa Byteiro completo (vamos compilá-lo até o MIPS no capítulo 8)"),
+        Say(PROF, tx("tpguidea_antes_linha_java_voce_precisa")),
+        Say(BYTE, tx("tpguidea_posso_por_classes_lambdas_vetores")),
+        Say(PROF, tx("tpguidea_nao_cada_recurso_mais_capitulo")),
+        Code(TP_PROGRAMA_CONTAGEM, tx("tpguidea_contagem_byt_programa_byteiro_completo")),
         Steps(
-            "Ficha técnica da Byteiro",
+            tx("tpguidea_ficha_tecnica_byteiro"),
             listOf(
-                "**Tipos**: `inteiro` (32 bits), `logico` (`verdadeiro`/`falso`), `caractere` (`'A'`).",
-                "**Comandos**: declaração (`inteiro a, b;`), atribuição com `<-`, `se`/`senao`, `enquanto`, `escreva(...)`, `leia(x)`.",
+                tx("tpguidea_tipos_inteiro_32_bits_logico"),
+                tx("tpguidea_comandos_declaracao_inteiro_b_atribuicao"),
                 "**Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.",
-                "**Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`.",
-                "**Comentários**: `// até o fim da linha` e `/* de bloco */`.",
-                "**Strings** só aparecem dentro do `escreva` — não existe tipo string.",
+                tx("tpguidea_expressoes_aritmetica_relacionais_logicas_ou"),
+                tx("tpguidea_comentarios_ate_fim_linha_bloco"),
+                tx("tpguidea_strings_so_aparecem_dentro_escreva"),
             ),
         ),
         Code(
-            """
-            Categoria      Padrão (informal)                    Exemplos
-            -------------  -----------------------------------  ----------------
-            reservadas     programa inteiro logico caractere    se, enquanto
-                           se senao enquanto escreva leia
-                           e ou nao verdadeiro falso
-            ID             letra (letra | dígito | _)*          soma, n1, valor_max
-            NUM            dígito+                              0, 42, 32767
-            CHAR           ' um-caractere '                     'A', '7'
-            STRING         " qualquer coisa sem aspas e sem \n " "soma = "
-            ATRIB          <-
-            relacionais    =  <>  <  >  <=  >=
-            aritméticos    +  -  *  /  %
-            pontuação      (  )  {  }  ,  ;
-            """.trimIndent(),
-            "Tabela de tokens — vai direto para o relatório",
+            tx("tpguidea_categoria_padrao_informal_exemplos_reservada"),
+            tx("tpguidea_tabela_tokens_vai_direto_para"),
         ),
         Code(
-            """
-            Precedência (da MAIS FRACA para a MAIS FORTE)
-            1. ou                          associa à esquerda
-            2. e                           associa à esquerda
-            3. =  <>  <  >  <=  >=         NÃO associativo: a < b < c é erro
-            4. +  -                        associa à esquerda
-            5. *  /  %                     associa à esquerda
-            6. nao   - (unário)            prefixo
-            7. ( )  literais  variáveis
-            """.trimIndent(),
-            "Tabela de precedência da Byteiro",
+            tx("tpguidea_precedencia_mais_fraca_para_mais"),
+            tx("tpguidea_tabela_precedencia_byteiro"),
         ),
         Predict(
-            "Na Byteiro, como é agrupado `a + b * 2 > 10 e ok`?",
+            tx("tpguidea_na_byteiro_como_agrupado_b"),
             listOf(
-                "((a + b) * 2) > (10 e ok)",
-                "((a + (b * 2)) > 10) e ok",
-                "a + ((b * 2) > (10 e ok))",
-                "Erro: misturar aritmética e lógica é proibido",
+                tx("tpguidea_b_2_10_ok"),
+                tx("tpguidea_b_2_10_ok_2"),
+                tx("tpguidea_b_2_10_ok_3"),
+                tx("tpguidea_erro_misturar_aritmetica_logica_proibido"),
             ),
             1,
-            "Quem está mais EMBAIXO na tabela gruda mais forte: primeiro `*`, depois `+`, depois `>`, e por último `e`. É exatamente a ordem que o parser vai seguir no capítulo 5.",
+            tx("tpguidea_quem_esta_mais_embaixo_na"),
         ),
-        Callout(WATCH_OUT, "Por que `<-` para atribuir? Assim `=` fica livre para COMPARAR e ninguém escreve `se (x = 1)` achando que atribui. Mas tem pegadinha: `a<-1` agora é `a <- 1` (atribuição), e não `a < -1`. É a regra do **maior lexema**: o léxico sempre pega o token mais comprido possível. Documente isso no relatório!"),
-        Visual(VK.TOKENIZE, input = "if (x<-1) y = 0; // C de verdade", caption = "O Lexi do app conhece C: em C, `x<-1` é `x < -1`. Na Byteiro o MESMO texto vira `x <- 1`. Quem define os tokens é a especificação da linguagem."),
+        Callout(WATCH_OUT, tx("tpguidea_por_que_para_atribuir_assim")),
+        Visual(VK.TOKENIZE, input = "if (x<-1) y = 0; // C de verdade", caption = tx("tpguidea_lexi_app_conhece_c_em")),
         Code(
             """
             programa   = "programa" ID bloco
@@ -234,280 +165,100 @@ internal val tpCap2 = GuideChapter(
             arg        = STRING | expr
             leia       = "leia" "(" ID ")" ";"
             """.trimIndent(),
-            "Gramática informal (EBNF): { } = repete 0+ vezes, [ ] = opcional. As expressões ficam para o capítulo 4.",
+            tx("tpguidea_gramatica_informal_ebnf_repete_0"),
         ),
-        Callout(REAL_WORLD, "Exigir chaves no `se` fecha a porta do 'senão pendurado' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha."),
-        Reveal("Quem pega cada erro? (1) `x <- 3 # 2;`  (2) `x <- 3 + ;`  (3) `x <- verdadeiro + 1;`", "(1) **Léxico**: `#` não pertence a nenhum token. (2) **Sintático**: depois do `+` deveria vir uma expressão. (3) **Semântico**: a forma está certa, mas somar um `logico` não faz sentido."),
+        Callout(REAL_WORLD, tx("tpguidea_exigir_chaves_no_se_fecha")),
+        Reveal("Quem pega cada erro? (1) `x <- 3 # 2;`  (2) `x <- 3 + ;`  (3) `x <- verdadeiro + 1;`", tx("tpguidea_1_lexico_nao_pertence_nenhum")),
         Predict(
             "E `inteiro 2x;`? Que tipo de erro a Byteiro deve dar?",
             listOf(
-                "Léxico: número malformado '2x'",
-                "Sintático: esperava identificador, encontrou '2'",
-                "Depende de como VOCÊ especificou o léxico — e precisa documentar",
-                "Nenhum: 2x é um identificador válido",
+                tx("tpguidea_lexico_numero_malformado_2x"),
+                tx("tpguidea_sintatico_esperava_identificador_encontrou_2"),
+                tx("tpguidea_depende_como_voce_especificou_lexico"),
+                tx("tpguidea_nenhum_2x_identificador_valido"),
             ),
             2,
-            "Um léxico pode cortar `2x` em NUM(2) + ID(x) e deixar o sintático reclamar, ou recusar na hora. Os dois são defensáveis! Na Byteiro decidimos que é erro **léxico** ('número malformado'). O que tira ponto é não ter decidido.",
+            tx("tpguidea_lexico_pode_cortar_2x_em"),
         ),
-        Callout(EXAM_TIP, "Escreva a especificação no relatório ANTES do código: tabela de tokens, precedência, gramática, decisões (maiúsculas importam? pode redeclarar em bloco interno?). Ela vira o seu mapa — e muitos professores dão nota para essa parte."),
+        Callout(EXAM_TIP, tx("tpguidea_escreva_especificacao_no_relatorio_antes")),
         Steps(
-            "Lição de casa antes do capítulo 3",
+            tx("tpguidea_licao_casa_antes_capitulo_3"),
             listOf(
-                "Escreva 5 programas Byteiro CORRETOS, cada um exercitando um recurso (declaração, se/senao, enquanto, escreva, expressões).",
-                "Escreva 5 programas ERRADOS, com UM erro cada: léxico, sintático, não declarado, tipo errado, redeclaração.",
-                "Ao lado de cada um, anote a saída esperada. Parabéns: você acabou de começar a bateria de testes.",
+                tx("tpguidea_escreva_5_programas_byteiro_corretos"),
+                tx("tpguidea_escreva_5_programas_errados_com"),
+                tx("tpguidea_ao_lado_cada_anote_saida"),
             ),
         ),
-        Say(LEXI, "Tabela de tokens pronta? Então me passa a katana. Próximo capítulo eu fatio tudo."),
+        Say(LEXI, tx("tpguidea_tabela_tokens_pronta_entao_me")),
     ),
 )
 
 // ───────────────────────────── Capítulo 3 ─────────────────────────────
 
 internal val tpCap3 = GuideChapter(
-    3, "Do regex ao AFD: o analisador léxico",
-    "Cada token é uma regex, cada regex é um AFD, todos viram UM autômato — escrito em Java com switch.",
+    3, tx("tpguidea_regex_ao_afd_analisador_lexico"),
+    tx("tpguidea_cada_token_regex_cada_regex"),
     Skill.REGEX_DFA,
     listOf(
-        Say(LEXI, "Meu segredo: cada categoria de token é uma **expressão regular**; cada regex vira um **AFD**; e todos os AFDs são colados num autômato grande, com um estado inicial só."),
+        Say(LEXI, tx("tpguidea_meu_segredo_cada_categoria_token")),
         Code(
-            """
-            ID      =  l (l | d | _)*          l = letra, d = dígito
-            NUM     =  d d*
-            CHAR    =  ' c '                   c = qualquer caractere menos ' e \n
-            STRING  =  " s* "                  s = qualquer caractere menos " e \n
-            MENOR   =  <        ATRIB = <-     MENOR_IGUAL = <=     DIFERENTE = <>
-            MAIOR   =  >        MAIOR_IGUAL = >=
-            DIV     =  /        (// e /* */ são comentários: descartados)
-            """.trimIndent(),
-            "As regex da Byteiro",
+            tx("tpguidea_id_l_l_d_l"),
+            tx("tpguidea_regex_byteiro"),
         ),
-        Visual(VK.DFA, input = "l(l|d)*", caption = "ID (l = letra, d = dígito; o _ ficou de fora para caber no widget). Teste 'l', 'ldl' e 'dl'."),
-        Visual(VK.DFA, input = "dd*", caption = "NUM: pelo menos um dígito. Teste 'd', 'ddd' e a cadeia vazia."),
-        Visual(VK.DFA, input = "m(h|i|g)?", caption = "A família do '<' (m = '<', h = '-', i = '=', g = '>'): aceita m, mh, mi, mg. Repare que o estado depois de 'm' já é final — é o MENOR sozinho."),
-        Say(BYTE, "Tá, são vários AFDs. Mas como eu junto tudo num só?"),
-        Say(PROF, "Crie um estado 0 com uma seta para o começo de cada AFD. Como os primeiros caracteres são diferentes — letra, dígito, '<', '/'… — nunca há duas setas com o mesmo rótulo saindo do 0. Continua determinístico!"),
+        Visual(VK.DFA, input = "l(l|d)*", caption = tx("tpguidea_id_l_letra_d_digito")),
+        Visual(VK.DFA, input = "dd*", caption = tx("tpguidea_num_pelo_menos_digito_teste")),
+        Visual(VK.DFA, input = "m(h|i|g)?", caption = tx("tpguidea_familia_m_h_i_g")),
+        Say(BYTE, tx("tpguidea_ta_sao_varios_afds_mas")),
+        Say(PROF, tx("tpguidea_crie_estado_0_com_seta")),
         Code(
-            """
-                         letra/dígito/_ ⟲
-            (0) ─letra──► (1) ── outro* → ID ou reservada
-             │
-             ├─dígito──► (2) ⟲ dígito    outro* → NUM     letra → ERRO "número malformado"
-             │
-             ├── '<' ──► (3) ── '-' → ATRIB   '=' → MENOR_IGUAL   '>' → DIFERENTE   outro* → MENOR
-             ├── '>' ──► (4) ── '=' → MAIOR_IGUAL   outro* → MAIOR
-             │
-             ├── '/' ──► (5) ── '/' → (6) comentário de linha: volta ao (0) no '\n'
-             │                ── '*' → (7) comentário de bloco: volta ao (0) no "*/"
-             │                ── outro* → DIV
-             │
-             ├── ' ───► (8) ── c → (9) ── ' → CHAR
-             ├── " ───► (10) ⟲ s    " → STRING    '\n' ou fim → ERRO
-             ├── espaço, \t, \r → fica no (0)      '\n' → fica no (0) e linha++
-             └── + - * % = ( ) { } , ;  → token de 1 caractere
-
-            outro* = o caractere que ENCERROU o token NÃO é consumido
-            """.trimIndent(),
-            "O autômato grande da Byteiro (desenhe a versão bonita no relatório!)",
+            tx("tpguidea_letra_digito_0_letra_1"),
+            tx("tpguidea_automato_grande_byteiro_desenhe_versao"),
         ),
         Code(
-            """
-            estado │ letra  │ dígito │   <    │   -    │   =    │   >    │ outro
-            ───────┼────────┼────────┼────────┼────────┼────────┼────────┼────────
-              0    │   1    │   2    │   3    │ MENOS  │ IGUAL  │   4    │ (ver acima)
-              1    │   1    │   1    │  ID*   │  ID*   │  ID*   │  ID*   │  ID*
-              2    │  ERRO  │   2    │  NUM*  │  NUM*  │  NUM*  │  NUM*  │  NUM*
-              3    │ MENOR* │ MENOR* │ MENOR* │ ATRIB  │ M_IGU  │ DIFER  │ MENOR*
-              4    │ MAIOR* │ MAIOR* │ MAIOR* │ MAIOR* │ MA_IGU │ MAIOR* │ MAIOR*
-            """.trimIndent(),
-            "Pedaço da tabela de transições (* = devolve o token sem consumir o caractere)",
+            tx("tpguidea_estado_letra_digito_outro_0"),
+            tx("tpguidea_pedaco_tabela_transicoes_devolve_token"),
         ),
-        Callout(NO_DUMB_QUESTIONS, "P: Cada palavra reservada precisa de um AFD próprio? R: Daria um autômato enorme. O truque clássico: reconheça tudo como ID (estado 1) e, no fim, consulte uma tabela (HashMap) de reservadas. Se estiver lá, é palavra-chave; senão, é ID."),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguidea_p_cada_palavra_reservada_precisa")),
         Code(
-            """
-            public enum TipoToken {
-                // palavras reservadas (o texto é a própria palavra)
-                PROGRAMA("programa"), INTEIRO("inteiro"), LOGICO("logico"), CARACTERE("caractere"),
-                SE("se"), SENAO("senao"), ENQUANTO("enquanto"), ESCREVA("escreva"), LEIA("leia"),
-                E("e"), OU("ou"), NAO("nao"), VERDADEIRO("verdadeiro"), FALSO("falso"),
-                // lexema variável
-                ID("identificador"), NUM("número"), CHAR("caractere literal"), STRING("string"),
-                // operadores e pontuação
-                ATRIB("<-"), MAIS("+"), MENOS("-"), VEZES("*"), DIV("/"), MOD("%"),
-                IGUAL("="), DIFERENTE("<>"), MENOR("<"), MAIOR(">"), MENOR_IGUAL("<="), MAIOR_IGUAL(">="),
-                ABRE_PAR("("), FECHA_PAR(")"), ABRE_CHAVE("{"), FECHA_CHAVE("}"),
-                VIRGULA(","), PONTO_VIRGULA(";"), EOF("fim de arquivo");
-
-                public final String texto;          // usado nas mensagens de erro
-                TipoToken(String texto) { this.texto = texto; }
-            }
-
-            public class Token {
-                public final TipoToken tipo;
-                public final String lexema;
-                public final int linha;
-
-                public Token(TipoToken tipo, String lexema, int linha) {
-                    this.tipo = tipo; this.lexema = lexema; this.linha = linha;
-                }
-
-                @Override public String toString() {
-                    return String.format("%-3d %-14s %s", linha, tipo, lexema);
-                }
-            }
-            """.trimIndent(),
-            "TipoToken.java e Token.java",
+            tx("tpguidea_public_enum_tipotoken_palavras_reservadas"),
+            tx("tpguidea_tipotoken_java_token_java"),
         ),
         Code(
-            """
-            import java.util.HashMap;
-            import java.util.Map;
-
-            public class Lexico {
-                private static final Map<String, TipoToken> RESERVADAS = new HashMap<>();
-                static {   // as 14 primeiras constantes do enum são as reservadas
-                    for (TipoToken t : TipoToken.values())
-                        if (t.ordinal() <= TipoToken.FALSO.ordinal()) RESERVADAS.put(t.texto, t);
-                }
-
-                private final String fonte;
-                private int pos = 0;      // índice do próximo caractere a ler
-                private int linha = 1;
-
-                public Lexico(String fonte) { this.fonte = fonte; }
-
-                private char atual() { return pos < fonte.length() ? fonte.charAt(pos) : '\0'; }
-                private char espia() { return pos + 1 < fonte.length() ? fonte.charAt(pos + 1) : '\0'; }
-                private Token tok(TipoToken t, String lexema) { return new Token(t, lexema, linha); }
-                private ErroCompilacao erro(String msg) { return new ErroCompilacao(linha, "erro léxico: " + msg); }
-            """.trimIndent(),
-            "Lexico.java (1/3) — campos e ajudantes. '\\0' faz o papel de 'fim do arquivo'.",
+            tx("tpguidea_import_java_util_hashmap_import"),
+            tx("tpguidea_lexico_java_1_3_campos"),
         ),
         Code(
-            """
-                public Token proximo() {
-                    int estado = 0;
-                    StringBuilder lex = new StringBuilder();
-                    while (true) {
-                        char c = atual();
-                        switch (estado) {
-                            case 0 -> {                                  // estado inicial
-                                if (c == '\0') return tok(TipoToken.EOF, "fim de arquivo");
-                                pos++;                                   // do estado 0 sempre se consome
-                                if (c == '\n') linha++;
-                                else if (c == ' ' || c == '\t' || c == '\r') { /* ignora */ }
-                                else if (Character.isLetter(c)) { lex.append(c); estado = 1; }
-                                else if (Character.isDigit(c))  { lex.append(c); estado = 2; }
-                                else if (c == '<')  estado = 3;
-                                else if (c == '>')  estado = 4;
-                                else if (c == '/')  estado = 5;
-                                else if (c == '\'') estado = 8;
-                                else if (c == '"')  estado = 10;
-                                else return simples(c);
-                            }
-                            case 1 -> {                                  // ID ou reservada
-                                if (Character.isLetterOrDigit(c) || c == '_') { lex.append(c); pos++; }
-                                else {                                   // 'outro': NÃO consome
-                                    String s = lex.toString();
-                                    return tok(RESERVADAS.getOrDefault(s, TipoToken.ID), s);
-                                }
-                            }
-                            case 2 -> {                                  // NUM
-                                if (Character.isDigit(c)) { lex.append(c); pos++; }
-                                else if (Character.isLetter(c)) throw erro("número malformado '" + lex + c + "'");
-                                else return tok(TipoToken.NUM, lex.toString());
-                            }
-                            case 3 -> {                                  // já leu '<'
-                                if (c == '-') { pos++; return tok(TipoToken.ATRIB, "<-"); }
-                                if (c == '=') { pos++; return tok(TipoToken.MENOR_IGUAL, "<="); }
-                                if (c == '>') { pos++; return tok(TipoToken.DIFERENTE, "<>"); }
-                                return tok(TipoToken.MENOR, "<");        // 'outro': NÃO consome
-                            }
-                            case 4 -> {                                  // já leu '>'
-                                if (c == '=') { pos++; return tok(TipoToken.MAIOR_IGUAL, ">="); }
-                                return tok(TipoToken.MAIOR, ">");
-                            }
-                            case 5 -> {                                  // já leu '/'
-                                if (c == '/') { pos++; estado = 6; }
-                                else if (c == '*') { pos++; estado = 7; }
-                                else return tok(TipoToken.DIV, "/");
-                            }
-                            case 6 -> {                                  // comentário de linha
-                                if (c == '\n' || c == '\0') estado = 0;  // o '\n' é contado no estado 0
-                                else pos++;
-                            }
-                            case 7 -> {                                  // comentário de bloco
-                                if (c == '\0') throw erro("comentário /* sem */ até o fim do arquivo");
-                                if (c == '*' && espia() == '/') { pos += 2; estado = 0; }
-                                else { if (c == '\n') linha++; pos++; }
-                            }
-                            case 8 -> {                                  // já leu a aspa simples
-                                if (c == '\'' || c == '\n' || c == '\0') throw erro("caractere vazio ou não fechado");
-                                lex.append(c); pos++; estado = 9;
-                            }
-                            case 9 -> {                                  // espera a aspa que fecha
-                                if (c != '\'') throw erro("esperava ' depois de '" + lex + "'");
-                                pos++;
-                                return tok(TipoToken.CHAR, lex.toString());
-                            }
-                            case 10 -> {                                 // dentro da string
-                                if (c == '"') { pos++; return tok(TipoToken.STRING, lex.toString()); }
-                                if (c == '\n' || c == '\0') throw erro("string não fechada");
-                                lex.append(c); pos++;
-                            }
-                            default -> throw new IllegalStateException("estado " + estado);
-                        }
-                    }
-                }
-            """.trimIndent(),
-            "Lexico.java (2/3) — o AFD inteiro: um case por estado, igualzinho ao desenho",
+            tx("tpguidea_public_token_proximo_int_estado"),
+            tx("tpguidea_lexico_java_2_3_afd"),
         ),
         Code(
-            """
-                private Token simples(char c) {                      // tokens de 1 caractere
-                    return switch (c) {
-                        case '+' -> tok(TipoToken.MAIS, "+");
-                        case '-' -> tok(TipoToken.MENOS, "-");
-                        case '*' -> tok(TipoToken.VEZES, "*");
-                        case '%' -> tok(TipoToken.MOD, "%");
-                        case '=' -> tok(TipoToken.IGUAL, "=");
-                        case '(' -> tok(TipoToken.ABRE_PAR, "(");
-                        case ')' -> tok(TipoToken.FECHA_PAR, ")");
-                        case '{' -> tok(TipoToken.ABRE_CHAVE, "{");
-                        case '}' -> tok(TipoToken.FECHA_CHAVE, "}");
-                        case ',' -> tok(TipoToken.VIRGULA, ",");
-                        case ';' -> tok(TipoToken.PONTO_VIRGULA, ";");
-                        default  -> throw erro("caractere inválido '" + c + "'");
-                    };
-                }
-            }
-            """.trimIndent(),
-            "Lexico.java (3/3)",
+            tx("tpguidea_private_token_simples_char_c"),
+            tx("tpguidea_lexico_java_3_3"),
         ),
         Predict(
-            "Entrada `x<y`. O AFD está no estado 3 (já leu '<') e vê o 'y'. O que o código faz?",
+            tx("tpguidea_entrada_x_y_afd_esta"),
             listOf(
-                "Consome o 'y' e devolve MENOR",
-                "Devolve MENOR SEM consumir o 'y' — ele será o começo do próximo token",
-                "Erro léxico: '<y' não é token",
-                "Volta ao estado 0 e descarta o '<'",
+                tx("tpguidea_consome_y_devolve_menor"),
+                tx("tpguidea_devolve_menor_sem_consumir_y"),
+                tx("tpguidea_erro_lexico_y_nao_token"),
+                tx("tpguidea_volta_ao_estado_0_descarta"),
             ),
             1,
-            "O 'y' é o 'outro*' do desenho: ele só serviu para avisar que o token acabou. Se você fizer `pos++` aí, o 'y' some e o parser recebe `x <` seguido do que vier depois. É o bug nº 1 de léxico feito à mão.",
+            tx("tpguidea_y_outro_desenho_ele_so"),
         ),
-        Callout(WATCH_OUT, "Contagem de linhas: incremente `linha` em TODO lugar que consome '\\n' — inclusive dentro do comentário de bloco (estado 7). E não conte '\\r': arquivo salvo no Windows tem '\\r\\n' no fim de cada linha; contar os dois dobra o número da linha nas mensagens."),
-        Callout(WATCH_OUT, "`Character.isLetter` aceita 'ç', 'é', 'π'… Se a especificação diz que identificador é só ASCII, troque por `(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')`. Detalhe pequeno, mas teste de correção adora."),
+        Callout(WATCH_OUT, tx("tpguidea_contagem_linhas_incremente_linha_em")),
+        Callout(WATCH_OUT, tx("tpguidea_character_isletter_aceita_c_se")),
         Steps(
-            "Os erros léxicos da Byteiro (sempre com a linha!)",
+            tx("tpguidea_erros_lexicos_byteiro_sempre_com"),
             listOf(
-                "Caractere inválido: `x <- 3 # 2;` → linha N: erro léxico: caractere inválido '#'",
-                "Número malformado: `12abc` → número malformado '12a'",
-                "Caractere vazio ou sem fechar: `''` ou `'A`",
-                "String que atravessa a linha: `\"olá` + Enter",
-                "Comentário `/*` sem `*/` até o fim do arquivo",
+                tx("tpguidea_caractere_invalido_x_3_2"),
+                tx("tpguidea_numero_malformado_12abc_numero_malformado"),
+                tx("tpguidea_caractere_vazio_ou_sem_fechar"),
+                tx("tpguidea_string_que_atravessa_linha_ola"),
+                tx("tpguidea_comentario_sem_ate_fim_arquivo"),
             ),
         ),
-        Callout(REAL_WORLD, "Muitos enunciados pedem palavras-chave que ignoram maiúsculas (`SE`, `Se`, `se`). É UMA linha: `RESERVADAS.getOrDefault(s.toLowerCase(), TipoToken.ID)`. Decida também se identificadores ignoram maiúsculas (`Soma` = `soma`?) — e documente."),
+        Callout(REAL_WORLD, tx("tpguidea_muitos_enunciados_pedem_palavras_chave")),
         Code(
             """
             public class TesteLexico {
@@ -521,7 +272,7 @@ internal val tpCap3 = GuideChapter(
                 }
             }
             """.trimIndent(),
-            "TesteLexico.java — rode ANTES de escrever uma linha do parser",
+            tx("tpguidea_testelexico_java_rode_antes_escrever"),
         ),
         Code(
             """
@@ -544,9 +295,9 @@ internal val tpCap3 = GuideChapter(
             2   FECHA_CHAVE    }
             2   EOF            fim de arquivo
             """.trimIndent(),
-            "Saída esperada: o comentário sumiu, `<-` e `<>` são UM token cada, e a linha muda no lugar certo",
+            tx("tpguidea_saida_esperada_comentario_sumiu_sao"),
         ),
-        Reveal("Por que `proximo()` devolve um token por vez em vez de uma lista com todos?", "Porque o parser de uma passada pede tokens sob demanda — e um erro léxico aparece exatamente quando o parser chega lá. Gerar a lista inteira antes também funciona (e permite espiar vários tokens à frente); só garanta que o erro léxico continue saindo com a linha certa."),
-        Say(LEXI, "Fatiado! Agora alguém precisa conferir se os pedaços estão na ORDEM certa. Chama a Profª Gramática."),
+        Reveal(tx("tpguidea_por_que_proximo_devolve_token"), tx("tpguidea_porque_parser_passada_pede_tokens")),
+        Say(LEXI, tx("tpguidea_fatiado_agora_alguem_precisa_conferir")),
     ),
 )

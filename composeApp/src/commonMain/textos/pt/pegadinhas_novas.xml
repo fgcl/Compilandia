@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Pegadinhas dos assuntos que não tinham (A4). -->
+<resources>
+    <string name="peg4_min_titulo">Juntar gêmeos de mentira</string>
+    <string name="peg4_min_01">Dois estados parecem gêmeos quando vão para os mesmos lugares.</string>
+    <string name="peg4_min_02">A pegadinha: um estado final e um não final nunca são gêmeos.</string>
+    <string name="peg4_min_03">Qual par dá para separar logo de cara? Toque nele.</string>
+    <string name="peg4_min_03_dica">Um deles aceita a palavra e o outro não.</string>
+    <string name="peg4_min_03_ok">Isso. Final contra não final já é diferente.</string>
+    <string name="peg4_min_04">Depois, olhe para onde cada um vai com a mesma letra.</string>
+    <string name="peg4_min_05">Se um vai para um par já separado, os dois também se separam.</string>
+    <string name="peg4_min_06">Só junte o que nenhuma palavra consegue separar.</string>
+    <string name="peg4_ll_titulo">Terminal não vai para a tabela</string>
+    <string name="peg4_ll_01">O topo da pilha pode ter dois tipos de símbolo.</string>
+    <string name="peg4_ll_02">Com não-terminal no topo, o parser consulta a tabela e troca pela regra.</string>
+    <string name="peg4_ll_03">Com terminal no topo, a tabela não entra. Ele só confere com a entrada.</string>
+    <string name="peg4_ll_04">O topo é mais e a entrada é mais. O que o parser faz? Toque.</string>
+    <string name="peg4_ll_04_dica">Mais é terminal. Terminal no topo nunca vai para a tabela.</string>
+    <string name="peg4_ll_04_ok">Isso. Casa, tira do topo e avança na entrada.</string>
+    <string name="peg4_ll_05">Se o terminal do topo for diferente da entrada, é erro na hora.</string>
+    <string name="peg4_ll_06">Tabela só para não-terminal. Terminal só confere.</string>
+    <string name="peg4_ll_op_casar">casar e avançar</string>
+    <string name="peg4_ll_op_tabela">consultar a tabela</string>
+    <string name="peg4_ll_op_erro">erro</string>
+    <string name="peg4_ast_titulo">O parêntese não vira nó</string>
+    <string name="peg4_ast_01">Esta conta tem parênteses. Eles mudam a ordem da conta.</string>
+    <string name="peg4_ast_02">Na árvore de derivação, cada parêntese aparece como folha.</string>
+    <string name="peg4_ast_03">Na AST eles somem. A forma da árvore já guarda a ordem.</string>
+    <string name="peg4_ast_04">Quais destes viram nós na árvore? Toque em todos.</string>
+    <string name="peg4_ast_04_dica">A AST guarda operações e valores. Sinal de agrupar não vira nó.</string>
+    <string name="peg4_ast_04_ok">Isso. Vezes e mais viram nós. Os parênteses somem.</string>
+    <string name="peg4_ast_05">O mais fica embaixo do vezes. É assim que a AST lembra do parêntese.</string>
+    <string name="peg4_ast_06">Na AST fica o que o programa faz, não como foi escrito.</string>
+</resources>

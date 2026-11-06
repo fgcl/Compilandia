@@ -36,7 +36,14 @@ class EpisodeFactsTest {
     @Test fun cadaEpisodioPedeUmToqueETemRitmoCurto() {
         for (e in Episodes.all) {
             assertTrue(e.passos.any { it.ask != null || it.brinquedo != null }, "${e.title} não pede nenhuma ação")
-            assertTrue(e.passos.size in 5..10, "${e.title} tem ${e.passos.size} passos")
+            // A2: a aula básica longa tem de 14 a 22 cenas e ao menos 2 perguntas; as outras seguem curtas até serem refeitas.
+            val longa = e.temporada == com.compilandia.content.Temporada.BASICO && e.skill in com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
+            if (longa) {
+                assertTrue(e.passos.size in 14..22, "${e.title} (longa) tem ${e.passos.size} passos")
+                assertTrue(e.passos.count { it.ask != null } >= 2, "${e.title} (longa) tem menos de 2 perguntas")
+            } else {
+                assertTrue(e.passos.size in 5..10, "${e.title} tem ${e.passos.size} passos")
+            }
             var seguidas = 0
             for (p in e.passos) {
                 seguidas = if (p.ask != null || p.brinquedo != null) 0 else seguidas + 1
@@ -113,6 +120,48 @@ class EpisodeFactsTest {
         assertEquals(setOf("$", ")"), f.follow["E"])
         assertEquals(setOf("$", ")"), f.follow["X"])
         assertEquals(setOf("+", "$", ")"), f.follow["T"])
+    }
+
+    /** O segundo exemplo das aulas longas de FIRST e FOLLOW: o que a fala afirma é o que o motor calcula. */
+    @Test fun segundosExemplosDasAulasLongas() {
+        val f1 = FirstFollow(Grammar.parse(com.compilandia.content.episodes.GRAMATICA_FIRST_2.joinToString("\n")))
+        assertEquals(setOf("a", "ε"), f1.first["A"])
+        assertEquals(setOf("a", "b", "c"), f1.first["S"])
+        val f2 = FirstFollow(Grammar.parse(com.compilandia.content.episodes.GRAMATICA_FOLLOW_2.joinToString("\n")))
+        assertEquals(setOf("*"), f2.first["Y"]!! - "ε")
+        assertEquals(setOf("+", ")", "$"), f2.follow["T"])
+        assertEquals(setOf("*", "+", ")", "$"), f2.follow["F"])
+    }
+
+    /** Segunda leva das aulas longas: o que o segundo exemplo afirma, o motor confirma. */
+    @Test fun segundosExemplosDaSegundaLeva() {
+        val ll = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_LL1_2.joinToString("\n"))
+        val t = LL1Table(ll)
+        assertTrue(t.isLL1, "a lista de ids é LL(1)")
+        assertEquals(setOf("$"), t.ff.follow["R"])
+        assertEquals("id R", t.cell("L", "id").single().rhsText())
+        assertEquals(", id R", t.cell("R", ",").single().rhsText())
+        assertTrue(t.cell("R", "$").single().isEpsilon)
+
+        val g = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_LR_2.joinToString("\n"))
+        val a = com.compilandia.engine.LRAutomaton.lr0(g)
+        assertEquals(3, a.states[0].items.size, "estado zero: S' -> .S, S -> .( S ), S -> .id")
+        val comId = a.transitions[0 to "id"]!!
+        assertTrue(a.states[comId].items.any { it.dot == a.grammar.productions[it.prodId].rhs.size }, "lendo id, o ponto chega ao fim")
+        val comPar = a.transitions[0 to "("]!!
+        assertTrue(a.states[comPar].items.size > 1, "lendo abre parêntese, o closure puxa as regras de S")
+        assertEquals(setOf(")", "$"), FirstFollow(g).follow["S"])
+
+        val d = DFA(3, 0, setOf(2), listOf('0', '1'), mapOf(
+            (0 to '0') to 1, (0 to '1') to 2, (1 to '0') to 1, (1 to '1') to 2, (2 to '0') to 2, (2 to '1') to 2,
+        ))
+        assertEquals(2, Minimizer.run(d).minimized.stateCount, "P e Q viram um só")
+
+        val tac = TacGen.generate(ExprParser.parse("total * ( preco - 2 )"))
+        assertTrue(tac.last().toString().contains("*"), "o vezes é a última conta: ${tac.last()}")
+        val mips = Mips.fromTac(TacGen.generate(ExprParser.parse("preco + taxa")))
+        assertEquals(2, mips.count { it.startsWith("lw") }, "$mips")
+        assertEquals(1, mips.count { it.startsWith("sw") }, "$mips")
     }
 
     @Test fun tabelaLl1() {

@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * Alocação de registradores por COLORAÇÃO DE GRAFOS (ideia de Chaitin), num bloco básico de TAC:
  *  1. análise de vivacidade (de trás para frente): in = use ∪ (out − def);
@@ -85,7 +87,7 @@ object RegAlloc {
         for (c in code) {
             if (c.op == null) {
                 val r = operand(c.a, "\$t8")
-                if (isTemp(c.target) && c.target in alloc.colors) out += "move ${reg(c.target)}, $r" else out += "sw $r, ${c.target}"
+                if (isTemp(c.target) && c.target in alloc.colors) out += tx("regalloc_move_1_2", reg(c.target), r) else out += "sw $r, ${c.target}"
             } else {
                 val a = operand(c.a, "\$t8"); val b = operand(c.b!!, "\$t9")
                 val op = when (c.op) { "+" -> "add"; "-" -> "sub"; "*" -> "mul"; else -> "div" }

@@ -1,6 +1,7 @@
 package com.compilandia.engine
 
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 object GrammarTransform {
     private fun fresh(g: Set<String>, base: String): String {
@@ -78,16 +79,16 @@ object GrammarBank {
     }
 
     val exprLeftRec = Named(
-        "expr", "Expressões (recursiva à esquerda)",
+        "expr", tx("transform_expressoes_recursiva_esquerda"),
         """
         E -> E + T | T
         T -> T * F | F
         F -> ( E ) | id
         """.trimIndent(),
-        "A gramática clássica do Livro do Dragão. Ótima para LR, proibida para LL(1)."
+        tx("transform_gramatica_classica_livro_dragao_otima")
     )
     val exprLL1 = Named(
-        "exprll", "Expressões (versão LL(1))",
+        "exprll", tx("transform_expressoes_versao_ll_1"),
         """
         E -> T E'
         E' -> + T E' | ε
@@ -95,67 +96,67 @@ object GrammarBank {
         T' -> * F T' | ε
         F -> ( E ) | id
         """.trimIndent(),
-        "Mesma linguagem, sem recursão à esquerda: agora o LL(1) consegue."
+        tx("transform_mesma_linguagem_sem_recursao_esquerda")
     )
     val exprAmbiguous = Named(
-        "ambig", "Expressões ambíguas",
+        "ambig", tx("transform_expressoes_ambiguas"),
         """
         E -> E + E | E * E | ( E ) | id
         """.trimIndent(),
-        "Curta e bonita, mas ambígua: 'id + id * id' tem duas árvores."
+        tx("transform_curta_bonita_mas_ambigua_id")
     )
     val parens = Named(
-        "parens", "Parênteses balanceados",
+        "parens", tx("transform_parenteses_balanceados"),
         "S -> ( S ) S | ε",
-        "Gera (), (()), ()() ... Uma linguagem que NENHUMA expressão regular reconhece."
+        tx("transform_gera_linguagem_que_nenhuma_expressao")
     )
     val anbn = Named(
         "anbn", "aⁿbⁿ",
         "S -> a S b | ε",
-        "O exemplo clássico de linguagem livre de contexto que não é regular."
+        tx("transform_exemplo_classico_linguagem_livre_contexto")
     )
     val ifElse = Named(
-        "ifelse", "if-then-else (dangling else)",
+        "ifelse", tx("transform_if_then_else_dangling_else"),
         """
         S -> if c then S | if c then S else S | x
         """.trimIndent(),
-        "O famoso 'else pendurado': ambígua; o Yacc resolve com shift."
+        tx("transform_famoso_else_pendurado_ambigua_yacc")
     )
     val stmts = Named(
-        "stmts", "Comandos simples",
+        "stmts", tx("transform_comandos_simples"),
         """
         P -> begin L end
         L -> S ; L | S
         S -> id = E | print E
         E -> id | num
         """.trimIndent(),
-        "Lista de comandos; precisa de fatoração para ser LL(1)."
+        tx("transform_lista_comandos_precisa_fatoracao_para")
     )
     val decl = Named(
-        "decl", "Declarações",
+        "decl", tx("comum_declaracoes"),
         """
         D -> T L ;
         T -> int | float
         L -> id R
         R -> , id R | ε
         """.trimIndent(),
-        "Declarações estilo C: int a, b, c;  — já é LL(1)."
+        tx("transform_declaracoes_estilo_c_int_b")
     )
     val slrNotLL = Named(
-        "slr", "Lista com recursão à esquerda",
+        "slr", tx("transform_lista_com_recursao_esquerda"),
         """
         S -> S a | b
         """.trimIndent(),
-        "b a a a ... — SLR(1) sem esforço, LL(1) impossível sem transformar."
+        tx("transform_b_slr_1_sem_esforco")
     )
     val lalrNotSlr = Named(
-        "lalr", "Atribuição com ponteiros (LALR mas não SLR)",
+        "lalr", tx("transform_atribuicao_com_ponteiros_lalr_mas"),
         """
         S -> L = R | R
         L -> * R | id
         R -> L
         """.trimIndent(),
-        "Exemplo famoso: o SLR(1) dá conflito shift/reduce em '=', o LALR(1) não."
+        tx("transform_exemplo_famoso_slr_1_conflito")
     )
 
     val all = listOf(exprLeftRec, exprLL1, exprAmbiguous, parens, anbn, ifElse, stmts, decl, slrNotLL, lalrNotSlr)

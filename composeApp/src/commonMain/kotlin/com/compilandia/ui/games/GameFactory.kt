@@ -46,16 +46,17 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.sin
+import com.compilandia.textos.tx
 
 /** Um desafio: a frase em português e a regex que confere. */
 private data class Encomenda(val pedido: String, val regex: String)
 
 private val encomendas = listOf(
-    listOf(Encomenda("Aceite um a seguido de quantos b quiser", "ab*"), Encomenda("Aceite só quem começa com a", "a(a|b)*")),
-    listOf(Encomenda("Aceite repetições de ab", "(ab)*"), Encomenda("Aceite quem termina em b", "(a|b)*b")),
-    listOf(Encomenda("Aceite só quem termina em ab", "(a|b)*ab"), Encomenda("Aceite um número par de a", "(aa)*")),
-    listOf(Encomenda("Aceite quem tem ab em algum lugar", "(a|b)*ab(a|b)*"), Encomenda("Aceite a antes de b", "a*b*")),
-    listOf(Encomenda("Aceite quem termina em abb", "(a|b)*abb"), Encomenda("Aceite quem tem a no penúltimo lugar", "(a|b)*a(a|b)")),
+    listOf(Encomenda(tx("gamefactory_aceite_seguido_quantos_b_quiser"), "ab*"), Encomenda(tx("gamefactory_aceite_so_quem_comeca_com"), "a(a|b)*")),
+    listOf(Encomenda(tx("gamefactory_aceite_repeticoes_ab"), "(ab)*"), Encomenda(tx("gamefactory_aceite_quem_termina_em_b"), "(a|b)*b")),
+    listOf(Encomenda(tx("gamefactory_aceite_so_quem_termina_em"), "(a|b)*ab"), Encomenda(tx("gamefactory_aceite_numero_par"), "(aa)*")),
+    listOf(Encomenda(tx("gamefactory_aceite_quem_tem_ab_em"), "(a|b)*ab(a|b)*"), Encomenda(tx("gamefactory_aceite_antes_b"), "a*b*")),
+    listOf(Encomenda(tx("gamefactory_aceite_quem_termina_em_abb"), "(a|b)*abb"), Encomenda(tx("gamefactory_aceite_quem_tem_no_penultimo"), "(a|b)*a(a|b)")),
 )
 
 /**
@@ -98,7 +99,7 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
     fun montado() = DFA(pos.size, 0, finais.toSet(), alfabeto, setas.toMap())
 
     Text(e.pedido, style = MaterialTheme.typography.titleMedium)
-    Text("Toque num círculo e depois em outro para ligar. Arraste para mover.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    Text(tx("gamefactory_toque_num_circulo_depois_em"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     Box(Modifier.fillMaxWidth().height(290.dp).clip(RoundedCornerShape(12.dp)).background(Palette.codeBg)) {
         Canvas(
             Modifier.fillMaxWidth().height(290.dp)
@@ -175,30 +176,30 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
     val s = sel
     val d = de
     if (d != null && s != null) {
-        Text("Letra da seta de q$d para q$s:", style = MaterialTheme.typography.labelMedium)
+        Text(tx("gamefactory_letra_seta_q_1_para", d, s), style = MaterialTheme.typography.labelMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             for (c in alfabeto) BigButton("$c", Modifier.weight(1f), small = true, color = Palette.hazard, textColor = Palette.hazardDark) {
                 setas[d to c] = s
                 Juice.drop()
                 de = null
             }
-            BigButton("Tirar", Modifier.weight(1f), small = true, color = Palette.white, textColor = Palette.ink) {
+            BigButton(tx("gamefactory_tirar"), Modifier.weight(1f), small = true, color = Palette.white, textColor = Palette.ink) {
                 setas.keys.filter { it.first == d && setas[it] == s }.forEach { setas.remove(it) }
                 de = null
             }
         }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        BigButton("Novo estado", Modifier.weight(1f), small = true, color = Palette.drawer, enabled = pos.size < 7) {
+        BigButton(tx("gamefactory_novo_estado"), Modifier.weight(1f), small = true, color = Palette.drawer, enabled = pos.size < 7) {
             val i = pos.size
             pos += Offset(0.3f + (i % 3) * 0.26f, if (i % 2 == 0) 0.3f else 0.72f)
             Juice.drop()
         }
-        BigButton(if (s != null && s in finais) "Tirar duplo" else "Círculo duplo", Modifier.weight(1f), small = true, color = Palette.drawer, enabled = s != null) {
+        BigButton(if (s != null && s in finais) tx("gamefactory_tirar_duplo") else tx("gamefactory_circulo_duplo"), Modifier.weight(1f), small = true, color = Palette.drawer, enabled = s != null) {
             if (s != null) { if (s in finais) finais.remove(s) else finais += s; Juice.click() }
         }
     }
-    HintBox(ctx, "Cada estado guarda uma lembrança: o que você já viu até aqui.", "Pense no que falta ler para aceitar. Um estado para cada situação.", "Solução mínima: $minimo estado(s).")
+    HintBox(ctx, tx("gamefactory_cada_estado_guarda_lembranca_que"), tx("gamefactory_pense_no_que_falta_ler"), tx("gamefactory_solucao_minima_1_estado", minimo))
     val f = furo
     if (f != null) Row(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.red.copy(alpha = 0.16f)).padding(8.dp),
@@ -206,12 +207,12 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
     ) {
         BugFigure(Modifier.height(44.dp))
         Column {
-            Text(if (f.isEmpty()) "a frase vazia" else f, style = MaterialTheme.typography.titleSmall, fontFamily = mono)
-            Text(if (furoAceitou) "Entrou e não devia." else "Devia entrar e ficou de fora.", style = MaterialTheme.typography.bodySmall)
+            Text(if (f.isEmpty()) tx("gamefactory_frase_vazia") else f, style = MaterialTheme.typography.titleSmall, fontFamily = mono)
+            Text(if (furoAceitou) tx("gamefactory_entrou_nao_devia") else tx("gamefactory_devia_entrar_ficou_fora"), style = MaterialTheme.typography.bodySmall)
         }
     }
-    if (ok) Text("Passou nos robôs com ${pos.size} estado(s). O mínimo é $minimo.", style = MaterialTheme.typography.titleSmall, color = Palette.green)
-    if (!ok) BigButton("Testar nos robôs", Modifier.fillMaxWidth()) {
+    if (ok) Text(tx("gamefactory_passou_nos_robos_com_1", pos.size, minimo), style = MaterialTheme.typography.titleSmall, color = Palette.green)
+    if (!ok) BigButton(tx("gamefactory_testar_nos_robos"), Modifier.fillMaxWidth()) {
         tentativas++
         val m = montado()
         val c = DfaCheck.diferenca(m, alvo)
@@ -224,7 +225,7 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
             furoAceitou = m.accepts(c)
             Juice.wrong()
         }
-    } else BigButton("Continuar", Modifier.fillMaxWidth()) {
+    } else BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
         val folga = (pos.size - minimo).coerceAtLeast(0)
         done((1.0 - 0.15 * folga - 0.1 * (tentativas - 1).coerceAtLeast(0)).coerceIn(0.5, 1.0))
     }

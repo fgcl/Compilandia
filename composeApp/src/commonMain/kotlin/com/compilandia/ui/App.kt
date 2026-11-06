@@ -42,6 +42,7 @@ import com.compilandia.ui.screens.OnboardingScreen
 import com.compilandia.ui.screens.RegionScreen
 import com.compilandia.ui.screens.SettingsScreen
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 @Composable
 fun App(injected: AppState? = null) {
@@ -76,6 +77,9 @@ fun App(injected: AppState? = null) {
                     is Screen.Episode -> com.compilandia.ui.screens.EpisodeScreen(app, screen)
                     Screen.Map -> MapScreen(app)
                     is Screen.RegionView -> RegionScreen(app, screen.region)
+                    is Screen.Trilha -> com.compilandia.ui.screens.TrilhaScreen(app, screen.skill)
+                    Screen.SeuCompilador -> com.compilandia.ui.screens.SeuCompiladorScreen(app)
+                    is Screen.FazerComAjuda -> com.compilandia.ui.screens.FazerComAjudaScreen(app, screen)
                     is Screen.Lesson -> LessonScreen(app, screen)
                     is Screen.Feynman -> FeynmanScreen(app, screen.skill)
                     is Screen.Play -> PlayScreen(app, screen)
@@ -98,6 +102,7 @@ fun App(injected: AppState? = null) {
             }
             JuiceOverlay()
             FxOverlay()
+            GlossarioBalao(app)
             val msg = app.toast
             LaunchedEffect(msg) { if (msg != null) { delay(2600); app.toast = null } }
             AnimatedVisibility(

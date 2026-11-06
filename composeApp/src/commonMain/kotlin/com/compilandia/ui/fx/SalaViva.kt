@@ -38,6 +38,7 @@ import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 private val MONITOR = Color(0xFF8FF5E2)
 private val SOLDA = Color(0xFFF5B700)
@@ -121,7 +122,7 @@ private fun BugPasseando(app: AppState, side: Dp) {
                     Sound.play(Sfx.IMPACT, 1.5f)
                     val pagou = app.learner.esmaga(nowMs())
                     app.commit()
-                    if (pagou > 0) app.say("Bug esmagado: +1 engrenagem")
+                    if (pagou > 0) app.say(tx("salaviva_bug_esmagado_1_engrenagem"))
                 },
         ) { BugFigure(Modifier.width(w)) }
     }

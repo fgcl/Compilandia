@@ -29,87 +29,71 @@ import com.compilandia.content.VisualKind.LR_TRACE
 import com.compilandia.content.VisualKind.PARSE_TREE
 import com.compilandia.learning.Skill
 import com.compilandia.learning.Style
+import com.compilandia.textos.tx
 
 // ───────────────────────────── DESCIDA RECURSIVA ─────────────────────────────
 
 internal val p2RecDescentLessons: List<Lesson> = listOf(
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.STORY, "A repartição dos funcionários-função",
+        Skill.RECURSIVE_DESCENT, Style.STORY, tx("lessonspart2c_reparticao_dos_funcionarios_funcao"),
         listOf(
-            Say(NARRADOR, "Corredor final do Templo Top-Down: uma repartição pública cheia de guichês. Cada guichê tem o nome de um não-terminal."),
-            Say(PROF, "Na descida recursiva, **cada não-terminal vira uma função** — um funcionário. O funcionário S atende comandos; o L, listas; o E, expressões."),
-            Code(P2_CMD, "A gramática dos comandos da repartição."),
-            Say(BYTE, "E como o funcionário S sabe o que fazer?"),
-            Say(PROF, "Ele olha a **senha do próximo cliente**: o token de lookahead. Senha 'if'? Segue o roteiro de S → if E then S. Senha 'print'? Roteiro de S → print E."),
-            Text("Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**match**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**)."),
+            Say(NARRADOR, tx("lessonspart2c_corredor_final_templo_top_down")),
+            Say(PROF, tx("lessonspart2c_na_descida_recursiva_cada_nao")),
+            Code(P2_CMD, tx("lessonspart2c_gramatica_dos_comandos_reparticao")),
+            Say(BYTE, tx("lessonspart2c_como_funcionario_sabe_que_fazer")),
+            Say(PROF, tx("lessonspart2c_ele_olha_senha_proximo_cliente")),
+            Text(tx("lessonspart2c_seguir_roteiro_simples_para_cada")),
             Predict(
-                "S recebeu a senha 'begin'. Qual é a sequência de ações do funcionário S?",
-                listOf("match(begin); L(); match(end)", "L(); match(begin); match(end)", "match(begin); S(); match(end)", "Chama E()"), 0,
-                "É o roteiro de S → begin L end: confere 'begin', manda para o L, confere 'end'."
+                tx("lessonspart2c_recebeu_senha_begin_qual_sequencia"),
+                listOf("match(begin); L(); match(end)", "L(); match(begin); match(end)", "match(begin); S(); match(end)", tx("lessonspart2c_chama")), 0,
+                tx("lessonspart2c_roteiro_begin_l_end_confere")
             ),
-            Visual(PARSE_TREE, P2_CMD, "begin print id end", "A árvore sintática é o organograma das chamadas: cada nó interno é uma função que foi chamada."),
-            Say(BYTE, "E o L, que pode ser ε? Como ele sabe que deve ficar quieto?"),
-            Say(PROF, "Se a senha for 'end' (que está em FOLLOW(L)), o L retorna sem fazer nada: a lista acabou. Se for if, print ou begin (FIRST(S)), ele chama S() e depois L() de novo."),
-            Callout(WATCH_OUT, "Funcionário que, como primeiro ato, chama a si mesmo sem atender ninguém (A → A α) entra em laço infinito. Recursão à esquerda mata a descida recursiva."),
-            Reveal("Quem faz o papel da 'pilha' na descida recursiva, se não há pilha explícita?", "A pilha de chamadas do próprio programa! Cada função chamada e ainda não terminada é um não-terminal pendente."),
-            Callout(REAL_WORLD, "GCC e Clang, compiladores de C/C++ usados no mundo inteiro, usam analisadores de descida recursiva escritos à mão: fáceis de ler e ótimos para mensagens de erro."),
+            Visual(PARSE_TREE, P2_CMD, tx("lessonspart2c_begin_print_id_end"), tx("lessonspart2c_arvore_sintatica_organograma_das_chamadas")),
+            Say(BYTE, tx("lessonspart2c_l_que_pode_ser_como")),
+            Say(PROF, tx("lessonspart2c_se_senha_for_end_que")),
+            Callout(WATCH_OUT, tx("lessonspart2c_funcionario_que_como_primeiro_ato")),
+            Reveal(tx("lessonspart2c_quem_faz_papel_pilha_na"), tx("lessonspart2c_pilha_chamadas_proprio_programa_cada")),
+            Callout(REAL_WORLD, tx("lessonspart2c_gcc_clang_compiladores_c_c")),
         )
     ),
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.VISUAL, "Vendo as funções se chamarem",
+        Skill.RECURSIVE_DESCENT, Style.VISUAL, tx("lessonspart2c_vendo_funcoes_se_chamarem"),
         listOf(
-            Say(PROF, "Vamos ver a descida recursiva acontecendo: cada passo da derivação é uma chamada de função."),
+            Say(PROF, tx("lessonspart2c_vamos_ver_descida_recursiva_acontecendo")),
             Code(P2_EXPR_LL),
             Code(
-                """
-                fun E() { T(); Elinha() }
-                fun Elinha() {
-                  if (look == "+") { match("+"); T(); Elinha() }
-                  // senão: ε (look deve estar em FOLLOW(E') = { ), ${'$'} })
-                }
-                fun T() { F(); Tlinha() }
-                fun Tlinha() {
-                  if (look == "*") { match("*"); F(); Tlinha() }
-                }
-                fun F() {
-                  when (look) {
-                    "("  -> { match("("); E(); match(")") }
-                    "id" -> match("id")
-                    else -> erro("esperava ( ou id")
-                  }
-                }
-                """.trimIndent(),
-                "Uma função por não-terminal (E' virou Elinha, T' virou Tlinha)."
+                tx("lessonspart2c_fun_t_elinha_fun_elinha"),
+                tx("lessonspart2c_funcao_por_nao_terminal_virou")
             ),
-            Visual(DERIVATION, P2_EXPR_LL, "id * id", "Cada expansão desta derivação mais à esquerda corresponde a uma chamada de função do código acima."),
+            Visual(DERIVATION, P2_EXPR_LL, "id * id", tx("lessonspart2c_cada_expansao_desta_derivacao_mais")),
             Steps(
-                "Chamadas para id * id",
+                tx("lessonspart2c_chamadas_para_id_id"),
                 listOf(
-                    "E() chama T().",
-                    "T() chama F(); F() vê 'id' e faz match(id).",
-                    "T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.",
-                    "Tlinha() vê \$: não faz nada (ε) e retorna.",
-                    "De volta em E(), que chama Elinha(); vê \$: ε, retorna.",
-                    "E() retorna com look = \$: sucesso!",
+                    tx("lessonspart2c_chama_t"),
+                    tx("lessonspart2c_t_chama_f_f_ve"),
+                    tx("lessonspart2c_t_chama_tlinha_ve_match"),
+                    tx("lessonspart2c_tlinha_ve_nao_faz_nada"),
+                    tx("lessonspart2c_volta_em_que_chama_elinha"),
+                    tx("lessonspart2c_retorna_com_look_sucesso"),
                 )
             ),
             Predict(
-                "Ao analisar 'id * id', quantas vezes F() é chamada?",
+                tx("lessonspart2c_ao_analisar_id_id_quantas"),
                 listOf("1", "2", "3", "0"), 1,
-                "Uma por id: T() chama F() para o primeiro e Tlinha() chama F() para o segundo."
+                tx("lessonspart2c_por_id_t_chama_f")
             ),
-            Visual(PARSE_TREE, P2_EXPR_LL, "id * id", "A árvore é o retrato das chamadas: os nós E, T, F, T' e E' são as funções."),
-            Say(BYTE, "E por que não usar a gramática E → E + T direto?"),
-            Visual(LEFT_RECURSION, P2_EXPR, caption = "Porque E() chamaria E() sem consumir nada: laço infinito. A transformação cria justamente as funções Elinha e Tlinha."),
-            Reveal("Na árvore de 'id * id', quantos nós T' aparecem, e por quê?", "Dois: o primeiro T' (filho de T) expande para * F T', e o T' de dentro vira ε. Cada chamada de Tlinha() é um nó T'."),
+            Visual(PARSE_TREE, P2_EXPR_LL, "id * id", tx("lessonspart2c_arvore_retrato_das_chamadas_nos")),
+            Say(BYTE, tx("lessonspart2c_por_que_nao_usar_gramatica")),
+            Visual(LEFT_RECURSION, P2_EXPR, caption = tx("lessonspart2c_porque_chamaria_sem_consumir_nada")),
+            Reveal(tx("lessonspart2c_na_arvore_id_id_quantos"), tx("lessonspart2c_dois_primeiro_t_filho_t")),
         )
     ),
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.WORKED, "Exemplo resolvido: funções das declarações",
+        Skill.RECURSIVE_DESCENT, Style.WORKED, tx("lessonspart2c_exemplo_resolvido_funcoes_das_declaracoes"),
         listOf(
-            Say(PROF, "Exercício de prova: escreva um analisador de descida recursiva para as declarações."),
+            Say(PROF, tx("lessonspart2c_exercicio_prova_escreva_analisador_descida")),
             Code(P2_DECL),
-            Text("Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `match(t)` que confere e avança."),
+            Text(tx("lessonspart2c_receita_funcao_por_nao_terminal")),
             Code(
                 """
                 fun match(t: String) {
@@ -117,134 +101,114 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
                   else erro("esperava " + t + ", veio " + look)
                 }
                 """.trimIndent(),
-                "O 'conferir a senha'."
+                tx("lessonspart2c_conferir_senha")
             ),
             Code(
-                """
-                fun D() { T(); L(); match(";") }      // produção única
-
-                fun T() {
-                  when (look) {
-                    "int"   -> match("int")
-                    "float" -> match("float")
-                    else    -> erro("esperava um tipo")
-                  }
-                }
-
-                fun L() { match("id"); R() }          // L → id R
-                """.trimIndent(),
-                "D, T e L resolvidos. D e L têm uma produção só: nem precisam olhar o lookahead."
+                tx("lessonspart2c_fun_d_t_l_match"),
+                tx("lessonspart2c_d_t_l_resolvidos_d")
             ),
-            Say(BYTE, "E o R, que tem ε?"),
-            Say(PROF, "Esse fica para você. Pense: qual token faz R escolher R → , id R? E qual faz escolher R → ε?"),
-            Reveal("Qual token escolhe R → , id R?", "',' — é FIRST(, id R)."),
-            Reveal("E qual escolhe R → ε?", "';' — é FOLLOW(R). Qualquer outro token é erro."),
-            Reveal("Escreva R() completo.", "fun R() { when (look) { \",\" -> { match(\",\"); match(\"id\"); R() };  \";\" -> { /* ε: não consome nada */ };  else -> erro(\"esperava , ou ;\") } }"),
-            Visual(PARSE_TREE, P2_DECL, "int id , id ;", "Cada nó interno = uma chamada. Repare no R chamando R: recursão à DIREITA, inofensiva."),
-            Callout(EXAM_TIP, "Nas produções com ε, deixe o teste explícito: 'se look ∈ FOLLOW(A), não faz nada; senão, erro'. Detectar o erro cedo (no else) costuma valer ponto."),
+            Say(BYTE, tx("lessonspart2c_r_que_tem")),
+            Say(PROF, tx("lessonspart2c_esse_fica_para_voce_pense")),
+            Reveal(tx("lessonspart2c_qual_token_escolhe_r_id"), tx("lessonspart2c_first_id_r")),
+            Reveal(tx("lessonspart2c_qual_escolhe_r"), tx("lessonspart2c_follow_r_qualquer_outro_token")),
+            Reveal(tx("lessonspart2c_escreva_r_completo"), tx("lessonspart2c_fun_r_when_look_match")),
+            Visual(PARSE_TREE, P2_DECL, "int id , id ;", tx("lessonspart2c_cada_no_interno_chamada_repare")),
+            Callout(EXAM_TIP, tx("lessonspart2c_nas_producoes_com_deixe_teste")),
         )
     ),
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.SOCRATIC, "Inventando a descida recursiva",
+        Skill.RECURSIVE_DESCENT, Style.SOCRATIC, tx("lessonspart2c_inventando_descida_recursiva"),
         listOf(
-            Say(PROF, "Vamos inventar a descida recursiva do zero. Objetivo: uma função que reconheça 'tudo que S gera'."),
+            Say(PROF, tx("lessonspart2c_vamos_inventar_descida_recursiva_zero")),
             Predict(
                 "S → a B c. Qual é o corpo mais natural de S()?",
                 listOf("match(a); B(); match(c)", "B(); match(a); match(c)", "match(a); match(B); match(c)", "S(); B()"), 0,
-                "Siga o lado direito da esquerda para a direita: terminal vira match; não-terminal vira chamada da função dele."
+                tx("lessonspart2c_siga_lado_direito_esquerda_para")
             ),
             Predict(
                 "S → a B | c D. Como S() escolhe?",
-                listOf("Tenta a primeira e, se falhar, volta atrás", "Olha o token: 'a' → primeira, 'c' → segunda", "Sempre a primeira", "Sorteia"), 1,
-                "Com FIRST disjuntos, um token basta. É a descida recursiva PREDITIVA, sem backtracking."
+                listOf(tx("lessonspart2c_tenta_primeira_se_falhar_volta"), tx("lessonspart2c_olha_token_primeira_c_segunda"), tx("lessonspart2c_sempre_primeira"), tx("lessonspart2c_sorteia")), 1,
+                tx("lessonspart2c_com_first_disjuntos_token_basta")
             ),
             Predict(
                 "E → E + T | T. O que acontece se E() começar chamando E()?",
-                listOf("Funciona normal", "Laço infinito / estouro de pilha", "Erro de sintaxe", "Lê o +"), 1,
-                "E() chama E() sem consumir token nenhum: chama de novo, e de novo… estouro de pilha. Recursão à esquerda é proibida aqui."
+                listOf(tx("lessonspart2c_funciona_normal"), tx("lessonspart2c_laco_infinito_estouro_pilha"), tx("comum_erro_sintaxe"), tx("lessonspart2c_le")), 1,
+                tx("lessonspart2c_chama_sem_consumir_token_nenhum")
             ),
             Predict(
                 "A → b A | ε. Com que tokens A() deve escolher o ε?",
-                listOf("Com b", "Com os tokens de FOLLOW(A)", "Com qualquer token", "Nunca"), 1,
-                "Se o token não abre b A mas pode vir depois de A, A some. É a mesma lógica da tabela LL(1)."
+                listOf(tx("lessonspart2c_com_b"), tx("lessonspart2c_com_tokens_follow"), tx("lessonspart2c_com_qualquer_token"), tx("comum_nunca")), 1,
+                tx("lessonspart2c_se_token_nao_abre_b")
             ),
-            Say(BYTE, "Então descida recursiva é a tabela LL(1) escrita em ifs?"),
-            Say(PROF, "Exatamente! Cada 'when (look)' é uma linha da tabela. E a pilha? É a pilha de chamadas."),
+            Say(BYTE, tx("lessonspart2c_entao_descida_recursiva_tabela_ll")),
+            Say(PROF, tx("lessonspart2c_exatamente_cada_when_look_linha")),
             Predict(
                 "A → x y | x z. A descida recursiva preditiva funciona direto?",
-                listOf("Sim", "Não: precisa fatorar à esquerda (A → x A', A' → y | z)", "Sim, se usar FOLLOW", "Não: precisa eliminar ε"), 1,
-                "O mesmo token x abre as duas alternativas: sem fatorar, só com backtracking."
+                listOf(tx("comum_sim"), tx("lessonspart2c_nao_precisa_fatorar_esquerda_x"), tx("lessonspart2c_sim_se_usar_follow"), tx("lessonspart2c_nao_precisa_eliminar")), 1,
+                tx("lessonspart2c_mesmo_token_x_abre_duas")
             ),
-            Visual(LEFT_FACTORING, P2_FACT, caption = "Veja a fatoração deixando a gramática pronta para virar funções."),
-            Reveal("Resuma com suas palavras como construir uma descida recursiva.", "Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, match para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada)."),
-            Visual(PARSE_TREE, P2_CMD, "if id then print id", "Treino: imagine S() → match(if), E(), match(then), S()… e confira com a árvore."),
+            Visual(LEFT_FACTORING, P2_FACT, caption = tx("lessonspart2c_veja_fatoracao_deixando_gramatica_pronta")),
+            Reveal(tx("lessonspart2c_resuma_com_suas_palavras_como"), tx("lessonspart2c_funcao_por_nao_terminal_lookahead")),
+            Visual(PARSE_TREE, P2_CMD, tx("lessonspart2c_if_id_then_print_id"), tx("lessonspart2c_treino_imagine_match_if_match")),
         )
     ),
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.FORMAL, "Descida recursiva: definição de prova",
+        Skill.RECURSIVE_DESCENT, Style.FORMAL, tx("lessonspart2c_descida_recursiva_definicao_prova"),
         listOf(
-            Say(PROF, "Definição de prova, no estilo do Livro do Dragão."),
-            Text("Um **analisador de descida recursiva** é um conjunto de procedimentos, um para cada não-terminal. A execução começa pelo procedimento do símbolo inicial e tem sucesso se ele termina tendo consumido toda a entrada."),
+            Say(PROF, tx("lessonspart2c_definicao_prova_no_estilo_livro")),
+            Text(tx("lessonspart2c_analisador_descida_recursiva_conjunto_proced")),
             Code(
-                """
-                void A() {
-                  escolha uma produção A → X1 X2 … Xk     // pelo lookahead
-                  para i := 1 até k:
-                    se Xi é não-terminal: chame Xi()
-                    senão se Xi = símbolo de entrada atual: avance a entrada
-                    senão: erro()
-                }
-                """.trimIndent(),
-                "Procedimento típico para um não-terminal A."
+                tx("lessonspart2c_void_escolha_producao_x1_x2"),
+                tx("lessonspart2c_procedimento_tipico_para_nao_terminal")
             ),
-            Text("Na forma geral, a escolha da produção pode exigir **retrocesso** (backtracking). Na forma **preditiva**, o lookahead decide: usa-se A → α se look ∈ FIRST(α), ou se α ⇒* ε e look ∈ FOLLOW(A). Isso exige uma gramática **LL(1)**."),
+            Text(tx("lessonspart2c_na_forma_geral_escolha_producao")),
             Steps(
-                "Requisitos da descida recursiva preditiva",
+                tx("lessonspart2c_requisitos_descida_recursiva_preditiva"),
                 listOf(
-                    "Sem recursão à esquerda (direta ou indireta): senão, laço infinito.",
-                    "Fatorada à esquerda: senão, um token não decide.",
-                    "Condições LL(1) satisfeitas: alternativas com conjuntos de escolha disjuntos.",
-                    "Se nenhuma alternativa serve para o lookahead: erro (a menos que haja alternativa ε e look ∈ FOLLOW(A)).",
+                    tx("lessonspart2c_sem_recursao_esquerda_direta_ou"),
+                    tx("lessonspart2c_fatorada_esquerda_senao_token_nao"),
+                    tx("lessonspart2c_condicoes_ll_1_satisfeitas_alternativas"),
+                    tx("lessonspart2c_se_nenhuma_alternativa_serve_para"),
                 )
             ),
             Predict(
-                "Qual a relação entre a descida recursiva preditiva e o analisador preditivo com tabela?",
-                listOf("Reconhecem classes diferentes", "Mesma classe (LL(1)); a pilha explícita vira a pilha de chamadas", "A descida recursiva é bottom-up", "O de tabela não precisa de FIRST"), 1,
-                "São duas implementações da mesma ideia: a tabela vira os ifs e a pilha vira a recursão."
+                tx("lessonspart2c_qual_relacao_entre_descida_recursiva"),
+                listOf(tx("lessonspart2c_reconhecem_classes_diferentes"), tx("lessonspart2c_mesma_classe_ll_1_pilha"), tx("lessonspart2c_descida_recursiva_bottom_up"), tx("lessonspart2c_tabela_nao_precisa_first")), 1,
+                tx("lessonspart2c_sao_duas_implementacoes_mesma_ideia")
             ),
-            Code(P2_CMD, "Exercício típico: escreva S(), L() e E()."),
-            Reveal("Escreva L() para L → S L | ε.", "L() { se look ∈ {if, print, begin}: S(); L()   senão se look = end: retorna (ε)   senão: erro() }"),
+            Code(P2_CMD, tx("lessonspart2c_exercicio_tipico_escreva_l")),
+            Reveal(tx("lessonspart2c_escreva_l_para_l_l"), tx("lessonspart2c_l_se_look_if_print")),
             Visual(FIRST_FOLLOW, P2_CMD, caption = "Os conjuntos que decidem cada if: FIRST(S) = {if, print, begin} e FOLLOW(L) = {end}."),
-            Callout(EXAM_TIP, "Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o match e a checagem final do \$ (principal: S(); se look ≠ \$, erro)."),
-            Reveal("Por que a recursão à DIREITA (L → S L) não causa problema?", "Porque antes de chamar L() de novo, S() consome pelo menos um token. A entrada diminui a cada chamada, então a recursão termina."),
+            Callout(EXAM_TIP, tx("lessonspart2c_na_prova_1_elimine_recursao")),
+            Reveal(tx("lessonspart2c_por_que_recursao_direita_l"), tx("lessonspart2c_porque_antes_chamar_l_novo")),
         )
     ),
     Lesson(
-        Skill.RECURSIVE_DESCENT, Style.MNEMONIC, "Uma variável, uma função",
+        Skill.RECURSIVE_DESCENT, Style.MNEMONIC, tx("lessonspart2c_variavel_funcao"),
         listOf(
-            Say(NARRADOR, "Último corredor do Templo Top-Down: uma fileira de portas, cada uma com o nome de um não-terminal. Atrás de cada porta, um funcionário que pode abrir outras portas."),
-            Callout(MNEMONIC, "**'Uma variável, uma função. Um terminal, um match.'**"),
-            Callout(MNEMONIC, "**Recursão à esquerda = cachorro correndo atrás do rabo.** E() chama E() que chama E()… e nunca sai do lugar, porque não come nenhum token."),
-            Callout(MNEMONIC, "**'Olha a senha antes de atender.'** O lookahead é a senha do cliente: o FIRST escolhe o roteiro; o FOLLOW autoriza o 'não faço nada' (ε)."),
-            Say(LEXI, "Eu entrego os tokens já cortadinhos. A função só precisa espiar o próximo: nada de reler texto!"),
-            Say(BYTE, "E qual a diferença pra pilha do golem?"),
-            Callout(FIRESIDE, "Golem Pilha e Descida Recursiva ao pé da lareira. Pilha: 'Eu guardo os não-terminais pendentes numa pilha de pedra.' Descida: 'E eu na pilha de chamadas. Somos gêmeos, só muda a roupa.' Pilha: 'Mas você dá mensagens de erro mais bonitas.' Descida: 'Por isso o Clang me contratou.'"),
+            Say(NARRADOR, tx("lessonspart2c_ultimo_corredor_templo_top_down")),
+            Callout(MNEMONIC, tx("lessonspart2c_variavel_funcao_terminal_match")),
+            Callout(MNEMONIC, tx("lessonspart2c_recursao_esquerda_cachorro_correndo_atras")),
+            Callout(MNEMONIC, tx("lessonspart2c_olha_senha_antes_atender_lookahead")),
+            Say(LEXI, tx("lessonspart2c_eu_entrego_tokens_ja_cortadinhos")),
+            Say(BYTE, tx("lessonspart2c_qual_diferenca_pra_pilha_golem")),
+            Callout(FIRESIDE, tx("lessonspart2c_golem_pilha_descida_recursiva_ao")),
             Steps(
-                "Confusões clássicas",
+                tx("comum_confusoes_classicas"),
                 listOf(
-                    "Descida recursiva NÃO é bottom-up: é top-down, começa pela raiz (S()).",
-                    "Recursão à DIREITA é ok; à ESQUERDA, não.",
-                    "Esquecer de checar \$ no final: S() pode retornar com tokens sobrando.",
-                    "Escolher ε 'por padrão' sem checar FOLLOW: funciona, mas o erro é detectado mais tarde.",
+                    tx("lessonspart2c_descida_recursiva_nao_bottom_up"),
+                    tx("lessonspart2c_recursao_direita_ok_esquerda_nao"),
+                    tx("lessonspart2c_esquecer_checar_no_final_pode"),
+                    tx("lessonspart2c_escolher_por_padrao_sem_checar"),
                 )
             ),
             Predict(
-                "Qual gramática NÃO serve para descida recursiva preditiva sem transformar?",
+                tx("lessonspart2c_qual_gramatica_nao_serve_para"),
                 listOf("E → T E'", "L → S L | ε", "A → A b | c", "R → , id R | ε"), 2,
                 "A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada."
             ),
-            Visual(PARSE_TREE, P2_DECL, "float id ;", "Cada nó interno = uma porta aberta (uma função chamada). Conte: D, T, L, R."),
-            Reveal("Recite os dois ganchos principais.", "'Uma variável, uma função; um terminal, um match.' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'"),
+            Visual(PARSE_TREE, P2_DECL, "float id ;", tx("lessonspart2c_cada_no_interno_porta_aberta")),
+            Reveal(tx("lessonspart2c_recite_dois_ganchos_principais"), tx("lessonspart2c_variavel_funcao_terminal_match_recursao")),
         )
     ),
 )
@@ -253,178 +217,178 @@ internal val p2RecDescentLessons: List<Lesson> = listOf(
 
 internal val p2ShiftReduceLessons: List<Lesson> = listOf(
     Lesson(
-        Skill.SHIFT_REDUCE, Style.STORY, "Montando Lego de baixo para cima",
+        Skill.SHIFT_REDUCE, Style.STORY, tx("lessonspart2c_montando_lego_baixo_para_cima"),
         listOf(
-            Say(NARRADOR, "Bem-vindo à Fortaleza Bottom-Up! Aqui ninguém prevê nada: a gente constrói de baixo para cima."),
-            Say(PROF, "Imagine montar um Lego seguindo o manual de trás pra frente. Você pega as pecinhas uma a uma (**empilhar**, shift). Quando as peças do topo formam um 'kit' do manual, você as encaixa num bloco maior (**reduzir**, reduce)."),
-            Code(P2_EXPR, "O 'manual'. Repare: tem recursão à esquerda, e aqui ninguém se importa!"),
-            Say(BYTE, "Então eu empilho 'id' e já reduzo, porque F → id?"),
-            Say(PROF, "Isso! O 'id' no topo vira F. E esse F vira T (T → F). Cada redução é um passo de derivação feito ao contrário."),
+            Say(NARRADOR, tx("lessonspart2c_bem_vindo_fortaleza_bottom_up")),
+            Say(PROF, tx("lessonspart2c_imagine_montar_lego_seguindo_manual")),
+            Code(P2_EXPR, tx("lessonspart2c_manual_repare_tem_recursao_esquerda")),
+            Say(BYTE, tx("lessonspart2c_entao_eu_empilho_id_ja")),
+            Say(PROF, tx("lessonspart2c_isso_id_no_topo_vira")),
             Predict(
-                "Pilha: \$ T. Próximo token: *. Reduzir T para E (E → T) ou empilhar o *?",
-                listOf("Reduzir para E", "Empilhar o *", "Aceitar", "Tanto faz"), 1,
-                "Se virasse E, teríamos 'E *', e nenhuma forma sentencial tem E seguido de *. O kit certo é T * F: empilhamos e esperamos. Saber QUANDO reduzir é a arte toda."
+                tx("lessonspart2c_pilha_t_proximo_token_reduzir"),
+                listOf(tx("lessonspart2c_reduzir_para"), tx("lessonspart2c_empilhar"), tx("comum_aceitar"), tx("comum_tanto_faz")), 1,
+                tx("lessonspart2c_se_virasse_teriamos_nenhuma_forma")
             ),
-            Text("O kit certo, no lugar certo, tem nome: **handle** (alça). Reduzir o handle é dar um passo para trás numa **derivação mais à direita**."),
-            Visual(LR_TRACE, P2_EXPR, "id * id", "Assista à montagem: empilha, reduz, reduz, empilha, empilha, reduz, reduz, reduz, aceita."),
-            Callout(NO_DUMB_QUESTIONS, "P: Quem me diz qual kit é o handle? R: Uma tabela construída com itens LR (as próximas salas da Fortaleza). Por enquanto, confie no manual e na intuição."),
-            Say(PILHA, "Aqui… eu… guardo… o PASSADO. O que você já… viu."),
-            Reveal("Quais são as 4 ações de um analisador empilha-reduz?", "Empilhar (shift), reduzir (reduce), aceitar (accept) e erro (error)."),
-            Callout(REAL_WORLD, "Yacc e Bison geram analisadores empilha-reduz (LALR). O PostgreSQL, por exemplo, usa Bison para analisar SQL."),
+            Text(tx("lessonspart2c_kit_certo_no_lugar_certo")),
+            Visual(LR_TRACE, P2_EXPR, "id * id", tx("lessonspart2c_assista_montagem_empilha_reduz_reduz")),
+            Callout(NO_DUMB_QUESTIONS, tx("lessonspart2c_p_quem_me_diz_qual")),
+            Say(PILHA, tx("lessonspart2c_aqui_eu_guardo_passado_que")),
+            Reveal(tx("lessonspart2c_quais_sao_4_acoes_analisador"), tx("lessonspart2c_empilhar_shift_reduzir_reduce_aceitar")),
+            Callout(REAL_WORLD, tx("lessonspart2c_yacc_bison_geram_analisadores_empilha")),
         )
     ),
     Lesson(
-        Skill.SHIFT_REDUCE, Style.VISUAL, "Empilha-reduz em câmera lenta",
+        Skill.SHIFT_REDUCE, Style.VISUAL, tx("lessonspart2c_empilha_reduz_em_camera_lenta"),
         listOf(
-            Say(PROF, "Vamos ver um analisador empilha-reduz completo, com estados e tudo."),
+            Say(PROF, tx("lessonspart2c_vamos_ver_analisador_empilha_reduz")),
             Code(P2_EXPR),
-            Visual(LR_TRACE, P2_EXPR, "id + id * id", "Avance passo a passo. Repare quando ele reduz e quando ele espera."),
+            Visual(LR_TRACE, P2_EXPR, "id + id * id", tx("lessonspart2c_avance_passo_passo_repare_quando")),
             Steps(
                 "Momentos-chave",
                 listOf(
-                    "Empilha id e reduz F → id, T → F, E → T: o primeiro operando já virou E.",
+                    tx("lessonspart2c_empilha_id_reduz_f_id"),
                     "Empilha + e o segundo id; reduz F → id e T → F.",
-                    "Agora o topo é E + T e vem '*': ele EMPILHA em vez de reduzir E → E + T. A multiplicação precisa ser montada antes.",
-                    "Monta T * F, reduz T → T * F e só então E → E + T.",
-                    "Pilha com E e entrada \$: aceita.",
+                    tx("lessonspart2c_agora_topo_t_vem_ele"),
+                    tx("lessonspart2c_monta_t_f_reduz_t"),
+                    tx("lessonspart2c_pilha_com_entrada_aceita"),
                 )
             ),
             Predict(
-                "Com 'E + T' no topo e '*' na entrada, por que NÃO reduzir E → E + T?",
-                listOf("Porque T * F ainda precisa ser montado (o * tem precedência)", "Porque a pilha está cheia", "Porque E + T não é produção", "Porque é proibido reduzir com * na entrada"), 0,
-                "Se reduzisse, ficaria E * …, que não existe na gramática. O analisador espera montar T * F primeiro: a precedência sai naturalmente da gramática."
+                tx("lessonspart2c_com_t_no_topo_na"),
+                listOf(tx("lessonspart2c_porque_t_f_ainda_precisa"), tx("lessonspart2c_porque_pilha_esta_cheia"), tx("lessonspart2c_porque_t_nao_producao"), tx("lessonspart2c_porque_proibido_reduzir_com_na")), 0,
+                tx("lessonspart2c_se_reduzisse_ficaria_que_nao")
             ),
-            Visual(PARSE_TREE, P2_EXPR, "id + id * id", "A árvore montada de baixo para cima: as folhas surgem primeiro, a raiz E por último."),
-            Say(BYTE, "Então o trace, lido de trás pra frente, é uma derivação?"),
-            Say(PROF, "Isso! As reduções, lidas ao contrário, formam a **derivação mais à direita**. Bottom-up = derivação mais à direita de trás pra frente."),
-            Reveal("Na entrada 'id * id', qual é a ÚLTIMA redução antes de aceitar?", "E → T. A raiz da árvore é sempre a última peça encaixada."),
-            Callout(BRAIN_POWER, "O analisador nunca precisa procurar o handle no MEIO da pilha: ele sempre aparece no topo. Por que isso facilita tanto a vida?"),
-            Reveal("Responda o Poder do Cérebro.", "Porque basta olhar o topo da pilha (e o próximo token) para decidir. É isso que permite guiar as decisões com uma pilha simples e um autômato finito."),
+            Visual(PARSE_TREE, P2_EXPR, "id + id * id", tx("lessonspart2c_arvore_montada_baixo_para_cima")),
+            Say(BYTE, tx("lessonspart2c_entao_trace_lido_tras_pra")),
+            Say(PROF, tx("lessonspart2c_isso_reducoes_lidas_ao_contrario")),
+            Reveal(tx("lessonspart2c_na_entrada_id_id_qual"), "E → T. A raiz da árvore é sempre a última peça encaixada."),
+            Callout(BRAIN_POWER, tx("lessonspart2c_analisador_nunca_precisa_procurar_handle")),
+            Reveal(tx("comum_responda_poder_cerebro"), tx("lessonspart2c_porque_basta_olhar_topo_pilha")),
         )
     ),
     Lesson(
-        Skill.SHIFT_REDUCE, Style.WORKED, "Exemplo resolvido: id * id",
+        Skill.SHIFT_REDUCE, Style.WORKED, tx("lessonspart2c_exemplo_resolvido_id_id"),
         listOf(
-            Say(PROF, "Exercício resolvido: análise empilha-reduz de id * id na gramática de expressões. Formato: Pilha | Entrada | Ação."),
+            Say(PROF, tx("lessonspart2c_exercicio_resolvido_analise_empilha_reduz")),
             Code(P2_EXPR),
             Steps(
-                "Resolução",
+                tx("lessonspart2c_resolucao"),
                 listOf(
-                    "\$ | id * id \$ | empilhar",
-                    "\$ id | * id \$ | reduzir F → id",
-                    "\$ F | * id \$ | reduzir T → F",
-                    "\$ T | * id \$ | empilhar (não reduza E → T: * não pode seguir E)",
-                    "\$ T * | id \$ | empilhar",
-                    "\$ T * id | \$ | reduzir F → id",
-                    "\$ T * F | \$ | reduzir T → T * F",
-                    "\$ T | \$ | reduzir E → T",
-                    "\$ E | \$ | aceitar",
+                    tx("lessonspart2c_id_id_empilhar"),
+                    tx("lessonspart2c_id_id_reduzir_f_id"),
+                    tx("lessonspart2c_f_id_reduzir_t_f"),
+                    tx("lessonspart2c_t_id_empilhar_nao_reduza"),
+                    tx("lessonspart2c_t_id_empilhar"),
+                    tx("lessonspart2c_t_id_reduzir_f_id"),
+                    tx("lessonspart2c_t_f_reduzir_t_t"),
+                    tx("lessonspart2c_t_reduzir_t"),
+                    tx("lessonspart2c_aceitar"),
                 )
             ),
-            Visual(LR_TRACE, P2_EXPR, "id * id", "Confira com o motor (ele mostra também os números dos estados)."),
-            Say(BYTE, "No passo 4 eu teria reduzido pra E. Tô ferrado?"),
-            Say(PROF, "De jeito nenhum: é O erro mais comum, e é exatamente por isso que existem as tabelas LR. A pista aqui: '*' não está em FOLLOW(E) = {+, ), \$}."),
-            Say(PROF, "Agora o desbotado. Gramática S → S a | b, entrada b a a."),
+            Visual(LR_TRACE, P2_EXPR, "id * id", tx("lessonspart2c_confira_com_motor_ele_mostra")),
+            Say(BYTE, tx("lessonspart2c_no_passo_4_eu_teria")),
+            Say(PROF, tx("lessonspart2c_jeito_nenhum_erro_mais_comum")),
+            Say(PROF, tx("lessonspart2c_agora_desbotado_gramatica_b_entrada")),
             Code(P2_LIST),
-            Text("Eu começo: \$ | b a a \$ | empilhar. Depois \$ b | a a \$ | reduzir S → b. Depois \$ S | a a \$ | empilhar."),
-            Reveal("Pilha \$ S a, entrada a \$. Ação?", "Reduzir S → S a. A pilha vira \$ S."),
-            Reveal("Pilha \$ S, entrada a \$. E agora?", "Empilhar a. Depois, com \$ S a e entrada \$, reduzir S → S a."),
-            Reveal("E o final?", "Pilha \$ S e entrada \$: aceitar."),
-            Visual(LR_TRACE, P2_LIST, "b a a", "Confira: a recursão à esquerda, proibida no Templo, aqui é bem-vinda."),
+            Text(tx("lessonspart2c_eu_comeco_b_empilhar_depois")),
+            Reveal(tx("lessonspart2c_pilha_entrada_acao"), tx("lessonspart2c_reduzir_pilha_vira")),
+            Reveal(tx("lessonspart2c_pilha_entrada_agora"), tx("lessonspart2c_empilhar_depois_com_entrada_reduzir")),
+            Reveal(tx("lessonspart2c_final"), tx("lessonspart2c_pilha_entrada_aceitar")),
+            Visual(LR_TRACE, P2_LIST, tx("comum_b"), tx("lessonspart2c_confira_recursao_esquerda_proibida_no")),
         )
     ),
     Lesson(
-        Skill.SHIFT_REDUCE, Style.SOCRATIC, "Descobrindo o que é um handle",
+        Skill.SHIFT_REDUCE, Style.SOCRATIC, tx("lessonspart2c_descobrindo_que_handle"),
         listOf(
-            Say(PROF, "Perguntas para você descobrir sozinho o que é um handle."),
-            Code(P2_HANDLE, "Exemplo clássico do Livro do Dragão, com a frase a b b c d e."),
+            Say(PROF, tx("lessonspart2c_perguntas_para_voce_descobrir_sozinho")),
+            Code(P2_HANDLE, tx("lessonspart2c_exemplo_classico_livro_dragao_com")),
             Predict(
-                "Pilha: \$ a b. Entrada: b c d e \$. O 'b' no topo casa com A → b. Reduzir?",
-                listOf("Sim", "Não"), 0,
-                "Sim: chegamos a a A b c d e, que leva a S. Aqui esse b é o handle."
+                tx("lessonspart2c_pilha_b_entrada_b_c"),
+                listOf(tx("comum_sim"), tx("comum_nao_2")), 0,
+                tx("lessonspart2c_sim_chegamos_b_c_d")
             ),
             Predict(
-                "Agora a pilha é \$ a A b e a entrada c d e \$. O 'b' no topo casa com A → b de novo. Reduzir?",
-                listOf("Sim, b é sempre handle", "Não: o certo é empilhar c e reduzir A b c para A"), 1,
-                "Reduzir daria a A A c d e, que não leva a S. O handle aqui é A b c. Nem toda ocorrência de um lado direito é um handle!"
+                tx("lessonspart2c_agora_pilha_b_entrada_c"),
+                listOf(tx("lessonspart2c_sim_b_sempre_handle"), tx("lessonspart2c_nao_certo_empilhar_c_reduzir")), 1,
+                tx("lessonspart2c_reduzir_daria_c_d_que")
             ),
-            Say(BYTE, "Então handle não é só 'achei um lado direito'…"),
-            Reveal("Tente definir handle com suas palavras.", "É uma ocorrência de um lado direito que, reduzida, nos leva um passo para trás numa derivação mais à DIREITA até o símbolo inicial: a redução 'certa'."),
+            Say(BYTE, tx("lessonspart2c_entao_handle_nao_so_achei")),
+            Reveal(tx("lessonspart2c_tente_definir_handle_com_suas"), tx("lessonspart2c_ocorrencia_lado_direito_que_reduzida")),
             Predict(
-                "Em que posição da pilha o handle aparece?",
-                listOf("Sempre no topo", "Sempre no fundo", "Em qualquer lugar", "No meio"), 0,
-                "Resultado importante: numa análise empilha-reduz o handle sempre aparece no topo da pilha, nunca escondido no meio."
+                tx("lessonspart2c_em_que_posicao_pilha_handle"),
+                listOf(tx("lessonspart2c_sempre_no_topo"), tx("lessonspart2c_sempre_no_fundo"), tx("lessonspart2c_em_qualquer_lugar"), tx("lessonspart2c_no_meio")), 0,
+                tx("lessonspart2c_resultado_importante_numa_analise_empilha")
             ),
             Predict(
-                "Se em algum momento o analisador não sabe se deve empilhar ou reduzir, temos um…",
-                listOf("Conflito empilha-reduz (shift/reduce)", "Conflito reduz-reduz", "Erro léxico", "Aceite"), 0,
-                "Conflito shift/reduce. Se ele não souber QUAL redução fazer, é reduce/reduce."
+                tx("lessonspart2c_se_em_algum_momento_analisador"),
+                listOf(tx("lessonspart2c_conflito_empilha_reduz_shift_reduce"), tx("lessonspart2c_conflito_reduz_reduz"), tx("comum_erro_lexico"), tx("lessonspart2c_aceite")), 0,
+                tx("lessonspart2c_conflito_shift_reduce_se_ele")
             ),
-            Visual(LR_TRACE, P2_HANDLE, "a b b c d e", "Veja o analisador acertando o handle em cada passo."),
-            Reveal("Escreva a sequência de reduções da análise de a b b c d e.", "A → b, A → A b c, B → d, S → a A B e. Lida ao contrário, é a derivação mais à direita: S ⇒ a A B e ⇒ a A d e ⇒ a A b c d e ⇒ a b b c d e."),
-            Say(PROF, "Você reconstruiu sozinho a ideia central do bottom-up. Achar handles é o que o resto da Fortaleza ensina a automatizar."),
+            Visual(LR_TRACE, P2_HANDLE, tx("lessonspart2c_b_b_c_d"), tx("lessonspart2c_veja_analisador_acertando_handle_em")),
+            Reveal(tx("lessonspart2c_escreva_sequencia_reducoes_analise_b"), "A → b, A → A b c, B → d, S → a A B e. Lida ao contrário, é a derivação mais à direita: S ⇒ a A B e ⇒ a A d e ⇒ a A b c d e ⇒ a b b c d e."),
+            Say(PROF, tx("lessonspart2c_voce_reconstruiu_sozinho_ideia_central")),
         )
     ),
     Lesson(
-        Skill.SHIFT_REDUCE, Style.FORMAL, "Empilha-reduz: definições de prova",
+        Skill.SHIFT_REDUCE, Style.FORMAL, tx("lessonspart2c_empilha_reduz_definicoes_prova"),
         listOf(
-            Say(PROF, "Definições de prova, sem enrolação."),
-            Text("**Análise empilha-reduz**: análise ascendente (bottom-up) com uma pilha de símbolos gramaticais e um buffer de entrada. Configuração inicial: pilha \$, entrada w\$. Sucesso: pilha \$ S, entrada \$."),
+            Say(PROF, tx("lessonspart2c_definicoes_prova_sem_enrolacao")),
+            Text(tx("lessonspart2c_analise_empilha_reduz_analise_ascendente")),
             Steps(
-                "As quatro ações",
+                tx("lessonspart2c_quatro_acoes"),
                 listOf(
-                    "**Empilhar (shift)**: move o próximo símbolo da entrada para o topo da pilha.",
-                    "**Reduzir (reduce)**: o topo contém um lado direito β (o handle); desempilha β e empilha A, para A → β.",
-                    "**Aceitar (accept)**: anuncia o término com sucesso.",
-                    "**Erro (error)**: detecta um erro de sintaxe e chama a rotina de recuperação.",
+                    tx("lessonspart2c_empilhar_shift_move_proximo_simbolo"),
+                    tx("lessonspart2c_reduzir_reduce_topo_contem_lado"),
+                    tx("lessonspart2c_aceitar_accept_anuncia_termino_com"),
+                    tx("lessonspart2c_erro_error_detecta_erro_sintaxe"),
                 )
             ),
-            Text("**Handle.** Se S ⇒*rm α A w ⇒rm α β w, então a produção A → β na posição logo após α é um handle de α β w. (w só tem terminais; 'rm' = mais à direita.)"),
-            Text("**Prefixo viável**: prefixo de uma forma sentencial direita que não ultrapassa o fim do handle. O conteúdo da pilha é sempre um prefixo viável."),
+            Text(tx("lessonspart2c_handle_se_rm_w_rm")),
+            Text(tx("lessonspart2c_prefixo_viavel_prefixo_forma_sentencial")),
             Predict(
-                "A sequência de reduções de um analisador empilha-reduz, lida de trás para frente, corresponde a:",
-                listOf("Uma derivação mais à esquerda", "Uma derivação mais à direita", "Uma árvore ambígua", "A tabela LL(1)"), 1,
-                "Bottom-up = derivação mais à direita (rightmost) ao contrário. É o R de LR."
+                tx("lessonspart2c_sequencia_reducoes_analisador_empilha_reduz"),
+                listOf(tx("comum_derivacao_mais_esquerda"), tx("comum_derivacao_mais_direita"), tx("lessonspart2c_arvore_ambigua"), tx("comum_tabela_ll_1")), 1,
+                tx("lessonspart2c_bottom_up_derivacao_mais_direita")
             ),
             Steps(
-                "Conflitos",
+                tx("comum_conflitos"),
                 listOf(
-                    "**shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else pendurado).",
-                    "**reduce/reduce**: não dá para decidir qual redução fazer.",
-                    "Gramáticas com conflito para um método não pertencem à classe dele (ex.: não são SLR(1)). Gramáticas ambíguas sempre geram conflito.",
+                    tx("lessonspart2c_shift_reduce_nao_para_decidir"),
+                    tx("lessonspart2c_reduce_reduce_nao_para_decidir"),
+                    tx("lessonspart2c_gramaticas_com_conflito_para_metodo"),
                 )
             ),
-            Visual(LR_TRACE, P2_EXPR, "( id )", "Siga as definições na análise de ( id )."),
-            Callout(EXAM_TIP, "A resposta-padrão é a tabela Pilha | Entrada | Ação, com a produção usada em cada 'reduzir'. E saiba de cor: o handle está sempre no topo; LR = Left-to-right, Rightmost derivation (ao contrário)."),
-            Reveal("Defina handle em uma frase.", "Uma subcadeia que casa com o lado direito de uma produção e cuja redução representa um passo de volta numa derivação mais à direita."),
-            Callout(FIRESIDE, "LL vs LR ao pé da lareira. LL: 'Eu escolho a produção olhando só o primeiro token dela.' LR: 'Eu vejo o lado direito INTEIRO e mais um token antes de decidir. Sou paciente, e por isso aceito mais gramáticas, inclusive as recursivas à esquerda.' LL: 'Mas eu sou fácil de escrever à mão!' LR: 'Por isso inventaram o Bison pra mim.'"),
+            Visual(LR_TRACE, P2_EXPR, "( id )", tx("lessonspart2c_siga_definicoes_na_analise_id")),
+            Callout(EXAM_TIP, tx("lessonspart2c_resposta_padrao_tabela_pilha_entrada")),
+            Reveal(tx("lessonspart2c_defina_handle_em_frase"), tx("lessonspart2c_subcadeia_que_casa_com_lado")),
+            Callout(FIRESIDE, tx("lessonspart2c_ll_vs_lr_ao_pe")),
         )
     ),
     Lesson(
-        Skill.SHIFT_REDUCE, Style.MNEMONIC, "Empilha até ver a alça",
+        Skill.SHIFT_REDUCE, Style.MNEMONIC, tx("lessonspart2c_empilha_ate_ver_alca"),
         listOf(
-            Say(NARRADOR, "Portão da Fortaleza Bottom-Up: uma esteira de fábrica leva caixinhas (tokens) até um montador."),
-            Callout(MNEMONIC, "**'Empilha até ver a alça; achou a alça no topo, reduz.'** Handle = alça: o pedaço por onde você pega e dobra tudo para o lado esquerdo da regra."),
-            Callout(MNEMONIC, "**LR = 'Lê da esquerda, Reconstrói a mais à direita… de trás pra frente.'** Bottom-up = rightmost ao contrário."),
-            Callout(MNEMONIC, "**Reduzir = 'tira o lado direito, põe o lado esquerdo'.** Como trocar um punhado de moedinhas por uma nota."),
+            Say(NARRADOR, tx("lessonspart2c_portao_fortaleza_bottom_up_esteira")),
+            Callout(MNEMONIC, tx("lessonspart2c_empilha_ate_ver_alca_achou")),
+            Callout(MNEMONIC, tx("lessonspart2c_lr_le_esquerda_reconstroi_mais")),
+            Callout(MNEMONIC, tx("lessonspart2c_reduzir_tira_lado_direito_poe")),
             Steps(
-                "Top-down × bottom-up",
+                tx("lessonspart2c_top_down_bottom_up"),
                 listOf(
-                    "Top-down (Templo): começa pela raiz S e prevê. Bottom-up (Fortaleza): começa pelas folhas e monta.",
-                    "LL: derivação mais à esquerda, na ordem. LR: derivação mais à direita, invertida.",
-                    "Pilha LL: o que falta (futuro). Pilha LR: o que já foi visto (passado).",
-                    "Recursão à esquerda: proibida no LL, tranquila no LR.",
+                    tx("lessonspart2c_top_down_templo_comeca_pela"),
+                    tx("lessonspart2c_ll_derivacao_mais_esquerda_na"),
+                    tx("lessonspart2c_pilha_ll_que_falta_futuro"),
+                    tx("lessonspart2c_recursao_esquerda_proibida_no_ll"),
                 )
             ),
-            Say(BYTE, "E 'shift' é empilhar ou é deslocar?"),
-            Say(PROF, "Os dois! O token se desloca da entrada para a pilha. No português do Livro do Dragão: **empilhar** (shift) e **reduzir** (reduce)."),
+            Say(BYTE, tx("lessonspart2c_shift_empilhar_ou_deslocar")),
+            Say(PROF, tx("lessonspart2c_dois_token_se_desloca_entrada")),
             Predict(
-                "Qual ação consome um token da entrada?",
-                listOf("Reduzir", "Empilhar", "Aceitar", "Todas"), 1,
-                "Só o shift consome entrada. Reduzir só mexe na pilha (troca β por A)."
+                tx("lessonspart2c_qual_acao_consome_token_entrada"),
+                listOf(tx("comum_reduzir"), tx("comum_empilhar_2"), tx("comum_aceitar"), tx("lessonspart2c_todas")), 1,
+                tx("lessonspart2c_so_shift_consome_entrada_reduzir")
             ),
-            Visual(LR_TRACE, P2_ANBN, "a a b b", "Treine o gancho: onde está a alça? Repare na redução S → ε, que empilha S sem desempilhar nada."),
-            Reveal("Recite os três ganchos.", "'Empilha até ver a alça; achou no topo, reduz.' 'LR = rightmost de trás pra frente.' 'Reduzir = tira o direito, põe o esquerdo.'"),
+            Visual(LR_TRACE, P2_ANBN, tx("comum_b_b"), tx("lessonspart2c_treine_gancho_onde_esta_alca")),
+            Reveal(tx("lessonspart2c_recite_tres_ganchos"), tx("lessonspart2c_empilha_ate_ver_alca_achou_2")),
         )
     ),
 )
@@ -433,196 +397,177 @@ internal val p2ShiftReduceLessons: List<Lesson> = listOf(
 
 internal val p2Lr0Lessons: List<Lesson> = listOf(
     Lesson(
-        Skill.LR0_ITEMS, Style.STORY, "O marcador de página",
+        Skill.LR0_ITEMS, Style.STORY, tx("lessonspart2c_marcador_pagina"),
         listOf(
-            Say(NARRADOR, "Torre central da Fortaleza Bottom-Up. Cada andar é um 'estado' cheio de marcadores de página."),
-            Say(PROF, "Um **item LR(0)** é uma produção com um ponto • no meio: um marcador de onde você está na leitura. C → c • C quer dizer: 'já vi o c, agora espero um C'."),
-            Code(P2_CC, "Nosso livro de receitas. Gera cadeias como d d, c d d, c c d c d…"),
-            Say(BYTE, "Tipo a barra de progresso do download?"),
-            Say(PROF, "Isso! Ponto no começo (C → • c C): 0%. Ponto no fim (C → c C •): 100%, hora de **reduzir**."),
+            Say(NARRADOR, tx("lessonspart2c_torre_central_fortaleza_bottom_up")),
+            Say(PROF, tx("lessonspart2c_item_lr_0_producao_com")),
+            Code(P2_CC, tx("lessonspart2c_nosso_livro_receitas_gera_cadeias")),
+            Say(BYTE, tx("lessonspart2c_tipo_barra_progresso_download")),
+            Say(PROF, tx("lessonspart2c_isso_ponto_no_comeco_c")),
             Predict(
-                "Quantos itens LR(0) a produção S → C C gera?",
+                tx("lessonspart2c_quantos_itens_lr_0_producao"),
                 listOf("1", "2", "3", "4"), 2,
                 "S → • C C, S → C • C e S → C C •. Uma produção com n símbolos dá n + 1 itens."
             ),
-            Say(PROF, "Agora a mágica do **fechamento (closure)**. Se eu espero um C (ponto antes de C), então posso estar no começo de qualquer receita de C. Eu 'convido' C → • c C e C → • d."),
-            Callout(MNEMONIC, "Fechamento = **convite em cascata**: o não-terminal logo depois do ponto convida as próprias produções, com o ponto no começo. Os convidados também convidam os seus."),
-            Say(PROF, "E o **desvio (goto)**: andar o ponto por cima de um símbolo. goto(I, c) = pegue os itens com • antes de c, passe o ponto para depois do c e feche de novo."),
-            Visual(LR0_AUTOMATON, P2_CC, caption = "O prédio inteiro: 7 andares (estados I0 a I6) e as escadas (transições) entre eles."),
-            Reveal("No estado I0, quais itens existem? (Dica: comece por S' → • S e vá convidando.)", "S' → • S, S → • C C, C → • c C, C → • d. O S convidou S → • C C; o C convidou as duas produções de C."),
-            Callout(NO_DUMB_QUESTIONS, "P: Que S' é esse? R: É a **gramática aumentada**: criamos S' → S para ter um único item de aceitação, S' → S •."),
-            Say(BYTE, "Marcador, convite, passo. Itens, closure, goto. Gostei!"),
+            Say(PROF, tx("lessonspart2c_agora_magica_fechamento_closure_se")),
+            Callout(MNEMONIC, tx("lessonspart2c_fechamento_convite_em_cascata_nao")),
+            Say(PROF, tx("lessonspart2c_desvio_goto_andar_ponto_por")),
+            Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_predio_inteiro_7_andares_estados")),
+            Reveal(tx("lessonspart2c_no_estado_i0_quais_itens"), "S' → • S, S → • C C, C → • c C, C → • d. O S convidou S → • C C; o C convidou as duas produções de C."),
+            Callout(NO_DUMB_QUESTIONS, tx("lessonspart2c_p_que_esse_r_gramatica")),
+            Say(BYTE, tx("lessonspart2c_marcador_convite_passo_itens_closure")),
         )
     ),
     Lesson(
-        Skill.LR0_ITEMS, Style.VISUAL, "Explorando o autômato LR(0)",
+        Skill.LR0_ITEMS, Style.VISUAL, tx("lessonspart2c_explorando_automato_lr_0"),
         listOf(
-            Say(PROF, "Vamos explorar o autômato LR(0) do jeito que se explora um mapa."),
+            Say(PROF, tx("lessonspart2c_vamos_explorar_automato_lr_0")),
             Code(P2_CC),
-            Visual(LR0_AUTOMATON, P2_CC, caption = "Toque em cada estado para ver seus itens. As setas são os desvios (goto)."),
+            Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_toque_em_cada_estado_para")),
             Steps(
-                "Roteiro de exploração",
+                tx("lessonspart2c_roteiro_exploracao"),
                 listOf(
                     "I0: o estado inicial, fechamento de { S' → • S }.",
-                    "I0 --S--> I1 = { S' → S • }: o estado de aceitação.",
-                    "I0 --C--> I2 = { S → C • C, C → • c C, C → • d }: o ponto passou pelo primeiro C, e o segundo C convidou suas produções.",
-                    "I0 --c--> I3 = { C → c • C, C → • c C, C → • d }. Repare em I3 --c--> I3: um laço!",
-                    "I0 --d--> I4 = { C → d • }: item completo → redução.",
-                    "I5 = { S → C C • } e I6 = { C → c C • }: mais dois estados de redução.",
+                    tx("lessonspart2c_i0_i1_estado_aceitacao"),
+                    tx("lessonspart2c_i0_c_i2_c_c"),
+                    tx("lessonspart2c_i0_c_i3_c_c"),
+                    tx("lessonspart2c_i0_d_i4_c_d"),
+                    tx("lessonspart2c_i5_c_c_i6_c"),
                 )
             ),
             Predict(
-                "De I2, lendo d, vamos para qual estado?",
-                listOf("Um estado novo", "I4", "I3", "I6"), 1,
-                "goto(I2, d) = { C → d • } = I4. Se o conjunto de itens já existe, reaproveitamos o estado: por isso o autômato é finito."
+                tx("lessonspart2c_i2_lendo_d_vamos_para"),
+                listOf(tx("lessonspart2c_estado_novo"), "I4", "I3", "I6"), 1,
+                tx("lessonspart2c_goto_i2_d_c_d")
             ),
-            Say(BYTE, "Por que de I3, lendo c, volta pro I3?"),
-            Say(PROF, "Porque goto(I3, c) dá C → c • C de novo, e o fechamento repete os mesmos convidados. Mesmo conjunto = mesmo estado. É o autômato 'contando' os c's sem precisar de memória extra."),
-            Visual(LR0_AUTOMATON, P2_EXPR, caption = "Agora uma gramática maior: 12 estados (I0 a I11). Procure o estado que tem E → T • e T → T • * F juntos."),
-            Reveal("Que problema esse estado (E → T • junto com T → T • * F) causaria se reduzíssemos sempre que um item está completo?", "Conflito empilha-reduz no '*': o item completo manda reduzir E → T e o outro manda empilhar *. O LR(0) puro não resolve; o SLR(1) usa FOLLOW(E) = {+, ), \$} para decidir (próxima sala)."),
-            Callout(BRAIN_POWER, "O autômato LR(0) reconhece exatamente os **prefixos viáveis** da gramática. Olhe os caminhos a partir de I0: cada caminho soletra algo que pode estar na pilha."),
+            Say(BYTE, tx("lessonspart2c_por_que_i3_lendo_c")),
+            Say(PROF, tx("lessonspart2c_porque_goto_i3_c_c")),
+            Visual(LR0_AUTOMATON, P2_EXPR, caption = tx("lessonspart2c_agora_gramatica_maior_12_estados")),
+            Reveal(tx("lessonspart2c_que_problema_esse_estado_t"), tx("lessonspart2c_conflito_empilha_reduz_no_item")),
+            Callout(BRAIN_POWER, tx("lessonspart2c_automato_lr_0_reconhece_exatamente")),
         )
     ),
     Lesson(
-        Skill.LR0_ITEMS, Style.WORKED, "Exemplo resolvido: a coleção canônica de S → C C",
+        Skill.LR0_ITEMS, Style.WORKED, tx("lessonspart2c_exemplo_resolvido_colecao_canonica_c"),
         listOf(
-            Say(PROF, "Exercício de prova: construa a coleção canônica LR(0) de S → C C, C → c C | d."),
+            Say(PROF, tx("lessonspart2c_exercicio_prova_construa_colecao_canonica")),
             Code(P2_CC),
             Steps(
-                "Resolução",
+                tx("lessonspart2c_resolucao"),
                 listOf(
-                    "Passo 0, aumente a gramática: 0) S' → S, 1) S → C C, 2) C → c C, 3) C → d.",
+                    tx("lessonspart2c_passo_0_aumente_gramatica_0"),
                     "I0 = closure({ S' → • S }) = { S' → • S, S → • C C, C → • c C, C → • d }.",
                     "goto(I0, S) = { S' → S • } = I1.",
                     "goto(I0, C) = closure({ S → C • C }) = { S → C • C, C → • c C, C → • d } = I2.",
                     "goto(I0, c) = closure({ C → c • C }) = { C → c • C, C → • c C, C → • d } = I3.",
                     "goto(I0, d) = { C → d • } = I4.",
-                    "goto(I2, C) = { S → C C • } = I5. goto(I2, c) = I3 e goto(I2, d) = I4: já existem!",
+                    tx("lessonspart2c_goto_i2_c_c_c"),
                 )
             ),
-            Visual(LR0_AUTOMATON, P2_CC, caption = "Confira os estados I0 a I5 com o motor."),
-            Say(BYTE, "Falta o I3, né?"),
-            Say(PROF, "Falta! Essa parte é sua. Lembre: goto = passar o ponto e depois fechar."),
-            Reveal("goto(I3, C) = ?", "{ C → c C • }: um estado novo, I6."),
-            Reveal("goto(I3, c) = ?", "closure({ C → c • C }) = { C → c • C, C → • c C, C → • d }: o próprio I3."),
-            Reveal("goto(I3, d) = ?", "{ C → d • } = I4."),
-            Reveal("Quantos estados ao todo, e quais são de redução?", "7 estados (I0 a I6). Itens completos: I1 (aceita), I4 (C → d), I5 (S → C C), I6 (C → c C). Nenhum estado mistura item completo com outro item: a gramática é LR(0)!"),
-            Callout(EXAM_TIP, "Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com o núcleo (kernel) separado dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe."),
+            Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_confira_estados_i0_i5_com")),
+            Say(BYTE, tx("lessonspart2c_falta_i3_ne")),
+            Say(PROF, tx("lessonspart2c_falta_essa_parte_sua_lembre")),
+            Reveal(tx("lessonspart2c_goto_i3_c"), "{ C → c C • }: um estado novo, I6."),
+            Reveal(tx("lessonspart2c_goto_i3_c_2"), tx("lessonspart2c_closure_c_c_c_c")),
+            Reveal(tx("lessonspart2c_goto_i3_d"), "{ C → d • } = I4."),
+            Reveal(tx("lessonspart2c_quantos_estados_ao_todo_quais"), tx("lessonspart2c_7_estados_i0_i6_itens")),
+            Callout(EXAM_TIP, tx("lessonspart2c_numere_producoes_gramatica_aumentada_desenhe")),
         )
     ),
     Lesson(
-        Skill.LR0_ITEMS, Style.SOCRATIC, "Por que itens, closure e goto?",
+        Skill.LR0_ITEMS, Style.SOCRATIC, tx("lessonspart2c_por_que_itens_closure_goto"),
         listOf(
-            Say(PROF, "Vamos redescobrir itens, closure e goto só com perguntas."),
+            Say(PROF, tx("lessonspart2c_vamos_redescobrir_itens_closure_goto")),
             Predict(
-                "Num analisador empilha-reduz, o que precisamos saber a cada momento?",
-                listOf("Só o próximo token", "Em que ponto das produções candidatas estamos", "A árvore inteira", "O FIRST de tudo"), 1,
-                "Para saber se o handle já está completo no topo, precisamos saber 'onde estamos' em cada produção candidata. Isso é um item."
+                tx("lessonspart2c_num_analisador_empilha_reduz_que"),
+                listOf(tx("lessonspart2c_so_proximo_token"), tx("lessonspart2c_em_que_ponto_das_producoes"), tx("lessonspart2c_arvore_inteira"), tx("lessonspart2c_first_tudo")), 1,
+                tx("lessonspart2c_para_saber_se_handle_ja")
             ),
             Predict(
-                "O item A → X Y • Z significa:",
-                listOf("Já reduzi A", "Já vi X Y; espero algo derivado de Z", "Espero X Y Z", "Erro"), 1,
-                "O ponto separa o passado (o que está na pilha) do futuro (o que vem na entrada)."
+                tx("lessonspart2c_item_x_y_z_significa"),
+                listOf(tx("lessonspart2c_ja_reduzi"), tx("lessonspart2c_ja_vi_x_y_espero"), tx("lessonspart2c_espero_x_y_z"), tx("comum_erro")), 1,
+                tx("lessonspart2c_ponto_separa_passado_que_esta")
             ),
             Predict(
-                "Se espero um Z (item A → X Y • Z) e Z → w | v, o que mais posso estar esperando?",
-                listOf("Nada", "Z → • w e Z → • v", "Z → w • e Z → v •", "A → • X Y Z"), 1,
-                "Esperar um Z é esperar o começo de alguma produção de Z. Isso é o fechamento."
+                tx("lessonspart2c_se_espero_z_item_x"),
+                listOf(tx("comum_nada"), "Z → • w e Z → • v", "Z → w • e Z → v •", "A → • X Y Z"), 1,
+                tx("lessonspart2c_esperar_z_esperar_comeco_alguma")
             ),
             Predict(
-                "Se o item é A → X • b Y, com b terminal, quantos itens o fechamento acrescenta por causa dele?",
-                listOf("Todos os de b", "Nenhum: terminal não tem produções", "Um", "Dois"), 1,
-                "O fechamento só convida quando há um NÃO-terminal logo depois do ponto."
+                tx("lessonspart2c_se_item_x_b_y"),
+                listOf(tx("lessonspart2c_todos_b"), tx("lessonspart2c_nenhum_terminal_nao_tem_producoes"), "Um", tx("lessonspart2c_dois")), 1,
+                tx("lessonspart2c_fechamento_so_convida_quando_ha")
             ),
             Predict(
-                "Estou no conjunto de itens I e empilho o símbolo X. O novo conjunto é…",
-                listOf("I de novo", "Os itens com • antes de X, com o ponto avançado, e depois fechados", "Todos os itens que contêm X", "Vazio"), 1,
-                "Isso é goto(I, X): avança o ponto sobre X e aplica o fechamento."
+                tx("lessonspart2c_estou_no_conjunto_itens_i"),
+                listOf(tx("lessonspart2c_i_novo"), tx("lessonspart2c_itens_com_antes_x_com"), tx("lessonspart2c_todos_itens_que_contem_x"), tx("lessonspart2c_vazio")), 1,
+                tx("lessonspart2c_isso_goto_i_x_avanca")
             ),
-            Reveal("Por que o número de estados é finito?", "Há um número finito de itens (produções × posições do ponto), logo um número finito de conjuntos de itens. Conjuntos repetidos viram o mesmo estado."),
+            Reveal(tx("lessonspart2c_por_que_numero_estados_finito"), tx("lessonspart2c_ha_numero_finito_itens_producoes")),
             Predict(
-                "Para que serve a produção S' → S da gramática aumentada?",
-                listOf("Enfeite", "Ter um item de aceitação único: S' → S •", "Evitar recursão à esquerda", "Calcular FOLLOW"), 1,
-                "Quando o analisador chegaria a reduzir para S' (item S' → S • com \$ na entrada), ele aceita."
+                tx("lessonspart2c_para_que_serve_producao_gramatica"),
+                listOf(tx("comum_enfeite"), tx("lessonspart2c_ter_item_aceitacao_unico"), tx("lessonspart2c_evitar_recursao_esquerda"), tx("lessonspart2c_calcular_follow")), 1,
+                tx("lessonspart2c_quando_analisador_chegaria_reduzir_para")
             ),
-            Visual(LR0_AUTOMATON, P2_LIST, caption = "Teste: S → S a | b. Antes de olhar, quantos itens terá I0?"),
-            Reveal("Quais são os itens de I0?", "3: S' → • S, S → • S a, S → • b. O S convidou suas duas produções; o S de S → • S a já foi convidado, então nada novo."),
-            Say(PROF, "Recursão à esquerda no closure? Sem drama: o conjunto não cresce para sempre, porque item repetido não entra de novo."),
+            Visual(LR0_AUTOMATON, P2_LIST, caption = tx("lessonspart2c_teste_b_antes_olhar_quantos")),
+            Reveal(tx("lessonspart2c_quais_sao_itens_i0"), tx("lessonspart2c_3_b_convidou_suas_duas")),
+            Say(PROF, tx("lessonspart2c_recursao_esquerda_no_closure_sem")),
         )
     ),
     Lesson(
-        Skill.LR0_ITEMS, Style.FORMAL, "Itens, CLOSURE, GOTO e coleção canônica (versão prova)",
+        Skill.LR0_ITEMS, Style.FORMAL, tx("lessonspart2c_itens_closure_goto_colecao_canonica"),
         listOf(
-            Say(PROF, "Definições formais, como no Livro do Dragão."),
-            Text("**Item LR(0)**: produção de G com um ponto em alguma posição do lado direito. A → X Y Z gera A → • X Y Z, A → X • Y Z, A → X Y • Z e A → X Y Z •. A produção A → ε gera só A → •."),
-            Text("**Gramática aumentada** G': G com um novo símbolo inicial S' e a produção S' → S. O analisador aceita quando reduziria por S' → S."),
+            Say(PROF, tx("lessonspart2c_definicoes_formais_como_no_livro")),
+            Text(tx("lessonspart2c_item_lr_0_producao_g")),
+            Text(tx("lessonspart2c_gramatica_aumentada_g_g_com")),
             Code(
-                """
-                CLOSURE(I):
-                  J := I
-                  repita
-                    para cada item A → α • B β em J:
-                      para cada produção B → γ de G':
-                        se B → • γ não está em J:
-                          adicione B → • γ a J
-                  até nenhum item ser adicionado
-                  retorne J
-                """.trimIndent(),
-                "Fechamento de um conjunto de itens."
+                tx("lessonspart2c_closure_i_j_i_repita"),
+                tx("lessonspart2c_fechamento_conjunto_itens")
             ),
             Code(
-                "GOTO(I, X) = CLOSURE({ A → α X • β  |  A → α • X β ∈ I })",
-                "Desvio: avança o ponto sobre X e fecha."
+                tx("lessonspart2c_goto_i_x_closure_x"),
+                tx("lessonspart2c_desvio_avanca_ponto_sobre_x")
             ),
             Code(
-                """
-                ITENS(G'):
-                  C := { CLOSURE({ S' → • S }) }
-                  repita
-                    para cada conjunto I em C:
-                      para cada símbolo gramatical X:
-                        se GOTO(I, X) ≠ ∅ e GOTO(I, X) ∉ C:
-                          adicione GOTO(I, X) a C
-                  até nenhum conjunto ser adicionado
-                """.trimIndent(),
-                "Coleção canônica de conjuntos de itens LR(0)."
+                tx("lessonspart2c_itens_g_c_closure_repita"),
+                tx("lessonspart2c_colecao_canonica_conjuntos_itens_lr")
             ),
-            Text("**Itens de núcleo (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais são **não-núcleo** e podem ser recalculados pelo fechamento."),
+            Text(tx("lessonspart2c_itens_nucleo_kernel_todos_itens")),
             Predict(
-                "Qual destes é item de núcleo?",
+                tx("lessonspart2c_qual_destes_item_nucleo"),
                 listOf("C → • c C", "S → • C C", "C → c • C", "C → • d"), 2,
                 "C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento."
             ),
-            Visual(LR0_AUTOMATON, P2_CC, caption = "Identifique, em cada estado, quais itens são de núcleo."),
-            Callout(EXAM_TIP, "Pergunta típica: 'calcule CLOSURE({…})' ou 'GOTO(I, X)'. Não esqueça: GOTO = avançar o ponto **e depois** fechar. E A → ε gera só o item A → •, que já nasce completo."),
-            Reveal("Qual a relação entre o autômato LR(0) e os prefixos viáveis?", "O autômato reconhece exatamente os prefixos viáveis: γ é viável se e somente se existe o caminho GOTO(I0, γ) a partir do estado inicial."),
+            Visual(LR0_AUTOMATON, P2_CC, caption = tx("lessonspart2c_identifique_em_cada_estado_quais")),
+            Callout(EXAM_TIP, tx("lessonspart2c_pergunta_tipica_calcule_closure_ou")),
+            Reveal(tx("lessonspart2c_qual_relacao_entre_automato_lr"), tx("lessonspart2c_automato_reconhece_exatamente_prefixos_viave")),
         )
     ),
     Lesson(
-        Skill.LR0_ITEMS, Style.MNEMONIC, "Você está aqui •",
+        Skill.LR0_ITEMS, Style.MNEMONIC, tx("lessonspart2c_voce_esta_aqui"),
         listOf(
-            Say(NARRADOR, "Torre da Fortaleza Bottom-Up: num dos andares há um mapa de shopping com um ponto vermelho, **VOCÊ ESTÁ AQUI**."),
-            Callout(MNEMONIC, "**O ponto • é o 'você está aqui'.** À esquerda dele: o que já está na pilha (passado). À direita: o que falta ler (futuro)."),
-            Callout(MNEMONIC, "**CLOSURE = 'convida a família'.** Ponto antes de um não-terminal B? Chama todas as produções de B, com o ponto no começo. A família de B convida as próprias famílias."),
-            Callout(MNEMONIC, "**GOTO = 'gol': chuta o ponto um passo pra frente e depois comemora com a família (closure).**"),
+            Say(NARRADOR, tx("lessonspart2c_torre_fortaleza_bottom_up_num")),
+            Callout(MNEMONIC, tx("lessonspart2c_ponto_voce_esta_aqui_esquerda")),
+            Callout(MNEMONIC, tx("lessonspart2c_closure_convida_familia_ponto_antes")),
+            Callout(MNEMONIC, tx("lessonspart2c_goto_gol_chuta_ponto_passo")),
             Steps(
-                "Confusões clássicas",
+                tx("comum_confusoes_classicas"),
                 listOf(
-                    "O closure só adiciona itens com o ponto NO COMEÇO (B → • γ).",
-                    "O goto avança o ponto só nos itens com • antes de X; os outros ficam de fora.",
-                    "Esquecer de fechar depois do goto.",
-                    "Criar estado repetido: conjunto igual = mesmo estado.",
-                    "Item completo (ponto no fim) = hora de reduzir; não sai goto dele.",
+                    tx("lessonspart2c_closure_so_adiciona_itens_com"),
+                    tx("lessonspart2c_goto_avanca_ponto_so_nos"),
+                    tx("lessonspart2c_esquecer_fechar_depois_goto"),
+                    tx("lessonspart2c_criar_estado_repetido_conjunto_igual"),
+                    tx("lessonspart2c_item_completo_ponto_no_fim"),
                 )
             ),
             Predict(
                 "Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?",
-                listOf("Nada", "Fechar: C → • c C e C → • d", "Adicionar S → • C C", "Remover o ponto"), 1,
-                "Goto = avançar + fechar. Como o ponto ficou antes de C, a família de C precisa ser convidada."
+                listOf(tx("comum_nada"), tx("lessonspart2c_fechar_c_c_c_c"), tx("lessonspart2c_adicionar_c_c"), tx("lessonspart2c_remover_ponto")), 1,
+                tx("lessonspart2c_goto_avancar_fechar_como_ponto")
             ),
-            Callout(FIRESIDE, "Item e Estado ao pé da lareira. Item: 'Eu sou só um marcador numa receita.' Estado: 'E eu sou o grupo de marcadores que valem ao mesmo tempo: todas as receitas que podem estar em andamento agora.' Item: 'Então você é a minha turma?' Estado: 'Sou. E o fechamento é como eu chamo a turma toda.'"),
-            Visual(LR0_AUTOMATON, P2_ANBN, caption = "Treino rápido em S → a S b | ε: ache o estado em que o 'você está aqui' aparece antes do S e conte os convidados."),
-            Reveal("Recite os três ganchos.", "Ponto = 'você está aqui'. Closure = 'convida a família'. Goto = 'chuta o ponto um passo e comemora com a família'."),
+            Callout(FIRESIDE, tx("lessonspart2c_item_estado_ao_pe_lareira")),
+            Visual(LR0_AUTOMATON, P2_ANBN, caption = tx("lessonspart2c_treino_rapido_em_b_ache")),
+            Reveal(tx("lessonspart2c_recite_tres_ganchos"), tx("lessonspart2c_ponto_voce_esta_aqui_closure")),
         )
     ),
 )

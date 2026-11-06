@@ -2,6 +2,7 @@ package com.compilandia.content
 
 import com.compilandia.engine.ParseNode
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 /** Papel de cor de uma peça no palco. Cada tema resolve a cor certa. */
 enum class Tint { NONE, TEAL, ORANGE, YELLOW, RED, GREEN, BLUE, PINK, DARK }
@@ -96,19 +97,19 @@ enum class EpMood { NEUTRAL, HAPPY, THINK, SURPRISED }
 
 /** Cada região tem três temporadas. O clipe é a aula de 30 segundos do feed. */
 enum class Temporada(val titulo: String) {
-    BASICO("Básico"),
-    PEGADINHA("Pegadinhas"),
-    PRATICA("Prática"),
-    CLIPE("Clipe"),
+    BASICO(tx("episode_basico")),
+    PEGADINHA(tx("episode_pegadinhas")),
+    PRATICA(tx("episode_pratica")),
+    CLIPE(tx("episode_clipe")),
     /** Diagramas de tabela: o mesmo assunto desenhado como caixas com compartimentos. */
-    TABELAS("Tabelas"),
+    TABELAS(tx("episode_tabelas")),
     /** A série que escreve um compilador em C, do getchar ao MIPS. Aparece inteira em toda região. */
-    EM_C("Em C"),
+    EM_C(tx("episode_em_c")),
 }
 
 data class Episode(val skill: Skill, val title: String, val passos: List<Passo>, val temporada: Temporada = Temporada.BASICO) {
     /** O básico fica com o nome do assunto, para os saves antigos continuarem certos. */
-    val id: String get() = if (temporada == Temporada.BASICO) skill.name else "${skill.name}/${title.lowercase().filter { it.isLetterOrDigit() }}"
+    val id: String get() = if (temporada == Temporada.BASICO) skill.name else "${skill.name}/${com.compilandia.textos.Txt.paraPt(title).lowercase().filter { it.isLetterOrDigit() }}"
     /** Duração aproximada da aula, para a lista. */
     val segundos: Int get() = passos.sumOf { 2 + it.fala.text.length / 14 }
 }

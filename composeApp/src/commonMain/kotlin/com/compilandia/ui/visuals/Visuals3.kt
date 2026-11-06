@@ -42,6 +42,7 @@ import com.compilandia.ui.RichText
 import com.compilandia.ui.TreeView
 import com.compilandia.ui.regColors
 import com.compilandia.ui.toUi
+import com.compilandia.textos.tx
 
 // ------------------------------------------------------------------ Minimização (tabela de pares)
 
@@ -60,10 +61,10 @@ fun PairTable(n: Int, name: (Int) -> String, cell: @Composable (Int, Int) -> Uni
 fun MinimizeView(idx: Int) {
     val (title, dfa) = remember(idx) { Minimizer.bank[idx.coerceIn(0, Minimizer.bank.lastIndex)] }
     val r = remember(dfa) { Minimizer.run(dfa) }
-    Mono("AFD: $title", bold = true)
+    Mono(tx("comum_afd_1", title), bold = true)
     val d = r.dfa
     AutomatonView(d.stateCount, d.start, d.accepting, d.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { r.stateName(it) })
-    if (r.deadState != null) Text("Completamos com o estado morto ∅ (para onde vão as transições que faltavam).", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    if (r.deadState != null) Text(tx("visuals3_completamos_com_estado_morto_para"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     Stepper(r.marks.size + 1) { i ->
         val shown = r.marks.take(i)
         val cur = r.marks.getOrNull(i - 1)
@@ -71,12 +72,12 @@ fun MinimizeView(idx: Int) {
             val m = shown.firstOrNull { (it.p == b && it.q == a) || (it.p == a && it.q == b) }
             Cell(m?.let { "X${it.round}" } ?: "", w = 44, color = when { m != null && m == cur -> Palette.yellow; m != null -> Palette.red.copy(alpha = 0.2f); else -> null })
         }
-        if (cur == null) RichText("Começamos com a tabela vazia. **Rodada 1:** marcar todo par (final, não-final).", style = MaterialTheme.typography.bodyMedium)
+        if (cur == null) RichText(tx("visuals3_comecamos_com_tabela_vazia_rodada"), style = MaterialTheme.typography.bodyMedium)
         else RichText("Rodada ${cur.round}: marca **{${r.stateName(cur.p)}, ${r.stateName(cur.q)}}** — ${cur.reason}.", style = MaterialTheme.typography.bodyMedium)
         if (i == r.marks.size) {
-            RichText("Nenhum par novo pode ser marcado: **fim**. Pares SEM X são equivalentes → classes: " +
+            RichText(tx("visuals3_nenhum_par_novo_pode_ser") +
                 r.classes.joinToString("  ") { cl -> cl.joinToString(",", "{", "}") { r.stateName(it) } }, style = MaterialTheme.typography.bodyMedium)
-            Text("AFD mínimo (${r.minimized.stateCount} estados):", style = MaterialTheme.typography.titleSmall)
+            Text(tx("visuals3_afd_minimo_1_estados", r.minimized.stateCount), style = MaterialTheme.typography.titleSmall)
             val m = r.minimized
             AutomatonView(m.stateCount, m.start, m.accepting, m.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { "m$it" })
         }
@@ -89,16 +90,16 @@ fun MinimizeView(idx: Int) {
 fun AstView(src: String) {
     val concrete = remember(src) { AstTools.concreteTree(src) }
     val ast = remember(src) { ExprParser.parse(src) }
-    Mono("expressão: $src", bold = true)
+    Mono(tx("comum_expressao_1", src), bold = true)
     if (concrete != null) {
-        Text("Árvore de DERIVAÇÃO (concreta) — ${AstTools.countNodes(concrete)} nós", style = MaterialTheme.typography.titleSmall)
+        Text(tx("visuals3_arvore_derivacao_concreta_1_nos", AstTools.countNodes(concrete)), style = MaterialTheme.typography.titleSmall)
         TreeView(concrete.toUi(AstTools.concreteGrammar))
     }
-    Text("Árvore Sintática ABSTRATA (AST) — ${AstTools.countNodes(ast)} nós", style = MaterialTheme.typography.titleSmall, color = Palette.teal)
+    Text(tx("visuals3_arvore_sintatica_abstrata_ast_1", AstTools.countNodes(ast)), style = MaterialTheme.typography.titleSmall, color = Palette.teal)
     TreeView(ast.toUi())
-    RichText("A AST jogou fora as \"correntes\" E → T → F, os parênteses e os tokens de pontuação: a **forma da árvore** já guarda a precedência.", style = MaterialTheme.typography.bodySmall)
-    CodeBlock(AstTools.toJava(ast), "Java: o parser devolve este objeto")
-    CodeBlock(AstTools.javaClasses, "As classes da AST")
+    RichText(tx("visuals3_ast_jogou_fora_correntes_t"), style = MaterialTheme.typography.bodySmall)
+    CodeBlock(AstTools.toJava(ast), tx("visuals3_java_parser_devolve_este_objeto"))
+    CodeBlock(AstTools.javaClasses, tx("visuals3_classes_ast"))
 }
 
 // ------------------------------------------------------------------ Alocação de registradores
@@ -110,8 +111,8 @@ fun RegAllocView(src: String) {
     val g = remember(code) { RegAlloc.interference(code) }
     val k = remember(g) { RegAlloc.chromatic(g) }
     val alloc = remember(g) { RegAlloc.color(g, k) }
-    Mono("r = ${ExprParser.parse(src).render()}", bold = true)
-    Text("1) Vivacidade (de baixo para cima): quem está vivo DEPOIS de cada instrução", style = MaterialTheme.typography.titleSmall)
+    Mono(tx("comum_r_1", ExprParser.parse(src).render()), bold = true)
+    Text(tx("visuals3_1_vivacidade_baixo_para_cima"), style = MaterialTheme.typography.titleSmall)
     Stepper(code.size) { s ->
         val i = code.size - 1 - s
         Column(Modifier.horizontalScroll(rememberScrollState())) {
@@ -123,14 +124,14 @@ fun RegAllocView(src: String) {
             }
         }
         val c = code[i]
-        Text("in = use ∪ (out − def): usa ${listOfNotNull(c.a, c.b).filter { RegAlloc.isTemp(it) }.ifEmpty { listOf("—") }.joinToString()}, define ${c.target}", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+        Text(tx("visuals3_in_use_out_def_usa", listOfNotNull(c.a, c.b).filter { RegAlloc.isTemp(it) }.ifEmpty { listOf("—") }.joinToString(), c.target), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     }
-    Text("2) Grafo de interferência (aresta = vivos ao mesmo tempo) e coloração com $k registrador(es)", style = MaterialTheme.typography.titleSmall)
+    Text(tx("visuals3_2_grafo_interferencia_aresta_vivos", k), style = MaterialTheme.typography.titleSmall)
     GraphView(RegAlloc.temps(code), g, fill = { v -> alloc.colors[v]?.let { regColors[it % regColors.size] } ?: Palette.paperDark }, sub = { v -> alloc.colors[v]?.let { "\$s$it" } ?: "spill" })
     val before = Mips.fromTac(code); val after = RegAlloc.mips(code, alloc)
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        Column(Modifier.weight(1f)) { Text("Tudo na memória: ${RegAlloc.memoryAccesses(before)} lw/sw", fontSize = 12.sp, fontWeight = FontWeight.Bold); for (l in before) Mono(l, size = 11) }
-        Column(Modifier.weight(1f)) { Text("Com registradores: ${RegAlloc.memoryAccesses(after)} lw/sw", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.teal); for (l in after) Mono(l, size = 11) }
+        Column(Modifier.weight(1f)) { Text(tx("visuals3_tudo_na_memoria_1_lw", RegAlloc.memoryAccesses(before)), fontSize = 12.sp, fontWeight = FontWeight.Bold); for (l in before) Mono(l, size = 11) }
+        Column(Modifier.weight(1f)) { Text(tx("visuals3_com_registradores_1_lw_sw", RegAlloc.memoryAccesses(after)), fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.teal); for (l in after) Mono(l, size = 11) }
     }
 }
 
@@ -159,11 +160,11 @@ fun MipsRunView(asm: String, highlightBranches: Boolean = false) {
         }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        BigButton("▶ passo", small = true, color = Palette.teal, enabled = !cur.halted && err == null) { steps++ }
-        BigButton("⏩ rodar tudo", small = true, color = Palette.orange, enabled = !cur.halted && err == null) { steps += 5000 }
+        BigButton(tx("visuals3_passo"), small = true, color = Palette.teal, enabled = !cur.halted && err == null) { steps++ }
+        BigButton(tx("visuals3_rodar_tudo"), small = true, color = Palette.orange, enabled = !cur.halted && err == null) { steps += 5000 }
         BigButton("↺", small = true, color = Palette.white, textColor = Palette.ink) { steps = 0 }
     }
-    Text("instruções executadas: ${cur.steps}" + if (cur.halted) " · programa terminou" else "", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    Text(tx("visuals3_instrucoes_executadas_1", cur.steps) + if (cur.halted) tx("visuals3_programa_terminou") else "", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     err?.let { Text("💥 $it", color = Palette.red, fontWeight = FontWeight.Bold) }
     val regs = cur.regs.filterKeys { it != "\$gp" }.entries.sortedBy { it.key }.associate { it.key to it.value }
     if (regs.isNotEmpty()) Row(Modifier.horizontalScroll(rememberScrollState())) {
@@ -173,7 +174,7 @@ fun MipsRunView(asm: String, highlightBranches: Boolean = false) {
         for (name in cur.dataAddr.keys) cur.word(name)?.let { Cell("$name\n$it", w = 64) }
     }
     if (cur.output.isNotEmpty()) Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(Color(0xFF0B0B12)).padding(8.dp)) {
-        Text("Console", color = Palette.green, fontSize = 11.sp)
+        Text(tx("visuals3_console"), color = Palette.green, fontSize = 11.sp)
         Text(cur.output.toString(), fontFamily = LocalFonts.current.mono, color = Palette.green, fontSize = 13.sp)
     }
 }
@@ -181,7 +182,7 @@ fun MipsRunView(asm: String, highlightBranches: Boolean = false) {
 @Composable
 fun MiniLangView(src: String) {
     val lines = remember(src) { MiniLang.compile(src, MiniLang.sampleEnv) }
-    CodeBlock(src, "programa (a = 4, b = 7)")
-    Text("Compilado para MIPS — desvios em rosa:", style = MaterialTheme.typography.titleSmall)
+    CodeBlock(src, tx("comum_programa_4_b_7"))
+    Text(tx("visuals3_compilado_para_mips_desvios_em"), style = MaterialTheme.typography.titleSmall)
     MipsRunView(MiniLang.asmText(lines), highlightBranches = true)
 }

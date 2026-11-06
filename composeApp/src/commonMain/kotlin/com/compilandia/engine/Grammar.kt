@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 const val EPS = "ε"
 const val EOF = "$"
 
@@ -67,14 +69,14 @@ class Grammar(val start: String, productions: List<Production>) {
                 val rhsAll: String
                 if (arrowIdx == null) {
                     // linha de continuação: "| a B"
-                    require(line.startsWith("|") && lastLhs != null) { "Linha sem '->': $line" }
+                    require(line.startsWith("|") && lastLhs != null) { tx("grammar_linha_sem_1", line) }
                     lhs = lastLhs
                     rhsAll = line.substring(1)
                 } else {
                     lhs = line.substring(0, arrowIdx.first).trim()
                     rhsAll = line.substring(arrowIdx.second)
                 }
-                require(lhs.isNotEmpty() && !lhs.contains(' ')) { "Lado esquerdo inválido: '$lhs'" }
+                require(lhs.isNotEmpty() && !lhs.contains(' ')) { tx("grammar_lado_esquerdo_invalido_1", lhs) }
                 if (start == null) start = lhs
                 lastLhs = lhs
                 for (alt in splitAlternatives(rhsAll)) {
@@ -82,7 +84,7 @@ class Grammar(val start: String, productions: List<Production>) {
                     prods += Production(prods.size, lhs, symbols)
                 }
             }
-            requireNotNull(start) { "Gramática vazia" }
+            requireNotNull(start) { tx("grammar_gramatica_vazia") }
             return Grammar(start, prods)
         }
 

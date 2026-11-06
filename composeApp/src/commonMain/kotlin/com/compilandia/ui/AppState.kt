@@ -14,13 +14,20 @@ import com.compilandia.learning.Style
 import com.compilandia.platform.Sfx
 import com.compilandia.platform.Sound
 import com.compilandia.platform.Storage
+import com.compilandia.textos.tx
 
 sealed class Screen {
     data object Onboarding : Screen()
     data object Room : Screen()
     data object Shop : Screen()
     data object Map : Screen()
-    data class Episode(val skill: Skill, val returnToGame: Boolean = false, val id: String? = null) : Screen()
+    data class Episode(val skill: Skill, val returnToGame: Boolean = false, val id: String? = null, val abertura: Boolean = true) : Screen()
+    /** A trilha de um assunto (A1). */
+    data class Trilha(val skill: Skill) : Screen()
+    /** As aulas em C e o Guia do TP numa trilha só (A5). */
+    data object SeuCompilador : Screen()
+    /** Fazer com ajuda (A3): quatro problemas em que o Byte ajuda cada vez menos. */
+    data class FazerComAjuda(val skill: Skill, val semente: Long = 0, val comeca: Int = 0) : Screen()
     data class RegionView(val region: Region) : Screen()
     data class Lesson(
         val skill: Skill,
@@ -92,7 +99,7 @@ class AppState(val learner: Learner) {
         val paid = learner.claimQuests(com.compilandia.platform.nowMs())
         ls = learner.state
         applyPrefs()
-        if (paid > 0) say("Meta do dia cumprida: +${paid * com.compilandia.learning.QUEST_GEARS} engrenagens")
+        if (paid > 0) say(tx("appstate_meta_dia_cumprida_1_engrenagens", paid * com.compilandia.learning.QUEST_GEARS))
         Storage.save(learner.save())
     }
 

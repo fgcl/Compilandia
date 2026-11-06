@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /** Item LR: produção com um ponto (•). `lookahead` só é usado em LR(1)/LALR(1). */
 data class LRItem(val prodId: Int, val dot: Int, val lookahead: String? = null) {
     fun core() = LRItem(prodId, dot)
@@ -210,22 +212,22 @@ class LRTable(
                     val rp = rulePrecedence(r.prodId)
                     if (tp != null && rp != null) {
                         pick = when {
-                            tp.level > rp.level -> shifts[0].also { resolution = "'${key.second}' tem precedência maior que a regra → shift" }
-                            tp.level < rp.level -> r.also { resolution = "a regra tem precedência maior que '${key.second}' → reduce" }
-                            tp.assoc == Assoc.LEFT -> r.also { resolution = "mesma precedência e %left → reduce (associa à esquerda)" }
-                            tp.assoc == Assoc.RIGHT -> shifts[0].also { resolution = "mesma precedência e %right → shift (associa à direita)" }
+                            tp.level > rp.level -> shifts[0].also { resolution = tx("lr_1_tem_precedencia_maior_que", key.second) }
+                            tp.level < rp.level -> r.also { resolution = tx("lr_regra_tem_precedencia_maior_que", key.second) }
+                            tp.assoc == Assoc.LEFT -> r.also { resolution = tx("lr_mesma_precedencia_left_reduce_associa") }
+                            tp.assoc == Assoc.RIGHT -> shifts[0].also { resolution = tx("lr_mesma_precedencia_right_shift_associa") }
                             else -> null.also { resolution = "%nonassoc → erro de sintaxe" }
                         }
                     } else {
                         pick = shifts[0]
-                        resolution = "sem precedência declarada: o Bison escolhe SHIFT e avisa o conflito"
+                        resolution = tx("lr_sem_precedencia_declarada_bison_escolhe")
                     }
                 } else if (shifts.isEmpty()) {
                     pick = reduces[0]
-                    resolution = "reduce/reduce: o Bison escolhe a regra que aparece primeiro"
+                    resolution = tx("lr_reduce_reduce_bison_escolhe_regra")
                 } else {
                     pick = shifts[0]
-                    resolution = "vários reduces + shift: o Bison prefere SHIFT"
+                    resolution = tx("lr_varios_reduces_shift_bison_prefere")
                 }
                 decisoes[key] = resolution!!
                 val stillWarn = resolution!!.startsWith("sem precedência") || shifts.isEmpty()
@@ -290,11 +292,11 @@ object LRParser {
             val snapS = states.toList(); val snapSym = symbols.toList(); val snapIn = inp.subList(pos, inp.size).toList()
             when (act) {
                 null -> {
-                    steps += LRStep(snapS, snapSym, snapIn, null, "ACTION[$s, $a] vazia → erro de sintaxe")
+                    steps += LRStep(snapS, snapSym, snapIn, null, tx("lr_action_1_2_vazia_erro", s, a))
                     return LRParseResult(steps, false, null)
                 }
                 is LRAction.Shift -> {
-                    steps += LRStep(snapS, snapSym, snapIn, act, "empilha '$a' e vai para o estado ${act.state}")
+                    steps += LRStep(snapS, snapSym, snapIn, act, tx("lr_empilha_1_vai_para_estado", a, act.state))
                     states += act.state; symbols += a; nodes += ParseNode(a); pos++
                 }
                 is LRAction.Reduce -> {
@@ -302,14 +304,14 @@ object LRParser {
                     val n = p.rhs.size
                     val gotoFrom = states[states.size - 1 - n]
                     val next = table.gotoTable[gotoFrom to p.lhs]
-                    steps += LRStep(snapS, snapSym, snapIn, act, "reduz por $p (desempilha $n) e GOTO[$gotoFrom, ${p.lhs}] = ${next ?: "?"}")
+                    steps += LRStep(snapS, snapSym, snapIn, act, tx("lr_reduz_por_1_desempilha_2", p, n, gotoFrom, p.lhs, next ?: "?"))
                     val kids = if (n == 0) listOf(ParseNode(EPS)) else nodes.subList(nodes.size - n, nodes.size).toList()
                     repeat(n) { states.removeAt(states.lastIndex); symbols.removeAt(symbols.lastIndex); nodes.removeAt(nodes.lastIndex) }
                     if (next == null) return LRParseResult(steps, false, null)
                     states += next; symbols += p.lhs; nodes += ParseNode(p.lhs, kids)
                 }
                 LRAction.Accept -> {
-                    steps += LRStep(snapS, snapSym, snapIn, act, "aceita! A entrada pertence à linguagem")
+                    steps += LRStep(snapS, snapSym, snapIn, act, tx("lr_aceita_entrada_pertence_linguagem"))
                     return LRParseResult(steps, true, nodes.lastOrNull())
                 }
             }

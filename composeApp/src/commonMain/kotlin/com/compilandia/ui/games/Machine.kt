@@ -40,6 +40,7 @@ import com.compilandia.resources.prop_gear
 import com.compilandia.ui.Palette
 import com.compilandia.ui.ThemeState
 import org.jetbrains.compose.resources.painterResource
+import com.compilandia.textos.tx
 
 const val MACHINE_LAMPS = 6
 private val LAMP_ON = Color(0xFFFFE28A)
@@ -81,8 +82,8 @@ fun MachinePanel(lit: Int, running: Boolean, region: String, modifier: Modifier 
             Image(painterResource(Res.drawable.prop_gear), null, Modifier.offset(x = (-8).dp, y = 10.dp).size(52.dp).rotate(-angle * 1.4f))
             Spacer(Modifier.width(6.dp))
             Column {
-                Text("Grande Compilador", color = Color(0xFFF2EEE3), style = MaterialTheme.typography.titleMedium)
-                Text(if (running) "Religado" else region, color = if (running) LAMP_ON else Color(0xFFD9D4C7), style = MaterialTheme.typography.bodySmall)
+                Text(tx("machine_grande_compilador"), color = Color(0xFFF2EEE3), style = MaterialTheme.typography.titleMedium)
+                Text(if (running) tx("machine_religado") else region, color = if (running) LAMP_ON else Color(0xFFD9D4C7), style = MaterialTheme.typography.bodySmall)
             }
         }
     }

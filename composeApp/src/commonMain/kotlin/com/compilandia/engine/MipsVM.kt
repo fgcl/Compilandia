@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * "MARS de bolso": um simulador MIPS-32 didático.
  *
@@ -10,7 +12,7 @@ package com.compilandia.engine
  * Memória por palavras; $sp começa no topo de uma pilha simulada.
  */
 class MipsVM(source: String, private val maxSteps: Int = 20_000) {
-    class AsmError(val line: Int, msg: String) : Exception(if (line >= 0) "linha ${line + 1}: $msg" else msg)
+    class AsmError(val line: Int, msg: String) : Exception(if (line >= 0) tx("mipsvm_linha_1_2", line + 1, msg) else msg)
 
     data class Inst(val op: String, val args: List<String>, val line: Int, val text: String)
 
@@ -71,7 +73,7 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
                         while (dataPtr % 4 != 0L) dataPtr++
                     }
                     line.startsWith(".space") -> { dataPtr += parseImm(line.removePrefix(".space").trim(), ln); while (dataPtr % 4 != 0L) dataPtr++ }
-                    else -> throw AsmError(ln, "diretiva de dados desconhecida: $line")
+                    else -> throw AsmError(ln, tx("mipsvm_diretiva_dados_desconhecida_1", line))
                 }
             } else {
                 if (label != null) labels[label] = program.size
@@ -119,13 +121,13 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
         return when {
             t.startsWith("0x") || t.startsWith("-0x") -> (if (t.startsWith("-")) -1 else 1) * t.removePrefix("-").removePrefix("0x").toLong(16)
             t.length == 3 && t[0] == '\'' -> t[1].code.toLong()
-            else -> t.toLongOrNull() ?: throw AsmError(ln, "número inválido: '$t'")
+            else -> t.toLongOrNull() ?: throw AsmError(ln, tx("mipsvm_numero_invalido_1", t))
         }
     }
 
     private fun regName(r: String, ln: Int): String {
         val n = REG_ALIASES[r] ?: r
-        if (!n.startsWith("\$")) throw AsmError(ln, "esperava um registrador, veio '$r'")
+        if (!n.startsWith("\$")) throw AsmError(ln, tx("mipsvm_esperava_registrador_veio_1", r))
         return n
     }
 
@@ -137,23 +139,23 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
         val m = Regex("^(-?[A-Za-z0-9_]*)\\((\\$[A-Za-z0-9]+)\\)$").find(a)
         if (m != null) {
             val base = get(m.groupValues[2], ln)
-            val off = m.groupValues[1].let { if (it.isEmpty()) 0 else it.toLongOrNull() ?: dataAddr[it] ?: throw AsmError(ln, "rótulo '$it' não existe") }
+            val off = m.groupValues[1].let { if (it.isEmpty()) 0 else it.toLongOrNull() ?: dataAddr[it] ?: throw AsmError(ln, tx("mipsvm_rotulo_1_nao_existe", it)) }
             return base + off
         }
-        return dataAddr[a] ?: throw AsmError(ln, "rótulo de dados '$a' não existe (declare em .data: $a: .word 0)")
+        return dataAddr[a] ?: throw AsmError(ln, tx("mipsvm_rotulo_dados_1_nao_existe", a, a))
     }
 
     private fun value(x: String, ln: Int): Long = if (x.startsWith("\$")) get(x, ln) else parseImm(x, ln)
 
-    private fun jump(label: String, ln: Int) { pc = labels[label] ?: throw AsmError(ln, "rótulo '$label' não existe") }
+    private fun jump(label: String, ln: Int) { pc = labels[label] ?: throw AsmError(ln, tx("mipsvm_rotulo_1_nao_existe", label)) }
 
     fun step(): Boolean {
         if (halted || pc >= program.size) { halted = true; return false }
-        if (++steps > maxSteps) throw AsmError(-1, "mais de $maxSteps instruções: laço infinito?")
+        if (++steps > maxSteps) throw AsmError(-1, tx("mipsvm_mais_1_instrucoes_laco_infinito", maxSteps))
         val ins = program[pc]
         val a = ins.args; val ln = ins.line
         pc++
-        fun need(n: Int) { if (a.size < n) throw AsmError(ln, "'${ins.op}' precisa de $n operandos") }
+        fun need(n: Int) { if (a.size < n) throw AsmError(ln, tx("mipsvm_1_precisa_2_operandos", ins.op, n)) }
         when (ins.op) {
             "nop" -> {}
             "li" -> { need(2); set(a[0], parseImm(a[1], ln), ln) }
@@ -167,10 +169,10 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
             "mul" -> { need(3); set(a[0], get(a[1], ln) * value(a[2], ln), ln) }
             "mult" -> { need(2); lo = get(a[0], ln) * get(a[1], ln); hi = 0 }
             "div" -> {
-                if (a.size == 2) { val d = get(a[1], ln); if (d == 0L) throw AsmError(ln, "divisão por zero"); lo = get(a[0], ln) / d; hi = get(a[0], ln) % d }
-                else { need(3); val d = value(a[2], ln); if (d == 0L) throw AsmError(ln, "divisão por zero"); set(a[0], get(a[1], ln) / d, ln) }
+                if (a.size == 2) { val d = get(a[1], ln); if (d == 0L) throw AsmError(ln, tx("mipsvm_divisao_por_zero")); lo = get(a[0], ln) / d; hi = get(a[0], ln) % d }
+                else { need(3); val d = value(a[2], ln); if (d == 0L) throw AsmError(ln, tx("mipsvm_divisao_por_zero")); set(a[0], get(a[1], ln) / d, ln) }
             }
-            "rem" -> { need(3); val d = value(a[2], ln); if (d == 0L) throw AsmError(ln, "divisão por zero"); set(a[0], get(a[1], ln) % d, ln) }
+            "rem" -> { need(3); val d = value(a[2], ln); if (d == 0L) throw AsmError(ln, tx("mipsvm_divisao_por_zero")); set(a[0], get(a[1], ln) % d, ln) }
             "mflo" -> set(a[0], lo, ln)
             "mfhi" -> set(a[0], hi, ln)
             "and", "andi" -> { need(3); set(a[0], get(a[1], ln) and value(a[2], ln), ln) }
@@ -195,7 +197,7 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
             "bnez" -> { need(2); if (get(a[0], ln) != 0L) jump(a[1], ln) }
             "b", "j" -> { need(1); jump(a[0], ln) }
             "jal" -> { need(1); regs["\$ra"] = pc.toLong(); jump(a[0], ln) }
-            "jr" -> { need(1); pc = get(a[0], ln).toInt(); if (pc < 0 || pc > program.size) throw AsmError(ln, "jr para endereço inválido") }
+            "jr" -> { need(1); pc = get(a[0], ln).toInt(); if (pc < 0 || pc > program.size) throw AsmError(ln, tx("mipsvm_jr_para_endereco_invalido")) }
             "jalr" -> { need(1); regs["\$ra"] = pc.toLong(); pc = get(a[0], ln).toInt() }
             "syscall" -> when (get("\$v0", ln)) {
                 1L -> output.append(get("\$a0", ln))
@@ -203,9 +205,9 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
                 11L -> output.append(get("\$a0", ln).toInt().toChar())
                 5L -> set("\$v0", 0, ln)          // read_int: o simulador lê sempre 0
                 10L -> halted = true
-                else -> throw AsmError(ln, "syscall ${get("\$v0", ln)} não suportada no simulador")
+                else -> throw AsmError(ln, tx("mipsvm_syscall_1_nao_suportada_no", get("\$v0", ln)))
             }
-            else -> throw AsmError(ln, "instrução '${ins.op}' não suportada no MARS de bolso")
+            else -> throw AsmError(ln, tx("mipsvm_instrucao_1_nao_suportada_no", ins.op))
         }
         trace += Snapshot(pc, HashMap(regs), output.toString(), ln)
         return !halted
@@ -236,7 +238,7 @@ object MiniLang {
         val toks = MiniLexer.tokenize(src).map { it.lexeme }
         var pos = 0
         fun peek() = toks.getOrNull(pos)
-        fun expect(t: String) { require(peek() == t) { "esperava '$t' mas veio '${peek()}'" }; pos++ }
+        fun expect(t: String) { require(peek() == t) { tx("mipsvm_esperava_1_mas_veio_2", t, peek()) }; pos++ }
         fun exprUntil(stop: Set<String>): Expr {
             val start = pos; var depth = 0
             while (pos < toks.size && !(depth == 0 && toks[pos] in stop)) { if (toks[pos] == "(") depth++; if (toks[pos] == ")") depth--; pos++ }
@@ -275,9 +277,9 @@ object MiniLang {
             }
         }
         fun cond(c: Expr, falseLabel: String) {
-            require(c.kind == Expr.Kind.BINOP && c.text in inverse) { "condição precisa ser uma comparação" }
+            require(c.kind == Expr.Kind.BINOP && c.text in inverse) { tx("mipsvm_condicao_precisa_ser_comparacao") }
             val a = expr(c.children[0]); val b = expr(c.children[1])
-            text += AsmLine("${inverse.getValue(c.text)} $a, $b, $falseLabel", true, "se a condição (${c.render()}) for FALSA, pula para $falseLabel — por isso o desvio usa o teste INVERSO de '${c.text}'")
+            text += AsmLine("${inverse.getValue(c.text)} $a, $b, $falseLabel", true, tx("mipsvm_se_condicao_1_for_falsa", c.render(), falseLabel, c.text))
         }
         fun stmts(list: List<Stmt>) {
             for (s in list) when (s) {
@@ -288,7 +290,7 @@ object MiniLang {
                     temp = 0; cond(s.cond, if (s.els.isEmpty()) lEnd else lElse)
                     stmts(s.then)
                     if (s.els.isNotEmpty()) {
-                        text += AsmLine("j $lEnd", true, "terminou o ENTÃO: pula o SENÃO")
+                        text += AsmLine("j $lEnd", true, tx("mipsvm_terminou_entao_pula_senao"))
                         text += AsmLine("$lElse:")
                         stmts(s.els)
                     }
@@ -299,14 +301,14 @@ object MiniLang {
                     text += AsmLine("$lTop:")
                     temp = 0; cond(s.cond, lEnd)
                     stmts(s.body)
-                    text += AsmLine("j $lTop", true, "fim do corpo: volta para testar a condição de novo")
+                    text += AsmLine("j $lTop", true, tx("mipsvm_fim_corpo_volta_para_testar"))
                     text += AsmLine("$lEnd:")
                 }
             }
         }
         prog.forEach { st -> if (st is Stmt.Assign) collect(st.expr) }
         stmts(prog)
-        val data = listOf(AsmLine(".data")) + vars.map { AsmLine("$it: .word ${initial[it] ?: 0}") } + listOf(AsmLine(".text"), AsmLine("main:"))
+        val data = listOf(AsmLine(".data")) + vars.map { AsmLine(tx("mipsvm_1_word_2", it, initial[it] ?: 0)) } + listOf(AsmLine(".text"), AsmLine("main:"))
         return data + text + listOf(AsmLine("li \$v0, 10"), AsmLine("syscall"))
     }
 

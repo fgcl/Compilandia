@@ -24,18 +24,19 @@ import com.compilandia.engine.Grammar
 import com.compilandia.engine.tokensOf
 import com.compilandia.learning.Skill
 import com.compilandia.tutor.Sims
+import com.compilandia.textos.tx
 
 /** Temporada Na prática: a pessoa pilota, e quem calcula é o motor. */
 val praticas by lazy {
     listOf(
-        episodio(Skill.PHASES, "A câmera entra na máquina", PRATICA) {
-            val nomes = listOf("Léxica", "Sintática", "Semântica", "Intermediário", "Otimização", "Geração")
+        episodio(Skill.PHASES, tx("eppratica_camera_entra_na_maquina"), PRATICA) {
+            val nomes = listOf(tx("comum_lexica"), tx("comum_sintatica"), tx("comum_semantica"), tx("comum_intermediario"), tx("comum_otimizacao_2"), tx("comum_geracao"))
             val fases = nomes.mapIndexed { i, n -> Box("f$i", n, 180f, 76f + i * 56f, 210f, 46f, Look.TOKEN, Tint.NONE, size = 17f) }
-            cena("Esta é a linha de montagem inteira. Vamos entrar na primeira máquina.") {
+            cena(tx("eppratica_esta_linha_montagem_inteira_vamos")) {
                 add(fases)
                 tint("f0", Tint.TEAL)
             }
-            cena("Dentro da fase léxica, a linha chega letra por letra.") {
+            cena(tx("eppratica_dentro_fase_lexica_linha_chega")) {
                 text("f0", "")
                 text("f1", "")
                 val letras = "x>=1"
@@ -43,19 +44,19 @@ val praticas by lazy {
                 camera(180f, 76f, 4f)
             }
             pergunta(
-                "Dois destes caracteres formam um token só. Toque nos dois.",
+                tx("eppratica_dois_destes_caracteres_formam_token"),
                 setOf("c1", "c2"), setOf("c0", "c3"),
-                "Procure o operador de comparação.",
-                "Isso. Maior ou igual é um token só.",
+                tx("eppratica_procure_operador_comparacao"),
+                tx("eppratica_isso_maior_ou_igual_token"),
             ) { hot() }
-            cena("Os tokens saem daqui e seguem para a próxima máquina.") {
+            cena(tx("eppratica_tokens_saem_daqui_seguem_para")) {
                 dropAll("c")
-                text("f0", "Léxica")
-                text("f1", "Sintática")
+                text("f0", tx("comum_lexica"))
+                text("f1", tx("comum_sintatica"))
                 camera()
                 hot("f1"); tint("f1", Tint.ORANGE)
             }
-            cena("Dentro da sintática, os mesmos tokens viram uma árvore.") {
+            cena(tx("eppratica_dentro_sintatica_mesmos_tokens_viram")) {
                 text("f0", "")
                 text("f1", "")
                 text("f2", "")
@@ -65,32 +66,32 @@ val praticas by lazy {
                 wire("r", "a", arrow = false); wire("r", "b", arrow = false)
                 camera(180f, 132f, 4f)
             }
-            cena("Cada máquina recebe o trabalho da anterior e entrega para a próxima.", who = PROF, mood = EpMood.HAPPY) {
+            cena(tx("eppratica_cada_maquina_recebe_trabalho_anterior"), who = PROF, mood = EpMood.HAPPY) {
                 drop("r", "a", "b")
-                text("f0", "Léxica")
-                text("f1", "Sintática")
-                text("f2", "Semântica")
+                text("f0", tx("comum_lexica"))
+                text("f1", tx("comum_sintatica"))
+                text("f2", tx("comum_semantica"))
                 camera()
                 hot()
             }
         },
 
-        episodio(Skill.FIRST, "Símbolos correndo nos fios", PRATICA) {
+        episodio(Skill.FIRST, tx("eppratica_simbolos_correndo_nos_fios"), PRATICA) {
             val no = { id: String, t: String, y: Float -> Box(id, t, 60f, y, 58f, 58f, Look.STATE, Tint.ORANGE, size = 20f) }
             val conj = { id: String, y: Float -> Box(id, "", 220f, y, 210f, 50f, Look.CELL, Tint.DARK, size = 15f) }
-            cena("Três regras em cadeia. E começa com T, e T começa com F.") {
+            cena(tx("eppratica_tres_regras_em_cadeia_comeca")) {
                 add(no("F", "F", 90f), no("T", "T", 220f), no("E", "E", 350f))
                 add(conj("cF", 90f), conj("cT", 220f), conj("cE", 350f))
                 wire("F", "T", bend = 0f); wire("T", "E", bend = 0f)
             }
-            cena("F abre com id, ou com abre parêntese. Eles entram primeiro.") { text("cF", "id   ("); hot("F", "cF") }
-            cena("T começa com F. Então tudo que abre F corre pelo fio até T.") { flow("F", "T", "id", "("); hot("T") }
-            cena("Chegou. Agora os mesmos símbolos seguem de T para E.") { text("cT", "id   ("); flow("T", "E", "id", "("); hot("E") }
+            cena(tx("eppratica_f_abre_com_id_ou")) { text("cF", "id   ("); hot("F", "cF") }
+            cena(tx("eppratica_t_comeca_com_f_entao")) { flow("F", "T", "id", "("); hot("T") }
+            cena(tx("eppratica_chegou_agora_mesmos_simbolos_seguem")) { text("cT", "id   ("); flow("T", "E", "id", "("); hot("E") }
             pergunta(
-                "Quem chega no FIRST de E? Toque nos dois.",
+                tx("eppratica_quem_chega_no_first_toque"),
                 setOf("a", "b"), setOf("c"),
-                "Só correm pelo fio os símbolos que já estão em T.",
-                "Isso. FIRST escorre de quem está no começo da regra.",
+                tx("eppratica_so_correm_pelo_fio_simbolos"),
+                tx("eppratica_isso_first_escorre_quem_esta"),
             ) {
                 clearWires()
                 wire("F", "T"); wire("T", "E")
@@ -98,149 +99,149 @@ val praticas by lazy {
                 add(Box("b", "(", 220f, 290f, 60f, 40f, Look.TOKEN, Tint.TEAL, size = 15f))
                 add(Box("c", "+", 290f, 290f, 60f, 40f, Look.TOKEN, Tint.TEAL, size = 15f))
             }
-            cena("Quando nada mais corre, acabou. É assim que o algoritmo sabe parar.", who = PROF, mood = EpMood.HAPPY) {
+            cena(tx("eppratica_quando_nada_mais_corre_acabou"), who = PROF, mood = EpMood.HAPPY) {
                 drop("a", "b", "c")
                 text("cE", "id   (")
                 hot("cE")
             }
         },
 
-        episodio(Skill.TOKENS, "Corte você mesmo", PRATICA) {
-            cena("Agora você é o scanner. A linha é x maior ou igual a dez.") {
+        episodio(Skill.TOKENS, tx("eppratica_corte_voce_mesmo"), PRATICA) {
+            cena(tx("eppratica_agora_voce_scanner_linha_x")) {
                 add(titulo("x>=10;"))
                 add(fileira("t", listOf("x" to Tint.TEAL, ">=" to Tint.ORANGE, "10" to Tint.YELLOW, ";" to Tint.BLUE), 180f, w = 62f))
             }
-            cena("Mais uma letra estica o pedaço. Cortar fecha o token.") { hot("t1") }
-            cena("Lembra da regra? Estique enquanto couber.", who = PROF) { hot() }
+            cena(tx("eppratica_mais_letra_estica_pedaco_cortar")) { hot("t1") }
+            cena(tx("eppratica_lembra_regra_estique_enquanto_couber"), who = PROF) { hot() }
             brinquedo(
-                "Corte a linha inteira. Estique, e corte na hora certa.",
-                "O motor recusou. Pense no maior pedaço possível.",
-                "Linha cortada. Foram quatro tokens.",
-            ) { ToyCorte("x>=10;", "Corte a linha inteira") }
-            cena("Scanner de verdade faz isso milhões de vezes por segundo.", mood = EpMood.HAPPY) {
+                tx("eppratica_corte_linha_inteira_estique_corte"),
+                tx("eppratica_motor_recusou_pense_no_maior"),
+                tx("eppratica_linha_cortada_foram_quatro_tokens"),
+            ) { ToyCorte("x>=10;", tx("eppratica_corte_linha_inteira")) }
+            cena(tx("eppratica_scanner_verdade_faz_isso_milhoes"), mood = EpMood.HAPPY) {
                 add(titulo("x>=10;"))
                 hot("t0", "t1", "t2", "t3")
             }
         },
 
-        episodio(Skill.REGEX_DFA, "Pilote o trem", PRATICA) {
-            cena("Esta regex pede um a, quantos a mais quiser, e um b no fim.") {
-                add(titulo("a a* b"))
+        episodio(Skill.REGEX_DFA, tx("eppratica_pilote_trem"), PRATICA) {
+            cena(tx("eppratica_esta_regex_pede_quantos_mais")) {
+                add(titulo(tx("eppratica_b")))
                 add(fileira("p", listOf("a" to Tint.TEAL, "a*" to Tint.ORANGE, "b" to Tint.TEAL), 180f, w = 74f, h = 54f, size = 20f))
             }
-            cena("O autômato tem um estado para cada situação. Cada letra é uma seta.") { hot("p1") }
-            cena("O laço no meio é a estrela: dá para ficar ali lendo a.", who = PROF) { hot("p1") }
+            cena(tx("eppratica_automato_tem_estado_para_cada")) { hot("p1") }
+            cena(tx("eppratica_laco_no_meio_estrela_para"), who = PROF) { hot("p1") }
             brinquedo(
-                "Agora pilote. Chegue no círculo duplo com exatamente três letras.",
-                "Essa letra não deu certo. Olhe as setas do estado aceso.",
-                "Chegou no círculo duplo. A frase foi aceita.",
-            ) { val d = DFA.fromRegex("aa*b"); ToyTrem(d, Sims.posicoes(d.stateCount), "Chegue no círculo duplo com 3 letras", 3) }
-            cena("Pilotar é rodar o autômato de cabeça. É isso que a prova pede.", mood = EpMood.HAPPY) {}
+                tx("eppratica_agora_pilote_chegue_no_circulo"),
+                tx("eppratica_essa_letra_nao_deu_certo"),
+                tx("eppratica_chegou_no_circulo_duplo_frase"),
+            ) { val d = DFA.fromRegex("aa*b"); ToyTrem(d, Sims.posicoes(d.stateCount), tx("eppratica_chegue_no_circulo_duplo_com"), 3) }
+            cena(tx("eppratica_pilotar_rodar_automato_cabeca_isso"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.CFG_DERIVATION, "Derive até chegar", PRATICA) {
-            cena("A frase alvo é id mais id. As regras estão aqui.") {
+        episodio(Skill.CFG_DERIVATION, tx("eppratica_derive_ate_chegar"), PRATICA) {
+            cena(tx("eppratica_frase_alvo_id_mais_id")) {
                 add(titulo("id + id"))
                 add(codigo("g", listOf("E -> T X", "X -> + T X | ε", "T -> id"), 110f, x = 120f, passo = 32f, size = 17f))
             }
-            cena("Troque sempre o não terminal mais à esquerda.") { hot("g0") }
-            cena("O X decide se a frase continua. Mais uma soma, ou épsilon para acabar.", who = PROF) { hot("g1") }
+            cena(tx("eppratica_troque_sempre_nao_terminal_mais")) { hot("g0") }
+            cena(tx("eppratica_x_decide_se_frase_continua"), who = PROF) { hot("g1") }
             brinquedo(
-                "Sua vez. Escolha as regras até chegar na frase.",
-                "Essa escolha saiu da frase. Comece de novo.",
-                "Chegou. Isso é uma derivação mais à esquerda.",
-            ) { ToyDerivacao(Grammar.parse("E -> T X\nX -> + T X | ε\nT -> id"), tokensOf("id + id"), "Chegue em id + id") }
-            cena("Quando você escolhe certo sem pensar, a tabela LL(1) já está na sua cabeça.", mood = EpMood.HAPPY) {}
+                tx("eppratica_sua_vez_escolha_regras_ate"),
+                tx("eppratica_essa_escolha_saiu_frase_comece"),
+                tx("eppratica_chegou_isso_derivacao_mais_esquerda"),
+            ) { ToyDerivacao(Grammar.parse("E -> T X\nX -> + T X | ε\nT -> id"), tokensOf("id + id"), tx("eppratica_chegue_em_id_id")) }
+            cena(tx("eppratica_quando_voce_escolhe_certo_sem"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.LEFT_RECURSION, "Rode a versão consertada", PRATICA) {
-            cena("Esta gramática já está consertada. Sem recursão à esquerda, a pilha anda.") {
+        episodio(Skill.LEFT_RECURSION, tx("eppratica_rode_versao_consertada"), PRATICA) {
+            cena(tx("eppratica_esta_gramatica_ja_esta_consertada")) {
                 add(titulo("n + n"))
                 add(codigo("g", listOf("E -> n X", "X -> + n X | ε"), 120f, x = 110f, passo = 34f, size = 18f))
             }
-            cena("Topo não terminal: troca pela regra. Topo igual à entrada: casa.") { hot("g0") }
-            cena("Repare no X à direita. A recursão foi para o fim, onde não trava.", who = PROF) { hot("g1") }
+            cena(tx("eppratica_topo_nao_terminal_troca_pela")) { hot("g0") }
+            cena(tx("eppratica_repare_no_x_direita_recursao"), who = PROF) { hot("g1") }
             brinquedo(
-                "Opere a pilha até aceitar.",
-                "Olhe o topo. Ele é terminal ou não terminal?",
-                "Aceitou. Com a recursão à direita, o parser sempre lê um token antes de voltar.",
-            ) { ToyPilhaLL(Grammar.parse("E -> n X\nX -> + n X | ε"), tokensOf("n + n"), "Leve a pilha até o fim") }
-            cena("A linguagem é a mesma de antes. Só a forma da regra mudou.", mood = EpMood.HAPPY) {}
+                tx("eppratica_opere_pilha_ate_aceitar"),
+                tx("eppratica_olhe_topo_ele_terminal_ou"),
+                tx("eppratica_aceitou_com_recursao_direita_parser"),
+            ) { ToyPilhaLL(Grammar.parse("E -> n X\nX -> + n X | ε"), tokensOf("n + n"), tx("eppratica_leve_pilha_ate_fim")) }
+            cena(tx("eppratica_linguagem_mesma_antes_so_forma"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.LL1_PARSING, "Opere a pilha", PRATICA) {
-            cena("Pilha, entrada e duas ações. Parece pouco, e é tudo que o parser faz.") {
+        episodio(Skill.LL1_PARSING, tx("eppratica_opere_pilha"), PRATICA) {
+            cena(tx("eppratica_pilha_entrada_duas_acoes_parece")) {
                 add(titulo("id + id"))
                 add(codigo("g", listOf("E -> T X", "X -> + T X | ε", "T -> id"), 110f, x = 120f, passo = 32f, size = 17f))
             }
-            cena("Topo não terminal: consulta a tabela e troca pela regra.") { hot("g0") }
-            cena("Topo terminal: precisa bater com a entrada, e os dois saem.") { hot("g2") }
+            cena(tx("eppratica_topo_nao_terminal_consulta_tabela")) { hot("g0") }
+            cena(tx("eppratica_topo_terminal_precisa_bater_com")) { hot("g2") }
             brinquedo(
-                "Opere até a pilha esvaziar.",
-                "Olhe o topo. Ele é terminal ou não terminal?",
-                "Pilha vazia e entrada no fim. A frase vale.",
-            ) { ToyPilhaLL(Grammar.parse("E -> T X\nX -> + T X | ε\nT -> id"), tokensOf("id + id"), "Leve a pilha até o fim") }
-            cena("Sem recursão, sem volta atrás. Por isso o LL(1) é tão rápido.", who = PROF, mood = EpMood.HAPPY) {}
+                tx("eppratica_opere_ate_pilha_esvaziar"),
+                tx("eppratica_olhe_topo_ele_terminal_ou"),
+                tx("eppratica_pilha_vazia_entrada_no_fim"),
+            ) { ToyPilhaLL(Grammar.parse("E -> T X\nX -> + T X | ε\nT -> id"), tokensOf("id + id"), tx("eppratica_leve_pilha_ate_fim")) }
+            cena(tx("eppratica_sem_recursao_sem_volta_atras"), who = PROF, mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.SHIFT_REDUCE, "Opere a esteira", PRATICA) {
-            cena("Agora o sentido é o contrário: da frase até o símbolo inicial.") {
+        episodio(Skill.SHIFT_REDUCE, tx("eppratica_opere_esteira"), PRATICA) {
+            cena(tx("eppratica_agora_sentido_contrario_frase_ate")) {
                 add(titulo("n + n"))
                 add(codigo("g", listOf("E -> E + n | n"), 130f, x = 90f, passo = 32f, size = 18f))
             }
-            cena("Empilhar puxa o próximo token. Reduzir troca o topo pelo lado esquerdo da regra.") { hot("g0") }
-            cena("Quando sobrar só E, e a entrada acabar, a frase vale.", who = PROF) {}
+            cena(tx("eppratica_empilhar_puxa_proximo_token_reduzir")) { hot("g0") }
+            cena(tx("eppratica_quando_sobrar_so_entrada_acabar"), who = PROF) {}
             brinquedo(
-                "Sua vez na esteira. Empilhe e reduza até sobrar E.",
-                "Olhe o topo. Ele já forma uma regra inteira?",
-                "Sobrou E e a entrada acabou. Aceito.",
-            ) { ToyEmpilhaReduz(Grammar.parse("E -> E + n | n"), tokensOf("n + n"), "Reduza até sobrar E") }
-            cena("Foi uma derivação mais à direita, de trás para frente.", mood = EpMood.HAPPY) {}
+                tx("eppratica_sua_vez_na_esteira_empilhe"),
+                tx("eppratica_olhe_topo_ele_ja_forma"),
+                tx("eppratica_sobrou_entrada_acabou_aceito"),
+            ) { ToyEmpilhaReduz(Grammar.parse("E -> E + n | n"), tokensOf("n + n"), tx("eppratica_reduza_ate_sobrar")) }
+            cena(tx("eppratica_foi_derivacao_mais_direita_tras"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.YACC_BISON, "Por que o vezes espera", PRATICA) {
-            cena("Sem declarar nada, os níveis da gramática já dão a precedência.") {
+        episodio(Skill.YACC_BISON, tx("eppratica_por_que_vezes_espera"), PRATICA) {
+            cena(tx("eppratica_sem_declarar_nada_niveis_gramatica")) {
                 add(titulo("id + id * id"))
                 add(codigo("g", listOf("E -> E + T | T", "T -> T * F | F", "F -> id"), 100f, x = 110f, passo = 32f, size = 17f))
             }
-            cena("Regra mais funda roda antes. T fica abaixo de E, então o vezes vem primeiro.") { hot("g1") }
-            cena("Com Bison, o left faz o mesmo sem esses níveis.", who = PROF) {}
+            cena(tx("eppratica_regra_mais_funda_roda_antes")) { hot("g1") }
+            cena(tx("eppratica_com_bison_left_faz_mesmo"), who = PROF) {}
             brinquedo(
-                "Rode a esteira. Repare quando o vezes faz a máquina esperar.",
-                "Antes de reduzir, olhe o que vem na entrada.",
-                "Aceito. O vezes reduziu antes do mais.",
-            ) { ToyEmpilhaReduz(Grammar.parse("E -> E + T | T\nT -> T * F | F\nF -> id"), tokensOf("id + id * id"), "Reduza até sobrar E") }
-            cena("Esperar é empilhar. Foi por isso que a conta saiu na ordem certa.", mood = EpMood.HAPPY) {}
+                tx("eppratica_rode_esteira_repare_quando_vezes"),
+                tx("eppratica_antes_reduzir_olhe_que_vem"),
+                tx("eppratica_aceito_vezes_reduziu_antes_mais"),
+            ) { ToyEmpilhaReduz(Grammar.parse("E -> E + T | T\nT -> T * F | F\nF -> id"), tokensOf("id + id * id"), tx("eppratica_reduza_ate_sobrar")) }
+            cena(tx("eppratica_esperar_empilhar_foi_por_isso"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.ATTRIBUTES_TYPES, "Suba os tipos", PRATICA) {
-            cena("Aqui a é inteiro e x é real. Vamos anotar a árvore.") {
-                add(titulo("a + x * 2"))
+        episodio(Skill.ATTRIBUTES_TYPES, tx("eppratica_suba_tipos"), PRATICA) {
+            cena(tx("eppratica_aqui_inteiro_x_real_vamos")) {
+                add(titulo(tx("comum_x_2")))
                 add(rotulo("r", "a: int     x: float", 180f, 130f, Tint.YELLOW, 18f))
             }
-            cena("Comece pelas folhas. Depois, cada pai olha os filhos.") {}
-            cena("Se um dos filhos é real, o resultado sobe como real.", who = PROF) {}
+            cena(tx("eppratica_comece_pelas_folhas_depois_cada")) {}
+            cena(tx("eppratica_se_dos_filhos_real_resultado"), who = PROF) {}
             brinquedo(
-                "Diga o tipo de cada nó aceso, de baixo para cima.",
-                "Tipo errado. Olhe os filhos desse nó.",
-                "Árvore anotada. O tipo subiu até a raiz.",
-            ) { ToyTipos("a + x * 2", ExprGenerator.env, "Diga o tipo do nó aceso") }
-            cena("Isso que você fez é atributo sintetizado, na ordem de baixo para cima.", mood = EpMood.HAPPY) {}
+                tx("eppratica_diga_tipo_cada_no_aceso"),
+                tx("eppratica_tipo_errado_olhe_filhos_desse"),
+                tx("eppratica_arvore_anotada_tipo_subiu_ate"),
+            ) { ToyTipos(tx("comum_x_2"), ExprGenerator.env, tx("eppratica_diga_tipo_no_aceso")) }
+            cena(tx("eppratica_isso_que_voce_fez_atributo"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.CODEGEN_MIPS, "Monte o MIPS", PRATICA) {
-            cena("MIPS só faz conta em registrador. Toda soma tem três tempos.") {
-                add(titulo("a + b"))
+        episodio(Skill.CODEGEN_MIPS, tx("eppratica_monte_mips"), PRATICA) {
+            cena(tx("eppratica_mips_so_faz_conta_em")) {
+                add(titulo(tx("comum_b_2")))
                 add(fileira("p", listOf("lw" to Tint.TEAL, "add" to Tint.ORANGE, "sw" to Tint.YELLOW), 180f, w = 84f, h = 54f, size = 18f))
             }
-            cena("Lw traz da memória. Add faz a conta. Sw guarda o resultado.") { hot("p0", "p1", "p2") }
-            cena("Esqueceu o lw, a conta usa lixo. Esqueceu o sw, o resultado some.", who = PROF) { hot() }
+            cena(tx("eppratica_lw_traz_memoria_add_faz")) { hot("p0", "p1", "p2") }
+            cena(tx("eppratica_esqueceu_lw_conta_usa_lixo"), who = PROF) { hot() }
             brinquedo(
-                "Monte as instruções na ordem.",
-                "Ordem errada. Primeiro carrega, depois calcula, depois guarda.",
-                "Programa pronto. Foi assim que o gerador de código fez.",
-            ) { ToyMips("a + b", "Escolha a próxima instrução") }
-            cena("Cada linha de três endereços vira esse mesmo trio.", mood = EpMood.HAPPY) {}
+                tx("eppratica_monte_instrucoes_na_ordem"),
+                tx("eppratica_ordem_errada_primeiro_carrega_depois"),
+                tx("eppratica_programa_pronto_foi_assim_que"),
+            ) { ToyMips(tx("comum_b_2"), tx("eppratica_escolha_proxima_instrucao")) }
+            cena(tx("eppratica_cada_linha_tres_enderecos_vira"), mood = EpMood.HAPPY) {}
         },
     )
 }

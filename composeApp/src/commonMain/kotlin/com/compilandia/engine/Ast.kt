@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * Árvore sintática ABSTRATA (AST) com classes, como num compilador de verdade, comparada
  * com a árvore de derivação (concreta). A AST joga fora o que só servia para a gramática:
@@ -31,7 +33,7 @@ object AstTools {
 
     /** Código Java que constrói a AST. */
     fun toJava(e: Expr): String = when (e.kind) {
-        Expr.Kind.NUM -> "new Num(${e.text})"
+        Expr.Kind.NUM -> tx("comum_new_num_1", e.text)
         Expr.Kind.VAR -> "new Var(\"${e.text}\")"
         Expr.Kind.BINOP -> "new BinOp('${e.text}', ${toJava(e.children[0])}, ${toJava(e.children[1])})"
     }
@@ -58,27 +60,5 @@ object AstTools {
     fun countNodes(e: Expr): Int = 1 + e.children.sumOf { countNodes(it) }
 
     /** Gera o parser descendente recursivo (com precedência em cascata) que CONSTRÓI a AST. */
-    val javaParserBuildingAst: String = """
-        Expr expr() {                 // E → T (('+'|'-') T)*
-            Expr e = termo();
-            while (tok.equals("+") || tok.equals("-")) {
-                char op = tok.charAt(0); casaToken(tok);
-                e = new BinOp(op, e, termo());   // associa à esquerda
-            }
-            return e;
-        }
-        Expr termo() {                // T → F (('*'|'/') F)*
-            Expr e = fator();
-            while (tok.equals("*") || tok.equals("/")) {
-                char op = tok.charAt(0); casaToken(tok);
-                e = new BinOp(op, e, fator());
-            }
-            return e;
-        }
-        Expr fator() {                // F → ( E ) | id | num
-            if (tok.equals("(")) { casaToken("("); Expr e = expr(); casaToken(")"); return e; }
-            if (ehNumero(tok)) { int v = Integer.parseInt(tok); casaToken(tok); return new Num(v); }
-            String nome = tok; casaToken(tok); return new Var(nome);
-        }
-    """.trimIndent()
+    val javaParserBuildingAst: String = tx("ast_expr_expr_t_t_expr")
 }

@@ -5,7 +5,8 @@ package com.compilandia.content
  * e o teste VoiceCoverageTest avisa que falta renderizar.
  */
 data class Fala(val who: Speaker, val text: String) {
-    val id: String get() = falaId(who, text)
+    /** Nasce do texto em português, para o áudio valer em qualquer idioma. */
+    val id: String get() = falaId(who, com.compilandia.textos.Txt.paraPt(text))
     /** O que a voz lê: sem marcas de negrito e de código. */
     val plain: String get() = text.replace("**", "").replace("`", "")
 }

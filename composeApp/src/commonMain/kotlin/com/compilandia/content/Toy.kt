@@ -14,6 +14,7 @@ import com.compilandia.engine.MiniLexer
 import com.compilandia.engine.Production
 import com.compilandia.engine.SententialForm
 import com.compilandia.engine.render
+import com.compilandia.textos.tx
 
 /**
  * Um brinquedo do palco. A pessoa aperta uma tecla, o motor calcula, e a imagem nova sai de [shot].
@@ -72,12 +73,12 @@ class ToyTrem(
     override fun aperta(tecla: String): Boolean {
         val c = tecla.first()
         if (lidas.length >= tamanho || d.step(estado, c) < 0) {
-            aviso = if (lidas.length >= tamanho) "A fita acabou. Recomece." else "Daqui não sai seta com essa letra."
+            aviso = if (lidas.length >= tamanho) tx("toy_fita_acabou_recomece") else tx("toy_daqui_nao_sai_seta_com")
             if (lidas.length >= tamanho) reinicia()
             return false
         }
         lidas += c
-        aviso = if (pronto) "Chegou." else if (lidas.length == tamanho) "Acabou a fita fora do círculo duplo." else null
+        aviso = if (pronto) tx("toy_chegou") else if (lidas.length == tamanho) tx("toy_acabou_fita_fora_circulo_duplo") else null
         return !(lidas.length == tamanho && !pronto)
     }
 
@@ -88,7 +89,7 @@ class ToyTrem(
 class ToyEmpilhaReduz(g: Grammar, private val entrada: List<String>, override val meta: String) : Toy {
     private val passos = LRParser.parse(LRTable(g, LRKind.SLR1), entrada).steps
     private var k = 0
-    override val teclas = listOf("Empilhar", "Reduzir")
+    override val teclas = listOf(tx("comum_empilhar_2"), tx("comum_reduzir"))
     override var aviso: String? = null
         private set
     override val pronto: Boolean get() = passos.getOrNull(k)?.action == LRAction.Accept
@@ -110,7 +111,7 @@ class ToyEmpilhaReduz(g: Grammar, private val entrada: List<String>, override va
             is LRAction.Reduce -> tecla == "Reduzir"
             else -> false
         }
-        aviso = if (certo) null else if (a is LRAction.Shift) "Ainda não forma regra. Empilhe." else "O topo já forma uma regra. Reduza."
+        aviso = if (certo) null else if (a is LRAction.Shift) tx("toy_ainda_nao_forma_regra_empilhe") else tx("toy_topo_ja_forma_regra_reduza")
         if (certo) k++
         return certo
     }
@@ -122,7 +123,7 @@ class ToyEmpilhaReduz(g: Grammar, private val entrada: List<String>, override va
 class ToyPilhaLL(g: Grammar, private val entrada: List<String>, override val meta: String) : Toy {
     private val passos = LL1Parser.trace(LL1Table(g), entrada)
     private var k = 0
-    override val teclas = listOf("Trocar pela regra", "Casar")
+    override val teclas = listOf(tx("toy_trocar_pela_regra"), tx("comum_casar_2"))
     override var aviso: String? = null
         private set
     override val pronto: Boolean get() = passos.getOrNull(k)?.action == LLAction.Accept
@@ -139,7 +140,7 @@ class ToyPilhaLL(g: Grammar, private val entrada: List<String>, override val met
     override fun aperta(tecla: String): Boolean {
         val a = passos.getOrNull(k)?.action
         val certo = (a is LLAction.Expand && tecla == "Trocar pela regra") || (a is LLAction.Match && tecla == "Casar")
-        aviso = if (certo) null else if (a is LLAction.Expand) "O topo é não terminal. Olhe a tabela." else "Topo e entrada são iguais. Case."
+        aviso = if (certo) null else if (a is LLAction.Expand) tx("toy_topo_nao_terminal_olhe_tabela") else tx("toy_topo_entrada_sao_iguais_case")
         if (certo) k++
         return certo
     }
@@ -152,7 +153,7 @@ class ToyCorte(private val linha: String, override val meta: String) : Toy {
     private val tokens = MiniLexer.tokenize(linha)
     private var t = 0
     private var fim = 0
-    override val teclas = listOf("Mais uma letra", "Cortar aqui")
+    override val teclas = listOf(tx("toy_mais_letra"), tx("toy_cortar_aqui"))
     override var aviso: String? = null
         private set
     override val pronto: Boolean get() = t >= tokens.size
@@ -176,12 +177,12 @@ class ToyCorte(private val linha: String, override val meta: String) : Toy {
     override fun aperta(tecla: String): Boolean {
         val atual = tokens.getOrNull(t) ?: return false
         if (tecla == "Mais uma letra") {
-            if (fim >= atual.end) { aviso = "Passou do token. A próxima letra já é outra coisa."; return false }
+            if (fim >= atual.end) { aviso = tx("toy_passou_token_proxima_letra_ja"); return false }
             fim++
             aviso = null
             return true
         }
-        if (fim < atual.end) { aviso = "Ainda cabe mais. Maior casamento: estique."; return false }
+        if (fim < atual.end) { aviso = tx("toy_ainda_cabe_mais_maior_casamento"); return false }
         t++
         val prox = tokens.getOrNull(t)
         fim = if (prox != null) prox.start + 1 else linha.length
@@ -211,15 +212,15 @@ class ToyDerivacao(private val g: Grammar, private val alvo: List<String>, overr
             val pecas = forma0.mapIndexed { i, s ->
                 Box("f$i-$s", s, x0 + i * cada, 220f, cada - 4f, 42f, Look.TOKEN, if (g.isNonTerminal(s)) Tint.ORANGE else Tint.TEAL, hot = i == forma.leftmostNT(g), size = minOf(16f, cada * 0.42f))
             }
-            return Shot(listOf(rotulo("ra", "chegue nesta frase", 180f, 26f)) + alvoBox + pecas)
+            return Shot(listOf(rotulo("ra", tx("toy_chegue_nesta_frase"), 180f, 26f)) + alvoBox + pecas)
         }
 
     override fun aperta(tecla: String): Boolean {
         val p = regras.firstOrNull { it.toString() == tecla } ?: return false
         val nova = forma.apply(forma.leftmostNT(g), p)
-        if (nova.symbols.count { !g.isNonTerminal(it) } > alvo.size) { aviso = "A frase passou do tamanho."; reinicia(); return false }
+        if (nova.symbols.count { !g.isNonTerminal(it) } > alvo.size) { aviso = tx("toy_frase_passou_tamanho"); reinicia(); return false }
         forma = nova
-        if (forma.leftmostNT(g) < 0 && !pronto) { aviso = "Virou outra frase. Comece de novo."; reinicia(); return false }
+        if (forma.leftmostNT(g) < 0 && !pronto) { aviso = tx("toy_virou_outra_frase_comece_novo"); reinicia(); return false }
         aviso = null
         return true
     }
@@ -264,7 +265,7 @@ class ToyTipos(src: String, private val env: Map<String, Pair<com.compilandia.en
         val e = ordem.getOrNull(k) ?: return false
         val certo = attrs.getValue(e.id).type.label
         if (tecla != certo) {
-            aviso = if (e.isLeaf) "Olhe a declaração de ${e.text}." else "Se um dos filhos é float, o resultado sobe como float."
+            aviso = if (e.isLeaf) tx("toy_olhe_declaracao_1", e.text) else tx("toy_se_dos_filhos_float_resultado")
             return false
         }
         aviso = null
@@ -285,12 +286,12 @@ class ToyMips(private val src: String, override val meta: String) : Toy {
     override val pronto: Boolean get() = k >= linhas.size
 
     override val shot: Shot
-        get() = Shot(listOf(rotulo("exp", src, 180f, 40f, Tint.YELLOW, 20f)) + codigo("m", linhas.take(k), 80f) + if (k < linhas.size) listOf(alvo("g", 180f, 90f + k * 25f, 300f, 22f, "próxima instrução")) else emptyList())
+        get() = Shot(listOf(rotulo("exp", src, 180f, 40f, Tint.YELLOW, 20f)) + codigo("m", linhas.take(k), 80f) + if (k < linhas.size) listOf(alvo("g", 180f, 90f + k * 25f, 300f, 22f, tx("toy_proxima_instrucao"))) else emptyList())
 
     override fun aperta(tecla: String): Boolean {
         val certo = linhas.getOrNull(k)?.substringBefore(' ') ?: return false
         if (tecla != certo) {
-            aviso = when (certo) { "lw" -> "Antes de calcular, o valor precisa vir da memória."; "sw" -> "A conta terminou. Guarde o resultado."; else -> "Os dois valores já estão nos registradores." }
+            aviso = when (certo) { "lw" -> tx("toy_antes_calcular_valor_precisa_vir"); "sw" -> tx("toy_conta_terminou_guarde_resultado"); else -> tx("toy_dois_valores_ja_estao_nos") }
             return false
         }
         aviso = null
@@ -328,9 +329,9 @@ class ToyTabelaViva(private val d: DFA, private val tamanho: Int, override val m
         }
 
     override fun aperta(tecla: String): Boolean {
-        if (lidas.length >= tamanho) { reinicia(); aviso = "A fita acabou. Recomece."; return false }
+        if (lidas.length >= tamanho) { reinicia(); aviso = tx("toy_fita_acabou_recomece"); return false }
         lidas += tecla.first()
-        aviso = if (pronto) "Chegou." else if (lidas.length == tamanho) "Terminou numa linha sem asterisco." else null
+        aviso = if (pronto) tx("toy_chegou") else if (lidas.length == tamanho) tx("toy_terminou_numa_linha_sem_asterisco") else null
         return !(lidas.length == tamanho && !pronto)
     }
 
@@ -345,7 +346,7 @@ class ToyClosure(g: Grammar, override val meta: String) : Toy {
     private val falsos = aug.productions.drop(1).filter { p -> p.rhs.isNotEmpty() }.map { com.compilandia.engine.LRItem(it.id, 1) }.take(2)
     private val opcoes = (fecho.drop(1) + falsos).map { it.render(aug) }.sortedBy { it.length }
     private val dentro = mutableListOf(fecho.first())
-    override val teclas: List<String> get() = (opcoes - dentro.map { it.render(aug) }.toSet()).ifEmpty { listOf("Pronto") }
+    override val teclas: List<String> get() = (opcoes - dentro.map { it.render(aug) }.toSet()).ifEmpty { listOf(tx("toy_pronto")) }
     override var aviso: String? = null
         private set
     override val pronto: Boolean get() = dentro.size == fecho.size
@@ -353,13 +354,13 @@ class ToyClosure(g: Grammar, override val meta: String) : Toy {
     override val shot: Shot
         get() {
             val linhas = dentro.map { it.render(aug) }
-            return Shot(listOf(rotulo("rg", "fecho do I0", 180f, 60f, Tint.YELLOW, 20f), registro("I0", "I0", linhas, 180f, 100f + alturaRegistro(linhas.size) / 2, 230f, if (pronto) Tint.GREEN else Tint.NONE, 16f, lit = linhas.lastIndex)))
+            return Shot(listOf(rotulo("rg", tx("toy_fecho_i0"), 180f, 60f, Tint.YELLOW, 20f), registro("I0", "I0", linhas, 180f, 100f + alturaRegistro(linhas.size) / 2, 230f, if (pronto) Tint.GREEN else Tint.NONE, 16f, lit = linhas.lastIndex)))
         }
 
     override fun aperta(tecla: String): Boolean {
         val item = fecho.firstOrNull { it.render(aug) == tecla }
         if (item == null || item in dentro) {
-            aviso = "Só entra item com o ponto no começo, de uma regra que aparece logo depois de um ponto."
+            aviso = tx("toy_so_entra_item_com_ponto")
             return false
         }
         dentro += item
@@ -374,7 +375,7 @@ class ToyClosure(g: Grammar, override val meta: String) : Toy {
 class ToyChamadas(private val tokens: List<String>, override val meta: String) : Toy {
     private val passos = rastroDescida(tokens)
     private var k = 0
-    override val teclas = listOf("Chamar", "Casar", "Voltar")
+    override val teclas = listOf(tx("toy_chamar"), tx("comum_casar_2"), tx("comum_voltar"))
     override var aviso: String? = null
         private set
     override val pronto: Boolean get() = k >= passos.size
@@ -386,17 +387,17 @@ class ToyChamadas(private val tokens: List<String>, override val meta: String) :
             val lidos = antes?.lidos ?: 0
             val fita = fitaTokens(tokens, lidos, 40f)
             val pilha = pilha("f", pilhaAgora.map { "$it()" }, 110f, 360f, 150f, 36f, Tint.ORANGE).mapIndexed { i, b -> if (i == pilhaAgora.lastIndex) b.copy(tint = Tint.YELLOW, hot = true) else b }
-            return Shot(fita + pilha + rotulo("rp", "pilha de chamadas", 110f, 392f) + codigo("g", listOf("expr:  termo ('+' termo)*", "termo: fator ('*' fator)*", "fator: NUM"), 120f, x = 196f, passo = 30f, size = 10f))
+            return Shot(fita + pilha + rotulo("rp", tx("comum_pilha_chamadas"), 110f, 392f) + codigo("g", listOf(tx("comum_expr_termo_termo"), tx("comum_termo_fator_fator"), tx("comum_fator_num")), 120f, x = 196f, passo = 30f, size = 10f))
         }
 
     override fun aperta(tecla: String): Boolean {
         val p = passos.getOrNull(k) ?: return false
-        val certo = when (p.acao) { "chamar" -> "Chamar"; "casar" -> "Casar"; else -> "Voltar" }
+        val certo = when (p.acao) { "chamar" -> tx("toy_chamar"); "casar" -> tx("comum_casar_2"); else -> tx("comum_voltar") }
         if (tecla != certo) {
             aviso = when (p.acao) {
-                "chamar" -> "A regra do topo ainda precisa de outra função."
-                "casar" -> "O token da fita é o que essa função espera. Case."
-                else -> "Essa função já fez tudo. Volte."
+                "chamar" -> tx("toy_regra_topo_ainda_precisa_outra")
+                "casar" -> tx("toy_token_fita_que_essa_funcao")
+                else -> tx("toy_essa_funcao_ja_fez_tudo")
             }
             return false
         }

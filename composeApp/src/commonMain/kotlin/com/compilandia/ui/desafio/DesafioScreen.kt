@@ -52,6 +52,7 @@ import com.compilandia.ui.Palette
 import com.compilandia.ui.ThemeState
 import com.compilandia.ui.pegboard
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -66,12 +67,12 @@ fun DesafioScreen(app: AppState) {
     val clip = LocalClipboardManager.current
     val mono = LocalFonts.current.mono
     Column(Modifier.fillMaxSize()) {
-        Header("Desafio do dia", "nº ${d.numero} · sequência ${app.ls.desafioSequencia}", Palette.drawer)
+        Header(tx("desafioscreen_desafio_dia"), tx("desafioscreen_no_1_sequencia_2", d.numero, app.ls.desafioSequencia), Palette.drawer)
         Column(
             Modifier.weight(1f).fillMaxWidth().background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f)).verticalScroll(rememberScrollState()).padding(14.dp),
             horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text("Ache a frase secreta de ${d.tamanho} tokens. Só vale frase que a gramática aceita.", style = MaterialTheme.typography.titleSmall)
+            Text(tx("desafioscreen_ache_frase_secreta_1_tokens", d.tamanho), style = MaterialTheme.typography.titleSmall)
             Text(d.texto, Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(12.dp), style = TextStyle(fontFamily = mono, fontSize = 15.sp, lineHeight = 22.sp, color = Palette.onAccent))
             val lado = (340.dp / d.tamanho).coerceAtMost(56.dp)
             for (l in 0 until Desafio.TENTATIVAS) {
@@ -88,19 +89,19 @@ fun DesafioScreen(app: AppState) {
                 }
             }
             if (acabou) {
-                val texto = if (jaJogou && palpites.isEmpty()) "Você já jogou hoje. Volte amanhã." else if (venceu) "Compilou em ${palpites.size}." else "Era: ${d.segredo.joinToString(" ")}"
+                val texto = if (jaJogou && palpites.isEmpty()) tx("desafioscreen_voce_ja_jogou_hoje_volte") else if (venceu) tx("desafioscreen_compilou_em_1", palpites.size) else "Era: ${d.segredo.joinToString(" ")}"
                 Text(texto, style = MaterialTheme.typography.titleMedium, color = if (venceu) Palette.green else Palette.yellow)
             }
         }
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(10.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (acabou) {
-                if (palpites.isNotEmpty()) BigButton("Compartilhar", Modifier.fillMaxWidth(), color = Palette.hazard, textColor = Palette.hazardDark) {
+                if (palpites.isNotEmpty()) BigButton(tx("desafioscreen_compartilhar"), Modifier.fillMaxWidth(), color = Palette.hazard, textColor = Palette.hazardDark) {
                     val t = Desafio.resultado(d, palpites, venceu)
                     clip.setText(AnnotatedString(t))
                     com.compilandia.platform.Compartilha.texto(t)
-                    app.say("Resultado copiado.")
+                    app.say(tx("desafioscreen_resultado_copiado"))
                 }
-                BigButton("Voltar à oficina", Modifier.fillMaxWidth()) { app.home() }
+                BigButton(tx("comum_voltar_oficina"), Modifier.fillMaxWidth()) { app.home() }
             } else {
                 FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     for (t in d.teclas) Box(Modifier.testTag("tecla-$t")) {
@@ -108,12 +109,12 @@ fun DesafioScreen(app: AppState) {
                     }
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    BigButton("Apagar", Modifier.weight(1f), color = Palette.drawer, enabled = atual.isNotEmpty()) { atual.removeAt(atual.lastIndex) }
-                    BigButton("Conferir", Modifier.weight(1f), enabled = atual.size == d.tamanho) {
+                    BigButton(tx("comum_apagar"), Modifier.weight(1f), color = Palette.drawer, enabled = atual.isNotEmpty()) { atual.removeAt(atual.lastIndex) }
+                    BigButton(tx("comum_conferir"), Modifier.weight(1f), enabled = atual.size == d.tamanho) {
                         val p = atual.toList()
                         if (!Desafio.valido(d, p)) {
                             Juice.wrong()
-                            app.say("A gramática não aceita essa frase.")
+                            app.say(tx("desafioscreen_gramatica_nao_aceita_essa_frase"))
                         } else {
                             palpites += p
                             atual.clear()

@@ -12,6 +12,7 @@ import com.compilandia.engine.LRTable
 import com.compilandia.engine.Production
 import com.compilandia.engine.SentenceGenerator
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 enum class Falha { IMPRODUTIVO, INALCANCAVEL, RECURSAO, RECURSAO_INDIRETA, PREFIXO, AMBIGUA, CONFLITO_LL, CONFLITO_SLR }
 
@@ -58,7 +59,7 @@ object Diagnostico {
         val g = try {
             Grammar.parse(normaliza(texto))
         } catch (e: Exception) {
-            return Laudo(null, e.message ?: "não entendi esse texto", emptyList(), false, false, false, emptyList())
+            return Laudo(null, e.message ?: tx("diagnostico_nao_entendi_esse_texto"), emptyList(), false, false, false, emptyList())
         }
         val problemas = mutableListOf<Problema>()
         fun linha(nt: String) = g.nonTerminals.indexOf(nt) + 1
@@ -66,44 +67,44 @@ object Diagnostico {
         val semFim = improdutivos(g)
         for (nt in semFim) problemas += Problema(
             Falha.IMPRODUTIVO, linha(nt), nt,
-            "$nt nunca termina: toda regra dele volta para ele.",
-            "Uma derivação que passa por $nt não chega numa frase. Fica sempre um não terminal sobrando.",
-            "Dê a $nt uma opção que só use terminais.",
+            tx("diagnostico_1_nunca_termina_toda_regra", nt),
+            tx("diagnostico_derivacao_que_passa_por_1", nt),
+            tx("diagnostico_1_opcao_que_so_use", nt),
         )
         for (nt in inalcancaveis(g)) problemas += Problema(
             Falha.INALCANCAVEL, linha(nt), nt,
-            "Ninguém chama $nt. Essa regra nunca roda.",
-            "A derivação começa em ${g.start}, e nenhum caminho chega em $nt.",
-            "Use $nt em alguma regra ou apague ela.",
+            tx("diagnostico_ninguem_chama_1_essa_regra", nt),
+            tx("diagnostico_derivacao_comeca_em_1_nenhum", g.start, nt),
+            tx("diagnostico_use_1_em_alguma_regra", nt),
         )
         for (nt in GrammarTransform.leftRecursiveNTs(g)) problemas += Problema(
             Falha.RECURSAO, linha(nt), nt,
-            "Na linha ${linha(nt)}, $nt começa com $nt.",
-            "Para decidir $nt, o parser precisa de $nt. Ele entra nisso e não sai mais.",
-            "Crie $nt' com o que vem depois de $nt, e termine $nt' com ε.",
+            tx("diagnostico_na_linha_1_2_comeca", linha(nt), nt, nt),
+            tx("diagnostico_para_decidir_1_parser_precisa", nt, nt),
+            tx("diagnostico_crie_1_com_que_vem", nt, nt, nt),
         )
         for (nt in recursaoIndireta(g)) problemas += Problema(
             Falha.RECURSAO_INDIRETA, linha(nt), nt,
-            "$nt volta para $nt passando por outra regra.",
-            "A recursão à esquerda está escondida: o parser dá a volta e chega no mesmo lugar.",
-            "Substitua a regra do meio dentro de $nt. Assim a recursão fica à vista.",
+            tx("diagnostico_1_volta_para_2_passando", nt, nt),
+            tx("diagnostico_recursao_esquerda_esta_escondida_parser"),
+            tx("diagnostico_substitua_regra_meio_dentro_1", nt),
         )
         if (GrammarTransform.needsLeftFactoring(g)) {
             val (nt, inicio) = prefixoComum(g)
             problemas += Problema(
                 Falha.PREFIXO, linha(nt), nt,
-                "Na linha ${linha(nt)}, duas opções de $nt começam com $inicio.",
-                "Olhando um símbolo só, o parser não sabe qual opção escolher.",
-                "Junte o começo igual e jogue a diferença para uma regra nova.",
+                tx("diagnostico_na_linha_1_duas_opcoes", linha(nt), nt, inicio),
+                tx("diagnostico_olhando_simbolo_so_parser_nao"),
+                tx("diagnostico_junte_comeco_igual_jogue_diferenca"),
             )
         }
         val frases = frases(g, rnd)
         ambigua(g, frases)?.let { f ->
             problemas += Problema(
                 Falha.AMBIGUA, 1, null,
-                "A frase ${f.joinToString(" ")} tem duas árvores.",
-                "Duas árvores são dois sentidos. O compilador precisa de um só.",
-                "Separe os operadores em níveis, ou declare precedência no Bison.",
+                tx("diagnostico_frase_1_tem_duas_arvores", f.joinToString(" ")),
+                tx("diagnostico_duas_arvores_sao_dois_sentidos"),
+                tx("diagnostico_separe_operadores_em_niveis_ou"),
                 f,
             )
         }
@@ -113,8 +114,8 @@ object Diagnostico {
             val regras = ll.cell(a, t)
             problemas += Problema(
                 Falha.CONFLITO_LL, linha(a), a,
-                "Na tabela, a casa de $a com $t recebeu ${regras.size} regras.",
-                "Com $t na entrada, valem ${regras.joinToString(" e ") { curta(it) }}. Só pode valer uma.",
+                tx("diagnostico_na_tabela_casa_1_com", a, t, regras.size),
+                tx("diagnostico_com_1_na_entrada_valem", t, regras.joinToString(" e ") { curta(it) }),
                 motivoConflito(ll, a, t),
             )
         }
@@ -125,27 +126,27 @@ object Diagnostico {
             tb.conflicts.firstOrNull()?.let { c ->
                 problemas += Problema(
                     Falha.CONFLITO_SLR, 1, null,
-                    "No estado ${c.state}, com ${c.terminal}, a tabela SLR tem conflito ${c.kind}.",
-                    "${descreve(tb, c.actions)}. Olhar só o FOLLOW não basta aqui.",
-                    if (lalr) "LALR(1) resolve: ele guarda o que pode vir em cada estado." else "Reescreva a gramática ou declare precedência no Bison.",
+                    tx("diagnostico_no_estado_1_com_2", c.state, c.terminal, c.kind),
+                    tx("diagnostico_1_olhar_so_follow_nao", descreve(tb, c.actions)),
+                    if (lalr) tx("diagnostico_lalr_1_resolve_ele_guarda") else tx("diagnostico_reescreva_gramatica_ou_declare_precedencia"),
                 )
             }
         }
         return Laudo(g, null, problemas, ll.conflicts.isEmpty(), slr, lalr, frases)
     }
 
-    private fun curta(p: Production) = "${p.lhs} para ${p.rhsText()}"
+    private fun curta(p: Production) = tx("diagnostico_1_para_2", p.lhs, p.rhsText())
 
     private fun motivoConflito(t: LL1Table, a: String, c: String): String {
         val r = t.reasons[a to c].orEmpty()
-        return if (r.any { "FOLLOW" in it }) "Uma opção de $a pode sumir, e $c também vem depois de $a. Mude a regra para separar os dois casos."
-        else "Duas opções de $a começam com $c. Fatore ou reescreva a regra."
+        return if (r.any { "FOLLOW" in it }) tx("diagnostico_opcao_1_pode_sumir_2", a, c, a)
+        else tx("diagnostico_duas_opcoes_1_comecam_com", a, c)
     }
 
     private fun descreve(t: LRTable, acoes: List<LRAction>): String = acoes.joinToString(" ou ") {
         when (it) {
             is LRAction.Shift -> "empilhar"
-            is LRAction.Reduce -> "reduzir por ${t.grammar.productions[it.prodId]}"
+            is LRAction.Reduce -> tx("diagnostico_reduzir_por_1", t.grammar.productions[it.prodId])
             else -> "aceitar"
         }
     }
@@ -198,7 +199,7 @@ object Diagnostico {
             val grupos = g.productionsOf(nt).filter { it.rhs.isNotEmpty() }.groupBy { it.rhs.first() }
             grupos.entries.firstOrNull { it.value.size > 1 }?.let { return nt to it.key }
         }
-        return g.start to "o mesmo símbolo"
+        return g.start to tx("diagnostico_mesmo_simbolo")
     }
 
     fun frases(g: Grammar, rnd: Random, n: Int = 6): List<List<String>> {

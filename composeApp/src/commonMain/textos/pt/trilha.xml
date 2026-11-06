@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A trilha de cada assunto (A1) e a trilha "Seu compilador" (A5). -->
+<resources>
+    <string name="trilha_etapa_bug">Abertura com o Bug</string>
+    <string name="trilha_etapa_bug_sub">10 segundos para tentar antes da explicação</string>
+    <string name="trilha_etapa_ver">Ver a aula animada</string>
+    <string name="trilha_etapa_ver_sub">O Byte mostra o algoritmo no palco</string>
+    <string name="trilha_etapa_pratica">Prática: você pilota</string>
+    <string name="trilha_etapa_pegadinha">Pegadinha</string>
+    <string name="trilha_etapa_desafio">Desafio</string>
+    <string name="trilha_etapa_desafio_sub">Um jogo no seu nível</string>
+    <string name="trilha_ler_com_calma">Ler com calma</string>
+    <string name="trilha_outro_jeito">Outro jeito de ver: %1$s</string>
+    <string name="trilha_pular">pular</string>
+    <string name="trilha_pulada">pulada</string>
+    <string name="trilha_opcional">opcional para você</string>
+    <string name="trilha_continuar">Continuar: %1$s</string>
+    <string name="trilha_completa">Trilha completa. O Desafio continua aberto para treinar.</string>
+    <string name="trilha_proximo_assunto">Próximo assunto: %1$s</string>
+    <string name="trilha_treinar">Treinar de novo</string>
+    <string name="trilha_pulou_aviso">Etapa pulada. Ela fica aqui se você quiser voltar.</string>
+    <string name="trilha_etapas_feitas">%1$s de %2$s etapas</string>
+    <string name="seucompilador_titulo">Seu compilador</string>
+    <string name="seucompilador_sub">As aulas em C e o Guia do TP, na ordem do compilador</string>
+    <string name="seucompilador_trancado">Abre quando você terminar a Floresta Léxica.</string>
+    <string name="seucompilador_aula_c">Aula em C</string>
+    <string name="seucompilador_capitulo">Capítulo %1$s do guia</string>
+    <string name="episodio_proxima_etapa">Próxima etapa: %1$s</string>
+    <string name="fim_cena_confusa">Ficou alguma cena confusa?</string>
+    <string name="fim_cena_confusa_sub">Toque na cena. Eu anoto e explico de outro jeito.</string>
+    <string name="fim_cena_anotada">Anotei a cena %1$s. Quer ver esse pedaço explicado de outro jeito?</string>
+    <string name="diario_titulo">Anotações do diário</string>
+    <string name="diario_aviso">O diário saiu do jogo, mas o que você escreveu continua guardado aqui.</string>
+    <string name="diario_ver">Ver as anotações antigas</string>
+    <string name="aula_tocar">Tocar sozinho</string>
+    <string name="aula_pausar">Pausar</string>
+    <string name="aula_tocando_aviso">As cenas seguem sozinhas. Nas perguntas, a aula espera o seu toque.</string>
+    <string name="aula_pausado_aviso">Pausado. Toque em Continuar para seguir.</string>
+    <string name="trilha_etapa_fazer">Fazer com ajuda</string>
+    <string name="trilha_etapa_fazer_sub">4 problemas. O Byte ajuda cada vez menos.</string>
+    <string name="guiado_problema">Problema %1$s de 4</string>
+    <string name="guiado_nivel_0">O Byte resolve tudo. Só acompanhe.</string>
+    <string name="guiado_nivel_1">O Byte faz tudo menos o último passo.</string>
+    <string name="guiado_nivel_2">O Byte faz só o primeiro passo.</string>
+    <string name="guiado_nivel_3">Agora é com você.</string>
+    <string name="guiado_proximo">Próximo problema</string>
+    <string name="guiado_concluir">Concluir</string>
+    <string name="guiado_dica">Dica</string>
+    <string name="guiado_byte_resolve">%1$s O Byte responde: %2$s.</string>
+    <string name="palco_texto_tocando">Cena %1$s de %2$s. Toque no palco para pausar.</string>
+    <string name="palco_texto_pausado">Cena %1$s de %2$s. Pausado. Toque para seguir.</string>
+    <string name="trilha_etapa_revisao">Revisão rápida</string>
+    <string name="trilha_etapa_revisao_sub">Um clipe de 30 segundos e um desafio.</string>
+    <string name="revisao_desafio">Agora um desafio rápido</string>
+</resources>

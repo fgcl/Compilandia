@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -59,6 +60,7 @@ import com.compilandia.ui.Screen
 import com.compilandia.ui.SpeechBubble
 import com.compilandia.ui.VSpace
 import com.compilandia.ui.visuals.VisualBeat
+import com.compilandia.textos.tx
 
 @Composable
 fun LessonScreen(app: AppState, s: Screen.Lesson) {
@@ -69,7 +71,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
     if (lesson == null) {
         Column(Modifier.fillMaxSize()) {
             Header(s.skill.title, "aula", color)
-            CenterText("Ainda não há aula para este tópico.\nTente praticar no minijogo! 🎮")
+            CenterText(tx("lessonscreen_ainda_nao_ha_aula_para"))
         }
         return
     }
@@ -86,7 +88,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
         val next = app.learner.notUnderstood(s.skill, lesson.style, s.tried, nowMs())
         app.commit()
         Sound.play(Sfx.WHOOSH)
-        app.say("Sem problema! Vamos de outro jeito: ${next.emoji} ${next.title}")
+        app.say(tx("lessonscreen_sem_problema_vamos_outro_jeito", next.emoji, next.title))
         app.replace(s.copy(style = next, tried = s.tried + lesson.style))
     }
 
@@ -97,6 +99,8 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
             Modifier.weight(1f).verticalScroll(scroll).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            // A6: a aula de texto também anima. O palco repassa as cenas da aula animada do assunto, sem som.
+            PalcoDaAula(s.skill)
             beats.take(shown).forEachIndexed { i, b ->
                 AnimatedVisibility(true, enter = fadeIn() + expandVertically()) {
                     BeatView(b, i, answered, revealed)
@@ -104,21 +108,21 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
             }
             if (finished) {
                 PaperCard(color = Palette.yellow.copy(alpha = 0.2f)) {
-                    Text("E aí, como foi?", style = MaterialTheme.typography.titleMedium)
-                    Text("Seja sincero(a): eu uso isso para escolher como explicar da próxima vez.", style = MaterialTheme.typography.bodySmall)
-                    BigButton("👍 Entendi! Quero explicar com minhas palavras", Modifier.fillMaxWidth(), color = Palette.green) {
+                    Text(tx("lessonscreen_ai_como_foi"), style = MaterialTheme.typography.titleMedium)
+                    Text(tx("lessonscreen_seja_sincero_eu_uso_isso"), style = MaterialTheme.typography.bodySmall)
+                    BigButton(tx("lessonscreen_entendi_quero_explicar_com_minhas"), Modifier.fillMaxWidth(), color = Palette.green) {
                         app.learner.recordLessonViewed(s.skill, lesson.style, true)
                         app.commit()
                         Juice.correct()
                         if (s.returnToGame) app.back() else app.replace(Screen.Feynman(s.skill))
                     }
-                    BigButton("🎮 Entendi, quero praticar direto", Modifier.fillMaxWidth(), color = Palette.orange) {
+                    BigButton(tx("lessonscreen_entendi_quero_praticar_direto"), Modifier.fillMaxWidth(), color = Palette.orange) {
                         app.learner.recordLessonViewed(s.skill, lesson.style, true)
                         app.commit()
                         if (s.returnToGame) app.back() else
                             app.replace(Screen.Play(s.skill, app.learner.chooseGame(s.skill), app.learner.chooseLevel(s.skill, nowMs()), seed = nowMs()))
                     }
-                    BigButton("😕 Não entendi — explica de outro jeito", Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink) { notUnderstood() }
+                    BigButton(tx("lessonscreen_nao_entendi_explica_outro_jeito"), Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink) { notUnderstood() }
                 }
             }
             VSpace(80)
@@ -127,15 +131,15 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
             Modifier.fillMaxWidth().background(Palette.paperDark).padding(10.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically,
         ) {
-            BigButton("😕 Não entendi", small = true, color = Palette.white, textColor = Palette.ink) { notUnderstood() }
-            BigButton("😴 Chato", small = true, color = Palette.white, textColor = Palette.ink) {
+            BigButton(tx("lessonscreen_nao_entendi"), small = true, color = Palette.white, textColor = Palette.ink) { notUnderstood() }
+            BigButton(tx("lessonscreen_chato"), small = true, color = Palette.white, textColor = Palette.ink) {
                 app.learner.boredLesson(s.skill, lesson.style, nowMs())
                 app.commit()
-                app.say("Bora aprender jogando então! Errar no jogo também ensina.")
+                app.say(tx("lessonscreen_bora_aprender_jogando_entao_errar"))
                 app.replace(Screen.Play(s.skill, app.learner.chooseGame(s.skill), 1, seed = nowMs()))
             }
             Spacer(Modifier.weight(1f))
-            if (!finished) BigButton(if (blocking) "responda ↑" else "Continuar ▶", small = true, enabled = !blocking, color = color) {
+            if (!finished) BigButton(if (blocking) tx("comum_responda") else tx("comum_continuar_2"), small = true, enabled = !blocking, color = color) {
                 Sound.play(Sfx.CLICK); shown++
             }
         }
@@ -155,7 +159,7 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             CodeBlock(b.code, b.caption)
             if (b.code.contains("main:") && listOf("class ", "void ", "public ").none { it in b.code }) {
                 var run by remember { mutableStateOf(false) }
-                if (!run) BigButton("▶ Rodar no MARS de bolso", small = true, color = Palette.teal) { run = true }
+                if (!run) BigButton(tx("lessonscreen_rodar_no_mars_bolso"), small = true, color = Palette.teal) { run = true }
                 else com.compilandia.ui.visuals.MipsRunView(b.code)
             }
         }
@@ -164,7 +168,7 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             RichText(b.text, style = MaterialTheme.typography.bodyMedium)
         }
         is Beat.Predict -> PaperCard(border = Palette.orange) {
-            Text("🔮 Preveja antes de ver", style = MaterialTheme.typography.labelMedium, color = Palette.orange)
+            Text(tx("lessonscreen_preveja_antes_ver"), style = MaterialTheme.typography.labelMedium, color = Palette.orange)
             RichText(b.question, style = MaterialTheme.typography.titleSmall)
             val chosen = answered[index]
             b.options.forEachIndexed { k, opt ->
@@ -185,17 +189,17 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             }
             if (chosen != null) FeedbackBanner(
                 chosen == b.correct,
-                (if (chosen == b.correct) "**Isso!** " else "**Boa tentativa — e errar aqui AJUDA a lembrar.** ") + b.explanation,
+                (if (chosen == b.correct) "**Isso!** " else tx("lessonscreen_boa_tentativa_errar_aqui_ajuda")) + b.explanation,
             )
         }
         is Beat.Reveal -> PaperCard(border = Palette.teal) {
-            Text("🧠 Pense primeiro, depois toque", style = MaterialTheme.typography.labelMedium, color = Palette.teal)
+            Text(tx("lessonscreen_pense_primeiro_depois_toque"), style = MaterialTheme.typography.labelMedium, color = Palette.teal)
             RichText(b.prompt, style = MaterialTheme.typography.titleSmall)
             if (revealed[index] == true) {
                 Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.teal.copy(alpha = 0.12f)).padding(10.dp)) {
                     RichText(b.answer, style = MaterialTheme.typography.bodyMedium)
                 }
-            } else BigButton("Pensei! Mostrar resposta", small = true, color = Palette.teal) { revealed[index] = true; Sound.play(Sfx.WHOOSH) }
+            } else BigButton(tx("lessonscreen_pensei_mostrar_resposta"), small = true, color = Palette.teal) { revealed[index] = true; Sound.play(Sfx.WHOOSH) }
         }
         is Beat.Steps -> StepsBeat(b)
         is Beat.Visual -> VisualBeat(b)
@@ -213,7 +217,7 @@ private fun StepsBeat(b: Beat.Steps) {
                 RichText(st, style = MaterialTheme.typography.bodyMedium)
             }
         }
-        if (n < b.steps.size) BigButton("próximo passo", small = true, color = Palette.blue) { n++ }
+        if (n < b.steps.size) BigButton(tx("lessonscreen_proximo_passo"), small = true, color = Palette.blue) { n++ }
     }
 }
 
@@ -240,45 +244,71 @@ fun FeynmanScreen(app: AppState, skill: Skill) {
     var checked by remember { mutableStateOf(false) }
     val color = Palette.region(skill.region)
     Column(Modifier.fillMaxSize()) {
-        Header("✍️ Explique com suas palavras", skill.title, color)
+        Header(tx("lessonscreen_explique_com_suas_palavras"), skill.title, color)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            SpeechBubble("🦉", "Profª Gramática", "Quem consegue explicar, entendeu de verdade. Escreva como se fosse mandar um áudio para um amigo — sem copiar, sem olhar. Frases tortas valem!")
-            PaperCard { RichText(card?.feynmanPrompt ?: "Explique \"${skill.title}\" para um colega que faltou à aula.", style = MaterialTheme.typography.titleSmall) }
-            OutlinedTextField(text, { text = it; checked = false }, Modifier.fillMaxWidth(), minLines = 5, label = { Text("Minha explicação") })
+            SpeechBubble("🦉", tx("comum_profa_gramatica"), tx("lessonscreen_quem_consegue_explicar_entendeu_verdade"))
+            PaperCard { RichText(card?.feynmanPrompt ?: tx("lessonscreen_explique_1_para_colega_que", skill.title), style = MaterialTheme.typography.titleSmall) }
+            OutlinedTextField(text, { text = it; checked = false }, Modifier.fillMaxWidth(), minLines = 5, label = { Text(tx("lessonscreen_minha_explicacao")) })
             if (checked && card != null) {
                 val lower = com.compilandia.learning.normalizeForMatch(text)
                 val hits = card.keyTerms.filter { lower.contains(com.compilandia.learning.normalizeForMatch(it)) }
                 PaperCard(color = Palette.paper) {
-                    Text("Espelho da sua explicação", style = MaterialTheme.typography.titleSmall)
+                    Text(tx("lessonscreen_espelho_sua_explicacao"), style = MaterialTheme.typography.titleSmall)
                     ChipRow { for (t in card.keyTerms) Chip((if (t in hits) "✓ " else "○ ") + t, selected = t in hits, color = Palette.green) }
                     Text(
                         when {
-                            hits.size == card.keyTerms.size -> "Você usou todas as ideias-chave. Excelente! 🏆"
-                            hits.size * 2 >= card.keyTerms.size -> "Muito bom! Que tal encaixar as ideias que faltaram (○)?"
-                            else -> "Ótimo começo. Releia os termos com ○ — consegue explicar como eles se ligam ao que você escreveu?"
+                            hits.size == card.keyTerms.size -> tx("lessonscreen_voce_usou_todas_ideias_chave")
+                            hits.size * 2 >= card.keyTerms.size -> tx("lessonscreen_muito_bom_que_tal_encaixar")
+                            else -> tx("lessonscreen_otimo_comeco_releia_termos_com")
                         }, style = MaterialTheme.typography.bodyMedium,
                     )
                     Text("🪝 ${card.hook}", style = MaterialTheme.typography.bodySmall, color = Palette.purple)
                     if (card.commonMistakes.isNotEmpty()) {
-                        Text("Erros comuns para evitar:", style = MaterialTheme.typography.labelMedium)
+                        Text(tx("lessonscreen_erros_comuns_para_evitar"), style = MaterialTheme.typography.labelMedium)
                         for (m in card.commonMistakes) RichText("• $m", style = MaterialTheme.typography.bodySmall)
                     }
                 }
             }
         }
         Row(Modifier.fillMaxWidth().background(Palette.paperDark).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            BigButton("Pular", small = true, color = Palette.white, textColor = Palette.ink) {
+            BigButton(tx("comum_pular"), small = true, color = Palette.white, textColor = Palette.ink) {
                 app.replace(Screen.Play(skill, app.learner.chooseGame(skill), app.learner.chooseLevel(skill, nowMs()), seed = nowMs()))
             }
             Spacer(Modifier.weight(1f))
-            if (!checked) BigButton("Conferir", small = true, color = color, enabled = text.trim().length >= 15) { checked = true; Sound.play(Sfx.CLICK) }
-            else BigButton("Salvar e praticar 🎮", small = true, color = Palette.orange) {
+            if (!checked) BigButton(tx("comum_conferir"), small = true, color = color, enabled = text.trim().length >= 15) { checked = true; Sound.play(Sfx.CLICK) }
+            else BigButton(tx("lessonscreen_salvar_praticar"), small = true, color = Palette.orange) {
                 app.learner.addJournal(card?.feynmanPrompt ?: skill.title, text.trim(), skill, nowMs())
                 app.commit()
-                app.say("+20 XP por explicar! Explicar é a forma mais forte de estudar.")
+                app.say(tx("lessonscreen_20_xp_por_explicar_explicar"))
                 app.replace(Screen.Play(skill, app.learner.chooseGame(skill), app.learner.chooseLevel(skill, nowMs()), seed = nowMs()))
             }
         }
+    }
+}
+
+/** O palco no topo da aula de texto: as cenas da aula animada passando sozinhas. Toque pausa. */
+@Composable
+private fun PalcoDaAula(skill: com.compilandia.learning.Skill) {
+    val ep = remember(skill) { com.compilandia.content.episodes.Episodes.of(skill) } ?: return
+    var k by remember(skill) { mutableIntStateOf(0) }
+    var tocando by remember { mutableStateOf(!com.compilandia.ui.ThemeState.reduceMotion) }
+    LaunchedEffect(k, tocando) {
+        if (!tocando) return@LaunchedEffect
+        kotlinx.coroutines.delay(2600L + ep.passos[k].fala.text.length * 30L)
+        k = (k + 1) % ep.passos.size
+    }
+    PaperCard(Modifier.fillMaxWidth(), color = Palette.paperDark, border = Palette.drawer) {
+        Box(
+            Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(8.dp)).background(Palette.codeBg)
+                .clickable { tocando = !tocando },
+        ) {
+            com.compilandia.ui.motion.MotionStage(ep.passos[k].shot, Modifier.fillMaxSize().padding(4.dp))
+        }
+        RichText(ep.passos[k].fala.text, style = MaterialTheme.typography.bodyMedium)
+        Text(
+            if (tocando) tx("palco_texto_tocando", k + 1, ep.passos.size) else tx("palco_texto_pausado", k + 1, ep.passos.size),
+            style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft,
+        )
     }
 }
 

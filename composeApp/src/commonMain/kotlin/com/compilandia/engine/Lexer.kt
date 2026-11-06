@@ -1,11 +1,12 @@
 package com.compilandia.engine
 
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 enum class TokenClass(val label: String, val emoji: String) {
     KEYWORD("palavra-chave", "🔑"),
     ID("identificador", "🏷️"),
-    NUM("número", "🔢"),
+    NUM(tx("lexer_numero"), "🔢"),
     OP("operador", "➕"),
     DELIM("delimitador", "🧱"),
     STRING("string", "💬"),
@@ -51,13 +52,13 @@ object MiniLexer {
                 c == '"' -> {
                     val s = i; i++
                     while (i < src.length && src[i] != '"') i++
-                    if (i >= src.length) throw LexError(s, "string sem fechar aspas")
+                    if (i >= src.length) throw LexError(s, tx("lexer_string_sem_fechar_aspas"))
                     i++
                     out += Token(TokenClass.STRING, src.substring(s, i), s)
                 }
                 c in delims -> { out += Token(TokenClass.DELIM, c.toString(), i); i++ }
                 else -> {
-                    val op = ops.firstOrNull { src.startsWith(it, i) } ?: throw LexError(i, "caractere inválido '$c'")
+                    val op = ops.firstOrNull { src.startsWith(it, i) } ?: throw LexError(i, tx("lexer_caractere_invalido_1", c))
                     out += Token(TokenClass.OP, op, i); i += op.length
                 }
             }

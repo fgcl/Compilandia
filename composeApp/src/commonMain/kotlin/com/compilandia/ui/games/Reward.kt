@@ -48,6 +48,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.cos
 import kotlin.math.sin
+import com.compilandia.textos.tx
 
 private val RAY = Color(0xFFF5B700)
 
@@ -125,13 +126,13 @@ fun RewardHero(stars: Int, xp: Int, gears: Int, title: String, modifier: Modifie
             }
         }
         if (bonus > 0 && somou) Text(
-            "Sequência de $sequencia: +$bonus", color = Palette.orange, style = MaterialTheme.typography.titleMedium,
+            tx("reward_sequencia_1_2", sequencia, bonus), color = Palette.orange, style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.align(Alignment.BottomCenter).offset(y = (-38).dp),
         )
         Row(Modifier.align(Alignment.BottomCenter).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly, verticalAlignment = Alignment.CenterVertically) {
-            Text("+$shownXp XP", color = Palette.teal, style = MaterialTheme.typography.headlineSmall)
+            Text(tx("reward_1_xp", shownXp), color = Palette.teal, style = MaterialTheme.typography.headlineSmall)
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                Image(painterResource(Res.drawable.prop_gear), "Engrenagens", Modifier.size(26.dp))
+                Image(painterResource(Res.drawable.prop_gear), tx("comum_engrenagens"), Modifier.size(26.dp))
                 Text("+$shownGears", color = Palette.yellow, style = MaterialTheme.typography.headlineSmall)
             }
         }

@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * AFN pequeno (com ou sem ε) para o jogo/aula da CONSTRUÇÃO DE SUBCONJUNTOS.
  * Diferente do [NFA] de Thompson, aceita vários estados finais e rótulos legíveis.
@@ -68,19 +70,19 @@ data class SmallNFA(
         private fun e(a: Int, c: Char?, b: Int) = Triple(a, c, b)
 
         val bank: List<SmallNFA> = listOf(
-            SmallNFA("abb", "(a|b)*abb — termina em abb", 4, 0, setOf(3),
+            SmallNFA("abb", tx("subset_b_abb_termina_em_abb"), 4, 0, setOf(3),
                 listOf(e(0, 'a', 0), e(0, 'b', 0), e(0, 'a', 1), e(1, 'b', 2), e(2, 'b', 3))),
-            SmallNFA("ab", "(a|b)*ab — termina em ab", 3, 0, setOf(2),
+            SmallNFA("ab", tx("subset_b_ab_termina_em_ab"), 3, 0, setOf(2),
                 listOf(e(0, 'a', 0), e(0, 'b', 0), e(0, 'a', 1), e(1, 'b', 2))),
-            SmallNFA("aa", "contém aa", 3, 0, setOf(2),
+            SmallNFA("aa", tx("subset_contem_aa"), 3, 0, setOf(2),
                 listOf(e(0, 'a', 0), e(0, 'b', 0), e(0, 'a', 1), e(1, 'a', 2), e(2, 'a', 2), e(2, 'b', 2))),
-            SmallNFA("abc", "ab* | c  (com ε)", 5, 0, setOf(2, 4),
+            SmallNFA("abc", tx("subset_ab_c_com"), 5, 0, setOf(2, 4),
                 listOf(e(0, null, 1), e(0, null, 3), e(1, 'a', 2), e(2, 'b', 2), e(3, 'c', 4))),
-            SmallNFA("eps", "a*b*  (com ε)", 2, 0, setOf(1),
+            SmallNFA("eps", tx("subset_b_com"), 2, 0, setOf(1),
                 listOf(e(0, 'a', 0), e(0, null, 1), e(1, 'b', 1))),
-            SmallNFA("pen", "penúltimo é a", 3, 0, setOf(2),
+            SmallNFA("pen", tx("subset_penultimo"), 3, 0, setOf(2),
                 listOf(e(0, 'a', 0), e(0, 'b', 0), e(0, 'a', 1), e(1, 'a', 2), e(1, 'b', 2))),
-            SmallNFA("ou", "(ab | a)c  (com ε)", 6, 0, setOf(5),
+            SmallNFA("ou", tx("subset_ab_c_com_2"), 6, 0, setOf(5),
                 listOf(e(0, 'a', 1), e(1, 'b', 2), e(0, 'a', 3), e(2, null, 4), e(3, null, 4), e(4, 'c', 5))),
         )
     }

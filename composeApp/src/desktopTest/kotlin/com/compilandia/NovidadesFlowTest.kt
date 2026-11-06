@@ -8,6 +8,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -321,19 +322,89 @@ class NovidadesFlowTest {
         onNodeWithText("2 de", substring = true).assertExists()
     }
 
-    @Test fun regiaoMostraTemporadas() = runDesktopComposeUiTest(412, 900) {
+    @Test fun regiaoAbreATrilhaEOContinuarAbreAEtapa() = runDesktopComposeUiTest(412, 900) {
         mainClock.autoAdvance = false
         val app = estado()
         app.stack.add(Screen.RegionView(Region.TEMPLO_TOPDOWN))
         setContent { App(app) }
         anda()
-        onNodeWithText("Pegadinhas").performClick()
+        onNodeWithText("Pegadinhas").assertDoesNotExist()
+        onNodeWithText(Skill.FOLLOW.title).performClick()
         anda(1500)
-        foto("49_temporadas")
-        val e = Episodes.daRegiao(Region.TEMPLO_TOPDOWN, Temporada.PEGADINHA).first()
-        onNodeWithText(e.title).performClick()
+        assertEquals(Screen.Trilha(Skill.FOLLOW), app.screen)
+        foto("49_trilha")
+        onNodeWithText("Continuar:", substring = true).performClick()
         anda(800)
-        assertEquals(e.id, (app.screen as Screen.Episode).id)
+        assertEquals(Skill.FOLLOW, (app.screen as Screen.Episode).skill)
+    }
+
+    @Test fun pularMarcaEAvanca() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = estado(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false, episodesSeen = listOf(Skill.FOLLOW.name)))
+        app.stack.add(Screen.Trilha(Skill.FOLLOW))
+        setContent { App(app) }
+        anda()
+        val antes = com.compilandia.content.Trilha.proximo(app.learner, Skill.FOLLOW)!!
+        onNodeWithText("pular").performClick()
+        anda()
+        assertEquals("pulada", app.learner.etapa(Skill.FOLLOW, antes.chave))
+        assertTrue(com.compilandia.content.Trilha.proximo(app.learner, Skill.FOLLOW) != antes)
+    }
+
+    @Test fun aulaTocandoSozinhaSegueEParaNaPergunta() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = estado(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false, autoAvancar = true))
+        app.stack.add(Screen.Episode(Skill.PHASES, abertura = false))
+        setContent { App(app) }
+        anda()
+        val ep = com.compilandia.content.episodes.Episodes.of(Skill.PHASES)!!
+        onNodeWithText(ep.passos[0].fala.text, substring = true).assertExists()
+        anda(12_000)
+        // A cena 2 é pergunta: a aula chegou nela sozinha e espera o toque.
+        onNodeWithText(ep.passos[1].fala.text, substring = true).assertExists()
+        anda(20_000)
+        onNodeWithText(ep.passos[1].fala.text, substring = true).assertExists()
+        onNodeWithText("Dica").assertExists()
+        foto("51_aula_tocando")
+    }
+
+    @Test fun pausadoNaoAndaSozinho() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = estado()
+        app.stack.add(Screen.Episode(Skill.PHASES, abertura = false))
+        setContent { App(app) }
+        anda()
+        val ep = com.compilandia.content.episodes.Episodes.of(Skill.PHASES)!!
+        anda(15_000)
+        onNodeWithText(ep.passos[0].fala.text, substring = true).assertExists()
+        onNodeWithContentDescription("Tocar sozinho").performClick()
+        anda()
+        assertTrue(app.ls.autoAvancar, "a escolha fica guardada")
+        anda(12_000)
+        onNodeWithText(ep.passos[1].fala.text, substring = true).assertExists()
+    }
+
+    @Test fun fazerComAjudaMostraGramaticaEPergunta() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = estado()
+        app.stack.add(Screen.FazerComAjuda(Skill.FIRST, semente = 42, comeca = 3))
+        setContent { App(app) }
+        anda(9_000)
+        foto("53_fazer_pergunta")
+    }
+
+    @Test fun gavetaJogarAbreACorrida() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = estado()
+        setContent { App(app) }
+        anda()
+        onNodeWithText("Corrida de portas").assertDoesNotExist()
+        onNodeWithText("Jogar").performClick()
+        anda()
+        foto("50_gaveta_jogar")
+        onNodeWithText("Corrida de portas").performClick()
+        anda()
+        assertEquals(Screen.Corrida, app.screen)
     }
 }
 

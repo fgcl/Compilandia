@@ -5,6 +5,7 @@ import com.compilandia.content.CalloutKind.*
 import com.compilandia.content.Speaker.*
 import com.compilandia.content.VisualKind as VK
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 // Guia do Trabalho Prático — capítulos 4 a 6 (gramática LL(1), parser descendente, tabela de símbolos).
 
@@ -40,17 +41,17 @@ E -> id | num"""
 // ───────────────────────────── Capítulo 4 ─────────────────────────────
 
 internal val tpCap4 = GuideChapter(
-    4, "A gramática LL(1) da Byteiro",
-    "Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token basta para decidir.",
+    4, tx("tpguideb_gramatica_ll_1_byteiro"),
+    tx("tpguideb_tirar_recursao_esquerda_fatorar_provar"),
     Skill.LL1_TABLE,
     listOf(
-        Say(PROF, "A gramática informal do capítulo 2 é ótima para humanos. Para virar descida recursiva, ela precisa ser **LL(1)**: olhando UM token, o parser sabe qual regra usar — sem voltar atrás, sem adivinhar."),
+        Say(PROF, tx("tpguideb_gramatica_informal_capitulo_2_otima")),
         Steps(
-            "As três checagens antes de programar",
+            tx("tpguideb_tres_checagens_antes_programar"),
             listOf(
-                "1. **Sem recursão à esquerda**: nenhum `A -> A …`. (Em Java isso é recursão infinita.)",
-                "2. **Fatorada**: duas alternativas do mesmo não-terminal não podem começar igual.",
-                "3. **FIRST/FOLLOW sem cruzamento**: os FIRST das alternativas são disjuntos; e se uma alternativa pode sumir (ε), os FIRST das outras não cruzam com o FOLLOW.",
+                tx("tpguideb_1_sem_recursao_esquerda_nenhum"),
+                tx("tpguideb_2_fatorada_duas_alternativas_mesmo"),
+                tx("tpguideb_3_first_follow_sem_cruzamento"),
             ),
         ),
         Code(
@@ -63,21 +64,21 @@ internal val tpCap4 = GuideChapter(
             Un    -> nao Un | - Un | Prim
             Prim  -> ( Expr ) | ID | NUM | CHAR | verdadeiro | falso
             """.trimIndent(),
-            "Primeira tentativa: precedência certinha… e recursão à esquerda em quatro lugares",
+            tx("tpguideb_primeira_tentativa_precedencia_certinha_recu"),
         ),
         Predict(
-            "O que acontece se você traduzir `Add -> Add + Mul` direto para Java (`void add() { add(); casaToken(MAIS); mul(); }`)?",
+            tx("tpguideb_que_acontece_se_voce_traduzir"),
             listOf(
-                "Funciona normalmente",
-                "StackOverflowError: add() chama add() sem consumir nenhum token",
-                "Erro de compilação do Java",
-                "Funciona, mas com associatividade errada",
+                tx("tpguideb_funciona_normalmente"),
+                tx("tpguideb_stackoverflowerror_add_chama_add_sem"),
+                tx("comum_erro_compilacao_java"),
+                tx("tpguideb_funciona_mas_com_associatividade_errada"),
             ),
             1,
-            "A primeira coisa que `add()` faz é chamar `add()` — com o MESMO token na frente. Nada muda, então ela se chama para sempre até a pilha estourar.",
+            tx("tpguideb_primeira_coisa_que_add_faz"),
         ),
-        Visual(VK.LEFT_RECURSION, grammar = TP_G_EXPR_RECURSIVA, caption = "Antes e depois: A -> A α | β vira A -> β A' e A' -> α A' | ε."),
-        Text("Na EBNF fica ainda mais limpo: `A -> A α | β` é o mesmo que `A -> β { α }` — um β seguido de zero ou mais α. E `{ }` vira um **while** em Java. Bônus: o while monta a árvore para a esquerda, então `10 - 3 - 2` continua dando 5."),
+        Visual(VK.LEFT_RECURSION, grammar = TP_G_EXPR_RECURSIVA, caption = tx("tpguideb_antes_depois_vira")),
+        Text(tx("tpguideb_na_ebnf_fica_ainda_mais")),
         Code(
             """
             expr     -> exprE { ou exprE }
@@ -88,91 +89,56 @@ internal val tpCap4 = GuideChapter(
             exprUn   -> nao exprUn | - exprUn | primario
             primario -> ( expr ) | ID | NUM | CHAR | verdadeiro | falso
             """.trimIndent(),
-            "Expressões da Byteiro em EBNF LL(1) — sete níveis, sete métodos Java",
+            tx("tpguideb_expressoes_byteiro_em_ebnf_ll"),
         ),
-        Callout(MNEMONIC, "Cascata: quanto mais FUNDO o método, mais FORTE o operador. `ou` mora no topo (agrupa por último); `*` mora lá embaixo (agrupa primeiro)."),
-        Text("E o `Rel -> Add oprel Add | Add`? As duas alternativas começam com `Add`: prefixo comum! Fatorando: `Rel -> Add Rel'` e `Rel' -> oprel Add | ε`. Na EBNF isso é o opcional `[ oprel exprAdd ]` — que em Java vira um **if**."),
-        Visual(VK.LEFT_FACTORING, grammar = TP_G_PREFIXOS, caption = "Se a Byteiro tivesse chamada de procedimento `p(x);`, atribuição e chamada começariam com `id`. E `se` com e sem `senao` também. Veja a fatoração."),
-        Code(TP_G_COMANDOS, "Os comandos da Byteiro em BNF (expressões resumidas em E) — prontos para o teste LL(1)"),
-        Visual(VK.FIRST_FOLLOW, grammar = TP_G_COMANDOS, caption = "Calcule FIRST e FOLLOW passo a passo. Repare: `senao` NÃO aparece em FOLLOW(Senao)."),
-        Visual(VK.LL1_TABLE, grammar = TP_G_COMANDOS, caption = "Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão pendurado."),
+        Callout(MNEMONIC, tx("tpguideb_cascata_quanto_mais_fundo_metodo")),
+        Text(tx("tpguideb_rel_add_oprel_add_add")),
+        Visual(VK.LEFT_FACTORING, grammar = TP_G_PREFIXOS, caption = tx("tpguideb_se_byteiro_tivesse_chamada_procedimento")),
+        Code(TP_G_COMANDOS, tx("tpguideb_comandos_byteiro_em_bnf_expressoes")),
+        Visual(VK.FIRST_FOLLOW, grammar = TP_G_COMANDOS, caption = tx("tpguideb_calcule_first_follow_passo_passo")),
+        Visual(VK.LL1_TABLE, grammar = TP_G_COMANDOS, caption = tx("tpguideb_nenhuma_celula_com_duas_producoes")),
         Predict(
-            "Em `Senao -> senao Bloco | ε`, quando o parser escolhe a alternativa ε?",
+            tx("tpguideb_em_senao_senao_bloco_quando"),
             listOf(
-                "Nunca: ε é só enfeite",
-                "Quando o token atual está em FOLLOW(Senao) — na prática, 'quando não é senao'",
-                "Quando o token atual é senao",
-                "Quando o arquivo acaba",
+                tx("tpguideb_nunca_so_enfeite"),
+                tx("tpguideb_quando_token_atual_esta_em"),
+                tx("tpguideb_quando_token_atual_senao"),
+                tx("tpguideb_quando_arquivo_acaba"),
             ),
             1,
-            "A tabela põe ε nas colunas de FOLLOW(Senao). No código da descida recursiva isso vira `if (eh(SENAO)) { … }` sem else: se não é `senao`, não consome nada — e se o token for lixo, o próximo `casaToken` reclama.",
+            tx("tpguideb_tabela_poe_nas_colunas_follow"),
         ),
-        Callout(WATCH_OUT, "Se a sua linguagem permitir `se (c) comando senao comando` SEM chaves, a célula [Senao, senao] ganha duas produções: é o dangling else, e a gramática não é LL(1). Solução prática no parser: sempre casar o `senao` com o `se` mais próximo (o `if` guloso) — e documentar essa decisão."),
-        Reveal("Calcule FIRST(comando) da Byteiro completa.", "{ ID, se, enquanto, escreva, leia, `{`, inteiro, logico, caractere } — declarações começam pelo tipo, e um bloco solto começa por `{`. Esse conjunto vira o método `comecaComando()` no capítulo 5."),
-        Reveal("FOLLOW de `{ comando }` dentro do bloco: quando a repetição para?", "Quando o token não está em FIRST(comando). Na gramática certa, ele só pode ser `}` — qualquer outra coisa faz o `casaToken(FECHA_CHAVE)` reclamar com uma mensagem precisa."),
-        Callout(NO_DUMB_QUESTIONS, "P: Preciso entregar a tabela LL(1) inteira? R: Depende do enunciado. Para descida recursiva, o que importa é a PROVA de que não há conflito: em cada ponto de decisão do código, os conjuntos de tokens testados são disjuntos. FIRST/FOLLOW no relatório é exatamente essa prova."),
-        Callout(EXAM_TIP, "O trio que cai em prova e no TP: recursão à esquerda → **while**; opcional `[ ]` → **if**; repetição `{ }` → **while**. Decore e você traduz qualquer EBNF para Java em minutos."),
-        Say(PILHA, "Gramática… LL(1)… pronta. Agora… me deem métodos… para empilhar."),
+        Callout(WATCH_OUT, tx("tpguideb_se_sua_linguagem_permitir_se")),
+        Reveal(tx("tpguideb_calcule_first_comando_byteiro_completa"), tx("tpguideb_id_se_enquanto_escreva_leia")),
+        Reveal(tx("tpguideb_follow_comando_dentro_bloco_quando"), tx("tpguideb_quando_token_nao_esta_em")),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguideb_p_preciso_entregar_tabela_ll")),
+        Callout(EXAM_TIP, tx("tpguideb_trio_que_cai_em_prova")),
+        Say(PILHA, tx("tpguideb_gramatica_ll_1_pronta_agora")),
     ),
 )
 
 // ───────────────────────────── Capítulo 5 ─────────────────────────────
 
 internal val tpCap5 = GuideChapter(
-    5, "O parser descendente recursivo",
-    "Um método por não-terminal, casaToken para terminais, if/while no token atual — e erros com linha.",
+    5, tx("tpguideb_parser_descendente_recursivo"),
+    tx("tpguideb_metodo_por_nao_terminal_casatoken"),
     Skill.RECURSIVE_DESCENT,
     listOf(
-        Say(PILHA, "Eu sou… a pilha de chamadas do Java. Cada método que você chama… eu empilho. Quando ele retorna… desempilho. A árvore sintática… é o caminho que eu faço."),
+        Say(PILHA, tx("tpguideb_eu_sou_pilha_chamadas_java")),
         Steps(
-            "A receita (decore!)",
+            tx("tpguideb_receita_decore"),
             listOf(
-                "Um método Java para cada não-terminal: `bloco()`, `comando()`, `expr()`…",
-                "Terminal no lado direito → `casaToken(TIPO)`: confere e avança.",
-                "Não-terminal no lado direito → chama o método dele.",
-                "Várias alternativas → `if`/`switch` olhando o token atual (os FIRST que você calculou).",
+                tx("tpguideb_metodo_java_para_cada_nao"),
+                tx("tpguideb_terminal_no_lado_direito_casatoken"),
+                tx("tpguideb_nao_terminal_no_lado_direito"),
+                tx("tpguideb_varias_alternativas_if_switch_olhando"),
                 "`{ … }` → `while`; `[ … ]` → `if`.",
             ),
         ),
-        Visual(VK.DESCENT_CODE, grammar = TP_G_CASCATA, input = "id + num * id", caption = "O código que o motor gera para a cascata de dois níveis — e a pilha de chamadas para `id + num * id`."),
+        Visual(VK.DESCENT_CODE, grammar = TP_G_CASCATA, input = tx("tpguideb_id_num_id"), caption = tx("tpguideb_codigo_que_motor_gera_para")),
         Code(
-            """
-            public class Sintatico {
-                private final Lexico lexico;
-                private Token tok;                         // lookahead: o token que o parser está "olhando"
-
-                public Sintatico(Lexico lexico) {
-                    this.lexico = lexico;
-                    this.tok = lexico.proximo();
-                }
-
-                private Token avanca() {                   // consome o token atual e o devolve
-                    Token t = tok;
-                    tok = lexico.proximo();
-                    return t;
-                }
-
-                private Token casaToken(TipoToken esperado) {
-                    if (tok.tipo != esperado) throw erroEsperava("'" + esperado.texto + "'");
-                    return avanca();
-                }
-
-                private boolean eh(TipoToken... tipos) {   // o token atual é algum destes?
-                    for (TipoToken t : tipos) if (tok.tipo == t) return true;
-                    return false;
-                }
-
-                private ErroCompilacao erroEsperava(String oQue) {
-                    String achou = tok.tipo == TipoToken.EOF ? "fim de arquivo" : "'" + tok.lexema + "'";
-                    return new ErroCompilacao(tok.linha, "erro sintático: esperava " + oQue + ", encontrou " + achou);
-                }
-
-                public String compila() {                  // o capítulo 8 faz isto devolver o MIPS
-                    programa();
-                    return "";
-                }
-            """.trimIndent(),
-            "Sintatico.java (1/4) — a infraestrutura. Só `avanca()` mexe em `tok`!",
+            tx("tpguideb_public_class_sintatico_private_final"),
+            tx("tpguideb_sintatico_java_1_4_infraestrutura"),
         ),
         Code(
             """
@@ -208,7 +174,7 @@ internal val tpCap5 = GuideChapter(
                     }
                 }
             """.trimIndent(),
-            "Sintatico.java (2/4) — programa, bloco e o 'despachante' comando()",
+            tx("tpguideb_sintatico_java_2_4_programa"),
         ),
         Code(
             """
@@ -276,70 +242,22 @@ internal val tpCap5 = GuideChapter(
                     casaToken(TipoToken.PONTO_VIRGULA);
                 }
             """.trimIndent(),
-            "Sintatico.java (3/4) — os comandos: leia cada método ao lado da sua regra EBNF",
+            tx("tpguideb_sintatico_java_3_4_comandos"),
         ),
         Code(
-            """
-                private void expr() {                     // exprE { ou exprE }
-                    exprE();
-                    while (eh(TipoToken.OU)) { avanca(); exprE(); }
-                }
-
-                private void exprE() {                    // exprRel { e exprRel }
-                    exprRel();
-                    while (eh(TipoToken.E)) { avanca(); exprRel(); }
-                }
-
-                private void exprRel() {                  // exprAdd [ oprel exprAdd ]
-                    exprAdd();
-                    if (eh(TipoToken.IGUAL, TipoToken.DIFERENTE, TipoToken.MENOR, TipoToken.MAIOR,
-                           TipoToken.MENOR_IGUAL, TipoToken.MAIOR_IGUAL)) {
-                        avanca();
-                        exprAdd();
-                    }
-                }
-
-                private void exprAdd() {                  // exprMul { (+|-) exprMul }
-                    exprMul();
-                    while (eh(TipoToken.MAIS, TipoToken.MENOS)) { avanca(); exprMul(); }
-                }
-
-                private void exprMul() {                  // exprUn { (*|/|%) exprUn }
-                    exprUn();
-                    while (eh(TipoToken.VEZES, TipoToken.DIV, TipoToken.MOD)) { avanca(); exprUn(); }
-                }
-
-                private void exprUn() {                   // nao exprUn | - exprUn | primario
-                    if (eh(TipoToken.NAO, TipoToken.MENOS)) { avanca(); exprUn(); }
-                    else primario();
-                }
-
-                private void primario() {
-                    if (eh(TipoToken.ABRE_PAR)) {
-                        avanca();
-                        expr();
-                        casaToken(TipoToken.FECHA_PAR);
-                    } else if (eh(TipoToken.ID, TipoToken.NUM, TipoToken.CHAR,
-                                  TipoToken.VERDADEIRO, TipoToken.FALSO)) {
-                        avanca();
-                    } else {
-                        throw erroEsperava("uma expressão");
-                    }
-                }
-            }
-            """.trimIndent(),
-            "Sintatico.java (4/4) — a cascata de precedência: cada nível chama o de baixo",
+            tx("tpguideb_private_void_expr_expre_ou"),
+            tx("tpguideb_sintatico_java_4_4_cascata"),
         ),
-        Reveal("Por que `exprRel` usa `if` e `exprAdd` usa `while`?", "Porque `a + b + c` é permitido (repetição → while), mas `a < b < c` não é (relacionais são NÃO associativos → no máximo um → if). Com o if, o `<` extra sobra e o parser reclama dele."),
+        Reveal(tx("tpguideb_por_que_exprrel_usa_if"), tx("tpguideb_porque_b_c_permitido_repeticao")),
         Steps(
             "A pilha de chamadas para `x <- a + 2 * b;`",
             listOf(
-                "`atribuicao()` casa ID(x) e `<-`, depois chama `expr()`.",
-                "`expr` → `exprE` → `exprRel` → `exprAdd` → `exprMul` → `exprUn` → `primario()` casa `a`. Volta tudo até `exprAdd`.",
-                "`exprAdd` vê `+`: avança e chama `exprMul()`.",
-                "`exprMul` → `exprUn` → `primario` casa `2`. De volta em `exprMul`, vê `*`: avança, `exprUn` → `primario` casa `b`.",
-                "`exprMul` não vê mais `*`: retorna. `exprAdd` não vê mais `+`: retorna. Sobe até `atribuicao()`.",
-                "`atribuicao()` casa `;`. Repare: `2 * b` terminou ANTES do `+` — a precedência saiu de graça da ordem das chamadas.",
+                tx("tpguideb_atribuicao_casa_id_x_depois"),
+                tx("tpguideb_expr_expre_exprrel_expradd_exprmul"),
+                tx("tpguideb_expradd_ve_avanca_chama_exprmul"),
+                tx("tpguideb_exprmul_exprun_primario_casa_2"),
+                tx("tpguideb_exprmul_nao_ve_mais_retorna"),
+                tx("tpguideb_atribuicao_casa_repare_2_b"),
             ),
         ),
         Code(
@@ -352,191 +270,91 @@ internal val tpCap5 = GuideChapter(
             "erro_falta_pv.byt — esqueceram o ';' da linha 2",
         ),
         Predict(
-            "Que mensagem o nosso parser imprime para esse programa?",
+            tx("tpguideb_que_mensagem_nosso_parser_imprime"),
             listOf(
-                "linha 2: erro sintático: esperava ';', encontrou 'x'",
-                "linha 3: erro sintático: esperava ';', encontrou 'x'",
-                "linha 4: erro sintático: esperava '}', encontrou fim de arquivo",
-                "Nenhuma: o programa compila",
+                tx("tpguideb_linha_2_erro_sintatico_esperava"),
+                tx("tpguideb_linha_3_erro_sintatico_esperava"),
+                tx("tpguideb_linha_4_erro_sintatico_esperava"),
+                tx("tpguideb_nenhuma_programa_compila"),
             ),
             1,
-            "O parser só PERCEBE que falta o ';' quando vê o token seguinte — o `x` da linha 3. A mensagem usa a linha do token encontrado. Se o enunciado pedir 'a linha do erro', isso é o esperado; se quiser a linha anterior, guarde a linha do último token consumido.",
+            tx("tpguideb_parser_so_percebe_que_falta"),
         ),
-        Callout(WATCH_OUT, "Esqueceu o `casaToken(TipoToken.EOF)` no fim de `programa()`? Então `programa t { } lixo lixo lixo` compila 'com sucesso'. Esse é um dos primeiros testes que o corretor faz."),
-        Callout(WATCH_OUT, "Chamar `lexico.proximo()` direto em vários lugares 'perde' tokens: você avança duas vezes sem perceber. Regra de ouro: SÓ o `avanca()` (e o `casaToken`, que usa ele) mexe em `tok`."),
-        Visual(VK.DESCENT_CODE, grammar = TP_G_COMANDOS, input = "se ( id ) { }", caption = "Agora com os comandos da Byteiro: veja o if/else de `Cmd` testando os FIRST de cada alternativa."),
-        Callout(NO_DUMB_QUESTIONS, "P: E se o enunciado pedir para continuar depois do primeiro erro? R: Modo pânico: ao errar, registre a mensagem e descarte tokens até um ponto seguro (`;` ou `}`), depois continue. Para a maioria dos TPs, parar no primeiro erro já é o pedido — confira."),
-        Visual(VK.PANIC, grammar = TP_G_PANICO, input = "id <- ; escreva ( id ) ;", caption = "Atribuição sem expressão: o parser reclama, pula até um token de sincronização e segue para o escreva."),
-        Callout(REAL_WORLD, "Os parsers do GCC (C/C++), do Clang, do javac e do Go são descida recursiva escrita à mão — exatamente a técnica do seu TP. Ela dá controle total sobre as mensagens de erro, e é por isso que os compiladores profissionais voltaram a ela."),
-        Callout(EXAM_TIP, "Questão clássica: 'escreva o procedimento da descida recursiva para o não-terminal X'. Siga a receita: um if por alternativa (com os FIRST), casaToken nos terminais, chamada nos não-terminais — e um else com erro."),
+        Callout(WATCH_OUT, tx("tpguideb_esqueceu_casatoken_tipotoken_eof_no")),
+        Callout(WATCH_OUT, tx("tpguideb_chamar_lexico_proximo_direto_em")),
+        Visual(VK.DESCENT_CODE, grammar = TP_G_COMANDOS, input = "se ( id ) { }", caption = tx("tpguideb_agora_com_comandos_byteiro_veja")),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguideb_p_se_enunciado_pedir_para")),
+        Visual(VK.PANIC, grammar = TP_G_PANICO, input = "id <- ; escreva ( id ) ;", caption = tx("tpguideb_atribuicao_sem_expressao_parser_reclama")),
+        Callout(REAL_WORLD, tx("tpguideb_parsers_gcc_c_c_clang")),
+        Callout(EXAM_TIP, tx("tpguideb_questao_classica_escreva_procedimento_descid")),
     ),
 )
 
 // ───────────────────────────── Capítulo 6 ─────────────────────────────
 
 internal val tpCap6 = GuideChapter(
-    6, "Tabela de símbolos e escopos",
-    "Uma pilha de HashMaps: abre bloco = push, declara = put no topo, usa = busca do topo para baixo.",
+    6, tx("tpguideb_tabela_simbolos_escopos"),
+    tx("tpguideb_pilha_hashmaps_abre_bloco_push"),
     Skill.SCOPE_SYMBOLS,
     listOf(
-        Say(BYTE, "Meu parser aceita `x <- 1;` mesmo sem nenhum `inteiro x;`. Ele não lembra de NADA!"),
-        Say(PROF, "Ele precisa de memória: a **tabela de símbolos**. E como a Byteiro tem blocos dentro de blocos, essa memória precisa de **escopos**."),
+        Say(BYTE, tx("tpguideb_meu_parser_aceita_x_1")),
+        Say(PROF, tx("tpguideb_ele_precisa_memoria_tabela_simbolos")),
         Code(
-            """
-            programa escopos {
-                inteiro x;              // x  -> rótulo x_0
-                x <- 1;
-                {
-                    caractere x;        // OUTRO x -> x_1 (esconde o de fora)
-                    x <- 'A';
-                    inteiro y;          // y  -> y_2
-                    y <- 2;
-                }
-                x <- x + 1;             // de volta ao x_0, inteiro
-                y <- 3;                 // ERRO: o escopo de y já fechou
-            }
-            """.trimIndent(),
-            "escopos.byt — leia de cima para baixo e acompanhe cada x",
+            tx("tpguideb_programa_escopos_inteiro_x_x"),
+            tx("tpguideb_escopos_byt_leia_cima_para"),
         ),
-        Visual(VK.SCOPE, caption = "Toque em cada uso e veja a qual declaração ele se liga."),
+        Visual(VK.SCOPE, caption = tx("tpguideb_toque_em_cada_uso_veja")),
         Predict(
             "O que o compilador diz na linha 11 (`y <- 3;`)?",
             listOf(
-                "Nada: y foi declarado no programa",
-                "linha 11: erro semântico: 'y' não foi declarado",
-                "linha 7: erro semântico: y declarado depois de x",
-                "Erro sintático",
+                tx("tpguideb_nada_y_foi_declarado_no"),
+                tx("tpguideb_linha_11_erro_semantico_y"),
+                tx("tpguideb_linha_7_erro_semantico_y"),
+                tx("tpguideb_erro_sintatico"),
             ),
             1,
-            "Quando o bloco interno fechou, o escopo dele (com o y) foi DESEMPILHADO. A busca na linha 11 só encontra o escopo de fora, onde não há y.",
+            tx("tpguideb_quando_bloco_interno_fechou_escopo"),
         ),
         Steps(
-            "A pilha de HashMaps em quatro operações",
+            tx("tpguideb_pilha_hashmaps_em_quatro_operacoes"),
             listOf(
                 "`{` → **abreEscopo**: empilha um HashMap vazio.",
-                "`inteiro x;` → **declara**: põe x no HashMap do TOPO (se já estiver lá: erro de redeclaração).",
-                "uso de `x` → **busca**: procura do topo para baixo; o primeiro que achar ganha (é isso que faz o x de dentro esconder o de fora).",
+                tx("tpguideb_inteiro_x_declara_poe_x"),
+                tx("tpguideb_uso_x_busca_procura_topo"),
                 "`}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.",
             ),
         ),
         Code(
-            """
-            public enum TipoDado { INTEIRO, LOGICO, CARACTERE }
-
-            public class Simbolo {
-                public final String nome;      // como está no fonte: "x"
-                public final TipoDado tipo;
-                public final String rotulo;    // endereço no MIPS: "x_1" (único no programa todo)
-                public final int linhaDecl;    // para mensagens de erro caprichadas
-
-                public Simbolo(String nome, TipoDado tipo, String rotulo, int linhaDecl) {
-                    this.nome = nome; this.tipo = tipo; this.rotulo = rotulo; this.linhaDecl = linhaDecl;
-                }
-            }
-            """.trimIndent(),
-            "TipoDado.java e Simbolo.java",
+            tx("tpguideb_public_enum_tipodado_inteiro_logico"),
+            tx("tpguideb_tipodado_java_simbolo_java"),
         ),
         Code(
-            """
-            import java.util.ArrayDeque;
-            import java.util.Deque;
-            import java.util.HashMap;
-            import java.util.Map;
-
-            public class TabelaSimbolos {
-                private final Deque<Map<String, Simbolo>> escopos = new ArrayDeque<>();
-                private int contador = 0;                  // deixa cada rótulo único: x_0, x_1...
-
-                public void abreEscopo()  { escopos.push(new HashMap<>()); }
-                public void fechaEscopo() { escopos.pop(); }
-
-                public Simbolo declara(String nome, TipoDado tipo, int linha) {
-                    Map<String, Simbolo> topo = escopos.peek();
-                    Simbolo antigo = topo.get(nome);
-                    if (antigo != null)
-                        throw new ErroCompilacao(linha, "erro semântico: '" + nome
-                            + "' já foi declarado neste escopo (linha " + antigo.linhaDecl + ")");
-                    Simbolo s = new Simbolo(nome, tipo, nome + "_" + (contador++), linha);
-                    topo.put(nome, s);
-                    return s;
-                }
-
-                public Simbolo busca(String nome) {        // do escopo mais interno para o mais externo
-                    for (Map<String, Simbolo> escopo : escopos) {   // ArrayDeque itera a partir do topo
-                        Simbolo s = escopo.get(nome);
-                        if (s != null) return s;
-                    }
-                    return null;
-                }
-            }
-            """.trimIndent(),
-            "TabelaSimbolos.java — a classe inteira cabe numa tela",
+            tx("tpguideb_import_java_util_arraydeque_import"),
+            tx("tpguideb_tabelasimbolos_java_classe_inteira_cabe"),
         ),
-        Say(PILHA, "Busca? Eu começo… pelo topo. Não achou? Desço um andar. Não achou? Desço mais. Chegou no chão… e nada? Não declarado."),
-        Callout(WATCH_OUT, "Armadilha do Java: se você usar `java.util.Stack` em vez de `ArrayDeque`, o for-each percorre a pilha de BAIXO para CIMA! A busca acha o x de FORA primeiro e o sombreamento quebra sem nenhuma mensagem de erro. Com `ArrayDeque` + `push`, a iteração começa no topo."),
-        Callout(NO_DUMB_QUESTIONS, "P: Por que o rótulo `x_1` e não só `x`? R: Dois motivos. (1) Os dois x do exemplo precisam de DOIS endereços diferentes no `.data` — se ambos fossem `x`, o MARS reclamaria de rótulo duplicado. (2) Variáveis chamadas `b`, `j` ou `add` coincidem com instruções MIPS e podem confundir o montador. O sufixo resolve os dois."),
+        Say(PILHA, tx("tpguideb_busca_eu_comeco_pelo_topo")),
+        Callout(WATCH_OUT, tx("tpguideb_armadilha_java_se_voce_usar")),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguideb_p_por_que_rotulo_x")),
         Code(
-            """
-                private final TabelaSimbolos tabela = new TabelaSimbolos();
-
-                private void bloco() {
-                    casaToken(TipoToken.ABRE_CHAVE);
-                    tabela.abreEscopo();
-                    while (comecaComando()) comando();
-                    tabela.fechaEscopo();
-                    casaToken(TipoToken.FECHA_CHAVE);
-                }
-
-                private void declaracao() {               // tipo ID { , ID } ;
-                    TipoDado t = tipo();
-                    declaraUm(t);
-                    while (eh(TipoToken.VIRGULA)) {
-                        avanca();
-                        declaraUm(t);                      // o MESMO tipo desce para cada ID
-                    }
-                    casaToken(TipoToken.PONTO_VIRGULA);
-                }
-
-                private void declaraUm(TipoDado t) {
-                    Token id = casaToken(TipoToken.ID);
-                    tabela.declara(id.lexema, t, id.linha);
-                }
-
-                private TipoDado tipo() {
-                    if (!eh(TipoToken.INTEIRO, TipoToken.LOGICO, TipoToken.CARACTERE))
-                        throw erroEsperava("um tipo");
-                    return switch (avanca().tipo) {
-                        case INTEIRO -> TipoDado.INTEIRO;
-                        case LOGICO  -> TipoDado.LOGICO;
-                        default      -> TipoDado.CARACTERE;
-                    };
-                }
-
-                private Simbolo usa(Token id) {           // toda vez que um ID aparece numa expressão/atribuição
-                    Simbolo s = tabela.busca(id.lexema);
-                    if (s == null)
-                        throw new ErroCompilacao(id.linha, "erro semântico: '" + id.lexema + "' não foi declarado");
-                    return s;
-                }
-            """.trimIndent(),
-            "No Sintatico: o parser agora abre/fecha escopos e registra/consulta nomes",
+            tx("tpguideb_private_final_tabelasimbolos_tabela_new"),
+            tx("tpguideb_no_sintatico_parser_agora_abre"),
         ),
-        Text("Onde chamar `usa(...)`? Em todo lugar que um ID aparece sem ser declaração: em `atribuicao()` (o destino), em `leia()` e em `primario()`. No capítulo 7 o `Simbolo` devolvido vai dizer o TIPO; no 8, o RÓTULO de memória."),
+        Text(tx("tpguideb_onde_chamar_usa_em_todo")),
         Steps(
-            "A tabela durante escopos.byt",
+            tx("tpguideb_tabela_durante_escopos_byt"),
             listOf(
                 "Linha 1, `{` do programa: pilha = [ {} ]",
                 "Linha 2: pilha = [ {x→x_0 inteiro} ]",
-                "Linha 4, `{`: pilha = [ {}, {x→x_0} ] (topo à esquerda)",
+                tx("tpguideb_linha_4_pilha_x_x"),
                 "Linhas 5 e 7: topo = {x→x_1 caractere, y→y_2 inteiro}",
-                "Linha 6: busca(x) acha x_1 no topo — o caractere.",
+                tx("tpguideb_linha_6_busca_x_acha"),
                 "Linha 9, `}`: desempilha. Pilha = [ {x→x_0} ]",
-                "Linha 10: busca(x) acha x_0. Linha 11: busca(y) → null → erro semântico!",
+                tx("tpguideb_linha_10_busca_x_acha"),
             ),
         ),
-        Callout(NO_DUMB_QUESTIONS, "P: Pode declarar um x no bloco interno se já existe um x fora? R: Depende da linguagem! C permite (sombreamento). Java PROÍBE redeclarar uma variável local num bloco interno. A Byteiro permite. Qualquer escolha vale — desde que esteja escrita no relatório e o compilador faça o que está escrito."),
-        Callout(EXAM_TIP, "Questão clássica: dado um programa com blocos aninhados, diga a qual declaração cada uso se refere (e quais usos são erro). O jogo Esconde-Esconde do Escopo treina exatamente isso."),
-        Callout(REAL_WORLD, "Compiladores reais guardam bem mais no Simbolo: tamanho, deslocamento no registro de ativação (offset relativo ao frame pointer), se é parâmetro, se foi usado (é daí que vem o aviso 'unused variable')."),
-        Reveal("E se a Byteiro ganhasse funções com variáveis locais?", "Cada função abriria um escopo para parâmetros e locais — e as locais morariam na PILHA de execução (offset do frame), não no `.data`, para que cada chamada recursiva tenha a sua cópia. Veja a região de registros de ativação na Forja do Código."),
+        Callout(NO_DUMB_QUESTIONS, tx("tpguideb_p_pode_declarar_x_no")),
+        Callout(EXAM_TIP, tx("tpguideb_questao_classica_dado_programa_com")),
+        Callout(REAL_WORLD, tx("tpguideb_compiladores_reais_guardam_bem_mais")),
+        Reveal(tx("tpguideb_se_byteiro_ganhasse_funcoes_com"), tx("tpguideb_cada_funcao_abriria_escopo_para")),
     ),
 )

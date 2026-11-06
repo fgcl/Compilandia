@@ -22,6 +22,7 @@ import com.compilandia.content.Speaker.PILHA
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.learning.Skill
 import com.compilandia.learning.Style
+import com.compilandia.textos.tx
 
 // =====================================================================
 // Parte 3 do conteúdo: Fortaleza Bottom-Up (SLR, LALR), Oficina Bison,
@@ -205,212 +206,193 @@ int yywrap(void) { return 1; }
 
 internal val slrLessonsP3: List<Lesson> = listOf(
     Lesson(
-        Skill.SLR_TABLE, Style.STORY, "A açaiteria que segue o quadro",
+        Skill.SLR_TABLE, Style.STORY, tx("lessonspart3_acaiteria_que_segue_quadro"),
         listOf(
-            Say(NARRADOR, "Fortaleza Bottom-Up, ala oeste. Na parede, um quadro gigante cheio de células: s5, r2, acc, vazio, vazio, s7..."),
-            Say(BYTE, "Parece uma planilha de Excel que deu errado. Pra que serve isso?"),
-            Say(PROF, "É o cérebro de um analisador LR: a tabela ACTION/GOTO. Vou te explicar com uma açaiteria."),
-            Text("A atendente monta copos de açaí. Ela **coloca ingredientes no copo** um a um (empilha). Quando o copo tem uma combinação completa — açaí + granola + banana —, ela **troca tudo por um nome**: 'Combo Clássico' (reduz)."),
-            Text("Ela não pensa: olha **onde está no pedido** (o estado) e **o próximo pedido do cliente** (o token), e obedece o quadro da parede."),
+            Say(NARRADOR, tx("lessonspart3_fortaleza_bottom_up_ala_oeste")),
+            Say(BYTE, tx("lessonspart3_parece_planilha_excel_que_deu")),
+            Say(PROF, tx("lessonspart3_cerebro_analisador_lr_tabela_action")),
+            Text(tx("lessonspart3_atendente_monta_copos_acai_ela")),
+            Text(tx("lessonspart3_ela_nao_pensa_olha_onde")),
             Steps(
-                "O mapa da analogia",
+                tx("comum_mapa_analogia"),
                 listOf(
-                    "Momento do pedido (o que já está no copo) → **estado** do autômato LR(0)",
-                    "Próximo pedido do cliente → **token de lookahead**",
-                    "'Põe no copo e vai para o momento 7' → **shift 7** (s7)",
-                    "'Troca açaí+granola+banana por Clássico' → **reduce** por Clássico → açaí granola banana",
-                    "'Com um Clássico na mão, vá para o momento 4' → **GOTO**[estado, Clássico] = 4",
-                    "'O que pode vir DEPOIS de um Clássico' → **FOLLOW(Clássico)**",
+                    tx("lessonspart3_momento_pedido_que_ja_esta"),
+                    tx("lessonspart3_proximo_pedido_cliente_token_lookahead"),
+                    tx("lessonspart3_poe_no_copo_vai_para"),
+                    tx("lessonspart3_troca_acai_granola_banana_por"),
+                    tx("lessonspart3_com_classico_na_mao_va"),
+                    tx("lessonspart3_que_pode_vir_depois_classico"),
                 ),
             ),
-            Say(PILHA, "Eu sou... a pilha. Só vejo... meu topo. O quadro diz... o resto. Gosto de quadros."),
+            Say(PILHA, tx("lessonspart3_eu_sou_pilha_so_vejo")),
             Predict(
-                "O copo tem açaí + granola + banana (um Clássico completo). O próximo pedido é 'leite condensado'. Na regra SLR, quando ela fecha o Clássico?",
+                tx("lessonspart3_copo_tem_acai_granola_banana"),
                 listOf(
-                    "Sempre: copo completo = fecha na hora",
-                    "Só se 'leite condensado' puder vir DEPOIS de um Clássico (está no FOLLOW)",
-                    "Nunca: ela só empilha",
+                    tx("lessonspart3_sempre_copo_completo_fecha_na"),
+                    tx("lessonspart3_so_se_leite_condensado_puder"),
+                    tx("lessonspart3_nunca_ela_so_empilha"),
                 ),
                 1,
-                "O SLR só coloca 'reduz' nas colunas do FOLLOW. Se leite condensado nunca vem depois de um Clássico, fechar agora seria um erro garantido.",
+                tx("lessonspart3_slr_so_coloca_reduz_nas"),
             ),
-            Callout(WATCH_OUT, "Se a mesma célula do quadro mandar 'põe no copo' E 'fecha o combo', a atendente trava. Isso é um **conflito empilhar/reduzir**. Duas ordens de 'fecha' diferentes = **reduzir/reduzir**."),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = "O quadro de verdade para E → E + T | T ... — nenhuma célula com duas ordens: a gramática é SLR(1)."),
-            Reveal("Na analogia, o que faz o papel do FOLLOW?", "A lista do que pode vir logo depois de um combo. A atendente só fecha o combo (reduz) se o próximo pedido está nessa lista."),
-            Callout(NO_DUMB_QUESTIONS, "Por que 'Simple'? Porque o SLR usa o autômato LR(0) mais simples possível e decide reduções com o FOLLOW, que você já sabe calcular. Simples, mas um pouco míope — e isso vai dar assunto."),
+            Callout(WATCH_OUT, tx("lessonspart3_se_mesma_celula_quadro_mandar")),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_quadro_verdade_para_t_t")),
+            Reveal(tx("lessonspart3_na_analogia_que_faz_papel"), tx("lessonspart3_lista_que_pode_vir_logo")),
+            Callout(NO_DUMB_QUESTIONS, tx("lessonspart3_por_que_simple_porque_slr")),
         ),
     ),
     Lesson(
-        Skill.SLR_TABLE, Style.VISUAL, "Do autômato à tabela, célula por célula",
+        Skill.SLR_TABLE, Style.VISUAL, tx("lessonspart3_automato_tabela_celula_por_celula"),
         listOf(
-            Say(PROF, "Hoje a gente constrói a tabela olhando o autômato LR(0). Primeiro, os estados."),
-            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_EXPR, caption = "Coleção canônica LR(0) da gramática de expressões (aumentada com E' → E)."),
+            Say(PROF, tx("lessonspart3_hoje_gente_constroi_tabela_olhando")),
+            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_EXPR, caption = tx("lessonspart3_colecao_canonica_lr_0_gramatica")),
             Steps(
-                "Quatro regras para encher a tabela",
+                tx("lessonspart3_quatro_regras_para_encher_tabela"),
                 listOf(
-                    "Seta com **terminal** a de Ii para Ij → ACTION[i, a] = **sj**",
-                    "Seta com **não-terminal** A de Ii para Ij → GOTO[i, A] = **j**",
-                    "Item completo **A → α •** em Ii → **rN** em ACTION[i, a] para cada a em **FOLLOW(A)**",
-                    "Item **E' → E •** em Ii → ACTION[i, \$] = **acc**",
+                    tx("lessonspart3_seta_com_terminal_ii_para"),
+                    tx("lessonspart3_seta_com_nao_terminal_ii"),
+                    tx("lessonspart3_item_completo_em_ii_rn"),
+                    tx("lessonspart3_item_em_ii_action_i"),
                 ),
             ),
             Visual(VisualKind.FIRST_FOLLOW, grammar = P3_EXPR, caption = "Vamos precisar do FOLLOW: FOLLOW(E) = { +, ), \$ } e FOLLOW(T) = FOLLOW(F) = { +, *, ), \$ }."),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = "A tabela pronta. Procure a linha do estado 2."),
-            Say(BYTE, "Peraí! O estado 2 tem E → T • (quer reduzir) e T → T • * F (quer empilhar). Isso não dá briga?"),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_tabela_pronta_procure_linha_estado")),
+            Say(BYTE, tx("lessonspart3_perai_estado_2_tem_t")),
             Predict(
-                "No estado 2, com o próximo token sendo '*', o que a tabela SLR manda?",
-                listOf("Reduzir por E → T", "Empilhar '*' (s7)", "Conflito: as duas coisas"),
+                tx("lessonspart3_no_estado_2_com_proximo"),
+                listOf(tx("lessonspart3_reduzir_por_t"), tx("lessonspart3_empilhar_s7"), tx("lessonspart3_conflito_duas_coisas")),
                 1,
-                "'*' não está em FOLLOW(E) = { +, ), \$ }, então o reduce nem é escrito nessa coluna. Sobra só o shift. Briga evitada pelo FOLLOW!",
+                tx("lessonspart3_nao_esta_em_follow_entao"),
             ),
-            Visual(VisualKind.LR_TRACE, grammar = P3_EXPR, input = "id + id * id", caption = "Siga a pilha: no estado 9, com '*', ele empilha; só depois reduz T → T * F."),
-            Say(PILHA, "Viu? Eu guardei E + T... e esperei o '*'. Por isso... a multiplicação liga mais forte."),
-            Say(PROF, "Agora uma gramática onde o FOLLOW não salva ninguém."),
+            Visual(VisualKind.LR_TRACE, grammar = P3_EXPR, input = "id + id * id", caption = tx("lessonspart3_siga_pilha_no_estado_9")),
+            Say(PILHA, tx("lessonspart3_viu_eu_guardei_t_esperei")),
+            Say(PROF, tx("lessonspart3_agora_gramatica_onde_follow_nao")),
             Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = "S → L = R | R; L → * R | id; R → L. Ache a célula vermelha: estado 2, coluna '='."),
             Reveal(
-                "Por que '=' entrou em FOLLOW(R)?",
+                tx("lessonspart3_por_que_entrou_em_follow"),
                 "L → * R joga FOLLOW(L) dentro de FOLLOW(R), e S → L = R coloca '=' em FOLLOW(L). Resultado: o SLR escreve r5 (R → L) em [2, =], junto com s6 de S → L • = R.",
             ),
-            Callout(BRAIN_POWER, "Essa gramática NÃO é ambígua. O conflito é culpa do SLR ser míope: nenhuma forma sentencial começa com 'R ='. Guarde essa: é a porta de entrada do LALR."),
+            Callout(BRAIN_POWER, tx("lessonspart3_essa_gramatica_nao_ambigua_conflito")),
         ),
     ),
     Lesson(
-        Skill.SLR_TABLE, Style.WORKED, "Preenchendo linhas da tabela com calma",
+        Skill.SLR_TABLE, Style.WORKED, tx("lessonspart3_preenchendo_linhas_tabela_com_calma"),
         listOf(
-            Say(PROF, "Exercício clássico de prova: preencher linhas da tabela SLR da gramática de expressões. Vou fazer duas; você faz as outras."),
-            Code("(1) E → E + T     (2) E → T\n(3) T → T * F     (4) T → F\n(5) F → ( E )     (6) F → id", "Produções numeradas (o número vira o rN)"),
-            Code("I1: E' → E •      E → E • + T          (+ → I6)\nI2: E → T •       T → T • * F          (* → I7)\nI9: E → E + T •   T → T • * F          (* → I7)", "Três estados do autômato LR(0)"),
+            Say(PROF, tx("lessonspart3_exercicio_classico_prova_preencher_linhas")),
+            Code(tx("lessonspart3_1_t_2_t_3"), tx("lessonspart3_producoes_numeradas_numero_vira_rn")),
+            Code(tx("lessonspart3_i1_t_i6_i2_t"), tx("lessonspart3_tres_estados_automato_lr_0")),
             Text("FOLLOW(E) = { +, ), \$ }    FOLLOW(T) = { +, *, ), \$ }"),
             Steps(
-                "Linha do estado 1",
+                tx("lessonspart3_linha_estado_1"),
                 listOf(
                     "E' → E • está completo e é o item aumentado → ACTION[1, \$] = **acc**",
                     "E → E • + T tem terminal depois do ponto, e há seta + → I6 → ACTION[1, +] = **s6**",
-                    "Todo o resto da linha fica vazio = **erro**",
+                    tx("lessonspart3_todo_resto_linha_fica_vazio"),
                 ),
             ),
             Steps(
-                "Linha do estado 2",
+                tx("lessonspart3_linha_estado_2"),
                 listOf(
                     "E → T • completo → **r2** nas colunas de FOLLOW(E): +, ) e \$",
                     "T → T • * F com seta * → I7 → ACTION[2, *] = **s7**",
-                    "Alguma célula com duas ações? Não: '*' ∉ FOLLOW(E). Linha limpa!",
+                    tx("lessonspart3_alguma_celula_com_duas_acoes"),
                 ),
             ),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = "Confira as linhas 1 e 2 na tabela gerada pelo motor."),
-            Say(BYTE, "Deixa eu tentar! Eu consigo, eu consigo..."),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_confira_linhas_1_2_na")),
+            Say(BYTE, tx("lessonspart3_deixa_eu_tentar_eu_consigo")),
             Reveal(
                 "Sua vez: estado 9 = { E → E + T • ; T → T • * F } com seta * → I7. Preencha a linha.",
                 "r1 em +, ) e \$ (FOLLOW(E)); s7 em *. Sem conflito, pelo mesmo motivo do estado 2.",
             ),
             Reveal(
                 "Agora o estado 10 = { T → T * F • }.",
-                "r3 em +, *, ) e \$ — todas as colunas de FOLLOW(T).",
+                tx("lessonspart3_r3_em_todas_colunas_follow"),
             ),
-            Say(PROF, "Último, sem rodinhas: a gramática dos ponteiros."),
+            Say(PROF, tx("lessonspart3_ultimo_sem_rodinhas_gramatica_dos")),
             Reveal(
                 "S → L = R | R; L → * R | id; R → L. Estado 2 = { S → L • = R ; R → L • }, seta = → I6, FOLLOW(R) = { =, \$ }. Preencha a linha.",
-                "ACTION[2, =] = { s6, r5 } → CONFLITO empilhar/reduzir! ACTION[2, \$] = r5. Conclusão: a gramática não é SLR(1).",
+                tx("lessonspart3_action_2_s6_r5_conflito"),
             ),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = "A célula [2, =] com duas ações confirma sua resposta."),
-            Callout(EXAM_TIP, "Calcule e escreva FOLLOW de todos os não-terminais ANTES de abrir a tabela. Metade dos erros de prova é reduce na coluna errada."),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = tx("lessonspart3_celula_2_com_duas_acoes")),
+            Callout(EXAM_TIP, tx("lessonspart3_calcule_escreva_follow_todos_nao")),
         ),
     ),
     Lesson(
-        Skill.SLR_TABLE, Style.SOCRATIC, "Por que o FOLLOW decide as reduções?",
+        Skill.SLR_TABLE, Style.SOCRATIC, tx("lessonspart3_por_que_follow_decide_reducoes"),
         listOf(
-            Say(PROF, "Hoje eu só pergunto. Responda na sua cabeça antes de tocar — errar aqui é treino, não nota."),
-            Reveal("Um estado tem o item A → α •. O que esse ponto no fim está dizendo?", "Que o topo da pilha contém α inteiro: temos um candidato a handle. Dá para reduzir por A → α."),
-            Reveal("O LR(0) puro reduz em QUALQUER próximo token. E se o mesmo estado tiver também B → β • a γ?", "No token a, ele quer reduzir E empilhar: conflito. O LR(0) é cego para o futuro."),
-            Reveal("Se reduzimos para A, que tokens podem aparecer logo depois numa derivação válida?", "Só os de FOLLOW(A). Se o próximo token não está lá, reduzir para A é erro garantido."),
-            Say(BYTE, "Então o SLR é o LR(0) com um filtro de FOLLOW nas reduções!"),
-            Say(PROF, "Exatamente. Mesmo autômato, mesmos estados — só reduções mais educadas."),
+            Say(PROF, tx("lessonspart3_hoje_eu_so_pergunto_responda")),
+            Reveal(tx("lessonspart3_estado_tem_item_que_esse"), tx("lessonspart3_que_topo_pilha_contem_inteiro")),
+            Reveal(tx("lessonspart3_lr_0_puro_reduz_em"), tx("lessonspart3_no_token_ele_quer_reduzir")),
+            Reveal(tx("lessonspart3_se_reduzimos_para_que_tokens"), tx("lessonspart3_so_follow_se_proximo_token")),
+            Say(BYTE, tx("lessonspart3_entao_slr_lr_0_com")),
+            Say(PROF, tx("lessonspart3_exatamente_mesmo_automato_mesmos_estados")),
             Predict(
-                "E se o token a estiver em FOLLOW(A) e o estado também tiver B → β • a γ?",
-                listOf("O SLR escolhe shift sozinho", "Conflito empilhar/reduzir: a gramática não é SLR(1)", "O SLR reduz pela regra mais curta"),
+                tx("lessonspart3_se_token_estiver_em_follow"),
+                listOf(tx("lessonspart3_slr_escolhe_shift_sozinho"), tx("lessonspart3_conflito_empilhar_reduzir_gramatica_nao"), tx("lessonspart3_slr_reduz_pela_regra_mais")),
                 1,
-                "A tabela SLR não escolhe nada: se duas ações caem na mesma célula, a gramática simplesmente não é SLR(1). (Quem escolhe 'shift' por padrão é o Bison — outra história.)",
+                tx("lessonspart3_tabela_slr_nao_escolhe_nada"),
             ),
-            Reveal("E dois itens completos A → α • e B → β • no mesmo estado?", "Se FOLLOW(A) ∩ FOLLOW(B) ≠ ∅, conflito reduzir/reduzir naquelas colunas."),
+            Reveal(tx("lessonspart3_dois_itens_completos_b_no"), tx("lessonspart3_se_follow_follow_b_conflito")),
             Visual(VisualKind.SLR_TABLE, grammar = P3_AMBIG, caption = "E → E + E | E * E | ( E ) | id: conflitos nos estados 7 e 8, colunas + e *."),
-            Reveal("Toda gramática ambígua gera conflito na tabela SLR?", "Sim: nenhuma gramática ambígua é LR(k). Mas a volta é falsa — conflito no SLR não prova ambiguidade (lembra de S → L = R | R?)."),
-            Reveal("Por que o FOLLOW é grosseiro demais?", "Ele junta tudo que pode seguir A em QUALQUER lugar da gramática, sem saber de qual caminho você veio. Recuperar esse contexto é o trabalho do LR(1)."),
-            Callout(BRAIN_POWER, "Pense: como você carregaria, dentro de cada item, a informação 'o que pode vir depois DESTE A, neste caminho'? Segure essa ideia até a aula de LALR."),
+            Reveal(tx("lessonspart3_toda_gramatica_ambigua_gera_conflito"), tx("lessonspart3_sim_nenhuma_gramatica_ambigua_lr")),
+            Reveal(tx("lessonspart3_por_que_follow_grosseiro_demais"), tx("lessonspart3_ele_junta_tudo_que_pode")),
+            Callout(BRAIN_POWER, tx("lessonspart3_pense_como_voce_carregaria_dentro")),
         ),
     ),
     Lesson(
-        Skill.SLR_TABLE, Style.FORMAL, "Construção da tabela SLR(1): algoritmo",
+        Skill.SLR_TABLE, Style.FORMAL, tx("lessonspart3_construcao_tabela_slr_1_algoritmo"),
         listOf(
-            Text("Seja G' a gramática aumentada (S' → S) e C = { I0, ..., In } a coleção canônica de conjuntos de itens LR(0) de G'. O estado i corresponde a Ii; o inicial é closure({ [S' → • S] })."),
+            Text(tx("lessonspart3_seja_g_gramatica_aumentada_c")),
             Code(
-                """para cada estado Ii:
-  para cada item [A → α • a β] em Ii, com a terminal:
-      se GOTO(Ii, a) = Ij:  ACTION[i, a] := shift j
-  para cada item [A → α •] em Ii, com A ≠ S':
-      para todo a em FOLLOW(A):  ACTION[i, a] := reduce A → α
-  se [S' → S •] ∈ Ii:  ACTION[i, $] := accept
-  para cada não-terminal A:
-      se GOTO(Ii, A) = Ij:  GOTO[i, A] := j
-células não preenchidas := erro""",
-                "Algoritmo SLR(1) (Livro do Dragão, Alg. 4.46)",
+                tx("lessonspart3_para_cada_estado_ii_para"),
+                tx("lessonspart3_algoritmo_slr_1_livro_dragao"),
             ),
-            Text("**Definição.** G é SLR(1) se e somente se nenhuma célula de ACTION recebe mais de uma ação."),
+            Text(tx("lessonspart3_definicao_g_slr_1_se")),
             Steps(
-                "Os dois tipos de conflito",
+                tx("lessonspart3_dois_tipos_conflito"),
                 listOf(
-                    "**Empilhar/reduzir:** Ii contém [A → α • a β] e [B → γ •] com a ∈ FOLLOW(B)",
-                    "**Reduzir/reduzir:** Ii contém [A → α •] e [B → β •] com FOLLOW(A) ∩ FOLLOW(B) ≠ ∅",
+                    tx("lessonspart3_empilhar_reduzir_ii_contem_b"),
+                    tx("lessonspart3_reduzir_reduzir_ii_contem_b"),
                 ),
             ),
             Code(
-                """empilha o estado 0;  a := primeiro token
-repita:
-  s := estado no topo
-  caso ACTION[s, a]:
-    shift t:       empilha t;  a := próximo token
-    reduce A → β:  desempilha |β| estados;  t := topo
-                   empilha GOTO[t, A];  emite A → β
-    accept:        pare com sucesso
-    erro:          chame a recuperação de erro""",
-                "Algoritmo do analisador LR (o mesmo para SLR, LALR e LR(1) — só a tabela muda)",
+                tx("lessonspart3_empilha_estado_0_primeiro_token"),
+                tx("lessonspart3_algoritmo_analisador_lr_mesmo_para"),
             ),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = "Tabela SLR(1) da gramática de expressões: sem conflitos."),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_EXPR, caption = tx("lessonspart3_tabela_slr_1_gramatica_expressoes")),
             Predict(
-                "Qual afirmação é VERDADEIRA (sobre classes de gramáticas)?",
-                listOf("Toda gramática SLR(1) é LL(1)", "Toda gramática SLR(1) é LALR(1)", "Toda gramática LALR(1) é SLR(1)"),
+                tx("lessonspart3_qual_afirmacao_verdadeira_sobre_classes"),
+                listOf(tx("lessonspart3_toda_gramatica_slr_1_ll"), tx("lessonspart3_toda_gramatica_slr_1_lalr"), tx("lessonspart3_toda_gramatica_lalr_1_slr")),
                 1,
-                "Hierarquia: LR(0) ⊂ SLR(1) ⊂ LALR(1) ⊂ LR(1). LL(1) e SLR(1) são incomparáveis (E → E + T é SLR mas não LL).",
+                tx("lessonspart3_hierarquia_lr_0_slr_1"),
             ),
-            Reveal("Dimensões da tabela?", "Uma linha por estado LR(0). ACTION: uma coluna por terminal + \$. GOTO: uma coluna por não-terminal (sem S')."),
-            Callout(WATCH_OUT, "Transição com terminal vira 'shift' em ACTION; transição com não-terminal vira número em GOTO. Não existe 'shift' na GOTO nem número puro na ACTION."),
-            Callout(EXAM_TIP, "Para justificar um conflito, cite: estado, terminal, os dois itens e o FOLLOW. Ex.: 'I2, coluna =: s6 por S → L • = R e r5 por R → L •, pois = ∈ FOLLOW(R)'."),
+            Reveal(tx("lessonspart3_dimensoes_tabela"), tx("lessonspart3_linha_por_estado_lr_0")),
+            Callout(WATCH_OUT, tx("lessonspart3_transicao_com_terminal_vira_shift")),
+            Callout(EXAM_TIP, tx("lessonspart3_para_justificar_conflito_cite_estado")),
         ),
     ),
     Lesson(
-        Skill.SLR_TABLE, Style.MNEMONIC, "O porteiro FOLLOW da torre SLR",
+        Skill.SLR_TABLE, Style.MNEMONIC, tx("lessonspart3_porteiro_follow_torre_slr"),
         listOf(
-            Say(NARRADOR, "Palácio da Memória: Fortaleza Bottom-Up, torre do SLR. Na porta, um porteiro de prancheta chamado FOLLOW."),
-            Callout(MNEMONIC, "SLR = **'Só Libera Redução'** se o próximo token estiver na prancheta do FOLLOW."),
+            Say(NARRADOR, tx("lessonspart3_palacio_memoria_fortaleza_bottom_up")),
+            Callout(MNEMONIC, tx("lessonspart3_slr_so_libera_reducao_se")),
             Code(
-                """• antes de TERMINAL         →  sN   (empilha e vai para N)
-• no FIM do item            →  rN   (só nas colunas do FOLLOW)
-S' → S •                    →  acc  (só na coluna $)
-seta com NÃO-terminal       →  GOTO (número puro)""",
-                "Cola de bolso",
+                tx("lessonspart3_antes_terminal_sn_empilha_vai"),
+                tx("lessonspart3_cola_bolso"),
             ),
-            Callout(MNEMONIC, "Ponto na frente do terminal: **'tem estrada, segue'** (shift). Ponto no fim: **'chegou, fecha'** (reduce)."),
-            Callout(MNEMONIC, "**E/R** = um item quer andar e outro quer fechar (uma porta, dois comandos). **R/R** = dois itens querem fechar ao mesmo tempo (dois nomes para o mesmo pacote)."),
-            Say(LEXI, "Eu corto tokens; o porteiro só deixa reduzir quem ele conhece. Equipe!"),
+            Callout(MNEMONIC, tx("lessonspart3_ponto_na_frente_terminal_tem")),
+            Callout(MNEMONIC, tx("lessonspart3_r_item_quer_andar_outro")),
+            Say(LEXI, tx("lessonspart3_eu_corto_tokens_porteiro_so")),
             Predict(
                 "No estado { S → L • = R ; R → L • } com '=' ∈ FOLLOW(R), o porteiro...",
-                listOf("Deixa só empilhar", "Libera a redução E a seta mostra empilhar: conflito E/R", "Não deixa nada"),
+                listOf(tx("lessonspart3_deixa_so_empilhar"), tx("lessonspart3_libera_reducao_seta_mostra_empilhar"), tx("lessonspart3_nao_deixa_nada")),
                 1,
-                "O porteiro olha só a prancheta global (FOLLOW). Ele não sabe que, ali, um R nunca é seguido de '='. Míope!",
+                tx("lessonspart3_porteiro_olha_so_prancheta_global"),
             ),
             Visual(VisualKind.SLR_TABLE, grammar = P3_LIST, caption = "S → S a | b: tabela pequena e sem conflitos. Recursão à esquerda não assusta o LR!"),
-            Callout(FIRESIDE, "LR(0): 'Eu reduzo sempre que vejo um item completo, sem olhar ninguém!' SLR: 'E por isso briga com todo mundo. Eu pergunto ao FOLLOW antes.' LALR (lá do fundo): 'Vocês dois ainda vão me pedir ajuda...'"),
-            Reveal("Recite as quatro regras da tabela SLR.", "Terminal após o ponto → shift. Não-terminal → GOTO. Item completo → reduce nas colunas do FOLLOW. S' → S • → accept em \$."),
-            Callout(MNEMONIC, "Contraste: no LL(1), o FOLLOW só entra nas produções que derivam ε. No SLR, o FOLLOW decide TODA redução."),
+            Callout(FIRESIDE, tx("lessonspart3_lr_0_eu_reduzo_sempre")),
+            Reveal(tx("lessonspart3_recite_quatro_regras_tabela_slr"), tx("lessonspart3_terminal_apos_ponto_shift_nao")),
+            Callout(MNEMONIC, tx("lessonspart3_contraste_no_ll_1_follow")),
         ),
     ),
 )
@@ -421,60 +403,53 @@ seta com NÃO-terminal       →  GOTO (número puro)""",
 
 internal val lalrLessonsP3: List<Lesson> = listOf(
     Lesson(
-        Skill.LALR, Style.STORY, "Ônibus com destino na testa",
+        Skill.LALR, Style.STORY, tx("lessonspart3_onibus_com_destino_na_testa"),
         listOf(
-            Say(BYTE, "O SLR travou naquela gramática dos ponteiros. Joga fora e pronto?"),
-            Say(PROF, "Não! Vamos dar ao analisador uma informação extra. Pense numa empresa de ônibus."),
-            Text("Cada **item** é um passageiro numa **linha** (a produção com o ponto). O SLR desce passageiros em qualquer ponto que **alguma** linha da cidade use — é o FOLLOW global."),
-            Text("O **LR(1)** cola na testa de cada passageiro o **ponto exato** onde ele vai descer: o **lookahead**. Item LR(1) = [linha, destino], ex.: [R → L •, \$]."),
+            Say(BYTE, tx("lessonspart3_slr_travou_naquela_gramatica_dos")),
+            Say(PROF, tx("lessonspart3_nao_vamos_dar_ao_analisador")),
+            Text(tx("lessonspart3_cada_item_passageiro_numa_linha")),
+            Text(tx("lessonspart3_lr_1_cola_na_testa")),
             Steps(
-                "O mapa da analogia",
+                tx("comum_mapa_analogia"),
                 listOf(
-                    "Linha do ônibus → **núcleo** do item (A → α • β)",
-                    "Ponto de descida na testa → **lookahead** (um terminal)",
-                    "Descer do ônibus → **reduzir**, só quando o próximo token é o lookahead",
-                    "Frota enorme, um ônibus por combinação linha+destinos → **LR(1) canônico** (muitos estados)",
-                    "Fundir ônibus com as mesmas linhas, somando destinos → **LALR(1)**",
+                    tx("lessonspart3_linha_onibus_nucleo_item"),
+                    tx("lessonspart3_ponto_descida_na_testa_lookahead"),
+                    tx("lessonspart3_descer_onibus_reduzir_so_quando"),
+                    tx("lessonspart3_frota_enorme_onibus_por_combinacao"),
+                    tx("lessonspart3_fundir_onibus_com_mesmas_linhas"),
                 ),
             ),
-            Say(PILHA, "Mais ônibus... mais estados... mais memória. A empresa... reclamou."),
-            Text("Então a empresa funde ônibus que fazem exatamente as **mesmas linhas** (mesmo núcleo) e junta as listas de destinos. A frota volta ao tamanho do LR(0)/SLR!"),
+            Say(PILHA, tx("lessonspart3_mais_onibus_mais_estados_mais")),
+            Text(tx("lessonspart3_entao_empresa_funde_onibus_que")),
             Predict(
-                "Ônibus 1: passageiro A desce em d, B desce em e. Ônibus 2 (mesmas linhas): A desce em e, B desce em d. Fundindo os dois, o que acontece no ponto d?",
-                listOf("Nada, só A desce", "A e B querem descer: confusão (reduzir/reduzir)", "Os dois continuam no ônibus"),
+                tx("lessonspart3_onibus_1_passageiro_desce_em"),
+                listOf(tx("lessonspart3_nada_so_desce"), tx("lessonspart3_b_querem_descer_confusao_reduzir"), tx("lessonspart3_dois_continuam_no_onibus")),
                 1,
-                "Fundidos, A e B têm d e e na testa. No ponto d, dois 'reduce' disputam a célula: conflito reduzir/reduzir que o LR(1) não tinha.",
+                tx("lessonspart3_fundidos_b_tem_d_na"),
             ),
-            Callout(BRAIN_POWER, "A fusão nunca cria conflito empilhar/reduzir novo: quem 'segue viagem' (shift) depende só da linha, e as linhas são as mesmas. Só a parte 'descer' (lookahead) é somada."),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = "O SLR trava em [2, =]. No LR(1), o estado 2 tem [R → L •, \$]: só desce em \$, então '=' fica só com o shift."),
-            Reveal("Na analogia, o que é o 'núcleo' de um estado?", "O conjunto de linhas (itens sem o lookahead). Estados LR(1) com o mesmo núcleo viram um estado só no LALR."),
-            Callout(REAL_WORLD, "O Yacc e o Bison geram, por padrão, tabelas LALR(1): quase o poder do LR(1) com o tamanho do SLR. O Bison moderno também oferece IELR e LR(1) canônico via %define lr.type."),
+            Callout(BRAIN_POWER, tx("lessonspart3_fusao_nunca_cria_conflito_empilhar")),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_PTR, caption = tx("lessonspart3_slr_trava_em_2_no")),
+            Reveal(tx("lessonspart3_na_analogia_que_nucleo_estado"), tx("lessonspart3_conjunto_linhas_itens_sem_lookahead")),
+            Callout(REAL_WORLD, tx("lessonspart3_yacc_bison_geram_por_padrao")),
         ),
     ),
     Lesson(
-        Skill.LALR, Style.VISUAL, "Vendo a fusão de núcleos acontecer",
+        Skill.LALR, Style.VISUAL, tx("lessonspart3_vendo_fusao_nucleos_acontecer"),
         listOf(
-            Say(PROF, "Mesma gramática dos ponteiros, agora com lookaheads. Primeiro, o esqueleto LR(0)."),
-            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_PTR, caption = "10 estados LR(0). O LALR terá exatamente estes 10 núcleos."),
+            Say(PROF, tx("lessonspart3_mesma_gramatica_dos_ponteiros_agora")),
+            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_PTR, caption = tx("lessonspart3_10_estados_lr_0_lalr")),
             Code(
-                """I0: S' → • S, $      S → • L = R, $      S → • R, $
-    L → • * R, =/$    L → • id, =/$       R → • L, $
-I2: S → L • = R, $    R → L •, $          ← reduz só em $!""",
-                "Itens LR(1): [núcleo, lookahead]. '=/\$' abrevia dois itens.",
+                tx("lessonspart3_i0_l_r_r_l"),
+                tx("lessonspart3_itens_lr_1_nucleo_lookahead"),
             ),
-            Say(BYTE, "No estado 2, R → L • só tem \$ na testa. Então em '=' é só empilhar!"),
-            Say(PROF, "Isso. O lookahead do item veio do contexto: R → • L foi criado a partir de S → • R, \$ — e depois de S só vem \$."),
+            Say(BYTE, tx("lessonspart3_no_estado_2_r_l")),
+            Say(PROF, tx("lessonspart3_isso_lookahead_item_veio_contexto")),
             Code(
-                """LR(1) canônico: 14 estados
-  I4 ~ I11   (L → * • R, ...)
-  I5 ~ I12   (L → id •, ...)
-  I7 ~ I9    (R → L •, ...)
-  I8 ~ I13   (L → * R •, ...)
-LALR(1): funde cada par → 10 estados""",
-                "Pares com o mesmo núcleo (numeração do motor do jogo)",
+                tx("lessonspart3_lr_1_canonico_14_estados"),
+                tx("lessonspart3_pares_com_mesmo_nucleo_numeracao"),
             ),
-            Visual(VisualKind.BISON, grammar = P3_BISON_PTR, input = "*x=y", caption = "O Bison (LALR) aceita '*x = y' sem nenhum conflito — onde o SLR travava."),
-            Say(PROF, "Agora o lado sombrio da fusão."),
+            Visual(VisualKind.BISON, grammar = P3_BISON_PTR, input = "*x=y", caption = tx("lessonspart3_bison_lalr_aceita_x_y")),
+            Say(PROF, tx("lessonspart3_agora_lado_sombrio_fusao")),
             Code(
                 """S → a A d | b B d | a B e | b A e
 A → c        B → c
@@ -482,154 +457,135 @@ A → c        B → c
 LR(1):  I6 = { [A → c •, d]  [B → c •, e] }   ← depois de 'a c'
         I9 = { [B → c •, d]  [A → c •, e] }   ← depois de 'b c'
 LALR:   I6+I9 = { [A → c •, d/e]  [B → c •, d/e] }  ← R/R em d e em e!""",
-                "Gramática LR(1) mas não LALR(1)",
+                tx("lessonspart3_gramatica_lr_1_mas_nao"),
             ),
-            Visual(VisualKind.BISON, grammar = P3_BISON_RR, input = "a c d", caption = "O Bison avisa 2 conflitos reduzir/reduzir e escolhe a regra que aparece primeiro (x : c)."),
+            Visual(VisualKind.BISON, grammar = P3_BISON_RR, input = tx("lessonspart3_c_d"), caption = tx("lessonspart3_bison_avisa_2_conflitos_reduzir")),
             Predict(
-                "Com essa escolha padrão do Bison, o que acontece com a frase válida 'a c e'?",
-                listOf("É aceita", "Dá syntax error, mesmo sendo válida", "O Bison pergunta ao usuário"),
+                tx("lessonspart3_com_essa_escolha_padrao_bison"),
+                listOf(tx("lessonspart3_aceita"), tx("lessonspart3_syntax_error_mesmo_sendo_valida"), tx("lessonspart3_bison_pergunta_ao_usuario")),
                 1,
-                "Em 'e', ele reduz c para x (primeira regra), mas 'a x e' não existe — só 'a y e'. A fusão fez o parser perder uma frase da linguagem.",
+                tx("lessonspart3_em_ele_reduz_c_para"),
             ),
-            Callout(BRAIN_POWER, "Note: o LR(1) separava 'a c' de 'b c' em estados diferentes. A fusão misturou os contextos — é exatamente aí que o LALR é mais fraco que o LR(1)."),
+            Callout(BRAIN_POWER, tx("lessonspart3_note_lr_1_separava_c")),
         ),
     ),
     Lesson(
-        Skill.LALR, Style.WORKED, "Closure LR(1) e fusão, passo a passo",
+        Skill.LALR, Style.WORKED, tx("lessonspart3_closure_lr_1_fusao_passo"),
         listOf(
-            Say(PROF, "Vamos calcular I0 da gramática S → L = R | R; L → * R | id; R → L, com lookaheads."),
+            Say(PROF, tx("lessonspart3_vamos_calcular_i0_gramatica_l")),
             Steps(
                 "closure({ [S' → • S, \$] })",
                 listOf(
-                    "Começa com [S' → • S, \$]",
-                    "Ponto antes de S; o que vem depois de S é ε, então o lookahead é FIRST(\$) = { \$ } → [S → • L = R, \$] e [S → • R, \$]",
+                    tx("lessonspart3_comeca_com"),
+                    tx("lessonspart3_ponto_antes_que_vem_depois"),
                     "De [S → • L = R, \$]: depois de L vem '= R', FIRST = { = } → [L → • * R, =] e [L → • id, =]",
-                    "De [S → • R, \$]: depois de R vem nada → FIRST(\$) → [R → • L, \$]",
-                    "De [R → • L, \$]: → [L → • * R, \$] e [L → • id, \$]",
-                    "Nada novo? Pronto. Compactando: [L → • * R, =/\$] e [L → • id, =/\$]",
+                    tx("lessonspart3_r_depois_r_vem_nada"),
+                    tx("lessonspart3_r_l_l_r_l"),
+                    tx("lessonspart3_nada_novo_pronto_compactando_l"),
                 ),
             ),
-            Callout(WATCH_OUT, "A regra é FIRST(β a), onde β é o que vem DEPOIS do não-terminal no item e a é o lookahead do item. Não é FOLLOW!"),
+            Callout(WATCH_OUT, tx("lessonspart3_regra_first_onde_que_vem")),
             Steps(
                 "GOTO(I0, L) = I2",
                 listOf(
-                    "Avança o ponto sobre L: [S → L • = R, \$] e [R → L •, \$]",
-                    "Closure não acrescenta nada (ponto antes de terminal ou no fim)",
-                    "Tabela: '=' → shift; R → L • reduz SÓ em \$ → sem conflito!",
+                    tx("lessonspart3_avanca_ponto_sobre_l_l"),
+                    tx("lessonspart3_closure_nao_acrescenta_nada_ponto"),
+                    tx("lessonspart3_tabela_shift_r_l_reduz"),
                 ),
             ),
-            Say(BYTE, "Agora eu! Agora eu!"),
+            Say(BYTE, tx("lessonspart3_agora_eu_agora_eu")),
             Reveal(
-                "Calcule GOTO(I0, *).",
-                "[L → * • R, =/\$] e, fechando: [R → • L, =/\$], [L → • * R, =/\$], [L → • id, =/\$]. Os lookaheads de L → * R são herdados por R → • L porque R está no fim.",
+                tx("lessonspart3_calcule_goto_i0"),
+                tx("lessonspart3_l_r_fechando_r_l"),
             ),
             Reveal(
-                "No LR(1) há [L → id •, =/\$] (depois de 'id' no início) e [L → id •, \$] (depois de 'L = id'). Fundem no LALR? Dá conflito?",
-                "Fundem (mesmo núcleo L → id •) virando [L → id •, =/\$]. Um único item completo → sem conflito.",
+                tx("lessonspart3_no_lr_1_ha_l"),
+                tx("lessonspart3_fundem_mesmo_nucleo_l_id"),
             ),
             Reveal(
-                "Na gramática S → a A d | b B d | a B e | b A e; A → c; B → c, quais estados LR(1) se fundem e o que acontece?",
-                "{ [A → c •, d], [B → c •, e] } e { [B → c •, d], [A → c •, e] } têm o mesmo núcleo. Fundidos: A → c • e B → c • ambos em d e em e → reduzir/reduzir.",
+                tx("lessonspart3_na_gramatica_d_b_b"),
+                tx("lessonspart3_c_d_b_c_b"),
             ),
-            Visual(VisualKind.SLR_TABLE, grammar = P3_RR, caption = "Curiosidade: o SLR também tem esse R/R (FOLLOW(A) = FOLLOW(B) = { d, e }). Só o LR(1) canônico escapa."),
-            Callout(EXAM_TIP, "Questão típica: 'mostre que G é LR(1) mas não LALR(1)'. Receita: ache dois estados LR(1) com o mesmo núcleo cujos itens completos trocam de lookahead, funda-os e aponte a célula com dois reduces."),
+            Visual(VisualKind.SLR_TABLE, grammar = P3_RR, caption = tx("lessonspart3_curiosidade_slr_tambem_tem_esse")),
+            Callout(EXAM_TIP, tx("lessonspart3_questao_tipica_mostre_que_g")),
         ),
     ),
     Lesson(
-        Skill.LALR, Style.SOCRATIC, "E se o item soubesse o futuro?",
+        Skill.LALR, Style.SOCRATIC, tx("lessonspart3_se_item_soubesse_futuro"),
         listOf(
-            Say(PROF, "Lembra da pergunta da última aula? Como carregar, dentro do item, 'o que vem depois deste A, neste caminho'?"),
-            Reveal("Qual a ideia mais simples?", "Grudar um terminal no item: [A → α • β, a] significa 'quando α β estiver completo, só reduza se o próximo token for a'."),
-            Reveal("De onde vem o lookahead dos itens novos na closure?", "Do item que os criou: em [A → α • B β, a], cada B → • γ ganha lookaheads FIRST(β a). É o contexto local, não o FOLLOW global."),
-            Reveal("Por que isso resolve S → L = R | R?", "No estado 2, R → L • veio de S → • R, \$, então só reduz em \$. O '=' fica só com o shift."),
-            Reveal("Qual o preço?", "Muitos estados: o mesmo núcleo aparece repetido com lookaheads diferentes. Para linguagens reais, o LR(1) canônico pode ter milhares de estados a mais."),
-            Say(BYTE, "E se a gente juntasse os estados que só diferem no lookahead?"),
-            Say(PROF, "Você acabou de inventar o LALR(1). Os nomes que você não sabia já estavam na sua cabeça."),
+            Say(PROF, tx("lessonspart3_lembra_pergunta_ultima_aula_como")),
+            Reveal(tx("lessonspart3_qual_ideia_mais_simples"), tx("lessonspart3_grudar_terminal_no_item_significa")),
+            Reveal(tx("lessonspart3_onde_vem_lookahead_dos_itens"), tx("lessonspart3_item_que_criou_em_b")),
+            Reveal(tx("lessonspart3_por_que_isso_resolve_l"), tx("lessonspart3_no_estado_2_r_l_2")),
+            Reveal(tx("lessonspart3_qual_preco"), tx("lessonspart3_muitos_estados_mesmo_nucleo_aparece")),
+            Say(BYTE, tx("lessonspart3_se_gente_juntasse_estados_que")),
+            Say(PROF, tx("lessonspart3_voce_acabou_inventar_lalr_1")),
             Predict(
-                "A fusão de estados com mesmo núcleo pode criar um conflito EMPILHAR/REDUZIR novo?",
-                listOf("Sim, sempre", "Não: se surgisse depois, ele já existia em um dos estados originais", "Só se a gramática for ambígua"),
+                tx("lessonspart3_fusao_estados_com_mesmo_nucleo"),
+                listOf(tx("comum_sim_sempre"), tx("lessonspart3_nao_se_surgisse_depois_ele"), tx("lessonspart3_so_se_gramatica_for_ambigua")),
                 1,
-                "Shifts dependem só do núcleo. Se [A → α •, a] e [B → β • a γ] estão no fundido, algum estado original tinha [A → α •, a] e — por ter o mesmo núcleo — também [B → β • a γ, ...]. O conflito já estava lá.",
+                tx("lessonspart3_shifts_dependem_so_nucleo_se"),
             ),
-            Reveal("E reduzir/reduzir novo?", "Pode! Dois estados sem conflito, com A e B completos trocando lookaheads (d/e e e/d), viram um estado com dois reduces em d e em e."),
-            Reveal("Então, por que o Bison usa LALR e não LR(1)?", "Porque o LALR tem o número de estados do SLR e quase sempre basta para linguagens de programação. O raro R/R da fusão vale a economia."),
-            Callout(FIRESIDE, "SLR: 'Eu uso o FOLLOW e pronto.' LALR: 'Eu uso lookaheads de verdade, só que fundidos — mais esperto que você e do mesmo tamanho.' LR(1): 'E eu nunca fundo nada. Mais forte que os dois... e bem mais gordo.'"),
+            Reveal(tx("lessonspart3_reduzir_reduzir_novo"), tx("lessonspart3_pode_dois_estados_sem_conflito")),
+            Reveal(tx("lessonspart3_entao_por_que_bison_usa"), tx("lessonspart3_porque_lalr_tem_numero_estados")),
+            Callout(FIRESIDE, tx("lessonspart3_slr_eu_uso_follow_pronto")),
         ),
     ),
     Lesson(
-        Skill.LALR, Style.FORMAL, "Itens LR(1), closure e fusão: definições",
+        Skill.LALR, Style.FORMAL, tx("lessonspart3_itens_lr_1_closure_fusao"),
         listOf(
-            Text("**Item LR(1):** par [A → α • β, a] com A → α β ∈ P e a ∈ T ∪ { \$ }. O primeiro componente é o **núcleo** (core); a é o **lookahead**. O lookahead só tem efeito quando β = ε."),
+            Text(tx("lessonspart3_item_lr_1_par_com")),
             Code(
-                """CLOSURE(I):
-  repita
-    para cada [A → α • B β, a] em I
-      para cada produção B → γ
-        para cada b em FIRST(β a)
-          acrescente [B → • γ, b] a I
-  até não mudar
-  retorne I
-
-GOTO(I, X) := CLOSURE({ [A → α X • β, a] | [A → α • X β, a] ∈ I })
-
-estado inicial := CLOSURE({ [S' → • S, $] })""",
-                "Construção da coleção canônica LR(1)",
+                tx("lessonspart3_closure_i_repita_para_cada"),
+                tx("lessonspart3_construcao_colecao_canonica_lr_1"),
             ),
-            Text("**Tabela LR(1):** igual à SLR, exceto que [A → α •, a] gera reduce **apenas** em ACTION[i, a] (não em todo o FOLLOW(A))."),
+            Text(tx("lessonspart3_tabela_lr_1_igual_slr")),
             Code(
-                """LALR(1):
-  1. construa a coleção LR(1) C = { I0, ..., In }
-  2. agrupe os conjuntos com o mesmo núcleo;
-     substitua cada grupo pela UNIÃO dos seus itens
-  3. monte ACTION como no LR(1); se houver conflito,
-     a gramática não é LALR(1)
-  4. GOTO(J, X) := estado que contém GOTO(Ik, X)
-     (bem definido: mesmos núcleos → mesmos destinos)""",
-                "Construção do LALR(1) por fusão",
+                tx("lessonspart3_lalr_1_1_construa_colecao"),
+                tx("lessonspart3_construcao_lalr_1_por_fusao"),
             ),
             Steps(
-                "Propriedades que caem em prova",
+                tx("lessonspart3_propriedades_que_caem_em_prova"),
                 listOf(
-                    "Nº de estados LALR(1) = nº de estados LR(0) = nº de estados SLR(1)",
-                    "Fusão nunca introduz conflito empilhar/reduzir; pode introduzir reduzir/reduzir",
-                    "Gramáticas: SLR(1) ⊂ LALR(1) ⊂ LR(1); nenhuma gramática ambígua é LR(1)",
-                    "Lookaheads LALR ⊆ FOLLOW: por isso todo SLR(1) é LALR(1)",
+                    tx("lessonspart3_no_estados_lalr_1_no"),
+                    tx("lessonspart3_fusao_nunca_introduz_conflito_empilhar"),
+                    tx("lessonspart3_gramaticas_slr_1_lalr_1"),
+                    tx("lessonspart3_lookaheads_lalr_follow_por_isso"),
                 ),
             ),
             Predict(
-                "Em [A → α • B β, a], quais lookaheads ganham os itens de B?",
-                listOf("FOLLOW(B)", "FIRST(β a)", "FIRST(B)"),
+                tx("lessonspart3_em_b_quais_lookaheads_ganham"),
+                listOf("FOLLOW(B)", tx("comum_first"), "FIRST(B)"),
                 1,
-                "FIRST(β a): se β não deriva ε, o a nem aparece; se deriva, o lookahead do pai 'atravessa'. FOLLOW(B) seria voltar ao SLR.",
+                tx("lessonspart3_first_se_nao_deriva_nem"),
             ),
-            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_RR, caption = "Os núcleos LR(0) de S → a A d | b B d | a B e | b A e. O estado com A → c • e B → c • é o fundido no LALR."),
-            Callout(EXAM_TIP, "Escreva itens LR(1) agrupados por núcleo, ex. [L → • id, =/\$]. É mais rápido e deixa a fusão visível. Mas lembre: formalmente são dois itens."),
-            Callout(WATCH_OUT, "Não confunda 'LALR = Look-Ahead LR' com 'LR com lookahead de 2 tokens'. O (1) continua: um token de lookahead."),
+            Visual(VisualKind.LR0_AUTOMATON, grammar = P3_RR, caption = tx("lessonspart3_nucleos_lr_0_d_b")),
+            Callout(EXAM_TIP, tx("lessonspart3_escreva_itens_lr_1_agrupados")),
+            Callout(WATCH_OUT, tx("lessonspart3_nao_confunda_lalr_look_ahead")),
         ),
     ),
     Lesson(
-        Skill.LALR, Style.MNEMONIC, "O alfaiate que funde gêmeos",
+        Skill.LALR, Style.MNEMONIC, tx("lessonspart3_alfaiate_que_funde_gemeos"),
         listOf(
-            Say(NARRADOR, "Palácio da Memória: o andar mais alto da Fortaleza Bottom-Up. Um alfaiate costura gêmeos idênticos num só, somando as roupas dos dois."),
-            Callout(MNEMONIC, "**Mesmo esqueleto, roupas somadas.** Estados com o mesmo núcleo (esqueleto) viram um; os lookaheads (roupas) são unidos."),
-            Callout(MNEMONIC, "Óculos: **LR(0)** = sem óculos. **SLR** = binóculo embaçado (FOLLOW global). **LR(1)** = lupa em cada item. **LALR** = lupa, mas costurada em pares."),
-            Callout(MNEMONIC, "**'Fusão só faz Reduce duplo'**: a fusão LALR nunca cria E/R novo; só R/R."),
+            Say(NARRADOR, tx("lessonspart3_palacio_memoria_andar_mais_alto")),
+            Callout(MNEMONIC, tx("lessonspart3_mesmo_esqueleto_roupas_somadas_estados")),
+            Callout(MNEMONIC, tx("lessonspart3_oculos_lr_0_sem_oculos")),
+            Callout(MNEMONIC, tx("lessonspart3_fusao_so_faz_reduce_duplo")),
             Code(
-                """força:    LR(0) < SLR(1) < LALR(1) < LR(1)
-tamanho:  LR(0) = SLR(1) = LALR(1) < LR(1)""",
-                "Duas linhas para tatuar",
+                tx("lessonspart3_forca_lr_0_slr_1"),
+                tx("lessonspart3_duas_linhas_para_tatuar"),
             ),
-            Say(BYTE, "Então o LALR é o 'custo-benefício' da família?"),
-            Say(PROF, "Isso! Por isso o Yacc e o Bison escolheram ele como padrão."),
+            Say(BYTE, tx("lessonspart3_entao_lalr_custo_beneficio_familia")),
+            Say(PROF, tx("lessonspart3_isso_por_isso_yacc_bison")),
             Predict(
-                "O alfaiate fundiu dois gêmeos sem brigas. O resultado tem um conflito empilhar/reduzir. Isso é possível?",
-                listOf("Sim, a fusão criou", "Não: se tem E/R, um dos gêmeos já tinha", "Só em gramática ambígua"),
+                tx("lessonspart3_alfaiate_fundiu_dois_gemeos_sem"),
+                listOf(tx("lessonspart3_sim_fusao_criou"), tx("lessonspart3_nao_se_tem_r_dos"), tx("lessonspart3_so_em_gramatica_ambigua")),
                 1,
-                "Shift depende só do esqueleto. Se o fundido tem E/R, o gêmeo que trouxe aquele reduce já tinha o mesmo shift.",
+                tx("lessonspart3_shift_depende_so_esqueleto_se"),
             ),
-            Visual(VisualKind.BISON, grammar = P3_BISON_PTR, input = "x=*y", caption = "O bisão (LALR) engole a gramática dos ponteiros sem reclamar."),
-            Reveal("Qual o exemplo-gancho de 'LALR mas não SLR'? E de 'LR(1) mas não LALR'?", "S → L = R | R; L → * R | id; R → L. E: S → a A d | b B d | a B e | b A e com A → c, B → c."),
-            Callout(FIRESIDE, "SLR vs LALR, ao pé da lareira. SLR: 'Eu sou simples, todo mundo me entende.' LALR: 'E eu sou do seu tamanho, mas sei de onde cada item veio. Na gramática dos ponteiros, você travou e eu não.'"),
+            Visual(VisualKind.BISON, grammar = P3_BISON_PTR, input = "x=*y", caption = tx("lessonspart3_bisao_lalr_engole_gramatica_dos")),
+            Reveal(tx("lessonspart3_qual_exemplo_gancho_lalr_mas"), "S → L = R | R; L → * R | id; R → L. E: S → a A d | b B d | a B e | b A e com A → c, B → c."),
+            Callout(FIRESIDE, tx("lessonspart3_slr_vs_lalr_ao_pe")),
         ),
     ),
 )

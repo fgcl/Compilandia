@@ -69,6 +69,7 @@ import com.compilandia.ui.cast.ByteFigure
 import com.compilandia.ui.cast.Mood
 import com.compilandia.ui.pegboard
 import kotlin.math.sqrt
+import com.compilandia.textos.tx
 
 fun playerLevel(xp: Int): Int = sqrt(xp / 60.0).toInt() + 1
 fun xpForLevel(level: Int): Int = (level - 1) * (level - 1) * 60
@@ -99,8 +100,8 @@ fun OnboardingScreen(app: AppState) {
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Text(line.who.displayName, style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
             RichText(line.text, style = MaterialTheme.typography.bodyLarge)
-            if (asksName) OutlinedTextField(name, { name = it.take(24) }, label = { Text("Seu nome") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            BigButton(if (page < lines.lastIndex) "Continuar" else "Abrir a oficina", Modifier.fillMaxWidth()) {
+            if (asksName) OutlinedTextField(name, { name = it.take(24) }, label = { Text(tx("homescreens_seu_nome")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            BigButton(if (page < lines.lastIndex) tx("comum_continuar") else tx("homescreens_abrir_oficina"), Modifier.fillMaxWidth()) {
                 com.compilandia.ui.voice.Narrator.stop()
                 if (page < lines.lastIndex) page++ else {
                     app.learner.setName(name.trim())
@@ -135,9 +136,9 @@ fun MapScreen(app: AppState) {
                 ByteFigure(Modifier.height(70.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
-                    Text("Compilândia", style = MaterialTheme.typography.displaySmall)
-                    Text("Bancada de ${ls.name.ifBlank { "aventureiro(a)" }}", style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-                    Text("Nível $lvl · ${ls.streakDays} dia(s) seguidos", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                    Text(tx("homescreens_compilandia"), style = MaterialTheme.typography.displaySmall)
+                    Text(tx("homescreens_bancada_1", ls.name.ifBlank { "aventureiro(a)" }), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+                    Text(tx("homescreens_nivel_1_2_dia_seguidos", lvl, ls.streakDays), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
                 }
                 XpGauge(ls.xp, levelProgress)
             }
@@ -145,13 +146,13 @@ fun MapScreen(app: AppState) {
             Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 val dExam = l.daysToExam(now)
                 if (dExam != null) PaperCard(color = Palette.red.copy(alpha = 0.08f), border = Palette.red) {
-                    Text(if (dExam == 0L) "📅 A prova é HOJE!" else "📅 Prova em $dExam dia(s)", style = MaterialTheme.typography.titleSmall, color = Palette.red)
+                    Text(if (dExam == 0L) tx("homescreens_prova_hoje") else tx("homescreens_prova_em_1_dia", dExam), style = MaterialTheme.typography.titleSmall, color = Palette.red)
                     val plan = remember(ls) { l.examPlan(now) }
                     RichText(
                         when {
-                            dExam <= 1 -> "Modo véspera: revisão relâmpago e só os pontos fracos. Durma bem — o sono consolida a memória!"
-                            dExam <= 7 -> "Faça ${if (dExam <= 3) 3 else 2} missões intercaladas por dia. Foco: **${plan.take(3).joinToString { it.title }}**."
-                            else -> "Ritmo tranquilo: 1 missão por dia + revisões que aparecerem. Pontos a reforçar: **${plan.take(3).joinToString { it.title }}**."
+                            dExam <= 1 -> tx("homescreens_modo_vespera_revisao_relampago_so")
+                            dExam <= 7 -> tx("homescreens_faca_1_missoes_intercaladas_por", if (dExam <= 3) 3 else 2, plan.take(3).joinToString { it.title })
+                            else -> tx("homescreens_ritmo_tranquilo_1_missao_por", plan.take(3).joinToString { it.title })
                         }, style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -161,23 +162,28 @@ fun MapScreen(app: AppState) {
                         openRegion = r
                     }
                 }
-                Drawer("Guia do Trabalho Prático") { app.go(Screen.Guide) }
+                // A5: a série em C e o Guia do TP numa trilha só, aberta depois da Floresta Léxica.
+                val compiladorAberto = remember(ls) { com.compilandia.content.SeuCompilador.aberta(l) }
+                Drawer(
+                    tx("seucompilador_titulo"), note = if (compiladorAberto) null else tx("seucompilador_trancado"), dimmed = !compiladorAberto,
+                ) {
+                    if (compiladorAberto) app.go(Screen.SeuCompilador) else app.say(tx("seucompilador_trancado"))
+                }
             }
         }
         // Barra fixa: as ferramentas ficam sempre à mão, sem rolar as gavetas.
         Column(Modifier.fillMaxWidth().background(Palette.paperDark).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                ToolTag(if (due.isEmpty()) "Revisão" else "Revisar ${due.size}", highlighted = due.isNotEmpty()) {
+                ToolTag(if (due.isEmpty()) tx("homescreens_revisao") else tx("comum_revisar_1", due.size), highlighted = due.isNotEmpty()) {
                     val skills = due.map { it.first }.ifEmpty { Skill.entries.filter { l.skill(it).attempts > 0 }.ifEmpty { listOf(Skill.PHASES) } }
                     app.go(Screen.Flashcards(skills))
                 }
-                ToolTag("Laboratório") { app.go(Screen.Lab) }
-                ToolTag("Painel") { app.go(Screen.Brain) }
-                ToolTag("Diário") { app.go(Screen.Journal) }
+                ToolTag(tx("comum_laboratorio")) { app.go(Screen.Lab) }
+                ToolTag(tx("comum_painel")) { app.go(Screen.Brain) }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 BigButton(
-                    "Missão: 4 desafios", Modifier.weight(1f),
+                    tx("homescreens_missao_4_desafios"), Modifier.weight(1f),
                     leading = { BoltIcon(Palette.on(Palette.action)) },
                 ) {
                     val mix = l.dailyMix(nowMs(), 4)
@@ -200,8 +206,8 @@ private fun RegionDrawer(app: AppState, r: Region, number: Int, open: Boolean, r
     val bossDown = r.name in app.ls.bossesDefeated
     if (open) {
         val cor = Palette.region(r)
-        OpenDrawer("$number ${r.title}", "entrar →", onClick = { com.compilandia.ui.fx.Fx.porta(r.title, cor) { app.go(Screen.RegionView(r)) } }) {
-            DrawerBin("$percent%", if (recommended) "próxima" else "domínio")
+        OpenDrawer("$number ${r.title}", tx("homescreens_entrar"), onClick = { com.compilandia.ui.fx.Fx.porta(r.title, cor) { app.go(Screen.RegionView(r)) } }) {
+            DrawerBin("$percent%", if (recommended) tx("homescreens_proxima") else tx("comum_dominio"))
             DrawerBin("${skills.size}", "assuntos")
             DrawerBin("${GameId.entries.count { g -> g != GameId.FLASHCARDS && g.skills.any { it in skills } }}", "jogos")
         }
@@ -223,105 +229,57 @@ fun RegionScreen(app: AppState, region: Region) {
     val ls = app.ls
     val color = Palette.region(region)
     val skills = Skill.entries.filter { it.region == region }
-    val nextHere = remember(ls) { skills.firstOrNull { it.name !in ls.episodesSeen } ?: skills.minByOrNull { l.mastery(it) } }
+    // O destaque vai para o primeiro assunto com trilha por terminar.
+    val nextHere = remember(ls) { skills.firstOrNull { !com.compilandia.content.Trilha.completa(l, it) } }
     Column(Modifier.fillMaxSize()) {
         Header(region.title, region.tagline, color)
         com.compilandia.ui.SceneBanner(com.compilandia.ui.regionArt(region), 110) {
             ByteFigure(Modifier.align(Alignment.BottomStart).padding(start = 16.dp).height(96.dp), lookX = 0.6f)
         }
-        var temporada by remember { mutableStateOf(Temporada.BASICO) }
-        // Só aparece a temporada que tem aula aqui. Com cinco etiquetas, a fila rola de lado.
-        val temporadas = remember(region) {
-            listOf(Temporada.BASICO) + listOf(Temporada.PEGADINHA, Temporada.PRATICA, Temporada.TABELAS, Temporada.EM_C).filter { Episodes.daRegiao(region, it).isNotEmpty() }
-        }
-        Row(
-            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 12.dp).padding(top = 10.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            for (t in temporadas) ToolTag(t.titulo, highlighted = t == temporada) { temporada = t; Sound.play(Sfx.CLICK) }
-        }
         Column(Modifier.verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (temporada != Temporada.BASICO) {
-                val lista = Episodes.daRegiao(region, temporada)
-                if (lista.isEmpty()) Text("Esta região ainda não tem aulas nesta temporada.", color = Palette.inkSoft, style = MaterialTheme.typography.bodyMedium)
-                var proxima = true
-                for (e in lista) {
-                    val visto = e.id in ls.episodesSeen
-                    AulaRow(app, e, destaque = !visto && proxima, visto)
-                    if (!visto) proxima = false
-                }
-                VSpace(24)
-                return@Column
-            }
             for (s in skills) SkillRow(app, s, color, s == nextHere)
             if (region == com.compilandia.learning.Region.OFICINA_BISON) {
                 PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.teal) {
-                    Text("Laboratório Bison", style = MaterialTheme.typography.titleSmall)
-                    Text("Mexa no .y, arraste a precedência e rode passo a passo.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-                    BigButton("Abrir o laboratório", Modifier.fillMaxWidth(), color = Palette.teal) { app.go(Screen.LabBison()) }
+                    Text(tx("comum_laboratorio_bison"), style = MaterialTheme.typography.titleSmall)
+                    Text(tx("homescreens_mexa_no_y_arraste_precedencia"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                    BigButton(tx("homescreens_abrir_laboratorio"), Modifier.fillMaxWidth(), color = Palette.teal) { app.go(Screen.LabBison()) }
                 }
             }
             val boss = com.compilandia.learning.Boss.of(region)
             val beaten = region.name in ls.bossesDefeated
             PaperCard(Modifier.fillMaxWidth(), color = Palette.white, border = Palette.yellow) {
-                Text(if (beaten) "Máquina religada" else "Chefão: ${boss.bossName}", style = MaterialTheme.typography.titleSmall)
-                BigButton(if (beaten) "Religar de novo" else "Enfrentar", Modifier.fillMaxWidth(), color = Palette.hazard) { app.go(Screen.BossFight(region)) }
+                Text(if (beaten) tx("comum_maquina_religada") else tx("homescreens_chefao_1", boss.bossName), style = MaterialTheme.typography.titleSmall)
+                BigButton(if (beaten) tx("homescreens_religar_novo") else tx("homescreens_enfrentar"), Modifier.fillMaxWidth(), color = Palette.hazard) { app.go(Screen.BossFight(region)) }
             }
             VSpace(24)
         }
     }
 }
 
-/** Uma aula da temporada: miniatura de verdade, título, duração e o que ela pede. */
-@Composable
-private fun AulaRow(app: AppState, e: com.compilandia.content.Episode, destaque: Boolean, visto: Boolean) {
-    val shot = e.passos[e.passos.size / 2].shot
-    PaperCard(Modifier.fillMaxWidth().clickable { app.go(Screen.Episode(e.skill, id = e.id)) }, color = if (destaque) Palette.hazard.copy(alpha = 0.14f) else Palette.white, border = if (destaque) Palette.hazard else Palette.ink) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(96.dp, 74.dp).clip(RoundedCornerShape(7.dp)).background(Palette.codeBg)) {
-                com.compilandia.ui.motion.MotionStage(shot, Modifier.fillMaxSize().padding(3.dp))
-            }
-            Spacer(Modifier.width(10.dp))
-            Column(Modifier.weight(1f)) {
-                Text(e.title, style = MaterialTheme.typography.titleSmall)
-                val tipo = when {
-                    e.passos.any { it.brinquedo != null } -> "você pilota"
-                    e.passos.any { it.ask != null } -> "você prevê"
-                    else -> "assista"
-                }
-                Text("${e.segundos} s · $tipo", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-            }
-            if (visto) Text("visto", color = Palette.green, style = MaterialTheme.typography.labelMedium)
-        }
-    }
-}
-
+/** Um assunto na região: anel de domínio, quantas etapas faltam e um botão só. Tocar no cartão abre a trilha. */
 @Composable
 private fun SkillRow(app: AppState, s: Skill, color: Color, isNext: Boolean) {
     val l = app.learner
-    val st = l.skill(s)
-    val seen = s.name in app.ls.episodesSeen
-    var expanded by remember { mutableStateOf(false) }
-    PaperCard(Modifier.fillMaxWidth(), color = if (isNext) Palette.hazard.copy(alpha = 0.14f) else Palette.white, border = if (isNext) Palette.hazard else Palette.ink) {
+    val ls = app.ls
+    val passos = remember(s) { com.compilandia.content.Trilha.passos(s) }
+    val feitas = remember(ls) { com.compilandia.content.Trilha.feitas(l, s) }
+    val proximo = remember(ls) { com.compilandia.content.Trilha.proximo(l, s) }
+    PaperCard(
+        Modifier.fillMaxWidth().clickable { app.go(Screen.Trilha(s)) },
+        color = if (isNext) Palette.hazard.copy(alpha = 0.14f) else Palette.white, border = if (isNext) Palette.hazard else Palette.ink,
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            MasteryRing(st.mastery, color)
+            MasteryRing(l.mastery(s), color)
             Spacer(Modifier.width(10.dp))
-            Text(s.title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-            Text(if (expanded) "menos" else "mais", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { expanded = !expanded }.padding(6.dp))
-        }
-        BigButton(
-            if (seen) "Praticar" else "Aula animada", Modifier.fillMaxWidth(), color = if (isNext) Palette.action else Palette.drawer, small = true,
-        ) {
-            if (seen) app.go(Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs()))
-            else app.go(Screen.Episode(s))
-        }
-        if (expanded) {
-            ChipRow {
-                Chip("Aula animada", color = color) { app.go(Screen.Episode(s)) }
-                for (style in Library.stylesFor(s)) Chip(style.title, color = color, selected = style.name in st.lessonsSeen) { app.go(Screen.Lesson(s, style)) }
+            Column(Modifier.weight(1f)) {
+                Text(s.title, style = MaterialTheme.typography.titleSmall)
+                Text(tx("trilha_etapas_feitas", feitas, passos.size), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
             }
-            ChipRow { for (g in GameId.forSkill(s)) Chip(g.title, color = Palette.orange) { app.go(Screen.Play(s, g, l.chooseLevel(s, nowMs()), seed = nowMs())) } }
-            Text("Memória: ${(st.memory.retrievability(nowMs()) * 100).toInt()}%", style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+        }
+        if (proximo != null) {
+            BigButton(tx("trilha_continuar", proximo.titulo), Modifier.fillMaxWidth(), color = if (isNext) Palette.action else Palette.drawer, small = true) {
+                abrirPasso(app, s, proximo)
+            }
         }
     }
 }

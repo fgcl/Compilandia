@@ -261,6 +261,7 @@ fun RichText(text: String, modifier: Modifier = Modifier, style: androidx.compos
     val mono = LocalFonts.current.mono
     Text(
         buildAnnotatedString {
+            val codigo = mutableListOf<IntRange>()
             var i = 0
             while (i < text.length) {
                 when {
@@ -273,12 +274,16 @@ fun RichText(text: String, modifier: Modifier = Modifier, style: androidx.compos
                     text[i] == '`' -> {
                         val end = text.indexOf('`', i + 1)
                         if (end < 0) { append(text.substring(i)); break }
+                        val de = length
                         withStyle(SpanStyle(fontFamily = mono, background = Palette.paperDark, color = Palette.purple)) { append(text.substring(i + 1, end)) }
+                        codigo += de until length
                         i = end + 1
                     }
                     else -> { append(text[i]); i++ }
                 }
             }
+            // A8: termos do glossário viram links que abrem o balão.
+            marcarGlossario(toString(), codigo)
         },
         style = style,
         color = color,

@@ -95,6 +95,13 @@ class RenderSmokeTest {
         shot("14_guia") { App(stateWith(Screen.Guide)) }
         if (Library.guide.isNotEmpty()) shot("15_guia_cap1") { App(stateWith(Screen.GuideChapter(Library.guide.first().number))) }
         shot("16_regiao_floresta") { App(stateWith(Screen.RegionView(Region.FLORESTA_LEXICA))) }
+        shot("17_trilha_follow") { App(stateWith(Screen.Trilha(Skill.FOLLOW))) }
+        shot("18_seu_compilador") { App(stateWith(Screen.SeuCompilador)) }
+        shot("19_fazer_com_ajuda") { App(stateWith(Screen.FazerComAjuda(Skill.FIRST, semente = 42))) }
+        shot("19_fazer_com_ajuda_tac") { App(stateWith(Screen.FazerComAjuda(Skill.TAC, semente = 42))) }
+        com.compilandia.ui.GlossarioUi.aberto = com.compilandia.content.Glossario.termos.first { it.id == "follow" }
+        shot("52_glossario") { App(stateWith(Screen.Episode(Skill.FOLLOW, abertura = false))) }
+        com.compilandia.ui.GlossarioUi.aberto = null
         shot("20_album_vazio") { App(stateWith(Screen.Album)) }
         shot("20_album") {
             val st = stateWith(Screen.Album)
@@ -124,7 +131,7 @@ class RenderSmokeTest {
 
     /** Fotografa todos os passos de todos os episódios: nenhum pode quebrar. */
     @Test fun everyEpisodeStep() {
-        val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY)
+        val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY) + com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
         // EPISODIOS=TABELAS,EM_C renderiza só essas temporadas (ou ids que contenham o texto): bom para olhar uma aula nova.
         val filtro = System.getenv("EPISODIOS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
         for (e in com.compilandia.content.episodes.Episodes.all + com.compilandia.content.episodes.Episodes.clipes) {

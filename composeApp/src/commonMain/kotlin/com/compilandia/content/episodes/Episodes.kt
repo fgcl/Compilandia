@@ -8,8 +8,8 @@ import com.compilandia.learning.Skill
 
 /** As aulas animadas. Cada assunto tem o básico; as pegadinhas, a prática e os clipes vêm por cima. */
 object Episodes {
-    val basicos: List<Episode> by lazy { lexicos + gramaticas + topDown + bottomUp + semantica + backend }
-    val novos: List<Episode> by lazy { pegadinhasFrente + pegadinhasMeio + pegadinhasFim + praticas + tabelas + serieEmC }
+    val basicos: List<Episode> by lazy { aulasLongas + aulasLongas2 + lexicos + gramaticas + topDown + bottomUp + semantica + backend }
+    val novos: List<Episode> by lazy { pegadinhasFrente + pegadinhasMeio + pegadinhasFim + pegadinhasNovas + praticas + tabelas + serieEmC }
     val clipes: List<Episode> by lazy { clipesTodos }
 
     /** Todas as aulas de verdade. Clipe fica de fora: ele mora no feed. */

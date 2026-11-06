@@ -4,6 +4,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import kotlinx.coroutines.launch
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -60,6 +62,7 @@ import com.compilandia.ui.motion.MotionStage
 import com.compilandia.ui.motion.STAGE_W
 import com.compilandia.ui.pegboard
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 const val TIMELINE_TAG = "linha-do-tempo"
 
@@ -85,9 +88,13 @@ fun FalaDigitada(texto: String, modifier: Modifier = Modifier, style: androidx.c
     }, modifier, style = style, color = Palette.ink)
 }
 
-/** O palco com a linha do tempo: arrasta para voltar, para, acelera e pede para prever. */
+/**
+ * O palco com a linha do tempo: arrasta para voltar, para, acelera e pede para prever.
+ * Modo guiado (A3): [exigir] diz em quais passos a pessoa responde; nos outros passos com pergunta, o Byte resolve e mostra o porquê.
+ * [onFim] avisa quando a simulação chega ao último passo.
+ */
 @Composable
-fun SimPlayer(sim: Sim, modifier: Modifier = Modifier, comecaEm: Int = 0) {
+fun SimPlayer(sim: Sim, modifier: Modifier = Modifier, comecaEm: Int = 0, exigir: Set<Int>? = null, onFim: () -> Unit = {}) {
     var k by remember(sim) { mutableIntStateOf(comecaEm.coerceIn(0, sim.passos.lastIndex)) }
     var tocando by remember(sim) { mutableStateOf(comecaEm == 0) }
     var veloc by remember { mutableFloatStateOf(1f) }
@@ -97,14 +104,24 @@ fun SimPlayer(sim: Sim, modifier: Modifier = Modifier, comecaEm: Int = 0) {
     var hop by remember { mutableIntStateOf(0) }
 
     val passo = sim.passos[k]
-    val ask = passo.ask.takeIf { prever }
+    val guiado = exigir != null
+    val ask = passo.ask.takeIf { if (guiado) k in exigir!! else prever }
+    // Passo resolvido pelo Byte no modo guiado: mostra a pergunta, a resposta e o porquê.
+    val resolvido = if (guiado && ask == null) passo.ask else null
     val perguntando = ask != null && resposta == null
+    var dicas by remember(sim, k) { mutableIntStateOf(0) }
+    val voz = androidx.compose.runtime.rememberCoroutineScope()
+    var avisouFim by remember(sim) { mutableStateOf(false) }
+    LaunchedEffect(sim, k, perguntando) {
+        if (k >= sim.passos.lastIndex && !perguntando && !avisouFim) { delay(900); avisouFim = true; onFim() }
+    }
     val shot = if (perguntando && k > 0) sim.passos[k - 1].shot else passo.shot
 
     LaunchedEffect(sim, k, tocando, perguntando, veloc) {
         if (!tocando || perguntando) return@LaunchedEffect
         if (k >= sim.passos.lastIndex) { tocando = false; return@LaunchedEffect }
-        delay(((1500 + passo.say.length * 36) / veloc).toLong())
+        val extra = if (resolvido != null) resolvido.porque.length * 40 + 1800 else 0
+        delay(((1500 + passo.say.length * 36 + extra) / veloc).toLong())
         k++
     }
     LaunchedEffect(k) { if (passo.erro) Juice.wrong() }
@@ -138,22 +155,43 @@ fun SimPlayer(sim: Sim, modifier: Modifier = Modifier, comecaEm: Int = 0) {
                 Etiqueta(if (veloc == 1f) "1x" else if (veloc == 2f) "2x" else "0,5x", false) {
                     veloc = when (veloc) { 1f -> 2f; 2f -> 0.5f; else -> 1f }
                 }
-                Etiqueta("Prever", prever) { prever = !prever; Juice.click() }
+                if (!guiado) Etiqueta(tx("simplayer_prever"), prever) { prever = !prever; Juice.click() }
+                if (guiado && perguntando) Etiqueta(tx("guiado_dica"), dicas > 0) { dicas = minOf(dicas + 1, 2); Juice.click() }
                 Spacer(Modifier.weight(1f))
                 Text("${k + 1}/${sim.passos.size}", style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
             }
-            Box(Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Box(
+                Modifier.fillMaxWidth().heightIn(min = 72.dp).then(
+                    // Modo guiado: pergunta e resposta num cartão próprio, com letra maior.
+                    if (guiado && (ask != null || resolvido != null)) Modifier.clip(RoundedCornerShape(10.dp)).background(Palette.white)
+                        .border(2.dp, if (perguntando) Palette.hazard else Palette.green, RoundedCornerShape(10.dp)).padding(12.dp)
+                    else Modifier,
+                ),
+            ) {
                 if (ask != null) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(if (perguntando) ask.pergunta else ask.porque, style = MaterialTheme.typography.bodyLarge)
-                        if (perguntando) Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(if (perguntando) ask.pergunta else ask.porque, style = if (guiado) MaterialTheme.typography.titleMedium else MaterialTheme.typography.bodyLarge)
+                        // Dica em degraus: o primeiro tira uma opção errada; o segundo mostra o porquê.
+                        if (perguntando && dicas >= 2) Text(ask.porque, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                        val tirada = if (dicas >= 1) ask.opcoes.indices.firstOrNull { it != ask.certa } else null
+                        fun responde(i: Int) {
+                            resposta = i
+                            if (i == ask.certa) { Sound.play(Sfx.CORRECT); hop++ } else { erros++; Juice.wrong() }
+                            if (guiado) voz.launch { com.compilandia.ui.voice.Narrator.say(if (i == ask.certa) com.compilandia.content.Falas.acerto.random() else com.compilandia.content.Falas.erro.random()) }
+                        }
+                        if (perguntando && guiado) Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            ask.opcoes.forEachIndexed { i, o -> if (i != tirada) BigButton(o, Modifier.fillMaxWidth(), color = Palette.drawer) { responde(i) } }
+                        } else if (perguntando) Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             ask.opcoes.forEachIndexed { i, o ->
-                                BigButton(o, Modifier.weight(1f), small = true, color = Palette.drawer) {
-                                    resposta = i
-                                    if (i == ask.certa) { Sound.play(Sfx.CORRECT); hop++ } else { erros++; Juice.wrong() }
-                                }
+                                if (i == tirada) return@forEachIndexed
+                                BigButton(o, Modifier.weight(1f), small = true, color = Palette.drawer) { responde(i) }
                             }
                         }
+                    }
+                } else if (resolvido != null) {
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        Text(tx("guiado_byte_resolve", resolvido.pergunta, resolvido.opcoes[resolvido.certa]), style = MaterialTheme.typography.titleMedium)
+                        Text(resolvido.porque, style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
                     }
                 } else {
                     FalaDigitada(passo.say)

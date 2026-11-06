@@ -9,6 +9,9 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
 }
 
+// Textos do jogo: textos/<idioma>/*.xml viram mapas Kotlin. O código lê com tx("chave").
+apply(from = "../gradle/textos.gradle.kts")
+
 kotlin {
     androidTarget {
         compilerOptions { jvmTarget.set(JvmTarget.JVM_17) }
@@ -30,6 +33,7 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
+        commonMain { kotlin.srcDir(tasks.named("gerarTextos")) }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)

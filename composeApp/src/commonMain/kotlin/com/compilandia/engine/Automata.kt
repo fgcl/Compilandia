@@ -1,6 +1,7 @@
 package com.compilandia.engine
 
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /**
  * Expressões regulares → AFN (Thompson) → AFD (subconjuntos) → AFD mínimo.
@@ -22,9 +23,9 @@ sealed class Regex0 {
             fun atom(): Regex0 {
                 val c = peek() ?: error("Expressão incompleta")
                 return when (c) {
-                    '(' -> { pos++; val r = if (peek() == ')') Empty else alt(); require(peek() == ')') { "Falta ')'" }; pos++; r }
+                    '(' -> { pos++; val r = if (peek() == ')') Empty else alt(); require(peek() == ')') { tx("comum_falta") }; pos++; r }
                     'ε' -> { pos++; Empty }
-                    else -> { require(c !in ")|*+?") { "Símbolo inesperado '$c'" }; pos++; Ch(c) }
+                    else -> { require(c !in ")|*+?") { tx("automata_simbolo_inesperado_1", c) }; pos++; Ch(c) }
                 }
             }
             fun post(): Regex0 {
@@ -49,7 +50,7 @@ sealed class Regex0 {
                 r
             }
             val r = alt()
-            require(pos == s.length) { "Sobrou '${s.substring(pos)}'" }
+            require(pos == s.length) { tx("comum_sobrou_1", s.substring(pos)) }
             return r
         }
     }
@@ -211,15 +212,15 @@ data class DFA(
 object RegexBank {
     data class Entry(val regex: String, val description: String)
     val entries = listOf(
-        Entry("ab*", "um 'a' seguido de quantos 'b' quiser"),
-        Entry("(a|b)*abb", "termina em abb (exemplo do Livro do Dragão)"),
-        Entry("a(a|b)*b", "começa com a e termina com b"),
-        Entry("(ab)*", "repetições de 'ab'"),
-        Entry("0|1(0|1)*", "binários sem zeros à esquerda"),
-        Entry("(0|1)*1", "binários ímpares"),
-        Entry("a*b*", "a's antes, b's depois"),
-        Entry("(a|b)*a(a|b)", "penúltimo símbolo é a"),
-        Entry("(aa)*", "quantidade par de a's"),
-        Entry("x(y|z)+", "x seguido de pelo menos um y ou z"),
+        Entry("ab*", tx("automata_seguido_quantos_b_quiser")),
+        Entry("(a|b)*abb", tx("automata_termina_em_abb_exemplo_livro")),
+        Entry("a(a|b)*b", tx("automata_comeca_com_termina_com_b")),
+        Entry("(ab)*", tx("automata_repeticoes_ab")),
+        Entry("0|1(0|1)*", tx("automata_binarios_sem_zeros_esquerda")),
+        Entry("(0|1)*1", tx("automata_binarios_impares")),
+        Entry("a*b*", tx("automata_antes_b_depois")),
+        Entry("(a|b)*a(a|b)", tx("automata_penultimo_simbolo")),
+        Entry("(aa)*", tx("automata_quantidade_par")),
+        Entry("x(y|z)+", tx("automata_x_seguido_pelo_menos_y")),
     )
 }

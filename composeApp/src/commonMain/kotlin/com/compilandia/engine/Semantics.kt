@@ -1,6 +1,7 @@
 package com.compilandia.engine
 
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 enum class Type(val label: String) { INT("int"), FLOAT("float"), BOOL("bool"), ERROR("erro") }
 
@@ -39,12 +40,12 @@ object TypeChecker {
             val a = when (e.kind) {
                 Expr.Kind.NUM -> {
                     val t = if (e.text.contains('.')) Type.FLOAT else Type.INT
-                    Attr(t, e.text.toDouble(), false, "literal ${e.text} é ${t.label}")
+                    Attr(t, e.text.toDouble(), false, tx("semantics_literal_1_2", e.text, t.label))
                 }
                 Expr.Kind.VAR -> {
                     val v = env[e.text]
-                    if (v == null) Attr(Type.ERROR, null, false, "'${e.text}' não foi declarada!")
-                    else Attr(v.first, v.second, false, "busca '${e.text}' na tabela de símbolos: ${v.first.label}")
+                    if (v == null) Attr(Type.ERROR, null, false, tx("semantics_1_nao_foi_declarada", e.text))
+                    else Attr(v.first, v.second, false, tx("semantics_busca_1_na_tabela_simbolos", e.text, v.first.label))
                 }
                 Expr.Kind.BINOP -> {
                     val l = go(e.children[0]); val r = go(e.children[1])
@@ -59,33 +60,33 @@ object TypeChecker {
     }
 
     fun combine(op: String, l: Attr, r: Attr): Attr {
-        if (l.type == Type.ERROR || r.type == Type.ERROR) return Attr(Type.ERROR, null, false, "erro se propaga para cima")
+        if (l.type == Type.ERROR || r.type == Type.ERROR) return Attr(Type.ERROR, null, false, tx("semantics_erro_se_propaga_para_cima"))
         return when (op) {
             in arith -> {
-                if (l.type == Type.BOOL || r.type == Type.BOOL) return Attr(Type.ERROR, null, false, "não dá para fazer '$op' com bool")
+                if (l.type == Type.BOOL || r.type == Type.BOOL) return Attr(Type.ERROR, null, false, tx("semantics_nao_para_fazer_1_com", op))
                 val t = if (l.type == Type.FLOAT || r.type == Type.FLOAT) Type.FLOAT else Type.INT
                 val coerced = t == Type.FLOAT && (l.type == Type.INT || r.type == Type.INT)
                 val lv = l.value!!; val rv = r.value!!
                 val v = when (op) {
                     "+" -> lv + rv; "-" -> lv - rv; "*" -> lv * rv
-                    else -> if (rv == 0.0) return Attr(Type.ERROR, null, false, "divisão por zero (erro em tempo de execução)")
+                    else -> if (rv == 0.0) return Attr(Type.ERROR, null, false, tx("semantics_divisao_por_zero_erro_em"))
                     else if (t == Type.INT) (lv.toLong() / rv.toLong()).toDouble() else lv / rv
                 }
-                val why = if (coerced) "int misturado com float → converte o int (inttofloat): resultado float" else "${l.type.label} $op ${r.type.label} → ${t.label}"
+                val why = if (coerced) tx("semantics_int_misturado_com_float_converte") else "${l.type.label} $op ${r.type.label} → ${t.label}"
                 Attr(t, v, coerced, why)
             }
             in rel -> {
-                if (l.type == Type.BOOL || r.type == Type.BOOL) return Attr(Type.ERROR, null, false, "comparação '$op' exige números")
+                if (l.type == Type.BOOL || r.type == Type.BOOL) return Attr(Type.ERROR, null, false, tx("semantics_comparacao_1_exige_numeros", op))
                 val lv = l.value!!; val rv = r.value!!
                 val b = when (op) { "<" -> lv < rv; ">" -> lv > rv; "<=" -> lv <= rv; ">=" -> lv >= rv; "==" -> lv == rv; else -> lv != rv }
-                Attr(Type.BOOL, if (b) 1.0 else 0.0, false, "comparação sempre produz bool")
+                Attr(Type.BOOL, if (b) 1.0 else 0.0, false, tx("semantics_comparacao_sempre_produz_bool"))
             }
             in logic -> {
-                if (l.type != Type.BOOL || r.type != Type.BOOL) return Attr(Type.ERROR, null, false, "'$op' exige dois bool")
+                if (l.type != Type.BOOL || r.type != Type.BOOL) return Attr(Type.ERROR, null, false, tx("semantics_1_exige_dois_bool", op))
                 val b = if (op == "&&") l.value!! != 0.0 && r.value!! != 0.0 else l.value!! != 0.0 || r.value!! != 0.0
-                Attr(Type.BOOL, if (b) 1.0 else 0.0, false, "lógica entre bool → bool")
+                Attr(Type.BOOL, if (b) 1.0 else 0.0, false, tx("semantics_logica_entre_bool_bool"))
             }
-            else -> Attr(Type.ERROR, null, false, "operador desconhecido")
+            else -> Attr(Type.ERROR, null, false, tx("semantics_operador_desconhecido"))
         }
     }
 
@@ -114,7 +115,7 @@ object ExprParser {
             val t = peek() ?: error("Expressão incompleta")
             pos++
             return when {
-                t == "(" -> { val e = orExpr(); require(peek() == ")") { "Falta ')'" }; pos++; e }
+                t == "(" -> { val e = orExpr(); require(peek() == ")") { tx("comum_falta") }; pos++; e }
                 t[0].isDigit() -> Expr(id(), Expr.Kind.NUM, t)
                 t[0].isLetter() || t[0] == '_' -> Expr(id(), Expr.Kind.VAR, t)
                 else -> error("Token inesperado '$t'")
@@ -131,7 +132,7 @@ object ExprParser {
         val and = { level(setOf("&&"), rel) }
         orExpr = { level(setOf("||"), and) }
         val e = orExpr()
-        require(pos == toks.size) { "Sobrou '${toks.drop(pos).joinToString(" ")}'" }
+        require(pos == toks.size) { tx("comum_sobrou_1", toks.drop(pos).joinToString(" ")) }
         return e
     }
 }

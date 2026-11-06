@@ -50,6 +50,7 @@ import com.compilandia.ui.Screen
 import com.compilandia.ui.VSpace
 import com.compilandia.ui.screens.playerLevel
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /** O que todo minijogo recebe. */
 class GameCtx(
@@ -109,8 +110,8 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
     }
 
     Column(Modifier.fillMaxSize()) {
-        Header(s.game.title, s.skill.title + if (s.queue.isNotEmpty()) " · faltam ${s.queue.size}" else "", color) {
-            if (phase == Phase.PLAYING) Text("Dicas: $hints", color = Palette.on(color), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(end = 4.dp))
+        Header(s.game.title, s.skill.title + if (s.queue.isNotEmpty()) tx("playscreen_faltam_1", s.queue.size) else "", color) {
+            if (phase == Phase.PLAYING) Text(tx("playscreen_dicas_1", hints), color = Palette.on(color), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(end = 4.dp))
         }
         when (phase) {
             Phase.CONFIDENCE -> Column(
@@ -119,17 +120,17 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
             ) {
                 com.compilandia.ui.cast.ByteFigure(Modifier.padding(top = 10.dp).height(170.dp))
                 Text(comoJogar[s.game]?.text ?: "", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
-                Text("Você sabe isso?", style = MaterialTheme.typography.headlineSmall)
+                Text(tx("playscreen_voce_sabe_isso"), style = MaterialTheme.typography.headlineSmall)
                 val opts = listOf(
-                    Triple("Vou chutar", 0.2, Palette.red),
-                    Triple("Acho que sei", 0.6, Palette.yellow),
-                    Triple("Tenho certeza", 0.9, Palette.green),
+                    Triple(tx("playscreen_vou_chutar"), 0.2, Palette.red),
+                    Triple(tx("comum_acho_que_sei"), 0.6, Palette.yellow),
+                    Triple(tx("comum_tenho_certeza"), 0.9, Palette.green),
                 )
                 for ((label, v, c) in opts) BigButton(label, Modifier.fillMaxWidth(), color = c) {
                     confidence = v; phase = Phase.PLAYING; Sound.play(Sfx.CLICK)
                 }
                 Text(
-                    "Pular", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
+                    tx("comum_pular"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier.clickable { phase = Phase.PLAYING }.padding(6.dp),
                 )
             }
@@ -163,9 +164,9 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
                 ) {
                     val tentou = Juice.hitTick + Juice.missTick > jogadasNaDica
                     val travada = hints >= 1 && !tentou
-                    BigButton(if (hints == 0) "Dica" else "Dica ${hints + 1}", small = true, color = if (travada) Palette.drawer else Palette.yellow) {
+                    BigButton(if (hints == 0) tx("comum_dica") else tx("playscreen_dica_1", hints + 1), small = true, color = if (travada) Palette.drawer else Palette.yellow) {
                         when {
-                            travada -> app.say("Tente uma vez. A próxima dica abre depois da sua tentativa.")
+                            travada -> app.say(tx("playscreen_tente_vez_proxima_dica_abre"))
                             hints >= 2 -> app.go(Screen.Episode(s.skill, returnToGame = true))
                             else -> {
                                 hints++
@@ -174,13 +175,13 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
                             }
                         }
                     }
-                    BigButton("Não entendi", small = true, color = Palette.white, textColor = Palette.ink) {
+                    BigButton(tx("comum_nao_entendi"), small = true, color = Palette.white, textColor = Palette.ink) {
                         app.go(Screen.Episode(s.skill, returnToGame = true))
                     }
-                    BigButton("Trocar jogo", small = true, color = Palette.white, textColor = Palette.ink) {
+                    BigButton(tx("playscreen_trocar_jogo"), small = true, color = Palette.white, textColor = Palette.ink) {
                         val next = l.bored(s.skill, s.game, nowMs())
                         app.commit()
-                        app.say("Mesma matéria, outro jogo: ${next.title}")
+                        app.say(tx("playscreen_mesma_materia_outro_jogo_1", next.title))
                         app.replace(s.copy(game = next, seed = nowMs()))
                     }
                 }
@@ -203,8 +204,8 @@ private fun ResultView(app: AppState, s: Screen.Play, score: Double, confidence:
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp), horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        RewardHero(stars, xpGained, gearsGained, if (won) "Bug eliminado" else "O Bug fugiu", sequencia = sequencia, bonus = bonus)
-        if (levelNow > levelBefore) Text("Nível $levelNow", style = MaterialTheme.typography.headlineSmall, color = Palette.yellow)
+        RewardHero(stars, xpGained, gearsGained, if (won) tx("playscreen_bug_eliminado") else tx("playscreen_bug_fugiu"), sequencia = sequencia, bonus = bonus)
+        if (levelNow > levelBefore) Text(tx("playscreen_nivel_1", levelNow), style = MaterialTheme.typography.headlineSmall, color = Palette.yellow)
         val offer = remember { l.affordableItem() }
         if (offer != null) RoomOffer(offer) {
             if (l.buy(offer)) {
@@ -214,41 +215,41 @@ private fun ResultView(app: AppState, s: Screen.Play, score: Double, confidence:
             }
         }
         if (score < 0.6) {
-            BigButton("Ver a aula de novo", Modifier.fillMaxWidth(), color = Palette.region(s.skill.region)) {
+            BigButton(tx("playscreen_ver_aula_novo"), Modifier.fillMaxWidth(), color = Palette.region(s.skill.region)) {
                 app.replace(Screen.Episode(s.skill))
             }
         }
         if (s.queue.isNotEmpty()) {
             val n = s.queue.first()
-            BigButton("Próximo: ${n.skill.title}", Modifier.fillMaxWidth()) {
+            BigButton(tx("playscreen_proximo_1", n.skill.title), Modifier.fillMaxWidth()) {
                 app.replace(Screen.Play(n.skill, n.game, n.level, s.queue.drop(1), nowMs()))
             }
         } else {
-            BigButton("Coletar", Modifier.fillMaxWidth()) { app.home() }
-            BigButton("Mais um", Modifier.fillMaxWidth(), color = Palette.drawer) {
+            BigButton(tx("playscreen_coletar"), Modifier.fillMaxWidth()) { app.home() }
+            BigButton(tx("playscreen_mais"), Modifier.fillMaxWidth(), color = Palette.drawer) {
                 app.replace(s.copy(level = l.chooseLevel(s.skill, nowMs()), seed = nowMs(), game = l.chooseGame(s.skill)))
             }
         }
         Text(
-            if (details) "esconder detalhes" else "ver detalhes", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
+            if (details) tx("playscreen_esconder_detalhes") else tx("playscreen_ver_detalhes"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.clickable { details = !details }.padding(6.dp),
         )
         if (details) PaperCard(Modifier.fillMaxWidth(), color = Palette.paper) {
-            Text("${(score * 100).toInt()}% de acerto", style = MaterialTheme.typography.titleSmall)
+            Text(tx("comum_1_acerto", (score * 100).toInt()), style = MaterialTheme.typography.titleSmall)
             if (confidence != null) {
                 val gap = confidence - score
                 Text(
                     when {
-                        gap > 0.4 -> "Você achou que sabia mais do que acertou. Vale rever."
-                        gap < -0.4 -> "Você sabia mais do que imaginava."
-                        else -> "Sua confiança bateu com o resultado."
+                        gap > 0.4 -> tx("playscreen_voce_achou_que_sabia_mais")
+                        gap < -0.4 -> tx("playscreen_voce_sabia_mais_que_imaginava")
+                        else -> tx("playscreen_sua_confianca_bateu_com_resultado")
                     }, style = MaterialTheme.typography.bodySmall,
                 )
             }
-            Text("A rede previa ${(predicted * 100).toInt()}% de chance de você ir bem.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Text(tx("playscreen_rede_previa_1_chance_voce", (predicted * 100).toInt()), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             val mem = l.skill(s.skill).memory
-            Text("Próxima revisão em ~${formatDays(mem.intervalDays())}.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-            Text("Domínio: ${(l.mastery(s.skill) * 100).toInt()}%", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Text(tx("playscreen_proxima_revisao_em_1", formatDays(mem.intervalDays())), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Text(tx("playscreen_dominio_1", (l.mastery(s.skill) * 100).toInt()), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
         }
     }
     @Suppress("UNUSED_EXPRESSION") attempt
@@ -262,19 +263,19 @@ private fun RoomOffer(item: com.compilandia.learning.RoomItem, onPlace: () -> Un
             if (layer != null) androidx.compose.foundation.Image(org.jetbrains.compose.resources.painterResource(layer.art), null, Modifier.size(72.dp))
             Spacer(Modifier.width(10.dp))
             androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
-                Text("Novo na oficina", style = MaterialTheme.typography.labelMedium, color = Palette.yellow)
+                Text(tx("playscreen_novo_na_oficina"), style = MaterialTheme.typography.labelMedium, color = Palette.yellow)
                 Text(item.title, style = MaterialTheme.typography.titleMedium)
             }
         }
-        BigButton("Colocar na sala: ${item.price}", Modifier.fillMaxWidth(), color = Palette.hazard, onClick = onPlace)
+        BigButton(tx("playscreen_colocar_na_sala_1", item.price), Modifier.fillMaxWidth(), color = Palette.hazard, onClick = onPlace)
     }
 }
 
 fun formatDays(d: Double): String = when {
-    d < 1.0 / 24 -> "alguns minutos"
+    d < 1.0 / 24 -> tx("playscreen_alguns_minutos")
     d < 1.0 -> "${(d * 24).toInt().coerceAtLeast(1)} h"
     d < 2.0 -> "1 dia"
-    else -> "${d.toInt()} dias"
+    else -> tx("playscreen_1_dias", d.toInt())
 }
 
 /** Despacha para o minijogo certo. */
@@ -310,7 +311,7 @@ fun GameHost(game: GameId, ctx: GameCtx) {
         GameId.REG_COLORING -> RegColoringGame(ctx)
         GameId.BRANCH_MAZE -> BranchMazeGame(ctx)
         GameId.AUTOMATON_FACTORY -> AutomatonFactoryGame(ctx)
-        GameId.FLASHCARDS -> Text("Use a Revisão Relâmpago no mapa.")
+        GameId.FLASHCARDS -> Text(tx("playscreen_use_revisao_relampago_no_mapa"))
     }
 }
 
@@ -320,7 +321,7 @@ fun Rounds(ctx: GameCtx, total: Int, content: @Composable (round: Int, done: (Do
     var round by remember { mutableIntStateOf(0) }
     val scores = remember { mutableListOf<Double>() }
     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text("Rodada ${round + 1}/$total", style = MaterialTheme.typography.labelLarge)
+        Text(tx("playscreen_rodada_1_2", round + 1, total), style = MaterialTheme.typography.labelLarge)
         Spacer(Modifier.weight(1f))
         for (i in 0 until total) Box(
             Modifier.padding(2.dp).clip(RoundedCornerShape(50)).background(
@@ -343,8 +344,8 @@ fun Rounds(ctx: GameCtx, total: Int, content: @Composable (round: Int, done: (Do
 /** Barra inferior padrão de "conferir / próxima" dentro de um jogo. */
 @Composable
 fun CheckOrNext(checked: Boolean, canCheck: Boolean = true, onCheck: () -> Unit, onNext: () -> Unit) {
-    if (!checked) BigButton("Conferir ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = canCheck) { onCheck() }
-    else BigButton("Continuar ▶", Modifier.fillMaxWidth(), color = Palette.orange) { onNext() }
+    if (!checked) BigButton(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = canCheck) { onCheck() }
+    else BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth(), color = Palette.orange) { onNext() }
 }
 
 @Composable
@@ -353,7 +354,7 @@ fun HintBox(ctx: GameCtx, vararg hints: String) {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
         hints.take(ctx.hints).forEachIndexed { i, h -> Degrau(i + 1, h, aberto = true) }
         // O último degrau é ver resolvendo: ele mora na aula, e não na caixinha.
-        if (ctx.hints < 3) Degrau(ctx.hints + 1, if (ctx.hints + 1 >= 3) "Mostrar resolvendo. Abre depois da sua tentativa." else "Abre depois da sua tentativa.", aberto = false)
+        if (ctx.hints < 3) Degrau(ctx.hints + 1, if (ctx.hints + 1 >= 3) tx("playscreen_mostrar_resolvendo_abre_depois_sua") else tx("playscreen_abre_depois_sua_tentativa"), aberto = false)
     }
 }
 

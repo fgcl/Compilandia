@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A sala com menos botões (T2). -->
+<resources>
+    <string name="sala_jogar">Jogar</string>
+    <string name="sala_metas">Metas do dia: %1$s de %2$s</string>
+    <string name="sala_corrida">Corrida de portas</string>
+    <string name="sala_aulas_30">Aulas de 30 segundos</string>
+    <string name="sala_fechar">Fechar</string>
+    <string name="sala_proximo">%1$s, %2$s</string>
+</resources>

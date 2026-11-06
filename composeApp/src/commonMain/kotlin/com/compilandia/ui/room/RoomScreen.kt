@@ -40,6 +40,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -81,6 +82,7 @@ import com.compilandia.ui.voice.Narrator
 import com.compilandia.content.Falas
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import com.compilandia.textos.tx
 
 // Centro da plataforma de recarga e pontos de toque, como fração da largura da sala.
 private const val PAD_X = 0.542f
@@ -94,35 +96,82 @@ fun RoomScreen(app: AppState) {
     val now = remember(ls) { nowMs() }
     val next = remember(ls) { l.nextStep(now) }
     val quests = remember(ls) { l.quests(now) }
-    val due = remember(ls) { l.dueSkills(now) }
-    Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
-        RoomHud(app)
-        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds(), contentAlignment = Alignment.Center) {
-            // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
-            val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
-            RoomScene(app, side, due.size)
-        }
-        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            for (q in quests) QuestChip(q, Modifier.weight(1f))
-        }
-        Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            val hoje = now / 86_400_000L
-            ToolTag("Desafio", highlighted = ls.desafioDia != hoje) { app.go(Screen.Desafio) }
-            ToolTag("Corrida") { app.go(Screen.Corrida) }
-            ToolTag("Álbum") { app.go(Screen.Album) }
-            ToolTag("30 s") { app.go(Screen.Feed) }
-        }
-        Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
-            Text("Próximo", style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-            Text(
-                next.skill.title + if (next.episode) ", aula animada" else ", ${next.game.title}",
-                style = MaterialTheme.typography.titleMedium, maxLines = 1,
-            )
-            Spacer(Modifier.height(8.dp))
-            BigButton("Continuar", Modifier.fillMaxWidth()) {
-                if (next.episode) app.go(Screen.Episode(next.skill))
-                else app.go(Screen.Play(next.skill, next.game, next.level, seed = nowMs()))
+    var gaveta by remember { mutableStateOf(false) }
+    var metasAbertas by remember { mutableStateOf(false) }
+    Box(Modifier.fillMaxSize()) {
+        Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
+            RoomHud(app)
+            BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds(), contentAlignment = Alignment.Center) {
+                // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
+                val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
+                RoomScene(app, side)
             }
+            // T2: as três metas viram um anel; o detalhe abre ao toque.
+            val cumpridas = quests.count { it.progress >= 1f }
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Row(
+                    Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).clickable { metasAbertas = !metasAbertas }.padding(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(26.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+                }
+                ToolTag(tx("sala_jogar"), highlighted = ls.desafioDia != now / 86_400_000L) { gaveta = true }
+            }
+            if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                for (q in quests) QuestChip(q, Modifier.weight(1f))
+            }
+            Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
+                // O Continuar segue a trilha do assunto que o modelo do aluno escolheu.
+                val passo = remember(ls) { com.compilandia.content.Trilha.proximo(l, next.skill, now) }
+                Text(tx("comum_proximo"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+                Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                Spacer(Modifier.height(8.dp))
+                BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
+                    if (passo != null) com.compilandia.ui.screens.abrirPasso(app, next.skill, passo)
+                    else app.go(Screen.Play(next.skill, next.game, next.level, seed = nowMs()))
+                }
+            }
+        }
+        if (gaveta) GavetaJogar(app, now) { gaveta = false }
+    }
+}
+
+/** Anel das metas do dia: enche conforme a média das três. */
+@Composable
+private fun MetasAnel(progresso: Float, modifier: Modifier) {
+    val trilho = Palette.paperDark
+    val cor = if (progresso >= 1f) Palette.green else Palette.hazard
+    androidx.compose.foundation.Canvas(modifier) {
+        val traco = size.minDimension * 0.18f
+        drawArc(trilho, 0f, 360f, false, style = Stroke(traco))
+        drawArc(cor, -90f, 360f * progresso, false, style = Stroke(traco, cap = androidx.compose.ui.graphics.StrokeCap.Round))
+    }
+}
+
+/** A gaveta Jogar: o que não é a trilha fica aqui, a um toque. */
+@Composable
+private fun GavetaJogar(app: AppState, now: Long, onFechar: () -> Unit) {
+    val hoje = now / 86_400_000L
+    Box(Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.55f)).clickable(remember { MutableInteractionSource() }, null) { onFechar() }) {
+        Column(
+            Modifier.align(Alignment.BottomCenter).fillMaxWidth().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                .background(Palette.paper).clickable(remember { MutableInteractionSource() }, null) {}.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(tx("sala_jogar"), style = MaterialTheme.typography.headlineSmall)
+            BigButton(tx("desafioscreen_desafio_dia"), Modifier.fillMaxWidth(), color = if (app.ls.desafioDia != hoje) Palette.hazard else Palette.drawer, small = true) { onFechar(); app.go(Screen.Desafio) }
+            BigButton(tx("sala_corrida"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Corrida) }
+            BigButton(tx("albumscreen_album_bugs"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Album) }
+            BigButton(tx("sala_aulas_30"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Feed) }
+            Text(
+                tx("sala_fechar"), color = Palette.inkSoft, style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.align(Alignment.CenterHorizontally).clickable { onFechar() }.padding(8.dp),
+            )
         }
     }
 }
@@ -136,7 +185,7 @@ private fun RoomHud(app: AppState) {
     ) {
         Flame(Modifier.size(20.dp, 24.dp))
         HudText("${ls.streakDays}")
-        Image(painterResource(Res.drawable.prop_gear), "Engrenagens", Modifier.size(24.dp))
+        Image(painterResource(Res.drawable.prop_gear), tx("comum_engrenagens"), Modifier.size(24.dp))
         HudText("${ls.gears}")
         Spacer(Modifier.weight(1f))
         Ring((ls.dailyXp.toFloat() / DAILY_XP_GOAL).coerceIn(0f, 1f), Modifier.size(32.dp))
@@ -192,14 +241,14 @@ private fun QuestChip(q: Quest, modifier: Modifier) {
 }
 
 @Composable
-private fun RoomScene(app: AppState, side: Dp, dueCount: Int) {
+private fun RoomScene(app: AppState, side: Dp) {
     val l = app.learner
     val ls = app.ls
     val scope = rememberCoroutineScope()
     var hop by remember { mutableIntStateOf(0) }
     val nextGhosts = remember(ls) { RoomItem.entries.filter { !l.owns(it) }.take(3) }
     Box(Modifier.requiredSize(side)) {
-        Image(painterResource(Res.drawable.room_base), "Oficina do Byte", Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
+        Image(painterResource(Res.drawable.room_base), tx("roomscreen_oficina_byte"), Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
         for ((id, layer) in roomLayers) {
             val item = RoomItem.entries.firstOrNull { it.id == id } ?: continue
             when {
@@ -229,14 +278,9 @@ private fun RoomScene(app: AppState, side: Dp, dueCount: Int) {
             mood = if (ls.streakDays >= 2) Mood.HAPPY else Mood.NEUTRAL, hop = hop,
         )
         com.compilandia.ui.fx.SalaViva(app, side)
-        Pin(side, 0.62f, 0.27f, "Mapa") { app.go(Screen.Map) }
-        Pin(side, 0.27f, 0.40f, "Laboratório") { app.go(Screen.Lab) }
-        Pin(side, 0.16f, 0.30f, "Painel") { app.go(Screen.Brain) }
-        Pin(side, 0.68f, 0.13f, "Diário") { app.go(Screen.Journal) }
-        Pin(side, 0.61f, 0.86f, "Loja") { app.go(Screen.Shop) }
-        if (dueCount > 0) Pin(side, 0.16f, 0.66f, "Revisar $dueCount") {
-            app.go(Screen.Flashcards(l.dueSkills(nowMs()).map { it.first }))
-        }
+        Pin(side, 0.62f, 0.27f, tx("roomscreen_mapa")) { app.go(Screen.Map) }
+        Pin(side, 0.27f, 0.40f, tx("comum_laboratorio")) { app.go(Screen.Lab) }
+        Pin(side, 0.61f, 0.86f, tx("roomscreen_loja")) { app.go(Screen.Shop) }
     }
 }
 
@@ -293,15 +337,15 @@ fun ShopScreen(app: AppState) {
     val l = app.learner
     val ls = app.ls
     Column(Modifier.fillMaxSize().background(Palette.paper)) {
-        Header("Loja da oficina", "Você tem ${ls.gears} engrenagens", Palette.drawer)
+        Header(tx("roomscreen_loja_oficina"), tx("roomscreen_voce_tem_1_engrenagens", ls.gears), Palette.drawer)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             PaperCard(Modifier.fillMaxWidth(), border = Palette.orange) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Flame(Modifier.size(24.dp, 28.dp))
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
-                        Text("Trava da sequência", style = MaterialTheme.typography.titleSmall)
-                        Text("Guarda sua sequência se faltar um dia. Você tem ${ls.streakFreezes}.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                        Text(tx("roomscreen_trava_sequencia"), style = MaterialTheme.typography.titleSmall)
+                        Text(tx("roomscreen_guarda_sua_sequencia_se_faltar", ls.streakFreezes), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
                     }
                     BigButton("$FREEZE_PRICE", small = true, enabled = ls.gears >= FREEZE_PRICE, color = Palette.hazard) {
                         if (l.buyFreeze()) { app.commit(); Sound.play(Sfx.STAR) }
@@ -316,7 +360,7 @@ fun ShopScreen(app: AppState) {
                         if (layer != null) Image(painterResource(layer.art), null, Modifier.size(56.dp), contentScale = ContentScale.Fit)
                         Spacer(Modifier.width(10.dp))
                         Text(item.title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
-                        if (owned) Text("na sala", color = Palette.green, style = MaterialTheme.typography.labelMedium)
+                        if (owned) Text(tx("roomscreen_na_sala"), color = Palette.green, style = MaterialTheme.typography.labelMedium)
                         else BigButton("${item.price}", small = true, enabled = ls.gears >= item.price, color = Palette.hazard) {
                             if (l.buy(item)) {
                                 app.justBought = item.id

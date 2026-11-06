@@ -23,6 +23,7 @@ import com.compilandia.ui.AppState
 import com.compilandia.ui.Header
 import com.compilandia.ui.Palette
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /** A mesma ideia da aula, com um exemplo novo que o motor acabou de gerar. */
 @Composable
@@ -32,7 +33,7 @@ fun ExemploScreen(app: AppState, skill: Skill) {
     Column(Modifier.fillMaxSize()) {
         Header(sim?.titulo ?: skill.title, null, Palette.region(skill.region)) {
             Box(Modifier.clip(RoundedCornerShape(8.dp)).clickable { n++ }.padding(horizontal = 8.dp, vertical = 6.dp)) {
-                Text("Outro", color = Palette.on(Palette.region(skill.region)), style = MaterialTheme.typography.labelMedium)
+                Text(tx("exemploscreen_outro"), color = Palette.on(Palette.region(skill.region)), style = MaterialTheme.typography.labelMedium)
             }
         }
         if (sim != null) SimPlayer(sim, Modifier.weight(1f))

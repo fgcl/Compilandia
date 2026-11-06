@@ -53,6 +53,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 private val FOGO = Color(0xFFFF7A28)
 private val BRASA = Color(0xFFF5B700)
@@ -65,7 +66,7 @@ object Fx {
 
     var glitchTick by mutableIntStateOf(0)
     var portao by mutableStateOf<Portao?>(null)
-    private val carimbos = listOf("TOKEN INESPERADO", "ERRO DE COMPILAÇÃO", "FALHA NA PILHA", "CONFLITO", "SEGMENTATION FAULT")
+    private val carimbos = listOf("TOKEN INESPERADO", tx("fx_erro_compilacao"), tx("fx_falha_na_pilha"), "CONFLITO", "SEGMENTATION FAULT")
     var carimbo by mutableStateOf("")
         private set
 
@@ -261,7 +262,7 @@ fun BoxScope.ExplosaoChefao() {
         }
     }
     Text(
-        "COMPILOU!", Modifier.align(Alignment.TopCenter).padding(top = 150.dp).scale(letreiro.value),
+        tx("fx_compilou"), Modifier.align(Alignment.TopCenter).padding(top = 150.dp).scale(letreiro.value),
         color = Palette.yellow, fontFamily = LocalFonts.current.display, fontWeight = FontWeight.Bold, fontSize = 62.sp,
     )
 }

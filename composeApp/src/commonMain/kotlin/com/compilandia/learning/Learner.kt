@@ -5,6 +5,7 @@ import kotlinx.serialization.json.Json
 import kotlin.math.abs
 import kotlin.math.ln
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 @Serializable
 data class SkillState(
@@ -88,6 +89,10 @@ data class LearnerState(
     val desafioPalpites: Int = 0,
     val desafioVenceu: Boolean = false,
     val desafioSequencia: Int = 0,
+    // ---- quarta reforma: trilha do assunto. Chave "ASSUNTO/ETAPA", valor "feita" ou "pulada".
+    val etapas: Map<String, String> = emptyMap(),
+    /** Aula animada seguindo sozinha (botão play ao lado do Continuar). */
+    val autoAvancar: Boolean = false,
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -344,9 +349,9 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun quests(nowMs: Long): List<Quest> {
         rollDay(nowMs)
         return listOf(
-            Quest("meta", "Meta do dia", state.dailyXp.toFloat() / DAILY_XP_GOAL),
-            Quest("revisar", "Revisar 1 assunto", state.dailyReviews.toFloat()),
-            Quest("combo", "3 acertos seguidos", state.dailyBestCombo / 3f),
+            Quest("meta", tx("learner_meta_dia"), state.dailyXp.toFloat() / DAILY_XP_GOAL),
+            Quest("revisar", tx("learner_revisar_1_assunto"), state.dailyReviews.toFloat()),
+            Quest("combo", tx("learner_3_acertos_seguidos"), state.dailyBestCombo / 3f),
         ).map { it.copy(progress = it.progress.coerceIn(0f, 1f)) }
     }
 
@@ -388,6 +393,29 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
         state = state.copy(episodesSeen = state.episodesSeen + id, xp = state.xp + 15, gears = state.gears + 5)
         return true
     }
+
+    /** Marca uma etapa da trilha. Pular fica registrado como sinal: quem pula a mesma etapa em vários assuntos acha ela chata. */
+    fun marcaEtapa(s: Skill, etapa: String, feita: Boolean, nowMs: Long) {
+        val k = "${s.name}/$etapa"
+        if (state.etapas[k] == "feita") return
+        state = state.copy(
+            etapas = state.etapas + (k to if (feita) "feita" else "pulada"),
+            feedback = if (feita) state.feedback else (state.feedback + Feedback(nowMs, "pulou", s.name, etapa.substringBefore(':'))).takeLast(200),
+        )
+    }
+
+    fun setAutoAvancar(v: Boolean) { state = state.copy(autoAvancar = v) }
+
+    /** A pessoa tocou num termo do glossário: guardado como sinal para a revisão por ideia. */
+    fun consultouTermo(s: Skill, termo: String, nowMs: Long) {
+        state = state.copy(feedback = (state.feedback + Feedback(nowMs, "glossario", s.name, termo)).takeLast(200))
+    }
+
+    fun etapa(s: Skill, etapa: String): String? = state.etapas["${s.name}/$etapa"]
+
+    /** Etapa pulada em três assuntos ou mais vira opcional para esta pessoa: continua na trilha, mas o Continuar passa por ela. */
+    fun etapaOpcional(tipo: String): Boolean =
+        state.feedback.filter { it.kind == "pulou" && it.target == tipo }.map { it.skill }.distinct().size >= 3
 
     fun setLabUltimo(t: String) { state = state.copy(labUltimo = t) }
     fun addXp(n: Int) { state = state.copy(xp = state.xp + n) }
@@ -452,18 +480,18 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
             var reason: String
             if (st.memory.isDue(nowMs)) {
                 score += 2.0 + (0.9 - r) * 3
-                reason = "Revisão: sua memória de \"${s.title}\" está em ${(r * 100).toInt()}% — revisar agora fixa mais"
+                reason = tx("learner_revisao_sua_memoria_1_esta", s.title, (r * 100).toInt())
             } else if (prereqsMet(s) && !isMastered(s)) {
                 score += 1.5 + (1 - st.mastery)
-                reason = if (st.attempts == 0) "Novo território: \"${s.title}\"" else "Fronteira: \"${s.title}\" está quase lá (${(st.mastery * 100).toInt()}%)"
+                reason = if (st.attempts == 0) tx("learner_novo_territorio_1", s.title) else tx("learner_fronteira_1_esta_quase_la", s.title, (st.mastery * 100).toInt())
             } else if (!prereqsMet(s)) {
                 score -= 2.0
-                reason = "Ainda faltam bases para \"${s.title}\""
+                reason = tx("learner_ainda_faltam_bases_para_1", s.title)
             } else {
                 score += 0.2
-                reason = "Manutenção de \"${s.title}\""
+                reason = tx("learner_manutencao_1", s.title)
             }
-            if (s in plan) { score += 1.6; reason = "📅 Prova em $dExam dia(s): reforçando \"${s.title}\", um dos seus pontos mais fracos" }
+            if (s in plan) { score += 1.6; reason = tx("learner_prova_em_1_dia_reforcando", dExam, s.title) }
             if (s.name in recentSkills) score -= 1.2
             score += s.ordinal * -0.03 // leve preferência pela ordem do curso
             score += rnd.nextDouble() * 0.3
@@ -495,7 +523,7 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
         val brier = xs.map { val c = it.confidence!!; val y = if (it.score >= 0.6) 1.0 else 0.0; (c - y) * (c - y) }.average()
         val bias = xs.map { it.confidence!! }.average() - xs.map { if (it.score >= 0.6) 1.0 else 0.0 }.average()
         val buckets = listOf(
-            "Chutei" to 0.0..0.4, "Acho que sei" to 0.4..0.8, "Tenho certeza" to 0.8..1.01,
+            tx("learner_chutei") to 0.0..0.4, tx("comum_acho_que_sei") to 0.4..0.8, tx("comum_tenho_certeza") to 0.8..1.01,
         ).map { (label, range) ->
             val b = xs.filter { it.confidence!! >= range.start && it.confidence < range.endInclusive }
             Triple(label, if (b.isEmpty()) 0.0 else b.count { it.score >= 0.6 }.toDouble() / b.size, b.size)
@@ -537,34 +565,34 @@ object Coach {
         val cal = l.calibration()
         if (cal.samples >= 5) {
             when {
-                cal.bias > 0.2 -> out += "🎭 Você tem se sentido mais confiante do que seus resultados mostram (ilusão de competência). Antes de responder, tente explicar o PORQUÊ em voz alta."
-                cal.bias < -0.2 -> out += "🌱 Você sabe MAIS do que pensa! Sua confiança está abaixo do seu desempenho. Confie mais no seu raciocínio."
-                else -> out += "🎯 Sua calibração está ótima: você sabe o que sabe. Isso é metacognição de verdade."
+                cal.bias > 0.2 -> out += tx("learner_voce_tem_se_sentido_mais")
+                cal.bias < -0.2 -> out += tx("learner_voce_sabe_mais_que_pensa")
+                else -> out += tx("learner_sua_calibracao_esta_otima_voce")
             }
         }
         val due = l.dueSkills(nowMs)
         if (due.isNotEmpty()) {
             val (s, r) = due.first()
-            out += "⏰ \"${s.title}\" está sendo esquecido (memória ~${(r * 100).toInt()}%). Uma revisão rápida agora vale mais que uma hora na véspera da prova."
+            out += tx("learner_1_esta_sendo_esquecido_memoria", s.title, (r * 100).toInt())
         }
         val styles = l.styleRanking().filter { (st.styleArms[it.first.name]?.let { a -> a.alpha + a.beta } ?: 2.0) > 3 }
-        if (styles.isNotEmpty()) out += "${styles.first().first.emoji} Seu estilo de explicação favorito até agora: ${styles.first().first.title}. Vou priorizá-lo — mas misturar estilos também ajuda a memória."
+        if (styles.isNotEmpty()) out += tx("learner_1_seu_estilo_explicacao_favorito", styles.first().first.emoji, styles.first().first.title)
         val bored = st.feedback.filter { it.kind == "chato" }.groupBy { it.target }.maxByOrNull { it.value.size }
         if (bored != null && bored.value.size >= 2) {
-            GameId.entries.firstOrNull { it.name == bored.key }?.let { out += "😴 Percebi que \"${it.title}\" não te empolga. Vou mostrar menos." }
+            GameId.entries.firstOrNull { it.name == bored.key }?.let { out += tx("learner_percebi_que_1_nao_te", it.title) }
         }
         val weak = Skill.entries.filter { l.skill(it).attempts >= 3 && l.mastery(it) < 0.4 }
-        if (weak.isNotEmpty()) out += "🧗 \"${weak.first().title}\" está difícil. É normal: é aí que o cérebro mais cresce. Tente a aula em outro estilo e depois um nível mais fácil."
-        l.aiAccuracy()?.let { out += "🤖 Minha rede neural acertou ${(it * 100).toInt()}% das previsões sobre você nas últimas tentativas." }
-        if (st.streakDays >= 2) out += "🔥 ${st.streakDays} dias seguidos! Constância vence intensidade."
-        if (out.isEmpty()) out += "👋 Jogue algumas missões e eu começo a entender como VOCÊ aprende melhor."
+        if (weak.isNotEmpty()) out += tx("learner_1_esta_dificil_errar_aqui", weak.first().title)
+        l.aiAccuracy()?.let { out += tx("learner_minha_rede_neural_acertou_1", (it * 100).toInt()) }
+        if (st.streakDays >= 2) out += tx("learner_1_dias_seguidos_estudar_pouco", st.streakDays)
+        if (out.isEmpty()) out += tx("learner_jogue_algumas_missoes_eu_comeco")
         return out
     }
 }
 
 /** Normaliza texto para comparar termos-chave (sem acentos, minúsculo). */
 fun normalizeForMatch(t: String): String {
-    val from = "áàâãäéèêëíìîïóòôõöúùûüçñ"
+    val from = tx("learner_aaaaaeeeeiiiiooooouuuucn")
     val to = "aaaaaeeeeiiiiooooouuuucn"
     return t.lowercase().map { c -> val i = from.indexOf(c); if (i >= 0) to[i] else c }.joinToString("")
 }

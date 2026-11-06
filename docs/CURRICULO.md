@@ -4,11 +4,11 @@
 
 ## Resumo rápido
 
-- **A ementa oficial de Compiladores da PUC Minas não foi encontrada.** Buscamos em pucminas.br (inclusive com `site:pucminas.br`), em repositórios públicos de alunos e em outros sites. O site da PUC Minas não abria a partir do nosso ambiente, e nenhuma busca retornou a página da ementa ou o plano de ensino.
+- **A ementa oficial de Compiladores da universidade não foi encontrada.** Buscamos em pucminas.br (inclusive com `site:pucminas.br`), em repositórios públicos de alunos e em outros sites. O site da universidade não abria a partir do nosso ambiente, e nenhuma busca retornou a página da ementa ou o plano de ensino.
 - **Encontramos dois indícios:**
-  1. Um repositório público de um aluno da PUC Minas com a **matriz curricular 3814** do curso. Nela, **Compiladores** está no **7º período**, com pré-requisitos **FTC** e **Arquitetura de Computadores II**. **FTC** está no **6º período**, com pré-requisito Teoria dos Grafos e Computabilidade (4º). [F1]
-  2. **Editais de seleção de professores da PUC Minas** (098/2024 e 032/2026) que, segundo os resultados de busca, listam para Compiladores: compilação e interpretação; análise léxica; análise sintática top-down e bottom-up; geradores de analisadores léxicos e sintáticos; tradução dirigida por sintaxe; análise semântica; geração de código intermediário; introdução à otimização. Não conseguimos abrir os PDFs para conferir o texto. [F2]
-- **Novidade (2ª pesquisa): o trabalho prático real da PUC Minas.** Um relatório público de alunos de Engenharia de Computação da PUC Minas BH (Compiladores, 2025/2, orientador Felipe de Castro Belém) mostra o que o TP exige [F14]:
+  1. Um repositório público de um aluno da universidade com a **matriz curricular 3814** do curso. Nela, **Compiladores** está no **7º período**, com pré-requisitos **FTC** e **Arquitetura de Computadores II**. **FTC** está no **6º período**, com pré-requisito Teoria dos Grafos e Computabilidade (4º). [F1]
+  2. **Editais de seleção de professores da universidade** (098/2024 e 032/2026) que, segundo os resultados de busca, listam para Compiladores: compilação e interpretação; análise léxica; análise sintática top-down e bottom-up; geradores de analisadores léxicos e sintáticos; tradução dirigida por sintaxe; análise semântica; geração de código intermediário; introdução à otimização. Não conseguimos abrir os PDFs para conferir o texto. [F2]
+- **Novidade (2ª pesquisa): o trabalho prático real da disciplina.** Um relatório público de alunos de Engenharia de Computação da universidade, em BH (Compiladores, 2025/2, orientador Felipe de Castro Belém) mostra o que o TP exige [F14]:
   - o aluno projeta uma linguagem própria e uma gramática **LL(1)**;
   - escreve o **analisador léxico a partir de expressões regulares e AFDs**;
   - escreve um **parser descendente recursivo**, com a precedência em métodos encadeados;
@@ -17,12 +17,12 @@
   - aplica otimização simples (**constant folding**).
   
   No campus Poços de Caldas, um trabalho público de aluno faz o analisador léxico com **lex** (arquivo `.l`) [F15]. Isso orientou a 2ª versão do jogo, que ganhou novas habilidades, minijogos (AFN→AFD, Flex, recuperação de erros, registros de ativação, MIPS, código da descida recursiva) e o **Guia do Trabalho Prático**.
-- Por isso, a **referência** deste documento é uma ementa síntese, montada a partir de disciplinas equivalentes de universidades brasileiras (UFU, UFRGS, UFFS, UFSCar, UFSC) e do **livro do Dragão** (Aho et al.). Ela bate com os tópicos dos editais da PUC Minas.
+- Por isso, a **referência** deste documento é uma ementa síntese, montada a partir de disciplinas equivalentes de universidades brasileiras (UFU, UFRGS, UFFS, UFSCar, UFSC) e do **livro do Dragão** (Aho et al.). Ela bate com os tópicos dos editais da universidade.
 - **Confirme com o professor.** O plano de ensino oficial costuma ser entregue na 1ª aula ou publicado no Canvas/SGA. Quando você tiver o plano, compare com a tabela da seção 3.
 
 ---
 
-## 1. O que sabemos sobre a PUC Minas
+## 1. O que sabemos sobre a universidade
 
 | Fato | Valor | Fonte | Confiança |
 |---|---|---|---|
@@ -40,7 +40,7 @@
 
 ## 2. "Estou no 4º período": onde entra cada coisa
 
-Na matriz 3814, quem está no 4º período **ainda não cursou FTC (6º) nem Compiladores (7º)**. Se a sua matriz for outra (versão nova, outro campus, dispensa), confira no SGA. Na PUC Minas, a base de **gramáticas e autômatos** costuma ficar em **Fundamentos Teóricos da Computação (FTC)**. Nas disciplinas equivalentes de outras universidades, o conteúdo de FTC inclui autômatos finitos, expressões regulares, gramáticas livres de contexto, autômatos de pilha e máquinas de Turing [F9].
+Na matriz 3814, quem está no 4º período **ainda não cursou FTC (6º) nem Compiladores (7º)**. Se a sua matriz for outra (versão nova, outro campus, dispensa), confira no SGA. Lá, a base de **gramáticas e autômatos** costuma ficar em **Fundamentos Teóricos da Computação (FTC)**. Nas disciplinas equivalentes de outras universidades, o conteúdo de FTC inclui autômatos finitos, expressões regulares, gramáticas livres de contexto, autômatos de pilha e máquinas de Turing [F9].
 
 **O Compilândia cobre as duas disciplinas.** Ordem sugerida:
 
@@ -61,8 +61,8 @@ A coluna "Evidência" lista as ementas e planos em que o tópico aparece **expli
 
 | # | Tópico da ementa | Evidência | Região do jogo | Habilidade (`Skill`) | Minijogos | Dragão |
 |---|---|---|---|---|---|---|
-| 1 | Compilação vs. interpretação; fases do compilador | PUC [F2], UFFS [F5], UFSC [F7] | Porto da Partida | Fases de um compilador (`PHASES`) | Esteira das Fases · Detetive de Erros | Cap. 1 |
-| 2 | Tokens, lexemas, padrões (análise léxica) | PUC [F2], UFU [F3], UFRGS [F4], UFFS [F5], UFSC [F7] | Floresta Léxica | Tokens, lexemas e padrões (`TOKENS`) | Fatiador de Tokens · Porteiro Regex · Detetive de Erros | 3.1–3.3 |
+| 1 | Compilação vs. interpretação; fases do compilador | Editais [F2], UFFS [F5], UFSC [F7] | Porto da Partida | Fases de um compilador (`PHASES`) | Esteira das Fases · Detetive de Erros | Cap. 1 |
+| 2 | Tokens, lexemas, padrões (análise léxica) | Editais [F2], UFU [F3], UFRGS [F4], UFFS [F5], UFSC [F7] | Floresta Léxica | Tokens, lexemas e padrões (`TOKENS`) | Fatiador de Tokens · Porteiro Regex · Detetive de Erros | 3.1–3.3 |
 | 3 | Expressões regulares e autômatos finitos | UFU [F3], UFRGS [F4], UFFS [F5]; FTC [F9] | Floresta Léxica | Expressões regulares e autômatos (`REGEX_DFA`) | Trem do Autômato · Porteiro Regex | 3.3–3.7 |
 | 4 | Gramáticas livres de contexto e derivações | UFU [F3], UFRGS [F4], UFSC [F7]; FTC [F9] | Vale das Gramáticas | Gramáticas e derivações (`CFG_DERIVATION`) | Derivação Turbo · Duas Árvores | 4.2 |
 | 5 | Árvores sintáticas e ambiguidade | Dragão (pré-requisito de LL/LR em todas) | Vale das Gramáticas | Árvores e ambiguidade (`AMBIGUITY`) | Duas Árvores · Derivação Turbo | 4.2.4–4.2.5, 4.3.2 |
@@ -70,22 +70,22 @@ A coluna "Evidência" lista as ementas e planos em que o tópico aparece **expli
 | 7 | Fatoração à esquerda | Dragão (pré-requisito de LL(1)) | Ponte da Transformação | Fatoração à esquerda (`LEFT_FACTORING`) | Cirurgia de Gramática · Sudoku LL(1) | 4.3.4 |
 | 8 | Conjunto FIRST | UFRGS [F4] | Templo Top-Down | Conjunto FIRST (`FIRST`) | Alquimia FIRST/FOLLOW · Sudoku LL(1) | 4.4.2 |
 | 9 | Conjunto FOLLOW | UFRGS [F4] | Templo Top-Down | Conjunto FOLLOW (`FOLLOW`) | Alquimia FIRST/FOLLOW · Sudoku LL(1) | 4.4.2 |
-| 10 | Tabela preditiva LL(1) | PUC "top-down" [F2], UFRGS [F4] | Templo Top-Down | Tabela LL(1) (`LL1_TABLE`) | Sudoku LL(1) · Torre da Pilha | 4.4.3 |
-| 11 | Analisador preditivo não recursivo (pilha) | PUC "top-down" [F2], UFRGS [F4] | Templo Top-Down | Analisador preditivo (`LL1_PARSING`) | Torre da Pilha · Derivação Turbo | 4.4.4 |
-| 12 | Descida recursiva | PUC "top-down" [F2] | Templo Top-Down | Descida recursiva (`RECURSIVE_DESCENT`) | Torre da Pilha · Derivação Turbo | 4.4.1 |
-| 13 | Análise bottom-up: empilha-reduz (shift-reduce) | PUC "bottom-up" [F2], UFRGS [F4], UFFS [F5] | Fortaleza Bottom-Up | Shift-reduce (`SHIFT_REDUCE`) | Esteira Shift-Reduce · Oficina Bison | 4.5 |
+| 10 | Tabela preditiva LL(1) | Editais "top-down" [F2], UFRGS [F4] | Templo Top-Down | Tabela LL(1) (`LL1_TABLE`) | Sudoku LL(1) · Torre da Pilha | 4.4.3 |
+| 11 | Analisador preditivo não recursivo (pilha) | Editais "top-down" [F2], UFRGS [F4] | Templo Top-Down | Analisador preditivo (`LL1_PARSING`) | Torre da Pilha · Derivação Turbo | 4.4.4 |
+| 12 | Descida recursiva | Editais "top-down" [F2] | Templo Top-Down | Descida recursiva (`RECURSIVE_DESCENT`) | Torre da Pilha · Derivação Turbo | 4.4.1 |
+| 13 | Análise bottom-up: empilha-reduz (shift-reduce) | Editais "bottom-up" [F2], UFRGS [F4], UFFS [F5] | Fortaleza Bottom-Up | Shift-reduce (`SHIFT_REDUCE`) | Esteira Shift-Reduce · Oficina Bison | 4.5 |
 | 14 | Itens LR(0), closure, goto | UFFS [F5], UFSCar [F6] | Fortaleza Bottom-Up | Itens LR(0) (`LR0_ITEMS`) | Construtor de Estados · Esteira Shift-Reduce | 4.6.1–4.6.2 |
 | 15 | Tabela SLR(1) e conflitos | UFRGS "tabelas LR" [F4], UFFS [F5], UFSCar [F6] | Fortaleza Bottom-Up | Tabela SLR(1) e conflitos (`SLR_TABLE`) | Caça-Conflitos · Esteira Shift-Reduce | 4.6.3–4.6.4 |
 | 16 | LR(1) canônico e LALR(1) | UFSCar [F6] | Fortaleza Bottom-Up | LR(1) e LALR(1) (`LALR`) | Construtor de Estados · Caça-Conflitos | 4.7 |
 | 17 | Resolução de conflitos com precedência/associatividade | UFSCar [F6] | Oficina Yacc/Bison | Yacc/Bison (`YACC_BISON`) | Oficina Bison · Caça-Conflitos | 4.8 |
-| 18 | Geradores de analisadores (Lex/Flex, Yacc/Bison) | PUC [F2], UFU "metacompiladores" [F3], UFRGS [F4], UFFS [F5] | Oficina Yacc/Bison (Bison); Floresta Léxica (conceitos do Lex) | Yacc/Bison (`YACC_BISON`) | Oficina Bison | 3.5, 4.9 |
-| 19 | Tradução dirigida por sintaxe; atributos sintetizados/herdados; S-/L-atribuídas | PUC [F2], UFU [F3], UFRGS [F4], UFFS [F5] | Cidade Semântica | Atributos e verificação de tipos (`ATTRIBUTES_TYPES`) | Árvore Anotada | Cap. 5 |
-| 20 | Análise semântica e verificação de tipos | PUC [F2], UFU [F3], UFSCar [F6] | Cidade Semântica | Atributos e verificação de tipos (`ATTRIBUTES_TYPES`) | Árvore Anotada · Detetive de Erros | 6.3, 6.5 |
+| 18 | Geradores de analisadores (Lex/Flex, Yacc/Bison) | Editais [F2], UFU "metacompiladores" [F3], UFRGS [F4], UFFS [F5] | Oficina Yacc/Bison (Bison); Floresta Léxica (conceitos do Lex) | Yacc/Bison (`YACC_BISON`) | Oficina Bison | 3.5, 4.9 |
+| 19 | Tradução dirigida por sintaxe; atributos sintetizados/herdados; S-/L-atribuídas | Editais [F2], UFU [F3], UFRGS [F4], UFFS [F5] | Cidade Semântica | Atributos e verificação de tipos (`ATTRIBUTES_TYPES`) | Árvore Anotada | Cap. 5 |
+| 20 | Análise semântica e verificação de tipos | Editais [F2], UFU [F3], UFSCar [F6] | Cidade Semântica | Atributos e verificação de tipos (`ATTRIBUTES_TYPES`) | Árvore Anotada · Detetive de Erros | 6.3, 6.5 |
 | 21 | Escopo e tabela de símbolos | UFSCar [F6], UFV [F8b] | Cidade Semântica | Escopo e tabela de símbolos (`SCOPE_SYMBOLS`) | Esconde-Esconde do Escopo · Detetive de Erros | 2.7 |
-| 22 | Código intermediário: três endereços | PUC [F2], UFRGS [F4], UFFS [F5] | Forja do Código | Código de três endereços (`TAC`) | Linha de Montagem TAC · Árvore Anotada | 6.2, 6.4 |
-| 23 | Otimização (introdução: dobra de constantes, blocos básicos, DAG) | PUC [F2], UFRGS [F4], UFFS [F5], UFV [F8b] | Forja do Código | Otimização (`OPTIMIZATION`) | Linha de Montagem TAC · Árvore Anotada | 8.5, 9.1 |
+| 22 | Código intermediário: três endereços | Editais [F2], UFRGS [F4], UFFS [F5] | Forja do Código | Código de três endereços (`TAC`) | Linha de Montagem TAC · Árvore Anotada | 6.2, 6.4 |
+| 23 | Otimização (introdução: dobra de constantes, blocos básicos, DAG) | Editais [F2], UFRGS [F4], UFFS [F5], UFV [F8b] | Forja do Código | Otimização (`OPTIMIZATION`) | Linha de Montagem TAC · Árvore Anotada | 8.5, 9.1 |
 
-Os tópicos 1–23 cobrem todos os itens que os editais da PUC Minas listam para Compiladores [F2]. A ficha da UFU GBC071 [F3] traz na ementa gramáticas, autômatos, análise léxica e sintática, geração de código, recuperação de erros e metacompiladores. Nos títulos do programa aparecem tradução dirigida por sintaxe, análise semântica e construção de AST. O plano da UFSC [F7] termina com a entrega de um compilador completo.
+Os tópicos 1–23 cobrem todos os itens que os editais listam para Compiladores [F2]. A ficha da UFU GBC071 [F3] traz na ementa gramáticas, autômatos, análise léxica e sintática, geração de código, recuperação de erros e metacompiladores. Nos títulos do programa aparecem tradução dirigida por sintaxe, análise semântica e construção de AST. O plano da UFSC [F7] termina com a entrega de um compilador completo.
 
 ---
 
@@ -99,7 +99,7 @@ Na 2ª versão, várias lacunas da 1ª foram fechadas:
 | AFN→AFD (subconjuntos) | ✅ habilidade **AFN → AFD** + jogo **Fábrica de Subconjuntos** |
 | Flex na prática (arquivo `.l`) | ✅ habilidade **Lex/Flex** + jogo **Oficina Flex** (maior casamento, ordem das regras) |
 | Ambientes de execução (registros de ativação) | ✅ habilidade **Ambientes de execução** + jogo **Pilha de Chamadas** |
-| Geração de código de máquina (MIPS, como no TP da PUC) | ✅ habilidade **Geração de código MIPS** + jogo **Montadora MIPS** + simulador "MARS de bolso" |
+| Geração de código de máquina (MIPS, como no TP) | ✅ habilidade **Geração de código MIPS** + jogo **Montadora MIPS** + simulador "MARS de bolso" |
 | Código do parser descendente recursivo (casaToken) | ✅ jogo **Programador Descendente** + capítulo do **Guia do TP** |
 | Tabela LALR(1) e derivação mais à direita | ✅ widgets novos (também no Laboratório) |
 

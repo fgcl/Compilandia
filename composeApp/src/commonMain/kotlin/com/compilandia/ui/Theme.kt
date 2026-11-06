@@ -24,14 +24,15 @@ import com.compilandia.resources.barlow_condensed_semibold
 import com.compilandia.resources.space_mono_bold
 import com.compilandia.resources.space_mono_regular
 import org.jetbrains.compose.resources.Font
+import com.compilandia.textos.tx
 
 /** Temas da oficina do Byte (escolha em Ajustes). */
 enum class ThemeMode(val title: String, val description: String) {
-    OFICINA("Oficina", "Metal escuro da bancada do Byte, padrão"),
-    CLARO("Galpão claro", "Chapa clara, bom sob luz forte"),
-    SEPIA("Sépia", "Tons quentes, menos azul, bom para ler muito"),
-    NOITE_AMBAR("Noite âmbar", "Escuro e quase sem luz azul, para estudar antes de dormir"),
-    CONTRASTE("Alto contraste", "Preto, branco e amarelo, máxima legibilidade"),
+    OFICINA(tx("comum_oficina"), tx("theme_metal_escuro_bancada_byte_padrao")),
+    CLARO(tx("theme_galpao_claro"), tx("theme_chapa_clara_bom_sob_luz")),
+    SEPIA(tx("theme_sepia"), tx("theme_tons_quentes_menos_azul_bom")),
+    NOITE_AMBAR(tx("theme_noite_ambar"), tx("theme_escuro_quase_sem_luz_azul")),
+    CONTRASTE(tx("theme_alto_contraste"), tx("theme_preto_branco_amarelo_maxima_legibilidade")),
 }
 
 /**

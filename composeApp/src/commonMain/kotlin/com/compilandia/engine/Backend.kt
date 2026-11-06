@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 // ======================================================================
 //  Recuperação de erros (modo pânico) no analisador LL(1)
 // ======================================================================
@@ -25,15 +27,15 @@ object PanicMode {
             val top = stack.last(); val a = inp[pos]
             if (top == EOF && a == EOF) { steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Accept); return RecoveryTrace(steps, events, true) }
             if (top == EOF) {
-                events += RecoveryEvent(pos, "sobrou entrada depois do fim do programa", inp.subList(pos, inp.size - 1), null)
-                steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error("sobrou entrada"))
+                events += RecoveryEvent(pos, tx("backend_sobrou_entrada_depois_fim_programa"), inp.subList(pos, inp.size - 1), null)
+                steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error(tx("backend_sobrou_entrada")))
                 return RecoveryTrace(steps, events, true)
             }
             if (!g.isNonTerminal(top)) {
                 if (top == a) { steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Match(a)); stack.removeAt(stack.lastIndex); pos++ }
                 else {
-                    events += RecoveryEvent(pos, "esperava '$top' mas veio '$a' (finjo que '$top' estava lá)", emptyList(), top)
-                    steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error("esperava '$top'"))
+                    events += RecoveryEvent(pos, tx("backend_esperava_1_mas_veio_2", top, a, top), emptyList(), top)
+                    steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error(tx("backend_esperava_1", top)))
                     stack.removeAt(stack.lastIndex)
                 }
                 continue
@@ -49,12 +51,12 @@ object PanicMode {
             val first = t.ff.first.getValue(top) - EPS
             val sync = t.ff.follow.getValue(top) + EOF
             val skipped = mutableListOf<String>()
-            steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error("M[$top, $a] vazia"))
+            steps += LLStep(stack.toList(), inp.drop(pos), LLAction.Error(tx("backend_m_1_2_vazia", top, a)))
             while (inp[pos] !in first && inp[pos] !in sync) { skipped += inp[pos]; pos++ }
             if (inp[pos] in first) {
-                events += RecoveryEvent(pos, "erro em $top: descartei ${skipped.ifEmpty { listOf("nada") }.joinToString(" ")} até achar '${inp[pos]}' que pode começar $top", skipped, null)
+                events += RecoveryEvent(pos, tx("backend_erro_em_1_descartei_2", top, skipped.ifEmpty { listOf("nada") }.joinToString(" "), inp[pos], top), skipped, null)
             } else {
-                events += RecoveryEvent(pos, "erro em $top: descartei ${skipped.ifEmpty { listOf("nada") }.joinToString(" ")} até o sincronizador '${inp[pos]}' ∈ FOLLOW($top); desempilho $top", skipped, top)
+                events += RecoveryEvent(pos, tx("backend_erro_em_1_descartei_2_2", top, skipped.ifEmpty { listOf("nada") }.joinToString(" "), inp[pos], top, top), skipped, top)
                 stack.removeAt(stack.lastIndex)
             }
         }
@@ -97,27 +99,27 @@ object RuntimeSim {
 
     fun fatorial(n: Int): RtProgram {
         val r = Rec()
-        fun fat(k: Int, ret: String): Int = r.call("fat", mapOf("n" to k), ret) { if (k <= 1) 1 else k * fat(k - 1, "fat, linha 3") }
-        val v = r.call("main", emptyMap(), "SO") { fat(n, "main, linha 6") }
-        return RtProgram("fat$n", "Fatorial recursivo de $n",
+        fun fat(k: Int, ret: String): Int = r.call("fat", mapOf("n" to k), ret) { if (k <= 1) 1 else k * fat(k - 1, tx("backend_fat_linha_3")) }
+        val v = r.call("main", emptyMap(), "SO") { fat(n, tx("backend_main_linha_6")) }
+        return RtProgram("fat$n", tx("backend_fatorial_recursivo_1", n),
             "1 int fat(int n) {\n2   if (n <= 1) return 1;\n3   return n * fat(n - 1);\n4 }\n5 int main() {\n6   return fat($n);\n7 }", r.events, v)
     }
 
     fun fib(n: Int): RtProgram {
         val r = Rec()
-        fun fib(k: Int, ret: String): Int = r.call("fib", mapOf("n" to k), ret) { if (k < 2) k else fib(k - 1, "fib, linha 3a") + fib(k - 2, "fib, linha 3b") }
-        val v = r.call("main", emptyMap(), "SO") { fib(n, "main, linha 6") }
-        return RtProgram("fib$n", "Fibonacci recursivo de $n",
+        fun fib(k: Int, ret: String): Int = r.call("fib", mapOf("n" to k), ret) { if (k < 2) k else fib(k - 1, tx("backend_fib_linha_3a")) + fib(k - 2, tx("backend_fib_linha_3b")) }
+        val v = r.call("main", emptyMap(), "SO") { fib(n, tx("backend_main_linha_6")) }
+        return RtProgram("fib$n", tx("backend_fibonacci_recursivo_1", n),
             "1 int fib(int n) {\n2   if (n < 2) return n;\n3   return fib(n-1) + fib(n-2);\n4 }\n5 int main() {\n6   return fib($n);\n7 }", r.events, v)
     }
 
     fun chain(x: Int): RtProgram {
         val r = Rec()
         fun h(a: Int, ret: String) = r.call("h", mapOf("a" to a), ret) { a + 1 }
-        fun g(b: Int, ret: String) = r.call("g", mapOf("b" to b), ret) { h(b * 2, "g, linha 5") }
-        fun f(c: Int, ret: String) = r.call("f", mapOf("c" to c), ret) { g(c, "f, linha 8") + h(c, "f, linha 8b") }
-        val v = r.call("main", emptyMap(), "SO") { f(x, "main, linha 11") }
-        return RtProgram("chain$x", "f chama g que chama h",
+        fun g(b: Int, ret: String) = r.call("g", mapOf("b" to b), ret) { h(b * 2, tx("backend_g_linha_5")) }
+        fun f(c: Int, ret: String) = r.call("f", mapOf("c" to c), ret) { g(c, tx("backend_f_linha_8")) + h(c, tx("backend_f_linha_8b")) }
+        val v = r.call("main", emptyMap(), "SO") { f(x, tx("backend_main_linha_11")) }
+        return RtProgram("chain$x", tx("backend_f_chama_g_que_chama"),
             "1 int h(int a) {\n2   return a + 1;\n3 }\n4 int g(int b) {\n5   return h(b * 2);\n6 }\n7 int f(int c) {\n8   return g(c) + h(c);\n9 }\n10 int main() {\n11  return f($x);\n12 }", r.events, v)
     }
 
@@ -199,7 +201,7 @@ object RecursiveDescentGen {
         val out = mutableListOf(CodeLine(0, "void ${fnName(nt)}() {"))
         val prods = g.productionsOf(nt)
         fun body(p: Production, ind: Int) {
-            if (p.rhs.isEmpty()) out += CodeLine(ind, "// ε: não consome nada")
+            if (p.rhs.isEmpty()) out += CodeLine(ind, tx("backend_nao_consome_nada"))
             for (s in p.rhs) out += CodeLine(ind, if (g.isNonTerminal(s)) "${fnName(s)}();" else "casaToken(\"$s\");")
         }
         if (prods.size == 1) body(prods[0], 1)
@@ -214,7 +216,7 @@ object RecursiveDescentGen {
             }
             if (eps != null) {
                 out += CodeLine(1, "} else {")
-                out += CodeLine(2, "// ε: não consome nada (tok deve estar em FOLLOW($nt))")
+                out += CodeLine(2, tx("backend_nao_consome_nada_tok_deve", nt))
                 out += CodeLine(1, "}")
             } else {
                 out += CodeLine(1, "} else {")
@@ -240,7 +242,7 @@ object RecursiveDescentGen {
         fun popFinished() {
             while (calls.isNotEmpty() && calls.last().remaining == 0) {
                 val f = calls.removeAt(calls.lastIndex)
-                out += calls.map { it.name } to "return de ${f.name}()"
+                out += calls.map { it.name } to tx("backend_return_1", f.name)
                 if (calls.isNotEmpty()) calls.last().remaining--
             }
         }
@@ -248,7 +250,7 @@ object RecursiveDescentGen {
             when (val a = s.action) {
                 is LLAction.Expand -> {
                     calls += Fr(fnName(a.production.lhs), a.production.rhs.size)
-                    out += calls.map { it.name } to "chama ${fnName(a.production.lhs)}()"
+                    out += calls.map { it.name } to tx("backend_chama_1", fnName(a.production.lhs))
                     popFinished()
                 }
                 is LLAction.Match -> {
@@ -256,8 +258,8 @@ object RecursiveDescentGen {
                     if (calls.isNotEmpty()) calls.last().remaining--
                     popFinished()
                 }
-                LLAction.Accept -> out += emptyList<String>() to "fim: tok == \$ → aceito!"
-                is LLAction.Error -> out += calls.map { it.name } to "erro: ${a.message}"
+                LLAction.Accept -> out += emptyList<String>() to tx("backend_fim_tok_aceito")
+                is LLAction.Error -> out += calls.map { it.name } to tx("comum_erro_1", a.message)
             }
         }
         return out

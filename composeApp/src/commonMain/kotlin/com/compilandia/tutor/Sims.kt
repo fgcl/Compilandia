@@ -49,6 +49,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /** Pergunta do modo Prever: a animação para antes do passo. */
 data class SimAsk(val pergunta: String, val opcoes: List<String>, val certa: Int, val porque: String)
@@ -75,8 +76,9 @@ object Sims {
     fun conjuntos(g: Grammar, kind: SetStep.Kind): Sim {
         val ff = FirstFollow(g)
         val nome = if (kind == SetStep.Kind.FIRST) "FIRST" else "FOLLOW"
-        val nts = g.nonTerminals.take(8)
-        val alt = min(64f, 310f / nts.size)
+        val nts = g.nonTerminals.take(6)
+        // A gramática inteira fica embaixo; os conjuntos crescem em cima.
+        val alt = min(56f, 196f / nts.size)
         val y0 = 74f
         fun y(nt: String) = y0 + nts.indexOf(nt).coerceAtLeast(0) * alt
         val tam = min(46f, alt - 8f)
@@ -88,46 +90,50 @@ object Sims {
                 Box("s$n-$s", s, 92f + i * cada, y(n), cada - 3f, min(30f, alt - 12f), Look.TOKEN, if (s == EPS) Tint.PINK else Tint.TEAL, hot = n == alvoNt && s in realce, size = min(13f, cada * 0.4f))
             }
         }
+        val yG = y0 + nts.size * alt + 4f
+        fun gramatica(lhsAceso: String?): List<Box> = nts.mapIndexed { i, nt ->
+            val lados = g.productions.filter { it.lhs == nt }.joinToString(" | ") { pr -> pr.rhs.joinToString(" ").ifEmpty { EPS } }
+            Box("gl$i", "$nt → $lados", 30f, yG + i * 24f, 310f, 22f, Look.CODE, if (nt == lhsAceso) Tint.YELLOW else Tint.NONE, hot = nt == lhsAceso, size = 14f)
+        }
         val passos = mutableListOf<SimStep>()
-        passos += SimStep(Shot(listOf(titulo(nome)) + nos), "Todos começam vazios. Vou olhar regra por regra.")
+        passos += SimStep(Shot(listOf(titulo(nome)) + nos + gramatica(null)), tx("sims_todos_comecam_vazios_vou_olhar"))
         val visitados = ff.steps.filter { it.kind == kind }.take(24)
         visitados.forEachIndexed { k, st ->
             val fonte = fonte(g, st, nts)
-            val ask = if (k % 2 == 0) perguntaConjunto(g, ff, st, nome, k) else null
+            val ask = perguntaConjunto(g, ff, st, nome, k)
             atuais.getOrPut(st.nonTerminal) { mutableListOf() } += st.added
             val fio = if (fonte != null && fonte != st.nonTerminal) listOf(Wire("n$fonte", "n${st.nonTerminal}", hot = true, bend = 30f, flow = st.added.toList())) else emptyList()
-            val regra = Box("regra", st.production.toString(), 180f, y0 + nts.size * alt + 6f, 330f, 30f, Look.CELL, Tint.DARK, size = 14f)
             passos += SimStep(
-                Shot(listOf(titulo(nome)) + nos + chips(st.added, st.nonTerminal) + regra, fio),
+                Shot(listOf(titulo(nome)) + nos + chips(st.added, st.nonTerminal) + gramatica(st.production.lhs), fio),
                 frase(st, nome), ask,
             )
         }
-        passos += SimStep(Shot(listOf(titulo(nome)) + nos + chips(emptySet(), null)), "Rodei tudo e nada mudou. Acabou: os conjuntos estão prontos.")
-        return Sim("$nome da sua gramática", passos, if (kind == SetStep.Kind.FIRST) Skill.FIRST else Skill.FOLLOW)
+        passos += SimStep(Shot(listOf(titulo(nome)) + nos + chips(emptySet(), null) + gramatica(null)), tx("sims_rodei_tudo_nada_mudou_acabou"))
+        return Sim(tx("sims_1_sua_gramatica", nome), passos, if (kind == SetStep.Kind.FIRST) Skill.FIRST else Skill.FOLLOW)
     }
 
     private fun fonte(g: Grammar, st: SetStep, nts: List<String>): String? {
         if (st.kind == SetStep.Kind.FIRST) return st.production.rhs.firstOrNull { g.isNonTerminal(it) && it in nts }
-        return if ("FOLLOW(${st.production.lhs}) entra" in st.reason) st.production.lhs else null
+        return if (tx("sims_follow_1_entra", st.production.lhs) in st.reason) st.production.lhs else null
     }
 
     private fun frase(st: SetStep, nome: String): String {
         val alvo = st.nonTerminal
         val itens = st.added.joinToString(" e ")
         return when {
-            nome == "FIRST" && EPS in st.added && st.added.size == 1 -> "Tudo à direita de $alvo pode sumir. Então ε entra."
-            nome == "FIRST" && "FIRST(" in st.reason -> "${st.production} começa com outro não terminal. O que abre ele abre $alvo: $itens."
-            nome == "FIRST" -> "Em ${st.production}, a regra abre com $itens."
-            "símbolo inicial" in st.reason -> "$alvo é o início. Depois dele vem o fim da entrada: $."
-            "FOLLOW(${st.production.lhs}) entra" in st.reason -> "$alvo fica no fim de ${st.production.lhs}. O que vem depois de ${st.production.lhs} vem depois dele: $itens."
-            else -> "Em ${st.production}, depois de $alvo pode vir $itens."
+            nome == "FIRST" && EPS in st.added && st.added.size == 1 -> tx("sims_tudo_direita_1_pode_sumir", alvo)
+            nome == "FIRST" && "FIRST(" in st.reason -> tx("sims_1_comeca_com_outro_nao", st.production, alvo, itens)
+            nome == "FIRST" -> tx("sims_em_1_regra_abre_com", st.production, itens)
+            tx("comum_simbolo_inicial") in st.reason -> tx("sims_1_inicio_depois_dele_vem", alvo)
+            tx("sims_follow_1_entra", st.production.lhs) in st.reason -> tx("sims_1_fica_no_fim_2", alvo, st.production.lhs, st.production.lhs, itens)
+            else -> tx("sims_em_1_depois_2_pode", st.production, alvo, itens)
         }
     }
 
     private fun perguntaConjunto(g: Grammar, ff: FirstFollow, st: SetStep, nome: String, k: Int): SimAsk {
         val certa = st.added.first()
         val (ops, idx) = opcoes(certa, (g.terminals + listOf(EOF, EPS)).shuffled(Random(k)), k)
-        return SimAsk("O que entra em $nome(${st.nonTerminal}) agora?", ops, idx, frase(st, nome))
+        return SimAsk(tx("sims_que_entra_em_1_2", nome, st.nonTerminal), ops, idx, frase(st, nome))
     }
 
     // ------------------------------------------------------------ Tabela LL(1)
@@ -141,11 +147,11 @@ object Sims {
         val x0 = 180f - cols.size * cw / 2
         val y0 = 76f
         val tam = min(13f, cw * 0.3f)
-        val fixas = mutableListOf(titulo("Tabela LL(1)"))
+        val fixas = mutableListOf(titulo(tx("comum_tabela_ll_1_2")))
         cols.forEachIndexed { c, s -> fixas += Box("h$c", s, x0 + (c + 1) * cw, y0, cw - 3f, ch - 3f, Look.CELL, Tint.DARK, size = tam) }
         rows.forEachIndexed { l, s -> fixas += Box("r$l", s, x0, y0 + (l + 1) * ch, cw - 3f, ch - 3f, Look.CELL, Tint.ORANGE, size = tam) }
         for (l in rows.indices) for (c in cols.indices) fixas += Box("v$l-$c", "", x0 + (c + 1) * cw, y0 + (l + 1) * ch, cw - 3f, ch - 3f, Look.CELL, Tint.NONE)
-        val passos = mutableListOf(SimStep(Shot(fixas.toList()), "Uma linha para cada não terminal, uma coluna para cada terminal."))
+        val passos = mutableListOf(SimStep(Shot(fixas.toList()), tx("sims_linha_para_cada_nao_terminal")))
         val cheias = mutableListOf<Box>()
         var k = 0
         for (l in rows.indices) for (c in cols.indices) {
@@ -157,19 +163,19 @@ object Sims {
                 if (conflito) Tint.RED else Tint.TEAL, hot = true, size = min(tam, (cw - 6f) / (rs.joinToString("/") { it.rhsText() }.length * 0.62f).coerceAtLeast(1f)).coerceAtLeast(6.5f),
             )
             val r = t.reasons[rows[l] to cols[c]].orEmpty().firstOrNull().orEmpty()
-            val diz = if (conflito) "Conflito: ${rs.size} regras na mesma casa. Isso não é LL(1)." else
-                if ("ε" in r) "${rs[0].lhs} pode sumir, e ${cols[c]} vem depois dele. A regra ${rs[0]} entra aqui." else
-                "${cols[c]} abre ${rs[0].rhsText()}. A regra ${rs[0]} entra aqui."
-            val (ops, idx) = opcoes(rs[0].rhsText(), g.productionsOf(rows[l]).map { it.rhsText() } + listOf("deixar vazia"), k)
+            val diz = if (conflito) tx("sims_conflito_1_regras_na_mesma", rs.size) else
+                if ("ε" in r) tx("sims_1_pode_sumir_2_vem", rs[0].lhs, cols[c], rs[0]) else
+                tx("sims_1_abre_2_regra_3", cols[c], rs[0].rhsText(), rs[0])
+            val (ops, idx) = opcoes(rs[0].rhsText(), g.productionsOf(rows[l]).map { it.rhsText() } + listOf(tx("sims_deixar_vazia")), k)
             passos += SimStep(
                 Shot(fixas + cheias.map { if (it === cheias.last()) it else it.copy(hot = false) }), diz,
-                if (k % 2 == 0) SimAsk("O que vai na casa de ${rows[l]} com ${cols[c]}?", ops, idx, diz) else null,
+                if (k % 2 == 0) SimAsk(tx("sims_que_vai_na_casa_1", rows[l], cols[c]), ops, idx, diz) else null,
                 erro = conflito,
             )
             k++
             if (k >= 30) break
         }
-        return Sim("Montando a tabela", passos, Skill.LL1_TABLE)
+        return Sim(tx("sims_montando_tabela"), passos, Skill.LL1_TABLE)
     }
 
     // ------------------------------------------------------------ LL(1) rodando
@@ -191,21 +197,21 @@ object Sims {
             val topo = st.stack.last()
             val acao = st.action
             val (diz, painel) = when (acao) {
-                is LLAction.Expand -> "Topo é $topo. Vem $a. A tabela manda trocar por ${acao.production.rhsText()}." to "M[$topo, $a]\n$topo → ${acao.production.rhsText()}"
-                is LLAction.Match -> "Topo e entrada são $a. Casou, os dois saem." to "casar $a"
-                LLAction.Accept -> "Pilha e entrada acabaram juntas. A frase vale." to "aceita"
-                is LLAction.Error -> "Travou: ${acao.message}. A frase não pertence à linguagem." to "erro"
+                is LLAction.Expand -> tx("sims_topo_1_vem_2_tabela", topo, a, acao.production.rhsText()) to "M[$topo, $a]\n$topo → ${acao.production.rhsText()}"
+                is LLAction.Match -> tx("sims_topo_entrada_sao_1_casou", a) to tx("sims_casar_1", a)
+                LLAction.Accept -> tx("sims_pilha_entrada_acabaram_juntas_frase") to "aceita"
+                is LLAction.Error -> tx("sims_travou_1_frase_nao_pertence", acao.message) to "erro"
             }
             val cor = when (acao) { is LLAction.Error -> Tint.RED; LLAction.Accept -> Tint.GREEN; else -> Tint.YELLOW }
             val caixa = Box("m", painel, 262f, 158f, 168f, 62f, Look.CELL, cor, size = 13f)
             val ask = when (acao) {
                 is LLAction.Expand -> {
-                    val (ops, idx) = opcoes("Trocar por ${acao.production.rhsText()}", listOf("Casar $a") + g.productionsOf(topo).map { "Trocar por ${it.rhsText()}" } + "Dar erro", k)
-                    SimAsk("Topo $topo, entrada $a. O que acontece?", ops, idx, diz)
+                    val (ops, idx) = opcoes(tx("sims_trocar_por_1", acao.production.rhsText()), listOf(tx("sims_casar_1_2", a)) + g.productionsOf(topo).map { tx("sims_trocar_por_1", it.rhsText()) } + tx("sims_dar_erro"), k)
+                    SimAsk(tx("sims_topo_1_entrada_2_que", topo, a), ops, idx, diz)
                 }
                 is LLAction.Match -> {
-                    val (ops, idx) = opcoes("Casar $a", listOf("Dar erro", "Trocar $topo"), k)
-                    SimAsk("Topo $topo, entrada $a. O que acontece?", ops, idx, diz)
+                    val (ops, idx) = opcoes(tx("sims_casar_1_2", a), listOf(tx("sims_dar_erro"), tx("sims_trocar_1", topo)), k)
+                    SimAsk(tx("sims_topo_1_entrada_2_que", topo, a), ops, idx, diz)
                 }
                 else -> null
             }
@@ -219,7 +225,7 @@ object Sims {
                 else -> {}
             }
         }
-        return Sim("Rodando LL(1)", passos, Skill.LL1_PARSING)
+        return Sim(tx("sims_rodando_ll_1"), passos, Skill.LL1_PARSING)
     }
 
     // ------------------------------------------------------------ Empilha-reduz
@@ -244,20 +250,20 @@ object Sims {
             }
             val a = st.input.first()
             val (diz, painel, cor) = when (acao) {
-                is LRAction.Shift -> Triple("Vem $a e o topo ainda não forma regra. Empilha.", "empilhar $a", Tint.YELLOW)
+                is LRAction.Shift -> Triple(tx("sims_vem_1_topo_ainda_nao", a), tx("sims_empilhar_1", a), Tint.YELLOW)
                 is LRAction.Reduce -> {
                     val p = tab.grammar.productions[acao.prodId]
-                    Triple("O topo forma ${p.rhsText()}. Reduz para ${p.lhs}.", "reduzir\n$p", Tint.ORANGE)
+                    Triple(tx("sims_topo_forma_1_reduz_para", p.rhsText(), p.lhs), tx("sims_reduzir_1", p), Tint.ORANGE)
                 }
-                LRAction.Accept -> Triple("Sobrou só ${g.start} e a entrada acabou. A frase vale.", "aceita", Tint.GREEN)
-                null -> Triple("Sem ação na tabela com $a. A frase não vale.", "erro", Tint.RED)
+                LRAction.Accept -> Triple(tx("sims_sobrou_so_1_entrada_acabou", g.start), "aceita", Tint.GREEN)
+                null -> Triple(tx("sims_sem_acao_na_tabela_com", a), "erro", Tint.RED)
                 else -> Triple(st.note, "", Tint.NONE)
             }
             val fita = fitaTokens(tudo, pos, 60f).filterIndexed { i, _ -> i >= pos }
             val caixa = Box("m", painel, 180f, 150f, 230f, 56f, Look.CELL, cor, size = 14f)
             val ask = when (acao) {
-                is LRAction.Shift -> { val (o, i) = opcoes("Empilhar", listOf("Reduzir"), k); SimAsk("Vem $a. O que a máquina faz?", o, i, diz) }
-                is LRAction.Reduce -> { val (o, i) = opcoes("Reduzir", listOf("Empilhar"), k); SimAsk("Vem $a. O que a máquina faz?", o, i, diz) }
+                is LRAction.Shift -> { val (o, i) = opcoes(tx("comum_empilhar_2"), listOf(tx("comum_reduzir")), k); SimAsk(tx("sims_vem_1_que_maquina_faz", a), o, i, diz) }
+                is LRAction.Reduce -> { val (o, i) = opcoes(tx("comum_reduzir"), listOf(tx("comum_empilhar_2")), k); SimAsk(tx("sims_vem_1_que_maquina_faz", a), o, i, diz) }
                 else -> null
             }
             passos += SimStep(
@@ -273,7 +279,7 @@ object Sims {
                 else -> {}
             }
         }
-        return Sim("Rodando empilha-reduz", passos, Skill.SHIFT_REDUCE)
+        return Sim(tx("sims_rodando_empilha_reduz"), passos, Skill.SHIFT_REDUCE)
     }
 
     // ------------------------------------------------------------ Árvores
@@ -308,16 +314,16 @@ object Sims {
         for (k in 0..d.size) {
             val t = parcial(g, d, k)
             val (bs, ws) = desenhaArvore(t, g = g)
-            val diz = if (k == 0) "Começo por ${g.start} e troco sempre o não terminal mais à esquerda."
-            else "Troco ${d[k - 1].lhs} por ${d[k - 1].rhsText()}."
+            val diz = if (k == 0) tx("sims_comeco_por_1_troco_sempre", g.start)
+            else tx("sims_troco_1_por_2", d[k - 1].lhs, d[k - 1].rhsText())
             val ask = if (k < d.size && k % 2 == 0) {
                 val (ops, idx) = opcoes(d[k].rhsText(), g.productionsOf(d[k].lhs).map { it.rhsText() }, k)
-                SimAsk("Para chegar na frase, ${d[k].lhs} vira o quê?", ops, idx, "Só ${d[k].rhsText()} ainda chega em ${tokens.joinToString(" ")}.")
+                SimAsk(tx("sims_para_chegar_na_frase_1", d[k].lhs), ops, idx, tx("sims_so_1_ainda_chega_em", d[k].rhsText(), tokens.joinToString(" ")))
             } else null
             passos += SimStep(Shot(bs, ws), diz, ask)
         }
-        passos += SimStep(passos.last().shot, "As folhas, da esquerda para a direita, formam a frase: ${tokens.joinToString(" ")}.")
-        return Sim("Árvore da frase", passos, Skill.CFG_DERIVATION)
+        passos += SimStep(passos.last().shot, tx("sims_folhas_esquerda_para_direita_formam", tokens.joinToString(" ")))
+        return Sim(tx("sims_arvore_frase"), passos, Skill.CFG_DERIVATION)
     }
 
     fun ambigua(g: Grammar, tokens: List<String>): Sim? {
@@ -327,11 +333,11 @@ object Sims {
         val b = desenhaArvore(DerivationHelper.treeOf(g, ds[1]))
         val rot = rotulo("fr", tokens.joinToString(" "), 180f, 30f, Tint.YELLOW, 18f)
         return Sim(
-            "Duas árvores", listOf(
-                SimStep(Shot(listOf(rot) + a.first, a.second), "Olha uma árvore para esta frase."),
-                SimStep(Shot(listOf(rot) + b.first, b.second), "Agora outra árvore, com a mesma frase. A gramática é ambígua.", erro = true),
-                SimStep(Shot(listOf(rot) + a.first, a.second), "A primeira agrupa de um jeito. Volte e compare o que fica mais fundo."),
-                SimStep(Shot(listOf(rot) + b.first, b.second), "O mais fundo roda primeiro. Por isso as duas dão resultados diferentes."),
+            tx("comum_duas_arvores"), listOf(
+                SimStep(Shot(listOf(rot) + a.first, a.second), tx("sims_olha_arvore_para_esta_frase")),
+                SimStep(Shot(listOf(rot) + b.first, b.second), tx("sims_agora_outra_arvore_com_mesma"), erro = true),
+                SimStep(Shot(listOf(rot) + a.first, a.second), tx("sims_primeira_agrupa_jeito_volte_compare")),
+                SimStep(Shot(listOf(rot) + b.first, b.second), tx("sims_mais_fundo_roda_primeiro_por")),
             ),
             Skill.AMBIGUITY,
         )
@@ -366,10 +372,10 @@ object Sims {
             val pecas = itens.mapIndexed { i, s ->
                 Box("f$i", s, x0 + i * cada, 180f, cada - 4f, 46f, Look.TOKEN, if (i == 0) Tint.RED else tintDe(g, s), hot = i == 0, size = min(16f, cada * 0.45f))
             }
-            passos += SimStep(Shot(pecas), if (k == 0) "O parser olha $nt e precisa decidir." else "$nt virou $nt ${resto.joinToString(" ")}. O primeiro continua sendo $nt.", erro = k == 4)
+            passos += SimStep(Shot(pecas), if (k == 0) tx("sims_parser_olha_1_precisa_decidir", nt) else tx("sims_1_virou_2_3_primeiro", nt, nt, resto.joinToString(" "), nt), erro = k == 4)
             forma = listOf(nt) + resto + forma.drop(1)
         }
-        return Sim("Preso em $nt", passos, Skill.LEFT_RECURSION)
+        return Sim(tx("sims_preso_em_1", nt), passos, Skill.LEFT_RECURSION)
     }
 
     fun recursao(g: Grammar): Sim? {
@@ -393,7 +399,7 @@ object Sims {
             id == "bar" || id.startsWith("seta") -> Tint.NONE
             else -> Tint.YELLOW
         }
-        val cab = listOf(titulo("Tirando a recursão"))
+        val cab = listOf(titulo(tx("sims_tirando_recursao")))
         val r1 = linha(150f, orig) { tint(it) }
         val d1 = linha(150f, buildList {
             add("a0" to nt); add("seta" to "->")
@@ -408,13 +414,13 @@ object Sims {
         val final = GrammarTransform.eliminateImmediateLeftRecursion(g)
         val lista = codigo("g", final.toText().lines().take(6), 290f, size = 13f)
         return Sim(
-            "Consertando a recursão", listOf(
-                SimStep(Shot(cab + r1), "Esta regra começa com ela mesma."),
-                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("al")) }), "O pedaço laranja é o que repete: ${alfa.joinToString(" ")}."),
-                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("be")) }), "O pedaço verde é por onde a regra termina: ${if (beta.isEmpty()) EPS else beta.joinToString(" ")}."),
-                SimStep(Shot(cab + d1), "Primeiro vem o que termina. Depois, uma regra nova cuida da repetição."),
-                SimStep(Shot(cab + d1 + d2), "A regra nova repete o laranja e chama a si mesma, agora à direita. O ε deixa ela parar."),
-                SimStep(Shot(cab + d1 + d2 + lista), "A linguagem é a mesma, e o parser agora sabe parar."),
+            tx("sims_consertando_recursao"), listOf(
+                SimStep(Shot(cab + r1), tx("sims_esta_regra_comeca_com_ela")),
+                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("al")) }), tx("sims_pedaco_laranja_que_repete_1", alfa.joinToString(" "))),
+                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("be")) }), tx("sims_pedaco_verde_por_onde_regra", if (beta.isEmpty()) EPS else beta.joinToString(" "))),
+                SimStep(Shot(cab + d1), tx("sims_primeiro_vem_que_termina_depois")),
+                SimStep(Shot(cab + d1 + d2), tx("sims_regra_nova_repete_laranja_chama")),
+                SimStep(Shot(cab + d1 + d2 + lista), tx("sims_linguagem_mesma_parser_agora_sabe")),
             ),
             Skill.LEFT_RECURSION,
         )
@@ -428,7 +434,7 @@ object Sims {
         while (grupo.all { it.rhs.size > comum && it.rhs[comum] == grupo[0].rhs[comum] }) comum++
         val pre = grupo[0].rhs.take(comum)
         val novo = "$nt'"
-        val cab = listOf(titulo("Fatorando"))
+        val cab = listOf(titulo(tx("sims_fatorando")))
         val ids = mutableListOf<Pair<String, String>>()
         ids += "a0" to nt; ids += "seta" to "->"
         grupo.forEachIndexed { i, p ->
@@ -457,11 +463,11 @@ object Sims {
         }) { if (it.startsWith("n")) Tint.PINK else tint(it) }
         val prefTxt = pre.joinToString(" ")
         return Sim(
-            "Fatorando", listOf(
-                SimStep(Shot(cab + r1), "Duas opções começam igual: $prefTxt."),
-                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("pre")) }), "Olhando um símbolo só, o parser não sabe qual escolher."),
-                SimStep(Shot(cab + d1), "Então lê o começo igual uma vez só. A escolha fica para depois."),
-                SimStep(Shot(cab + d1 + d2), "A regra nova guarda só o que muda. Agora a decisão é fácil."),
+            tx("sims_fatorando"), listOf(
+                SimStep(Shot(cab + r1), tx("sims_duas_opcoes_comecam_igual_1", prefTxt)),
+                SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("pre")) }), tx("sims_olhando_simbolo_so_parser_nao")),
+                SimStep(Shot(cab + d1), tx("sims_entao_le_comeco_igual_vez")),
+                SimStep(Shot(cab + d1 + d2), tx("sims_regra_nova_guarda_so_que")),
             ),
             Skill.LEFT_FACTORING,
         )
@@ -502,20 +508,20 @@ object Sims {
                 if (s in 0 until n) Actor(ax, ay - 14f, 0.58f) else null,
             )
         }
-        val passos = mutableListOf(SimStep(quadro(0), "O trem começa em q0 e lê uma letra por vez."))
+        val passos = mutableListOf(SimStep(quadro(0), tx("sims_trem_comeca_em_q0_le")))
         for (k in 1..entrada.length) {
             val c = entrada[k - 1]
             val s = caminho[k]
             if (s < 0) {
-                passos += SimStep(quadro(k), "Não há seta com $c saindo daqui. Rejeita.", erro = true)
-                return Sim("Autômato de $regex", passos, Skill.REGEX_DFA)
+                passos += SimStep(quadro(k), tx("sims_nao_ha_seta_com_1", c), erro = true)
+                return Sim(tx("sims_automato_1", regex), passos, Skill.REGEX_DFA)
             }
             val (ops, idx) = opcoes("q$s", List(n) { "q$it" }.shuffled(Random(k)), k)
-            passos += SimStep(quadro(k), "Leu $c. Vai de q${caminho[k - 1]} para q$s.", SimAsk("Leu $c. Para onde vai?", ops, idx, "A seta com $c leva para q$s.").takeIf { k % 2 == 1 })
+            passos += SimStep(quadro(k), tx("sims_leu_1_vai_q_2", c, caminho[k - 1], s), SimAsk(tx("sims_leu_1_para_onde_vai", c), ops, idx, tx("sims_seta_com_1_leva_para", c, s)).takeIf { k % 2 == 1 })
         }
         val fim = caminho.last()
-        passos += SimStep(passos.last().shot, if (fim in d.accepting) "Acabou a fita em círculo duplo. Aceita." else "Acabou a fita fora do círculo duplo. Rejeita.", erro = fim !in d.accepting)
-        return Sim("Autômato de $regex", passos, Skill.REGEX_DFA)
+        passos += SimStep(passos.last().shot, if (fim in d.accepting) tx("sims_acabou_fita_em_circulo_duplo") else tx("sims_acabou_fita_fora_circulo_duplo"), erro = fim !in d.accepting)
+        return Sim(tx("sims_automato_1", regex), passos, Skill.REGEX_DFA)
     }
 
     // ------------------------------------------------------------ Tokens
@@ -534,18 +540,18 @@ object Sims {
         }
         val base = fita(src, 90f, cel)
         val feitos = mutableListOf<Box>()
-        val passos = mutableListOf(SimStep(Shot(base + rotulo("r", "tokens", 180f, 150f)), "O scanner anda da esquerda para a direita e fecha o maior pedaço que puder."))
+        val passos = mutableListOf(SimStep(Shot(base + rotulo("r", "tokens", 180f, 150f)), tx("sims_scanner_anda_esquerda_para_direita")))
         toks.forEachIndexed { k, t ->
             val fit = base.mapIndexed { i, b -> b.copy(tint = if (i in t.start until t.end) Tint.YELLOW else if (i < t.start) Tint.DARK else Tint.NONE, hot = i in t.start until t.end) }
             feitos += Box("tk$k", t.lexeme, 56f + (k % 4) * 83f, 188f + (k / 4) * 48f, 76f, 40f, Look.TOKEN, tint(t.cls), size = min(14f, 72f / (t.lexeme.length * 0.66f + 0.5f)))
             val rotuloCls = Box("cls", t.cls.label, 180f, 136f, 200f, 28f, Look.LABEL, tint(t.cls), size = 18f)
             val ask = if (k % 2 == 0) {
                 val (ops, idx) = opcoes(t.cls.label, com.compilandia.engine.TokenClass.entries.map { it.label }.shuffled(Random(k)), k)
-                SimAsk("De que classe é ${t.lexeme}?", ops, idx, "${t.lexeme} é ${t.cls.label}.")
+                SimAsk(tx("sims_que_classe_1", t.lexeme), ops, idx, tx("sims_1_2", t.lexeme, t.cls.label))
             } else null
-            passos += SimStep(Shot(fit + feitos + rotuloCls), "${t.lexeme} é ${t.cls.label}.", ask)
+            passos += SimStep(Shot(fit + feitos + rotuloCls), tx("sims_1_2", t.lexeme, t.cls.label), ask)
         }
-        return Sim("Cortando em tokens", passos, Skill.TOKENS)
+        return Sim(tx("sims_cortando_em_tokens"), passos, Skill.TOKENS)
     }
 
     // ------------------------------------------------------------ Expressão até o MIPS
@@ -556,7 +562,7 @@ object Sims {
         val e = ExprParser.parse(src)
         val tac = TacGen.generate(e)
         val (bs, ws) = desenhaArvore(noDe(e), 56f, 170f)
-        val passos = mutableListOf(SimStep(Shot(bs, ws), "O parser já montou a árvore. O que está mais fundo roda primeiro."))
+        val passos = mutableListOf(SimStep(Shot(bs, ws), tx("sims_parser_ja_montou_arvore_que")))
         var atual = bs
         val linhas = mutableListOf<String>()
         fun caminho(e0: Expr, alvo: Expr, id: String): String? {
@@ -570,13 +576,16 @@ object Sims {
             val ins = tac.getOrNull(k) ?: return@forEachIndexed
             linhas += ins.toString()
             atual = atual.map { if (it.id == id) it.copy(text = ins.target, tint = Tint.YELLOW, hot = true) else it.copy(hot = false) }
-            passos += SimStep(Shot(atual + codigo("l", linhas.toList(), 256f, size = 13f), ws), "Calculo ${n.render()} e guardo em ${ins.target}.")
+            // Pergunta do Prever: qual conta vem agora? As erradas são as outras contas da árvore.
+            val (ops, certa) = opcoes(n.render(), internos.filter { it !== n }.map { it.render() }.reversed() + e.render(), k)
+            val ask = SimAsk(tx("sims_ask_tac"), ops, certa, tx("sims_ask_tac_porque", n.render()))
+            passos += SimStep(Shot(atual + codigo("l", linhas.toList(), 256f, size = 13f), ws), tx("sims_calculo_1_guardo_em_2", n.render(), ins.target), ask)
         }
         val asm = try { Mips.fromTac(tac) } catch (x: Exception) { emptyList() }
         if (asm.isNotEmpty()) {
-            passos += SimStep(Shot(codigo("m", asm.take(10), 60f, size = 13f)), "Cada linha vira instruções MIPS: carrega, calcula, guarda.")
+            passos += SimStep(Shot(codigo("m", asm.take(10), 60f, size = 13f)), tx("sims_cada_linha_vira_instrucoes_mips"))
         }
-        return Sim("Da expressão ao MIPS", passos, Skill.TAC)
+        return Sim(tx("sims_expressao_ao_mips"), passos, Skill.TAC)
     }
 
     // ------------------------------------------------------------ Autômato LR(0)
@@ -599,14 +608,22 @@ object Sims {
             val painel = itens.mapIndexed { i, s -> Box("it$i", s, 24f, 44f + i * 19f, 320f, 18f, Look.CODE, size = 12f) }
             val completos = st.items.count { it.dot >= a.grammar.productions[it.prodId].rhs.size }
             val diz = when {
-                k == 0 -> "O estado 0 começa antes de tudo. O fecho puxa as regras dos não terminais depois do ponto."
-                completos > 0 && st.items.size > completos -> "Estado $k: o ponto chegou ao fim numa regra e não em outra. Aqui pode dar conflito."
-                completos > 0 -> "Estado $k: o ponto chegou ao fim. Aqui a máquina reduz."
-                else -> "Estado $k: andei o ponto sobre um símbolo e fechei de novo."
+                k == 0 -> tx("sims_estado_0_comeca_antes_tudo")
+                completos > 0 && st.items.size > completos -> tx("sims_estado_1_ponto_chegou_ao", k)
+                completos > 0 -> tx("sims_estado_1_ponto_chegou_ao_2", k)
+                else -> tx("sims_estado_1_andei_ponto_sobre", k)
             }
-            passos += SimStep(Shot(painel + vistos.map { if (it.id == "I$k") it.copy(tint = Tint.YELLOW, hot = true) else it }, fios.toList()), diz)
+            // Pergunta do Prever: o estado tem item completo? É o que decide se ali dá para reduzir.
+            val ask = if (k == 0) null else {
+                val sim = completos > 0
+                SimAsk(
+                    tx("sims_ask_lr0", k), listOf(tx("sims_ask_lr0_sim"), tx("sims_ask_lr0_nao")), if (sim) 0 else 1,
+                    if (sim) tx("sims_ask_lr0_porque_sim") else tx("sims_ask_lr0_porque_nao"),
+                )
+            }
+            passos += SimStep(Shot(painel + vistos.map { if (it.id == "I$k") it.copy(tint = Tint.YELLOW, hot = true) else it }, fios.toList()), diz, ask)
         }
-        return Sim("Construindo os estados LR(0)", passos, Skill.LR0_ITEMS)
+        return Sim(tx("sims_construindo_estados_lr_0"), passos, Skill.LR0_ITEMS)
     }
 
     // ------------------------------------------------------------ Outro exemplo
@@ -635,7 +652,7 @@ object Sims {
             Skill.LEFT_RECURSION -> recursao(GrammarBank.exprLeftRec.grammar)
             Skill.LEFT_FACTORING -> fatorar(Grammar.parse(listOf("S -> if E then S | if E then S else S | a\nE -> b", "A -> a b c | a b d | e", "L -> id , L | id").random(rnd)))
             Skill.SHIFT_REDUCE, Skill.SLR_TABLE -> GrammarBank.exprLeftRec.grammar.let { g -> parseLR(g, SentenceGenerator.generate(g, rnd, maxTokens = 7) ?: listOf("id")) }
-            Skill.LR0_ITEMS -> lr0(Grammar.parse("E -> E + n | n"))
+            Skill.LR0_ITEMS -> lr0(Grammar.parse(listOf("E -> E + n | n", "S -> ( S ) | id", "L -> L , id | id", "E -> E * n | n", "A -> id = E\nE -> E + n | n").random(rnd)))
             Skill.TAC, Skill.ATTRIBUTES_TYPES, Skill.AST_BUILD, Skill.CODEGEN_MIPS, Skill.OPTIMIZATION -> expressao(ExprGenerator.random(rnd, 2))
             else -> null
         }

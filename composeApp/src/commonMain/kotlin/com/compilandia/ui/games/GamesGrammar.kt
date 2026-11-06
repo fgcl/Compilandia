@@ -61,6 +61,7 @@ import com.compilandia.ui.TreeView
 import com.compilandia.ui.toUi
 import com.compilandia.ui.visuals.Cell
 import com.compilandia.ui.visuals.StackAndInput
+import com.compilandia.textos.tx
 
 // ============================================================ Derivação Turbo
 
@@ -102,11 +103,11 @@ fun DerivationBoard(
 
     GrammarText(g)
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("🎯 Alvo: ", style = MaterialTheme.typography.titleSmall)
+        Text(tx("gamesgrammar_alvo"), style = MaterialTheme.typography.titleSmall)
         SymbolsText(g, target, size = 17)
     }
     PaperCard(color = Palette.paper) {
-        Text("Forma sentencial atual:", style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+        Text(tx("gamesgrammar_forma_sentencial_atual"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
         Row(Modifier.horizontalScroll(rememberScrollState())) {
             form.symbols.forEachIndexed { k, s ->
                 Box(
@@ -117,36 +118,36 @@ fun DerivationBoard(
             }
             if (form.symbols.isEmpty()) Mono(EPS, size = 18)
         }
-        Text("${history.size} passos · ${mistakes} becos", style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+        Text(tx("gamesgrammar_1_passos_2_becos", history.size, mistakes), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
     }
     HintBox(
         ctx,
-        "Olhe o próximo terminal do ALVO que ainda não apareceu: qual produção pode começar com ele?",
-        "Boas escolhas agora: " + (if (idx >= 0) DerivationHelper.goodChoices(g, earley, form, target).joinToString(" ou ") { it.rhsText() } else "—"),
+        tx("gamesgrammar_olhe_proximo_terminal_alvo_que"),
+        tx("gamesgrammar_boas_escolhas_agora") + (if (idx >= 0) DerivationHelper.goodChoices(g, earley, form, target).joinToString(" ou ") { it.rhsText() } else "—"),
     )
     msg?.let { FeedbackBanner(it.first, it.second) }
     if (finished) {
-        FeedbackBanner(true, "Derivação completa em ${history.size} passos! Aqui está a árvore:")
+        FeedbackBanner(true, tx("gamesgrammar_derivacao_completa_em_1_passos", history.size))
         TreeView(DerivationHelper.treeOf(g, history.toList()).toUi(g))
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { onDone(mistakes, history.toList()) }
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { onDone(mistakes, history.toList()) }
     } else if (idx >= 0) {
-        Text("Expandir ${form.symbols[idx]} com:", style = MaterialTheme.typography.titleSmall)
+        Text(tx("gamesgrammar_expandir_1_com", form.symbols[idx]), style = MaterialTheme.typography.titleSmall)
         for (p in g.productionsOf(form.symbols[idx])) {
             BigButton("${p.lhs} → ${p.rhsText()}", Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink, small = true) {
                 val nf = form.apply(idx, p)
                 val wouldRepeat = forbidden != null && nf.leftmostNT(g) < 0 && (history + p) == forbidden
                 if (wouldRepeat) {
-                    mistakes++; msg = false to "Essa é a MESMA derivação da primeira árvore. Ache outro caminho!"; Juice.wrong()
+                    mistakes++; msg = false to tx("gamesgrammar_essa_mesma_derivacao_primeira_arvore"); Juice.wrong()
                 } else if (DerivationHelper.viable(g, earley, nf.symbols, target) && nf.symbols.count { !g.isNonTerminal(it) } <= target.size) {
                     form = nf; history += p; msg = null; Sound.play(Sfx.CLICK)
                 } else {
                     mistakes++
-                    msg = false to "Beco sem saída: de \"${nf.text()}\" não dá mais para chegar no alvo."
+                    msg = false to tx("gamesgrammar_beco_sem_saida_1_nao", nf.text())
                     Juice.wrong()
                 }
             }
         }
-        if (history.isNotEmpty()) BigButton("↶ desfazer", small = true, color = Palette.white, textColor = Palette.ink) {
+        if (history.isNotEmpty()) BigButton(tx("gamesgrammar_desfazer"), small = true, color = Palette.white, textColor = Palette.ink) {
             history.removeAt(history.lastIndex)
             var f = SententialForm(listOf(g.start))
             for (p in history) f = f.apply(f.leftmostNT(g), p)
@@ -174,23 +175,23 @@ fun TwoTreesGame(ctx: GameCtx) {
     var second by remember { mutableStateOf<List<Production>?>(null) }
     when {
         first == null -> {
-            Text("Árvore 1 de 2", style = MaterialTheme.typography.headlineSmall)
+            Text(tx("gamesgrammar_arvore_1_2"), style = MaterialTheme.typography.headlineSmall)
             DerivationBoard(ctx, g, target, null) { m, d -> totalMistakes += m; first = d }
         }
         second == null -> {
-            Text("Árvore 2 de 2 — tem que ser DIFERENTE!", style = MaterialTheme.typography.headlineSmall)
-            HintBox(ctx, "Na primeira árvore, qual operador ficou mais perto da raiz? Tente colocar o OUTRO lá em cima.")
+            Text(tx("gamesgrammar_arvore_2_2_tem_que"), style = MaterialTheme.typography.headlineSmall)
+            HintBox(ctx, tx("gamesgrammar_na_primeira_arvore_qual_operador"))
             androidx.compose.runtime.key("second") {
                 DerivationBoard(ctx, g, target, first) { m, d -> totalMistakes += m; second = d }
             }
         }
         else -> {
-            FeedbackBanner(true, "Duas derivações mais à esquerda diferentes = duas árvores = **gramática ambígua**. É por isso que compiladores reescrevem a gramática ou usam precedência (%left no Bison)!")
-            Text("Árvore 1", style = MaterialTheme.typography.titleSmall)
+            FeedbackBanner(true, tx("gamesgrammar_duas_derivacoes_mais_esquerda_diferentes"))
+            Text(tx("comum_arvore_1"), style = MaterialTheme.typography.titleSmall)
             TreeView(DerivationHelper.treeOf(g, first!!).toUi(g))
-            Text("Árvore 2", style = MaterialTheme.typography.titleSmall)
+            Text(tx("comum_arvore_2"), style = MaterialTheme.typography.titleSmall)
             TreeView(DerivationHelper.treeOf(g, second!!).toUi(g))
-            BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * totalMistakes).coerceAtLeast(0.0)) }
+            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * totalMistakes).coerceAtLeast(0.0)) }
         }
     }
 }
@@ -225,14 +226,14 @@ private fun SurgeryRound(ctx: GameCtx, g: Grammar, leftRec: Boolean, done: (Doub
     var selected by remember(g) { mutableStateOf<Int?>(null) }
     var result by remember(g) { mutableStateOf<Double?>(null) }
 
-    Text(if (leftRec) "🩺 Paciente com RECURSÃO À ESQUERDA" else "🩺 Paciente precisando de FATORAÇÃO", style = MaterialTheme.typography.titleSmall)
+    Text(if (leftRec) tx("gamesgrammar_paciente_com_recursao_esquerda") else tx("gamesgrammar_paciente_precisando_fatoracao"), style = MaterialTheme.typography.titleSmall)
     PaperCard(color = Palette.red.copy(alpha = 0.06f), border = Palette.red) { GrammarText(g) }
     HintBox(
         ctx,
-        if (leftRec) "Receita: A → A α | β  vira  A → β A'  e  A' → α A' | ε" else "Receita: A → α β1 | α β2  vira  A → α A'  e  A' → β1 | β2",
-        "Comece pelos espaços da produção principal: o que vem primeiro nela?",
+        if (leftRec) tx("gamesgrammar_receita_vira") else tx("gamesgrammar_receita_1_2_vira_1"),
+        tx("gamesgrammar_comece_pelos_espacos_producao_principal"),
     )
-    Text("Gramática curada (preencha os espaços):", style = MaterialTheme.typography.titleSmall)
+    Text(tx("gamesgrammar_gramatica_curada_preencha_espacos"), style = MaterialTheme.typography.titleSmall)
     if (unchanged.isNotEmpty()) for (p in unchanged) Mono("${p.lhs} → ${p.rhsText()}", color = Palette.inkSoft)
     skeleton.forEachIndexed { pi, p ->
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.horizontalScroll(rememberScrollState())) {
@@ -261,20 +262,20 @@ private fun SurgeryRound(ctx: GameCtx, g: Grammar, leftRec: Boolean, done: (Doub
             }
         }
     }
-    Text("Peças:", style = MaterialTheme.typography.labelMedium)
+    Text(tx("gamesgrammar_pecas"), style = MaterialTheme.typography.labelMedium)
     ChipRow {
         for ((id, s) in pieces) if (id !in used) Chip(s, selected = selected == id, mono = true, color = Palette.purple, enabled = result == null) { selected = if (selected == id) null else id }
     }
-    if (result == null) BigButton("Operar ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = slots.all { s -> s.all { it != null } }) {
+    if (result == null) BigButton(tx("gamesgrammar_operar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = slots.all { s -> s.all { it != null } }) {
         val good = skeleton.indices.count { correctSlot(skeleton, slots, it) }
         result = good.toDouble() / skeleton.size
         if (result == 1.0) Juice.correct() else Juice.wrong()
     } else {
-        FeedbackBanner(result == 1.0, if (result == 1.0) "Cirurgia perfeita! A nova gramática gera a MESMA linguagem, sem o problema." else "Quase! A versão certa é:")
+        FeedbackBanner(result == 1.0, if (result == 1.0) tx("gamesgrammar_cirurgia_perfeita_nova_gramatica_gera") else tx("gamesgrammar_quase_versao_certa"))
         if (result != 1.0) PaperCard(color = Palette.green.copy(alpha = 0.08f), border = Palette.green) { GrammarText(target) }
         val ll = LL1Table(target).isLL1
-        Text(if (ll) "E agora ela é LL(1) ✅" else "Ainda não é LL(1), mas melhorou.", style = MaterialTheme.typography.bodySmall)
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done(result!!) }
+        Text(if (ll) tx("gamesgrammar_agora_ela_ll_1") else tx("gamesgrammar_ainda_nao_ll_1_mas"), style = MaterialTheme.typography.bodySmall)
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(result!!) }
     }
 }
 
@@ -313,9 +314,9 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
     GrammarText(g)
     HintBox(
         ctx,
-        "FIRST(A): olhe o INÍCIO de cada produção de A. Terminal entra direto; não-terminal → copie o FIRST dele (e, se ele pode sumir, olhe o próximo).",
-        "FOLLOW: procure A no LADO DIREITO das produções e veja quem vem logo depois. O inicial sempre tem $. Se A está no fim, herda o FOLLOW do lado esquerdo.",
-        "Anuláveis (podem virar ε): " + ff.nullable.ifEmpty { setOf("nenhum") }.joinToString(),
+        tx("gamesgrammar_first_olhe_inicio_cada_producao"),
+        tx("gamesgrammar_follow_procure_no_lado_direito"),
+        tx("gamesgrammar_anulaveis_podem_virar") + ff.nullable.ifEmpty { setOf("nenhum") }.joinToString(),
     )
     Column(Modifier.horizontalScroll(rememberScrollState())) {
         Row { Cell("", header = true, w = 48); Cell("⚗️ FIRST", header = true, w = 140); if (withFollow) Cell("🧪 FOLLOW", header = true, w = 140) }
@@ -338,7 +339,7 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
         }
     }
     if (!checked) {
-        Text("Ingredientes para ${if (active.startsWith("F")) "FIRST" else "FOLLOW"}(${active.drop(2)}):", style = MaterialTheme.typography.labelMedium)
+        Text(tx("gamesgrammar_ingredientes_para_1_2", if (active.startsWith("F")) "FIRST" else "FOLLOW", active.drop(2)), style = MaterialTheme.typography.labelMedium)
         val ingredients = g.terminals + if (active.startsWith("F")) listOf(EPS) else listOf(EOF)
         ChipRow {
             for (t in ingredients) {
@@ -348,11 +349,11 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
                 }
             }
         }
-        BigButton("Destilar ✔", Modifier.fillMaxWidth(), color = Palette.teal) { checked = true; if (keys.all { sets[it].orEmpty() == truth(it) }) Juice.correct() else Juice.wrong() }
+        BigButton(tx("gamesgrammar_destilar"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true; if (keys.all { sets[it].orEmpty() == truth(it) }) Juice.correct() else Juice.wrong() }
     } else {
         val score = keys.count { sets[it].orEmpty() == truth(it) }.toDouble() / keys.size
-        FeedbackBanner(score == 1.0, if (score == 1.0) "Poção perfeita! Todos os conjuntos certos." else "${(score * 100).toInt()}% dos caldeirões certos. As respostas corretas estão marcadas com ✔.")
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done(score) }
+        FeedbackBanner(score == 1.0, if (score == 1.0) tx("gamesgrammar_pocao_perfeita_todos_conjuntos_certos") else tx("gamesgrammar_1_dos_caldeiroes_certos_respostas", (score * 100).toInt()))
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(score) }
     }
 }
 
@@ -377,8 +378,8 @@ fun LL1SudokuGame(ctx: GameCtx) {
     GrammarText(g)
     HintBox(
         ctx,
-        "Para cada A → α: coloque-a em M[A, a] para todo a em FIRST(α).",
-        "Se α pode virar ε, coloque também em M[A, b] para todo b em FOLLOW(A).",
+        tx("gamesgrammar_para_cada_coloque_em_m"),
+        tx("gamesgrammar_se_pode_virar_coloque_tambem"),
         "FIRST/FOLLOW: " + t.grammar.nonTerminals.joinToString("  ") { "$it: F{${t.ff.first.getValue(it).joinToString(",")}} W{${t.ff.follow.getValue(it).joinToString(",")}}" },
     )
     Column(Modifier.horizontalScroll(rememberScrollState())) {
@@ -405,7 +406,7 @@ fun LL1SudokuGame(ctx: GameCtx) {
     }
     val s = sel
     if (!checked && s != null) {
-        Text("M[${s.first}, ${s.second}] =", style = MaterialTheme.typography.labelMedium)
+        Text(tx("gamesgrammar_m_1_2", s.first, s.second), style = MaterialTheme.typography.labelMedium)
         ChipRow {
             for (p in g.productionsOf(s.first)) {
                 val on = p.id in mine[s].orEmpty()
@@ -414,24 +415,24 @@ fun LL1SudokuGame(ctx: GameCtx) {
                 }
             }
         }
-    } else if (!checked) Text("Toque numa célula para preenchê-la.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    } else if (!checked) Text(tx("gamesgrammar_toque_numa_celula_para_preenche"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
 
     if (!checked) {
-        Text("E então, a gramática é LL(1)?", style = MaterialTheme.typography.titleSmall)
+        Text(tx("gamesgrammar_entao_gramatica_ll_1"), style = MaterialTheme.typography.titleSmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Chip("Sim, é LL(1)", selected = verdictLL1 == true, color = Palette.green) { verdictLL1 = true }
-            Chip("Não: tem conflito", selected = verdictLL1 == false, color = Palette.red) { verdictLL1 = false }
+            Chip(tx("gamesgrammar_sim_ll_1"), selected = verdictLL1 == true, color = Palette.green) { verdictLL1 = true }
+            Chip(tx("gamesgrammar_nao_tem_conflito"), selected = verdictLL1 == false, color = Palette.red) { verdictLL1 = false }
         }
-        BigButton("Conferir ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = verdictLL1 != null) { checked = true }
+        BigButton(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = verdictLL1 != null) { checked = true }
     } else {
         val relevant = (t.filledCells().keys + mine.filterValues { it.isNotEmpty() }.keys).toSet()
         val good = relevant.count { k -> mine[k].orEmpty() == t.cell(k.first, k.second).map { it.id }.toSet() }
         val cellScore = if (relevant.isEmpty()) 1.0 else good.toDouble() / relevant.size
         val verdictOk = verdictLL1 == t.isLL1
         FeedbackBanner(cellScore == 1.0 && verdictOk,
-            "Células: $good/${relevant.size}. " + (if (verdictOk) "Veredito certo: " else "Veredito errado: ") +
-                (if (t.isLL1) "nenhuma célula tem duas produções → LL(1)." else "há células com 2+ produções → NÃO é LL(1)."))
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish(0.8 * cellScore + 0.2 * (if (verdictOk) 1.0 else 0.0)) }
+            tx("gamesgrammar_celulas_1_2", good, relevant.size) + (if (verdictOk) tx("gamesgrammar_veredito_certo") else tx("gamesgrammar_veredito_errado")) +
+                (if (t.isLL1) tx("gamesgrammar_nenhuma_celula_tem_duas_producoes") else tx("gamesgrammar_ha_celulas_com_2_producoes")))
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.8 * cellScore + 0.2 * (if (verdictOk) 1.0 else 0.0)) }
     }
 }
 
@@ -469,15 +470,15 @@ private fun StackTowerRound(ctx: GameCtx, g: Grammar, input: List<String>, done:
     GrammarText(g)
     if (finished) {
         val last = trace.last().action
-        FeedbackBanner(true, if (last is LLAction.Accept) "Aceito! A pilha esvaziou junto com a entrada." else "Erro detectado corretamente: a entrada NÃO pertence à linguagem.")
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        FeedbackBanner(true, if (last is LLAction.Accept) tx("gamesgrammar_aceito_pilha_esvaziou_junto_com") else tx("gamesgrammar_erro_detectado_corretamente_entrada_nao"))
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     cur!!
     BeltStage(cur.stack, cur.input)
-    Text("Topo: ${cur.stack.last()} · Próximo: ${cur.input.first()}", style = MaterialTheme.typography.titleSmall)
-    HintBox(ctx, "Topo terminal igual ao token → casar. Topo não-terminal → olhe M[topo, token].",
-        "M[${cur.stack.last()}, ${cur.input.first()}] = " + (if (g.isNonTerminal(cur.stack.last())) t.cell(cur.stack.last(), cur.input.first()).joinToString().ifEmpty { "vazio" } else "não se aplica: o topo é terminal"))
+    Text(tx("gamesgrammar_topo_1_proximo_2", cur.stack.last(), cur.input.first()), style = MaterialTheme.typography.titleSmall)
+    HintBox(ctx, tx("gamesgrammar_topo_terminal_igual_ao_token"),
+        "M[${cur.stack.last()}, ${cur.input.first()}] = " + (if (g.isNonTerminal(cur.stack.last())) t.cell(cur.stack.last(), cur.input.first()).joinToString().ifEmpty { "vazio" } else tx("gamesgrammar_nao_se_aplica_topo_terminal")))
     msg?.let { FeedbackBanner(it.first, it.second) }
     fun choose(a: LLAction) {
         val right = cur.action
@@ -488,15 +489,15 @@ private fun StackTowerRound(ctx: GameCtx, g: Grammar, input: List<String>, done:
         if (ok) { step++; stepMistakes = 0; msg = true to right.label(); Juice.correct() }
         else {
             mistakes++; stepMistakes++; Juice.wrong()
-            msg = if (stepMistakes >= 2) { step++; stepMistakes = 0; false to "A ação certa era: ${right.label()} (já apliquei para você)." }
-            else false to "Hmm, não. Olhe o topo da pilha e o próximo token de novo."
+            msg = if (stepMistakes >= 2) { step++; stepMistakes = 0; false to tx("gamesgrammar_acao_certa_era_1_ja", right.label()) }
+            else false to tx("gamesgrammar_hmm_nao_olhe_topo_pilha")
         }
     }
     val top = cur.stack.last()
     ChipRow {
-        if (!g.isNonTerminal(top) && top != EOF) Chip("✅ casar '$top'", color = Palette.teal) { choose(LLAction.Match(top)) }
-        if (g.isNonTerminal(top)) for (p in g.productionsOf(top)) Chip("expandir $top→${p.rhsText()}", mono = true, color = Palette.purple) { choose(LLAction.Expand(p)) }
-        Chip("🏁 aceitar", color = Palette.green) { choose(LLAction.Accept) }
-        Chip("🚨 erro", color = Palette.red) { choose(LLAction.Error("")) }
+        if (!g.isNonTerminal(top) && top != EOF) Chip(tx("gamesgrammar_casar_1", top), color = Palette.teal) { choose(LLAction.Match(top)) }
+        if (g.isNonTerminal(top)) for (p in g.productionsOf(top)) Chip(tx("gamesgrammar_expandir_1_2", top, p.rhsText()), mono = true, color = Palette.purple) { choose(LLAction.Expand(p)) }
+        Chip(tx("gamesgrammar_aceitar"), color = Palette.green) { choose(LLAction.Accept) }
+        Chip(tx("gamesgrammar_erro"), color = Palette.red) { choose(LLAction.Error("")) }
     }
 }

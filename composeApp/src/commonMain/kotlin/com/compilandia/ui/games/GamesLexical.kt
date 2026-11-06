@@ -59,6 +59,7 @@ import com.compilandia.ui.RichText
 import com.compilandia.ui.visuals.phases
 import com.compilandia.ui.visuals.tokenColor
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 // ============================================================ Esteira das Fases
 
@@ -80,20 +81,20 @@ private fun PipelineOrder(ctx: GameCtx, done: (Double) -> Unit) {
     fun place(p: com.compilandia.ui.visuals.Phase) {
         val idx = stages.indexOf(p)
         if (idx == placed.size) { placed += idx; wrongFlash = null; Juice.correct() }
-        else { mistakes++; wrongFlash = "Ainda não! Antes de **${p.name}** vem outra fase."; Juice.wrong() }
+        else { mistakes++; wrongFlash = tx("gameslexical_ainda_nao_antes_1_vem", p.name); Juice.wrong() }
     }
-    Text("🏭 Arraste as fases para a ESTEIRA na ordem em que o código passa por elas:", style = MaterialTheme.typography.titleSmall)
+    Text(tx("gameslexical_arraste_fases_para_esteira_na"), style = MaterialTheme.typography.titleSmall)
     com.compilandia.ui.DropZone(dd, "esteira", Modifier.fillMaxWidth()) { hovered ->
         Column(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(if (hovered) Palette.yellow.copy(alpha = 0.35f) else Palette.paperDark)
                 .border(if (hovered) 4.dp else 2.dp, if (hovered) Palette.orange else Palette.ink.copy(alpha = 0.4f), RoundedCornerShape(16.dp)).padding(12.dp),
         ) {
-            Text("📄 código-fonte", style = MaterialTheme.typography.labelLarge)
+            Text(tx("gameslexical_codigo_fonte"), style = MaterialTheme.typography.labelLarge)
             for (i in placed) Text("   ⬇\n${stages[i].emoji} ${stages[i].name}", style = MaterialTheme.typography.bodyMedium)
-            if (placed.size < stages.size) Text("   ⬇\n   📥 solte a próxima fase aqui", color = Palette.inkSoft)
+            if (placed.size < stages.size) Text(tx("gameslexical_solte_proxima_fase_aqui"), color = Palette.inkSoft)
         }
     }
-    HintBox(ctx, "Primeiro o texto vira tokens, depois os tokens viram árvore. Só depois disso dá para checar tipos.", "Otimização vem depois do código intermediário e antes do código final.")
+    HintBox(ctx, tx("gameslexical_primeiro_texto_vira_tokens_depois"), tx("gameslexical_otimizacao_vem_depois_codigo_intermediario"))
     wrongFlash?.let { FeedbackBanner(false, it) }
     ChipRow {
         for (p in shuffled) {
@@ -105,8 +106,8 @@ private fun PipelineOrder(ctx: GameCtx, done: (Double) -> Unit) {
         }
     }
     if (placed.size == stages.size) {
-        FeedbackBanner(true, "Pipeline montado! Léxico → Sintático → Semântico → Intermediário → Otimização → Código.")
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.12).coerceAtLeast(0.0)) }
+        FeedbackBanner(true, tx("gameslexical_pipeline_montado_lexico_sintatico_semantico"))
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.12).coerceAtLeast(0.0)) }
     }
 }
 
@@ -122,8 +123,8 @@ private fun PipelineMatch(ctx: GameCtx, done: (Double) -> Unit) {
         return
     }
     val it = items[current]
-    Text("Qual fase fabricou este produto? (${current + 1}/${items.size})", style = MaterialTheme.typography.titleSmall)
-    CodeBlock(it.example, "entrada: posicao = inicial + taxa * 60")
+    Text(tx("gameslexical_qual_fase_fabricou_este_produto", current + 1, items.size), style = MaterialTheme.typography.titleSmall)
+    CodeBlock(it.example, tx("gameslexical_entrada_posicao_inicial_taxa_60"))
     for (o in options) BigButton("${o.emoji} ${o.name}", Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink, small = true, enabled = answered == null) {
         val ok = o == it
         if (ok) correct++
@@ -131,31 +132,31 @@ private fun PipelineMatch(ctx: GameCtx, done: (Double) -> Unit) {
         if (ok) Juice.correct() else Juice.wrong()
     }
     answered?.let { ok ->
-        FeedbackBanner(ok, if (ok) "Isso! ${it.name} produz ${it.output}." else "Era **${it.name}**: ela produz ${it.output}.")
-        BigButton("Próximo ▶", Modifier.fillMaxWidth()) { answered = null; current++ }
+        FeedbackBanner(ok, if (ok) tx("gameslexical_isso_1_produz_2", it.name, it.output) else tx("gameslexical_era_1_ela_produz_2", it.name, it.output))
+        BigButton(tx("gameslexical_proximo"), Modifier.fillMaxWidth()) { answered = null; current++ }
     }
 }
 
 // ============================================================ Detetive de Erros
 
 private data class Case(val code: String, val phase: Int, val why: String)
-private val detectiveBins = listOf("🔪 Léxico", "🌳 Sintático", "🔍 Semântico", "💥 Execução")
+private val detectiveBins = listOf(tx("gameslexical_lexico"), tx("gameslexical_sintatico"), tx("gameslexical_semantico"), tx("gameslexical_execucao"))
 private val detectiveCases = listOf(
-    Case("x = 3 @ 4;", 0, "'@' não pertence a nenhum padrão de token: o scanner nem sabe o que é isso."),
-    Case("nome = \"Maria;", 0, "A string nunca fecha as aspas: o léxico não consegue formar o token string."),
-    Case("total = 1 # 2;", 0, "'#' é um caractere inválido na linguagem: erro léxico."),
-    Case("if (x > ) y = 1;", 1, "Todos os tokens são válidos, mas falta um operando depois de '>': a ESTRUTURA está errada."),
-    Case("while x < 3 { x++; }", 1, "Faltam os parênteses exigidos pela gramática do while."),
-    Case("y = (a + b;", 1, "Parêntese aberto e nunca fechado: só uma gramática (não uma regex) percebe isso."),
-    Case("int x int y;", 1, "Faltou ';' entre as declarações: a sequência de tokens não casa com nenhuma regra."),
-    Case("int x; x = \"oi\";", 2, "A frase está bem formada, mas atribuir string a int viola as regras de TIPO."),
-    Case("y = z + 1;  // z nunca foi declarada", 2, "Sintaxe perfeita; mas a tabela de símbolos não tem 'z': erro semântico."),
-    Case("int a; float a;", 2, "Declarar duas vezes o mesmo nome no mesmo escopo: semântico."),
-    Case("f(1, 2);  // f foi declarada com 1 parâmetro", 2, "Número de argumentos errado: checagem semântica."),
-    Case("v[10] = 1;  // v tem 5 posições", 3, "Em C o compilador normalmente não sabe o índice em tempo de compilação: estoura na execução."),
-    Case("a = b / c;  // c vale 0 na hora", 3, "Divisão por zero com valores que só existem quando o programa roda: erro de execução."),
-    Case("whille (x) { }", 2, "'whille' vira um IDENTIFICADOR (não é palavra-chave!) e 'whille(x)' parece chamada de função não declarada: semântico. O léxico não tem como saber que foi erro de digitação."),
-    Case("int 2x = 5;", 1, "O scanner gera NUM(2) e ID(x) — tokens válidos! Mas 'int NUM ID' não casa com a regra de declaração: sintático."),
+    Case("x = 3 @ 4;", 0, tx("gameslexical_nao_pertence_nenhum_padrao_token")),
+    Case("nome = \"Maria;", 0, tx("gameslexical_string_nunca_fecha_aspas_lexico")),
+    Case("total = 1 # 2;", 0, tx("gameslexical_caractere_invalido_na_linguagem_erro")),
+    Case("if (x > ) y = 1;", 1, tx("gameslexical_todos_tokens_sao_validos_mas")),
+    Case("while x < 3 { x++; }", 1, tx("gameslexical_faltam_parenteses_exigidos_pela_gramatica")),
+    Case("y = (a + b;", 1, tx("gameslexical_parentese_aberto_nunca_fechado_so")),
+    Case("int x int y;", 1, tx("gameslexical_faltou_entre_declaracoes_sequencia_tokens")),
+    Case("int x; x = \"oi\";", 2, tx("gameslexical_frase_esta_bem_formada_mas")),
+    Case("y = z + 1;  // z nunca foi declarada", 2, tx("gameslexical_sintaxe_perfeita_mas_tabela_simbolos")),
+    Case("int a; float a;", 2, tx("gameslexical_declarar_duas_vezes_mesmo_nome")),
+    Case(tx("gameslexical_f_1_2_f_foi"), 2, tx("gameslexical_numero_argumentos_errado_checagem_semantica")),
+    Case(tx("gameslexical_v_10_1_v_tem"), 3, tx("gameslexical_em_c_compilador_normalmente_nao")),
+    Case("a = b / c;  // c vale 0 na hora", 3, tx("gameslexical_divisao_por_zero_com_valores")),
+    Case("whille (x) { }", 2, tx("gameslexical_whille_vira_identificador_nao_palavra")),
+    Case("int 2x = 5;", 1, tx("gameslexical_scanner_gera_num_2_id")),
 )
 
 @Composable
@@ -180,16 +181,16 @@ fun PhaseDetectiveGame(ctx: GameCtx) {
             if (answer == null) { answer = -1; Juice.wrong() }
         }
     }
-    Text("Caso ${i + 1}/${cases.size}: quem pega este erro?", style = MaterialTheme.typography.titleSmall)
+    Text(tx("gameslexical_caso_1_2_quem_pega", i + 1, cases.size), style = MaterialTheme.typography.titleSmall)
     if (timed) ProgressBar(timeLeft, if (timeLeft > 0.3f) Palette.teal else Palette.red, Modifier.fillMaxWidth(), 8.dp)
     val dd = com.compilandia.ui.rememberDragDrop()
     fun choose(k: Int) { if (answer != null) return; answer = k; if (k == c.phase) { correct++; Juice.correct() } else Juice.wrong() }
-    HintBox(ctx, "Léxico = caractere/palavra impossível. Sintático = tokens OK mas estrutura errada. Semântico = estrutura OK mas significado errado (tipos, declarações). Execução = depende de valores reais.")
-    Text("🕵️ Arraste o cartão do suspeito até o setor que pega esse erro:", style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
+    HintBox(ctx, tx("gameslexical_lexico_caractere_palavra_impossivel_sintatic"))
+    Text(tx("gameslexical_arraste_cartao_suspeito_ate_setor"), style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
     if (answer == null) androidx.compose.runtime.key(i) {
         com.compilandia.ui.Draggable(dd, c, Modifier.fillMaxWidth(), onDrop = { z -> choose(z.toInt()) }) {
             Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp)).background(Palette.codeBg).border(3.dp, Palette.yellow, RoundedCornerShape(14.dp)).padding(12.dp)) {
-                Text("📁 CASO ${i + 1}", color = Palette.yellow, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Text(tx("gameslexical_caso_1", i + 1), color = Palette.yellow, fontWeight = FontWeight.Bold, fontSize = 12.sp)
                 Text(c.code, fontFamily = LocalFonts.current.mono, color = Color(0xFFE8E6F0), fontSize = 15.sp)
             }
         }
@@ -213,8 +214,8 @@ fun PhaseDetectiveGame(ctx: GameCtx) {
         }
     }
     answer?.let { a ->
-        FeedbackBanner(a == c.phase, (if (a == -1) "Tempo esgotado! " else "") + "**${detectiveBins[c.phase]}** — ${c.why}")
-        BigButton("Próximo caso ▶", Modifier.fillMaxWidth()) { answer = null; i++ }
+        FeedbackBanner(a == c.phase, (if (a == -1) tx("gameslexical_tempo_esgotado") else "") + "**${detectiveBins[c.phase]}** — ${c.why}")
+        BigButton(tx("gameslexical_proximo_caso"), Modifier.fillMaxWidth()) { answer = null; i++ }
     }
 }
 
@@ -262,7 +263,7 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
     val truthSpans = truth.map { it.start to it.end }
 
     Text(
-        when (phase) { 0 -> "✂️ Toque nos espaços entre os caracteres para cortar"; 1 -> "🏷️ Toque em cada token para escolher a classe"; else -> "Resultado" },
+        when (phase) { 0 -> tx("gameslexical_toque_nos_espacos_entre_caracteres"); 1 -> tx("gameslexical_toque_em_cada_token_para"); else -> tx("gameslexical_resultado") },
         style = MaterialTheme.typography.titleSmall,
     )
     val mono = LocalFonts.current.mono
@@ -283,8 +284,8 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
                 ) { Text(line[i].toString(), fontFamily = mono, fontSize = 20.sp, fontWeight = FontWeight.Bold) }
             }
         }
-        HintBox(ctx, "Regra do maior casamento: o scanner engole o MAIOR lexema possível. `>=` é UM token; `count2` é UM identificador.", "Palavras como `iff` ou `whilex` NÃO são palavras-chave: são identificadores!")
-        BigButton("Cortar! ✂️", Modifier.fillMaxWidth(), color = Palette.red) {
+        HintBox(ctx, tx("gameslexical_regra_maior_casamento_scanner_engole"), tx("gameslexical_palavras_como_iff_ou_whilex"))
+        BigButton(tx("gameslexical_cortar"), Modifier.fillMaxWidth(), color = Palette.red) {
             val mine = playerTokens()
             val hit = mine.count { it in truthSpans }
             cutScore = (2f * hit / (mine.size + truthSpans.size)).coerceIn(0f, 1f)
@@ -293,11 +294,11 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
         }
     } else {
         val spans = if (cutScore > 0.99f) truthSpans else truthSpans // classificação sempre sobre os tokens corretos
-        if (cutScore < 0.99f && phase == 1) FeedbackBanner(false, "Os cortes certos eram estes (${(cutScore * 100).toInt()}% de acerto nos cortes). Agora classifique:")
-        else if (phase == 1) FeedbackBanner(true, "Cortes perfeitos! Agora classifique:")
+        if (cutScore < 0.99f && phase == 1) FeedbackBanner(false, tx("gameslexical_cortes_certos_eram_estes_1", (cutScore * 100).toInt()))
+        else if (phase == 1) FeedbackBanner(true, tx("gameslexical_cortes_perfeitos_agora_classifique"))
         val dd = com.compilandia.ui.rememberDragDrop()
         val classOptions = TokenClass.entries.filter { it != TokenClass.STRING }
-        if (phase == 1) Text("Arraste cada token para a caixa da classe dele (ou toque para alternar):", style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
+        if (phase == 1) Text(tx("gameslexical_arraste_cada_token_para_caixa"), style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
         ChipRow {
             spans.forEachIndexed { k, (a, b) ->
                 val lex = line.substring(a, b)
@@ -336,13 +337,13 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
                 }
             }
         }
-        if (phase == 1) BigButton("Conferir classes ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = classes.size == spans.size) {
+        if (phase == 1) BigButton(tx("gameslexical_conferir_classes"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = classes.size == spans.size) {
             classScore = spans.indices.count { classes[it] == truth[it].cls }.toFloat() / spans.size
             if (classScore > 0.99f) Juice.correct() else Juice.wrong()
             phase = 2
         } else {
-            FeedbackBanner(classScore > 0.8f, "Cortes: ${(cutScore * 100).toInt()}% · Classes: ${(classScore * 100).toInt()}%. Total de tokens: ${truth.size} (espaços somem — o scanner os descarta).")
-            BigButton("Próxima linha ▶", Modifier.fillMaxWidth()) { done(0.6 * cutScore + 0.4 * classScore) }
+            FeedbackBanner(classScore > 0.8f, tx("gameslexical_cortes_1_classes_2_total", (cutScore * 100).toInt(), (classScore * 100).toInt(), truth.size))
+            BigButton(tx("gameslexical_proxima_linha"), Modifier.fillMaxWidth()) { done(0.6 * cutScore + 0.4 * classScore) }
         }
     }
 }
@@ -368,45 +369,45 @@ private fun DfaTrainRound(ctx: GameCtx, done: (Double) -> Unit) {
     val stuck = pos < input.length && path[pos + 1] < 0
     val atEnd = pos == input.length || (pos < path.size && path[pos] < 0)
 
-    Mono("regex: ${entry.regex}   (${entry.description})", bold = true)
+    Mono(tx("gameslexical_regex_1_2", entry.regex, entry.description), bold = true)
     val move = remember(pos) { androidx.compose.animation.core.Animatable(0f) }
     LaunchedEffect(pos) { move.snapTo(0f); move.animateTo(1f, androidx.compose.animation.core.tween(550)) }
     val trav = if (pos > 0 && path[pos] >= 0) Triple(path[pos - 1], path[pos], move.value) else if (path[pos] >= 0) Triple(path[pos], path[pos], 1f) else null
     DfaView(dfa, current = path[pos].takeIf { it >= 0 }, lastEdge = if (pos > 0 && path[pos] >= 0) path[pos - 1] to path[pos] else null, traveler = trav) { tapped ->
         if (atEnd || verdict != null) return@DfaView
-        if (stuck) { mistakes++; msg = false to "Não existe transição de q${path[pos]} com '${input[pos]}'. Use o botão 'travou'!"; Juice.wrong(); return@DfaView }
+        if (stuck) { mistakes++; msg = false to tx("gameslexical_nao_existe_transicao_q_1", path[pos], input[pos]); Juice.wrong(); return@DfaView }
         if (tapped == path[pos + 1]) { pos++; msg = null; Juice.correct() }
-        else { mistakes++; msg = false to "Com '${input[pos]}', de q${path[pos]} o trem NÃO vai para q$tapped. Siga a seta com esse rótulo."; Juice.wrong() }
+        else { mistakes++; msg = false to tx("gameslexical_com_1_q_2_trem", input[pos], path[pos], tapped); Juice.wrong() }
     }
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text("Cadeia: ", style = MaterialTheme.typography.titleSmall)
+        Text(tx("gameslexical_cadeia"), style = MaterialTheme.typography.titleSmall)
         input.forEachIndexed { k, ch ->
             Box(
                 Modifier.padding(2.dp).clip(RoundedCornerShape(6.dp)).background(when { k < pos -> Palette.paperDark; k == pos -> Palette.yellow; else -> Palette.white })
                     .border(1.dp, Palette.ink, RoundedCornerShape(6.dp)).padding(horizontal = 8.dp, vertical = 4.dp)
             ) { Mono(ch.toString(), bold = true, size = 18) }
         }
-        if (input.isEmpty()) Mono("ε (vazia)", bold = true)
+        if (input.isEmpty()) Mono(tx("gameslexical_vazia"), bold = true)
     }
-    HintBox(ctx, "Ache o círculo amarelo (estado atual) e procure a seta que sai dele com o símbolo amarelo da cadeia.", "Se não houver seta com aquele símbolo, o AFD trava e REJEITA.")
+    HintBox(ctx, tx("gameslexical_ache_circulo_amarelo_estado_atual"), tx("gameslexical_se_nao_houver_seta_com"))
     msg?.let { FeedbackBanner(it.first, it.second) }
-    if (!atEnd && verdict == null && stuck) BigButton("💥 Travou! (sem transição)", Modifier.fillMaxWidth(), color = Palette.red) {
-        pos = input.length; msg = true to "Isso! Sem transição = rejeita na hora."; Juice.correct()
+    if (!atEnd && verdict == null && stuck) BigButton(tx("gameslexical_travou_sem_transicao"), Modifier.fillMaxWidth(), color = Palette.red) {
+        pos = input.length; msg = true to tx("gameslexical_isso_sem_transicao_rejeita_na"); Juice.correct()
         verdict = false
     }
     if ((atEnd) && verdict == null) {
-        Text("Fim da cadeia! O trem parou em q${path.getOrNull(pos)}. E aí?", style = MaterialTheme.typography.titleSmall)
+        Text(tx("gameslexical_fim_cadeia_trem_parou_em", path.getOrNull(pos)), style = MaterialTheme.typography.titleSmall)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            for ((label, v) in listOf("✅ Aceita" to true, "❌ Rejeita" to false)) BigButton(label, Modifier.weight(1f), color = Palette.white, textColor = Palette.ink) {
+            for ((label, v) in listOf(tx("gameslexical_aceita") to true, tx("gameslexical_rejeita") to false)) BigButton(label, Modifier.weight(1f), color = Palette.white, textColor = Palette.ink) {
                 val ok = dfa.accepts(input) == v
                 if (!ok) mistakes++
                 verdict = v
-                msg = ok to if (dfa.accepts(input)) "Parou num estado de ACEITAÇÃO (círculo duplo): aceita." else "Não parou num círculo duplo: rejeita."
+                msg = ok to if (dfa.accepts(input)) tx("gameslexical_parou_num_estado_aceitacao_circulo") else tx("gameslexical_nao_parou_num_circulo_duplo")
                 if (ok) Juice.correct() else Juice.wrong()
             }
         }
     }
-    if (verdict != null) BigButton("Próximo trem ▶", Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.2).coerceAtLeast(0.0)) }
+    if (verdict != null) BigButton(tx("gameslexical_proximo_trem"), Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.2).coerceAtLeast(0.0)) }
 }
 
 // ============================================================ Porteiro Regex
@@ -429,7 +430,7 @@ fun RegexSorterGame(ctx: GameCtx) {
     fun judge(letIn: Boolean?) {
         val ok = letIn == accept
         if (ok) correct++
-        last = ok to "\"${s.ifEmpty { "ε" }}\" ${if (accept) "CASA" else "NÃO casa"} com ${entry.regex}"
+        last = ok to tx("gameslexical_1_2_com_3", s.ifEmpty { "ε" }, if (accept) "CASA" else tx("gameslexical_nao_casa"), entry.regex)
         if (ok) Juice.correct() else Juice.wrong()
         i++
     }
@@ -440,13 +441,13 @@ fun RegexSorterGame(ctx: GameCtx) {
         judge(null)
     }
     PaperCard(color = Palette.codeBg) {
-        Text("🚪 Balada REGEX", color = Palette.yellow, style = MaterialTheme.typography.headlineSmall)
-        Mono("só entra quem casa com:  ${entry.regex}", color = Palette.onAccent, bold = true)
+        Text(tx("gameslexical_balada_regex"), color = Palette.yellow, style = MaterialTheme.typography.headlineSmall)
+        Mono(tx("gameslexical_so_entra_quem_casa_com", entry.regex), color = Palette.onAccent, bold = true)
         Text("(${entry.description})", color = Palette.onAccent.copy(alpha = 0.7f), style = MaterialTheme.typography.bodySmall)
     }
-    Text("Fila: ${queue.size - i} pessoas", style = MaterialTheme.typography.labelMedium)
+    Text(tx("gameslexical_fila_1_pessoas", queue.size - i), style = MaterialTheme.typography.labelMedium)
     if (timed) ProgressBar(timeLeft, Palette.orange, Modifier.fillMaxWidth(), 8.dp)
-    Text("👉 Arraste a pessoa: DIREITA = entra · ESQUERDA = barra", style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
+    Text(tx("gameslexical_arraste_pessoa_direita_entra_esquerda"), style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
     Box(Modifier.fillMaxWidth().height(230.dp), contentAlignment = Alignment.Center) {
         // próxima da fila aparecendo atrás
         if (i + 1 < queue.size) Box(
@@ -460,13 +461,13 @@ fun RegexSorterGame(ctx: GameCtx) {
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
                 ) {
                     Text("🧍", fontSize = 54.sp)
-                    Text(s.ifEmpty { "ε (cadeia vazia)" }, fontFamily = LocalFonts.current.mono, fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Palette.inkOnLight)
+                    Text(s.ifEmpty { tx("gameslexical_cadeia_vazia") }, fontFamily = LocalFonts.current.mono, fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Palette.inkOnLight)
                     Text("${i + 1}/${queue.size}", fontSize = 12.sp, color = Palette.inkOnLight.copy(alpha = 0.6f))
                 }
             }
         }
     }
-    HintBox(ctx, "Leia a regex como uma receita: * = zero ou mais vezes, + = uma ou mais, | = ou.", "Tente 'andar' com a cadeia pela regex da esquerda para a direita.")
+    HintBox(ctx, tx("gameslexical_leia_regex_como_receita_zero"), tx("gameslexical_tente_andar_com_cadeia_pela"))
     if (ctx.hints >= 2) DfaView(dfa)
     last?.let { FeedbackBanner(it.first, it.second) }
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {

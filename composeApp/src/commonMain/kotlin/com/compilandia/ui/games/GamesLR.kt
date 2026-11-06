@@ -66,6 +66,7 @@ import com.compilandia.ui.visuals.Cell
 import com.compilandia.ui.visuals.LRTableView
 import com.compilandia.ui.visuals.StackAndInput
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 // ============================================================ Esteira Shift-Reduce
 
@@ -97,9 +98,9 @@ private fun ShiftReduceRound(ctx: GameCtx, g: Grammar, input: List<String>, done
     val cur = res.steps.getOrNull(step)
     GrammarText(g)
     if (cur == null) {
-        FeedbackBanner(true, "ACEITO! Repare: as reduções, lidas de trás para frente, são uma derivação mais à DIREITA.")
+        FeedbackBanner(true, tx("gameslr_aceito_repare_reducoes_lidas_tras"))
         res.tree?.let { TreeView(it.toUi(t.grammar)) }
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     fun choose(a: LRAction?) {
@@ -111,10 +112,10 @@ private fun ShiftReduceRound(ctx: GameCtx, g: Grammar, input: List<String>, done
             mistakes++; stepMistakes++; Juice.wrong()
             msg = if (stepMistakes >= 2) { step++; stepMistakes = 0; false to "Era: ${cur.note}" }
             else false to when (right) {
-                is LRAction.Shift -> "Ainda não há um handle completo no topo. Empilhe mais!"
-                is LRAction.Reduce -> "O topo da pilha já forma o lado direito de uma produção (handle) e o próximo token está no FOLLOW dela."
-                LRAction.Accept -> "Só sobrou o símbolo inicial e a entrada acabou!"
-                null -> "Nenhuma ação vale aqui: é erro de sintaxe."
+                is LRAction.Shift -> tx("gameslr_ainda_nao_ha_handle_completo")
+                is LRAction.Reduce -> tx("gameslr_topo_pilha_ja_forma_lado")
+                LRAction.Accept -> tx("gameslr_so_sobrou_simbolo_inicial_entrada")
+                null -> tx("gameslr_nenhuma_acao_vale_aqui_erro")
             }
         }
     }
@@ -122,27 +123,27 @@ private fun ShiftReduceRound(ctx: GameCtx, g: Grammar, input: List<String>, done
         var ms = 0L
         val total = 14000L
         while (ms < total) { delay(100); ms += 100; timeLeft = 1f - ms.toFloat() / total }
-        mistakes++; step++; msg = false to "⏰ Tempo! Era: ${cur.note}"
+        mistakes++; step++; msg = false to tx("gameslr_tempo_era_1", cur.note)
     }
     if (timed) ProgressBar(timeLeft, Palette.orange, Modifier.fillMaxWidth(), 8.dp)
     // A torre mostra cada símbolo com o estado que veio junto; o estado do topo decide a ação.
-    val stackView = listOf("estado ${cur.states.first()}") + cur.symbols.zip(cur.states.drop(1)).map { (sym, st) -> "$sym  ${st}" }
+    val stackView = listOf(tx("gameslr_estado_1", cur.states.first())) + cur.symbols.zip(cur.states.drop(1)).map { (sym, st) -> "$sym  ${st}" }
     BeltStage(stackView, cur.input)
     HintBox(
         ctx,
-        "Olhe o estado do topo (${cur.states.last()}) e o token '${cur.input.first()}': ACTION[${cur.states.last()}, ${cur.input.first()}] = ${t.action[cur.states.last() to cur.input.first()]?.short() ?: "vazio"}",
-        "Abaixo, a tabela SLR inteira.",
+        tx("gameslr_olhe_estado_topo_1_token", cur.states.last(), cur.input.first(), cur.states.last(), cur.input.first(), t.action[cur.states.last() to cur.input.first()]?.short() ?: "vazio"),
+        tx("gameslr_abaixo_tabela_slr_inteira"),
     )
     if (ctx.hints >= 2) LRTableView(t, setOf(cur.states.last() to cur.input.first()))
     msg?.let { FeedbackBanner(it.first, it.second) }
     val nextState = t.action[cur.states.last() to cur.input.first()].let { if (it is LRAction.Shift) it.state else -1 }
-    BigButton("Empilhar ${cur.input.first()}", Modifier.fillMaxWidth(), color = Palette.teal) {
+    BigButton(tx("gameslr_empilhar_1", cur.input.first()), Modifier.fillMaxWidth(), color = Palette.teal) {
         choose(if (nextState >= 0) LRAction.Shift(nextState) else LRAction.Shift(-99))
     }
-    for (p in t.grammar.productions.drop(1)) BigButton("Reduzir $p", Modifier.fillMaxWidth(), color = Palette.orange) { choose(LRAction.Reduce(p.id)) }
+    for (p in t.grammar.productions.drop(1)) BigButton(tx("gameslr_reduzir_1", p), Modifier.fillMaxWidth(), color = Palette.orange) { choose(LRAction.Reduce(p.id)) }
     ChipRow {
-        Chip("Aceitar", color = Palette.green) { choose(LRAction.Accept) }
-        Chip("Erro", color = Palette.red) { choose(null) }
+        Chip(tx("comum_aceitar"), color = Palette.green) { choose(LRAction.Accept) }
+        Chip(tx("comum_erro"), color = Palette.red) { choose(null) }
     }
 }
 
@@ -183,12 +184,12 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
 
     GrammarText(g)
     PaperCard(color = Palette.paper) {
-        Text("Núcleo (kernel) do estado:", style = MaterialTheme.typography.labelMedium)
+        Text(tx("gameslr_nucleo_kernel_estado"), style = MaterialTheme.typography.labelMedium)
         for (it in st.kernel) Mono("★ " + it.render(g), bold = true)
     }
     if (phase == 0) {
-        Text("Quais itens o FECHAMENTO acrescenta?", style = MaterialTheme.typography.titleSmall)
-        HintBox(ctx, "Para cada item com • antes de um NÃO-TERMINAL B, adicione B → •γ para TODA produção de B. Repita para os novos itens!", "Itens com o • no meio (como X → a • b) nunca são adicionados pelo fechamento.")
+        Text(tx("gameslr_quais_itens_fechamento_acrescenta"), style = MaterialTheme.typography.titleSmall)
+        HintBox(ctx, tx("gameslr_para_cada_item_com_antes"), tx("gameslr_itens_com_no_meio_como"))
         for (o in options) {
             val on = picked[o] == true
             Box(
@@ -197,7 +198,7 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
                     .clickable { picked[o] = !on; Sound.play(Sfx.CLICK) }.padding(10.dp)
             ) { Mono((if (on) "☑ " else "☐ ") + o.render(g), size = 15) }
         }
-        BigButton("Fechar estado ✔", Modifier.fillMaxWidth(), color = Palette.teal) {
+        BigButton(tx("gameslr_fechar_estado"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val mine = picked.filterValues { it }.keys
             val inter = mine.intersect(closureOnly).size
             val union = (mine + closureOnly).size
@@ -206,12 +207,12 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
             phase = 1
         }
     } else {
-        FeedbackBanner(closureScore == 1f, if (closureScore == 1f) "Fechamento perfeito!" else "O estado completo é:")
+        FeedbackBanner(closureScore == 1f, if (closureScore == 1f) tx("gameslr_fechamento_perfeito") else tx("gameslr_estado_completo"))
         PaperCard { for (it in st.items) Mono((if (it in st.kernel) "★ " else "  ") + it.render(g), bold = it in st.kernel) }
         if (gotoSym == null || gotoTarget == null) {
-            BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done(closureScore.toDouble()) }
+            BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(closureScore.toDouble()) }
         } else {
-            Text("Agora: GOTO(I$stateId, $gotoSym) = qual estado? (avance o • sobre $gotoSym e feche)", style = MaterialTheme.typography.titleSmall)
+            Text(tx("gameslr_agora_goto_i_1_2", stateId, gotoSym, gotoSym), style = MaterialTheme.typography.titleSmall)
             for (opt in gotoOptions) {
                 val sel = gotoPick == opt
                 val color = when { gotoPick == null -> Palette.white; opt == gotoTarget -> Palette.green.copy(alpha = 0.25f); sel -> Palette.red.copy(alpha = 0.2f); else -> Palette.white }
@@ -220,7 +221,7 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
                         .clickable(enabled = gotoPick == null) { gotoPick = opt; if (opt == gotoTarget) Juice.correct() else Juice.wrong() }.padding(10.dp)
                 ) { for (it in a.states[opt].kernel) Mono(it.render(g), size = 14) }
             }
-            if (gotoPick != null) BigButton("Continuar ▶", Modifier.fillMaxWidth()) {
+            if (gotoPick != null) BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) {
                 done(0.6 * closureScore + 0.4 * (if (gotoPick == gotoTarget) 1.0 else 0.0))
             }
         }
@@ -247,13 +248,13 @@ fun ConflictHunterGame(ctx: GameCtx) {
     var phase by remember { mutableIntStateOf(0) }
     var huntScore by remember { mutableFloatStateOf(0f) }
 
-    Text("Gramática: ${choice.title}", style = MaterialTheme.typography.titleSmall)
+    Text(tx("gameslr_gramatica_1", choice.title), style = MaterialTheme.typography.titleSmall)
     GrammarText(g)
     if (phase == 0) {
-        Text("Algumas células da tabela SLR estão escondidas (?). Toque nas que têm CONFLITO (duas ações).", style = MaterialTheme.typography.bodyMedium)
+        Text(tx("gameslr_algumas_celulas_tabela_slr_estao"), style = MaterialTheme.typography.bodyMedium)
         HintBox(
             ctx,
-            "Conflito shift/reduce: o estado tem um item A → α • (reduz) E um item com • antes do terminal t, com t ∈ FOLLOW(A).",
+            tx("gameslr_conflito_shift_reduce_estado_tem"),
             "FOLLOW: " + t.grammar.nonTerminals.drop(1).joinToString("  ") { "$it{${t.ff.follow.getValue(it).joinToString(",")}}" },
         )
         Column(Modifier.horizontalScroll(rememberScrollState())) {
@@ -268,7 +269,7 @@ fun ConflictHunterGame(ctx: GameCtx) {
             }
         }
         StatesPeek(t)
-        BigButton(if (marks.values.none { it }) "Não há conflitos ✔" else "Conferir ✔", Modifier.fillMaxWidth(), color = Palette.teal) {
+        BigButton(if (marks.values.none { it }) tx("gameslr_nao_ha_conflitos") else tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val mine = marks.filterValues { it }.keys
             val good = hidden.count { (it in mine) == (it in conflicts) }
             huntScore = good.toFloat() / hidden.size.coerceAtLeast(1)
@@ -276,8 +277,8 @@ fun ConflictHunterGame(ctx: GameCtx) {
             phase = 1
         }
     } else {
-        FeedbackBanner(huntScore == 1f, "Você acertou ${(huntScore * 100).toInt()}% das células escondidas. Conflitos reais: " +
-            (if (conflicts.isEmpty()) "nenhum — a gramática é SLR(1)!" else conflicts.joinToString { "[${it.first}, ${it.second}]" }))
+        FeedbackBanner(huntScore == 1f, tx("gameslr_voce_acertou_1_das_celulas", (huntScore * 100).toInt()) +
+            (if (conflicts.isEmpty()) tx("gameslr_nenhum_gramatica_slr_1") else conflicts.joinToString { "[${it.first}, ${it.second}]" }))
         LRTableView(t, conflicts)
         ConflictResolution(ctx, choice.id, g, conflicts, huntScore.toDouble())
     }
@@ -286,7 +287,7 @@ fun ConflictHunterGame(ctx: GameCtx) {
 @Composable
 private fun StatesPeek(t: LRTable) {
     var open by remember { mutableStateOf(false) }
-    Text(if (open) "▲ esconder estados" else "▼ ver estados LR(0) (itens)", color = Palette.purple, style = MaterialTheme.typography.labelLarge, modifier = Modifier.clickable { open = !open })
+    Text(if (open) tx("gameslr_esconder_estados") else tx("gameslr_ver_estados_lr_0_itens"), color = Palette.purple, style = MaterialTheme.typography.labelLarge, modifier = Modifier.clickable { open = !open })
     if (open) Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         for (st in t.automaton.states) {
             Text("I${st.id}", style = MaterialTheme.typography.labelMedium)
@@ -307,16 +308,16 @@ private fun ConflictResolution(ctx: GameCtx, gid: String, g: Grammar, conflicts:
                 val cell = conflicts.firstOrNull { it.second == "*" } ?: conflicts.first()
                 val act = tp.action[cell]
                 val items = tp.automaton.states[cell.first].items.filter { it.dot >= tp.grammar.productions[it.prodId].rhs.size }.joinToString { it.render(tp.grammar) }
-                Q("Com  %left '+'  e depois  %left '*'  (o * liga mais forte), o que o Bison faz no estado ${cell.first} vendo '${cell.second}'? (item completo: $items)",
+                Q(tx("gameslr_com_left_depois_left_liga", cell.first, cell.second, items),
                     listOf("SHIFT", "REDUCE"), if (act is LRAction.Shift) 0 else 1,
-                    "Comparamos a precedência do token '${cell.second}' com a da regra (último terminal dela). " + (if (act is LRAction.Shift) "O token é mais forte → SHIFT." else "A regra é mais forte ou igual com %left → REDUCE."))
+                    tx("gameslr_comparamos_precedencia_token_1_com", cell.second) + (if (act is LRAction.Shift) tx("gameslr_token_mais_forte_shift") else tx("gameslr_regra_mais_forte_ou_igual")))
             }
-            "ifelse" -> Q("Sem declarar precedência, como o Bison resolve o 'else pendurado'?", listOf("SHIFT: o else fica com o if mais próximo", "REDUCE: o else fica com o if de fora", "Recusa compilar"), 0,
-                "Por padrão o Bison prefere SHIFT (e avisa o conflito). Isso cola o else no if mais interno — exatamente o que C e Java fazem.")
-            "lalr" -> Q("Esse conflito existe no SLR porque FOLLOW(R) contém '='. E no LALR(1)?", listOf("Some: o lookahead do item R → L• naquele estado é só $", "Continua igual", "Vira reduce/reduce"), 0,
-                "O LALR usa lookaheads específicos por estado, mais precisos que o FOLLOW global. Por isso o Bison (LALR) aceita essa gramática.")
-            else -> Q("Esta gramática não tem conflitos SLR. Isso significa que…", listOf("ela não é ambígua (gramáticas SLR nunca são ambíguas)", "ela é LL(1) também", "o Bison vai reclamar"), 0,
-                "Toda gramática LR (sem conflitos) é não ambígua. Mas ela pode NÃO ser LL(1) — esta tem recursão à esquerda!")
+            "ifelse" -> Q(tx("gameslr_sem_declarar_precedencia_como_bison"), listOf(tx("gameslr_shift_else_fica_com_if"), tx("gameslr_reduce_else_fica_com_if"), tx("gameslr_recusa_compilar")), 0,
+                tx("gameslr_por_padrao_bison_prefere_shift"))
+            "lalr" -> Q(tx("gameslr_esse_conflito_existe_no_slr"), listOf(tx("gameslr_some_lookahead_item_r_l"), tx("gameslr_continua_igual"), tx("gameslr_vira_reduce_reduce")), 0,
+                tx("gameslr_lalr_usa_lookaheads_especificos_por"))
+            else -> Q(tx("gameslr_esta_gramatica_nao_tem_conflitos"), listOf(tx("gameslr_ela_nao_ambigua_gramaticas_slr"), tx("gameslr_ela_ll_1_tambem"), tx("gameslr_bison_vai_reclamar")), 0,
+                tx("gameslr_toda_gramatica_lr_sem_conflitos"))
         }
     }
     var pick by remember { mutableStateOf<Int?>(null) }
@@ -330,7 +331,7 @@ private fun ConflictResolution(ctx: GameCtx, gid: String, g: Grammar, conflicts:
         }
         if (pick != null) {
             FeedbackBanner(pick == q.right, q.why)
-            BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish(0.6 * huntScore + 0.4 * (if (pick == q.right) 1.0 else 0.0)) }
+            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.6 * huntScore + 0.4 * (if (pick == q.right) 1.0 else 0.0)) }
         }
     }
 }
@@ -356,14 +357,14 @@ fun BisonWorkshopGame(ctx: GameCtx) {
     PaperCard(color = Palette.paper, border = Palette.orange) {
         Text("🦬 ${ch.title}", style = MaterialTheme.typography.headlineSmall)
         RichText(ch.story, style = MaterialTheme.typography.bodyMedium)
-        Text("Testes: " + ch.tests.joinToString("   ") { "${it.first} → ${it.second ?: "erro"}" }, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+        Text(tx("gameslr_testes") + ch.tests.joinToString("   ") { "${it.first} → ${it.second ?: "erro"}" }, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     }
-    HintBox(ctx, ch.hint, "Regra de ouro do Bison: em conflito, compara a precedência do TOKEN que chega com a da REGRA (dada pelo último terminal da regra).")
+    HintBox(ctx, ch.hint, tx("gameslr_regra_ouro_bison_em_conflito"))
     OutlinedTextField(
-        spec, { spec = it }, Modifier.fillMaxWidth(), label = { Text("calc.y") },
+        spec, { spec = it }, Modifier.fillMaxWidth(), label = { Text(tx("gameslr_calc_y")) },
         textStyle = TextStyle(fontFamily = LocalFonts.current.mono, fontSize = 13.sp), minLines = 8,
     )
-    Text("Blocos (inserem no cursor):", style = MaterialTheme.typography.labelMedium)
+    Text(tx("gameslr_blocos_inserem_no_cursor"), style = MaterialTheme.typography.labelMedium)
     ChipRow {
         for (s in snippets) Chip(s.trim().take(28), mono = true, color = Palette.orange) {
             val sel = spec.selection.start.coerceIn(0, spec.text.length)
@@ -372,7 +373,7 @@ fun BisonWorkshopGame(ctx: GameCtx) {
         }
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        BigButton("▶ bison calc.y && ./calc", Modifier.weight(1f), color = Palette.ink) {
+        BigButton(tx("gameslr_bison_calc_y_calc"), Modifier.weight(1f), color = Palette.ink) {
             runs++
             verdict = BisonChallenges.check(ch, spec.text)
             if (verdict!!.passed) Juice.levelUp() else Juice.wrong()
@@ -385,19 +386,19 @@ fun BisonWorkshopGame(ctx: GameCtx) {
         }
         val compiled = try { MiniBison.compile(spec.text) } catch (e: Exception) { null }
         if (compiled != null && compiled.conflicts.isNotEmpty()) {
-            Text("Detalhes dos conflitos:", style = MaterialTheme.typography.labelMedium)
-            for (c in compiled.conflicts.take(3)) Mono("estado ${c.state}, token ${c.terminal}: ${c.actions.joinToString(" vs ") { it.short() }} → ${c.resolution}", size = 11)
+            Text(tx("gameslr_detalhes_dos_conflitos"), style = MaterialTheme.typography.labelMedium)
+            for (c in compiled.conflicts.take(3)) Mono(tx("gameslr_estado_1_token_2_3", c.state, c.terminal, c.actions.joinToString(" vs ") { it.short() }, c.resolution), size = 11)
         }
         if (v.passed) {
-            FeedbackBanner(true, "Todos os testes passaram em $runs execução(ões)! Você acabou de programar um gerador de analisadores. 🎉")
-            BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.08 * (runs - 1)).coerceIn(0.5, 1.0)) }
+            FeedbackBanner(true, tx("gameslr_todos_testes_passaram_em_1", runs))
+            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.08 * (runs - 1)).coerceIn(0.5, 1.0)) }
         }
     }
     if (verdict?.passed != true) {
-        if (!gaveUp && runs >= 3) BigButton("🏳️ Mostrar a dica completa e encerrar", Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) { gaveUp = true }
+        if (!gaveUp && runs >= 3) BigButton(tx("gameslr_mostrar_dica_completa_encerrar"), Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) { gaveUp = true }
         if (gaveUp) {
             FeedbackBanner(false, ch.hint)
-            BigButton("Encerrar (vou revisar depois)", Modifier.fillMaxWidth()) { ctx.finish(0.2) }
+            BigButton(tx("gameslr_encerrar_vou_revisar_depois"), Modifier.fillMaxWidth()) { ctx.finish(0.2) }
         }
     }
 }

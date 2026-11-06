@@ -40,6 +40,7 @@ import com.compilandia.ui.Palette
 import com.compilandia.ui.VSpace
 import com.compilandia.ui.fx.ExplosaoChefao
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /**
  * Chefão da região: 3 desafios seguidos, um pouco acima do seu nível, que religam a máquina.
@@ -70,42 +71,42 @@ fun BossScreen(app: AppState, region: Region) {
 
     androidx.compose.foundation.layout.Box(Modifier.fillMaxSize()) {
     Column(Modifier.fillMaxSize()) {
-        Header("${boss.emoji} ${boss.bossName}", "Chefão de ${region.title}", color)
+        Header("${boss.emoji} ${boss.bossName}", tx("bossscreen_chefao_1", region.title), color)
         val won = hp <= 0.001f
         val lost = round >= plan.size && !won
         MachinePanel(((1f - hpAnim) * MACHINE_LAMPS + 0.01f).toInt(), won, region.title)
         when {
             round == -1 -> Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("${boss.bossName} quebrou esta parte da máquina.", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
-                Text("Três desafios seguidos, um pouco acima do seu nível. Cada acerto acende lâmpadas.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+                Text(tx("bossscreen_1_quebrou_esta_parte_maquina", boss.bossName), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                Text(tx("bossscreen_tres_desafios_seguidos_pouco_acima"), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 for ((s, g) in plan) Text("${g.title}: ${s.title}", style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
-                BigButton("Religar", Modifier.fillMaxWidth(), color = Palette.action) { round = 0; Sound.play(Sfx.WHOOSH) }
+                BigButton(tx("bossscreen_religar"), Modifier.fillMaxWidth(), color = Palette.action) { round = 0; Sound.play(Sfx.WHOOSH) }
             }
             won || lost -> Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 if (won) {
                     LaunchedEffect(Unit) { Juice.victory() }
                     com.compilandia.ui.cast.ByteFigure(Modifier.height(170.dp), com.compilandia.ui.cast.Mood.HAPPY, armsUp = 1f, hop = 1)
-                    Text("Máquina religada", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-                    Text("+150 XP e +$BOSS_GEARS engrenagens. ${region.title} está protegida.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+                    Text(tx("comum_maquina_religada"), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                    Text(tx("bossscreen_150_xp_1_engrenagens_2", BOSS_GEARS, region.title), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 } else {
                     com.compilandia.ui.cast.ByteFigure(Modifier.height(170.dp), com.compilandia.ui.cast.Mood.SAD)
-                    Text("Faltou pouco", style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
-                    Text("Agora você sabe o que revisar. Esses assuntos entraram na sua revisão.", style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
+                    Text(tx("bossscreen_faltou_pouco"), style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center)
+                    Text(tx("bossscreen_agora_voce_sabe_que_revisar"), style = MaterialTheme.typography.bodyLarge, textAlign = TextAlign.Center)
                 }
-                BigButton("Voltar à oficina", Modifier.fillMaxWidth()) { app.home() }
-                if (!won) BigButton("Tentar de novo", Modifier.fillMaxWidth(), color = Palette.drawer) { app.replace(com.compilandia.ui.Screen.BossFight(region)) }
+                BigButton(tx("comum_voltar_oficina"), Modifier.fillMaxWidth()) { app.home() }
+                if (!won) BigButton(tx("comum_tentar_novo"), Modifier.fillMaxWidth(), color = Palette.drawer) { app.replace(com.compilandia.ui.Screen.BossFight(region)) }
             }
             lastScore != null -> Column(Modifier.weight(1f).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 val sc = lastScore!!
                 VSpace(20)
                 com.compilandia.ui.cast.ByteFigure(Modifier.height(150.dp), if (sc >= 0.5) com.compilandia.ui.cast.Mood.HAPPY else com.compilandia.ui.cast.Mood.SAD, hop = 1)
-                Text(if (sc >= 0.5) "Boa: ${(sc * 100).toInt()}% de acerto" else "Essa não acendeu nada.", style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
-                BigButton("Próximo desafio", Modifier.fillMaxWidth()) { lastScore = null; round++ }
+                Text(if (sc >= 0.5) tx("bossscreen_boa_1_acerto", (sc * 100).toInt()) else tx("bossscreen_essa_nao_acendeu_nada"), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center)
+                BigButton(tx("bossscreen_proximo_desafio"), Modifier.fillMaxWidth()) { lastScore = null; round++ }
             }
             else -> {
                 val (s, g) = plan[round]
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("Desafio ${round + 1} de 3: ${g.title}", style = MaterialTheme.typography.titleMedium)
+                    Text(tx("bossscreen_desafio_1_3_2", round + 1, g.title), style = MaterialTheme.typography.titleMedium)
                     Text(com.compilandia.content.comoJogar[g]?.text ?: "", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
                     val level = (l.chooseLevel(s, nowMs()) + 1).coerceAtMost(5)
                     key(round) {

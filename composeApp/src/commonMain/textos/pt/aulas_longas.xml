@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aulas básicas longas (A2): por que existe, primeiro exemplo, receita e segundo exemplo com perguntas. -->
+<resources>
+    <!-- Fases do compilador -->
+    <string name="fases_l_titulo_porque">Para que serve?</string>
+    <string name="fases_l_maquina" translatable="false">lw  add  sw</string>
+    <string name="fases_l_seu_codigo">seu código</string>
+    <string name="fases_l_processador">processador</string>
+    <string name="fases_l_01">Você escreve conta igual a preço mais dois. O processador não lê isso.</string>
+    <string name="fases_l_02">Qual dos dois o processador entende? Toque nele.</string>
+    <string name="fases_l_02_dica">Ele só lê instruções curtas, como carregar, somar e guardar.</string>
+    <string name="fases_l_02_ok">Isso. Código de máquina. O seu código precisa virar aquilo.</string>
+    <string name="fases_l_03">Traduzir tudo de uma vez seria difícil e daria muito erro.</string>
+    <string name="fases_l_04">Então o compilador divide o trabalho em seis fases, uma depois da outra.</string>
+    <string name="fases_l_05">Depois vem o código intermediário: uma conta por linha, fácil de traduzir.</string>
+    <string name="fases_l_06">A otimização tira o que sobra. A geração escreve o código de máquina.</string>
+    <string name="fases_l_titulo_receita">O que sai de cada fase</string>
+    <string name="fases_l_07">A receita é o que sai de cada fase. Ela fica aqui na tela.</string>
+    <string name="fases_l_r_lexica">Léxica → tokens</string>
+    <string name="fases_l_r_sintatica">Sintática → árvore</string>
+    <string name="fases_l_r_semantica">Semântica → árvore com tipos</string>
+    <string name="fases_l_r_intermediario">Intermediário → uma conta por linha</string>
+    <string name="fases_l_r_otimizacao">Otimização → menos contas</string>
+    <string name="fases_l_r_geracao">Geração → código de máquina</string>
+    <string name="fases_l_08">Erro de letra é da léxica. Erro de forma é da sintática.</string>
+    <string name="fases_l_09">Erro de sentido, como tipo trocado, é da semântica.</string>
+    <string name="fases_l_titulo_outro">Outro código</string>
+    <string name="fases_l_10">Agora este while passa pelas mesmas fases.</string>
+    <string name="fases_l_11">Quem corta o while em tokens? Toque na fase.</string>
+    <string name="fases_l_11_dica">É a primeira fase. Ela só olha as letras.</string>
+    <string name="fases_l_11_ok">Isso. A léxica corta e dá nome a cada pedaço.</string>
+    <string name="fases_l_12">Se faltar o fecha parêntese, qual fase reclama?</string>
+    <string name="fases_l_12_dica">As letras estão certas. O que falta é a forma do comando.</string>
+    <string name="fases_l_12_ok">Isso. Parêntese sem par quebra a árvore. É a sintática.</string>
+    <string name="fases_l_13">Em qual fase o laço vira desvios, com uma conta por linha?</string>
+    <string name="fases_l_13_dica">Vem depois da semântica e antes da otimização.</string>
+    <string name="fases_l_13_ok">Isso. O código intermediário escreve o laço com desvios.</string>
+    <string name="fases_l_14">Seis fases em ordem. O mapa do jogo segue esse mesmo caminho.</string>
+
+    <!-- FIRST -->
+    <string name="first_l_01">O parser tem T no topo e lê id. T tem duas regras.</string>
+    <string name="first_l_02">Ele só escolhe certo se souber com o que cada regra começa.</string>
+    <string name="first_l_03">Os tokens que podem começar um símbolo formam o FIRST dele.</string>
+    <string name="first_l_04">Nesta gramática, cada símbolo ganha um saco para o seu FIRST.</string>
+    <string name="first_l_titulo_receita">Receita do FIRST</string>
+    <string name="first_l_05">A receita do FIRST tem três regras. Ela fica aqui na tela.</string>
+    <string name="first_l_r1">1. Terminal no começo: ele entra.</string>
+    <string name="first_l_r2">2. Não-terminal no começo: o FIRST dele.</string>
+    <string name="first_l_r3">3. Pode sumir: olhe o próximo símbolo.</string>
+    <string name="first_l_06">Regra um: se a regra começa com terminal, ele entra.</string>
+    <string name="first_l_07">Em E vai para T X, qual regra da receita você usa? Toque nela.</string>
+    <string name="first_l_07_dica">E começa com T, e T tem regras próprias.</string>
+    <string name="first_l_07_ok">Isso. Regra dois: o FIRST de T entra no de E.</string>
+    <string name="first_l_08">Regra três: se esse símbolo pode sumir, olhe o próximo também.</string>
+    <string name="first_l_09">Outra gramática. Agora quem calcula é você, com a receita.</string>
+    <string name="first_l_10">A começa com a, ou some. Toque no que entra no FIRST de A.</string>
+    <string name="first_l_10_dica">Uma regra começa com o terminal a. A outra é épsilon.</string>
+    <string name="first_l_10_ok">Isso. Os dois entram no FIRST de A.</string>
+    <string name="first_l_11">S vai para A b, e A pode sumir. Que token também começa S?</string>
+    <string name="first_l_11_dica">Se A sumir, quem fica no começo é o b.</string>
+    <string name="first_l_11_ok">Isso. Pela regra três, o b entra.</string>
+    <string name="first_l_12">Falta a outra regra de S. Toque no que entra por ela.</string>
+    <string name="first_l_12_dica">A segunda regra de S começa com um terminal.</string>
+    <string name="first_l_12_ok">Isso. A letra c entra pela regra um.</string>
+    <string name="first_l_13">FIRST de S: a, b e c. Agora o parser sabe qual regra escolher.</string>
+
+    <!-- FOLLOW -->
+    <string name="follow_l_01">O parser tem X no topo e lê fecha parêntese. X pode sumir.</string>
+    <string name="follow_l_02">Apagar X só faz sentido se fecha parêntese puder vir depois de X.</string>
+    <string name="follow_l_03">O que pode vir logo depois de um símbolo forma o FOLLOW dele.</string>
+    <string name="follow_l_04">Três sacos de novo. Agora para o que vem depois.</string>
+    <string name="follow_l_titulo_receita">Receita do FOLLOW</string>
+    <string name="follow_l_05">A receita do FOLLOW também tem três regras.</string>
+    <string name="follow_l_r1">1. O símbolo inicial ganha o cifrão.</string>
+    <string name="follow_l_r2">2. Depois de B vem β: o FIRST de β entra.</string>
+    <string name="follow_l_r3">3. β pode sumir: B herda o FOLLOW do pai.</string>
+    <string name="follow_l_06">Regra um: o símbolo inicial ganha o cifrão.</string>
+    <string name="follow_l_07">O mais do FIRST de X entrou no FOLLOW de T. Qual regra fez isso?</string>
+    <string name="follow_l_07_dica">X vem logo depois de T. É o FIRST do que vem depois.</string>
+    <string name="follow_l_07_ok">Isso. Regra dois.</string>
+    <string name="follow_l_08">Regra três: se o resto pode sumir, o símbolo herda o FOLLOW do pai.</string>
+    <string name="follow_l_09">Agora uma gramática maior. A meta é o FOLLOW de F.</string>
+    <string name="follow_l_10">Em T vai para F Y, depois de F vem Y. Y começa com qual token?</string>
+    <string name="follow_l_10_dica">Olhe a regra de Y. O que vem antes do F?</string>
+    <string name="follow_l_10_ok">Isso. O vezes entra pela regra dois.</string>
+    <string name="follow_l_11">Y pode sumir. Então F herda o FOLLOW de quem? Toque.</string>
+    <string name="follow_l_11_dica">F está dentro da regra de T.</string>
+    <string name="follow_l_11_ok">Isso. Pela regra três, tudo que segue T também segue F.</string>
+    <string name="follow_l_12">O FOLLOW de T tem mais, fecha parêntese e cifrão. Tudo isso desce para F.</string>
+    <string name="follow_l_13">FOLLOW de F: vezes, mais, fecha parêntese e cifrão.</string>
+</resources>

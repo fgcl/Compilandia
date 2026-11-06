@@ -28,6 +28,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.border
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -48,6 +52,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
@@ -83,6 +89,7 @@ import com.compilandia.ui.pegboard
 import com.compilandia.ui.voice.Narrator
 import kotlinx.coroutines.delay
 import kotlin.math.sin
+import com.compilandia.textos.tx
 
 const val STAGE_TAG = "palco"
 const val FITA_TAG = "fita"
@@ -108,10 +115,14 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
         LaunchedEffect(Unit) { app.replace(Screen.Lesson(s.skill, app.learner.chooseStyle(s.skill), returnToGame = s.returnToGame)) }
         return
     }
-    val abre = remember(ep) { if (abertura && onStep == 0 && !s.returnToGame && ep.temporada == Temporada.BASICO && ep.id !in app.ls.episodesSeen) Aberturas.of(ep.skill) else null }
+    val abre = remember(ep) { if (abertura && s.abertura && onStep == 0 && !s.returnToGame && ep.temporada == Temporada.BASICO && ep.id !in app.ls.episodesSeen) Aberturas.of(ep.skill) else null }
     var abrindo by remember(ep) { mutableStateOf(abre != null) }
     if (abrindo && abre != null) {
-        BugAbertura(abre) { abrindo = false }
+        BugAbertura(abre) {
+            abrindo = false
+            app.learner.marcaEtapa(ep.skill, com.compilandia.content.Etapa.BUG.name, feita = true, nowMs())
+            app.commit()
+        }
         return
     }
     var index by remember { mutableIntStateOf(onStep.coerceIn(0, ep.passos.lastIndex)) }
@@ -131,12 +142,20 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
     var armsUp by remember(index) { mutableStateOf(0f) }
     var replay by remember(index) { mutableIntStateOf(0) }
     var legendaForcada by remember(index) { mutableStateOf(false) }
+    // Play/pause: tocando, a cena segue sozinha quando a fala acaba. Perguntas e brinquedos esperam o toque.
+    var tocando by remember { mutableStateOf(app.ls.autoAvancar) }
+    var prontoParaSeguir by remember(index) { mutableStateOf(false) }
+    var falouAudio by remember(index) { mutableStateOf(false) }
     androidx.compose.runtime.DisposableEffect(Unit) { onDispose { Juice.combo = 0 } }
 
     LaunchedEffect(index, finished) {
         if (!finished) {
+            falouAudio = Narrator.canSpeak(passo.fala)
             Narrator.say(passo.fala)
-            if (ask == null && brinq == null) speaking = null
+            if (ask == null && brinq == null) {
+                speaking = null
+                prontoParaSeguir = true
+            }
         }
     }
 
@@ -208,7 +227,22 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
             if (misses >= 3) { found = a.right; solved = true }
         }
     }
-    LaunchedEffect(speaking, replay) { val f = speaking; if (f != null && f != passo.fala) Narrator.say(f) }
+    LaunchedEffect(speaking, replay) {
+        val f = speaking
+        if (f != null && f != passo.fala) {
+            falouAudio = Narrator.canSpeak(f)
+            Narrator.say(f)
+            // Depois do acerto, a aula pode seguir sozinha.
+            if (solved && (f == ask?.got || f == brinq?.acerto)) prontoParaSeguir = true
+        }
+    }
+    LaunchedEffect(prontoParaSeguir, tocando, finished) {
+        if (!tocando || !prontoParaSeguir || finished) return@LaunchedEffect
+        // Com voz, uma pausa curta depois da fala; sem voz, o tempo de ler a legenda.
+        val texto = (if (solved && ask != null) ask.got.text else if (solved && brinq != null) brinq.acerto.text else passo.fala.text)
+        delay(if (falouAudio) 700L else 1200L + texto.length * 55L)
+        if (tocando && !finished) next()
+    }
     LaunchedEffect(reaction, misses) {
         if (reaction == Mood.SAD) {
             delay(1400)
@@ -269,12 +303,12 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                     }
                     // Sensor de texto ruim: guarda exatamente qual fala não foi entendida.
                     Text(
-                        "não entendi", color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall,
+                        tx("episodescreen_nao_entendi"), color = Palette.inkSoft, style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.align(Alignment.End).clickable {
                             app.learner.naoEntendiFala(s.skill, line.id, nowMs()); app.commit()
                             legendaForcada = true
                             replay++
-                            app.say("Anotado. Veja com calma: toque na fita para voltar.")
+                            app.say(tx("episodescreen_anotado_veja_com_calma_toque"))
                         }.padding(horizontal = 6.dp, vertical = 2.dp),
                     )
                 }
@@ -301,9 +335,17 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
             if (toy != null && brinq != null && !solved) {
                 PainelBrinquedo(toy, toyTick) { aperta(it) }
             } else if (ask != null && !solved) {
-                BigButton("Dica", Modifier.fillMaxWidth(), color = Palette.drawer) { speaking = ask.hint; replay++ }
+                BigButton(tx("comum_dica"), Modifier.fillMaxWidth(), color = Palette.drawer) { speaking = ask.hint; replay++ }
             } else {
-                BigButton("Continuar", Modifier.fillMaxWidth()) { next() }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    BotaoTocar(tocando) {
+                        tocando = !tocando
+                        app.learner.setAutoAvancar(tocando)
+                        app.commit()
+                        app.say(if (tocando) tx("aula_tocando_aviso") else tx("aula_pausado_aviso"))
+                    }
+                    BigButton(tx("comum_continuar"), Modifier.weight(1f)) { next() }
+                }
             }
         }
     }
@@ -389,7 +431,7 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Pular", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { Narrator.stop(); onDone() }.padding(6.dp))
+            Text(tx("comum_pular"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { Narrator.stop(); onDone() }.padding(6.dp))
             Spacer(Modifier.weight(1f))
             Box(Modifier.size(52.dp).clip(RoundedCornerShape(26.dp)).background(Palette.codeBg), contentAlignment = Alignment.Center) {
                 Text("$resta", color = Palette.hazard, style = MaterialTheme.typography.headlineSmall)
@@ -414,9 +456,9 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
                 }
             }
         } else {
-            Text(if (r == a.certa) "Acertou de primeira." else "Errar aqui ajuda a aula a colar.", style = MaterialTheme.typography.titleMedium, color = if (r == a.certa) Palette.green else Palette.yellow)
+            Text(if (r == a.certa) tx("episodescreen_acertou_primeira") else tx("episodescreen_errar_aqui_ajuda_aula_colar"), style = MaterialTheme.typography.titleMedium, color = if (r == a.certa) Palette.green else Palette.yellow)
             RichText(a.depois.text, style = MaterialTheme.typography.bodyLarge)
-            BigButton("Agora a aula", Modifier.fillMaxWidth()) { Narrator.stop(); onDone() }
+            BigButton(tx("episodescreen_agora_aula"), Modifier.fillMaxWidth()) { Narrator.stop(); onDone() }
         }
     }
 }
@@ -448,7 +490,7 @@ private fun EpisodeTop(captions: Boolean, onClose: () -> Unit, onCaptions: () ->
             Modifier.clip(RoundedCornerShape(6.dp)).background(if (captions) Palette.hazard else Palette.white).clickable { onCaptions() }.padding(horizontal = 7.dp, vertical = 5.dp),
         ) { Text("CC", color = if (captions) Palette.hazardDark else Palette.ink, style = MaterialTheme.typography.labelMedium) }
         Spacer(Modifier.width(6.dp))
-        Text("Pular", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { onSkip() }.padding(4.dp))
+        Text(tx("comum_pular"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium, modifier = Modifier.clickable { onSkip() }.padding(4.dp))
     }
 }
 
@@ -469,21 +511,98 @@ private fun SoundBars(modifier: Modifier) {
 @Composable
 private fun EpisodeEnd(app: AppState, s: Screen.Episode, ep: Episode, onReplay: () -> Unit, onPractice: () -> Unit) {
     Column(
-        Modifier.fillMaxSize().background(Palette.paper).padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp, Alignment.Bottom), horizontalAlignment = Alignment.CenterHorizontally,
+        Modifier.fillMaxSize().background(Palette.paper).verticalScroll(rememberScrollState()).padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom), horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         var hop by remember { mutableIntStateOf(0) }
         LaunchedEffect(Unit) { hop++ }
-        ByteFigure(Modifier.width(190.dp), Mood.HAPPY, hop = hop, armsUp = 1f)
+        ByteFigure(Modifier.width(110.dp), Mood.HAPPY, hop = hop, armsUp = 1f)
         Text(ep.title, style = MaterialTheme.typography.headlineMedium)
-        Text("Agora é com você. Testar logo depois de ver fixa muito mais do que rever.", style = MaterialTheme.typography.bodyLarge, color = Palette.inkSoft)
-        BigButton(if (s.returnToGame) "Voltar ao jogo" else "Praticar agora", Modifier.fillMaxWidth()) { onPractice() }
+        CenaConfusa(app, s, ep)
+        Text(tx("episodescreen_agora_com_voce_testar_logo"), style = MaterialTheme.typography.bodyLarge, color = Palette.inkSoft)
+        // Fim de aula da trilha: o botão leva à próxima etapa. Em C e Tabelas voltam para onde a pessoa estava.
+        val naTrilha = !s.returnToGame && ep.temporada in setOf(Temporada.BASICO, Temporada.PRATICA, Temporada.PEGADINHA)
+        val proximo = remember(app.ls) { if (naTrilha) com.compilandia.content.Trilha.proximo(app.learner, s.skill) else null }
+        when {
+            s.returnToGame -> BigButton(tx("episodescreen_voltar_ao_jogo"), Modifier.fillMaxWidth()) { onPractice() }
+            proximo != null -> BigButton(tx("episodio_proxima_etapa", proximo.titulo), Modifier.fillMaxWidth()) {
+                Narrator.stop()
+                abrirPasso(app, s.skill, proximo, troca = true)
+            }
+            naTrilha -> BigButton(tx("episodescreen_praticar_agora"), Modifier.fillMaxWidth()) { onPractice() }
+            // A7: o clipe da revisão rápida termina num desafio, que é o que atualiza a memória.
+            ep.temporada == Temporada.CLIPE -> BigButton(tx("revisao_desafio"), Modifier.fillMaxWidth()) { onPractice() }
+            else -> BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) { Narrator.stop(); app.back() }
+        }
         val temExemplo = remember(s.skill) { com.compilandia.tutor.Sims.exemplo(s.skill, kotlin.random.Random(1)) != null }
-        if (temExemplo) BigButton("Outro exemplo", Modifier.fillMaxWidth(), color = Palette.hazard, textColor = Palette.hazardDark) { app.go(Screen.Exemplo(s.skill)) }
-        BigButton("Ver de novo", Modifier.fillMaxWidth(), color = Palette.drawer) { onReplay() }
+        if (temExemplo) BigButton(tx("episodescreen_outro_exemplo"), Modifier.fillMaxWidth(), color = Palette.hazard, textColor = Palette.hazardDark) { app.go(Screen.Exemplo(s.skill)) }
+        BigButton(tx("episodescreen_ver_novo"), Modifier.fillMaxWidth(), color = Palette.drawer) { onReplay() }
         Text(
-            "Ler a aula completa", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
+            tx("episodescreen_ler_aula_completa"), color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium,
             modifier = Modifier.clickable { app.replace(Screen.Lesson(s.skill, app.learner.chooseStyle(s.skill), returnToGame = s.returnToGame)) }.padding(8.dp),
         )
     }
 }
+
+/** T4: no lugar do diário, uma pergunta de um toque. A cena tocada vira "não entendi" e abre a explicação em outro estilo. */
+@Composable
+private fun CenaConfusa(app: AppState, s: Screen.Episode, ep: Episode) {
+    var marcada by remember(ep) { mutableIntStateOf(-1) }
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(tx("fim_cena_confusa"), style = MaterialTheme.typography.titleSmall)
+        Text(tx("fim_cena_confusa_sub"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            ep.passos.forEachIndexed { i, passo ->
+                val sel = i == marcada
+                Column(
+                    Modifier.width(78.dp).clip(RoundedCornerShape(7.dp)).background(if (sel) Palette.hazard.copy(alpha = 0.25f) else Palette.white)
+                        .border(2.dp, if (sel) Palette.hazard else Palette.paperDark, RoundedCornerShape(7.dp))
+                        .clickable {
+                            marcada = i
+                            app.learner.naoEntendiFala(s.skill, passo.fala.id, nowMs())
+                            app.commit()
+                        }.padding(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Box(Modifier.fillMaxWidth().height(52.dp).clip(RoundedCornerShape(5.dp)).background(Palette.codeBg)) {
+                        com.compilandia.ui.motion.MotionStage(passo.shot, Modifier.fillMaxSize().padding(2.dp))
+                    }
+                    Text("${i + 1}", style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+                }
+            }
+        }
+        if (marcada >= 0) {
+            Text(tx("fim_cena_anotada", marcada + 1), style = MaterialTheme.typography.bodySmall)
+            BigButton(tx("trilha_ler_com_calma"), Modifier.fillMaxWidth(), color = Palette.hazard, textColor = Palette.hazardDark, small = true) {
+                Narrator.stop()
+                app.go(Screen.Lesson(s.skill, app.learner.chooseStyle(s.skill), returnToGame = s.returnToGame))
+            }
+        }
+    }
+}
+
+/** Play/pause da aula: um triângulo para tocar sozinho, duas barras para pausar. */
+@Composable
+private fun BotaoTocar(tocando: Boolean, onClick: () -> Unit) {
+    val cor = if (tocando) Palette.hazard else Palette.drawer
+    val tinta = Palette.on(cor)
+    Box(
+        Modifier.size(52.dp).clip(RoundedCornerShape(10.dp)).background(cor).clickable { onClick() }
+            .semantics { contentDescription = if (tocando) tx("aula_pausar") else tx("aula_tocar") },
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(Modifier.size(20.dp)) {
+            if (tocando) {
+                val w = size.width * 0.3f
+                drawRect(tinta, Offset(size.width * 0.12f, 0f), Size(w, size.height))
+                drawRect(tinta, Offset(size.width * 0.58f, 0f), Size(w, size.height))
+            } else {
+                val p = androidx.compose.ui.graphics.Path().apply {
+                    moveTo(size.width * 0.18f, 0f); lineTo(size.width, size.height / 2); lineTo(size.width * 0.18f, size.height); close()
+                }
+                drawPath(p, tinta)
+            }
+        }
+    }
+}
+

@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.compilandia.textos.tx
 
 /** Uma mensagem da conversa do Laboratório. */
 sealed class Msg {
@@ -69,21 +70,21 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
     init { abertura() }
 
     private fun abertura() {
-        byte("Cole aqui o exercício: gramática, regex, expressão ou linha de código. Também pode perguntar.", Mood.HAPPY)
+        byte(tx("labconversa_cole_aqui_exercicio_gramatica_regex"), Mood.HAPPY)
         acoes(
             Acao("E -> E + T | T") { entra("E -> E + T | T\nT -> id") },
             Acao("(a|b)*abb") { entra("(a|b)*abb") },
-            Acao("a + b * c") { entra("a + b * c") },
+            Acao(tx("comum_b_c")) { entra(tx("comum_b_c")) },
             Acao("if (x >= 10) y = 1;") { entra("if (x >= 10) y = 1;") },
-            Acao("o que é handle?") { entra("o que é handle?") },
-            Acao("Laboratório Bison") { app.go(Screen.LabBison()) },
+            Acao(tx("labconversa_que_handle")) { entra(tx("labconversa_que_handle")) },
+            Acao(tx("comum_laboratorio_bison")) { app.go(Screen.LabBison()) },
         )
     }
 
     /** O Byte lê o .y: quantas regras, quantos conflitos, o que a precedência decidiu e quanto dá a conta. */
     private fun bison(t: String) {
         val b = try { MiniBison.compile(t) } catch (e: Exception) {
-            byte("Isso não compilou: ${e.message}.", Mood.SAD)
+            byte(tx("labconversa_isso_nao_compilou_1", e.message), Mood.SAD)
             rascunho = t
             return
         }
@@ -91,17 +92,17 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
         val conta = "2+3*4"
         val r = b.run(conta)
         val partes = buildList {
-            add("Li $regras regra${if (regras > 1) "s" else ""}.")
-            add(if (b.conflicts.isEmpty()) "Nenhum conflito sobrou." else "Sobraram ${b.conflicts.size} conflitos.")
-            if (b.resolvedByPrecedence > 0) add("A precedência decidiu ${b.resolvedByPrecedence}.")
-            if (r.accepted) add("Veja: $conta dá ${r.value}.")
+            add(tx("labconversa_li_1_regra_2", regras, if (regras > 1) "s" else ""))
+            add(if (b.conflicts.isEmpty()) tx("labconversa_nenhum_conflito_sobrou") else tx("labconversa_sobraram_1_conflitos", b.conflicts.size))
+            if (b.resolvedByPrecedence > 0) add(tx("labconversa_precedencia_decidiu_1", b.resolvedByPrecedence))
+            if (r.accepted) add(tx("labconversa_veja_1_2", conta, r.value))
         }
         // O palco com a conta vem primeiro; a conclusão do Byte fica embaixo, perto dos botões.
         msgs += Msg.Ferramenta(VisualKind.BISON, t, conta)
         byte(partes.joinToString(" "), if (b.conflicts.isEmpty()) Mood.HAPPY else Mood.THINK)
         acoes(
-            Acao("Abrir no Laboratório Bison", destaque = true) { app.go(Screen.LabBison(t)) },
-            Acao("Ver os conflitos") { app.go(Screen.LabBison(t)) },
+            Acao(tx("labconversa_abrir_no_laboratorio_bison"), destaque = true) { app.go(Screen.LabBison(t)) },
+            Acao(tx("labconversa_ver_conflitos")) { app.go(Screen.LabBison(t)) },
         )
     }
 
@@ -163,7 +164,7 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
             app.learner.setLabUltimo(t)
             app.commit()
             if (l.g == null) {
-                byte("Não consegui ler: ${l.erro}. Escreva uma regra por linha: E -> E + T | T", Mood.SAD)
+                byte(tx("labconversa_nao_consegui_ler_1_escreva", l.erro), Mood.SAD)
                 rascunho = t
                 return@launch
             }
@@ -171,12 +172,12 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
             if (antes != null && p != null && p.falha == antes.problema.falha && p.nt == antes.problema.nt) {
                 // Mandou de novo e o problema continua: conta como tentativa e abre o degrau seguinte.
                 antes.tentou()
-                byte("Ainda não: ${p.aponta}", Mood.THINK)
+                byte(tx("labconversa_ainda_nao_1", p.aponta), Mood.THINK)
                 acoesDoDegrau(antes, l)
                 return@launch
             }
             if (antes != null && (p == null || p.falha != antes.problema.falha)) {
-                byte("Isso! Sumiu o problema da ${nomeFalha(antes.problema.falha)}.", Mood.HAPPY)
+                byte(tx("labconversa_isso_sumiu_problema_1", nomeFalha(antes.problema.falha)), Mood.HAPPY)
                 Sound.play(Sfx.CORRECT)
             }
             if (p == null) { degraus = null; semProblema(l) } else mostra(p, l)
@@ -184,18 +185,18 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
     }
 
     private fun nomeFalha(f: Falha) = when (f) {
-        Falha.RECURSAO, Falha.RECURSAO_INDIRETA -> "recursão"
-        Falha.PREFIXO -> "fatoração"
+        Falha.RECURSAO, Falha.RECURSAO_INDIRETA -> tx("labconversa_recursao")
+        Falha.PREFIXO -> tx("comum_fatoracao")
         Falha.AMBIGUA -> "ambiguidade"
         Falha.CONFLITO_LL, Falha.CONFLITO_SLR -> "conflito"
-        Falha.IMPRODUTIVO -> "regra sem fim"
-        Falha.INALCANCAVEL -> "regra solta"
+        Falha.IMPRODUTIVO -> tx("labconversa_regra_sem_fim")
+        Falha.INALCANCAVEL -> tx("labconversa_regra_solta")
     }
 
     private fun mostra(p: Problema, l: Laudo) {
         val d = Degraus(p)
         degraus = d
-        val extra = if (l.problemas.size > 1) " Tem mais ${l.problemas.size - 1} depois desse." else ""
+        val extra = if (l.problemas.size > 1) tx("labconversa_tem_mais_1_depois_desse", l.problemas.size - 1) else ""
         byte(p.aponta + extra, Mood.THINK)
         simDoProblema(p, l)?.let { msgs += Msg.Palco(it) }
         acoesDoDegrau(d, l)
@@ -219,31 +220,31 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
         val conserto = g?.let { Diagnostico.conserto(it) }
         val mostra = g?.let { resolveu(it, d.problema) }
         val lista = mutableListOf<Acao>()
-        if (d.degrau == 1) lista += Acao("Me dá uma dica", destaque = true) {
+        if (d.degrau == 1) lista += Acao(tx("labconversa_me_dica"), destaque = true) {
             limpaAcoes()
             d.sobe()
             byte(d.texto, Mood.THINK)
             rascunho = texto
-            byte("Tente: edite a gramática aqui embaixo e mande de novo.")
+            byte(tx("labconversa_tente_edite_gramatica_aqui_embaixo"))
             acoesDoDegrau(d, l)
         }
-        if (d.degrau >= 2 && mostra != null) lista += Acao("Mostrar resolvendo", destaque = !d.travado, travada = d.travado) {
+        if (d.degrau >= 2 && mostra != null) lista += Acao(tx("labconversa_mostrar_resolvendo"), destaque = !d.travado, travada = d.travado) {
             if (!d.sobe() && d.travado) {
-                byte("Antes, tente uma vez. Mesmo errada, a tentativa faz a resposta colar.", Mood.THINK)
+                byte(tx("labconversa_antes_tente_vez_mesmo_errada"), Mood.THINK)
                 rascunho = texto
             } else {
                 limpaAcoes()
                 abre(mostra)
                 val nova = conserto?.toText()
                 if (nova != null) {
-                    byte("Agora feche os olhos e refaça de cabeça. Quando quiser, use a versão consertada.")
-                    acoes(Acao("Usar a consertada", destaque = true) { entra(nova) }, Acao("Refazer sozinho") { rascunho = texto })
+                    byte(tx("labconversa_agora_feche_olhos_refaca_cabeca"))
+                    acoes(Acao(tx("labconversa_usar_consertada"), destaque = true) { entra(nova) }, Acao(tx("labconversa_refazer_sozinho")) { rascunho = texto })
                 }
             }
         }
-        if (g != null && l.frases.isNotEmpty()) lista += Acao("Rodar assim mesmo") { limpaAcoes(); rodaFrase(l.frases.first()) }
+        if (g != null && l.frases.isNotEmpty()) lista += Acao(tx("labconversa_rodar_assim_mesmo")) { limpaAcoes(); rodaFrase(l.frases.first()) }
         // Recursão à esquerda só é problema para LL. Quem estuda LR precisa das tabelas assim mesmo.
-        if (g != null) lista += Acao("Tabelas completas") { limpaAcoes(); maisFerramentas(g) }
+        if (g != null) lista += Acao(tx("labconversa_tabelas_completas")) { limpaAcoes(); maisFerramentas(g) }
         acoes(*lista.toTypedArray())
     }
 
@@ -258,21 +259,21 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
     private fun semProblema(l: Laudo) {
         val g = l.g ?: return
         val como = when {
-            l.ll1 -> "Sem problema nenhum: é LL(1)."
-            l.slr -> "Não é LL(1), mas o SLR dá conta."
-            l.lalr -> "Só o LALR(1) resolve essa."
-            else -> "Essa precisa de LR(1) completo."
+            l.ll1 -> tx("labconversa_sem_problema_nenhum_ll_1")
+            l.slr -> tx("labconversa_nao_ll_1_mas_slr")
+            l.lalr -> tx("labconversa_so_lalr_1_resolve_essa")
+            else -> tx("labconversa_essa_precisa_lr_1_completo")
         }
         byte(como, Mood.HAPPY)
         Sound.play(Sfx.CORRECT)
-        val frases = l.frases.take(2).map { f -> Acao("Rodar: ${f.joinToString(" ")}", destaque = true) { limpaAcoes(); rodaFrase(f) } }
+        val frases = l.frases.take(2).map { f -> Acao(tx("labconversa_rodar_1", f.joinToString(" ")), destaque = true) { limpaAcoes(); rodaFrase(f) } }
         acoes(
             *frases.toTypedArray(),
             Acao("FIRST") { abre(Sims.conjuntos(g, SetStep.Kind.FIRST)) },
             Acao("FOLLOW") { abre(Sims.conjuntos(g, SetStep.Kind.FOLLOW)) },
-            Acao("Tabela LL(1)") { abre(Sims.tabelaLL(g)) },
-            Acao("Estados LR(0)") { abre(Sims.lr0(g)) },
-            Acao("Tabelas completas") { limpaAcoes(); maisFerramentas(g) },
+            Acao(tx("comum_tabela_ll_1_2")) { abre(Sims.tabelaLL(g)) },
+            Acao(tx("labconversa_estados_lr_0")) { abre(Sims.lr0(g)) },
+            Acao(tx("labconversa_tabelas_completas")) { limpaAcoes(); maisFerramentas(g) },
         )
     }
 
@@ -283,14 +284,14 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
         val f = laudo?.frases?.firstOrNull()?.joinToString(" ").orEmpty()
         val ll1 = laudo?.ll1 == true
         val lista = buildList {
-            add(tool("FIRST e FOLLOW", VisualKind.FIRST_FOLLOW))
-            add(tool("Tabela LL(1)", VisualKind.LL1_TABLE))
-            add(tool("Tabela SLR", VisualKind.SLR_TABLE))
-            add(tool("Tabela LALR(1)", VisualKind.LALR_TABLE))
-            add(tool("Estados LR(0)", VisualKind.LR0_AUTOMATON))
-            if (f.isNotEmpty()) add(tool("Derivação à direita", VisualKind.RIGHTMOST, f))
+            add(tool(tx("labconversa_first_follow"), VisualKind.FIRST_FOLLOW))
+            add(tool(tx("comum_tabela_ll_1_2"), VisualKind.LL1_TABLE))
+            add(tool(tx("labconversa_tabela_slr"), VisualKind.SLR_TABLE))
+            add(tool(tx("labconversa_tabela_lalr_1"), VisualKind.LALR_TABLE))
+            add(tool(tx("labconversa_estados_lr_0"), VisualKind.LR0_AUTOMATON))
+            if (f.isNotEmpty()) add(tool(tx("labconversa_derivacao_direita"), VisualKind.RIGHTMOST, f))
             // Essa ferramenta só existe para gramática LL(1): fora disso ela nem aparece.
-            if (ll1 && f.isNotEmpty()) add(tool("Código da descida", VisualKind.DESCENT_CODE, f))
+            if (ll1 && f.isNotEmpty()) add(tool(tx("labconversa_codigo_descida"), VisualKind.DESCENT_CODE, f))
         }
         acoes(*lista.toTypedArray())
     }
@@ -305,12 +306,12 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
             l.lalr -> Sims.parseLR(g, tokens, LRKind.LALR1)
             else -> Sims.derivacao(g, tokens) ?: Sims.parseLR(g, tokens, LRKind.LR1)
         }
-        byte(if (aceita) "Essa frase vale. Veja a máquina andando." else "Essa frase não vale. Veja onde a máquina trava.", if (aceita) Mood.HAPPY else Mood.THINK)
+        byte(if (aceita) tx("labconversa_essa_frase_vale_veja_maquina") else tx("labconversa_essa_frase_nao_vale_veja"), if (aceita) Mood.HAPPY else Mood.THINK)
         abre(sim)
         val frases = l.frases.filter { it != tokens }.take(2)
         acoes(
-            *frases.map { f -> Acao("Rodar: ${f.joinToString(" ")}") { limpaAcoes(); rodaFrase(f) } }.toTypedArray(),
-            Acao("Ver a árvore") { Sims.derivacao(g, tokens)?.let(abre) ?: byte("Sem árvore: a frase não vale.", Mood.SAD) },
+            *frases.map { f -> Acao(tx("labconversa_rodar_1", f.joinToString(" "))) { limpaAcoes(); rodaFrase(f) } }.toTypedArray(),
+            Acao(tx("labconversa_ver_arvore")) { Sims.derivacao(g, tokens)?.let(abre) ?: byte(tx("labconversa_sem_arvore_frase_nao_vale"), Mood.SAD) },
         )
     }
 
@@ -318,14 +319,14 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
 
     private fun regex(t: String) {
         val d = try { DFA.fromRegex(t) } catch (e: Exception) {
-            byte("Essa regex não fechou: ${e.message}.", Mood.SAD)
+            byte(tx("labconversa_essa_regex_nao_fechou_1", e.message), Mood.SAD)
             rascunho = t
             return
         }
         regex = t
         laudo = null
         val amostra = d.samples(kotlin.random.Random(3), 6).filter { it.first.isNotEmpty() }
-        byte("Montei o autômato: ${d.stateCount} estados. Digite uma cadeia, ou toque numa destas.", Mood.HAPPY)
+        byte(tx("labconversa_montei_automato_1_estados_digite", d.stateCount), Mood.HAPPY)
         msgs += Msg.Palco(Sims.afd(t, amostra.firstOrNull { it.second }?.first.orEmpty()))
         acoes(*amostra.take(4).map { (c, _) -> Acao(c) { entra(c) } }.toTypedArray())
     }
@@ -334,32 +335,32 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
         val r = regex ?: return
         abre(Sims.afd(r, c))
         val aceita = try { DFA.fromRegex(r).accepts(c) } catch (e: Exception) { false }
-        byte(if (aceita) "$c casa com $r." else "$c não casa com $r.", if (aceita) Mood.HAPPY else Mood.THINK)
+        byte(if (aceita) tx("labconversa_1_casa_com_2", c, r) else tx("labconversa_1_nao_casa_com_2", c, r), if (aceita) Mood.HAPPY else Mood.THINK)
     }
 
     // ------------------------------------------------------------ Expressão e código
 
     private fun expressao(t: String) {
         val sim = try { Sims.expressao(t) } catch (e: Exception) {
-            byte("Não consegui ler essa expressão: ${e.message}.", Mood.SAD)
+            byte(tx("labconversa_nao_consegui_ler_essa_expressao", e.message), Mood.SAD)
             rascunho = t
             return
         }
-        byte("Vou da árvore até o MIPS.", Mood.HAPPY)
+        byte(tx("labconversa_vou_arvore_ate_mips"), Mood.HAPPY)
         msgs += Msg.Palco(sim)
         acoes(
-            Acao("Ver em tela cheia", destaque = true) { abre(sim) },
-            Acao("Tipos") { msgs += Msg.Ferramenta(VisualKind.ATTR_TREE, "", t) },
-            Acao("AST e derivação") { msgs += Msg.Ferramenta(VisualKind.AST, "", t) },
-            Acao("Registradores") { msgs += Msg.Ferramenta(VisualKind.REGALLOC, "", t) },
+            Acao(tx("labconversa_ver_em_tela_cheia"), destaque = true) { abre(sim) },
+            Acao(tx("labconversa_tipos")) { msgs += Msg.Ferramenta(VisualKind.ATTR_TREE, "", t) },
+            Acao(tx("labconversa_ast_derivacao")) { msgs += Msg.Ferramenta(VisualKind.AST, "", t) },
+            Acao(tx("comum_registradores")) { msgs += Msg.Ferramenta(VisualKind.REGALLOC, "", t) },
         )
     }
 
     private fun codigo(t: String) {
         val sim = Sims.tokens(t)
-        byte("Cortei a linha em tokens.", Mood.HAPPY)
+        byte(tx("labconversa_cortei_linha_em_tokens"), Mood.HAPPY)
         msgs += Msg.Palco(sim)
-        acoes(Acao("Ver em tela cheia", destaque = true) { abre(sim) })
+        acoes(Acao(tx("labconversa_ver_em_tela_cheia"), destaque = true) { abre(sim) })
     }
 
     private fun ferramenta(k: VisualKind, g: String, i: String, valida: () -> Unit) {
@@ -367,7 +368,7 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
             valida()
             msgs += Msg.Ferramenta(k, g, i)
         } catch (e: Exception) {
-            byte("Isso não compilou: ${e.message}.", Mood.SAD)
+            byte(tx("labconversa_isso_nao_compilou_1", e.message), Mood.SAD)
             rascunho = g
         }
     }
@@ -382,22 +383,22 @@ class LabConversa(private val app: AppState, private val scope: CoroutineScope, 
             r.skill?.let { skill -> acoes(*acoesDeTeste(skill)) }
             return
         }
-        byte("Essa eu ainda não sei. Tente com outras palavras, ou cole o exercício.", Mood.THINK)
+        byte(tx("labconversa_essa_eu_ainda_nao_sei"), Mood.THINK)
         acoes(
-            Acao("o que é FOLLOW?") { entra("o que é FOLLOW?") },
-            Acao("o que é conflito?") { entra("o que é conflito shift-reduce?") },
-            Acao("para que serve o ε?") { entra("para que serve o épsilon?") },
+            Acao(tx("labconversa_que_follow")) { entra(tx("labconversa_que_follow")) },
+            Acao(tx("labconversa_que_conflito")) { entra(tx("labconversa_que_conflito_shift_reduce")) },
+            Acao(tx("labconversa_para_que_serve")) { entra(tx("labconversa_para_que_serve_epsilon")) },
         )
     }
 
     private fun acoesDeTeste(skill: Skill): Array<Acao> {
         val l = app.learner
         return arrayOf(
-            Acao("Me testa agora", destaque = true) {
+            Acao(tx("labconversa_me_testa_agora"), destaque = true) {
                 val g: GameId = l.chooseGame(skill)
                 app.go(Screen.Play(skill, g, l.chooseLevel(skill, nowMs()), seed = nowMs()))
             },
-            Acao("Ver a aula") { app.go(Screen.Episode(skill)) },
+            Acao(tx("labconversa_ver_aula")) { app.go(Screen.Episode(skill)) },
         )
     }
 }

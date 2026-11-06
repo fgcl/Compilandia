@@ -1,5 +1,7 @@
 package com.compilandia.learning
 
+import com.compilandia.textos.tx
+
 data class Achievement(val emoji: String, val title: String, val description: String, val unlocked: Boolean)
 
 /** Conquistas calculadas a partir do estado (nada a mais para salvar). */
@@ -9,37 +11,37 @@ object Achievements {
         val cal = l.calibration()
         fun m(sk: Skill) = l.mastery(sk) >= 0.8
         return listOf(
-            Achievement("👣", "Primeiro passo", "Jogar a primeira partida", s.history.isNotEmpty()),
-            Achievement("📖", "Leitor curioso", "Ver aulas em 3 estilos diferentes", s.styleArms.size >= 3),
-            Achievement("✍️", "Explicador", "Escrever uma explicação com suas palavras", s.journal.isNotEmpty()),
-            Achievement("🔥", "Constância", "3 dias seguidos estudando", s.streakDays >= 3),
-            Achievement("🔥🔥", "Hábito de ferro", "7 dias seguidos", s.streakDays >= 7),
-            Achievement("🎯", "Calibrado", "10+ respostas de confiança com Brier < 0,2", cal.samples >= 10 && cal.brier < 0.2),
-            Achievement("😕➡️💡", "Não desisti", "Apertar 'Não entendi' e depois acertar o assunto", s.feedback.any { f -> f.kind == "nao_entendi" && s.history.any { it.skill == f.skill && it.ts > f.ts && it.score >= 0.8 } }),
-            Achievement("🔪", "Ninja léxico", "Dominar tokens e autômatos", m(Skill.TOKENS) && m(Skill.REGEX_DFA)),
-            Achievement("⚗️", "Alquimista", "Dominar FIRST e FOLLOW", m(Skill.FIRST) && m(Skill.FOLLOW)),
-            Achievement("🛕", "Sacerdote LL(1)", "Dominar tabela e analisador LL(1)", m(Skill.LL1_TABLE) && m(Skill.LL1_PARSING)),
-            Achievement("🏰", "Senhor do LR", "Dominar shift-reduce, itens e SLR", m(Skill.SHIFT_REDUCE) && m(Skill.LR0_ITEMS) && m(Skill.SLR_TABLE)),
-            Achievement("🦬", "Domador de Bison", "Dominar Yacc/Bison", m(Skill.YACC_BISON)),
-            Achievement("🔩", "Montador", "Dominar geração de código MIPS", m(Skill.CODEGEN_MIPS)),
-            Achievement("⚔️", "Caçador de chefões", "Derrotar 3 chefões", s.bossesDefeated.size >= 3),
-            Achievement("👑", "Compilador humano", "Derrotar todos os chefões", s.bossesDefeated.size >= Region.entries.size),
-            Achievement("🛠️", "Engenheiro do TP", "Ler todo o Guia do Trabalho Prático", s.guideRead.size >= 9),
+            Achievement("👣", tx("achievements_primeiro_passo"), tx("achievements_jogar_primeira_partida"), s.history.isNotEmpty()),
+            Achievement("📖", tx("achievements_leitor_curioso"), tx("achievements_ver_aulas_em_3_estilos"), s.styleArms.size >= 3),
+            Achievement("✍️", tx("achievements_explicador"), tx("achievements_escrever_explicacao_com_suas_palavras"), s.journal.isNotEmpty()),
+            Achievement("🔥", tx("achievements_constancia"), tx("achievements_3_dias_seguidos_estudando"), s.streakDays >= 3),
+            Achievement("🔥🔥", tx("achievements_habito_ferro"), tx("achievements_7_dias_seguidos"), s.streakDays >= 7),
+            Achievement("🎯", tx("achievements_calibrado"), tx("achievements_10_respostas_confianca_com_brier"), cal.samples >= 10 && cal.brier < 0.2),
+            Achievement("😕➡️💡", tx("achievements_nao_desisti"), tx("achievements_apertar_nao_entendi_depois_acertar"), s.feedback.any { f -> f.kind == "nao_entendi" && s.history.any { it.skill == f.skill && it.ts > f.ts && it.score >= 0.8 } }),
+            Achievement("🔪", tx("achievements_ninja_lexico"), tx("achievements_dominar_tokens_automatos"), m(Skill.TOKENS) && m(Skill.REGEX_DFA)),
+            Achievement("⚗️", tx("achievements_alquimista"), tx("achievements_dominar_first_follow"), m(Skill.FIRST) && m(Skill.FOLLOW)),
+            Achievement("🛕", tx("achievements_sacerdote_ll_1"), tx("achievements_dominar_tabela_analisador_ll_1"), m(Skill.LL1_TABLE) && m(Skill.LL1_PARSING)),
+            Achievement("🏰", tx("achievements_senhor_lr"), tx("achievements_dominar_shift_reduce_itens_slr"), m(Skill.SHIFT_REDUCE) && m(Skill.LR0_ITEMS) && m(Skill.SLR_TABLE)),
+            Achievement("🦬", tx("achievements_domador_bison"), tx("achievements_dominar_yacc_bison"), m(Skill.YACC_BISON)),
+            Achievement("🔩", tx("achievements_montador"), tx("achievements_dominar_geracao_codigo_mips"), m(Skill.CODEGEN_MIPS)),
+            Achievement("⚔️", tx("achievements_cacador_chefoes"), tx("achievements_derrotar_3_chefoes"), s.bossesDefeated.size >= 3),
+            Achievement("👑", tx("achievements_compilador_humano"), tx("achievements_derrotar_todos_chefoes"), s.bossesDefeated.size >= Region.entries.size),
+            Achievement("🛠️", tx("achievements_engenheiro_tp"), tx("achievements_ler_todo_guia_trabalho_pratico"), s.guideRead.size >= 9),
         )
     }
 }
 
 /** Chefões de cada região (personagens originais). */
 enum class Boss(val region: Region, val emoji: String, val bossName: String, val taunt: String) {
-    B_PORTO(Region.PORTO, "🐙", "Polvo Desordenado", "Eu embaralho as fases do compilador! Quero ver você pôr na ordem."),
-    B_FLORESTA(Region.FLORESTA_LEXICA, "👻", "Token Fantasma", "Sou um lexema que ninguém consegue cortar direito… hihihi."),
-    B_VALE(Region.VALE_GRAMATICAS, "🐉", "Dragão Ambíguo", "Toda frase minha tem DUAS árvores. Escolha… se puder!"),
-    B_PONTE(Region.PONTE_TRANSFORMACAO, "🌀", "Recursão Infinita", "E → E + T → E + T + T → E + T + T + T → …"),
-    B_TEMPLO(Region.TEMPLO_TOPDOWN, "🗿", "Guardião da Tabela", "Uma célula com duas produções e o templo desaba!"),
-    B_FORTALEZA(Region.FORTALEZA_BOTTOMUP, "⚔️", "Cavaleiro Shift/Reduce", "Empilho ou reduzo? Nem eu sei… e você?"),
-    B_OFICINA(Region.OFICINA_BISON, "🦬", "Bisão Conflituoso", "bison: 4 shift/reduce conflicts. Boa sorte!"),
-    B_CIDADE(Region.CIDADE_SEMANTICA, "🦹", "Tipo Errado", "Somo inteiro com bool e escondo variáveis em escopos!"),
-    B_FORJA(Region.FORJA_CODIGO, "💀", "Segmentation Fault", "Esqueceu um sw? Sua pilha estourou? Core dumped!"),
+    B_PORTO(Region.PORTO, "🐙", tx("achievements_polvo_desordenado"), tx("achievements_eu_embaralho_fases_compilador_quero")),
+    B_FLORESTA(Region.FLORESTA_LEXICA, "👻", tx("achievements_token_fantasma"), tx("achievements_sou_lexema_que_ninguem_consegue")),
+    B_VALE(Region.VALE_GRAMATICAS, "🐉", tx("achievements_dragao_ambiguo"), tx("achievements_toda_frase_minha_tem_duas")),
+    B_PONTE(Region.PONTE_TRANSFORMACAO, "🌀", tx("achievements_recursao_infinita"), "E → E + T → E + T + T → E + T + T + T → …"),
+    B_TEMPLO(Region.TEMPLO_TOPDOWN, "🗿", tx("achievements_guardiao_tabela"), tx("achievements_celula_com_duas_producoes_templo")),
+    B_FORTALEZA(Region.FORTALEZA_BOTTOMUP, "⚔️", tx("achievements_cavaleiro_shift_reduce"), tx("achievements_empilho_ou_reduzo_nem_eu")),
+    B_OFICINA(Region.OFICINA_BISON, "🦬", tx("achievements_bisao_conflituoso"), tx("achievements_bison_4_shift_reduce_conflicts")),
+    B_CIDADE(Region.CIDADE_SEMANTICA, "🦹", tx("achievements_tipo_errado"), tx("achievements_somo_inteiro_com_bool_escondo")),
+    B_FORJA(Region.FORJA_CODIGO, "💀", tx("achievements_segmentation_fault"), tx("achievements_esqueceu_sw_sua_pilha_estourou")),
     ;
     companion object { fun of(r: Region) = entries.first { it.region == r } }
 }

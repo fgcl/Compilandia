@@ -58,6 +58,7 @@ import com.compilandia.ui.toUi
 import com.compilandia.ui.visuals.Cell
 import com.compilandia.ui.visuals.MipsRunView
 import com.compilandia.ui.visuals.PairTable
+import com.compilandia.textos.tx
 
 // ============================================================ Tabela dos Pares (minimização)
 
@@ -70,14 +71,14 @@ fun MinTableGame(ctx: GameCtx) {
     val truth = remember { r.distinguishable.map { minOf(it.first, it.second) to maxOf(it.first, it.second) }.toSet() }
     val marks = remember { mutableStateMapOf<Pair<Int, Int>, Boolean>() }
     var checked by remember { mutableStateOf(false) }
-    Mono("AFD: $title", bold = true)
+    Mono(tx("comum_afd_1", title), bold = true)
     AutomatonView(d.stateCount, d.start, d.accepting, d.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { r.stateName(it) })
-    RichText("Toque nas células para marcar **X** nos pares DISTINGUÍVEIS. Os que ficarem em branco são equivalentes e viram um estado só.", style = MaterialTheme.typography.titleSmall)
+    RichText(tx("gamesv3_toque_nas_celulas_para_marcar"), style = MaterialTheme.typography.titleSmall)
     HintBox(
         ctx,
-        "Rodada 1: todo par com um estado final e outro não-final é distinguível.",
-        "Depois: {p,q} é distinguível se, com algum símbolo, eles vão para um par já marcado. Repita até não mudar nada.",
-        "Transições: " + d.alphabet.joinToString("  ") { c -> "'$c': " + (0 until d.stateCount).joinToString(" ") { "${r.stateName(it)}→${r.stateName(d.delta.getValue(it to c))}" } },
+        tx("gamesv3_rodada_1_todo_par_com"),
+        tx("gamesv3_depois_p_q_distinguivel_se"),
+        tx("gamesv3_transicoes") + d.alphabet.joinToString("  ") { c -> "'$c': " + (0 until d.stateCount).joinToString(" ") { "${r.stateName(it)}→${r.stateName(d.delta.getValue(it to c))}" } },
     )
     PairTable(d.stateCount, r::stateName) { a, b ->
         val key = b to a // (menor, maior)
@@ -94,17 +95,17 @@ fun MinTableGame(ctx: GameCtx) {
             onClick = { if (!checked) { marks[key] = !on; Sound.play(Sfx.CLICK) } },
         )
     }
-    if (!checked) BigButton("Conferir tabela ✔", Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
+    if (!checked) BigButton(tx("gamesv3_conferir_tabela"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
     else {
         val total = d.stateCount * (d.stateCount - 1) / 2
         val wrong = (0 until d.stateCount).sumOf { i -> (0 until i).count { j -> (marks[j to i] == true) != ((j to i) in truth) } }
         val score = (total - wrong).toDouble() / total
-        FeedbackBanner(wrong == 0, if (wrong == 0) "Tabela perfeita!" else "$wrong célula(s) erradas (em vermelho).")
-        RichText("Classes equivalentes: " + r.classes.joinToString("  ") { cl -> cl.joinToString(",", "{", "}") { r.stateName(it) } } +
-            " → AFD mínimo com **${r.minimized.stateCount}** estados.", style = MaterialTheme.typography.bodyMedium)
+        FeedbackBanner(wrong == 0, if (wrong == 0) tx("gamesv3_tabela_perfeita") else tx("gamesv3_1_celula_erradas_em_vermelho", wrong))
+        RichText(tx("gamesv3_classes_equivalentes") + r.classes.joinToString("  ") { cl -> cl.joinToString(",", "{", "}") { r.stateName(it) } } +
+            tx("gamesv3_afd_minimo_com_1_estados", r.minimized.stateCount), style = MaterialTheme.typography.bodyMedium)
         val m = r.minimized
         AutomatonView(m.stateCount, m.start, m.accepting, m.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { "m$it" })
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish(score) }
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(score) }
     }
 }
 
@@ -126,30 +127,30 @@ private fun AstRound(ctx: GameCtx, done: (Double) -> Unit) {
                 if (p != null && !p.isLeaf && AstTools.concreteTree(src) != null) res = p
             }
         }
-        res ?: ExprParser.parse("a + b * c")
+        res ?: ExprParser.parse(tx("comum_b_c"))
     }
     val order = remember { preorder(e) }
     var k by remember { mutableIntStateOf(0) }
     var mistakes by remember { mutableIntStateOf(0) }
     var msg by remember { mutableStateOf<String?>(null) }
     val src = remember { e.render().removeSurrounding("(", ")") }
-    Mono("código: $src", bold = true, size = 16)
+    Mono(tx("gamesv3_codigo_1", src), bold = true, size = 16)
     if (ctx.hints > 0) AstTools.concreteTree(src)?.let { TreeView(it.toUi(AstTools.concreteGrammar)) }
-    HintBox(ctx, "Árvore de derivação acima: a AST é ela \"espremida\" — só operadores e operandos.", "A raiz é o operador que é feito POR ÚLTIMO (o de menor precedência, fora dos parênteses).")
+    HintBox(ctx, tx("gamesv3_arvore_derivacao_acima_ast_ela"), tx("gamesv3_raiz_operador_que_feito_por"))
     fun javaWith(n: Expr): String {
         val idx = order.indexOf(n)
         if (idx >= k) return "▢"
         return when (n.kind) {
-            Expr.Kind.NUM -> "new Num(${n.text})"
+            Expr.Kind.NUM -> tx("comum_new_num_1", n.text)
             Expr.Kind.VAR -> "new Var(\"${n.text}\")"
             Expr.Kind.BINOP -> "new BinOp('${n.text}', ${javaWith(n.children[0])}, ${javaWith(n.children[1])})"
         }
     }
-    CodeBlock("Expr arvore = " + javaWith(e) + ";", "o parser monta isto")
+    CodeBlock(tx("gamesv3_expr_arvore") + javaWith(e) + ";", tx("gamesv3_parser_monta_isto"))
     if (k >= order.size) {
-        FeedbackBanner(true, "AST completa! ${AstTools.countNodes(e)} nós, contra ${AstTools.concreteTree(src)?.let { AstTools.countNodes(it) } ?: "?"} na árvore de derivação.")
+        FeedbackBanner(true, tx("gamesv3_ast_completa_1_nos_contra", AstTools.countNodes(e), AstTools.concreteTree(src)?.let { AstTools.countNodes(it) } ?: "?"))
         TreeView(e.toUi())
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val target = order[k]
@@ -157,12 +158,12 @@ private fun AstRound(ctx: GameCtx, done: (Double) -> Unit) {
         val pool = (order.map { AstTools.label(it) } + listOf("BinOp('+')", "BinOp('*')", "BinOp('-')", "Var(a)", "Num(2)")).distinct()
         (listOf(AstTools.label(target)) + pool.filter { it != AstTools.label(target) }.shuffled(ctx.rnd).take(3)).shuffled(ctx.rnd)
     }
-    RichText("Qual nó vai no próximo ▢?", style = MaterialTheme.typography.titleSmall)
+    RichText(tx("gamesv3_qual_no_vai_no_proximo"), style = MaterialTheme.typography.titleSmall)
     msg?.let { FeedbackBanner(false, it) }
     ChipRow {
         for (o in options) Chip(o, mono = true, color = Palette.purple) {
             if (o == AstTools.label(target)) { k++; msg = null; Juice.correct() }
-            else { mistakes++; msg = "Não. Pense: neste ponto da expressão, qual operação ou operando vem primeiro (de fora para dentro)?"; Juice.wrong() }
+            else { mistakes++; msg = tx("gamesv3_nao_pense_neste_ponto_expressao"); Juice.wrong() }
         }
     }
 }
@@ -175,9 +176,9 @@ private fun preorder(e: Expr): List<Expr> = listOf(e) + e.children.flatMap { pre
 fun RegColoringGame(ctx: GameCtx) {
     val src = remember {
         val pool = when (ctx.level) {
-            1 -> listOf("a * b + c * d", "( a + b ) * ( c - d )")
-            2 -> listOf("a * b + c * d - a", "( a + b ) * ( c + d ) * 2")
-            else -> listOf("a * b + c * d + a * c", "( a + b ) * ( c - d ) + b * d", "a * ( b + c ) - ( d - a ) * b")
+            1 -> listOf(tx("comum_b_c_d"), tx("comum_b_c_d_2_2"))
+            2 -> listOf(tx("gamesv3_b_c_d"), tx("gamesv3_b_c_d_2"))
+            else -> listOf(tx("gamesv3_b_c_d_c"), tx("gamesv3_b_c_d_b_d"), tx("gamesv3_b_c_d_b"))
         }
         pool[ctx.rnd.nextInt(pool.size)]
     }
@@ -193,12 +194,12 @@ fun RegColoringGame(ctx: GameCtx) {
     var sel by remember { mutableStateOf<String?>(null) }
     var colorMistakes by remember { mutableIntStateOf(0) }
 
-    Mono("r = $src", bold = true)
+    Mono(tx("comum_r_1", src), bold = true)
     if (phase == 0) {
-        RichText("**Passo 1 — vivacidade:** marque quais temporários estão VIVOS logo DEPOIS de cada instrução (ainda serão usados mais abaixo).", style = MaterialTheme.typography.titleSmall)
-        HintBox(ctx, "Trabalhe de BAIXO para CIMA: depois da última instrução nada está vivo.", "in = use ∪ (out − def): um temporário fica vivo de onde é definido até o último uso.")
+        RichText(tx("gamesv3_passo_1_vivacidade_marque_quais"), style = MaterialTheme.typography.titleSmall)
+        HintBox(ctx, tx("gamesv3_trabalhe_baixo_para_cima_depois"), tx("gamesv3_in_use_out_def_temporario"))
         Column(Modifier.horizontalScroll(rememberScrollState())) {
-            Row { Cell("instrução", header = true, w = 130); for (t in temps) Cell(t, header = true, w = 44) }
+            Row { Cell(tx("gamesv3_instrucao"), header = true, w = 130); for (t in temps) Cell(t, header = true, w = 44) }
             code.forEachIndexed { i, ins ->
                 Row {
                     Cell(ins.toString(), w = 130)
@@ -209,7 +210,7 @@ fun RegColoringGame(ctx: GameCtx) {
                 }
             }
         }
-        BigButton("Conferir vivacidade ✔", Modifier.fillMaxWidth(), color = Palette.teal) {
+        BigButton(tx("gamesv3_conferir_vivacidade"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val cells = code.indices.flatMap { i -> temps.map { i to it } }
             val ok = cells.count { (i, t) -> (live[i to t] == true) == (t in lv.liveOut[i]) }
             liveScore = ok.toDouble() / cells.size
@@ -217,13 +218,13 @@ fun RegColoringGame(ctx: GameCtx) {
             phase = 1
         }
     } else if (phase == 1 || phase == 2) {
-        if (phase == 1) FeedbackBanner(liveScore == 1.0, "Vivacidade: ${(liveScore * 100).toInt()}%. Correto: " + code.indices.joinToString("; ") { "${it + 1}: " + lv.liveOut[it].sorted().joinToString(",", "{", "}") })
-        RichText("**Passo 2 — coloração:** use só **$k** registrador(es). Toque num temporário e depois num registrador. Vizinhos (vivos juntos) não podem dividir registrador!", style = MaterialTheme.typography.titleSmall)
+        if (phase == 1) FeedbackBanner(liveScore == 1.0, tx("gamesv3_vivacidade_1_correto", (liveScore * 100).toInt()) + code.indices.joinToString("; ") { "${it + 1}: " + lv.liveOut[it].sorted().joinToString(",", "{", "}") })
+        RichText(tx("gamesv3_passo_2_coloracao_use_so", k), style = MaterialTheme.typography.titleSmall)
         GraphView(temps, g, fill = { v -> colors[v]?.let { regColors[it % regColors.size] } ?: Palette.white }, sub = { v -> colors[v]?.let { "\$s$it" } }, selected = sel) { v -> if (phase == 1) sel = v }
-        HintBox(ctx, "Comece pelo nó com MAIS vizinhos. Nós sem aresta entre si podem repetir registrador.")
+        HintBox(ctx, tx("gamesv3_comece_pelo_no_com_mais"))
         if (phase == 1) {
             ChipRow { for (c in 0 until k) Chip("\$s$c", color = Palette.purple) { sel?.let { colors[it] = c; Sound.play(Sfx.CLICK) } } }
-            BigButton("Alocar ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = temps.all { it in colors }) {
+            BigButton(tx("gamesv3_alocar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = temps.all { it in colors }) {
                 val clashes = g.entries.sumOf { (v, nbs) -> nbs.count { colors[it] == colors[v] } } / 2
                 colorMistakes = clashes
                 if (clashes == 0) Juice.levelUp() else Juice.wrong()
@@ -231,12 +232,12 @@ fun RegColoringGame(ctx: GameCtx) {
             }
         } else {
             val valid = colorMistakes == 0
-            FeedbackBanner(valid, if (valid) "Alocação válida com $k registrador(es)!" else "$colorMistakes conflito(s): temporários vivos ao mesmo tempo dividindo registrador.")
+            FeedbackBanner(valid, if (valid) tx("gamesv3_alocacao_valida_com_1_registrador", k) else tx("gamesv3_1_conflito_temporarios_vivos_ao", colorMistakes))
             val alloc = RegAlloc.color(g, k)
             val before = Mips.fromTac(code); val after = RegAlloc.mips(code, alloc)
-            RichText("Acessos à memória: **${RegAlloc.memoryAccesses(before)}** (tudo na memória) → **${RegAlloc.memoryAccesses(after)}** (com registradores).", style = MaterialTheme.typography.bodyMedium)
-            CodeBlock(after.joinToString("\n"), "MIPS com alocação")
-            BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish(0.5 * liveScore + 0.5 * (if (valid) 1.0 else 0.3)) }
+            RichText(tx("gamesv3_acessos_memoria_1_tudo_na", RegAlloc.memoryAccesses(before), RegAlloc.memoryAccesses(after)), style = MaterialTheme.typography.bodyMedium)
+            CodeBlock(after.joinToString("\n"), tx("gamesv3_mips_com_alocacao"))
+            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.5 * liveScore + 0.5 * (if (valid) 1.0 else 0.3)) }
         }
     }
 }
@@ -257,14 +258,14 @@ fun BranchMazeGame(ctx: GameCtx) {
     var msg by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     val labels = remember { lines.map { it.text }.filter { it.endsWith(":") && it != "main:" }.map { it.removeSuffix(":") } }
 
-    CodeBlock(src, "programa (a = 4, b = 7)")
+    CodeBlock(src, tx("comum_programa_4_b_7"))
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
         lines.forEachIndexed { i, l ->
             val isBlank = i in blanks
             val shown = when {
                 !isBlank -> l.text
                 answers[i] != null -> answers[i]!!
-                i == blanks.getOrNull(current) -> "▢▢▢ ← complete"
+                i == blanks.getOrNull(current) -> tx("gamesv3_complete")
                 else -> "▢▢▢"
             }
             val indent = if (l.text.endsWith(":") || l.text.startsWith(".")) "" else "    "
@@ -273,9 +274,9 @@ fun BranchMazeGame(ctx: GameCtx) {
         }
     }
     if (current >= blanks.size) {
-        FeedbackBanner(mistakes == 0, "Desvios completos! Agora rode no MARS de bolso e veja o resultado:")
+        FeedbackBanner(mistakes == 0, tx("gamesv3_desvios_completos_agora_rode_no"))
         MipsRunView(MiniLang.asmText(lines), highlightBranches = true)
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val bi = blanks[current]
@@ -290,12 +291,12 @@ fun BranchMazeGame(ctx: GameCtx) {
         }
         opts.toList().take(4).shuffled(ctx.rnd)
     }
-    RichText("Qual instrução vai no ▢ marcado?", style = MaterialTheme.typography.titleSmall)
-    HintBox(ctx, "No if/while o desvio pula quando a condição é FALSA: para (a < b) usamos bge (a ≥ b).", "No fim do corpo do while, volte para o rótulo do TESTE; no fim do então, pule o senão.")
+    RichText(tx("gamesv3_qual_instrucao_vai_no_marcado"), style = MaterialTheme.typography.titleSmall)
+    HintBox(ctx, tx("gamesv3_no_if_while_desvio_pula"), tx("gamesv3_no_fim_corpo_while_volte"))
     msg?.let { FeedbackBanner(it.first, it.second) }
     for (o in options) BigButton(o, Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) {
         if (o == right) { answers[bi] = o; current++; msg = true to lines[bi].why; Juice.correct() }
-        else { mistakes++; msg = false to "Não… ${lines[bi].why}"; Juice.wrong() }
+        else { mistakes++; msg = false to tx("gamesv3_nao_1", lines[bi].why); Juice.wrong() }
     }
 }
 

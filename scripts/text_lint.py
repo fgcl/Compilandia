@@ -196,7 +196,7 @@ PERMITIDOS = {
     "AFD", "AFN", "goto", "MIPS", "Byte", "lw", "sw", "mul", "ifa", "fat", "spill", "Bug", "Bugs", "t1", "q1", "q0",
     "shift", "reduce", "int", "float", "vezes", "mais", "Mais", "ifs", "Handle", "while", "Cifrão", "inteiro", "ao mesmo tempo", "épsilon", "fecho", "conta2", "x1", "if", "id", "left", "casa", "handle", "miolo", "else", "If", "AST", "add", "Add", "regex", "Shift", "Float", "aab", "Lw", "Sw", "ifs",
     # Terceira reforma: nomes de código C, de arquivo e das ferramentas, que a fala cita como estão.
-    "abb", "closure", "bison", "graph", "main", "getchar", "ungetc", "struct", "structs", "lexer", "expr", "op", "esq", "dir",
+    "abb", "closure", "Closure", "ids", "bison", "graph", "main", "getchar", "ungetc", "struct", "structs", "lexer", "expr", "op", "esq", "dir",
     "yyparse", "yylex", "yylval", "gcc", "calc",
 }
 

@@ -4,6 +4,7 @@ import com.compilandia.engine.DFA
 import com.compilandia.engine.LRAutomaton
 import com.compilandia.engine.nextSymbol
 import com.compilandia.engine.render
+import com.compilandia.textos.tx
 
 /*
  * Diagramas de tabela: a mesma coisa da prova desenhada como caixas com compartimentos.
@@ -49,7 +50,7 @@ fun caixasDoAfd(dfa: DFA, pos: List<Pair<Float, Float>>, nomes: List<String>? = 
     val wires = mutableListOf<Wire>()
     for (i in 0 until dfa.stateCount) {
         val (x, y) = pos[i]
-        val extra = buildList { if (i == dfa.start) add("início"); if (i in dfa.accepting) add("final") }.joinToString(" ")
+        val extra = buildList { if (i == dfa.start) add(tx("diagramas_inicio")); if (i in dfa.accepting) add("final") }.joinToString(" ")
         val linhas = dfa.alphabet.map { c -> val d = dfa.delta[i to c]; "$c → ${if (d == null) "∅" else nomeEstado(dfa, d, nomes)}" }
         boxes += registro("q$i", (nomeEstado(dfa, i, nomes) + " " + extra).trim(), linhas, x, y, w, tintEstado(dfa, i), 14f)
         dfa.alphabet.forEachIndexed { r, c -> dfa.delta[i to c]?.let { d -> wires += Wire("q$i", "q$d", fromRow = r) } }
@@ -132,11 +133,11 @@ fun linhasDoEstado(t: com.compilandia.engine.LRTable, sid: Int): List<String> {
     val empilha = acoes.filter { it.second is com.compilandia.engine.LRAction.Shift }
     fun regra(p: Int) = g.productions[p].toString()
     val linhas = mutableListOf<String>()
-    for ((a, act) in empilha) linhas += "$a empilha → ${(act as com.compilandia.engine.LRAction.Shift).state}"
-    if (acoes.any { it.second == com.compilandia.engine.LRAction.Accept }) linhas += "\$end aceita"
-    if (reduz.size == 1) linhas += "\$default reduz ${regra(reduz[0].prodId)}"
-    else for ((a, act) in acoes) if (act is com.compilandia.engine.LRAction.Reduce) linhas += "$a reduz ${regra(act.prodId)}"
-    for (nt in t.nonTerminals) t.gotoTable[sid to nt]?.let { linhas += "$nt vai → $it" }
+    for ((a, act) in empilha) linhas += tx("diagramas_1_empilha_2", a, (act as com.compilandia.engine.LRAction.Shift).state)
+    if (acoes.any { it.second == com.compilandia.engine.LRAction.Accept }) linhas += tx("diagramas_end_aceita")
+    if (reduz.size == 1) linhas += tx("diagramas_default_reduz_1", regra(reduz[0].prodId))
+    else for ((a, act) in acoes) if (act is com.compilandia.engine.LRAction.Reduce) linhas += tx("diagramas_1_reduz_2", a, regra(act.prodId))
+    for (nt in t.nonTerminals) t.gotoTable[sid to nt]?.let { linhas += tx("diagramas_1_vai_2", nt, it) }
     return itens + linhas
 }
 
@@ -156,9 +157,9 @@ fun structsDaExpr(e: com.compilandia.engine.Expr, y0: Float, passoY: Float = 112
     val boxes = bs.map { b ->
         val x = porId.getValue(b.id)
         if (x.children.isEmpty()) {
-            val campo = if (x.kind == com.compilandia.engine.Expr.Kind.NUM) "val: ${x.text}" else "nome: ${x.text}"
-            registro(b.id, "Node", listOf(campo), b.x + dx, b.y, folhaW, Tint.TEAL, size)
-        } else registro(b.id, "Node", listOf("op: '${x.text}'", "esq ●", "dir ●"), b.x + dx, b.y, opW, Tint.YELLOW, size)
+            val campo = if (x.kind == com.compilandia.engine.Expr.Kind.NUM) "val: ${x.text}" else tx("diagramas_nome_1", x.text)
+            registro(b.id, tx("diagramas_node"), listOf(campo), b.x + dx, b.y, folhaW, Tint.TEAL, size)
+        } else registro(b.id, tx("diagramas_node"), listOf("op: '${x.text}'", "esq ●", "dir ●"), b.x + dx, b.y, opW, Tint.YELLOW, size)
     }
     val wires = ws.map { w -> w.copy(arrow = true, fromRow = 1 + w.to.last().digitToInt()) }
     return boxes to wires

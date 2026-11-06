@@ -4,6 +4,7 @@ import com.compilandia.engine.Earley
 import com.compilandia.engine.Grammar
 import com.compilandia.engine.SentenceGenerator
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 enum class Cor { VERDE, AMARELO, CINZA }
 
@@ -65,7 +66,7 @@ object Desafio {
 
     /** O texto que vai para o grupo: mostra o caminho sem entregar a frase. */
     fun resultado(d: Dia, palpites: List<List<String>>, venceu: Boolean): String = buildString {
-        appendLine("Compilândia nº ${d.numero}: ${if (venceu) palpites.size else "X"}/$TENTATIVAS")
+        appendLine(tx("desafio_compilandia_no_1_2_3", d.numero, if (venceu) palpites.size else "X", TENTATIVAS))
         for (p in palpites) appendLine(cores(p, d.segredo).joinToString("") { when (it) { Cor.VERDE -> "🟩"; Cor.AMARELO -> "🟨"; Cor.CINZA -> "⬛" } })
     }
 }

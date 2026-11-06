@@ -13,159 +13,160 @@ import com.compilandia.content.pilha
 import com.compilandia.content.rotulo
 import com.compilandia.content.titulo
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 /** Pegadinhas de prova: semântica e geração de código. */
 val pegadinhasFim by lazy {
     listOf(
-        episodio(Skill.ATTRIBUTES_TYPES, "Sintetizado sobe, herdado desce", PEGADINHA) {
+        episodio(Skill.ATTRIBUTES_TYPES, tx("eppegadinhas3_sintetizado_sobe_herdado_desce"), PEGADINHA) {
             val d = Box("d", "D", 180f, 86f, 70f, 40f, Look.NODE, Tint.ORANGE, size = 16f)
             val t = Box("t", "T: int", 90f, 180f, 100f, 40f, Look.NODE, Tint.ORANGE, size = 15f)
             val l = Box("l", "L", 270f, 180f, 80f, 40f, Look.NODE, Tint.ORANGE, size = 16f)
             val a = Box("a", "a", 220f, 276f, 60f, 40f, Look.NODE, Tint.TEAL, size = 16f)
             val b = Box("b", "b", 320f, 276f, 60f, 40f, Look.NODE, Tint.TEAL, size = 16f)
-            cena("Declaração: int a, b. O tipo está num galho, e os nomes estão no outro.") {
+            cena(tx("eppegadinhas3_declaracao_int_b_tipo_esta")) {
                 add(titulo("int a, b", y = 30f))
                 add(d, t, l, a, b)
                 wire("d", "t", arrow = false); wire("d", "l", arrow = false); wire("l", "a", arrow = false); wire("l", "b", arrow = false)
             }
-            cena("Em a mais b, o tipo sobe dos filhos para o pai. Isso é sintetizado.", who = PROF) {}
+            cena(tx("eppegadinhas3_em_mais_b_tipo_sobe"), who = PROF) {}
             pergunta(
-                "Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque.",
+                tx("eppegadinhas3_aqui_diferente_para_saber_tipo"),
                 setOf("t"), setOf("l", "b"),
-                "O int está no galho do lado. Ele precisa atravessar.",
-                "Isso. O int passa pelo pai e desce até a. Isso é herdado.",
+                tx("eppegadinhas3_int_esta_no_galho_lado"),
+                tx("eppegadinhas3_isso_int_passa_pelo_pai"),
             ) { hot() }
-            cena("Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado.") { hot("t", "l", "a", "b") }
-            palavra("HERDADO", "S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita.", who = PROF, mood = EpMood.HAPPY)
+            cena(tx("eppegadinhas3_herdado_vem_pai_ou_irmao")) { hot("t", "l", "a", "b") }
+            palavra("HERDADO", tx("eppegadinhas3_atribuida_usa_so_sintetizado_l"), who = PROF, mood = EpMood.HAPPY)
         },
 
-        episodio(Skill.SCOPE_SYMBOLS, "A sombra da variável", PEGADINHA) {
-            cena("Dois x, um fora e um dentro. O de dentro faz sombra no de fora.") {
-                add(titulo("Dois x"))
+        episodio(Skill.SCOPE_SYMBOLS, tx("eppegadinhas3_sombra_variavel"), PEGADINHA) {
+            cena(tx("eppegadinhas3_dois_x_fora_dentro_dentro")) {
+                add(titulo(tx("eppegadinhas3_dois_x")))
                 add(codigo("c", listOf("int x = 1;", "{", "  int x = 2;", "  print(x);", "}", "print(x);"), 76f, x = 90f, passo = 32f, size = 16f))
             }
             pergunta(
-                "O print de dentro enxerga qual x? Toque na declaração.",
+                tx("eppegadinhas3_print_dentro_enxerga_qual_x"),
                 setOf("c2"), setOf("c0"),
-                "A busca começa no bloco mais interno.",
-                "Isso. Ele acha o x de dentro e para ali.",
+                tx("eppegadinhas3_busca_comeca_no_bloco_mais"),
+                tx("eppegadinhas3_isso_ele_acha_x_dentro"),
             ) { hot("c3") }
             pergunta(
-                "O bloco fechou. O print de fora enxerga qual x?",
+                tx("eppegadinhas3_bloco_fechou_print_fora_enxerga"),
                 setOf("c0"), setOf("c2"),
-                "Quando o bloco fecha, os nomes dele somem.",
-                "Isso. Sobrou só o de fora, que nunca mudou.",
+                tx("eppegadinhas3_quando_bloco_fecha_nomes_dele"),
+                tx("eppegadinhas3_isso_sobrou_so_fora_que"),
             ) { hot("c5") }
-            cena("A pegadinha é achar que x igual a dois mudou o x de fora. É outra variável.", who = PROF) { hot("c2", "c0") }
-            cena("Saída do programa: dois, depois um.", mood = EpMood.HAPPY) {
+            cena(tx("eppegadinhas3_pegadinha_achar_que_x_igual"), who = PROF) { hot("c2", "c0") }
+            cena(tx("eppegadinhas3_saida_programa_dois_depois"), mood = EpMood.HAPPY) {
                 add(fileira("s", listOf("2" to Tint.GREEN, "1" to Tint.GREEN), 310f, w = 70f, h = 50f, size = 20f))
                 hot()
             }
         },
 
-        episodio(Skill.TAC, "A ordem dos temporários", PEGADINHA) {
-            cena("Três endereços: no máximo uma conta por linha.") {
-                add(titulo("a + b * c"))
+        episodio(Skill.TAC, tx("eppegadinhas3_ordem_dos_temporarios"), PEGADINHA) {
+            cena(tx("eppegadinhas3_tres_enderecos_no_maximo_conta")) {
+                add(titulo(tx("comum_b_c")))
                 add(fileira("e", listOf("a" to Tint.TEAL, "+" to Tint.ORANGE, "b" to Tint.TEAL, "*" to Tint.ORANGE, "c" to Tint.TEAL), 110f, w = 56f, h = 46f, size = 18f))
             }
             pergunta(
-                "Qual conta vira a primeira linha? Toque no operador.",
+                tx("eppegadinhas3_qual_conta_vira_primeira_linha"),
                 setOf("e3"), setOf("e1"),
-                "Quem está mais fundo na árvore roda antes.",
-                "Isso. O vezes vai primeiro e guarda em t1.",
+                tx("eppegadinhas3_quem_esta_mais_fundo_na"),
+                tx("eppegadinhas3_isso_vezes_vai_primeiro_guarda"),
             ) { hot() }
-            cena("Primeira linha: t1 recebe b vezes c.") {
+            cena(tx("eppegadinhas3_primeira_linha_t1_recebe_b")) {
                 add(codigo("l", listOf("t1 = b * c"), 190f, x = 110f, passo = 34f, size = 18f))
                 hot("l0")
             }
-            cena("Segunda linha: t2 recebe a mais t1.") {
-                add(codigo("l", listOf("t1 = b * c", "t2 = a + t1"), 190f, x = 110f, passo = 34f, size = 18f))
+            cena(tx("eppegadinhas3_segunda_linha_t2_recebe_mais")) {
+                add(codigo("l", listOf("t1 = b * c", tx("comum_t2_t1")), 190f, x = 110f, passo = 34f, size = 18f))
                 hot("l1")
             }
-            cena("Se inverter as linhas, o t1 é lido antes de existir.", who = PROF, mood = EpMood.HAPPY) { hot() }
+            cena(tx("eppegadinhas3_se_inverter_linhas_t1_lido"), who = PROF, mood = EpMood.HAPPY) { hot() }
         },
 
-        episodio(Skill.OPTIMIZATION, "Otimizar sem mudar o resultado", PEGADINHA) {
-            cena("Otimizar é trocar código por outro mais rápido, com o mesmo resultado.") {
-                add(titulo("Pode trocar?"))
-                add(Box("a", "2 * 3   vira   6", 180f, 110f, 280f, 46f, Look.CELL, Tint.GREEN, size = 16f))
+        episodio(Skill.OPTIMIZATION, tx("eppegadinhas3_otimizar_sem_mudar_resultado"), PEGADINHA) {
+            cena(tx("eppegadinhas3_otimizar_trocar_codigo_por_outro")) {
+                add(titulo(tx("eppegadinhas3_pode_trocar")))
+                add(Box("a", tx("eppegadinhas3_2_3_vira_6"), 180f, 110f, 280f, 46f, Look.CELL, Tint.GREEN, size = 16f))
             }
-            cena("Multiplicar por um não muda nada. Dá para tirar.") {
-                add(Box("b", "x * 1   vira   x", 180f, 166f, 280f, 46f, Look.CELL, Tint.GREEN, size = 16f))
+            cena(tx("eppegadinhas3_multiplicar_por_nao_muda_nada")) {
+                add(Box("b", tx("eppegadinhas3_x_1_vira_x"), 180f, 166f, 280f, 46f, Look.CELL, Tint.GREEN, size = 16f))
             }
             pergunta(
-                "Uma destas trocas não vale. Toque nela.",
+                tx("eppegadinhas3_destas_trocas_nao_vale_toque"),
                 setOf("d"), setOf("c"),
-                "Pense em x valendo zero.",
-                "Isso. Com x zero, o programa dava erro, e a troca sumiria com ele.",
+                tx("eppegadinhas3_pense_em_x_valendo_zero"),
+                tx("eppegadinhas3_isso_com_x_zero_programa"),
             ) {
-                add(Box("c", "x + 0   vira   x", 180f, 222f, 280f, 46f, Look.CELL, size = 16f))
-                add(Box("d", "x / x   vira   1", 180f, 278f, 280f, 46f, Look.CELL, size = 16f))
+                add(Box("c", tx("eppegadinhas3_x_0_vira_x"), 180f, 222f, 280f, 46f, Look.CELL, size = 16f))
+                add(Box("d", tx("eppegadinhas3_x_x_vira_1"), 180f, 278f, 280f, 46f, Look.CELL, size = 16f))
             }
-            cena("Otimização não pode mudar o que o programa faz, nem nos casos raros.", who = PROF) { tint("d", Tint.RED); hot("d") }
-            cena("Na dúvida, o compilador deixa como está.", mood = EpMood.HAPPY) { hot() }
+            cena(tx("eppegadinhas3_otimizacao_nao_pode_mudar_que"), who = PROF) { tint("d", Tint.RED); hot("d") }
+            cena(tx("eppegadinhas3_na_duvida_compilador_deixa_como"), mood = EpMood.HAPPY) { hot() }
         },
 
-        episodio(Skill.RUNTIME, "Cada chamada, um registro", PEGADINHA) {
-            cena("Função recursiva não reaproveita o mesmo espaço. Cada chamada empilha um registro.") {
+        episodio(Skill.RUNTIME, tx("eppegadinhas3_cada_chamada_registro"), PEGADINHA) {
+            cena(tx("eppegadinhas3_funcao_recursiva_nao_reaproveita_mesmo")) {
                 add(titulo("fat(3)"))
                 add(pilha("f", listOf("fat(3)"), 180f, 320f, w = 170f, h = 46f, tint = Tint.TEAL))
             }
-            cena("fat de três chama fat de dois. Sobe outro registro, com o n dele.") {
+            cena(tx("eppegadinhas3_fat_tres_chama_fat_dois")) {
                 add(pilha("f", listOf("fat(3)", "fat(2)"), 180f, 320f, w = 170f, h = 46f, tint = Tint.TEAL))
             }
-            cena("fat de dois chama fat de um. Três registros vivos ao mesmo tempo.") {
+            cena(tx("eppegadinhas3_fat_dois_chama_fat_tres")) {
                 add(pilha("f", listOf("fat(3)", "fat(2)", "fat(1)"), 180f, 320f, w = 170f, h = 46f, tint = Tint.TEAL))
             }
             pergunta(
-                "Quem retorna primeiro? Toque no registro.",
+                tx("comum_quem_retorna_primeiro_toque_no"),
                 setOf("f2"), setOf("f0", "f1"),
-                "A pilha só tira do topo.",
-                "Isso. O último a entrar é o primeiro a sair.",
+                tx("eppegadinhas3_pilha_so_tira_topo"),
+                tx("comum_isso_ultimo_entrar_primeiro_sair"),
             ) { hot() }
-            cena("Ao retornar, o registro some, com as variáveis locais dele.", who = PROF, mood = EpMood.HAPPY) {
+            cena(tx("eppegadinhas3_ao_retornar_registro_some_com"), who = PROF, mood = EpMood.HAPPY) {
                 drop("f2")
             }
         },
 
-        episodio(Skill.CODEGEN_MIPS, "O if vira desvio", PEGADINHA) {
-            cena("MIPS não tem if. Tem pulo. O teste sai ao contrário.") {
+        episodio(Skill.CODEGEN_MIPS, tx("eppegadinhas3_if_vira_desvio"), PEGADINHA) {
+            cena(tx("eppegadinhas3_mips_nao_tem_if_tem")) {
                 add(titulo("if (a < b) x = 1;", size = 22f))
                 add(codigo("c", listOf("lw  \$t0, a", "lw  \$t1, b", "bge \$t0, \$t1, fim", "li  \$t2, 1", "sw  \$t2, x", "fim:"), 80f, x = 76f, passo = 32f, size = 15f))
             }
-            cena("Carrega a e b nos registradores.") { hot("c0", "c1") }
-            cena("Aqui está o truque. O if pede a menor que b, e o desvio testa a maior ou igual.") { hot("c2") }
+            cena(tx("eppegadinhas3_carrega_b_nos_registradores")) { hot("c0", "c1") }
+            cena(tx("eppegadinhas3_aqui_esta_truque_if_pede")) { hot("c2") }
             pergunta(
-                "Se a for maior ou igual a b, para onde o programa pula? Toque.",
+                tx("eppegadinhas3_se_for_maior_ou_igual"),
                 setOf("c5"), setOf("c3", "c4"),
-                "Com a condição falsa, o corpo do if não pode rodar.",
-                "Isso. Ele pula o corpo e cai em fim.",
+                tx("eppegadinhas3_com_condicao_falsa_corpo_if"),
+                tx("eppegadinhas3_isso_ele_pula_corpo_cai"),
             ) { hot() }
-            cena("Teste invertido: o desvio descreve quando pular o corpo.", who = PROF, mood = EpMood.HAPPY) { hot("c2", "c5") }
+            cena(tx("eppegadinhas3_teste_invertido_desvio_descreve_quando"), who = PROF, mood = EpMood.HAPPY) { hot("c2", "c5") }
         },
 
-        episodio(Skill.REG_ALLOC, "Quem vive junto briga", PEGADINHA) {
-            cena("Dois valores vivos ao mesmo tempo não podem dividir um registrador.") {
-                add(titulo("Vivos juntos"))
-                add(codigo("c", listOf("t1 = a + b", "t2 = c + d", "t3 = t1 * t2"), 80f, x = 100f, passo = 30f, size = 16f))
+        episodio(Skill.REG_ALLOC, tx("eppegadinhas3_quem_vive_junto_briga"), PEGADINHA) {
+            cena(tx("eppegadinhas3_dois_valores_vivos_ao_mesmo")) {
+                add(titulo(tx("eppegadinhas3_vivos_juntos")))
+                add(codigo("c", listOf(tx("comum_t1_b"), "t2 = c + d", "t3 = t1 * t2"), 80f, x = 100f, passo = 30f, size = 16f))
             }
-            cena("t1 nasce na primeira linha, e a terceira lê esse valor. Fica vivo o tempo todo.") { hot("c0", "c2") }
+            cena(tx("eppegadinhas3_t1_nasce_na_primeira_linha")) { hot("c0", "c2") }
             pergunta(
-                "Quem está vivo junto com t1 na segunda linha? Toque no nó.",
+                tx("eppegadinhas3_quem_esta_vivo_junto_com"),
                 setOf("n2"), setOf("n3"),
-                "Veja quem já nasceu e ainda tem uso pela frente.",
-                "Isso. t1 e t2 são vizinhos no grafo. Registradores diferentes.",
+                tx("eppegadinhas3_veja_quem_ja_nasceu_ainda"),
+                tx("eppegadinhas3_isso_t1_t2_sao_vizinhos"),
             ) {
                 hot()
                 add(Box("n1", "t1", 90f, 270f, 56f, 56f, Look.STATE, Tint.TEAL, size = 16f))
                 add(Box("n2", "t2", 200f, 270f, 56f, 56f, Look.STATE, size = 16f))
                 add(Box("n3", "t3", 300f, 270f, 56f, 56f, Look.STATE, size = 16f))
             }
-            cena("t3 nasce quando t1 e t2 morrem. Ele pode reaproveitar um dos registradores.") {
+            cena(tx("eppegadinhas3_t3_nasce_quando_t1_t2")) {
                 wire("n1", "n2", arrow = false, hot = true)
                 tint("n2", Tint.ORANGE); tint("n3", Tint.TEAL)
             }
-            palavra("INTERFERÊNCIA", "Dois registradores bastam. Colorir o grafo é só isso.", who = PROF, mood = EpMood.HAPPY)
+            palavra(tx("eppegadinhas3_interferencia"), tx("eppegadinhas3_dois_registradores_bastam_colorir_grafo"), who = PROF, mood = EpMood.HAPPY)
         },
     )
 }

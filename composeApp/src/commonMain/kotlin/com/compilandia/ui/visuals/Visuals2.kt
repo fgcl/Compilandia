@@ -59,6 +59,7 @@ import com.compilandia.ui.RichText
 import com.compilandia.ui.SymbolsText
 import com.compilandia.ui.TreeView
 import com.compilandia.ui.toUi
+import com.compilandia.textos.tx
 
 fun nfaEdges(n: SmallNFA) = n.edges.map { Triple(it.first, it.second?.toString() ?: "ε", it.third) }
 
@@ -70,18 +71,18 @@ fun dfaLetter(i: Int) = ('A' + i).toString()
 fun NfaSubsetView(id: String) {
     val nfa = remember(id) { SmallNFA.bank.first { it.id == id } }
     val res = remember(nfa) { nfa.subsetConstruction() }
-    Mono("AFN: ${nfa.title}", bold = true)
+    Mono(tx("comum_afn_1", nfa.title), bold = true)
     Stepper(res.steps.size + 1) { i ->
         val cur = res.steps.getOrNull(i - 1)
         AutomatonView(nfa.stateCount, nfa.start, nfa.accepting, nfaEdges(nfa), highlight = cur?.from ?: nfa.epsClosure(setOf(nfa.start)))
         if (cur == null) {
-            RichText("Estado inicial do AFD: **A = ε-fecho({${nfa.start}}) = ${setText(res.states[0])}** (amarelo).", style = MaterialTheme.typography.bodyMedium)
+            RichText(tx("visuals2_estado_inicial_afd_fecho_1", nfa.start, setText(res.states[0])), style = MaterialTheme.typography.bodyMedium)
         } else {
             val from = dfaLetter(res.states.indexOf(cur.from))
             val toIdx = res.states.indexOf(cur.to)
             RichText(
-                "De **$from = ${setText(cur.from)}** com '**${cur.symbol}**': move = ${setText(cur.moved)}, ε-fecho = **${setText(cur.to)}**" +
-                    if (cur.to.isEmpty()) " → estado morto (sem transição)." else " → estado **${dfaLetter(toIdx)}**.",
+                tx("visuals2_1_2_com_3_move", from, setText(cur.from), cur.symbol, setText(cur.moved), setText(cur.to)) +
+                    if (cur.to.isEmpty()) tx("visuals2_estado_morto_sem_transicao") else tx("visuals2_estado_1", dfaLetter(toIdx)),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
@@ -101,9 +102,9 @@ fun NfaSubsetView(id: String) {
                 }
             }
         }
-        Text("* = estado final (contém um final do AFN)", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+        Text(tx("visuals2_estado_final_contem_final_afn"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
         if (i == res.steps.size) {
-            Text("AFD resultante:", style = MaterialTheme.typography.titleSmall)
+            Text(tx("visuals2_afd_resultante"), style = MaterialTheme.typography.titleSmall)
             val dfa = res.toDFA(nfa.alphabet)
             AutomatonView(dfa.stateCount, 0, dfa.accepting, dfa.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { dfaLetter(it) })
         }
@@ -118,7 +119,7 @@ fun FlexView(spec: String, input: String) {
     var text by remember(spec) { mutableStateOf(input.ifBlank { "if x1 >= 42" }) }
     val r = remember(flex, text) { flex.scan(text) }
     CodeBlock(spec, "scanner.l")
-    OutlinedTextField(text, { text = it }, label = { Text("entrada para o yylex()") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    OutlinedTextField(text, { text = it }, label = { Text(tx("visuals2_entrada_para_yylex")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
     ChipRow {
         for (lx in r.tokens) Column(
             Modifier.clip(RoundedCornerShape(8.dp)).background(Palette.teal.copy(alpha = 0.12f)).border(1.dp, Palette.ink.copy(alpha = 0.5f), RoundedCornerShape(8.dp)).padding(6.dp),
@@ -126,7 +127,7 @@ fun FlexView(spec: String, input: String) {
         ) {
             Mono(lx.token, bold = true, color = Palette.purple)
             Mono("\"${lx.text}\"", size = 12)
-            Text("regra ${lx.rule + 1}", fontSize = 10.sp, color = Palette.inkSoft)
+            Text(tx("visuals2_regra_1", lx.rule + 1), fontSize = 10.sp, color = Palette.inkSoft)
         }
     }
     r.error?.let { Text("❌ $it", color = Palette.red) }
@@ -150,16 +151,16 @@ fun PanicView(g: Grammar, input: String) {
             ) { Mono(s, bold = k == errPos) }
         }
     }
-    if (errPos != null) Text("O erro é DETECTADO no token ${errPos + 1} ('${toks[errPos]}'): é o primeiro que não pode continuar nenhuma frase válida.", style = MaterialTheme.typography.bodySmall, color = Palette.red)
+    if (errPos != null) Text(tx("visuals2_erro_detectado_no_token_1", errPos + 1, toks[errPos]), style = MaterialTheme.typography.bodySmall, color = Palette.red)
     Stepper(tr.steps.size) { i ->
         val s = tr.steps[i]
         StackAndInput(g, s.stack, s.input)
         val a = s.action
         Text(if (a is LLAction.Error) "🚨 ${a.message}" else a.label(), style = MaterialTheme.typography.bodyMedium, color = if (a is LLAction.Error) Palette.red else Palette.ink)
     }
-    Text("Recuperações feitas:", style = MaterialTheme.typography.titleSmall)
+    Text(tx("visuals2_recuperacoes_feitas"), style = MaterialTheme.typography.titleSmall)
     for (e in tr.events) RichText("• " + e.message, style = MaterialTheme.typography.bodySmall)
-    Text(if (tr.reachedEnd) "✅ O parser continuou até o fim e pôde relatar todos os erros de uma vez." else "O parser desistiu.", style = MaterialTheme.typography.bodySmall, color = Palette.teal)
+    Text(if (tr.reachedEnd) tx("visuals2_parser_continuou_ate_fim_pode") else tx("visuals2_parser_desistiu"), style = MaterialTheme.typography.bodySmall, color = Palette.teal)
 }
 
 // ------------------------------------------------------------------ Pilha de chamadas
@@ -175,7 +176,7 @@ fun runtimeProgram(id: String): RtProgram = when (id) {
 @Composable
 fun FrameStack(frames: List<com.compilandia.engine.Frame>, highlightTop: Boolean = true) {
     Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-        Text("⬆ topo da pilha", style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+        Text(tx("visuals2_topo_pilha"), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
         frames.asReversed().forEachIndexed { k, f ->
             Column(
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp))
@@ -183,10 +184,10 @@ fun FrameStack(frames: List<com.compilandia.engine.Frame>, highlightTop: Boolean
                     .border(2.dp, Palette.ink, RoundedCornerShape(8.dp)).padding(8.dp)
             ) {
                 Mono("${f.fn}(${f.args.entries.joinToString { "${it.key}=${it.value}" }})", bold = true)
-                Text("retorna para: ${f.returnTo} · vínculo de controle → ${frames.getOrNull(frames.size - 2 - k)?.fn ?: "—"}", fontSize = 11.sp, color = Palette.inkSoft)
+                Text(tx("visuals2_retorna_para_1_vinculo_controle", f.returnTo, frames.getOrNull(frames.size - 2 - k)?.fn ?: "—"), fontSize = 11.sp, color = Palette.inkSoft)
             }
         }
-        if (frames.isEmpty()) Text("(vazia)", color = Palette.inkSoft)
+        if (frames.isEmpty()) Text(tx("visuals2_vazia"), color = Palette.inkSoft)
     }
 }
 
@@ -198,12 +199,12 @@ fun CallStackView(id: String) {
         val e = p.events[i]
         Text(
             when (e) {
-                is RtEvent.Call -> "📥 chama ${e.frame.fn}(${e.frame.args.values.joinToString()}) → EMPILHA um registro de ativação"
-                is RtEvent.Return -> "📤 ${e.fn} retorna ${e.value} → DESEMPILHA o registro"
+                is RtEvent.Call -> tx("visuals2_chama_1_2_empilha_registro", e.frame.fn, e.frame.args.values.joinToString())
+                is RtEvent.Return -> tx("visuals2_1_retorna_2_desempilha_registro", e.fn, e.value)
             }, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold,
         )
         FrameStack(e.stack)
-        if (i == p.events.lastIndex) Text("Resultado final: ${p.result}. Profundidade máxima: ${p.events.maxOf { it.stack.size }} registros.", color = Palette.teal)
+        if (i == p.events.lastIndex) Text(tx("visuals2_resultado_final_1_profundidade_maxima", p.result, p.events.maxOf { it.stack.size }), color = Palette.teal)
     }
 }
 
@@ -215,7 +216,7 @@ fun MipsView(src: String) {
     val tac = remember(e) { TacGen.generate(e, "r") }
     val asm = remember(tac) { Mips.fromTac(tac) }
     val states = remember(asm) { Mips.run(asm, Mips.intEnv) }
-    Mono("r = ${e.render()}    (a=4, b=2, c=3, d=5)", bold = true)
+    Mono(tx("visuals2_r_1_4_b_2", e.render()), bold = true)
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Column(Modifier.weight(1f)) {
             Text("TAC", style = MaterialTheme.typography.labelMedium)
@@ -226,22 +227,22 @@ fun MipsView(src: String) {
         val st = states[i]
         val vars = (tac.map { it.target } + listOf("a", "b", "c", "d")).distinct()
         Column(Modifier.clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp).fillMaxWidth()) {
-            Text(".text\nmain:", fontFamily = LocalFonts.current.mono, fontSize = 12.sp, color = Color(0xFF9CA3AF))
+            Text(tx("comum_text_main"), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, color = Color(0xFF9CA3AF))
             asm.forEachIndexed { k, line ->
                 Text("  $line", fontFamily = LocalFonts.current.mono, fontSize = 13.sp,
                     color = if (k == i) Palette.yellow else if (k < i) Color(0xFFE8E6F0) else Color(0xFF6B7280),
                     fontWeight = if (k == i) FontWeight.Bold else FontWeight.Normal)
             }
         }
-        Text("Registradores", style = MaterialTheme.typography.labelMedium)
+        Text(tx("comum_registradores"), style = MaterialTheme.typography.labelMedium)
         Row(Modifier.horizontalScroll(rememberScrollState())) {
             for (r in listOf("\$t0", "\$t1", "\$t2", "\$t3")) Cell("$r\n${st.regs[r] ?: "—"}", w = 64)
         }
-        Text("Memória (.data)", style = MaterialTheme.typography.labelMedium)
+        Text(tx("visuals2_memoria_data"), style = MaterialTheme.typography.labelMedium)
         Row(Modifier.horizontalScroll(rememberScrollState())) {
             for (v in vars) Cell("$v\n${st.mem[v] ?: "?"}", w = 56, color = if (asm[i].endsWith(", $v") && asm[i].startsWith("sw")) Palette.yellow.copy(alpha = 0.6f) else null)
         }
-        if (i == asm.lastIndex) Text("✅ r = ${st.mem["r"]} — é isso que o MARS mostraria na memória.", color = Palette.teal, fontWeight = FontWeight.Bold)
+        if (i == asm.lastIndex) Text(tx("visuals2_r_1_isso_que_mars", st.mem["r"]), color = Palette.teal, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -252,20 +253,20 @@ fun DescentCodeView(g: Grammar, input: String) {
     val t = remember(g) { LL1Table(g) }
     val code = remember(t) { RecursiveDescentGen.program(t) }
     GrammarText(g)
-    CodeBlock(code.joinToString("\n") { "    ".repeat(it.indent) + it.text }, "Parser.java (um método por não-terminal)")
+    CodeBlock(code.joinToString("\n") { "    ".repeat(it.indent) + it.text }, tx("visuals2_parser_java_metodo_por_nao"))
     if (input.isNotBlank()) {
         val calls = remember(t, input) { RecursiveDescentGen.callTrace(t, tokensOf(input)) }
-        Mono("entrada: $input", bold = true)
+        Mono(tx("comum_entrada_1", input), bold = true)
         Stepper(calls.size) { i ->
             val (stack, what) = calls[i]
             Text(what, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
-            Text("Pilha de chamadas (a pilha \"escondida\" do Java):", style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
+            Text(tx("visuals2_pilha_chamadas_pilha_escondida_java"), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
             Row(Modifier.horizontalScroll(rememberScrollState())) {
                 stack.forEachIndexed { k, f ->
                     Box(Modifier.padding(end = 3.dp).clip(RoundedCornerShape(6.dp)).background(if (k == stack.lastIndex) Palette.yellow else Palette.paperDark)
                         .border(1.dp, Palette.ink, RoundedCornerShape(6.dp)).padding(horizontal = 7.dp, vertical = 4.dp)) { Mono("$f()", bold = true, size = 13) }
                 }
-                if (stack.isEmpty()) Text("(vazia)", color = Palette.inkSoft)
+                if (stack.isEmpty()) Text(tx("visuals2_vazia"), color = Palette.inkSoft)
             }
         }
     }
@@ -279,8 +280,8 @@ fun LalrTableView(g: Grammar) {
     val slr = remember(g) { LRTable(g, LRKind.SLR1) }
     LRTableView(lalr)
     Text(
-        "Comparação: SLR(1) tem ${slr.rawConflictCells.size} célula(s) em conflito; LALR(1) tem ${lalr.rawConflictCells.size}. " +
-            "Mesmos ${lalr.automaton.states.size} estados do LR(0), mas lookaheads mais precisos que o FOLLOW.",
+        tx("visuals2_comparacao_slr_1_tem_1", slr.rawConflictCells.size, lalr.rawConflictCells.size) +
+            tx("visuals2_mesmos_1_estados_lr_0", lalr.automaton.states.size),
         style = MaterialTheme.typography.bodySmall,
     )
 }
@@ -305,7 +306,7 @@ fun rightmostForms(g: Grammar, tree: ParseNode): List<Pair<List<String>, String>
 fun RightmostView(g: Grammar, input: String) {
     val tree = remember(g, input) { DerivationHelper.leftmostDerivations(g, tokensOf(input), 1).firstOrNull()?.let { DerivationHelper.treeOf(g, it) } }
     GrammarText(g)
-    if (tree == null) { Text("A frase não pertence à linguagem.", color = Palette.red); return }
+    if (tree == null) { Text(tx("comum_frase_nao_pertence_linguagem"), color = Palette.red); return }
     val forms = remember(tree) { rightmostForms(g, tree) }
     Stepper(forms.size) { i ->
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -313,10 +314,10 @@ fun RightmostView(g: Grammar, input: String) {
                 Text(if (k == 0) "   " else "⇒ ", fontFamily = LocalFonts.current.mono)
                 SymbolsText(g, forms[k].first, size = if (k == i) 17 else 14)
             }
-            if (i > 0) Text("expandiu o não-terminal MAIS À DIREITA: ${forms[i].second}", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            if (i > 0) Text(tx("visuals2_expandiu_nao_terminal_mais_direita", forms[i].second), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             if (i == forms.lastIndex) {
                 PaperCard(color = Palette.yellow.copy(alpha = 0.15f)) {
-                    RichText("Leia de baixo para cima: cada passo ao contrário é uma **redução** do analisador shift-reduce. LR = Left-to-right, **Rightmost** derivation (ao contrário).", style = MaterialTheme.typography.bodySmall)
+                    RichText(tx("visuals2_leia_baixo_para_cima_cada"), style = MaterialTheme.typography.bodySmall)
                 }
                 TreeView(tree.toUi(g))
             }

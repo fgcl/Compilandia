@@ -25,6 +25,7 @@ import com.compilandia.engine.MiniLexer
 import com.compilandia.engine.Mips
 import com.compilandia.engine.TacGen
 import com.compilandia.learning.Skill
+import com.compilandia.textos.tx
 
 /**
  * Série "Compilador em C": o mesmo compilador escrito em C, um pedaço por aula.
@@ -33,7 +34,7 @@ import com.compilandia.learning.Skill
 val serieEmC by lazy {
     listOf(
         // ─────────────────────────────── 1. O laço do getchar ───────────────────────────────
-        episodio(Skill.TOKENS, "Em C 1: o laço do getchar", EM_C) {
+        episodio(Skill.TOKENS, tx("epemc_em_c_1_laco_getchar"), EM_C) {
             val linha = "42+7"
             val primeiro = MiniLexer.tokenize(linha).first().lexeme
             val c = listOf(
@@ -48,45 +49,45 @@ val serieEmC by lazy {
                 "  return (Token){NUM, v};",
                 "}",
             )
-            fun vars(cc: String, v: String) = registro("vars", "variáveis", listOf("c = $cc", "v = $v"), 95f, 352f, 130f, Tint.NONE, 13f)
-            cena("Vamos escrever o analisador léxico em C, na mão.") {
+            fun vars(cc: String, v: String) = registro("vars", tx("epemc_variaveis"), listOf("c = $cc", "v = $v"), 95f, 352f, 130f, Tint.NONE, 13f)
+            cena(tx("epemc_vamos_escrever_analisador_lexico_em")) {
                 add(titulo("lexer.c"))
                 add(codigo("s", c, 58f, passo = 21f, size = 12f))
                 add(fita(linha, 290f, 30f))
             }
-            cena("O getchar lê um caractere por vez. Chegou o 4.") {
+            cena(tx("epemc_getchar_le_caractere_por_vez")) {
                 hot("s0"); tint("c0", Tint.YELLOW)
                 add(vars("'4'", "?"))
             }
-            cena("É dígito. Entra no if, e o valor começa em zero.") {
+            cena(tx("epemc_digito_entra_no_if_valor")) {
                 hot("s1", "s2"); add(vars("'4'", "0"))
             }
-            cena("Cada volta do while junta um dígito. Agora v vale quatro.") {
+            cena(tx("epemc_cada_volta_while_junta_digito")) {
                 hot("s4"); add(vars("'4'", "4"))
             }
-            cena("Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois.") {
+            cena(tx("epemc_le_2_quatro_vezes_dez")) {
                 hot("s4", "s5"); tint("c1", Tint.YELLOW); add(vars("'2'", "42"))
             }
             pergunta(
-                "Agora chegou o mais. Qual linha roda logo depois? Toque nela.",
+                tx("epemc_agora_chegou_mais_qual_linha"),
                 setOf("s7"), setOf("s4", "s5", "s1"),
-                "O mais não é dígito. O while para.",
-                "Isso. O laço para e o ungetc devolve o mais.",
+                tx("epemc_mais_nao_digito_while_para"),
+                tx("epemc_isso_laco_para_ungetc_devolve"),
             ) { hot(); tint("c2", Tint.ORANGE); add(vars("'+'", "42")) }
-            cena("O mais foi lido a mais. O ungetc devolve ele para a entrada.") { hot("s7"); tint("c2", Tint.NONE) }
-            cena("E sai o token. Ele é um struct com o tipo e o valor.", mood = EpMood.HAPPY) {
+            cena(tx("epemc_mais_foi_lido_mais_ungetc")) { hot("s7"); tint("c2", Tint.NONE) }
+            cena(tx("epemc_sai_token_ele_struct_com"), mood = EpMood.HAPPY) {
                 hot("s8")
-                add(registro("tok", "Token", listOf("tipo: NUM", "valor: $primeiro"), 265f, 352f, 140f, Tint.TEAL, 13f))
+                add(registro("tok", tx("comum_token"), listOf(tx("epemc_tipo_num"), tx("epemc_valor_1", primeiro)), 265f, 352f, 140f, Tint.TEAL, 13f))
             }
             brinquedo(
-                "Agora corte uma linha inteira, como o seu lexer em C faria.",
-                "Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token.",
-                "Os tokens que você cortou são os que o seu lexer devolveria.",
-            ) { ToyCorte("x1 = 42 + y;", "Corte a linha em tokens.") }
+                tx("epemc_agora_corte_linha_inteira_como"),
+                tx("epemc_maior_casamento_estique_pedaco_enquanto"),
+                tx("epemc_tokens_que_voce_cortou_sao"),
+            ) { ToyCorte("x1 = 42 + y;", tx("epemc_corte_linha_em_tokens")) }
         },
 
         // ─────────────────────────────── 2. Uma função por regra ───────────────────────────────
-        episodio(Skill.RECURSIVE_DESCENT, "Em C 2: uma função por regra", EM_C) {
+        episodio(Skill.RECURSIVE_DESCENT, tx("epemc_em_c_2_funcao_por"), EM_C) {
             val toks = listOf("2", "+", "3", "*", "4")
             val rastro = rastroDescida(toks)
             val codigoExpr = listOf(
@@ -107,81 +108,81 @@ val serieEmC by lazy {
             }
             fun mostra(k: Int) { dropAll("f"); add(pilhaEm(k)); dropAll("e"); add(fitaEm(k)) }
             val casaMais = rastro.indexOfFirst { it.acao == "casar" && it.alvo == "+" }
-            cena("Na descida recursiva em C, cada regra da gramática vira uma função.") {
+            cena(tx("epemc_na_descida_recursiva_em_c")) {
                 add(titulo("parser.c"))
                 add(codigo("s", codigoExpr, 70f, x = 40f, passo = 26f, size = 14f))
             }
-            cena("expr chama termo. O while repete enquanto vier um mais.") { hot("s1", "s2") }
-            cena("termo é igual, com o vezes. E fator só casa um número.") {
+            cena(tx("epemc_expr_chama_termo_while_repete")) { hot("s1", "s2") }
+            cena(tx("epemc_termo_igual_com_vezes_fator")) {
                 add(codigo("t", listOf("void termo(void) {", "  fator(); while (tok == '*') ...", "}", "void fator(void) { casa(NUM); }"), 270f, x = 14f, passo = 24f, size = 13f))
                 hot("t1", "t3")
             }
-            cena("Vamos rodar com dois mais três vezes quatro. O main chama expr.") {
+            cena(tx("epemc_vamos_rodar_com_dois_mais")) {
                 dropAll("s"); dropAll("t")
-                add(rotulo("rp", "pilha de chamadas", 100f, 400f))
-                add(codigo("g", listOf("expr:  termo ('+' termo)*", "termo: fator ('*' fator)*", "fator: NUM"), 180f, x = 180f, passo = 30f, size = 11f))
+                add(rotulo("rp", tx("comum_pilha_chamadas"), 100f, 400f))
+                add(codigo("g", listOf(tx("comum_expr_termo_termo"), tx("comum_termo_fator_fator"), tx("comum_fator_num")), 180f, x = 180f, passo = 30f, size = 11f))
                 mostra(0)
             }
-            cena("expr chama termo, e termo chama fator. A pilha cresce.") { mostra(2) }
-            cena("fator casa o 2 e volta. Depois termo volta também.") {
+            cena(tx("epemc_expr_chama_termo_termo_chama")) { mostra(2) }
+            cena(tx("epemc_fator_casa_2_volta_depois")) {
                 mostra(rastro.indexOfFirst { it.acao == "voltar" && it.alvo == "termo" })
             }
             pergunta(
-                "Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque.",
+                tx("epemc_agora_vem_mais_qual_funcao"),
                 setOf("f${rastro[casaMais].pilha.lastIndex}"), setOf("f0"),
-                "Quem tem o while do mais?",
-                "Isso. O while do mais mora dentro de expr.",
+                tx("epemc_quem_tem_while_mais"),
+                tx("epemc_isso_while_mais_mora_dentro"),
             ) { mostra(casaMais) }
-            cena("No vezes, quem casa é termo. Cada função cuida do seu operador.", who = PROF) {
+            cena(tx("epemc_no_vezes_quem_casa_termo"), who = PROF) {
                 mostra(rastro.indexOfFirst { it.acao == "casar" && it.alvo == "*" })
             }
             brinquedo(
-                "Agora você é o processador. Chame, case e volte, na ordem certa.",
-                "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou.",
-                "Você rodou a descida recursiva inteira, igual ao programa em C.",
-            ) { ToyChamadas(listOf("1", "*", "2", "+", "3"), "Rode 1 * 2 + 3 até a pilha esvaziar.") }
+                tx("epemc_agora_voce_processador_chame_case"),
+                tx("epemc_chame_quando_topo_precisa_outra"),
+                tx("epemc_voce_rodou_descida_recursiva_inteira"),
+            ) { ToyChamadas(listOf("1", "*", "2", "+", "3"), tx("epemc_rode_1_2_3_ate")) }
         },
 
         // ─────────────────────────────── 3. O struct Node ───────────────────────────────
-        episodio(Skill.AST_BUILD, "Em C 3: o struct Node", EM_C) {
+        episodio(Skill.AST_BUILD, tx("epemc_em_c_3_struct_node"), EM_C) {
             val e = ExprParser.parse("2 + 3 * 4")
             val (nos, ponteiros) = structsDaExpr(e, 110f, 118f, 310f, size = 13f, folhaW = 84f, opW = 94f)
             val folhas = nos.filter { it.rows.size == 1 }.map { it.id }
             val vezes = nos.first { it.rows.firstOrNull() == "op: '*'" }.id
             val raiz = "t"
-            cena("Na AST em C, cada nó da árvore é um struct.") {
+            cena(tx("epemc_na_ast_em_c_cada")) {
                 add(titulo("struct Node"))
                 add(codigo("s", listOf("typedef struct Node {", "  char op;", "  int val;", "  struct Node *esq, *dir;", "} Node;"), 120f, x = 60f, passo = 30f, size = 15f))
             }
-            cena("op guarda o operador. val guarda o número.") { hot("s1", "s2") }
-            cena("esq e dir são ponteiros. Eles apontam para os filhos.") { hot("s3") }
-            cena("Para dois mais três vezes quatro, o parser cria os nós de baixo para cima.") {
+            cena(tx("epemc_op_guarda_operador_val_guarda")) { hot("s1", "s2") }
+            cena(tx("epemc_esq_dir_sao_ponteiros_eles")) { hot("s3") }
+            cena(tx("epemc_para_dois_mais_tres_vezes")) {
                 dropAll("s")
                 add(titulo("2 + 3 * 4"))
                 add(nos.filter { it.id in folhas })
             }
-            cena("Primeiro as folhas, um nó para cada número. Depois vem o vezes.") {
+            cena(tx("epemc_primeiro_folhas_no_para_cada")) {
                 add(nos.filter { it.id == vezes })
                 wires(ponteiros.filter { it.from == vezes })
                 hot(vezes)
             }
-            cena("Por último o mais, que vira a raiz da árvore.") {
+            cena(tx("epemc_por_ultimo_mais_que_vira")) {
                 add(nos.filter { it.id == raiz })
                 wires(ponteiros.filter { it.from == raiz })
                 hot(raiz)
             }
             pergunta(
-                "Para qual nó aponta o ponteiro dir da raiz? Toque nele.",
+                tx("epemc_para_qual_no_aponta_ponteiro"),
                 setOf(vezes), folhas.toSet(),
-                "Siga o fio que sai da linha dir.",
-                "Isso. O dir da raiz aponta para o vezes.",
+                tx("epemc_siga_fio_que_sai_linha"),
+                tx("epemc_isso_dir_raiz_aponta_para"),
             ) { hot(); lit(raiz, 2) }
-            cena("A árvore é isso: structs ligados por ponteiros.", who = PROF, mood = EpMood.HAPPY) { lit(raiz, -1); hot() }
+            cena(tx("epemc_arvore_isso_structs_ligados_por"), who = PROF, mood = EpMood.HAPPY) { lit(raiz, -1); hot() }
         },
 
         // ─────────────────────────────── 4. Da árvore ao MIPS ───────────────────────────────
-        episodio(Skill.CODEGEN_MIPS, "Em C 4: da árvore ao MIPS", EM_C) {
-            val src = "a + b * c"
+        episodio(Skill.CODEGEN_MIPS, tx("epemc_em_c_4_arvore_ao"), EM_C) {
+            val src = tx("comum_b_c")
             val e = ExprParser.parse(src)
             val mips = Mips.fromTac(TacGen.generate(e))
             val (nos, ponteiros) = structsDaExpr(e, 90f, 110f, 190f, dx = -86f, size = 11f, folhaW = 60f, opW = 76f)
@@ -191,70 +192,70 @@ val serieEmC by lazy {
             // Cada operador do TAC vira quatro linhas: carrega, carrega, calcula e guarda.
             val porOp = mips.size / op.size
             fun linhas(n: Int) = codigo("m", mips.take(n), 74f, x = 196f, passo = 24f, size = 12f)
-            cena("O gerador anda na árvore e escreve MIPS, uma linha por vez.") {
+            cena(tx("epemc_gerador_anda_na_arvore_escreve")) {
                 add(titulo(src))
                 add(nos); wires(ponteiros)
             }
-            cena("Ele visita os filhos antes do pai. O primeiro nó pronto é o vezes.") { hot(vezes) }
-            cena("O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda.") {
+            cena(tx("epemc_ele_visita_filhos_antes_pai")) { hot(vezes) }
+            cena(tx("epemc_vezes_vira_quatro_linhas_carrega")) {
                 add(linhas(porOp)); hot(vezes, *(0 until porOp).map { "m$it" }.toTypedArray())
             }
             pergunta(
-                "Qual nó o gerador visita agora? Toque nele.",
+                tx("epemc_qual_no_gerador_visita_agora"),
                 setOf(raiz), nos.map { it.id }.toSet() - raiz - vezes,
-                "Os dois filhos da raiz já estão prontos.",
-                "Isso. Agora é a vez da raiz.",
+                tx("epemc_dois_filhos_raiz_ja_estao"),
+                tx("epemc_isso_agora_vez_raiz"),
             ) { hot() }
-            cena("O mais usa o resultado do vezes, que já está guardado na memória.") {
+            cena(tx("epemc_mais_usa_resultado_vezes_que")) {
                 add(linhas(mips.size)); hot(raiz, *(porOp until mips.size).map { "m$it" }.toTypedArray())
             }
-            cena("Em C, é uma função recursiva: gera os filhos e depois o pai.", who = PROF) {
+            cena(tx("epemc_em_c_funcao_recursiva_gera"), who = PROF) {
                 add(codigo("c", listOf("void gera(Node *n) {", "  if (n->op) { gera(n->esq); gera(n->dir); }", "  emite(n);", "}"), 300f, x = 14f, passo = 22f, size = 12f))
                 hot("c1")
             }
             brinquedo(
-                "Agora monte o MIPS na ordem certa, instrução por instrução.",
-                "Antes de calcular, os dois valores precisam estar nos registradores.",
-                "É exatamente o que o seu gerador em C escreveria.",
-            ) { ToyMips(src, "Monte o MIPS de $src.") }
+                tx("epemc_agora_monte_mips_na_ordem"),
+                tx("epemc_antes_calcular_dois_valores_precisam"),
+                tx("epemc_exatamente_que_seu_gerador_em"),
+            ) { ToyMips(src, tx("epemc_monte_mips_1", src)) }
         },
 
         // ─────────────────────────────── 5. Flex, Bison e o main ───────────────────────────────
-        episodio(Skill.YACC_BISON, "Em C 5: flex, bison e o main", EM_C) {
+        episodio(Skill.YACC_BISON, tx("epemc_em_c_5_flex_bison"), EM_C) {
             val conta = "2+3*4"
             val valor = MiniBison.compile(SPEC_CALC.joinToString("\n")).run(conta).value
-            val y = registro("y", "calc.y", listOf("e: e '+' e", "{ \$\$ = \$1 + \$3; }"), 180f, 100f, 180f, Tint.ORANGE, 13f)
-            val l = registro("l", "calc.l", listOf("[0-9]+  NUM", "yylval = atoi(yytext)"), 92f, 232f, 172f, Tint.TEAL, 13f)
+            val y = registro("y", "calc.y", listOf(tx("epemc_e_e_e"), "{ \$\$ = \$1 + \$3; }"), 180f, 100f, 180f, Tint.ORANGE, 13f)
+            val l = registro("l", "calc.l", listOf(tx("epemc_0_9_num"), tx("epemc_yylval_atoi_yytext")), 92f, 232f, 172f, Tint.TEAL, 13f)
             val m = registro("main", "main.c", listOf("int main(void) {", "  return yyparse();", "}"), 272f, 232f, 162f, Tint.YELLOW, 13f)
-            cena("Um compilador em C de verdade costuma ter três arquivos.") {
-                add(titulo("flex + bison + C"))
+            cena(tx("epemc_compilador_em_c_verdade_costuma")) {
+                add(titulo(tx("epemc_flex_bison_c")))
                 add(l, y, m)
             }
-            cena("O main chama o yyparse, o parser que o Bison escreveu.") {
+            cena(tx("epemc_main_chama_yyparse_parser_que")) {
                 wire(Wire("main", "y", "yyparse()", hot = true, fromRow = 1))
                 lit("main", 1)
             }
-            cena("Sempre que precisa de um token, o parser chama o yylex.") {
+            cena(tx("epemc_sempre_que_precisa_token_parser")) {
                 lit("main", -1)
                 wire(Wire("y", "l", "yylex()", hot = true, bend = 16f))
             }
-            cena("O yylex devolve o tipo. O valor vai junto, em yylval.") {
+            cena(tx("epemc_yylex_devolve_tipo_valor_vai")) {
                 clearWires()
                 wire(Wire("main", "y", "yyparse()", fromRow = 1))
                 wire(Wire("l", "y", flow = listOf("NUM", "42"), fromRow = 1))
                 lit("l", 1)
             }
             pergunta(
-                "Quem chama o yylex? Toque no arquivo.",
+                tx("epemc_quem_chama_yylex_toque_no"),
                 setOf("y"), setOf("l", "main"),
-                "Quem pede tokens é o parser.",
-                "Isso. O parser pede um token por vez.",
+                tx("epemc_quem_pede_tokens_parser"),
+                tx("epemc_isso_parser_pede_token_por"),
             ) { lit("l", -1) }
-            cena("O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa.") {
-                add(registro("gcc", "terminal", listOf("bison -d calc.y", "flex calc.l", "gcc *.c -o calc"), 92f, 350f, 172f, Tint.NONE, 13f))
+            cena(tx("epemc_bison_flex_escrevem_arquivos_c")) {
+                add(registro("gcc", "terminal", listOf(tx("epemc_bison_d_calc_y"), tx("epemc_flex_calc_l"), tx("epemc_gcc_c_calc")), 92f, 350f, 172f, Tint.NONE, 13f))
                 hot("gcc")
             }
-            cena("Roda o calc, digita a conta, e sai o resultado.", mood = EpMood.HAPPY) {
+            cena(tx("epemc_roda_calc_digita_conta_sai"), mood = EpMood.HAPPY) {
                 add(registro("run", "./calc", listOf(conta, "= $valor"), 272f, 350f, 150f, Tint.GREEN, 14f, lit = 1))
                 wire(Wire("gcc", "run"))
                 hot("run")

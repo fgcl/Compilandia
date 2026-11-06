@@ -1,5 +1,7 @@
 package com.compilandia.engine
 
+import com.compilandia.textos.tx
+
 /**
  * Um "Flex de bolso": regras padrão → token, com as DUAS regras de ouro do lex/flex:
  *  1. maior casamento (o lexema mais longo vence);
@@ -10,7 +12,7 @@ package com.compilandia.engine
 class MiniFlex(val rules: List<Rule>) {
     data class Rule(val pattern: String, val token: String?) {   // token null = ignorar (ex.: espaços)
         val regex: Regex by lazy { Regex(toKotlinRegex(pattern)) }
-        fun display(): String = "$pattern   { ${if (token == null) "/* ignora */" else "return $token;"} }"
+        fun display(): String = "$pattern   { ${if (token == null) tx("miniflex_ignora") else "return $token;"} }"
     }
 
     data class Lexeme(val token: String, val text: String, val rule: Int)
@@ -26,7 +28,7 @@ class MiniFlex(val rules: List<Rule>) {
                 val len = m?.value?.length ?: 0
                 if (len > bestLen) { best = k; bestLen = len }
             }
-            if (best < 0) return Result(out, "caractere inesperado '${input[i]}' na posição $i (nenhuma regra casa)")
+            if (best < 0) return Result(out, tx("miniflex_caractere_inesperado_1_na_posicao", input[i], i))
             val text = input.substring(i, i + bestLen)
             rules[best].token?.let { out += Lexeme(it, text, best) }
             i += bestLen
@@ -45,7 +47,7 @@ class MiniFlex(val rules: List<Rule>) {
                 val c = p[i]
                 if (c == '"') {
                     val end = p.indexOf('"', i + 1)
-                    require(end > i) { "aspas sem fechar em $p" }
+                    require(end > i) { tx("miniflex_aspas_sem_fechar_em_1", p) }
                     sb.append(Regex.escape(p.substring(i + 1, end)))
                     i = end + 1
                 } else { sb.append(c); i++ }
@@ -101,49 +103,49 @@ object FlexChallenges {
 
     val all = listOf(
         Challenge(
-            "f1", "Palavra-chave sequestrada",
-            "O scanner está chamando 'if' de ID! Com o mesmo tamanho, quem vence é a regra que vem PRIMEIRO.",
+            "f1", tx("miniflex_palavra_chave_sequestrada"),
+            tx("miniflex_scanner_esta_chamando_if_id"),
             listOf(WS, ID, MiniFlex.Rule("\"if\"", "IF"), MiniFlex.Rule("\"(\"", "LPAR"), MiniFlex.Rule("\")\"", "RPAR"), NUM),
             emptyList(),
-            "if (x1) iffy",
+            tx("miniflex_if_x1_iffy"),
             listOf("IF", "LPAR", "ID", "RPAR", "ID"),
-            "Suba a regra \"if\" para ANTES da regra de identificadores. Repare que 'iffy' continua ID: o maior casamento vence a ordem!",
+            tx("miniflex_suba_regra_if_para_antes"),
         ),
         Challenge(
-            "f2", "Maior ou igual?",
-            "a>=b deveria virar ID GE ID. Falta uma regra… e o flex pega o MAIOR lexema.",
+            "f2", tx("miniflex_maior_ou_igual"),
+            tx("miniflex_b_deveria_virar_id_ge"),
             listOf(WS, ID, MiniFlex.Rule("\">\"", "GT"), MiniFlex.Rule("\"=\"", "ASSIGN")),
             listOf(MiniFlex.Rule("\">=\"", "GE"), MiniFlex.Rule("\"==\"", "EQ")),
-            "a>=b c=d e>f",
+            tx("miniflex_b_c_d_f"),
             listOf("ID", "GE", "ID", "ID", "ASSIGN", "ID", "ID", "GT", "ID"),
-            "Adicione a regra \">=\". A posição dela nem importa: \">=\" casa 2 caracteres e \">\" só 1.",
+            tx("miniflex_adicione_regra_posicao_dela_nem"),
         ),
         Challenge(
-            "f3", "Números com vírgula (ponto)",
-            "3.14 está virando NUM, erro, NUM. Precisamos de uma regra para reais.",
+            "f3", tx("miniflex_numeros_com_virgula_ponto"),
+            tx("miniflex_3_14_esta_virando_num"),
             listOf(WS, NUM, MiniFlex.Rule("\"+\"", "MAIS")),
             listOf(MiniFlex.Rule("[0-9]+\".\"[0-9]+", "REAL"), MiniFlex.Rule("\".\"", "PONTO")),
             "3.14 + 42",
             listOf("REAL", "MAIS", "NUM"),
-            "Adicione [0-9]+\".\"[0-9]+ → REAL (entre aspas o ponto é literal). Por que ela vence NUM em '3.14'? Maior casamento!",
+            tx("miniflex_adicione_0_9_0_9"),
         ),
         Challenge(
-            "f4", "Comentários fantasmas",
-            "Comentários // devem SUMIR (sem token). Hoje eles viram lixo.",
+            "f4", tx("miniflex_comentarios_fantasmas"),
+            tx("miniflex_comentarios_devem_sumir_sem_token"),
             listOf(WS, ID, MiniFlex.Rule("\"/\"", "DIV")),
             listOf(MiniFlex.Rule("\"//\".*", null), MiniFlex.Rule("\"/*\"", null)),
-            "a / b // divide a por b\nc",
+            tx("miniflex_b_divide_por_b_c"),
             listOf("ID", "DIV", "ID", "ID"),
-            "Adicione a regra \"//\".* sem return (ignora). '.' casa tudo menos quebra de linha.",
+            tx("miniflex_adicione_regra_sem_return_ignora"),
         ),
         Challenge(
-            "f5", "O token inútil",
-            "A regra de identificadores aceita dígitos no começo! '9x' está virando um ID só.",
+            "f5", tx("miniflex_token_inutil"),
+            tx("miniflex_regra_identificadores_aceita_digitos_no"),
             listOf(WS, MiniFlex.Rule("[a-z0-9]+", "ID"), NUM),
             listOf(ID),
             "9x x9 42",
             listOf("NUM", "ID", "ID", "NUM"),
-            "Troque a regra [a-z0-9]+ pela correta [a-z][a-z0-9]* (remova a velha e adicione a nova). Teste: '9x' vira NUM e ID.",
+            tx("miniflex_troque_regra_z0_9_pela"),
         ),
     )
 

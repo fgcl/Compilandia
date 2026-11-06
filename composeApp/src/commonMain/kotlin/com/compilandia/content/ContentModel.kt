@@ -2,24 +2,25 @@ package com.compilandia.content
 
 import com.compilandia.learning.Skill
 import com.compilandia.learning.Style
+import com.compilandia.textos.tx
 
 /** Personagens (originais) que conversam nas aulas, no estilo "livro que fala com você". */
 enum class Speaker(val displayName: String, val emoji: String) {
-    BYTE("Byte", "🤖"),          // o robozinho aprendiz — pergunta o que VOCÊ pensaria em perguntar
-    PROF("Profª Gramática", "🦉"), // a coruja professora — paciente, adora analogias
-    LEXI("Lexi", "🦊"),          // a raposa ninja do léxico — rápida, corta tudo em tokens
-    PILHA("Pilha", "🗿"),        // o golem-pilha — só enxerga o topo, fala devagar
-    NARRADOR("Narrador", "📜"),
+    BYTE(tx("contentmodel_byte"), "🤖"),          // o robozinho aprendiz — pergunta o que VOCÊ pensaria em perguntar
+    PROF(tx("comum_profa_gramatica"), "🦉"), // a coruja professora — paciente, adora analogias
+    LEXI(tx("contentmodel_lexi"), "🦊"),          // a raposa ninja do léxico — rápida, corta tudo em tokens
+    PILHA(tx("contentmodel_pilha"), "🗿"),        // o golem-pilha — só enxerga o topo, fala devagar
+    NARRADOR(tx("contentmodel_narrador"), "📜"),
 }
 
 enum class CalloutKind(val title: String, val emoji: String) {
-    NO_DUMB_QUESTIONS("Não existem perguntas idiotas", "🙋"),
-    BRAIN_POWER("Poder do cérebro", "🧠"),
-    WATCH_OUT("Cuidado!", "⚠️"),
-    MNEMONIC("Gancho de memória", "🪝"),
-    EXAM_TIP("Dica de prova", "📝"),
-    FIRESIDE("Conversa ao pé da lareira", "🔥"),
-    REAL_WORLD("No mundo real", "🌍"),
+    NO_DUMB_QUESTIONS(tx("contentmodel_nao_existem_perguntas_idiotas"), "🙋"),
+    BRAIN_POWER(tx("contentmodel_poder_cerebro"), "🧠"),
+    WATCH_OUT(tx("contentmodel_cuidado"), "⚠️"),
+    MNEMONIC(tx("contentmodel_gancho_memoria"), "🪝"),
+    EXAM_TIP(tx("contentmodel_dica_prova"), "📝"),
+    FIRESIDE(tx("contentmodel_conversa_ao_pe_lareira"), "🔥"),
+    REAL_WORLD(tx("contentmodel_no_mundo_real"), "🌍"),
 }
 
 /** Widgets interativos alimentados pelo motor de compiladores (nada de imagem estática). */
@@ -104,7 +105,7 @@ data class Lesson(
 )
 
 /** Ficha de cada habilidade: base para revisão espaçada e autoexplicação (técnica Feynman). */
-/** Capítulo do Guia do Trabalho Prático (construir um compilador completo, estilo PUC). */
+/** Capítulo do Guia do Trabalho Prático: construir um compilador completo. */
 data class GuideChapter(val number: Int, val title: String, val summary: String, val skill: Skill, val beats: List<Beat>)
 
 data class SkillCard(

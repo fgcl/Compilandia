@@ -60,6 +60,7 @@ import com.compilandia.ui.motion.MotionStage
 import com.compilandia.ui.pegboard
 import com.compilandia.ui.visuals.VisualBeat
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 const val LAB_INPUT_TAG = "lab-entrada"
 const val LAB_SEND_TAG = "lab-enviar"
@@ -75,7 +76,7 @@ fun LabScreen(app: AppState) {
         Column(Modifier.fillMaxSize()) {
             Header(sim.titulo, null, Palette.purple) {
                 Box(Modifier.clip(RoundedCornerShape(8.dp)).clickable { aberto = null }.padding(horizontal = 8.dp, vertical = 6.dp)) {
-                    Text("Conversa", color = Palette.on(Palette.purple), style = MaterialTheme.typography.labelMedium)
+                    Text(tx("labscreen_conversa"), color = Palette.on(Palette.purple), style = MaterialTheme.typography.labelMedium)
                 }
             }
             SimPlayer(sim, Modifier.weight(1f))
@@ -83,7 +84,7 @@ fun LabScreen(app: AppState) {
         return
     }
     Column(Modifier.fillMaxSize()) {
-        Header("Laboratório", null, Palette.purple)
+        Header(tx("comum_laboratorio"), null, Palette.purple)
         val lista = rememberLazyListState()
         LaunchedEffect(conversa.msgs.size) { if (conversa.msgs.isNotEmpty()) lista.animateScrollToItem(conversa.msgs.lastIndex) }
         val itens = conversa.msgs.toList()
@@ -136,7 +137,7 @@ private fun Mensagem(m: Msg, ultima: Boolean, abrir: (Sim) -> Unit, app: AppStat
         }
         Msg.Pensando -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             ByteFigure(Modifier.width(38.dp), Mood.THINK)
-            Text("lendo...", style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
+            Text(tx("labscreen_lendo"), style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
         }
     }
 }
@@ -179,7 +180,7 @@ private fun MiniPalco(shots: List<com.compilandia.content.Shot>, onOpen: () -> U
         MotionStage(shots[k.coerceAtMost(shots.lastIndex)], Modifier.fillMaxSize().padding(6.dp))
         Row(
             Modifier.align(Alignment.BottomEnd).padding(6.dp).clip(RoundedCornerShape(6.dp)).background(Palette.hazard).padding(horizontal = 8.dp, vertical = 3.dp),
-        ) { Text("Abrir", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium) }
+        ) { Text(tx("labscreen_abrir"), color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium) }
     }
 }
 
@@ -238,7 +239,7 @@ private fun Composer(c: LabConversa) {
     }
     Row(Modifier.fillMaxWidth().background(Palette.paper).padding(10.dp), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Box(Modifier.weight(1f).clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(horizontal = 12.dp, vertical = 12.dp)) {
-            if (texto.text.isEmpty()) Text("Cole um exercício ou pergunte", color = Palette.onAccent.copy(alpha = 0.6f), style = MaterialTheme.typography.bodyMedium)
+            if (texto.text.isEmpty()) Text(tx("labscreen_cole_exercicio_ou_pergunte"), color = Palette.onAccent.copy(alpha = 0.6f), style = MaterialTheme.typography.bodyMedium)
             BasicTextField(
                 texto, { texto = it }, Modifier.fillMaxWidth().testTag(LAB_INPUT_TAG), maxLines = 7,
                 textStyle = TextStyle(fontFamily = LocalFonts.current.mono, fontSize = 15.sp, lineHeight = 21.sp, color = Palette.onAccent),

@@ -75,6 +75,7 @@ import com.compilandia.ui.TreeView
 import com.compilandia.ui.VSpace
 import com.compilandia.ui.toUi
 import kotlin.random.Random
+import com.compilandia.textos.tx
 
 /** Mostra um widget interativo. Erros (gramática inválida) viram mensagem amigável. */
 @Composable
@@ -113,8 +114,8 @@ fun VisualBeat(v: Beat.Visual) {
             VisualKind.LR0_AUTOMATON -> LR0View(Grammar.parse(v.grammar))
             VisualKind.SLR_TABLE -> LRTableView(LRTable(Grammar.parse(v.grammar), LRKind.SLR1))
             VisualKind.LR_TRACE -> LRTraceView(Grammar.parse(v.grammar), v.input)
-            VisualKind.LEFT_RECURSION -> BeforeAfter(Grammar.parse(v.grammar), GrammarTransform.eliminateImmediateLeftRecursion(Grammar.parse(v.grammar)), "eliminando recursão à esquerda")
-            VisualKind.LEFT_FACTORING -> BeforeAfter(Grammar.parse(v.grammar), GrammarTransform.leftFactor(Grammar.parse(v.grammar)), "fatorando à esquerda")
+            VisualKind.LEFT_RECURSION -> BeforeAfter(Grammar.parse(v.grammar), GrammarTransform.eliminateImmediateLeftRecursion(Grammar.parse(v.grammar)), tx("visuals_eliminando_recursao_esquerda"))
+            VisualKind.LEFT_FACTORING -> BeforeAfter(Grammar.parse(v.grammar), GrammarTransform.leftFactor(Grammar.parse(v.grammar)), tx("visuals_fatorando_esquerda"))
             VisualKind.ATTR_TREE -> AttrTreeView(v.input)
             VisualKind.TAC -> TacView(v.input)
             VisualKind.SCOPE -> ScopeView()
@@ -143,7 +144,7 @@ fun Stepper(count: Int, start: Int = 0, content: @Composable (Int) -> Unit) {
     if (count == 0) return
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         BigButton("◀", small = true, color = Palette.white, textColor = Palette.ink, enabled = i > 0) { i-- }
-        Text("passo ${i + 1} de $count", style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
+        Text(tx("comum_passo_1_2", i + 1, count), style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
         BigButton("▶", small = true, color = Palette.teal, enabled = i < count - 1) { i++ }
         BigButton("⏭", small = true, color = Palette.white, textColor = Palette.ink, enabled = i < count - 1) { i = count - 1 }
     }
@@ -155,13 +156,13 @@ fun Stepper(count: Int, start: Int = 0, content: @Composable (Int) -> Unit) {
 data class Phase(val emoji: String, val name: String, val output: String, val example: String)
 
 val phases = listOf(
-    Phase("📄", "Código-fonte", "texto", "posicao = inicial + taxa * 60"),
-    Phase("🔪", "Análise léxica (scanner)", "tokens", "<id,1> <=> <id,2> <+> <id,3> <*> <num,60>"),
-    Phase("🌳", "Análise sintática (parser)", "árvore sintática", "=(id1, +(id2, *(id3, 60)))"),
-    Phase("🔍", "Análise semântica", "árvore anotada (tipos)", "=(id1, +(id2, *(id3, inttofloat(60))))"),
-    Phase("🧩", "Geração de código intermediário", "código de 3 endereços", "t1 = inttofloat(60)\nt2 = id3 * t1\nt3 = id2 + t2\nid1 = t3"),
-    Phase("⚡", "Otimização", "código melhor", "t1 = id3 * 60.0\nid1 = id2 + t1"),
-    Phase("🖥️", "Geração de código", "código de máquina", "LDF R2, id3\nMULF R2, R2, #60.0\nLDF R1, id2\nADDF R1, R1, R2\nSTF id1, R1"),
+    Phase("📄", tx("visuals_codigo_fonte"), "texto", tx("visuals_posicao_inicial_taxa_60")),
+    Phase("🔪", tx("visuals_analise_lexica_scanner"), "tokens", tx("visuals_id_1_id_2_id")),
+    Phase("🌳", tx("visuals_analise_sintatica_parser"), tx("visuals_arvore_sintatica"), "=(id1, +(id2, *(id3, 60)))"),
+    Phase("🔍", tx("comum_analise_semantica"), tx("visuals_arvore_anotada_tipos"), "=(id1, +(id2, *(id3, inttofloat(60))))"),
+    Phase("🧩", tx("visuals_geracao_codigo_intermediario"), tx("visuals_codigo_3_enderecos"), "t1 = inttofloat(60)\nt2 = id3 * t1\nt3 = id2 + t2\nid1 = t3"),
+    Phase("⚡", tx("comum_otimizacao_2"), tx("visuals_codigo_melhor"), "t1 = id3 * 60.0\nid1 = id2 + t1"),
+    Phase("🖥️", tx("comum_geracao_codigo"), tx("visuals_codigo_maquina"), "LDF R2, id3\nMULF R2, R2, #60.0\nLDF R1, id2\nADDF R1, R1, R2\nSTF id1, R1"),
 )
 
 @Composable
@@ -207,7 +208,7 @@ fun TokenizeView(src: String) {
     CodeBlock(src)
     Stepper(tokens.size) { i ->
         Column {
-            Text("O scanner lê da esquerda para a direita, sempre pegando o MAIOR lexema possível:", style = MaterialTheme.typography.bodySmall)
+            Text(tx("visuals_scanner_le_esquerda_para_direita"), style = MaterialTheme.typography.bodySmall)
             VSpace(6)
             ChipRow {
                 tokens.forEachIndexed { k, t ->
@@ -231,21 +232,21 @@ fun DfaPlayground(regex: String) {
     var input by remember(regex) { mutableStateOf(dfa.samples(Random(regex.hashCode()), 1).firstOrNull()?.first ?: "") }
     var pos by remember(regex, input) { mutableIntStateOf(0) }
     val path = remember(dfa, input) { dfa.run(input) }
-    Mono("regex: $regex", bold = true)
+    Mono(tx("visuals_regex_1", regex), bold = true)
     DfaView(dfa, current = path.getOrNull(pos)?.takeIf { it >= 0 }, lastEdge = if (pos > 0) path[pos - 1] to path[pos] else null)
-    Text("Duplo círculo = estado de aceitação. A seta solta aponta o inicial.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-    OutlinedTextField(input, { s -> input = s.filter { it in dfa.alphabet } }, label = { Text("cadeia para testar (alfabeto: ${dfa.alphabet.joinToString("")})") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    Text(tx("visuals_duplo_circulo_estado_aceitacao_seta"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    OutlinedTextField(input, { s -> input = s.filter { it in dfa.alphabet } }, label = { Text(tx("visuals_cadeia_para_testar_alfabeto_1", dfa.alphabet.joinToString(""))) }, singleLine = true, modifier = Modifier.fillMaxWidth())
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         Mono(input.take(pos).ifEmpty { "·" } + " | " + input.drop(pos), bold = true, modifier = Modifier.weight(1f))
-        BigButton("passo", small = true, color = Palette.teal, enabled = pos < input.length && path[pos] >= 0) { pos++ }
+        BigButton(tx("visuals_passo"), small = true, color = Palette.teal, enabled = pos < input.length && path[pos] >= 0) { pos++ }
         BigButton("↺", small = true, color = Palette.white, textColor = Palette.ink) { pos = 0 }
     }
     val st = path.getOrNull(pos) ?: -1
     when {
-        st < 0 -> Text("💥 Sem transição: o autômato TRAVOU → rejeita.", color = Palette.red, fontWeight = FontWeight.Bold)
-        pos == input.length -> Text(if (st in dfa.accepting) "✅ Terminou em q$st (aceitação): ACEITA" else "❌ Terminou em q$st (não é de aceitação): REJEITA",
+        st < 0 -> Text(tx("visuals_sem_transicao_automato_travou_rejeita"), color = Palette.red, fontWeight = FontWeight.Bold)
+        pos == input.length -> Text(if (st in dfa.accepting) tx("visuals_terminou_em_q_1_aceitacao", st) else tx("visuals_terminou_em_q_1_nao", st),
             color = if (st in dfa.accepting) Palette.green else Palette.red, fontWeight = FontWeight.Bold)
-        else -> Text("Estado atual: q$st. Próximo símbolo: '${input[pos]}'", style = MaterialTheme.typography.bodyMedium)
+        else -> Text(tx("visuals_estado_atual_q_1_proximo", st, input[pos]), style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -256,7 +257,7 @@ fun DerivationView(g: Grammar, input: String) {
     val target = remember(input) { tokensOf(input) }
     val deriv = remember(g, input) { DerivationHelper.leftmostDerivations(g, target, limit = 1).firstOrNull() }
     GrammarText(g)
-    if (deriv == null) { Text("Essa cadeia não é gerada pela gramática.", color = Palette.red); return }
+    if (deriv == null) { Text(tx("visuals_essa_cadeia_nao_gerada_pela"), color = Palette.red); return }
     val forms = remember(deriv) {
         var f = SententialForm(listOf(g.start))
         val out = mutableListOf(f)
@@ -271,10 +272,10 @@ fun DerivationView(g: Grammar, input: String) {
                     SymbolsText(g, forms[k].symbols, size = if (k == i) 17 else 14)
                 }
             }
-            if (i > 0) Text("usou: ${deriv[i - 1]}  (sempre no não-terminal MAIS À ESQUERDA)", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            if (i > 0) Text(tx("visuals_usou_1_sempre_no_nao", deriv[i - 1]), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             if (i == forms.size - 1) {
                 VSpace(6)
-                Text("Árvore de derivação:", style = MaterialTheme.typography.titleSmall)
+                Text(tx("visuals_arvore_derivacao"), style = MaterialTheme.typography.titleSmall)
                 TreeView(DerivationHelper.treeOf(g, deriv).toUi(g))
             }
         }
@@ -285,27 +286,27 @@ fun DerivationView(g: Grammar, input: String) {
 fun ParseTreesView(g: Grammar, input: String) {
     val ds = remember(g, input) { DerivationHelper.leftmostDerivations(g, tokensOf(input), limit = 2) }
     GrammarText(g)
-    Mono("frase: $input", bold = true)
+    Mono(tx("visuals_frase_1", input), bold = true)
     when (ds.size) {
-        0 -> Text("A frase não pertence à linguagem.", color = Palette.red)
-        1 -> { Text("Uma única árvore 👍", fontWeight = FontWeight.Bold); TreeView(DerivationHelper.treeOf(g, ds[0]).toUi(g)) }
+        0 -> Text(tx("comum_frase_nao_pertence_linguagem"), color = Palette.red)
+        1 -> { Text(tx("visuals_unica_arvore"), fontWeight = FontWeight.Bold); TreeView(DerivationHelper.treeOf(g, ds[0]).toUi(g)) }
         else -> {
-            Text("⚠️ DUAS árvores diferentes para a mesma frase → gramática AMBÍGUA", color = Palette.red, fontWeight = FontWeight.Bold)
-            Text("Árvore 1", style = MaterialTheme.typography.titleSmall); TreeView(DerivationHelper.treeOf(g, ds[0]).toUi(g))
-            Text("Árvore 2", style = MaterialTheme.typography.titleSmall); TreeView(DerivationHelper.treeOf(g, ds[1]).toUi(g))
+            Text(tx("visuals_duas_arvores_diferentes_para_mesma"), color = Palette.red, fontWeight = FontWeight.Bold)
+            Text(tx("comum_arvore_1"), style = MaterialTheme.typography.titleSmall); TreeView(DerivationHelper.treeOf(g, ds[0]).toUi(g))
+            Text(tx("comum_arvore_2"), style = MaterialTheme.typography.titleSmall); TreeView(DerivationHelper.treeOf(g, ds[1]).toUi(g))
         }
     }
 }
 
 @Composable
 fun BeforeAfter(before: Grammar, after: Grammar, what: String) {
-    Text("Antes", style = MaterialTheme.typography.titleSmall)
+    Text(tx("comum_antes"), style = MaterialTheme.typography.titleSmall)
     GrammarText(before)
     Text("⬇ $what", color = Palette.purple, fontWeight = FontWeight.Bold)
-    Text("Depois", style = MaterialTheme.typography.titleSmall)
+    Text(tx("comum_depois"), style = MaterialTheme.typography.titleSmall)
     GrammarText(after)
     val ll = remember(after) { LL1Table(after).isLL1 }
-    Text(if (ll) "✅ O resultado é LL(1)." else "ℹ️ O resultado ainda não é LL(1) (pode precisar de outra transformação).",
+    Text(if (ll) tx("visuals_resultado_ll_1") else tx("visuals_i_resultado_ainda_nao_ll"),
         style = MaterialTheme.typography.bodySmall, color = if (ll) Palette.green else Palette.inkSoft)
 }
 
@@ -340,7 +341,7 @@ fun Cell(text: String, header: Boolean = false, w: Int = 70, color: Color? = nul
 fun FirstFollowView(g: Grammar) {
     val ff = remember(g) { FirstFollow(g) }
     GrammarText(g)
-    Text("Ponto fixo: repete as regras até nada mudar.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    Text(tx("visuals_ponto_fixo_repete_regras_ate"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     Stepper(ff.steps.size + 1) { i ->
         val first = g.nonTerminals.associateWith { mutableSetOf<String>() }
         val follow = g.nonTerminals.associateWith { mutableSetOf<String>() }
@@ -350,7 +351,7 @@ fun FirstFollowView(g: Grammar) {
             if (cur != null) {
                 RichText("**${cur.kind}(${cur.nonTerminal})** ganha **{ ${cur.added.joinToString(", ")} }**", style = MaterialTheme.typography.bodyMedium)
                 Text(cur.reason, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-            } else Text("Começa tudo vazio…", style = MaterialTheme.typography.bodyMedium)
+            } else Text(tx("visuals_comeca_tudo_vazio"), style = MaterialTheme.typography.bodyMedium)
             SetsTable(g, first, follow, cur?.nonTerminal)
         }
     }
@@ -374,7 +375,7 @@ fun LL1TableView(t: LL1Table) {
             }
         }
     }
-    Text(if (t.isLL1) "✅ Nenhuma célula com duas produções: a gramática é LL(1)." else "❌ Células vermelhas têm 2+ produções: CONFLITO, não é LL(1).",
+    Text(if (t.isLL1) tx("visuals_nenhuma_celula_com_duas_producoes") else tx("visuals_celulas_vermelhas_tem_2_producoes"),
         color = if (t.isLL1) Palette.green else Palette.red, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodySmall)
 }
 
@@ -389,10 +390,10 @@ fun LL1TraceView(g: Grammar, input: String) {
         val a = s.action
         Text(
             when (a) {
-                is LLAction.Expand -> "Topo é ${s.stack.last()}, olho '${s.input.first()}': M[${s.stack.last()}, ${s.input.first()}] = ${a.production}. Troca o topo pelo lado direito (de trás pra frente)."
-                is LLAction.Match -> "Topo e entrada são '${a.terminal}': casa e avança!"
-                LLAction.Accept -> "Pilha só com \$ e entrada acabou: ACEITA ✅"
-                is LLAction.Error -> "Erro: ${a.message} ❌"
+                is LLAction.Expand -> tx("visuals_topo_1_olho_2_m", s.stack.last(), s.input.first(), s.stack.last(), s.input.first(), a.production)
+                is LLAction.Match -> tx("visuals_topo_entrada_sao_1_casa", a.terminal)
+                LLAction.Accept -> tx("visuals_pilha_so_com_entrada_acabou")
+                is LLAction.Error -> tx("visuals_erro_1", a.message)
             },
             style = MaterialTheme.typography.bodyMedium,
         )
@@ -400,7 +401,7 @@ fun LL1TraceView(g: Grammar, input: String) {
 }
 
 @Composable
-fun StackAndInput(g: Grammar, stack: List<String>, input: List<String>, stackLabel: String = "Pilha (topo à direita)") {
+fun StackAndInput(g: Grammar, stack: List<String>, input: List<String>, stackLabel: String = tx("visuals_pilha_topo_direita")) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(stackLabel, style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
         Row(Modifier.horizontalScroll(rememberScrollState())) {
@@ -412,7 +413,7 @@ fun StackAndInput(g: Grammar, stack: List<String>, input: List<String>, stackLab
                 ) { SymbolsText(g, listOf(s), size = 14) }
             }
         }
-        Text("Entrada", style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+        Text(tx("comum_entrada_2"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
         Row(Modifier.horizontalScroll(rememberScrollState())) {
             input.forEachIndexed { k, s ->
                 Box(
@@ -432,20 +433,20 @@ fun LR0View(g: Grammar) {
     val t = remember(g) { LRTable(g, LRKind.SLR1) }
     val a = t.automaton
     GrammarText(g)
-    Text("Gramática aumentada: ${a.grammar.productions[0]}", style = MaterialTheme.typography.bodySmall)
+    Text(tx("visuals_gramatica_aumentada_1", a.grammar.productions[0]), style = MaterialTheme.typography.bodySmall)
     Stepper(a.states.size) { i ->
         val st = a.states[i]
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("Estado I$i", style = MaterialTheme.typography.titleMedium)
+            Text(tx("visuals_estado_i_1", i), style = MaterialTheme.typography.titleMedium)
             for (it in st.items) {
                 val kernel = it in st.kernel
                 Mono((if (kernel) "★ " else "  ") + it.render(a.grammar), bold = kernel, color = if (kernel) Palette.ink else Palette.inkSoft)
             }
-            Text("★ = núcleo (kernel). O resto veio do fechamento (closure).", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Text(tx("visuals_nucleo_kernel_resto_veio_fechamento"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             val outs = a.transitions.filterKeys { it.first == i }
-            if (outs.isNotEmpty()) ChipRow { for ((k, v) in outs) Chip("goto(I$i, ${k.second}) = I$v", mono = true, color = Palette.teal) }
+            if (outs.isNotEmpty()) ChipRow { for ((k, v) in outs) Chip(tx("visuals_goto_i_1_2_i", i, k.second, v), mono = true, color = Palette.teal) }
             val red = st.items.filter { it.dot >= a.grammar.productions[it.prodId].rhs.size }
-            for (r in red) Text("item completo: ${r.render(a.grammar)} → reduzir", color = Palette.orange, style = MaterialTheme.typography.bodySmall)
+            for (r in red) Text(tx("visuals_item_completo_1_reduzir", r.render(a.grammar)), color = Palette.orange, style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -453,7 +454,7 @@ fun LR0View(g: Grammar) {
 @Composable
 fun LRTableView(t: LRTable, highlightCells: Set<Pair<Int, String>> = emptySet()) {
     GrammarText(t.grammar)
-    Text("Produções numeradas: " + t.grammar.productions.drop(1).joinToString("   ") { "r${it.id}: $it" }, style = MaterialTheme.typography.bodySmall)
+    Text(tx("visuals_producoes_numeradas") + t.grammar.productions.drop(1).joinToString("   ") { "r${it.id}: $it" }, style = MaterialTheme.typography.bodySmall)
     Column(Modifier.horizontalScroll(rememberScrollState())) {
         Row {
             Cell("", header = true, w = 44)
@@ -478,7 +479,7 @@ fun LRTableView(t: LRTable, highlightCells: Set<Pair<Int, String>> = emptySet())
     }
     val c = t.rawConflictCells
     Text(
-        if (c.isEmpty()) "✅ Sem conflitos: a gramática é ${t.kind.name.replace("1", "(1)")}." else "❌ ${c.size} célula(s) em conflito (em vermelho).",
+        if (c.isEmpty()) tx("visuals_sem_conflitos_gramatica_1", t.kind.name.replace("1", "(1)")) else tx("visuals_1_celula_em_conflito_em", c.size),
         color = if (c.isEmpty()) Palette.green else Palette.red, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.bodySmall,
     )
 }
@@ -491,7 +492,7 @@ fun LRTraceView(g: Grammar, input: String) {
     Stepper(r.steps.size) { i ->
         val s = r.steps[i]
         val stackView = s.states.zip(listOf("") + s.symbols).flatMap { (st, sym) -> if (sym.isEmpty()) listOf("$st") else listOf(sym, "$st") }
-        StackAndInput(t.grammar, stackView, s.input, "Pilha (estados e símbolos, topo à direita)")
+        StackAndInput(t.grammar, stackView, s.input, tx("visuals_pilha_estados_simbolos_topo_direita"))
         Text(
             when (val a = s.action) {
                 is LRAction.Shift -> "SHIFT: ${s.note}"
@@ -511,15 +512,15 @@ fun AttrTreeView(src: String) {
     val e = remember(src) { ExprParser.parse(src) }
     val attrs = remember(e) { TypeChecker.evaluate(e, ExprGenerator.env) }
     val order = remember(e) { e.postorder() }
-    Text("Tabela de símbolos: a,b,c: int (4,2,3) · x,y: float (1.5, 0.5) · ok: bool", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-    Mono("expressão: $src", bold = true)
+    Text(tx("visuals_tabela_simbolos_b_c_int"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    Mono(tx("comum_expressao_1", src), bold = true)
     Stepper(order.size + 1) { i ->
         val done = order.take(i).map { it.id }.toSet()
         TreeView(e.toUi(sub = { n -> if (n.id in done) attrs[n.id]?.let { "${it.type.label}:${TypeChecker.formatValue(it)}" } else null },
             color = { n -> if (n.id in done) Palette.nodeActive else if (n.isLeaf) Palette.nodeLeaf else Palette.nodeNonTerminal }))
         val cur = order.getOrNull(i - 1)
-        if (cur != null) Text("Nó '${cur.text}': ${attrs[cur.id]?.rule}", style = MaterialTheme.typography.bodyMedium)
-        else Text("Atributos sintetizados sobem das folhas para a raiz (pós-ordem).", style = MaterialTheme.typography.bodyMedium)
+        if (cur != null) Text(tx("visuals_no_1_2", cur.text, attrs[cur.id]?.rule), style = MaterialTheme.typography.bodyMedium)
+        else Text(tx("visuals_atributos_sintetizados_sobem_das_folhas"), style = MaterialTheme.typography.bodyMedium)
     }
 }
 
@@ -532,11 +533,11 @@ fun TacView(src: String) {
         Column {
             code.take(i + 1).forEachIndexed { k, ins -> Mono(ins.toString(), bold = k == i, color = if (k == i) Palette.purple else Palette.ink) }
             VSpace(4)
-            Text("Cada instrução tem no máximo UM operador e TRÊS endereços.", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Text(tx("visuals_cada_instrucao_tem_no_maximo"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
         }
     }
     val folded = remember(e) { TacGen.constantFold(e) }
-    if (folded.render() != e.render()) Text("Otimizando (dobra de constantes): ${folded.render()}", color = Palette.teal, style = MaterialTheme.typography.bodySmall)
+    if (folded.render() != e.render()) Text(tx("visuals_otimizando_dobra_constantes_1", folded.render()), color = Palette.teal, style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable
@@ -544,7 +545,7 @@ fun ScopeView() {
     var seed by remember { mutableIntStateOf(1) }
     val prog = remember(seed) { ScopeGen.random(Random(seed)) }
     var sel by remember(seed) { mutableStateOf<Int?>(null) }
-    Text("Toque num USO de variável para ver a declaração que ele enxerga (escopo estático: o mais interno que já foi declarado).", style = MaterialTheme.typography.bodySmall)
+    Text(tx("visuals_toque_num_uso_variavel_para"), style = MaterialTheme.typography.bodySmall)
     Column(Modifier.clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
         prog.lines.forEachIndexed { idx, line ->
             val target = sel?.let { prog.lines[it].resolvesTo }
@@ -558,10 +559,10 @@ fun ScopeView() {
     }
     sel?.let { s ->
         val l = prog.lines[s]
-        Text(if (l.resolvesTo == null) "'${l.use}' NÃO foi declarada em nenhum escopo visível → erro semântico!" else "'${l.use}' refere-se à declaração destacada em verde.",
+        Text(if (l.resolvesTo == null) tx("visuals_1_nao_foi_declarada_em", l.use) else tx("visuals_1_refere_se_declaracao_destacada", l.use),
             fontWeight = FontWeight.Bold, color = if (l.resolvesTo == null) Palette.red else Palette.green)
     }
-    BigButton("🎲 outro programa", small = true, color = Palette.teal) { seed++ }
+    BigButton(tx("visuals_outro_programa"), small = true, color = Palette.teal) { seed++ }
 }
 
 @Composable
@@ -569,14 +570,14 @@ fun BisonView(spec: String, input: String) {
     val b = remember(spec) { MiniBison.compile(spec) }
     var text by remember(spec) { mutableStateOf(input.ifBlank { "2+3*4" }) }
     val r = remember(b, text) { b.run(text) }
-    CodeBlock(spec, "especificação .y")
-    if (b.conflicts.isNotEmpty()) Text("⚠️ bison: ${b.conflicts.size} conflito(s) — " + b.conflicts.take(2).joinToString("; ") { "estado ${it.state}, ${it.terminal}: ${it.resolution ?: it.kind}" },
+    CodeBlock(spec, tx("visuals_especificacao_y"))
+    if (b.conflicts.isNotEmpty()) Text(tx("visuals_bison_1_conflito", b.conflicts.size) + b.conflicts.take(2).joinToString("; ") { tx("visuals_estado_1_2_3", it.state, it.terminal, it.resolution ?: it.kind) },
         color = Palette.red, style = MaterialTheme.typography.bodySmall)
-    else if (b.resolvedByPrecedence > 0) Text("✅ ${b.resolvedByPrecedence} conflito(s) resolvido(s) por precedência/associatividade.", color = Palette.green, style = MaterialTheme.typography.bodySmall)
-    OutlinedTextField(text, { text = it }, label = { Text("entrada") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+    else if (b.resolvedByPrecedence > 0) Text(tx("visuals_1_conflito_resolvido_por_precedencia", b.resolvedByPrecedence), color = Palette.green, style = MaterialTheme.typography.bodySmall)
+    OutlinedTextField(text, { text = it }, label = { Text(tx("comum_entrada")) }, singleLine = true, modifier = Modifier.fillMaxWidth())
     if (r.accepted) {
-        Text("Resultado: ${r.value}", style = MaterialTheme.typography.titleLarge, color = Palette.teal)
-        Text("Reduções (cada uma executa uma ação):", style = MaterialTheme.typography.labelMedium)
+        Text(tx("visuals_resultado_1", r.value), style = MaterialTheme.typography.titleLarge, color = Palette.teal)
+        Text(tx("visuals_reducoes_cada_executa_acao"), style = MaterialTheme.typography.labelMedium)
         for (line in r.reductions) Mono(line, size = 12)
         r.tree?.let { TreeView(it.toUi(null)) }
     } else Text("❌ ${r.error}", color = Palette.red)

@@ -53,6 +53,7 @@ import com.compilandia.ui.motion.MotionStage
 import com.compilandia.ui.pegboard
 import com.compilandia.ui.voice.Narrator
 import kotlinx.coroutines.delay
+import com.compilandia.textos.tx
 
 /** Aulas de 30 segundos numa fila vertical. Os assuntos fracos vêm primeiro. */
 @OptIn(ExperimentalFoundationApi::class)
@@ -61,7 +62,7 @@ fun FeedScreen(app: AppState) {
     val fila = remember { Episodes.clipes.sortedBy { app.learner.mastery(it.skill) + (it.title.hashCode() and 7) * 0.02 } }
     val pager = rememberPagerState { fila.size }
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
-        Header("30 segundos", "${pager.currentPage + 1} de ${fila.size}", Palette.drawer)
+        Header(tx("feedscreen_30_segundos"), tx("comum_1_2", pager.currentPage + 1, fila.size), Palette.drawer)
         VerticalPager(state = pager, modifier = Modifier.weight(1f).fillMaxWidth().testTag("feed")) { i ->
             Clipe(app, fila[i], ativo = pager.currentPage == i)
         }
@@ -97,12 +98,12 @@ private fun Clipe(app: AppState, ep: Episode, ativo: Boolean) {
             }
         }
         Column(Modifier.align(Alignment.BottomEnd).padding(end = 6.dp, bottom = 96.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Lateral("Entendi", Palette.green) { hop++; Juice.correct(); app.learner.addXp(2); app.commit() }
-            Lateral("Não entendi", Palette.yellow) {
+            Lateral(tx("feedscreen_entendi"), Palette.green) { hop++; Juice.correct(); app.learner.addXp(2); app.commit() }
+            Lateral(tx("comum_nao_entendi"), Palette.yellow) {
                 app.learner.naoEntendiFala(ep.skill, passo.fala.id, nowMs()); app.commit()
                 app.go(Screen.Episode(ep.skill))
             }
-            Lateral("De novo", Palette.teal) { Narrator.stop(); rodada++ }
+            Lateral(tx("feedscreen_novo"), Palette.teal) { Narrator.stop(); rodada++ }
         }
         if (acabou) Dica(Modifier.align(Alignment.BottomCenter).padding(bottom = 6.dp))
     }
@@ -143,7 +144,7 @@ private fun Lateral(rotulo: String, cor: androidx.compose.ui.graphics.Color, onC
 @Composable
 private fun Dica(modifier: Modifier) {
     val y by rememberInfiniteTransition().animateFloat(0f, -7f, infiniteRepeatable(tween(520), RepeatMode.Reverse))
-    Text("Deslize para o próximo", modifier.offset(y = (if (ThemeState.reduceMotion) 0f else y).dp), style = MaterialTheme.typography.labelMedium, color = Palette.hazard)
+    Text(tx("feedscreen_deslize_para_proximo"), modifier.offset(y = (if (ThemeState.reduceMotion) 0f else y).dp), style = MaterialTheme.typography.labelMedium, color = Palette.hazard)
 }
 
 @Suppress("unused") private val keepH = Modifier.height(0.dp)

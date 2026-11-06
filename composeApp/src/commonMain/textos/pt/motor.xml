@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia. A chave é o que o código usa em tx("chave"); %1$s, %2$s são trocados pelos valores. -->
+<resources>
+    <!-- Ast.kt -->
+    <string name="ast_expr_expr_t_t_expr">Expr expr() {                 // E → T (('+'|'-') T)*\n    Expr e = termo();\n    while (tok.equals("+") || tok.equals("-")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, termo());   // associa à esquerda\n    }\n    return e;\n}\nExpr termo() {                // T → F (('*'|'/') F)*\n    Expr e = fator();\n    while (tok.equals("*") || tok.equals("/")) {\n        char op = tok.charAt(0); casaToken(tok);\n        e = new BinOp(op, e, fator());\n    }\n    return e;\n}\nExpr fator() {                // F → ( E ) | id | num\n    if (tok.equals("(")) { casaToken("("); Expr e = expr(); casaToken(")"); return e; }\n    if (ehNumero(tok)) { int v = Integer.parseInt(tok); casaToken(tok); return new Num(v); }\n    String nome = tok; casaToken(tok); return new Var(nome);\n}</string>
+    <!-- Automata.kt -->
+    <string name="automata_simbolo_inesperado_1">Símbolo inesperado '%1$s'</string>
+    <string name="automata_seguido_quantos_b_quiser">um 'a' seguido de quantos 'b' quiser</string>
+    <string name="automata_termina_em_abb_exemplo_livro">termina em abb (exemplo do Livro do Dragão)</string>
+    <string name="automata_comeca_com_termina_com_b">começa com a e termina com b</string>
+    <string name="automata_repeticoes_ab">repetições de 'ab'</string>
+    <string name="automata_binarios_sem_zeros_esquerda">binários sem zeros à esquerda</string>
+    <string name="automata_binarios_impares">binários ímpares</string>
+    <string name="automata_antes_b_depois">a's antes, b's depois</string>
+    <string name="automata_penultimo_simbolo">penúltimo símbolo é a</string>
+    <string name="automata_quantidade_par">quantidade par de a's</string>
+    <string name="automata_x_seguido_pelo_menos_y">x seguido de pelo menos um y ou z</string>
+    <!-- Backend.kt -->
+    <string name="backend_sobrou_entrada_depois_fim_programa">sobrou entrada depois do fim do programa</string>
+    <string name="backend_sobrou_entrada">sobrou entrada</string>
+    <string name="backend_esperava_1_mas_veio_2">esperava '%1$s' mas veio '%2$s' (finjo que '%3$s' estava lá)</string>
+    <string name="backend_esperava_1">esperava '%1$s'</string>
+    <string name="backend_m_1_2_vazia">M[%1$s, %2$s] vazia</string>
+    <string name="backend_erro_em_1_descartei_2">erro em %1$s: descartei %2$s até achar '%3$s' que pode começar %4$s</string>
+    <string name="backend_erro_em_1_descartei_2_2">erro em %1$s: descartei %2$s até o sincronizador '%3$s' ∈ FOLLOW(%4$s); desempilho %5$s</string>
+    <string name="backend_fat_linha_3">fat, linha 3</string>
+    <string name="backend_main_linha_6">main, linha 6</string>
+    <string name="backend_fatorial_recursivo_1">Fatorial recursivo de %1$s</string>
+    <string name="backend_fib_linha_3a">fib, linha 3a</string>
+    <string name="backend_fib_linha_3b">fib, linha 3b</string>
+    <string name="backend_fibonacci_recursivo_1">Fibonacci recursivo de %1$s</string>
+    <string name="backend_g_linha_5">g, linha 5</string>
+    <string name="backend_f_linha_8">f, linha 8</string>
+    <string name="backend_f_linha_8b">f, linha 8b</string>
+    <string name="backend_main_linha_11">main, linha 11</string>
+    <string name="backend_f_chama_g_que_chama">f chama g que chama h</string>
+    <string name="backend_nao_consome_nada">// ε: não consome nada</string>
+    <string name="backend_nao_consome_nada_tok_deve">// ε: não consome nada (tok deve estar em FOLLOW(%1$s))</string>
+    <string name="backend_return_1">return de %1$s()</string>
+    <string name="backend_chama_1">chama %1$s()</string>
+    <string name="backend_fim_tok_aceito">fim: tok == $ → aceito!</string>
+    <!-- FirstFollow.kt -->
+    <string name="firstfollow_first_1_entra_em_first">FIRST(%1$s) entra em FIRST(%2$s) </string>
+    <string name="firstfollow_1_pode_sumir_olho_proximo">(%1$s pode sumir, olho o próximo) </string>
+    <string name="firstfollow_1_comeca_producao">'%1$s' começa a produção </string>
+    <string name="firstfollow_tudo_direita_pode_virar">tudo à direita pode virar ε </string>
+    <string name="firstfollow_1_simbolo_inicial_depois_dele">%1$s é o símbolo inicial: depois dele vem o fim da entrada (%2$s)</string>
+    <string name="firstfollow_em_1_depois_2_vem">Em %1$s, depois de %2$s vem %3$s: FIRST disso entra em FOLLOW(%4$s)</string>
+    <string name="firstfollow_1_esta_no_fim">%1$s está no fim</string>
+    <string name="firstfollow_que_vem_depois_1_pode">o que vem depois de %1$s pode sumir</string>
+    <string name="firstfollow_em_1_2_follow_3">Em %1$s, %2$s: FOLLOW(%3$s) entra em FOLLOW(%4$s)</string>
+    <!-- Grammar.kt -->
+    <string name="grammar_linha_sem_1">Linha sem '-&gt;': %1$s</string>
+    <string name="grammar_lado_esquerdo_invalido_1">Lado esquerdo inválido: '%1$s'</string>
+    <string name="grammar_gramatica_vazia">Gramática vazia</string>
+    <!-- LL1.kt -->
+    <string name="ll1_1_pode_virar_2_follow">%1$s pode virar ε e '%2$s' ∈ FOLLOW(%3$s)</string>
+    <string name="ll1_casar_1">casar '%1$s'</string>
+    <string name="ll1_expandir_1">expandir %1$s</string>
+    <string name="ll1_pilha_vazia_mas_ainda_ha">pilha vazia, mas ainda há entrada ('%1$s')</string>
+    <string name="ll1_esperava_1_veio_2">esperava '%1$s', veio '%2$s'</string>
+    <string name="ll1_m_1_2_esta_vazia">M[%1$s, %2$s] está vazia</string>
+    <!-- LR.kt -->
+    <string name="lr_1_tem_precedencia_maior_que">'%1$s' tem precedência maior que a regra → shift</string>
+    <string name="lr_regra_tem_precedencia_maior_que">a regra tem precedência maior que '%1$s' → reduce</string>
+    <string name="lr_mesma_precedencia_left_reduce_associa">mesma precedência e %left → reduce (associa à esquerda)</string>
+    <string name="lr_mesma_precedencia_right_shift_associa">mesma precedência e %right → shift (associa à direita)</string>
+    <string name="lr_sem_precedencia_declarada_bison_escolhe">sem precedência declarada: o Bison escolhe SHIFT e avisa o conflito</string>
+    <string name="lr_reduce_reduce_bison_escolhe_regra">reduce/reduce: o Bison escolhe a regra que aparece primeiro</string>
+    <string name="lr_varios_reduces_shift_bison_prefere">vários reduces + shift: o Bison prefere SHIFT</string>
+    <string name="lr_action_1_2_vazia_erro">ACTION[%1$s, %2$s] vazia → erro de sintaxe</string>
+    <string name="lr_empilha_1_vai_para_estado">empilha '%1$s' e vai para o estado %2$s</string>
+    <string name="lr_reduz_por_1_desempilha_2">reduz por %1$s (desempilha %2$s) e GOTO[%3$s, %4$s] = %5$s</string>
+    <string name="lr_aceita_entrada_pertence_linguagem">aceita! A entrada pertence à linguagem</string>
+    <!-- Lexer.kt -->
+    <string name="lexer_numero">número</string>
+    <string name="lexer_string_sem_fechar_aspas">string sem fechar aspas</string>
+    <string name="lexer_caractere_invalido_1">caractere inválido '%1$s'</string>
+    <!-- MiniBison.kt -->
+    <string name="minibison_empilha_1_vai_para_estado">empilha %1$s e vai para o estado %2$s</string>
+    <string name="minibison_reduz_1">reduz %1$s</string>
+    <string name="minibison_aceita_valor_final_1">aceita: o valor final é %1$s</string>
+    <string name="minibison_erro_sintaxe_nada_fazer_com">erro de sintaxe: nada a fazer com %1$s no estado %2$s</string>
+    <string name="minibison_fim">o fim</string>
+    <string name="minibison_faltou_separador_entre_declaracoes_regras">Faltou o separador %% entre as declarações e as regras</string>
+    <string name="minibison_declaracao_desconhecida_1">Declaração desconhecida: '%1$s'</string>
+    <string name="minibison_esperava_nome_regra_perto_1">Esperava o nome de uma regra perto de '%1$s'</string>
+    <string name="minibison_faltou_depois_1">Faltou ':' depois de '%1$s'</string>
+    <string name="minibison_acao_sem">Ação sem '}'</string>
+    <string name="minibison_literal_mal_formado_perto_1">Literal mal formado perto de %1$s</string>
+    <string name="minibison_caractere_inesperado_1_na_regra">Caractere inesperado '%1$s' na regra '%2$s'</string>
+    <string name="minibison_nenhuma_regra_encontrada">Nenhuma regra encontrada</string>
+    <string name="minibison_1_nao_regra_nem_token">'%1$s' não é regra nem token declarado (faltou %token %2$s?)</string>
+    <string name="minibison_token_1_nao_aparece_em">o token %1$s não aparece em nenhuma regra</string>
+    <string name="minibison_syntax_error_1">syntax error (%1$s)</string>
+    <string name="minibison_padrao_1">(padrão) $$ = $1</string>
+    <string name="minibison_erro_na_acao_1">erro na ação: %1$s</string>
+    <string name="minibison_acao_incompleta">ação incompleta</string>
+    <string name="minibison_faltou">faltou ')'</string>
+    <string name="minibison_1_nao_existe_regra_so">$%1$s não existe: a regra só tem %2$s símbolo(s)</string>
+    <string name="minibison_sobrou_1_na_acao">sobrou '%1$s' na ação</string>
+    <string name="minibison_calculadora_confusa">A calculadora confusa</string>
+    <string name="minibison_calculadora_byte_diz_que_2">A calculadora do Byte diz que 2+3*4 = 20. O Bison avisou conflitos, mas ninguém leu. Ensine precedência a ele!</string>
+    <string name="minibison_linhas_left_mais_embaixo_ligam">Linhas de %left mais EMBAIXO ligam MAIS FORTE. Coloque '+' '-' numa linha e '*' '/' na de baixo.</string>
+    <string name="minibison_menos_com_menos">Menos com menos</string>
+    <string name="minibison_8_3_2_deveria_dar">8-3-2 deveria dar 3 (associa à esquerda: (8-3)-2). Mas a calculadora está achando 7!</string>
+    <string name="minibison_right_faz_b_c_virar">%right faz a-b-c virar a-(b-c). Subtração e divisão associam à ESQUERDA.</string>
+    <string name="minibison_torre_potencias">Torre de potências</string>
+    <string name="minibison_adicione_operador_potencia_ele_liga">Adicione o operador '^' (potência). Ele liga mais forte que * e associa à DIREITA: 2^3^2 = 2^9 = 512.</string>
+    <string name="minibison_voce_precisa_linha_right_por">Você precisa de: uma linha %right '^' (por último!) e uma regra  expr '^' expr { $$ = $1 ^ $3; }</string>
+    <string name="minibison_menos_solitario">O menos solitário</string>
+    <string name="minibison_faca_5_2_dar_3">Faça -5+2 dar -3. O menos unário precisa de precedência própria: use %prec.</string>
+    <string name="minibison_declare_right_uminus_por_ultimo">Declare %right UMINUS por último e a regra:  '-' expr %prec UMINUS { $$ = -$2; }</string>
+    <string name="minibison_gramatica_sem_ambiguidade">Gramática sem ambiguidade</string>
+    <string name="minibison_outro_jeito_resolver_em_vez">Outro jeito de resolver: em vez de %left, reescreva a gramática em camadas (expr, term, fator). Sem NENHUMA declaração de precedência!</string>
+    <string name="minibison_expr_expr_term_term_term">expr : expr '+' term | term ;   term : term '*' fator | fator ;   fator : NUM ;  (com as ações!)</string>
+    <string name="minibison_erro_proposito">Erro de propósito</string>
+    <string name="minibison_faca_1_2_3_dar">Faça 1&lt;2&lt;3 dar ERRO de sintaxe (comparações não se encadeiam). Os testes com um único '&lt;' devem funcionar (valor 1 = verdadeiro).</string>
+    <string name="minibison_left_deixa_1_2_3">%left '&lt;' deixa 1&lt;2&lt;3 virar (1&lt;2)&lt;3. Troque por %nonassoc '&lt;': aí a&lt;b&lt;c vira erro de sintaxe, como em várias linguagens.</string>
+    <string name="minibison_erro_na_especificacao_1">Erro na especificação: %1$s</string>
+    <string name="minibison_sem_conflitos">Sem conflitos</string>
+    <string name="minibison_1_conflito">%1$s conflito(s): </string>
+    <string name="minibison_estado_1_com_2_3">estado %1$s com %2$s (%3$s)</string>
+    <string name="minibison_erro_sintaxe">erro de sintaxe</string>
+    <string name="minibison_1_2_esperado_3">%1$s  →  %2$s   (esperado: %3$s)</string>
+    <!-- MiniFlex.kt -->
+    <string name="miniflex_ignora">/* ignora */</string>
+    <string name="miniflex_caractere_inesperado_1_na_posicao">caractere inesperado '%1$s' na posição %2$s (nenhuma regra casa)</string>
+    <string name="miniflex_aspas_sem_fechar_em_1">aspas sem fechar em %1$s</string>
+    <string name="miniflex_palavra_chave_sequestrada">Palavra-chave sequestrada</string>
+    <string name="miniflex_scanner_esta_chamando_if_id">O scanner está chamando 'if' de ID! Com o mesmo tamanho, quem vence é a regra que vem PRIMEIRO.</string>
+    <string name="miniflex_if_x1_iffy">if (x1) iffy</string>
+    <string name="miniflex_suba_regra_if_para_antes">Suba a regra "if" para ANTES da regra de identificadores. Repare que 'iffy' continua ID: o maior casamento vence a ordem!</string>
+    <string name="miniflex_maior_ou_igual">Maior ou igual?</string>
+    <string name="miniflex_b_deveria_virar_id_ge">a&gt;=b deveria virar ID GE ID. Falta uma regra… e o flex pega o MAIOR lexema.</string>
+    <string name="miniflex_b_c_d_f">a&gt;=b c=d e&gt;f</string>
+    <string name="miniflex_adicione_regra_posicao_dela_nem">Adicione a regra "&gt;=". A posição dela nem importa: "&gt;=" casa 2 caracteres e "&gt;" só 1.</string>
+    <string name="miniflex_numeros_com_virgula_ponto">Números com vírgula (ponto)</string>
+    <string name="miniflex_3_14_esta_virando_num">3.14 está virando NUM, erro, NUM. Precisamos de uma regra para reais.</string>
+    <string name="miniflex_adicione_0_9_0_9">Adicione [0-9]+"."[0-9]+ → REAL (entre aspas o ponto é literal). Por que ela vence NUM em '3.14'? Maior casamento!</string>
+    <string name="miniflex_comentarios_fantasmas">Comentários fantasmas</string>
+    <string name="miniflex_comentarios_devem_sumir_sem_token">Comentários // devem SUMIR (sem token). Hoje eles viram lixo.</string>
+    <string name="miniflex_b_divide_por_b_c">a / b // divide a por b\nc</string>
+    <string name="miniflex_adicione_regra_sem_return_ignora">Adicione a regra "//".* sem return (ignora). '.' casa tudo menos quebra de linha.</string>
+    <string name="miniflex_token_inutil">O token inútil</string>
+    <string name="miniflex_regra_identificadores_aceita_digitos_no">A regra de identificadores aceita dígitos no começo! '9x' está virando um ID só.</string>
+    <string name="miniflex_troque_regra_z0_9_pela">Troque a regra [a-z0-9]+ pela correta [a-z][a-z0-9]* (remova a velha e adicione a nova). Teste: '9x' vira NUM e ID.</string>
+    <!-- Minimize.kt -->
+    <string name="minimize_1_final_2_nao">%1$s é final e %2$s não</string>
+    <string name="minimize_com_1_2_3_4">com '%1$s': %2$s→%3$s e %4$s→%5$s, e {%6$s,%7$s} já está marcado</string>
+    <string name="minimize_b_abb_afd_livro">(a|b)*abb: AFD do livro</string>
+    <string name="minimize_quantidade_par_com_sobra">quantidade par de a's (com sobra)</string>
+    <string name="minimize_termina_em_b_redundante">termina em b (redundante)</string>
+    <string name="minimize_1_via_subconjuntos">%1$s (via subconjuntos)</string>
+    <!-- MipsVM.kt -->
+    <string name="mipsvm_linha_1_2">linha %1$s: %2$s</string>
+    <string name="mipsvm_diretiva_dados_desconhecida_1">diretiva de dados desconhecida: %1$s</string>
+    <string name="mipsvm_numero_invalido_1">número inválido: '%1$s'</string>
+    <string name="mipsvm_esperava_registrador_veio_1">esperava um registrador, veio '%1$s'</string>
+    <string name="mipsvm_rotulo_1_nao_existe">rótulo '%1$s' não existe</string>
+    <string name="mipsvm_rotulo_dados_1_nao_existe">rótulo de dados '%1$s' não existe (declare em .data: %2$s: .word 0)</string>
+    <string name="mipsvm_mais_1_instrucoes_laco_infinito">mais de %1$s instruções: laço infinito?</string>
+    <string name="mipsvm_1_precisa_2_operandos">'%1$s' precisa de %2$s operandos</string>
+    <string name="mipsvm_divisao_por_zero">divisão por zero</string>
+    <string name="mipsvm_jr_para_endereco_invalido">jr para endereço inválido</string>
+    <string name="mipsvm_syscall_1_nao_suportada_no">syscall %1$s não suportada no simulador</string>
+    <string name="mipsvm_instrucao_1_nao_suportada_no">instrução '%1$s' não suportada no MARS de bolso</string>
+    <string name="mipsvm_esperava_1_mas_veio_2">esperava '%1$s' mas veio '%2$s'</string>
+    <string name="mipsvm_condicao_precisa_ser_comparacao">condição precisa ser uma comparação</string>
+    <string name="mipsvm_se_condicao_1_for_falsa">se a condição (%1$s) for FALSA, pula para %2$s, por isso o desvio usa o teste INVERSO de '%3$s'</string>
+    <string name="mipsvm_terminou_entao_pula_senao">terminou o ENTÃO: pula o SENÃO</string>
+    <string name="mipsvm_fim_corpo_volta_para_testar">fim do corpo: volta para testar a condição de novo</string>
+    <string name="mipsvm_1_word_2">%1$s: .word %2$s</string>
+    <!-- RegAlloc.kt -->
+    <string name="regalloc_move_1_2">move %1$s, %2$s</string>
+    <!-- Semantics.kt -->
+    <string name="semantics_literal_1_2">literal %1$s é %2$s</string>
+    <string name="semantics_1_nao_foi_declarada">'%1$s' não foi declarada!</string>
+    <string name="semantics_busca_1_na_tabela_simbolos">busca '%1$s' na tabela de símbolos: %2$s</string>
+    <string name="semantics_erro_se_propaga_para_cima">erro se propaga para cima</string>
+    <string name="semantics_nao_para_fazer_1_com">não dá para fazer '%1$s' com bool</string>
+    <string name="semantics_divisao_por_zero_erro_em">divisão por zero (erro em tempo de execução)</string>
+    <string name="semantics_int_misturado_com_float_converte">int misturado com float → converte o int (inttofloat): resultado float</string>
+    <string name="semantics_comparacao_1_exige_numeros">comparação '%1$s' exige números</string>
+    <string name="semantics_comparacao_sempre_produz_bool">comparação sempre produz bool</string>
+    <string name="semantics_1_exige_dois_bool">'%1$s' exige dois bool</string>
+    <string name="semantics_logica_entre_bool_bool">lógica entre bool → bool</string>
+    <string name="semantics_operador_desconhecido">operador desconhecido</string>
+    <!-- Subset.kt -->
+    <string name="subset_b_abb_termina_em_abb">(a|b)*abb: termina em abb</string>
+    <string name="subset_b_ab_termina_em_ab">(a|b)*ab: termina em ab</string>
+    <string name="subset_contem_aa">contém aa</string>
+    <string name="subset_ab_c_com">ab* | c  (com ε)</string>
+    <string name="subset_b_com">a*b*  (com ε)</string>
+    <string name="subset_penultimo">penúltimo é a</string>
+    <string name="subset_ab_c_com_2">(ab | a)c  (com ε)</string>
+    <!-- Transform.kt -->
+    <string name="transform_expressoes_recursiva_esquerda">Expressões (recursiva à esquerda)</string>
+    <string name="transform_gramatica_classica_livro_dragao_otima">A gramática clássica do Livro do Dragão. Ótima para LR, proibida para LL(1).</string>
+    <string name="transform_expressoes_versao_ll_1">Expressões (versão LL(1))</string>
+    <string name="transform_mesma_linguagem_sem_recursao_esquerda">Mesma linguagem, sem recursão à esquerda: agora o LL(1) consegue.</string>
+    <string name="transform_expressoes_ambiguas">Expressões ambíguas</string>
+    <string name="transform_curta_bonita_mas_ambigua_id">Curta e bonita, mas ambígua: 'id + id * id' tem duas árvores.</string>
+    <string name="transform_parenteses_balanceados">Parênteses balanceados</string>
+    <string name="transform_gera_linguagem_que_nenhuma_expressao">Gera (), (()), ()() ... Uma linguagem que NENHUMA expressão regular reconhece.</string>
+    <string name="transform_exemplo_classico_linguagem_livre_contexto">O exemplo clássico de linguagem livre de contexto que não é regular.</string>
+    <string name="transform_if_then_else_dangling_else">if-then-else (dangling else)</string>
+    <string name="transform_famoso_else_pendurado_ambigua_yacc">O famoso 'else pendurado': ambígua; o Yacc resolve com shift.</string>
+    <string name="transform_comandos_simples">Comandos simples</string>
+    <string name="transform_lista_comandos_precisa_fatoracao_para">Lista de comandos; precisa de fatoração para ser LL(1).</string>
+    <string name="transform_declaracoes_estilo_c_int_b">Declarações estilo C: int a, b, c; , já é LL(1).</string>
+    <string name="transform_lista_com_recursao_esquerda">Lista com recursão à esquerda</string>
+    <string name="transform_b_slr_1_sem_esforco">b a a a ...: SLR(1) sem esforço, LL(1) impossível sem transformar.</string>
+    <string name="transform_atribuicao_com_ponteiros_lalr_mas">Atribuição com ponteiros (LALR mas não SLR)</string>
+    <string name="transform_exemplo_famoso_slr_1_conflito">Exemplo famoso: o SLR(1) dá conflito shift/reduce em '=', o LALR(1) não.</string>
+</resources>

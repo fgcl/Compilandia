@@ -11,6 +11,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import com.compilandia.content.Shot
@@ -64,9 +65,11 @@ class FlowTest {
         }
         assertTrue(s.skill.name in app.ls.episodesSeen, "o episódio precisa contar como visto")
         assertTrue(app.ls.gears > 0, "ver a aula rende engrenagens")
-        onNodeWithText("Praticar agora").performClick()
+        // A trilha (A1): depois da aula vem a próxima etapa, que é aula da temporada ou o jogo.
+        onNodeWithText("Próxima etapa", substring = true).performScrollTo().performClick()
         anda()
-        assertTrue(app.screen is Screen.Play, "depois da aula vem a prática, veio ${app.screen}")
+        val depois = app.screen
+        assertTrue(depois is Screen.Play || (depois is Screen.Episode && depois.id != null), "depois da aula vem a próxima etapa, veio $depois")
     }
 
     @Test fun todaPerguntaDeTodoEpisodioRespondeAoToque() = runDesktopComposeUiTest(412, 900, testTimeout = 8.minutes) {
@@ -129,7 +132,7 @@ class FlowTest {
         val app = estado()
         setContent { App(app) }
         anda()
-        for ((rotulo, tela) in listOf("Mapa" to Screen.Map, "Laboratório" to Screen.Lab, "Painel" to Screen.Brain, "Diário" to Screen.Journal)) {
+        for ((rotulo, tela) in listOf("Mapa" to Screen.Map, "Laboratório" to Screen.Lab, "Loja" to Screen.Shop)) {
             onNodeWithText(rotulo).performClick()
             anda()
             assertEquals(tela, app.screen, "tocar em $rotulo")

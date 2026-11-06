@@ -40,6 +40,7 @@ import com.compilandia.ui.RichText
 import com.compilandia.ui.Screen
 import com.compilandia.ui.SpeechBubble
 import com.compilandia.ui.VSpace
+import com.compilandia.textos.tx
 
 private val guideColor get() = Palette.teal
 
@@ -47,10 +48,10 @@ private val guideColor get() = Palette.teal
 fun GuideScreen(app: AppState) {
     val chapters = Library.guide
     Column(Modifier.fillMaxSize()) {
-        Header("🛠️ Guia do Trabalho Prático", "Construa um compilador completo, do .txt ao MIPS", guideColor)
+        Header(tx("guidescreens_guia_trabalho_pratico"), tx("guidescreens_construa_compilador_completo_txt_ao"), guideColor)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            SpeechBubble("🦉", "Profª Gramática", "Na PUC Minas o trabalho prático de Compiladores pede um compilador INTEIRO: léxico com autômatos, gramática LL(1), descida recursiva, tabela de símbolos, tipos e geração de assembly MIPS. Este guia te leva por cada etapa com uma linguagem de exemplo.")
-            if (chapters.isEmpty()) Text("Guia em construção.", color = Palette.inkSoft)
+            SpeechBubble("🦉", tx("comum_profa_gramatica"), tx("guidescreens_trabalho_pratico_pede"))
+            if (chapters.isEmpty()) Text(tx("guidescreens_guia_em_construcao"), color = Palette.inkSoft)
             ProgressBar(app.ls.guideRead.size.toFloat() / chapters.size.coerceAtLeast(1), guideColor, Modifier.fillMaxWidth())
             for (c in chapters) {
                 val read = c.number in app.ls.guideRead
@@ -72,7 +73,7 @@ fun GuideScreen(app: AppState) {
 @Composable
 fun GuideChapterScreen(app: AppState, number: Int) {
     val c = Library.guide.firstOrNull { it.number == number }
-    if (c == null) { Column(Modifier.fillMaxSize()) { Header("Guia", null, guideColor); CenterText("Capítulo não encontrado") }; return }
+    if (c == null) { Column(Modifier.fillMaxSize()) { Header(tx("guidescreens_guia"), null, guideColor); CenterText(tx("guidescreens_capitulo_nao_encontrado")) }; return }
     var shown by remember { mutableIntStateOf(1) }
     val answered = remember { mutableStateMapOf<Int, Int>() }
     val revealed = remember { mutableStateMapOf<Int, Boolean>() }
@@ -81,23 +82,23 @@ fun GuideChapterScreen(app: AppState, number: Int) {
     val blocking = c.beats.take(shown).withIndex().any { (i, b) -> (b is Beat.Predict && i !in answered) || (b is Beat.Reveal && revealed[i] != true) }
     val finished = shown >= c.beats.size && !blocking
     Column(Modifier.fillMaxSize()) {
-        Header("${c.number}. ${c.title}", "Guia do TP · relacionado a: ${c.skill.title}", guideColor)
+        Header("${c.number}. ${c.title}", tx("guidescreens_guia_tp_relacionado_1", c.skill.title), guideColor)
         ProgressBar(shown.toFloat() / c.beats.size, guideColor, Modifier.fillMaxWidth(), 6.dp)
         Column(Modifier.weight(1f).verticalScroll(scroll).padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             c.beats.take(shown).forEachIndexed { i, b -> BeatView(b, i, answered, revealed) }
             if (finished) {
                 PaperCard(color = guideColor.copy(alpha = 0.08f), border = guideColor) {
-                    RichText("Capítulo concluído! Quer **praticar** \"${c.skill.title}\" num minijogo agora? Fazer logo depois de ler fixa muito mais.", style = MaterialTheme.typography.bodyMedium)
-                    BigButton("🎮 Praticar", Modifier.fillMaxWidth(), color = Palette.orange) {
+                    RichText(tx("guidescreens_capitulo_concluido_quer_praticar_1", c.skill.title), style = MaterialTheme.typography.bodyMedium)
+                    BigButton(tx("guidescreens_praticar"), Modifier.fillMaxWidth(), color = Palette.orange) {
                         app.learner.markGuideRead(c.number); app.commit()
                         app.replace(Screen.Play(c.skill, app.learner.chooseGame(c.skill), app.learner.chooseLevel(c.skill, nowMs()), seed = nowMs()))
                     }
                     val next = Library.guide.firstOrNull { it.number == c.number + 1 }
-                    if (next != null) BigButton("📘 Próximo capítulo: ${next.title}", Modifier.fillMaxWidth(), color = guideColor) {
+                    if (next != null) BigButton(tx("guidescreens_proximo_capitulo_1", next.title), Modifier.fillMaxWidth(), color = guideColor) {
                         app.learner.markGuideRead(c.number); app.commit()
                         app.replace(Screen.GuideChapter(next.number))
                     }
-                    BigButton("Voltar ao índice", Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink) {
+                    BigButton(tx("guidescreens_voltar_ao_indice"), Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink) {
                         app.learner.markGuideRead(c.number); app.commit(); app.back()
                     }
                 }
@@ -106,7 +107,7 @@ fun GuideChapterScreen(app: AppState, number: Int) {
         }
         Row(Modifier.fillMaxWidth().background(Palette.paperDark).padding(10.dp)) {
             Spacer(Modifier.weight(1f))
-            if (!finished) BigButton(if (blocking) "responda ↑" else "Continuar ▶", small = true, enabled = !blocking, color = guideColor) { Sound.play(Sfx.CLICK); shown++ }
+            if (!finished) BigButton(if (blocking) tx("comum_responda") else tx("comum_continuar_2"), small = true, enabled = !blocking, color = guideColor) { Sound.play(Sfx.CLICK); shown++ }
         }
     }
 }

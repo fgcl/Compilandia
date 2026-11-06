@@ -66,6 +66,7 @@ import com.compilandia.ui.visuals.Cell
 import com.compilandia.ui.visuals.FrameStack
 import com.compilandia.ui.visuals.dfaLetter
 import com.compilandia.ui.visuals.nfaEdges
+import com.compilandia.textos.tx
 
 // ============================================================ Fábrica de Subconjuntos
 
@@ -84,7 +85,7 @@ fun SubsetFactoryGame(ctx: GameCtx) {
     var msg by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     var revealed by remember { mutableStateOf(false) }
 
-    Mono("AFN: ${nfa.title}", bold = true)
+    Mono(tx("comum_afn_1", nfa.title), bold = true)
     val cur = steps.getOrNull(k)
     AutomatonView(nfa.stateCount, nfa.start, nfa.accepting, nfaEdges(nfa), highlight = picked.toSet()) { s ->
         if (cur != null && !revealed) { if (s in picked) picked.remove(s) else picked.add(s); Sound.play(Sfx.CLICK) }
@@ -106,25 +107,25 @@ fun SubsetFactoryGame(ctx: GameCtx) {
         }
     }
     if (cur == null) {
-        FeedbackBanner(mistakes == 0, "Fábrica concluída! Cada estado do AFD é um CONJUNTO de estados do AFN. O AFD completo tem ${res.states.size} estados.")
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
+        FeedbackBanner(mistakes == 0, tx("gamesv2_fabrica_concluida_cada_estado_afd", res.states.size))
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val fromName = dfaLetter(res.states.indexOf(cur.from))
-    RichText("Calcule **ε-fecho(move($fromName = ${setText(cur.from)}, '${cur.symbol}'))** — toque nos estados do AFN que formam o resultado.", style = MaterialTheme.typography.titleSmall)
-    Text("Selecionados: ${setText(picked.sorted().toCollection(LinkedHashSet()))}", style = MaterialTheme.typography.bodyMedium)
-    HintBox(ctx, "Primeiro o MOVE: de cada estado de $fromName, para onde vai uma seta '${cur.symbol}'? = ${setText(cur.moved)}", "Depois o ε-FECHO: siga também todas as setas ε a partir desses estados (e deles mesmos).")
+    RichText(tx("gamesv2_calcule_fecho_move_1_2", fromName, setText(cur.from), cur.symbol), style = MaterialTheme.typography.titleSmall)
+    Text(tx("gamesv2_selecionados_1", setText(picked.sorted().toCollection(LinkedHashSet()))), style = MaterialTheme.typography.bodyMedium)
+    HintBox(ctx, tx("gamesv2_primeiro_move_cada_estado_1", fromName, cur.symbol, setText(cur.moved)), tx("gamesv2_depois_fecho_siga_tambem_todas"))
     msg?.let { FeedbackBanner(it.first, it.second) }
     if (!revealed) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        BigButton("∅ nenhum", small = true, color = Palette.white, textColor = Palette.ink) { picked.clear() }
-        BigButton("Confirmar ✔", Modifier.weight(1f), small = true, color = Palette.teal) {
+        BigButton(tx("gamesv2_nenhum"), small = true, color = Palette.white, textColor = Palette.ink) { picked.clear() }
+        BigButton(tx("gamesv2_confirmar"), Modifier.weight(1f), small = true, color = Palette.teal) {
             val ok = picked.toSet() == cur.to
             if (!ok) mistakes++
-            msg = ok to (if (ok) "Isso! " else "Era ${setText(cur.to)}. ") + "move = ${setText(cur.moved)}, depois ε-fecho = ${setText(cur.to)}."
+            msg = ok to (if (ok) tx("gamesv2_isso") else "Era ${setText(cur.to)}. ") + tx("gamesv2_move_1_depois_fecho_2", setText(cur.moved), setText(cur.to))
             if (ok) Juice.correct() else Juice.wrong()
             revealed = true
         }
-    } else BigButton("Próxima transição ▶", Modifier.fillMaxWidth()) { k++; picked.clear(); revealed = false; msg = null }
+    } else BigButton(tx("gamesv2_proxima_transicao"), Modifier.fillMaxWidth()) { k++; picked.clear(); revealed = false; msg = null }
 }
 
 // ============================================================ Oficina Flex
@@ -138,11 +139,11 @@ fun FlexWorkshopGame(ctx: GameCtx) {
     PaperCard(color = Palette.paper, border = Palette.green) {
         Text("🦎 ${ch.title}", style = MaterialTheme.typography.headlineSmall)
         RichText(ch.story, style = MaterialTheme.typography.bodyMedium)
-        Mono("entrada: ${ch.input.replace("\n", "⏎")}", bold = true)
-        Mono("esperado: ${ch.expected.joinToString(" ")}", color = Palette.teal)
+        Mono(tx("comum_entrada_1", ch.input.replace("\n", "⏎")), bold = true)
+        Mono(tx("gamesv2_esperado_1", ch.expected.joinToString(" ")), color = Palette.teal)
     }
     HintBox(ctx, ch.hint, "Lembre: 1) maior casamento; 2) empate → regra de CIMA.")
-    Text("scanner.l — regras (de cima para baixo):", style = MaterialTheme.typography.titleSmall)
+    Text(tx("gamesv2_scanner_l_regras_cima_para"), style = MaterialTheme.typography.titleSmall)
     rules.forEachIndexed { i, r ->
         Row(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(Palette.codeBg).padding(horizontal = 8.dp, vertical = 4.dp),
@@ -156,23 +157,23 @@ fun FlexWorkshopGame(ctx: GameCtx) {
         }
     }
     if (ch.extra.isNotEmpty()) {
-        Text("Regras disponíveis para adicionar (vão para o fim):", style = MaterialTheme.typography.labelMedium)
+        Text(tx("gamesv2_regras_disponiveis_para_adicionar_vao"), style = MaterialTheme.typography.labelMedium)
         ChipRow { for (r in ch.extra) if (r !in rules) Chip(r.display(), mono = true, color = Palette.green) { rules.add(r) } }
     }
-    BigButton("▶ flex scanner.l && ./a.out", Modifier.fillMaxWidth(), color = Palette.ink) {
+    BigButton(tx("gamesv2_flex_scanner_l_out"), Modifier.fillMaxWidth(), color = Palette.ink) {
         runs++
         result = FlexChallenges.check(ch, rules.toList())
         if (result!!.first) Juice.levelUp() else Juice.wrong()
     }
     result?.let { (ok, r) ->
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
-            Text("saída: " + r.tokens.joinToString(" ") { it.token } + (r.error?.let { "  ✘ $it" } ?: ""), color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
-            Text("lexemas: " + r.tokens.joinToString(" ") { "\"${it.text}\"" }, color = Color(0xFF9CA3AF), fontFamily = LocalFonts.current.mono, fontSize = 11.sp)
+            Text(tx("gamesv2_saida") + r.tokens.joinToString(" ") { it.token } + (r.error?.let { "  ✘ $it" } ?: ""), color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
+            Text(tx("gamesv2_lexemas") + r.tokens.joinToString(" ") { "\"${it.text}\"" }, color = Color(0xFF9CA3AF), fontFamily = LocalFonts.current.mono, fontSize = 11.sp)
         }
         if (ok) {
-            FeedbackBanner(true, "Scanner certo em $runs execução(ões)!")
-            BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * (runs - 1)).coerceIn(0.4, 1.0)) }
-        } else if (runs >= 4) BigButton("Desistir (ver dica e encerrar)", Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) { ctx.finish(0.2) }
+            FeedbackBanner(true, tx("gamesv2_scanner_certo_em_1_execucao", runs))
+            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * (runs - 1)).coerceIn(0.4, 1.0)) }
+        } else if (runs >= 4) BigButton(tx("gamesv2_desistir_ver_dica_encerrar"), Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) { ctx.finish(0.2) }
     }
 }
 
@@ -208,7 +209,7 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
     var score by remember { mutableStateOf(0.0) }
 
     GrammarText(panicGrammar)
-    Text(if (phase == 0) "🚨 Em qual token o parser LL(1) PERCEBE o erro?" else "Recuperação", style = MaterialTheme.typography.titleSmall)
+    Text(if (phase == 0) tx("gamesv2_em_qual_token_parser_ll") else tx("gamesv2_recuperacao"), style = MaterialTheme.typography.titleSmall)
     Row(Modifier.horizontalScroll(rememberScrollState())) {
         (input + "$").forEachIndexed { k, s ->
             val bg = when {
@@ -224,18 +225,18 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
             ) { Mono(s, bold = true, size = 15) }
         }
     }
-    HintBox(ctx, "O LL(1) lê da esquerda para a direita e para no PRIMEIRO token que nenhuma frase válida poderia ter naquela posição.", "No modo pânico, o parser joga tokens fora até achar um sincronizador (um token do FOLLOW do não-terminal, como ';').")
+    HintBox(ctx, tx("gamesv2_ll_1_le_esquerda_para"), tx("gamesv2_no_modo_panico_parser_joga"))
     when (phase) {
-        0 -> BigButton("É este! ✔", Modifier.fillMaxWidth(), color = Palette.red, enabled = tapped != null) {
+        0 -> BigButton(tx("gamesv2_este"), Modifier.fillMaxWidth(), color = Palette.red, enabled = tapped != null) {
             val ok = tapped == errPos
             score += if (ok) 0.5 else 0.0
             if (ok) Juice.correct() else Juice.wrong()
             tapped = null; phase = 1
         }
         1 -> {
-            FeedbackBanner(true, "O erro é detectado em '${input[errPos]}' (token ${errPos + 1}). Propriedade do prefixo viável: tudo antes dele ainda poderia ser um programa válido.")
-            RichText("Agora o **modo pânico**: toque no token onde o parser VOLTA a trabalhar normalmente (o sincronizador).", style = MaterialTheme.typography.bodyMedium)
-            BigButton("Volta aqui ✔", Modifier.fillMaxWidth(), color = Palette.teal, enabled = tapped != null) {
+            FeedbackBanner(true, tx("gamesv2_erro_detectado_em_1_token", input[errPos], errPos + 1))
+            RichText(tx("gamesv2_agora_modo_panico_toque_no"), style = MaterialTheme.typography.bodyMedium)
+            BigButton(tx("gamesv2_volta_aqui"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = tapped != null) {
                 val ok = tapped == ev.position
                 score += if (ok) 0.5 else 0.0
                 if (ok) Juice.correct() else Juice.wrong()
@@ -244,8 +245,8 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
         }
         else -> {
             for (e in trace.events) RichText("• ${e.message}", style = MaterialTheme.typography.bodySmall)
-            FeedbackBanner(score >= 0.99, "Em vez de parar no primeiro erro, o compilador se recupera e continua — assim ele lista TODOS os erros numa compilação só.")
-            BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done(score) }
+            FeedbackBanner(score >= 0.99, tx("gamesv2_em_vez_parar_no_primeiro"))
+            BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(score) }
         }
     }
 }
@@ -260,16 +261,16 @@ fun CallStackGame(ctx: GameCtx) {
     var msg by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     CodeBlock(p.code, p.title)
     if (i >= p.events.size) {
-        FeedbackBanner(mistakes == 0, "Programa terminou com ${p.result}. Pico da pilha: ${p.events.maxOf { it.stack.size }} registros de ativação.")
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        FeedbackBanner(mistakes == 0, tx("gamesv2_programa_terminou_com_1_pico", p.result, p.events.maxOf { it.stack.size }))
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val before = if (i == 0) emptyList() else p.events[i - 1].stack
     FrameStack(before)
     val right = p.events[i]
     fun label(e: RtEvent) = when (e) {
-        is RtEvent.Call -> "📥 chamar ${e.frame.fn}(${e.frame.args.values.joinToString()})"
-        is RtEvent.Return -> "📤 ${e.fn} retorna ${e.value}"
+        is RtEvent.Call -> tx("gamesv2_chamar_1_2", e.frame.fn, e.frame.args.values.joinToString())
+        is RtEvent.Return -> tx("gamesv2_1_retorna_2", e.fn, e.value)
     }
     val options = remember(i) {
         val top = before.lastOrNull()
@@ -277,22 +278,22 @@ fun CallStackGame(ctx: GameCtx) {
         when (right) {
             is RtEvent.Call -> {
                 val a = right.frame.args.values.firstOrNull()
-                if (a != null) distract += "📥 chamar ${right.frame.fn}(${a + 1})"
-                if (top != null) distract += "📤 ${top.fn} retorna ${(top.args.values.firstOrNull() ?: 1)}"
+                if (a != null) distract += tx("gamesv2_chamar_1_2", right.frame.fn, a + 1)
+                if (top != null) distract += tx("gamesv2_1_retorna_2", top.fn, (top.args.values.firstOrNull() ?: 1))
             }
             is RtEvent.Return -> {
-                distract += "📤 ${right.fn} retorna ${right.value + 1}"
-                distract += if (right.value != 0) "📤 ${right.fn} retorna ${right.value * 2}" else "📥 chamar ${right.fn}(0)"
+                distract += tx("gamesv2_1_retorna_2", right.fn, right.value + 1)
+                distract += if (right.value != 0) tx("gamesv2_1_retorna_2", right.fn, right.value * 2) else tx("gamesv2_chamar_1_0", right.fn)
             }
         }
         (distract.distinct().filter { it != label(right) }.take(2) + label(right)).shuffled(ctx.rnd)
     }
-    Text("O que acontece agora?", style = MaterialTheme.typography.titleSmall)
-    HintBox(ctx, "Olhe o registro do TOPO: em qual linha ele está? Se ele chama alguém, EMPILHA. Se termina, DESEMPILHA e devolve o valor.", "fat(n) = n * fat(n-1); fat(1) = 1.")
+    Text(tx("gamesv2_que_acontece_agora"), style = MaterialTheme.typography.titleSmall)
+    HintBox(ctx, tx("gamesv2_olhe_registro_topo_em_qual"), "fat(n) = n * fat(n-1); fat(1) = 1.")
     msg?.let { FeedbackBanner(it.first, it.second) }
     for (o in options) BigButton(o, Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) {
-        if (o == label(right)) { msg = true to "Isso! " + o; i++; Juice.correct() }
-        else { mistakes++; msg = false to "Não. Pense no registro do topo da pilha."; Juice.wrong() }
+        if (o == label(right)) { msg = true to tx("gamesv2_isso") + o; i++; Juice.correct() }
+        else { mistakes++; msg = false to tx("gamesv2_nao_pense_no_registro_topo"); Juice.wrong() }
     }
 }
 
@@ -302,9 +303,9 @@ fun CallStackGame(ctx: GameCtx) {
 fun MipsForgeGame(ctx: GameCtx) {
     val src = remember {
         val pool = when (ctx.level) {
-            1 -> listOf("a + b", "c * d", "a - 1")
-            2 -> listOf("a + b * c", "( a + b ) * c", "d - b * 2")
-            else -> listOf("a * b + c * d", "( a + 1 ) * ( b - c )", "a + b + c + d", "d * ( a - b ) / 2")
+            1 -> listOf(tx("comum_b_2"), "c * d", tx("gamesv2_1"))
+            2 -> listOf(tx("comum_b_c"), tx("comum_b_c_3"), "d - b * 2")
+            else -> listOf(tx("comum_b_c_d"), tx("gamesv2_1_b_c"), tx("comum_b_c_d_2"), tx("gamesv2_d_b_2"))
         }
         pool[ctx.rnd.nextInt(pool.size)]
     }
@@ -315,20 +316,20 @@ fun MipsForgeGame(ctx: GameCtx) {
     var mistakes by remember { mutableIntStateOf(0) }
     var msg by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
 
-    Mono("r = $src     (a=4, b=2, c=3, d=5)", bold = true)
+    Mono(tx("gamesv2_r_1_4_b_2", src), bold = true)
     PaperCard(color = Palette.paper) {
         Text("TAC", style = MaterialTheme.typography.labelMedium)
         tac.forEachIndexed { j, ins -> Mono((if (j == k) "▶ " else "  ") + ins, bold = j == k, color = if (j < k) Palette.inkSoft else Palette.ink) }
     }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
-        Text(".text\nmain:", fontFamily = LocalFonts.current.mono, fontSize = 12.sp, color = Color(0xFF9CA3AF))
+        Text(tx("comum_text_main"), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, color = Color(0xFF9CA3AF))
         for (l in built + currentLines) Text("  $l", fontFamily = LocalFonts.current.mono, fontSize = 13.sp, color = Color(0xFFE8E6F0))
         if (k < tac.size) Text("  _", fontFamily = LocalFonts.current.mono, color = Palette.yellow)
     }
     if (k >= tac.size) {
         val st = Mips.run(built.toList(), Mips.intEnv).last()
-        FeedbackBanner(true, "Rodando no \"MARS de bolso\": r = ${st.mem["r"]}. Seu assembly funciona! 🎉")
-        BigButton("Concluir ▶", Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        FeedbackBanner(true, tx("gamesv2_rodando_no_mars_bolso_r", st.mem["r"]))
+        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val ins = tac[k]
@@ -348,8 +349,8 @@ fun MipsForgeGame(ctx: GameCtx) {
         }
         (want + wrong.distinct().filter { it !in want }.take(3)).shuffled(ctx.rnd)
     }
-    RichText("Traduza **$ins** (um tijolo por vez, na ordem):", style = MaterialTheme.typography.titleSmall)
-    HintBox(ctx, "Padrão: carrega os operandos em registradores (lw ou li para constantes), faz a conta no registrador, guarda o resultado na memória (sw).", "lw = load word (memória → registrador); sw = store word (registrador → memória).")
+    RichText(tx("gamesv2_traduza_1_tijolo_por_vez", ins), style = MaterialTheme.typography.titleSmall)
+    HintBox(ctx, tx("gamesv2_padrao_carrega_operandos_em_registradores"), tx("gamesv2_lw_load_word_memoria_registrador"))
     msg?.let { FeedbackBanner(it.first, it.second) }
     val dd = com.compilandia.ui.rememberDragDrop()
     fun tryLine(line: String) {
@@ -357,14 +358,14 @@ fun MipsForgeGame(ctx: GameCtx) {
         if (line == expected) {
             currentLines += line; msg = null; Juice.pick()
             if (currentLines.size == want.size) {
-                built += currentLines; currentLines.clear(); k++; msg = true to "Instrução traduzida!"; Juice.correct()
+                built += currentLines; currentLines.clear(); k++; msg = true to tx("gamesv2_instrucao_traduzida"); Juice.correct()
             }
         } else {
             mistakes++; Juice.wrong()
             msg = false to when {
-                line.startsWith("sw") && expected.startsWith("lw") -> "Primeiro precisa CARREGAR os valores (lw) para um registrador."
-                line.startsWith("lw") && expected.startsWith("sw") -> "A conta já está no registrador; agora GUARDE o resultado (sw)."
-                else -> "Não é essa ainda. Siga: carregar → operar → guardar."
+                line.startsWith("sw") && expected.startsWith("lw") -> tx("gamesv2_primeiro_precisa_carregar_valores_lw")
+                line.startsWith("lw") && expected.startsWith("sw") -> tx("gamesv2_conta_ja_esta_no_registrador")
+                else -> tx("gamesv2_nao_essa_ainda_siga_carregar")
             }
         }
     }
@@ -373,7 +374,7 @@ fun MipsForgeGame(ctx: GameCtx) {
             Modifier.fillMaxWidth().height(56.dp).clip(RoundedCornerShape(14.dp)).background(if (hovered) Palette.yellow.copy(alpha = 0.5f) else Palette.paperDark)
                 .border(if (hovered) 4.dp else 2.dp, if (hovered) Palette.orange else Palette.ink.copy(alpha = 0.4f), RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center,
-        ) { Text("🔩 solte o tijolo aqui (${currentLines.size + 1}/${want.size})", fontWeight = FontWeight.Bold, color = Palette.ink) }
+        ) { Text(tx("gamesv2_solte_tijolo_aqui_1_2", currentLines.size + 1, want.size), fontWeight = FontWeight.Bold, color = Palette.ink) }
     }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         for (line in palette) if (line !in currentLines) {
@@ -410,10 +411,10 @@ private fun DescentRound(ctx: GameCtx, g: Grammar, t: LL1Table, nt: String, done
     var mistakes by remember { mutableIntStateOf(0) }
     var msg by remember { mutableStateOf<String?>(null) }
     GrammarText(g)
-    RichText("Escreva o método de **$nt** do parser descendente recursivo (toque nas linhas na ordem).", style = MaterialTheme.typography.titleSmall)
+    RichText(tx("gamesv2_escreva_metodo_1_parser_descendente", nt), style = MaterialTheme.typography.titleSmall)
     HintBox(ctx,
-        "Uma produção vira uma sequência: terminal → casaToken(\"x\"); não-terminal → chamada X();",
-        "Com várias produções, escolha pelo token atual: if (tok em FIRST da produção). A produção ε vira o else que não faz nada.",
+        tx("gamesv2_producao_vira_sequencia_terminal_casatoken"),
+        tx("gamesv2_com_varias_producoes_escolha_pelo"),
         "FIRST: " + g.productionsOf(nt).joinToString("  ") { "${it.rhsText()}: {${(t.ff.firstOfString(it.rhs)).joinToString(",")}}" })
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
         val mono = LocalFonts.current.mono
@@ -433,14 +434,14 @@ private fun DescentRound(ctx: GameCtx, g: Grammar, t: LL1Table, nt: String, done
                             if (line.text == expectedText) {
                                 // linhas idênticas são intercambiáveis
                                 placed += idx; msg = null; Sound.play(Sfx.CLICK)
-                            } else { mistakes++; msg = "Ainda não é essa linha. Pense na ordem dos símbolos da produção."; Juice.wrong() }
+                            } else { mistakes++; msg = tx("gamesv2_ainda_nao_essa_linha_pense"); Juice.wrong() }
                         }.padding(10.dp)
                 ) { Mono(line.text, bold = true, size = 14) }
             }
         }
     } else {
-        FeedbackBanner(true, "Método pronto! Repare: a pilha do analisador LL(1) virou a pilha de CHAMADAS do Java.")
-        BigButton("Continuar ▶", Modifier.fillMaxWidth()) { done((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        FeedbackBanner(true, tx("gamesv2_metodo_pronto_repare_pilha_analisador"))
+        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
     }
 }
 
