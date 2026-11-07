@@ -54,8 +54,6 @@
     <string name="epbackend_ali_moram_parametros_variaveis_locais">Ali moram os parâmetros, as variáveis locais e o endereço de volta.</string>
     <string name="epbackend_fat_dois_chama_fat_outro">O fat de dois chama o fat de um. Outro registro sobe, com outro n.</string>
     <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  volta: fat</string>
-    <string name="epbackend_mais_chamada_agora_com_n">Mais uma chamada, agora com n igual a zero.</string>
-    <string name="epbackend_fat_n_0_volta_fat">fat  n = 0  volta: fat</string>
     <string name="epbackend_so_topo_pilha_esta_rodando">Só o topo da pilha está rodando.</string>
     <string name="epbackend_retornou_registro_sai_controle_volta">Retornou, o registro sai e o controle volta para quem chamou.</string>
     <string name="epbackend_por_isso_recursao_funciona_cada">Por isso a recursão funciona: cada chamada tem o seu próprio n.</string>

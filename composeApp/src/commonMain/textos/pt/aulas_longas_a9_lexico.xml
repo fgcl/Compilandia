@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Aulas básicas longas do léxico (A9): tokens, expressões regulares, subconjuntos e Flex. -->
+<resources>
+    <!-- Tokens -->
+    <string name="tok_l_titulo_porque">Letras demais</string>
+    <string name="tok_l_01">O parser monta frases com palavras. O arquivo chega letra por letra.</string>
+    <string name="tok_l_02">Quantas palavras o parser quer ver nesta linha? Toque no número.</string>
+    <string name="tok_l_02_dica">Nome, número, sinal e parêntese contam. Espaço não conta.</string>
+    <string name="tok_l_02_ok">Isso. Seis palavras no lugar de treze caracteres.</string>
+    <string name="tok_l_03">Antes do parser, o scanner junta as letras em palavras.</string>
+    <string name="tok_l_04">A receita do scanner tem três passos. Ela fica aqui na tela.</string>
+    <string name="tok_l_r1">1. Pule espaços e comentários.</string>
+    <string name="tok_l_r2">2. Pegue o pedaço mais longo que forma token.</string>
+    <string name="tok_l_r3">3. Dê a classe: palavra-chave, ID, NUM, OP...</string>
+    <string name="tok_l_05">Por que conta2 virou um token só, e não dois? Toque no passo.</string>
+    <string name="tok_l_05_dica">O scanner segue lendo enquanto o pedaço ainda forma um nome.</string>
+    <string name="tok_l_05_ok">Isso. Passo dois, o maior casamento.</string>
+    <string name="tok_l_06">Passo três: if é palavra reservada. Já ifx é um nome comum.</string>
+    <string name="tok_l_titulo_outra">Outra linha</string>
+    <string name="tok_l_07">A linha começa com while. Qual é a classe dele? Toque.</string>
+    <string name="tok_l_07_dica">While está na lista de palavras reservadas da linguagem.</string>
+    <string name="tok_l_07_ok">Isso. Palavra-chave, como if e for.</string>
+    <string name="tok_l_08">Agora o fim da linha. Toque nos dois cortes deste pedaço.</string>
+    <string name="tok_l_08_dica">O mais mais fica inteiro, como o maior ou igual.</string>
+    <string name="tok_l_08_ok">Isso. Três tokens: o nome, o mais mais e o ponto e vírgula.</string>
+    <string name="tok_l_09">Quantos tokens saem da linha inteira? Toque no número.</string>
+    <string name="tok_l_09_dica">Conte cada nome, cada sinal e cada parêntese. Pule os espaços.</string>
+    <string name="tok_l_09_ok">Isso. Essa linha gera nove tokens.</string>
+    <string name="tok_l_10">Nove tokens, cada um com sua classe. É isso que o parser recebe.</string>
+
+    <!-- Expressões regulares e AFD -->
+    <string name="regex_l_titulo_porque">Nomes sem fim</string>
+    <string name="regex_l_01">Nomes de variável não acabam nunca. Não dá para listar todos.</string>
+    <string name="regex_l_02">Um destes não pode ser nome de variável. Toque nele.</string>
+    <string name="regex_l_02_dica">Em C, o nome começa com letra, nunca com dígito.</string>
+    <string name="regex_l_02_ok">Isso. Falta um jeito curto de escrever esse formato.</string>
+    <string name="regex_l_03">O trem está no segundo estado e lê b. Para onde ele vai? Toque.</string>
+    <string name="regex_l_03_dica">Procure a seta com b que sai do estado onde ele está.</string>
+    <string name="regex_l_03_ok">Isso. A seta com b é um laço no mesmo estado.</string>
+    <string name="regex_l_04">Para ler uma cadeia, o trem segue sempre quatro passos.</string>
+    <string name="regex_l_r1">1. Comece no estado inicial.</string>
+    <string name="regex_l_r2">2. A cada letra, siga a seta dela.</string>
+    <string name="regex_l_r3">3. Faltou seta: rejeite a cadeia.</string>
+    <string name="regex_l_r4">4. Acabou num círculo duplo: aceita.</string>
+    <string name="regex_l_05">Em a b a, o trem trava na última letra. Qual passo explica? Toque.</string>
+    <string name="regex_l_05_dica">Depois de a b, ele está no segundo estado. Sai seta com a dali?</string>
+    <string name="regex_l_05_ok">Isso. Sem seta para a letra, o trem rejeita a cadeia.</string>
+    <string name="regex_l_06">Na expressão, a estrela quer dizer repetir zero ou mais vezes.</string>
+    <string name="regex_l_07">Outra expressão: a, depois b quantas vezes quiser, e c no fim.</string>
+    <string name="regex_l_08">Qual destes estados deve ser final? Toque nele.</string>
+    <string name="regex_l_08_dica">A cadeia só pode acabar depois da letra c.</string>
+    <string name="regex_l_08_ok">Isso. Só a seta com a letra c chega ao final.</string>
+    <string name="regex_l_09">A cadeia a c é aceita ou rejeitada? Toque na resposta.</string>
+    <string name="regex_l_09_dica">A estrela deixa a letra b aparecer zero vezes.</string>
+    <string name="regex_l_09_ok">Isso. A letra b pode faltar, e a cadeia passa.</string>
+    <string name="regex_l_10">Agora a cadeia a b c b. Ela é aceita ou rejeitada? Toque.</string>
+    <string name="regex_l_10_dica">Depois do c, o trem está no final. Sai seta com b dali?</string>
+    <string name="regex_l_10_ok">Isso. Sobrou um b sem seta, então o trem rejeita a cadeia.</string>
+    <string name="regex_l_11">O scanner tem uma máquina dessas para cada tipo de token.</string>
+
+    <!-- AFN para AFD -->
+    <string name="afn_l_fica">fica no 0</string>
+    <string name="afn_l_vai">vai para 1</string>
+    <string name="afn_l_as_duas">as duas</string>
+    <string name="afn_l_01">O trem está no zero e lê a. Qual seta ele segue? Toque.</string>
+    <string name="afn_l_01_dica">Nada no desenho escolhe entre as duas setas.</string>
+    <string name="afn_l_01_ok">Isso. O AFN segue as duas ao mesmo tempo.</string>
+    <string name="afn_l_02">Do conjunto zero e dois, lendo a, para onde vamos? Toque no conjunto.</string>
+    <string name="afn_l_02_dica">Lendo a letra a, o estado zero vai para zero e um. O dois não anda.</string>
+    <string name="afn_l_02_ok">Isso. Volta para o conjunto zero e um, que já existe.</string>
+    <string name="afn_l_03">As setas que faltam caem em conjuntos que já existem. A tabela fecha.</string>
+    <string name="afn_l_04">A receita dos subconjuntos tem quatro passos. Ela fica na tela.</string>
+    <string name="afn_l_r1">1. Comece pelo fecho épsilon do inicial.</string>
+    <string name="afn_l_r2">2. Para cada letra, junte os destinos.</string>
+    <string name="afn_l_r3">3. Feche com épsilon. Conjunto novo vira estado.</string>
+    <string name="afn_l_r4">4. Tem final dentro? O conjunto é final.</string>
+    <string name="afn_l_05">O conjunto zero e dois virou final. Qual passo decide isso? Toque.</string>
+    <string name="afn_l_05_dica">No AFN, o estado dois é final.</string>
+    <string name="afn_l_05_ok">Isso. Basta um final dentro do conjunto.</string>
+    <string name="afn_l_06">Outro AFN, agora com setas épsilon. Quem monta os conjuntos é você.</string>
+    <string name="afn_l_07">Primeiro passo: o fecho épsilon do zero. Toque nos estados que entram.</string>
+    <string name="afn_l_07_dica">Comece no zero e siga só as setas épsilon.</string>
+    <string name="afn_l_07_ok">Isso. Zero, um e três, sem ler nenhuma letra.</string>
+    <string name="afn_l_08">Desse conjunto, lendo a, aonde chegamos? Toque no conjunto.</string>
+    <string name="afn_l_08_dica">Só o estado um tem seta com a letra a. Ela leva ao dois.</string>
+    <string name="afn_l_08_ok">Isso. Nasce o conjunto que só tem o dois.</string>
+    <string name="afn_l_09">E se o conjunto zero, um e três ler c? Toque no destino.</string>
+    <string name="afn_l_09_dica">Procure a única seta com a letra c no desenho.</string>
+    <string name="afn_l_09_ok">Isso. Nasce o conjunto que só tem o quatro.</string>
+    <string name="afn_l_10">Quais estados do AFD são finais? Toque em todos.</string>
+    <string name="afn_l_10_dica">No AFN, o dois e o quatro são finais.</string>
+    <string name="afn_l_10_ok">Isso. Cada um tem um final dentro.</string>
+    <string name="afn_l_11">Pronto. O AFD tem três estados e lê sem adivinhar.</string>
+
+    <!-- Flex -->
+    <string name="flex_l_titulo_porque">Scanner à mão</string>
+    <string name="flex_l_01">Escrito à mão, o scanner tem um teste para cada classe de token.</string>
+    <string name="flex_l_02">Qual linha começa o teste dos números? Toque nela.</string>
+    <string name="flex_l_02_dica">Procure o teste de dígito.</string>
+    <string name="flex_l_02_ok">Isso. Cada classe pede um teste, e a ordem fica por sua conta.</string>
+    <string name="flex_l_03">Para cada pedaço da entrada, o scanner do Flex faz quatro passos.</string>
+    <string name="flex_l_r1">1. Teste todas as regras no ponto atual.</string>
+    <string name="flex_l_r2">2. Vence o casamento mais longo.</string>
+    <string name="flex_l_r3">3. Empate no tamanho: vence a regra de cima.</string>
+    <string name="flex_l_r4">4. Rode a ação. Sem return, o texto some.</string>
+    <string name="flex_l_04">Os espaços não chegam ao parser. Qual passo explica isso? Toque.</string>
+    <string name="flex_l_04_dica">Olhe a ação da regra do espaço. Ela tem return?</string>
+    <string name="flex_l_04_ok">Isso. A ação não devolve token, então o espaço some.</string>
+    <string name="flex_l_05">Outro arquivo de regras, com um erro escondido. Quem roda agora é você.</string>
+    <string name="flex_l_06">O scanner lê while. Qual token sai? Toque na resposta.</string>
+    <string name="flex_l_06_dica">As duas primeiras regras casam cinco letras. No empate, vale a de cima.</string>
+    <string name="flex_l_06_ok">Isso. Sai ID. A regra do while nunca ganha.</string>
+    <string name="flex_l_07">Agora o scanner chega aos dois iguais. Qual regra vence? Toque nela.</string>
+    <string name="flex_l_07_dica">Uma regra casa um caractere. A outra casa dois.</string>
+    <string name="flex_l_07_ok">Isso. O mais longo vence, mesmo estando mais abaixo.</string>
+    <string name="flex_l_08">Para while virar WHILE, qual regra precisa subir para o topo? Toque.</string>
+    <string name="flex_l_08_dica">A regra que perde o empate precisa ficar em cima.</string>
+    <string name="flex_l_08_ok">Isso. Palavra reservada vem antes da regra de nomes.</string>
+    <string name="flex_l_09">Com while no topo, saem quatro tokens: WHILE, ID, IGUAL e NUM.</string>
+</resources>

@@ -24,6 +24,8 @@ import com.compilandia.ui.CompilandiaTheme
 import com.compilandia.ui.Header
 import com.compilandia.ui.Palette
 import com.compilandia.ui.Screen
+import com.compilandia.ui.bancada.CarteiroEstado
+import com.compilandia.ui.bancada.CarteiroJogo
 import com.compilandia.ui.bancada.FabricaEstado
 import com.compilandia.ui.bancada.FabricaJogo
 import com.compilandia.ui.bancada.GuindasteEstado
@@ -88,6 +90,7 @@ class BancadaRenderTest {
         shot("pilha_inicio") { App(app(Screen.Bancada(Robo.PILHA))) }
         shot("guindaste_inicio") { App(app(Screen.Bancada(Robo.GUINDASTE))) }
         shot("fabrica_inicio") { App(app(Screen.Bancada(Robo.FABRICA))) }
+        shot("carteiro_inicio") { App(app(Screen.Bancada(Robo.CARTEIRO))) }
     }
 
     @Test fun roboMips() {
@@ -216,5 +219,22 @@ class BancadaRenderTest {
         shot("fabrica_anbn_meio") { moldura("Fábrica de frases", a.nome) { FabricaJogo(meio, false, {}, {}) } }
         val sobra = FabricaEstado(a).apply { alterna(0); alterna(1); alterna(4); rodar(tocar = false); linha.atual = linha.total - 1 }
         shot("fabrica_sobra") { moldura("Fábrica de frases", a.nome) { FabricaJogo(sobra, false, {}, {}) } }
+    }
+
+    @Test fun carteiro() {
+        val f = com.compilandia.engine.Carteiro.fases.first { it.id == "escopo_laco" }
+        fun errado() = CarteiroEstado(f).apply {
+            poe("ni", "arq"); poe("nf", "f"); poe("i", "arq"); poe("s", "f")
+            assertFalse(rodar(tocar = false).passou)
+            linha.atual = linha.total - 1
+        }
+        for ((rotulo, wh) in tamanhos) shot("carteiro_erro_$rotulo", wh.first, wh.second) { moldura("Carteiro do escopo", f.nome) { CarteiroJogo(errado(), false, {}, {}) } }
+        val meio = CarteiroEstado(f).apply {
+            f.solucao.forEach { (c, s) -> poe(c, s) }
+            assertTrue(rodar(tocar = false).passou)
+            mostra(2, tocar = false)
+            linha.atual = 1
+        }
+        shot("carteiro_sobe") { moldura("Carteiro do escopo", f.nome) { CarteiroJogo(meio, true, {}, {}) } }
     }
 }

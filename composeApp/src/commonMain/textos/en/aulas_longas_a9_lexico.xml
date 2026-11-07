@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas_a9_lexico.xml. -->
+<resources>
+    <!-- Tokens -->
+    <string name="tok_l_titulo_porque">Too many letters</string>
+    <string name="tok_l_01">The parser builds sentences out of words. The file arrives letter by letter.</string>
+    <string name="tok_l_02">How many words does the parser want to see in this line? Tap the number.</string>
+    <string name="tok_l_02_dica">Names, numbers, signs and parentheses count. Spaces do not.</string>
+    <string name="tok_l_02_ok">Right. Six words instead of thirteen characters.</string>
+    <string name="tok_l_03">Before the parser, the scanner joins the letters into words.</string>
+    <string name="tok_l_04">The scanner recipe has three steps. It stays here on the screen.</string>
+    <string name="tok_l_r1">1. Skip spaces and comments.</string>
+    <string name="tok_l_r2">2. Take the longest piece that forms a token.</string>
+    <string name="tok_l_r3">3. Give it a class: keyword, ID, NUM, OP...</string>
+    <string name="tok_l_05">Why did conta2 become one token, and not two? Tap the step.</string>
+    <string name="tok_l_05_dica">The scanner keeps reading while the piece still forms a name.</string>
+    <string name="tok_l_05_ok">Right. Step two, the longest match.</string>
+    <string name="tok_l_06">Step three: if is a reserved word. But ifx is a plain name.</string>
+    <string name="tok_l_titulo_outra">Another line</string>
+    <string name="tok_l_07">The line starts with while. What is its class? Tap it.</string>
+    <string name="tok_l_07_dica">While is on the language's list of reserved words.</string>
+    <string name="tok_l_07_ok">Right. A keyword, like if and for.</string>
+    <string name="tok_l_08">Now the end of the line. Tap the two cuts in this piece.</string>
+    <string name="tok_l_08_dica">The plus plus stays whole, like greater or equal.</string>
+    <string name="tok_l_08_ok">Right. Three tokens: the name, the plus plus and the semicolon.</string>
+    <string name="tok_l_09">How many tokens come out of the whole line? Tap the number.</string>
+    <string name="tok_l_09_dica">Count each name, each sign and each parenthesis. Skip the spaces.</string>
+    <string name="tok_l_09_ok">Right. Nine tokens come out of this line.</string>
+    <string name="tok_l_10">Nine tokens, each with its class. That is what the parser receives.</string>
+
+    <!-- Expressões regulares e AFD -->
+    <string name="regex_l_titulo_porque">Endless names</string>
+    <string name="regex_l_01">Variable names never run out. You cannot list them all.</string>
+    <string name="regex_l_02">One of these cannot be a variable name. Tap it.</string>
+    <string name="regex_l_02_dica">In C, a name starts with a letter, never with a digit.</string>
+    <string name="regex_l_02_ok">Right. We need a short way to write that format.</string>
+    <string name="regex_l_03">The train is in the second state and reads b. Where does it go? Tap.</string>
+    <string name="regex_l_03_dica">Look for the arrow with b leaving the state it is in.</string>
+    <string name="regex_l_03_ok">Right. The arrow with b is a loop on the same state.</string>
+    <string name="regex_l_04">To read a string, the train always follows four steps.</string>
+    <string name="regex_l_r1">1. Start at the initial state.</string>
+    <string name="regex_l_r2">2. For each letter, follow its arrow.</string>
+    <string name="regex_l_r3">3. No arrow: reject the string.</string>
+    <string name="regex_l_r4">4. Ended on a double circle: accept.</string>
+    <string name="regex_l_05">On a b a, the train gets stuck at the last letter. Which step explains it? Tap.</string>
+    <string name="regex_l_05_dica">After a b, it is in the second state. Is there an arrow with a from there?</string>
+    <string name="regex_l_05_ok">Right. With no arrow for the letter, the train rejects the string.</string>
+    <string name="regex_l_06">In the expression, the star means repeat zero or more times.</string>
+    <string name="regex_l_07">Another expression: a, then as many b as you like, and c at the end.</string>
+    <string name="regex_l_08">Which of these states should be final? Tap it.</string>
+    <string name="regex_l_08_dica">The string can only end after the letter c.</string>
+    <string name="regex_l_08_ok">Right. Only the arrow with the letter c reaches the final state.</string>
+    <string name="regex_l_09">Is the string a c accepted or rejected? Tap the answer.</string>
+    <string name="regex_l_09_dica">The star lets the letter b appear zero times.</string>
+    <string name="regex_l_09_ok">Right. The letter b can be missing, and the string passes.</string>
+    <string name="regex_l_10">Now the string a b c b. Is it accepted or rejected? Tap.</string>
+    <string name="regex_l_10_dica">After the c, the train is in the final state. Is there an arrow with b from there?</string>
+    <string name="regex_l_10_ok">Right. A b is left with no arrow, so the train rejects the string.</string>
+    <string name="regex_l_11">The scanner has one machine like this for each kind of token.</string>
+
+    <!-- AFN para AFD -->
+    <string name="afn_l_fica">stay at 0</string>
+    <string name="afn_l_vai">go to 1</string>
+    <string name="afn_l_as_duas">both</string>
+    <string name="afn_l_01">The train is at zero and reads a. Which arrow does it follow? Tap.</string>
+    <string name="afn_l_01_dica">Nothing in the drawing picks between the two arrows.</string>
+    <string name="afn_l_01_ok">Right. The NFA follows both at the same time.</string>
+    <string name="afn_l_02">From the set zero and two, reading a, where do we go? Tap the set.</string>
+    <string name="afn_l_02_dica">Reading a, zero goes to zero and one. Two goes nowhere.</string>
+    <string name="afn_l_02_ok">Right. Back to the set zero and one, which already exists.</string>
+    <string name="afn_l_03">The missing arrows land on sets that already exist. The table is complete.</string>
+    <string name="afn_l_04">The subset construction recipe has four steps. It stays on the screen.</string>
+    <string name="afn_l_r1">1. Start with the epsilon closure of the start.</string>
+    <string name="afn_l_r2">2. For each letter, gather the targets.</string>
+    <string name="afn_l_r3">3. Take the epsilon closure. A new set is a state.</string>
+    <string name="afn_l_r4">4. Has a final inside? The set is final.</string>
+    <string name="afn_l_05">The set zero and two became final. Which step decides that? Tap.</string>
+    <string name="afn_l_05_dica">In the NFA, state two is final.</string>
+    <string name="afn_l_05_ok">Right. One final inside the set is enough.</string>
+    <string name="afn_l_06">Another NFA, now with epsilon arrows. You build the sets.</string>
+    <string name="afn_l_07">First step: the epsilon closure of zero. Tap the states that go in.</string>
+    <string name="afn_l_07_dica">Start at zero and follow only the epsilon arrows.</string>
+    <string name="afn_l_07_ok">Right. Zero, one and three, without reading any letter.</string>
+    <string name="afn_l_08">From that set, reading a, where do we land? Tap the set.</string>
+    <string name="afn_l_08_dica">Only state one has an arrow with the letter a. It leads to two.</string>
+    <string name="afn_l_08_ok">Right. A new set is born with only two in it.</string>
+    <string name="afn_l_09">What if the set zero, one and three reads c? Tap the target.</string>
+    <string name="afn_l_09_dica">Look for the only arrow with the letter c in the drawing.</string>
+    <string name="afn_l_09_ok">Right. A new set is born with only four in it.</string>
+    <string name="afn_l_10">Which DFA states are final? Tap all of them.</string>
+    <string name="afn_l_10_dica">In the NFA, two and four are final.</string>
+    <string name="afn_l_10_ok">Right. Each one has a final inside.</string>
+    <string name="afn_l_11">Done. The DFA has three states and reads without guessing.</string>
+
+    <!-- Flex -->
+    <string name="flex_l_titulo_porque">Scanner by hand</string>
+    <string name="flex_l_01">Written by hand, the scanner has one test for each token class.</string>
+    <string name="flex_l_02">Which line starts the test for numbers? Tap it.</string>
+    <string name="flex_l_02_dica">Look for the digit test.</string>
+    <string name="flex_l_02_ok">Right. Each class needs a test, and the order is up to you.</string>
+    <string name="flex_l_03">For each piece of the input, the Flex scanner does four steps.</string>
+    <string name="flex_l_r1">1. Try every rule at the current point.</string>
+    <string name="flex_l_r2">2. The longest match wins.</string>
+    <string name="flex_l_r3">3. Same length: the rule on top wins.</string>
+    <string name="flex_l_r4">4. Run the action. No return: the text vanishes.</string>
+    <string name="flex_l_04">Spaces never reach the parser. Which step explains that? Tap.</string>
+    <string name="flex_l_04_dica">Look at the action of the space rule. Does it have a return?</string>
+    <string name="flex_l_04_ok">Right. The action returns no token, so the space vanishes.</string>
+    <string name="flex_l_05">Another rules file, with a hidden bug. Now you run it.</string>
+    <string name="flex_l_06">The scanner reads while. Which token comes out? Tap the answer.</string>
+    <string name="flex_l_06_dica">The first two rules match five letters. On a tie, the top one wins.</string>
+    <string name="flex_l_06_ok">Right. ID comes out. The while rule never wins.</string>
+    <string name="flex_l_07">Now the scanner reaches the two equals signs. Which rule wins? Tap it.</string>
+    <string name="flex_l_07_dica">One rule matches one character. The other matches two.</string>
+    <string name="flex_l_07_ok">Right. The longest wins, even when it sits lower down.</string>
+    <string name="flex_l_08">For while to become WHILE, which rule must move to the top? Tap.</string>
+    <string name="flex_l_08_dica">The rule that loses the tie needs to sit above.</string>
+    <string name="flex_l_08_ok">Right. Reserved words come before the name rule.</string>
+    <string name="flex_l_09">With while on top, four tokens come out: WHILE, ID, IGUAL and NUM.</string>
+</resources>

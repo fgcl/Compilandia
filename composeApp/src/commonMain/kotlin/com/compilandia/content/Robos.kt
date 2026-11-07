@@ -1,6 +1,7 @@
 package com.compilandia.content
 
 import com.compilandia.content.Speaker.BYTE
+import com.compilandia.engine.Carteiro
 import com.compilandia.engine.Fabrica
 import com.compilandia.engine.Guindaste
 import com.compilandia.engine.RoboMips
@@ -22,15 +23,17 @@ enum class Robo(val skill: Skill) {
     PILHA(Skill.LL1_TABLE),
     /** J5: o guindaste empilha-reduz, na Fortaleza Bottom-Up. */
     GUINDASTE(Skill.SHIFT_REDUCE),
+    /** J7: o carteiro do escopo, na Cidade Semântica. */
+    CARTEIRO(Skill.SCOPE_SYMBOLS),
     MIPS(Skill.CODEGEN_MIPS);
 
     val titulo: String get() = when (this) {
         TRILHO -> tx("robo_trilho_titulo"); FABRICA -> tx("robo_fabrica_titulo"); PILHA -> tx("robo_pilha_titulo")
-        GUINDASTE -> tx("robo_guindaste_titulo"); MIPS -> tx("robo_mips_titulo")
+        GUINDASTE -> tx("robo_guindaste_titulo"); CARTEIRO -> tx("robo_carteiro_titulo"); MIPS -> tx("robo_mips_titulo")
     }
     val subtitulo: String get() = when (this) {
         TRILHO -> tx("robo_trilho_sub"); FABRICA -> tx("robo_fabrica_sub"); PILHA -> tx("robo_pilha_sub")
-        GUINDASTE -> tx("robo_guindaste_sub"); MIPS -> tx("robo_mips_sub")
+        GUINDASTE -> tx("robo_guindaste_sub"); CARTEIRO -> tx("robo_carteiro_sub"); MIPS -> tx("robo_mips_sub")
     }
 
     /** id, nome e pedido de cada fase. */
@@ -39,12 +42,13 @@ enum class Robo(val skill: Skill) {
         FABRICA -> Fabrica.fases[i].let { Triple(it.id, it.nome, it.pedido) }
         PILHA -> RoboPilha.fases[i].let { Triple(it.id, it.nome, it.pedido) }
         GUINDASTE -> Guindaste.fases[i].let { Triple(it.id, it.nome, it.pedido) }
+        CARTEIRO -> Carteiro.fases[i].let { Triple(it.id, it.nome, it.pedido) }
         MIPS -> RoboMips.fases[i].let { Triple(it.id, it.nome, it.pedido) }
     }
 
     val fases: Int get() = when (this) {
         TRILHO -> Trilho.fases.size; FABRICA -> Fabrica.fases.size; PILHA -> RoboPilha.fases.size
-        GUINDASTE -> Guindaste.fases.size; MIPS -> RoboMips.fases.size
+        GUINDASTE -> Guindaste.fases.size; CARTEIRO -> Carteiro.fases.size; MIPS -> RoboMips.fases.size
     }
 
     fun idFase(i: Int): String = fase(i).first

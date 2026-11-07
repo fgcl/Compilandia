@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J7 Scope mail carrier, in Semantic City. -->
+<resources>
+    <string name="robo_carteiro_titulo">Scope mail carrier</string>
+    <string name="robo_carteiro_sub">Put the declarations in the rooms. Byte delivers each use to the right declaration.</string>
+
+    <string name="carteiro_fase_global">Shared variable</string>
+    <string name="carteiro_fase_sombra">Shadow</string>
+    <string name="carteiro_fase_irmaos">Neighbor rooms</string>
+    <string name="carteiro_fase_laco">Function with a loop</string>
+
+    <string name="carteiro_pedido_global">The functions soma and main use total. Put the declaration where both can see it.</string>
+    <string name="carteiro_pedido_sombra">The printf in the if must read the float. The printf in main must read the int.</string>
+    <string name="carteiro_pedido_irmaos">Inside the else, the variable from the if does not exist. There the compiler must report an error.</string>
+    <string name="carteiro_pedido_laco">Four cards, four rooms. Each use has to find the requested declaration.</string>
+
+    <string name="carteiro_dica_global_1">Byte looks in the room of the use. If it finds nothing, it goes up to the outer room.</string>
+    <string name="carteiro_dica_global_2">The global room wraps soma and main. Both see what is inside it.</string>
+    <string name="carteiro_dica_sombra_1">Byte stops at the first declaration it finds going up. The inner one hides the outer one.</string>
+    <string name="carteiro_dica_sombra_2">Put float x inside the if. Keep int x in main.</string>
+    <string name="carteiro_dica_irmaos_1">Going up from the else, Byte passes main and global. It never enters the if.</string>
+    <string name="carteiro_dica_irmaos_2">The i goes inside the if. The j goes in main, because main and the else use j.</string>
+    <string name="carteiro_dica_laco_1">Start with the error: i in main must find nothing. So i stays in the for.</string>
+    <string name="carteiro_dica_laco_2">The float n goes in conta and hides the global int n. Main sees only the int n.</string>
+
+    <string name="carteiro_sala_arquivo">global</string>
+    <string name="carteiro_teste">%1$s in %2$s</string>
+    <string name="carteiro_erro_nao_declarada">error: undeclared</string>
+    <string name="carteiro_nota_achou">In room %2$s Byte found %3$s. Delivered.</string>
+    <string name="carteiro_nota_sobe">Room %1$s has no %2$s. Byte goes up to %3$s.</string>
+    <string name="carteiro_nota_nao_declarada">Not even the global room has %1$s. The compiler reports: undeclared variable.</string>
+    <string name="carteiro_nota_escolha">Tap a use to watch Byte deliver the letter.</string>
+    <string name="carteiro_mesa_vazia">No declaration is in a room yet. Pick the room for each card.</string>
+    <string name="carteiro_redeclarada">There are two %1$s in room %2$s. The compiler reports a redeclaration before running.</string>
+    <string name="carteiro_falha_nao_achou">The use of %1$s in %2$s found nothing. It needed to reach %3$s.</string>
+    <string name="carteiro_falha_devia_errar">The use of %1$s in %2$s found %3$s, in room %4$s. It should be an error there.</string>
+    <string name="carteiro_falha_errada">The use of %1$s in %2$s reached %3$s. Expected %4$s.</string>
+    <string name="carteiro_onde_olhar">Go up from %2$s. The first declaration on the way must be %1$s.</string>
+    <string name="carteiro_onde_olhar_alta">The path from %2$s passes %1$s. Put that card in a room off the path.</string>
+    <string name="carteiro_cartas">Declaration cards</string>
+    <string name="carteiro_cartas_ajuda">Tap a room under each card. Hand means outside the program.</string>
+    <string name="carteiro_mao">hand</string>
+    <string name="carteiro_programa">The program</string>
+</resources>

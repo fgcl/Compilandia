@@ -191,7 +191,9 @@ fun TwoTreesGame(ctx: GameCtx) {
             TreeView(DerivationHelper.treeOf(g, first!!).toUi(g))
             Text(tx("comum_arvore_2"), style = MaterialTheme.typography.titleSmall)
             TreeView(DerivationHelper.treeOf(g, second!!).toUi(g))
-            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * totalMistakes).coerceAtLeast(0.0)) }
+            // J8: com números no lugar dos ids, as duas árvores calculam valores diferentes.
+            val passos = remember { com.compilandia.engine.Reacoes.duasArvores(DerivationHelper.treeOf(g, first!!), DerivationHelper.treeOf(g, second!!)) }
+            Reacao(passos) { ctx.finish((1.0 - 0.1 * totalMistakes).coerceAtLeast(0.0)) }
         }
     }
 }
@@ -275,7 +277,15 @@ private fun SurgeryRound(ctx: GameCtx, g: Grammar, leftRec: Boolean, done: (Doub
         if (result != 1.0) PaperCard(color = Palette.green.copy(alpha = 0.08f), border = Palette.green) { GrammarText(target) }
         val ll = LL1Table(target).isLL1
         Text(if (ll) tx("gamesgrammar_agora_ela_ll_1") else tx("gamesgrammar_ainda_nao_ll_1_mas"), style = MaterialTheme.typography.bodySmall)
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(result!!) }
+        // J8: a gramática que você montou vai para o Byte com a pilha e analisa frases da original.
+        val passos = remember(g) {
+            val minhas = skeleton.indices.map { i -> skeleton[i].lhs to slots[i].map { it ?: "?" }.filter { it != EPS } }
+            val operada = com.compilandia.engine.Reacoes.montaGramatica(target.start, unchanged, minhas)
+            val rnd = kotlin.random.Random(g.productions.size * 31L + skeleton.size)
+            val frases = (0 until 12).mapNotNull { com.compilandia.engine.SentenceGenerator.generate(g, rnd, maxTokens = 7) }.distinct().sortedBy { it.size }
+            if (operada == null) emptyList() else com.compilandia.engine.Reacoes.cirurgia(g, operada, listOfNotNull(frases.firstOrNull(), frases.getOrNull(frases.size / 2), frases.lastOrNull()).distinct())
+        }
+        Reacao(passos) { done(result!!) }
     }
 }
 

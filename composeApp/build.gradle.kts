@@ -113,7 +113,7 @@ compose.desktop {
 }
 
 /**
- * Quantas JVMs de teste rodam juntas. Cada uma renderiza com Skia e ocupa perto de 1,3 GB;
+ * Quantas JVMs de teste rodam juntas. Cada uma renderiza com Skia e, com o heap de 1 GB, ocupa perto de 1,1 GB;
  * com memória curta o earlyoom mata o daemon do Gradle. Fica com 2,5 GB de folga para o resto da máquina.
  */
 fun forksQueCabem(): Int {
@@ -122,7 +122,7 @@ fun forksQueCabem(): Int {
     if (!meminfo.exists()) return nucleos.coerceAtMost(2)
     val linha = meminfo.readLines().firstOrNull { l -> l.startsWith("MemAvailable:") } ?: return nucleos.coerceAtMost(2)
     val livreMb: Long = linha.split(Regex("\\s+"))[1].toLong() / 1024
-    val porMemoria = ((livreMb - 2500) / 1300).toInt()
+    val porMemoria = ((livreMb - 2500) / 1100).toInt()
     return minOf(nucleos, porMemoria, 5).coerceAtLeast(1)
 }
 
@@ -132,6 +132,12 @@ tasks.withType<Test>().configureEach {
     maxParallelForks = (findProperty("forks") as String?)?.toIntOrNull() ?: forksQueCabem()
     // O limite padrão do runTest é 60 s de relógio para o teste inteiro.
     systemProperty("kotlinx.coroutines.test.default_timeout", "10m")
+    // Sem teto, cada JVM de teste pode crescer até 1/4 da RAM. Com 1 GB cabem mais JVMs juntas.
+    maxHeapSize = "1g"
+    // Testes em silêncio: o Sound e o VoicePlayer do desktop não tocam nada com esta propriedade.
+    systemProperty("compilandia.mudo", "true")
+    // O que o teste salva vai para build/, nunca para o save de verdade em ~/.compilandia.
+    systemProperty("user.home", layout.buildDirectory.dir("casa-teste").get().asFile.absolutePath)
     testLogging {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- R1 a R4: retomada, rodízio de formatos, revisão por ideia e lembrete. -->
+<resources>
+    <string name="retomada_titulo">Retomada</string>
+    <string name="retomada_sub">Dois minutos para lembrar antes de seguir.</string>
+    <string name="retomada_fala">Faz uns dias que você não aparece. Três perguntas rápidas e a gente segue.</string>
+    <string name="retomada_abre_nada">Que bom te ver de novo.</string>
+    <string name="retomada_abre_um">Da última vez você viu %1$s.</string>
+    <string name="retomada_abre_dois">Da última vez você viu %1$s e %2$s.</string>
+    <string name="retomada_n">Pergunta %1$s de %2$s</string>
+    <string name="retomada_pergunta">Verdade ou mentira?</string>
+    <string name="retomada_verdade">Verdade</string>
+    <string name="retomada_mentira">Mentira</string>
+    <string name="retomada_era_verdade">É verdade.</string>
+    <string name="retomada_era_mentira">É mentira.</string>
+    <string name="retomada_proxima">Próxima</string>
+    <string name="retomada_fim">Ver o resultado</string>
+    <string name="retomada_resultado">Você lembrou de %1$s de %2$s.</string>
+    <string name="retomada_resultado_sub">A frase que escapou volta antes das outras na próxima revisão.</string>
+    <string name="retomada_seguir">Continuar de onde parei</string>
+    <string name="retomada_pular">Pular a retomada</string>
+
+    <string name="revisao_formato_prever">Revisão: prever num exemplo novo</string>
+    <string name="revisao_formato_bug">Revisão: julgar as frases do Bug</string>
+    <string name="revisao_formato_robo">Revisão: uma fase do robô</string>
+    <string name="revisao_formato_clipe">Revisão: clipe de 30 segundos</string>
+    <string name="revisao_formato_feynman">Revisão: explicar com suas palavras</string>
+    <string name="revisao_formato_pegadinha">Revisão: a pegadinha do assunto</string>
+
+    <string name="lembrete_1">%1$s está sumindo da memória. Dois minutos resolvem.</string>
+    <string name="lembrete_2">Uma pergunta de %1$s espera por você na oficina.</string>
+    <string name="lembrete_3">Lembra de %1$s? Confira antes que escape.</string>
+    <string name="lembrete_4">O Byte separou uma revisão curta de %1$s.</string>
+    <string name="lembrete_5">Hoje é um bom dia para rever %1$s.</string>
+    <string name="lembrete_canal">Revisão do dia</string>
+    <string name="lembrete_ligado">Ligado</string>
+    <string name="lembrete_desligado">Desligado</string>
+    <string name="lembrete_ajuste">Lembrete de revisão</string>
+    <string name="lembrete_ajuste_sub">Uma notificação por dia, só quando houver revisão pendente.</string>
+    <string name="lembrete_hora">Hora: %1$s h</string>
+    <string name="lembrete_hora_chip">%1$s h</string>
+    <string name="lembrete_sem_permissao">O celular não deixou o jogo mandar notificações.</string>
+    <string name="lembrete_so_celular">No computador e no navegador não há lembrete. A retomada aparece quando você abre o jogo.</string>
+</resources>

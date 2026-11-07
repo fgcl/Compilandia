@@ -44,7 +44,8 @@ open class RenderBase {
         val scene = ImageComposeScene(w * 2, h * 2, Density(2f)) { content() }
         try {
             scene.render(0)
-            scene.render(500_000_000)
+            // Sem foto, o teste só confere que nada quebra; o quadro do meio só importa para a imagem salva.
+            if (name != null) scene.render(500_000_000)
             val img = scene.render(1_000_000_000)
             if (name != null) File(out, "$name.png").writeBytes(img.encodeToData(EncodedImageFormat.PNG)!!.bytes)
         } finally {
@@ -275,14 +276,16 @@ class RenderAulasTest : RenderBase() {
 
 /**
  * Todos os passos de todos os episódios, divididos em [PARTES] classes que o Gradle roda em paralelo.
- * EPISODIOS=TABELAS,EM_C ./gradlew :composeApp:desktopTest --tests '*Episodios*' renderiza só essas temporadas.
+ * EPISODIOS=TABELAS,EM_C ./gradlew :composeApp:desktopTest --tests '*Episodios*' renderiza só essas temporadas
+ * e salva a foto de cada passo delas. Sem o filtro, todo passo é renderizado, mas só sai foto do passo do meio
+ * de cada aula e de todos os passos dos assuntos de [VITRINE]: codificar mais de mil PNGs pesava na bateria.
  */
 abstract class RenderEpisodios(private val parte: Int) : RenderBase() {
-    /** Fotografa todos os passos de todos os episódios: nenhum pode quebrar. */
+    /** Renderiza todos os passos de todos os episódios: nenhum pode quebrar. */
     @Test fun everyEpisodeStep() {
         var n = -1
-        val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY) + com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
         // EPISODIOS=TABELAS,EM_C renderiza só essas temporadas (ou ids que contenham o texto): bom para olhar uma aula nova.
+        // EPISODIOS=BASICO fotografa todos os passos das 29 aulas animadas.
         val filtro = System.getenv("EPISODIOS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
         for (e in com.compilandia.content.episodes.Episodes.all + com.compilandia.content.episodes.Episodes.clipes) {
             if (filtro.isNotEmpty() && filtro.none { it == e.temporada.name || e.id.contains(it) }) continue
@@ -291,7 +294,13 @@ abstract class RenderEpisodios(private val parte: Int) : RenderBase() {
                 // Cada parte fotografa um passo a cada PARTES: as quatro rodam ao mesmo tempo.
                 if (++n % PARTES != parte) return@forEach
                 val novo = e.temporada != com.compilandia.content.Temporada.BASICO
-                val name = if (e.skill in destaque && !novo) "ep_${e.skill.name.lowercase()}_$k" else if (novo) "epn_${slug}_$k" else if (k == e.passos.size / 2) "ep_${e.skill.name.lowercase()}" else null
+                val todos = filtro.isNotEmpty() || (e.skill in VITRINE && !novo)
+                val base = if (novo) "epn_$slug" else "ep_${e.skill.name.lowercase()}"
+                val name = when {
+                    todos -> "${base}_$k"
+                    k == e.passos.size / 2 -> base
+                    else -> null
+                }
                 try {
                     shot(name) {
                         val app = stateWith()
@@ -305,7 +314,14 @@ abstract class RenderEpisodios(private val parte: Int) : RenderBase() {
     }
 
 
-    companion object { const val PARTES = 4 }
+    companion object {
+        const val PARTES = 4
+        /** Assuntos com foto de todo passo mesmo sem filtro: quatro palcos diferentes (fita, pilha, autômato e árvores). */
+        val VITRINE = setOf(
+            com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE,
+            com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY,
+        )
+    }
 }
 
 class EpisodiosParte0Test : RenderEpisodios(0)

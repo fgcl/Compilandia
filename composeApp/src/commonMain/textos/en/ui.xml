@@ -262,7 +262,6 @@
     <string name="gameslexical_arraste_cada_token_para_caixa">Drag each token to its class box (or tap to cycle):</string>
     <string name="gameslexical_conferir_classes">Check classes ✔</string>
     <string name="gameslexical_cortes_1_classes_2_total">Cuts: %1$s% · Classes: %2$s%. Total tokens: %3$s (spaces vanish, the scanner drops them).</string>
-    <string name="gameslexical_proxima_linha">Next line ▶</string>
     <string name="gameslexical_regex_1_2">regex: %1$s   (%2$s)</string>
     <string name="gameslexical_nao_existe_transicao_q_1">There's no transition from q%1$s on '%2$s'. Use the 'stuck' button!</string>
     <string name="gameslexical_com_1_q_2_trem">On '%1$s', from q%2$s the train does NOT go to q%3$s. Follow the arrow with that label.</string>

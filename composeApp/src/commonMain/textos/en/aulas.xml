@@ -51,8 +51,6 @@
     <string name="epbackend_ali_moram_parametros_variaveis_locais">That's where the parameters, the local variables and the return address live.</string>
     <string name="epbackend_fat_dois_chama_fat_outro">fat of two calls fat of one. Another record goes up, with another n.</string>
     <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  return: fat</string>
-    <string name="epbackend_mais_chamada_agora_com_n">One more call, now with n equal to zero.</string>
-    <string name="epbackend_fat_n_0_volta_fat">fat  n = 0  return: fat</string>
     <string name="epbackend_so_topo_pilha_esta_rodando">Only the top of the stack is running.</string>
     <string name="epbackend_retornou_registro_sai_controle_volta">It returned: the record leaves and control goes back to the caller.</string>
     <string name="epbackend_por_isso_recursao_funciona_cada">That's why recursion works: each call has its own n.</string>

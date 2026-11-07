@@ -280,7 +280,11 @@ fun ConflictHunterGame(ctx: GameCtx) {
         FeedbackBanner(huntScore == 1f, tx("gameslr_voce_acertou_1_das_celulas", (huntScore * 100).toInt()) +
             (if (conflicts.isEmpty()) tx("gameslr_nenhum_gramatica_slr_1") else conflicts.joinToString { "[${it.first}, ${it.second}]" }))
         LRTableView(t, conflicts)
-        ConflictResolution(ctx, choice.id, g, conflicts, huntScore.toDouble())
+        // J8: o analisador roda uma frase curta até a célula com duas ações.
+        val passos = remember { com.compilandia.engine.Reacoes.conflito(t, g) }
+        var viu by remember { mutableStateOf(false) }
+        if (!viu) Reacao(passos) { viu = true }
+        else ConflictResolution(ctx, choice.id, g, conflicts, huntScore.toDouble())
     }
 }
 

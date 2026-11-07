@@ -244,9 +244,10 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
             }
         }
         else -> {
-            for (e in trace.events) RichText("• ${e.message}", style = MaterialTheme.typography.bodySmall)
             FeedbackBanner(score >= 0.99, tx("gamesv2_em_vez_parar_no_primeiro"))
-            BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(score) }
+            // J8: o modo pânico roda a entrada inteira, erro por erro.
+            val passos = remember { com.compilandia.engine.Reacoes.panico(input, trace) }
+            Reacao(passos) { done(score) }
         }
     }
 }

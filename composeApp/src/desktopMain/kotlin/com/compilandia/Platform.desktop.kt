@@ -17,6 +17,9 @@ actual object Storage {
     }
 }
 
+/** Os testes rodam com -Dcompilandia.mudo=true (build.gradle.kts): nada toca no alto-falante de quem compila. */
+private val mudo: Boolean = System.getProperty("compilandia.mudo") == "true"
+
 actual object Sound {
     actual var enabled: Boolean = true
     private val wavs = HashMap<Sfx, ByteArray>()
@@ -26,7 +29,7 @@ actual object Sound {
     }
 
     actual fun play(sfx: Sfx, rate: Float) {
-        if (!enabled) return
+        if (!enabled || mudo) return
         val wav = wavs[sfx]
         thread(isDaemon = true) {
             try {
@@ -64,6 +67,8 @@ actual object VoicePlayer {
 
     actual fun play(id: String, bytes: ByteArray, onEnd: () -> Unit): Boolean {
         stop()
+        // Mudo, a fala não toca e o Narrator segue na hora, como quando falta o áudio.
+        if (mudo) return false
         return try {
             // O Java não abre OGG sozinho: quem entende o arquivo é o vorbisspi (só no desktop).
             val source = AudioSystem.getAudioInputStream(java.io.ByteArrayInputStream(bytes))
@@ -100,4 +105,11 @@ actual fun nowMs(): Long = System.currentTimeMillis()
 actual object Idioma {
     actual fun doAparelho(): String = java.util.Locale.getDefault().language
     actual fun reabrir(): Boolean = false
+}
+
+/** R4: sem lembrete fora do celular. A retomada aparece quando a pessoa abre o jogo. */
+actual object Lembrete {
+    actual val disponivel: Boolean = false
+    actual fun agenda(ligado: Boolean, hora: Int) {}
+    actual fun pedePermissao(onResultado: (Boolean) -> Unit) = onResultado(false)
 }

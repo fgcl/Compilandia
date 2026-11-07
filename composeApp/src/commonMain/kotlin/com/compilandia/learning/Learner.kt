@@ -95,6 +95,16 @@ data class LearnerState(
     val etapas: Map<String, String> = emptyMap(),
     /** Aula animada seguindo sozinha (botão play ao lado do Continuar). */
     val autoAvancar: Boolean = false,
+    // ---- quarta reforma, revisão espaçada (R1 a R4)
+    /** R1: a última vez que o jogo foi usado. A retomada aparece quando a pessoa volta depois de 2 dias. */
+    val ultimaVisitaMs: Long = 0,
+    /** R2: quando cada formato de revisão foi usado. Chave "ASSUNTO/FORMATO". */
+    val formatosRevisao: Map<String, Long> = emptyMap(),
+    /** R3: memória por ideia. A ideia sem registro herda a memória do assunto. */
+    val ideias: Map<String, Memory> = emptyMap(),
+    /** R4: lembrete no celular. Desligado até a pessoa ligar. [lembreteHora] vai de 0 a 23. */
+    val lembreteLigado: Boolean = false,
+    val lembreteHora: Int = 19,
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -408,6 +418,34 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     }
 
     fun setAutoAvancar(v: Boolean) { state = state.copy(autoAvancar = v) }
+
+    // ---- R1 a R4: revisão espaçada
+
+    /** Dias desde a última visita gravada; null quando é a primeira. */
+    fun diasLonge(nowMs: Long): Double? = state.ultimaVisitaMs.takeIf { it > 0 }?.let { (nowMs - it) / Memory.DAY_MS }
+
+    fun marcaVisita(nowMs: Long) { state = state.copy(ultimaVisitaMs = nowMs) }
+
+    /** R2: o formato de revisão [formato] foi usado agora no assunto [s]. */
+    fun usouFormato(s: Skill, formato: String, nowMs: Long) {
+        state = state.copy(formatosRevisao = state.formatosRevisao + ("${s.name}/$formato" to nowMs))
+    }
+
+    fun formatoUsadoEm(s: Skill, formato: String): Long = state.formatosRevisao["${s.name}/$formato"] ?: 0L
+
+    /** R3: a memória de uma ideia. Sem registro, vale a do assunto (o save antigo continua valendo). */
+    fun memoriaIdeia(id: String, s: Skill): Memory = state.ideias[id] ?: skill(s).memory
+
+    /** R3: a pessoa lembrou (ou não) de uma ideia. Só a ideia muda; o assunto inteiro fica como está. */
+    fun revisaIdeia(id: String, s: Skill, score: Double, nowMs: Long) {
+        val m = memoriaIdeia(id, s).review(nowMs, score)
+        state = state.copy(ideias = state.ideias + (id to m))
+        touchDay(nowMs)
+    }
+
+    fun setLembrete(ligado: Boolean, hora: Int = state.lembreteHora) {
+        state = state.copy(lembreteLigado = ligado, lembreteHora = hora.coerceIn(0, 23))
+    }
 
     /** A pessoa tocou num termo do glossário: guardado como sinal para a revisão por ideia. */
     fun consultouTermo(s: Skill, termo: String, nowMs: Long) {

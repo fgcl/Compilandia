@@ -27,6 +27,10 @@ val GRAMATICA_FOLLOW_2 = listOf("E -> T R", "R -> + T R | ε", "T -> F Y", "Y ->
 
 /** Assuntos que já ganharam a aula longa. Os outros seguem com a aula curta até serem refeitos. */
 val ASSUNTOS_COM_AULA_LONGA = setOf(
+    Skill.LL1_PARSING, Skill.RECURSIVE_DESCENT, Skill.ERROR_RECOVERY, Skill.SHIFT_REDUCE, Skill.YACC_BISON,
+    Skill.ATTRIBUTES_TYPES, Skill.SCOPE_SYMBOLS, Skill.TAC, Skill.OPTIMIZATION, Skill.RUNTIME, Skill.REG_ALLOC,
+    Skill.CFG_DERIVATION, Skill.AMBIGUITY, Skill.LEFT_RECURSION, Skill.LEFT_FACTORING,
+    Skill.TOKENS, Skill.REGEX_DFA, Skill.NFA_TO_DFA, Skill.LEX_FLEX,
     Skill.PHASES, Skill.FIRST, Skill.FOLLOW, Skill.LL1_TABLE, Skill.LR0_ITEMS, Skill.SLR_TABLE, Skill.LALR,
     Skill.DFA_MINIMIZATION, Skill.AST_BUILD, Skill.CODEGEN_MIPS,
 )

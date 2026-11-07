@@ -233,6 +233,43 @@ fun JournalScreen(app: AppState) {
 
 // ---------------------------------------------------------------- Ajustes
 
+/**
+ * R4: o quadro do lembrete nos Ajustes. Lembrete local, desligado até a pessoa ligar, só no celular.
+ * [disponivel] vem de fora para o teste do computador capturar também a versão do celular.
+ */
+@Composable
+internal fun LembreteAjuste(app: AppState, disponivel: Boolean = com.compilandia.platform.Lembrete.disponivel) {
+    PaperCard {
+        Text(tx("lembrete_ajuste"), style = MaterialTheme.typography.titleSmall)
+        if (disponivel) {
+            Text(tx("lembrete_ajuste_sub"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Chip(tx("lembrete_desligado"), selected = !app.ls.lembreteLigado, color = Palette.inkSoft) {
+                    app.learner.setLembrete(false); app.commit()
+                    com.compilandia.platform.Lembrete.agenda(false, app.ls.lembreteHora)
+                }
+                Chip(tx("lembrete_ligado"), selected = app.ls.lembreteLigado, color = Palette.teal) {
+                    com.compilandia.platform.Lembrete.pedePermissao { ok ->
+                        if (ok) {
+                            app.learner.setLembrete(true); app.commit()
+                            com.compilandia.platform.Lembrete.agenda(true, app.ls.lembreteHora)
+                        } else app.say(tx("lembrete_sem_permissao"))
+                    }
+                }
+            }
+            if (app.ls.lembreteLigado) {
+                Text(tx("lembrete_hora", app.ls.lembreteHora), style = MaterialTheme.typography.labelLarge)
+                com.compilandia.ui.ChipRow {
+                    for (h in listOf(8, 12, 15, 19, 21)) Chip(tx("lembrete_hora_chip", h), selected = app.ls.lembreteHora == h, color = Palette.teal) {
+                        app.learner.setLembrete(true, h); app.commit()
+                        com.compilandia.platform.Lembrete.agenda(true, h)
+                    }
+                }
+            }
+        } else Text(tx("lembrete_so_celular"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    }
+}
+
 @Composable
 fun SettingsScreen(app: AppState) {
     var confirmReset by remember { mutableStateOf(false) }
@@ -279,6 +316,7 @@ fun SettingsScreen(app: AppState) {
                 }
                 Text(tx("ajustes_idioma_nota"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
             }
+            LembreteAjuste(app)
             PaperCard {
                 Text(tx("toolscreens_tamanho_texto"), style = MaterialTheme.typography.titleSmall)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

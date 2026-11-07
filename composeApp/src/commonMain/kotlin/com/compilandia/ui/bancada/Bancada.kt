@@ -187,6 +187,10 @@ fun BancadaScreen(app: AppState, scr: Screen.Bancada) {
                         val e = remember { FabricaEstado(com.compilandia.engine.Fabrica.fases[fase]) }
                         FabricaJogo(e, ultima = fase == r.fases - 1, onPassou = passou, onSeguir = seguir)
                     }
+                    Robo.CARTEIRO -> {
+                        val e = remember { CarteiroEstado(com.compilandia.engine.Carteiro.fases[fase]) }
+                        CarteiroJogo(e, ultima = fase == r.fases - 1, onPassou = passou, onSeguir = seguir)
+                    }
                 }
             }
         }

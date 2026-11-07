@@ -32,6 +32,8 @@ object Falas {
         Fala(BYTE, tx("falas_esse_bug_fugiu_mas_gente")),
     )
     val confianca = Fala(BYTE, tx("falas_antes_comecar_voce_sabe_isso"))
+    /** R1: a abertura da retomada. */
+    val retomada = Fala(BYTE, tx("retomada_fala"))
     /** A abertura de cada problema do Fazer com ajuda (A3). O resto dele é gerado na hora e fica em legenda. */
     val guiado = listOf(
         Fala(BYTE, tx("guiado_nivel_0")),
@@ -48,5 +50,5 @@ object Falas {
     )
 
     /** Toda fala solta, para gerar os áudios. */
-    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + guiado + boas + comoJogar.values + Robos.falas()
+    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + retomada + guiado + boas + comoJogar.values + Robos.falas()
 }

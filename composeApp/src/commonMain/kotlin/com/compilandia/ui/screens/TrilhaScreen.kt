@@ -62,7 +62,25 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
         Etapa.PRATICA, Etapa.PEGADINHA -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.FAZER -> Screen.FazerComAjuda(s, semente = nowMs())
         Etapa.PROGRAMAR -> com.compilandia.content.Robo.de(s)?.let { Screen.Bancada(it) } ?: return
-        Etapa.REVISAO -> Screen.Episode(s, id = p.episodio?.id)
+        Etapa.REVISAO -> {
+            // R2: grava o formato usado, para a próxima revisão escolher outro.
+            val f = p.formato ?: com.compilandia.content.FormatoRevisao.CLIPE
+            l.usouFormato(s, f.name, nowMs())
+            app.commit()
+            when (f) {
+                com.compilandia.content.FormatoRevisao.CLIPE, com.compilandia.content.FormatoRevisao.PEGADINHA ->
+                    p.episodio?.let { Screen.Episode(s, id = it.id) } ?: Screen.Feynman(s)
+                com.compilandia.content.FormatoRevisao.PREVER -> Screen.Exemplo(s)
+                com.compilandia.content.FormatoRevisao.BUG -> com.compilandia.content.Ideias.de(s)
+                    .minByOrNull { com.compilandia.content.Ideias.retencao(l, it, nowMs()) }?.let { Screen.CacaBug(it.especie.id) } ?: Screen.Feynman(s)
+                com.compilandia.content.FormatoRevisao.ROBO -> com.compilandia.content.Robo.de(s)?.let { r ->
+                    // Uma fase já feita, que gira a cada revisão.
+                    val feitas = (0 until r.fases).filter { com.compilandia.content.Robos.feita(l, r, it) }
+                    Screen.Bancada(r, feitas.getOrNull(l.skill(s).memory.reviews % feitas.size.coerceAtLeast(1)) ?: -1)
+                } ?: Screen.Feynman(s)
+                com.compilandia.content.FormatoRevisao.FEYNMAN -> Screen.Feynman(s)
+            }
+        }
         Etapa.DESAFIO -> Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs())
     }
     if (troca) app.replace(alvo) else app.go(alvo)
@@ -117,6 +135,11 @@ fun TrilhaCorpo(app: AppState, s: Skill, modifier: Modifier) {
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 16.dp, vertical = 12.dp)) {
             Column(Modifier.larguraDeLeitura()) {
                 if (proximo != null) {
+                    // R2: a revisão não é uma etapa da lista, então o formato da vez aparece aqui.
+                    if (proximo.etapa == Etapa.REVISAO) {
+                        Text(proximo.subtitulo, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+                        VSpace(6)
+                    }
                     BigButton(tx("trilha_continuar", proximo.titulo), Modifier.fillMaxWidth()) { abrirPasso(app, s, proximo) }
                 } else {
                     Text(tx("trilha_completa"), style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)

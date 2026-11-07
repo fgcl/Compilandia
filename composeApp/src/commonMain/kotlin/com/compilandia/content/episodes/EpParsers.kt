@@ -7,6 +7,7 @@ import com.compilandia.content.EpisodeBuilder
 import com.compilandia.content.Look
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.content.Tint
+import com.compilandia.content.alvo
 import com.compilandia.content.codigo
 import com.compilandia.content.episodio
 import com.compilandia.content.fileira
@@ -16,6 +17,14 @@ import com.compilandia.content.tabela
 import com.compilandia.content.titulo
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
+
+/** A tabela LL(1) da gramática das aulas, preenchida (conferida em EpisodeFactsTest.tabelaLl1). */
+private val TABELA_LL_1 = listOf(
+    listOf("", "id", "+", "(", ")", "$"),
+    listOf("E", "T X", "", "T X", "", ""),
+    listOf("X", "", "+ T X", "", "ε", "ε"),
+    listOf("T", "id", "", "( E )", "", ""),
+)
 
 /** Mostra pilha e entrada de um parser: entrada no alto, pilha na base, em peças que deslizam. */
 private fun EpisodeBuilder.parser(stack: List<String>, input: List<String>, total: Int) {
@@ -30,6 +39,57 @@ private fun EpisodeBuilder.parser(stack: List<String>, input: List<String>, tota
     }
 }
 
+/*
+ * A9: as aulas básicas destes cinco assuntos viraram longas, no roteiro do A2
+ * (por que existe, primeiro exemplo, a receita à vista e um segundo exemplo em que a pessoa decide).
+ * O que o segundo exemplo afirma é conferido contra o motor em A9ParsersFactsTest.
+ */
+
+/** Gramática e entrada do segundo exemplo do analisador preditivo e da descida recursiva. */
+val GRAMATICA_PREDITIVO_2 = listOf("L -> id R", "R -> , id R | ε")
+val ENTRADA_PREDITIVO_2 = listOf("id", ",", "id")
+
+/** Gramática e entrada com dois erros do segundo exemplo da recuperação. */
+val GRAMATICA_ERRO_2 = listOf("Prog -> Cmd Prog | ε", "Cmd -> id = Val ;", "Val -> id | num")
+val ENTRADA_ERRO_2 = listOf("id", "=", "=", "num", ";", "id", "=", ";")
+
+/** Gramática e entrada do segundo exemplo do empilha-reduz. */
+val GRAMATICA_SR_2 = listOf("S -> ( S ) | id")
+val ENTRADA_SR_2 = listOf("(", "id", ")")
+
+/** O arquivo .y do primeiro exemplo do Bison. */
+val BISON_SPEC_1 = listOf(
+    "%token NUM",
+    "%left '+' '-'",
+    "%left '*' '/'",
+    "%%",
+    "expr: expr '+' expr { \$\$ = \$1 + \$3; }",
+    "    | expr '-' expr { \$\$ = \$1 - \$3; }",
+    "    | expr '*' expr { \$\$ = \$1 * \$3; }",
+    "    | NUM ;",
+)
+
+/** A calculadora com parênteses do "por que existe" do Bison: o motor conta os estados da tabela. */
+val BISON_CALC = listOf(
+    "%token NUM",
+    "%left '+' '-'",
+    "%left '*' '/'",
+    "%%",
+    "expr: expr '+' expr | expr '-' expr",
+    "    | expr '*' expr | expr '/' expr",
+    "    | '(' expr ')' | NUM ;",
+)
+
+/** Segundo exemplo do Bison: só o menos, sem precedência, e depois com o %left. */
+val BISON_MENOS = listOf("%token NUM", "%%", "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | NUM ;")
+val BISON_MENOS_LEFT = listOf("%token NUM", "%left '-'", "%%", "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | NUM ;")
+
+/** O aviso do bison 3 para a calculadora sem precedência (sem o [-Wconflicts-sr] do fim, que não cabe). */
+const val BISON_AVISO = "calc.y: warning: 1 shift/reduce conflict"
+
+/** Opção de toque do segundo exemplo. */
+private fun botao(id: String, t: String, x: Float, y: Float, w: Float = 70f) = Box(id, t, x, y, w, 40f, Look.TOKEN, Tint.YELLOW, size = 15f)
+
 val topDown by lazy {
     listOf(
         // ─────────────────────────────── TABELA LL(1) ───────────────────────────────
@@ -37,7 +97,19 @@ val topDown by lazy {
         // ─────────────────────────────── PREDITIVO ───────────────────────────────
         episodio(Skill.LL1_PARSING, tx("epparsers_pilha_decide")) {
             val n = 4
+            // 1. Por que existe
+            cena(tx("pred_l_01"), mood = EpMood.THINK) {
+                add(titulo("( id )"))
+                add(Box("w0", "(", 110f, 160f, 60f, 46f, Look.TOKEN, Tint.TEAL, size = 20f), Box("w1", "id", 180f, 160f, 60f, 46f, Look.TOKEN, Tint.TEAL, size = 20f))
+                add(alvo("w2", 250f, 160f, 60f, 46f))
+            }
+            pergunta(tx("pred_l_02"), setOf("o1"), setOf("o2", "o3"), tx("pred_l_02_dica"), tx("pred_l_02_ok")) {
+                add(botao("o1", ")", 110f, 280f), botao("o2", "(", 180f, 280f), botao("o3", "id", 250f, 280f))
+            }
+            palavra(tx("pred_l_palavra"), tx("pred_l_03"))
+            // 2. Primeiro exemplo
             cena(tx("epparsers_parser_preditivo_tem_pilha_entrada")) {
+                clear()
                 add(titulo("id + id"))
                 add(rotulo("rs", tx("sims_pilha"), 74f, 326f), rotulo("ra", tx("epparsers_topo_token_id"), 240f, 200f, Tint.YELLOW, 17f))
                 parser(listOf("$", "E"), listOf("id", "+", "id", "$"), n)
@@ -72,6 +144,60 @@ val topDown by lazy {
                 text("ra", tx("sims_aceita"))
                 hot("p0", "i3")
             }
+            // 3. A receita
+            cena(tx("pred_l_05")) {
+                clear()
+                add(titulo(tx("a2_receita")))
+                add(regra("r1", tx("pred_l_r1"), 110f), regra("r2", tx("pred_l_r2"), 166f), regra("r3", tx("pred_l_r3"), 222f))
+            }
+            pergunta(tx("pred_l_06"), setOf("r2"), setOf("r1", "r3"), tx("pred_l_06_dica"), tx("pred_l_06_ok")) {
+                hot()
+                add(Box("q", tx("pred_l_q"), 180f, 310f, 220f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
+            }
+            cena(tx("pred_l_07")) { drop("q"); hot("r3") }
+            // 4. Segundo exemplo, com perguntas
+            val m = ENTRADA_PREDITIVO_2.size + 1
+            val fim = ENTRADA_PREDITIVO_2 + "$"
+            fun regrasDeR() = add(
+                Box("o3", "R -> , id R", 250f, 330f, 160f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f),
+                Box("o4", "R -> ε", 250f, 378f, 160f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f),
+            )
+            cena(tx("pred_l_08")) {
+                clear()
+                add(titulo("id , id"))
+                add(codigo("g", GRAMATICA_PREDITIVO_2, 250f, x = 150f, passo = 25f, size = 14f))
+                add(rotulo("rs", tx("sims_pilha"), 74f, 326f), rotulo("ra", tx("pred_l_ra_l"), 240f, 180f, Tint.YELLOW, 17f))
+                parser(listOf("$", "L"), fim, m)
+                hot("p1", "i0")
+            }
+            pergunta(tx("pred_l_09"), setOf("o1"), setOf("o2"), tx("pred_l_09_dica"), tx("pred_l_09_ok")) {
+                hot("g0")
+                add(botao("o1", "id", 210f, 350f), botao("o2", "R", 290f, 350f))
+            }
+            cena(tx("pred_l_10")) {
+                drop("o1", "o2")
+                parser(listOf("$", "R"), fim.drop(1), m)
+                text("ra", tx("epparsers_casou_id"))
+                hot("p1")
+            }
+            pergunta(tx("pred_l_11"), setOf("o3"), setOf("o4"), tx("pred_l_11_dica"), tx("pred_l_11_ok")) {
+                text("ra", tx("pred_l_ra_r"))
+                regrasDeR()
+                hot("p1", "i1")
+            }
+            cena(tx("pred_l_12")) {
+                drop("o3", "o4")
+                parser(listOf("$", "R"), fim.drop(3), m)
+                text("ra", tx("pred_l_ra_fim"))
+                hot("p1", "i3")
+            }
+            pergunta(tx("pred_l_13"), setOf("o4"), setOf("o3"), tx("pred_l_13_dica"), tx("pred_l_13_ok")) { regrasDeR() }
+            cena(tx("pred_l_14"), mood = EpMood.HAPPY) {
+                drop("o3", "o4")
+                parser(listOf("$"), listOf("$"), m)
+                text("ra", tx("sims_aceita"))
+                hot("p0", "i3")
+            }
         },
 
         // ─────────────────────────────── DESCIDA RECURSIVA ───────────────────────────────
@@ -88,7 +214,19 @@ val topDown by lazy {
                 "  else { casa('('); E(); casa(')'); }",
                 "}",
             )
+            // 1. Por que existe
+            cena(tx("desc_l_01"), mood = EpMood.THINK) {
+                add(titulo(tx("epparsers_tabela_preditiva")))
+                add(tabela("m", TABELA_LL_1, 120f, cw = 56f, ch = 42f, size = 12f))
+            }
+            cena(tx("desc_l_02")) {
+                add(Box("erro", "M[X, id]", 180f, 330f, 160f, 44f, Look.TOKEN, Tint.RED, size = 15f))
+                hot("ml2c1")
+            }
+            palavra(tx("comum_descida_recursiva").uppercase(), tx("desc_l_03"))
+            // 2. Primeiro exemplo
             cena(tx("epparsers_para_escrever_parser_mao_cada")) {
+                clear()
                 add(titulo(tx("comum_descida_recursiva")))
                 add(codigo("c", src, 64f, passo = 27f, size = 12f))
             }
@@ -108,12 +246,64 @@ val topDown by lazy {
                 hot("c7", "c8")
             }
             cena(tx("epparsers_esse_parser_que_trabalho_pratico"), who = PROF, mood = EpMood.HAPPY) { hot() }
+            // 3. A receita
+            cena(tx("desc_l_05")) {
+                clear()
+                add(titulo(tx("a2_receita")))
+                add(regra("r1", tx("desc_l_r1"), 110f), regra("r2", tx("desc_l_r2"), 166f), regra("r3", tx("desc_l_r3"), 222f), regra("r4", tx("desc_l_r4"), 278f))
+            }
+            pergunta(tx("desc_l_06"), setOf("r2"), setOf("r1", "r3", "r4"), tx("desc_l_06_dica"), tx("desc_l_06_ok")) {
+                hot()
+                add(codigo("q", listOf("T -> ( E )"), 340f, x = 130f, size = 16f))
+            }
+            cena(tx("desc_l_07")) { drop("q0"); hot("r4") }
+            // 4. Segundo exemplo, com perguntas
+            cena(tx("desc_l_08")) {
+                clear()
+                add(titulo(tx("comum_descida_recursiva")))
+                add(codigo("g", GRAMATICA_PREDITIVO_2, 62f, x = 100f, passo = 26f, size = 15f))
+                add(codigo("c", listOf("void L() { casa(ID); ___ }", "void R() {", "  if (tok == ___) {", "    casa(','); casa(ID); R();", "  }", "}"), 132f, x = 40f, passo = 27f, size = 14f))
+            }
+            pergunta(tx("desc_l_09"), setOf("o1"), setOf("o2"), tx("desc_l_09_dica"), tx("desc_l_09_ok")) {
+                hot("c0")
+                add(botao("o1", "R();", 120f, 330f, 90f), botao("o2", "casa(R);", 240f, 330f, 110f))
+            }
+            pergunta(tx("desc_l_10"), setOf("p1"), setOf("p2"), tx("desc_l_10_dica"), tx("desc_l_10_ok")) {
+                drop("o1", "o2")
+                text("c0", "void L() { casa(ID); R(); }")
+                hot("c2")
+                add(botao("p1", "','", 140f, 330f), botao("p2", "ID", 220f, 330f))
+            }
+            cena(tx("desc_l_11")) {
+                drop("p1", "p2")
+                text("c2", "  if (tok == ',') {")
+                add(fileira("k", (ENTRADA_PREDITIVO_2 + "$").map { it to Tint.TEAL }, 312f, w = 50f, h = 36f))
+                hot("c0", "c2")
+            }
+            pergunta(tx("desc_l_12"), setOf("n2"), setOf("n1", "n3"), tx("desc_l_12_dica"), tx("desc_l_12_ok")) {
+                hot()
+                add(botao("n1", "1", 120f, 375f, 54f), botao("n2", "2", 180f, 375f, 54f), botao("n3", "3", 240f, 375f, 54f))
+            }
+            cena(tx("desc_l_13"), mood = EpMood.HAPPY) {
+                drop("n1", "n2", "n3")
+                hot("c2", "k3")
+            }
         },
 
         // ─────────────────────────────── RECUPERAÇÃO DE ERROS ───────────────────────────────
         episodio(Skill.ERROR_RECOVERY, tx("epparsers_cair_levantar")) {
             val itens = listOf("x", "=", "*", "3", ";", "y", "=", "2", ";")
+            // 1. Por que existe
+            cena(tx("erro_l_01"), mood = EpMood.THINK) {
+                add(titulo(tx("erro_l_titulo")))
+                add(codigo("c", listOf("x = * 3;", "y = 2;", "z = ;"), 130f, x = 110f, passo = 40f, size = 18f))
+                hot("c0", "c2")
+            }
+            cena(tx("erro_l_02")) { hot("c2") }
+            palavra(tx("erro_l_palavra"), tx("erro_l_03"))
+            // 2. Primeiro exemplo
             cena(tx("epparsers_erro_nao_pode_derrubar_compilador")) {
+                clear()
                 add(titulo(tx("comum_modo_panico")))
                 add(fileira("k", itens.map { it to Tint.TEAL }, 130f, w = 34f, h = 42f, gap = 4f))
             }
@@ -135,6 +325,44 @@ val topDown by lazy {
             }
             cena(tx("epparsers_bons_sincronizadores_saem_follow_cada"), who = PROF) { hot() }
             cena(tx("epparsers_assim_compilacao_so_aponta_varios"), mood = EpMood.HAPPY) {}
+            // 3. A receita
+            cena(tx("erro_l_05")) {
+                clear()
+                add(titulo(tx("a2_receita")))
+                add(regra("r1", tx("erro_l_r1"), 110f), regra("r2", tx("erro_l_r2"), 166f), regra("r3", tx("erro_l_r3"), 222f), regra("r4", tx("erro_l_r4"), 278f))
+            }
+            pergunta(tx("erro_l_06"), setOf("r3"), setOf("r1", "r2", "r4"), tx("erro_l_06_dica"), tx("erro_l_06_ok")) { hot() }
+            cena(tx("erro_l_07")) { hot("r4") }
+            // 4. Segundo exemplo, com perguntas
+            val toks = ENTRADA_ERRO_2 + "$"
+            val todos = toks.indices.map { "k$it" }.toSet()
+            cena(tx("erro_l_08")) {
+                clear()
+                add(titulo(tx("comum_modo_panico")))
+                add(codigo("g", GRAMATICA_ERRO_2, 66f, x = 80f, passo = 27f, size = 14f))
+                add(fileira("k", toks.map { it to Tint.TEAL }, 190f, w = 34f, h = 42f, gap = 4f))
+            }
+            pergunta(tx("erro_l_09"), setOf("k2"), todos - "k2", tx("erro_l_09_dica"), tx("erro_l_09_ok")) { hot() }
+            pergunta(tx("erro_l_10"), setOf("k3"), setOf("k4", "k5", "k6", "k7", "k8"), tx("erro_l_10_dica"), tx("erro_l_10_ok")) {
+                tint("k2", Tint.RED)
+                add(rotulo("e", tx("epparsers_erro_aqui"), 110f, 236f, Tint.RED, 17f))
+                hot("g2")
+            }
+            cena(tx("erro_l_11")) {
+                drop("k2", "e")
+                tint("k3", Tint.GREEN)
+                hot("k3")
+            }
+            pergunta(tx("erro_l_12"), setOf("m1"), setOf("m2"), tx("erro_l_12_dica"), tx("erro_l_12_ok")) {
+                tint("k7", Tint.RED)
+                hot("k7")
+                add(botao("m1", tx("erro_l_tira"), 100f, 290f, 140f), botao("m2", tx("erro_l_descarta"), 260f, 290f, 140f))
+            }
+            cena(tx("erro_l_13"), mood = EpMood.HAPPY) {
+                drop("m1", "m2")
+                tint("k7", Tint.GREEN)
+                hot("k8")
+            }
         },
     )
 }
@@ -147,7 +375,19 @@ val bottomUp by lazy {
                 dropAll("i")
                 for ((pos, t) in itens) add(Box("i$pos", t, 40f + pos * 46f, 130f, 40f, 40f, Look.TOKEN, Tint.TEAL, size = 16f))
             }
+            // 1. Por que existe
+            cena(tx("sr_l_01"), mood = EpMood.THINK) {
+                add(titulo("E -> E + n"))
+                add(codigo("x", listOf("E", "E + n", "E + n + n", "E + n + n + n", "..."), 80f, x = 120f, passo = 34f, size = 17f))
+                hot("x0")
+            }
+            pergunta(tx("sr_l_02"), setOf("o3"), setOf("o1", "o2"), tx("sr_l_02_dica"), tx("sr_l_02_ok")) {
+                add(botao("o1", "1", 90f, 300f, 60f), botao("o2", "2", 170f, 300f, 60f), botao("o3", tx("sr_l_sem_fim"), 270f, 300f, 110f))
+            }
+            palavra(tx("epparsers_empilha_reduz").uppercase(), tx("sr_l_03"))
+            // 2. Primeiro exemplo
             cena(tx("epparsers_agora_gente_monta_arvore_baixo")) {
+                clear()
                 add(titulo("E -> E + n | n"))
                 esteira(listOf(0 to "n", 1 to "+", 2 to "n", 3 to "$"))
                 add(rotulo("rp", tx("sims_pilha"), 300f, 372f))
@@ -184,6 +424,58 @@ val bottomUp by lazy {
                 hot("p0")
             }
             cena(tx("epparsers_lidas_tras_para_frente_reducoes"), who = PROF) { actor(null) }
+            // 3. A receita
+            cena(tx("sr_l_05")) {
+                clear()
+                add(titulo(tx("a2_receita")))
+                add(regra("r1", tx("sr_l_r1"), 110f), regra("r2", tx("sr_l_r2"), 166f), regra("r3", tx("sr_l_r3"), 222f))
+            }
+            pergunta(tx("sr_l_06"), setOf("r3"), setOf("r1", "r2"), tx("sr_l_06_dica"), tx("sr_l_06_ok")) {
+                hot()
+                add(Box("q", "E   |   $", 180f, 310f, 160f, 44f, Look.TOKEN, Tint.YELLOW, size = 17f))
+            }
+            cena(tx("sr_l_07")) { drop("q"); hot("r2") }
+            // 4. Segundo exemplo, com perguntas
+            fun botoes() = add(
+                Box("emp", tx("comum_empilhar_2"), 90f, 300f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 16f),
+                Box("red", tx("comum_reduzir"), 90f, 356f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 16f),
+            )
+            cena(tx("sr_l_08")) {
+                clear()
+                add(titulo(GRAMATICA_SR_2.single()))
+                esteira((ENTRADA_SR_2 + "$").mapIndexed { i, t -> i to t })
+                add(rotulo("rp", tx("sims_pilha"), 300f, 372f))
+            }
+            cena(tx("sr_l_09")) {
+                esteira(listOf(2 to ")", 3 to "$"))
+                add(pilha("p", listOf("(", "id"), 300f, 340f, h = 34f))
+                hot("p1")
+            }
+            pergunta(tx("sr_l_10"), setOf("red"), setOf("emp"), tx("sr_l_10_dica"), tx("sr_l_10_ok")) {
+                botoes()
+                hot("p1")
+            }
+            cena(tx("sr_l_11")) {
+                drop("emp", "red")
+                dropAll("p")
+                add(Box("p0", "(", 300f, 340f, 70f, 34f, Look.TOKEN, Tint.TEAL), Box("p1", "S", 300f, 303f, 70f, 34f, Look.TOKEN, Tint.ORANGE))
+                hot("p1")
+            }
+            pergunta(tx("sr_l_12"), setOf("emp"), setOf("red"), tx("sr_l_12_dica"), tx("sr_l_12_ok")) {
+                botoes()
+                hot("p0", "p1")
+            }
+            pergunta(tx("sr_l_13"), setOf("p0", "p1", "p2"), setOf("i3"), tx("sr_l_13_dica"), tx("sr_l_13_ok")) {
+                drop("emp", "red")
+                esteira(listOf(3 to "$"))
+                add(Box("p2", ")", 300f, 266f, 70f, 34f, Look.TOKEN, Tint.TEAL))
+                hot()
+            }
+            cena(tx("sr_l_14"), mood = EpMood.HAPPY) {
+                dropAll("p")
+                add(Box("p0", "S", 300f, 340f, 70f, 34f, Look.TOKEN, Tint.ORANGE))
+                hot("p0", "i3")
+            }
         },
 
         // ─────────────────────────────── ITENS LR(0) ───────────────────────────────
@@ -194,33 +486,82 @@ val bottomUp by lazy {
 
         // ─────────────────────────────── BISON ───────────────────────────────
         episodio(Skill.YACC_BISON, tx("epparsers_fabrica_parsers")) {
-            val spec = listOf(
-                "%left '+' '-'",
-                "%left '*' '/'",
-                "%%",
-                "expr: expr '+' expr { \$\$ = \$1 + \$3; }",
-                "    | expr '*' expr { \$\$ = \$1 * \$3; }",
-                "    | NUM ;",
-            )
-            cena(tx("epparsers_bison_le_gramatica_escreve_parser")) {
-                add(titulo(tx("epparsers_arquivo_y")))
-                add(codigo("s", spec, 70f, passo = 30f, size = 13f))
+            // 1. Por que existe
+            cena(tx("bison_l_01"), mood = EpMood.THINK) {
+                add(titulo("LALR(1)"))
+                add(codigo("g", BISON_CALC, 66f, x = 20f, passo = 26f, size = 12f))
+                add(Box("n", tx("bison_l_estados"), 180f, 270f, 240f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
             }
-            cena(tx("epparsers_cada_regra_tem_acao_cifrao")) { hot("s3") }
-            cena(tx("epparsers_cifrao_cifrao_resultado_regra_ele")) { hot("s4") }
-            cena(tx("epparsers_essa_gramatica_ambigua_quem_resolve"), mood = EpMood.THINK) { hot("s0", "s1") }
+            pergunta(tx("bison_l_02"), setOf("o2"), setOf("o1", "o3"), tx("bison_l_02_dica"), tx("bison_l_02_ok")) {
+                hot("n")
+                add(botao("o1", "22", 100f, 350f), botao("o2", "112", 180f, 350f), botao("o3", "1000", 260f, 350f))
+            }
+            palavra("BISON", tx("bison_l_03"))
+            // 2. Primeiro exemplo
+            cena(tx("epparsers_bison_le_gramatica_escreve_parser")) {
+                clear()
+                add(titulo(tx("epparsers_arquivo_y")))
+                add(codigo("s", BISON_SPEC_1, 66f, passo = 28f, size = 13f))
+            }
+            cena(tx("epparsers_cada_regra_tem_acao_cifrao")) { hot("s4") }
+            cena(tx("epparsers_cifrao_cifrao_resultado_regra_ele")) { hot("s5") }
+            cena(tx("epparsers_essa_gramatica_ambigua_quem_resolve"), mood = EpMood.THINK) { hot("s1", "s2") }
             pergunta(
                 tx("epparsers_quanto_mais_abaixo_no_arquivo"),
-                setOf("s1"), setOf("s0"),
+                setOf("s2"), setOf("s1"),
                 tx("epparsers_procure_linha_mais_perto_das"),
                 tx("epparsers_isso_vezes_esta_mais_abaixo"),
             ) { hot() }
             cena(tx("epparsers_left_diz_que_contas_iguais")) {
-                add(Box("e1", "1 + 2 * 3 = 7", 180f, 300f, 200f, 42f, Look.TOKEN, Tint.GREEN, size = 16f))
-                add(Box("e2", "5 - 2 - 1 = 2", 180f, 350f, 200f, 42f, Look.TOKEN, Tint.TEAL, size = 16f))
-                hot("s0")
+                add(Box("e1", "1 + 2 * 3 = 7", 180f, 318f, 200f, 42f, Look.TOKEN, Tint.GREEN, size = 16f))
+                add(Box("e2", "5 - 2 - 1 = 2", 180f, 366f, 200f, 42f, Look.TOKEN, Tint.TEAL, size = 16f))
+                hot("s1")
             }
             cena(tx("epparsers_sem_nenhuma_linha_conflito_na"), mood = EpMood.HAPPY) { hot() }
+            // 3. A receita
+            cena(tx("bison_l_05")) {
+                clear()
+                add(titulo(tx("a2_receita")))
+                add(regra("r1", tx("bison_l_r1"), 110f), regra("r2", tx("bison_l_r2"), 166f), regra("r3", tx("bison_l_r3"), 222f))
+            }
+            pergunta(tx("bison_l_06"), setOf("r1"), setOf("r2", "r3"), tx("bison_l_06_dica"), tx("bison_l_06_ok")) {
+                hot()
+                add(codigo("q", listOf("%left '-'"), 310f, x = 120f, size = 16f))
+            }
+            cena(tx("bison_l_07")) { drop("q0"); hot("r3") }
+            // 4. Segundo exemplo, com perguntas
+            fun conta() = add(
+                Box("conta", "5 - 2 - 1", 180f, 300f, 160f, 40f, Look.TOKEN, Tint.TEAL, size = 16f),
+                botao("v2", "2", 140f, 360f, 60f), botao("v4", "4", 220f, 360f, 60f),
+            )
+            cena(tx("bison_l_08")) {
+                clear()
+                add(titulo("calc.y"))
+                add(codigo("s", BISON_MENOS, 70f, x = 20f, passo = 28f, size = 13f))
+            }
+            pergunta(tx("bison_l_09"), setOf("n1"), setOf("n0", "n2"), tx("bison_l_09_dica"), tx("bison_l_09_ok")) {
+                add(botao("n0", "0", 110f, 230f, 60f), botao("n1", "1", 180f, 230f, 60f), botao("n2", "2", 250f, 230f, 60f))
+            }
+            cena(tx("bison_l_10")) {
+                drop("n0", "n1", "n2")
+                add(codigo("o", listOf("\$ bison calc.y", BISON_AVISO), 200f, x = 20f, passo = 26f, size = 12f))
+                hot("o1")
+            }
+            pergunta(tx("bison_l_11"), setOf("v4"), setOf("v2"), tx("bison_l_11_dica"), tx("bison_l_11_ok")) { conta() }
+            cena(tx("bison_l_12")) {
+                drop("v2", "v4", "conta")
+                dropAll("o")
+                dropAll("s")
+                add(codigo("s", BISON_MENOS_LEFT, 70f, x = 20f, passo = 28f, size = 13f))
+                hot("s1")
+            }
+            pergunta(tx("bison_l_13"), setOf("v2"), setOf("v4"), tx("bison_l_13_dica"), tx("bison_l_13_ok")) { conta() }
+            cena(tx("bison_l_14"), mood = EpMood.HAPPY) {
+                drop("v4")
+                tint("v2", Tint.GREEN)
+                add(codigo("o", listOf("\$ bison calc.y"), 230f, x = 20f, passo = 26f, size = 12f))
+                hot("v2")
+            }
         },
     )
 }

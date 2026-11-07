@@ -107,7 +107,9 @@ private fun PipelineOrder(ctx: GameCtx, done: (Double) -> Unit) {
     }
     if (placed.size == stages.size) {
         FeedbackBanner(true, tx("gameslexical_pipeline_montado_lexico_sintatico_semantico"))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.12).coerceAtLeast(0.0)) }
+        // J8: uma linha de verdade passa pela esteira montada.
+        val passos = remember { com.compilandia.engine.Reacoes.esteira(placed.map { stages[it].name }) }
+        Reacao(passos) { done((1.0 - mistakes * 0.12).coerceAtLeast(0.0)) }
     }
 }
 
@@ -168,8 +170,14 @@ fun PhaseDetectiveGame(ctx: GameCtx) {
     var answer by remember { mutableStateOf<Int?>(null) }
     var timeLeft by remember(i) { mutableFloatStateOf(1f) }
     val timed = ctx.level >= 3
+    val palpites = remember { mutableMapOf<Int, Int>() }
     if (i >= cases.size) {
-        LaunchedEffect(Unit) { ctx.finish(correct.toDouble() / cases.size) }
+        // J8: o compilador roda o caso em que você errou (ou o último) fase por fase.
+        val passos = remember {
+            val k = cases.indices.firstOrNull { palpites[it] != cases[it].phase } ?: cases.lastIndex
+            com.compilandia.engine.Reacoes.detetive(cases[k].code, cases[k].phase, palpites[k] ?: -1, detectiveBins)
+        }
+        Reacao(passos) { ctx.finish(correct.toDouble() / cases.size) }
         return
     }
     val c = cases[i]
@@ -184,7 +192,7 @@ fun PhaseDetectiveGame(ctx: GameCtx) {
     Text(tx("gameslexical_caso_1_2_quem_pega", i + 1, cases.size), style = MaterialTheme.typography.titleSmall)
     if (timed) ProgressBar(timeLeft, if (timeLeft > 0.3f) Palette.teal else Palette.red, Modifier.fillMaxWidth(), 8.dp)
     val dd = com.compilandia.ui.rememberDragDrop()
-    fun choose(k: Int) { if (answer != null) return; answer = k; if (k == c.phase) { correct++; Juice.correct() } else Juice.wrong() }
+    fun choose(k: Int) { if (answer != null) return; answer = k; palpites[i] = k; if (k == c.phase) { correct++; Juice.correct() } else Juice.wrong() }
     HintBox(ctx, tx("gameslexical_lexico_caractere_palavra_impossivel_sintatic"))
     Text(tx("gameslexical_arraste_cartao_suspeito_ate_setor"), style = MaterialTheme.typography.labelLarge, color = Palette.inkSoft)
     if (answer == null) androidx.compose.runtime.key(i) {
@@ -343,7 +351,9 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
             phase = 2
         } else {
             FeedbackBanner(classScore > 0.8f, tx("gameslexical_cortes_1_classes_2_total", (cutScore * 100).toInt(), (classScore * 100).toInt(), truth.size))
-            BigButton(tx("gameslexical_proxima_linha"), Modifier.fillMaxWidth()) { done(0.6 * cutScore + 0.4 * classScore) }
+            // J8: os tokens seguem com a classe que você deu: tabela de símbolos e parser.
+            val passos = remember { com.compilandia.engine.Reacoes.fatiador(truth, classes.toMap()) }
+            Reacao(passos) { done(0.6 * cutScore + 0.4 * classScore) }
         }
     }
 }
@@ -422,13 +432,21 @@ fun RegexSorterGame(ctx: GameCtx) {
     var last by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     var timeLeft by remember(i) { mutableFloatStateOf(1f) }
     val timed = ctx.level >= 3
+    val respostas = remember { mutableListOf<Pair<String, Boolean?>>() }
     if (i >= queue.size) {
-        LaunchedEffect(Unit) { ctx.finish(correct.toDouble() / queue.size) }
+        // J8: o porteiro vira autômato e julga as palavras em que você errou e outras novas.
+        val passos = remember {
+            val novas = dfa.samples(kotlin.random.Random(ctx.rnd.nextLong()), 8, maxLen = 3 + ctx.level).map { it.first }
+            com.compilandia.engine.Reacoes.porteiro(entry.regex, respostas, novas)
+        }
+        last?.let { FeedbackBanner(it.first, it.second) }
+        Reacao(passos) { ctx.finish(correct.toDouble() / queue.size) }
         return
     }
     val (s, accept) = queue[i]
     fun judge(letIn: Boolean?) {
         val ok = letIn == accept
+        respostas += s to letIn
         if (ok) correct++
         last = ok to tx("gameslexical_1_2_com_3", s.ifEmpty { "ε" }, if (accept) tx("gameslexical_casa") else tx("gameslexical_nao_casa"), entry.regex)
         if (ok) Juice.correct() else Juice.wrong()

@@ -279,7 +279,6 @@
     <string name="gameslexical_arraste_cada_token_para_caixa">Arraste cada token para a caixa da classe dele (ou toque para alternar):</string>
     <string name="gameslexical_conferir_classes">Conferir classes ✔</string>
     <string name="gameslexical_cortes_1_classes_2_total">Cortes: %1$s% · Classes: %2$s%. Total de tokens: %3$s (espaços somem, o scanner os descarta).</string>
-    <string name="gameslexical_proxima_linha">Próxima linha ▶</string>
     <string name="gameslexical_regex_1_2">regex: %1$s   (%2$s)</string>
     <string name="gameslexical_nao_existe_transicao_q_1">Não existe transição de q%1$s com '%2$s'. Use o botão 'travou'!</string>
     <string name="gameslexical_com_1_q_2_trem">Com '%1$s', de q%2$s o trem NÃO vai para q%3$s. Siga a seta com esse rótulo.</string>

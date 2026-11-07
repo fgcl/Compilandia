@@ -51,7 +51,10 @@ fun App(injected: AppState? = null) {
             val salvo = Storage.load()
             // O idioma vem antes de tudo: aulas e nomes são montados uma vez, no idioma da abertura.
             com.compilandia.textos.Txt.idioma = com.compilandia.textos.Txt.idiomaInicial(salvo, com.compilandia.platform.Idioma.doAparelho())
-            AppState(Learner.load(salvo))
+            AppState(Learner.load(salvo)).also {
+                // R4: "forçar parada" apaga o alarme do lembrete, e alguns celulares fazem isso sozinhos. Religa a cada abertura.
+                if (it.ls.lembreteLigado) com.compilandia.platform.Lembrete.agenda(true, it.ls.lembreteHora)
+            }
         }
     }
     CompilandiaTheme {
@@ -91,6 +94,7 @@ fun App(injected: AppState? = null) {
                     is Screen.FazerComAjuda -> ColunaCentral { com.compilandia.ui.screens.FazerComAjudaScreen(app, screen) }
                     is Screen.Bancada -> com.compilandia.ui.bancada.BancadaScreen(app, screen)
                     Screen.Bancadas -> ColunaCentral { com.compilandia.ui.bancada.BancadasScreen(app) }
+                    is Screen.Retomada -> ColunaCentral { com.compilandia.ui.screens.RetomadaScreen(app, screen.r) }
                     is Screen.Lesson -> ColunaCentral { LessonScreen(app, screen) }
                     is Screen.Feynman -> ColunaCentral { FeynmanScreen(app, screen.skill) }
                     is Screen.Play -> ColunaCentral { PlayScreen(app, screen) }

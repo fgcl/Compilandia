@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J8: a reação no fim dos jogos de classificar. O resultado da pessoa roda no motor. -->
+<resources>
+    <string name="reacao_titulo">Agora roda</string>
+    <string name="reacao_continuar">Continuar</string>
+
+    <string name="reacao_porteiro_abre">A regex %1$s vira um autômato. Agora ele é o porteiro.</string>
+    <string name="reacao_porteiro_entra">A palavra %1$s termina em %2$s, que é final. Entra.</string>
+    <string name="reacao_porteiro_barra">A palavra %1$s termina em %2$s, que não é final. Fica fora.</string>
+    <string name="reacao_porteiro_sem_trilho">Na palavra %1$s falta trilho no meio do caminho. Fica fora.</string>
+    <string name="reacao_porteiro_voce_entra">Você deixou %1$s entrar.</string>
+    <string name="reacao_porteiro_voce_barra">Você barrou %1$s.</string>
+
+    <string name="reacao_esteira_entra">A linha entra na esteira que você montou.</string>
+    <string name="reacao_esteira_lexica">%1$s: a linha virou %2$s tokens.</string>
+    <string name="reacao_esteira_sintatica">%1$s: os parênteses mostram a árvore. A conta de vezes fica embaixo.</string>
+    <string name="reacao_esteira_semantica">%1$s: a conta inteira tem tipo %2$s.</string>
+    <string name="reacao_esteira_intermediario">%1$s: %2$s instruções de três endereços.</string>
+    <string name="reacao_esteira_otimizacao">%1$s: 2 * 3 virou 6 antes de rodar. Eram %2$s instruções, ficaram %3$s.</string>
+    <string name="reacao_esteira_geracao">%1$s: %2$s instruções MIPS.</string>
+    <string name="reacao_esteira_roda">O simulador MIPS roda com a = %1$s. No fim, %2$s vale %3$s.</string>
+
+    <string name="reacao_detetive_compila">O compilador recebe o caso.</string>
+    <string name="reacao_detetive_passou">%1$s: passou.</string>
+    <string name="reacao_detetive_pegou">%1$s: pegou o erro aqui.</string>
+    <string name="reacao_detetive_execucao">Compilou. O erro só aparece na %1$s, com o programa rodando.</string>
+    <string name="reacao_detetive_palpite">Você apontou %1$s. Quem pega é %2$s.</string>
+
+    <string name="reacao_fatiador_id">%1$s entra na tabela de símbolos.</string>
+    <string name="reacao_fatiador_chave">%1$s avisa o parser qual regra usar.</string>
+    <string name="reacao_fatiador_num">%1$s vira uma constante.</string>
+    <string name="reacao_fatiador_simbolo">%1$s chega ao parser do jeito que está.</string>
+    <string name="reacao_fatiador_errado">O certo era %1$s.</string>
+    <string name="reacao_fatiador_parser">É isso que o parser recebe.</string>
+    <string name="reacao_fatiador_tabela">A tabela de símbolos ficou com %1$s nomes.</string>
+    <string name="reacao_fatiador_tabela_vazia">A tabela de símbolos ficou vazia.</string>
+    <string name="reacao_fatiador_tabela_um">A tabela de símbolos ficou com um nome só.</string>
+
+    <string name="reacao_arvores_valores">Ponha números no lugar dos ids: %1$s.</string>
+    <string name="reacao_arvores_primeira">A primeira árvore calcula assim e dá %1$s.</string>
+    <string name="reacao_arvores_segunda">A segunda árvore calcula assim e dá %1$s.</string>
+    <string name="reacao_arvores_diferentes">A mesma linha %1$s deu dois resultados. Por isso a ambiguidade é um problema.</string>
+    <string name="reacao_arvores_iguais">Aqui as duas deram o mesmo valor. Mesmo assim, o parser não sabe qual árvore montar.</string>
+
+    <string name="reacao_cirurgia_abre">A gramática operada vai para o Byte com a pilha.</string>
+    <string name="reacao_cirurgia_conflito">A célula M[%1$s, %2$s] ficou com duas regras. O Byte não sabe qual usar.</string>
+    <string name="reacao_cirurgia_aceitou">O Byte analisou %1$s em %2$s passos, sem voltar atrás.</string>
+    <string name="reacao_cirurgia_perdeu">A frase %1$s era da gramática antiga. A operada não gera mais essa frase.</string>
+    <string name="reacao_cirurgia_parou">Com %1$s o Byte parou: %2$s</string>
+    <string name="reacao_cirurgia_longa">Com %1$s o Byte ficou rodando sem sair do lugar.</string>
+
+    <string name="reacao_conflito_frase">O analisador SLR lê %1$s.</string>
+    <string name="reacao_conflito_celula">No estado %1$s, olhando %2$s, a tabela tem %3$s. O analisador trava nessa escolha.</string>
+    <string name="reacao_conflito_ou"> e </string>
+    <string name="reacao_conflito_nenhum">O analisador lê %1$s em %2$s passos sem dúvida nenhuma.</string>
+
+    <string name="reacao_escopo_sobe">O compilador procura %1$s no bloco da linha %2$s e não acha. Sobe um bloco.</string>
+    <string name="reacao_escopo_achou">O uso de %1$s na linha %2$s acha a linha %3$s: %4$s</string>
+    <string name="reacao_escopo_nada">Nenhum bloco tem %1$s. A linha %2$s dá erro de variável não declarada.</string>
+
+    <string name="reacao_panico_abre">O parser lê a entrada inteira, com o modo pânico ligado.</string>
+    <string name="reacao_panico_fim">Chegou ao fim. Achou %1$s erros numa passada só.</string>
+    <string name="reacao_panico_fim_um">Chegou ao fim. Achou um erro numa passada só.</string>
+    <string name="reacao_panico_parou">O parser parou antes do fim da entrada.</string>
+    <string name="reacao_porteiro_dentro">entra</string>
+    <string name="reacao_porteiro_fora">fica fora</string>
+    <string name="reacao_escopo_linha">Linha %1$s: %2$s   ↑ bloco da linha %3$s</string>
+</resources>

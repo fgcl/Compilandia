@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J7 Carteiro do escopo, na Cidade Semântica. -->
+<resources>
+    <string name="robo_carteiro_titulo">Carteiro do escopo</string>
+    <string name="robo_carteiro_sub">Ponha as declarações nas salas. O Byte entrega cada uso na declaração certa.</string>
+
+    <string name="carteiro_fase_global">Variável de todos</string>
+    <string name="carteiro_fase_sombra">Sombra</string>
+    <string name="carteiro_fase_irmaos">Salas vizinhas</string>
+    <string name="carteiro_fase_laco">Função com laço</string>
+
+    <string name="carteiro_pedido_global">As funções soma e main usam total. Ponha a declaração onde as duas enxergam.</string>
+    <string name="carteiro_pedido_sombra">O printf do if deve ler o float. O printf do main deve ler o int.</string>
+    <string name="carteiro_pedido_irmaos">Dentro do else, a variável do if não existe. Ali o compilador deve acusar erro.</string>
+    <string name="carteiro_pedido_laco">Quatro cartas, quatro salas. Cada uso tem que achar a declaração pedida.</string>
+
+    <string name="carteiro_dica_global_1">O Byte procura na sala do uso. Se não acha, sobe para a sala de fora.</string>
+    <string name="carteiro_dica_global_2">A sala global fica por fora de soma e de main. As duas enxergam o que está nela.</string>
+    <string name="carteiro_dica_sombra_1">O Byte para na primeira declaração que acha subindo. A de dentro esconde a de fora.</string>
+    <string name="carteiro_dica_sombra_2">Ponha o float x dentro do if. O int x fica em main.</string>
+    <string name="carteiro_dica_irmaos_1">Subindo do else, o Byte passa por main e pela global. Ele nunca entra no if.</string>
+    <string name="carteiro_dica_irmaos_2">O i vai dentro do if. O j vai em main, porque main e o else usam j.</string>
+    <string name="carteiro_dica_laco_1">Comece pelo erro: i em main não pode achar nada. Então i fica no for.</string>
+    <string name="carteiro_dica_laco_2">O float n fica em conta e esconde o int n da global. Main vê só o int n.</string>
+
+    <string name="carteiro_sala_arquivo">global</string>
+    <string name="carteiro_teste">%1$s em %2$s</string>
+    <string name="carteiro_erro_nao_declarada">erro: não declarada</string>
+    <string name="carteiro_nota_achou">Na sala %2$s o Byte achou %3$s. Entregue.</string>
+    <string name="carteiro_nota_sobe">Na sala %1$s não há %2$s. O Byte sobe para %3$s.</string>
+    <string name="carteiro_nota_nao_declarada">Nem a sala global tem %1$s. O compilador acusa: variável não declarada.</string>
+    <string name="carteiro_nota_escolha">Toque num uso para ver o Byte entregar a carta.</string>
+    <string name="carteiro_mesa_vazia">Nenhuma declaração está numa sala. Escolha a sala de cada carta.</string>
+    <string name="carteiro_redeclarada">Há dois %1$s na sala %2$s. O compilador acusa redeclaração antes de rodar.</string>
+    <string name="carteiro_falha_nao_achou">O uso de %1$s em %2$s não achou nada. Ele precisava chegar em %3$s.</string>
+    <string name="carteiro_falha_devia_errar">O uso de %1$s em %2$s achou %3$s, na sala %4$s. Ali devia dar erro.</string>
+    <string name="carteiro_falha_errada">O uso de %1$s em %2$s chegou em %3$s. Esperava %4$s.</string>
+    <string name="carteiro_onde_olhar">Suba a partir de %2$s. A primeira declaração no caminho tem que ser %1$s.</string>
+    <string name="carteiro_onde_olhar_alta">O caminho de %2$s passa por %1$s. Ponha essa carta numa sala fora do caminho.</string>
+    <string name="carteiro_cartas">Cartas de declaração</string>
+    <string name="carteiro_cartas_ajuda">Toque numa sala embaixo de cada carta. Mão quer dizer fora do programa.</string>
+    <string name="carteiro_mao">mão</string>
+    <string name="carteiro_programa">O programa</string>
+</resources>

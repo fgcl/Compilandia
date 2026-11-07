@@ -57,3 +57,15 @@ expect object Idioma {
     /** Fecha e abre o jogo de novo. Devolve false onde não dá: a pessoa reabre à mão. */
     fun reabrir(): Boolean
 }
+
+/**
+ * R4: o lembrete diário de revisão. Só no Android, sem internet: um alarme local que, na hora marcada,
+ * lê o save e notifica se houver revisão pendente. No computador e no navegador [disponivel] é false.
+ */
+expect object Lembrete {
+    val disponivel: Boolean
+    /** Liga o alarme diário na [hora] (0 a 23), ou desliga. */
+    fun agenda(ligado: Boolean, hora: Int)
+    /** Pede a permissão de notificar (Android 13 ou mais novo). [onResultado] diz se pode. */
+    fun pedePermissao(onResultado: (Boolean) -> Unit)
+}

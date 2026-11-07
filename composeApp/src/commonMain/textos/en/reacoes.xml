@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J8: the reaction at the end of the sorting games. The person's result runs in the engine. -->
+<resources>
+    <string name="reacao_titulo">Now it runs</string>
+    <string name="reacao_continuar">Continue</string>
+
+    <string name="reacao_porteiro_abre">The regex %1$s becomes an automaton. Now it is the doorkeeper.</string>
+    <string name="reacao_porteiro_entra">The word %1$s ends in %2$s, which is final. It gets in.</string>
+    <string name="reacao_porteiro_barra">The word %1$s ends in %2$s, which is not final. It stays out.</string>
+    <string name="reacao_porteiro_sem_trilho">The word %1$s runs out of track halfway. It stays out.</string>
+    <string name="reacao_porteiro_voce_entra">You let %1$s in.</string>
+    <string name="reacao_porteiro_voce_barra">You turned %1$s away.</string>
+
+    <string name="reacao_esteira_entra">The line enters the belt you built.</string>
+    <string name="reacao_esteira_lexica">%1$s: the line became %2$s tokens.</string>
+    <string name="reacao_esteira_sintatica">%1$s: the parentheses show the tree. The multiplication sits lower.</string>
+    <string name="reacao_esteira_semantica">%1$s: the whole expression has type %2$s.</string>
+    <string name="reacao_esteira_intermediario">%1$s: %2$s three-address instructions.</string>
+    <string name="reacao_esteira_otimizacao">%1$s: 2 * 3 became 6 before running. There were %2$s instructions, now %3$s.</string>
+    <string name="reacao_esteira_geracao">%1$s: %2$s MIPS instructions.</string>
+    <string name="reacao_esteira_roda">The MIPS simulator runs with a = %1$s. At the end, %2$s is %3$s.</string>
+
+    <string name="reacao_detetive_compila">The compiler receives the case.</string>
+    <string name="reacao_detetive_passou">%1$s: passed.</string>
+    <string name="reacao_detetive_pegou">%1$s: caught the error here.</string>
+    <string name="reacao_detetive_execucao">It compiled. The error only shows up at %1$s, with the program running.</string>
+    <string name="reacao_detetive_palpite">You pointed at %1$s. The one that catches it is %2$s.</string>
+
+    <string name="reacao_fatiador_id">%1$s goes into the symbol table.</string>
+    <string name="reacao_fatiador_chave">%1$s tells the parser which rule to use.</string>
+    <string name="reacao_fatiador_num">%1$s becomes a constant.</string>
+    <string name="reacao_fatiador_simbolo">%1$s reaches the parser as it is.</string>
+    <string name="reacao_fatiador_errado">The right class was %1$s.</string>
+    <string name="reacao_fatiador_parser">This is what the parser receives.</string>
+    <string name="reacao_fatiador_tabela">The symbol table ended up with %1$s names.</string>
+    <string name="reacao_fatiador_tabela_vazia">The symbol table stayed empty.</string>
+    <string name="reacao_fatiador_tabela_um">The symbol table ended up with a single name.</string>
+
+    <string name="reacao_arvores_valores">Put numbers in place of the ids: %1$s.</string>
+    <string name="reacao_arvores_primeira">The first tree computes like this and gives %1$s.</string>
+    <string name="reacao_arvores_segunda">The second tree computes like this and gives %1$s.</string>
+    <string name="reacao_arvores_diferentes">The same line %1$s gave two results. That is why ambiguity is a problem.</string>
+    <string name="reacao_arvores_iguais">Here both gave the same value. Still, the parser does not know which tree to build.</string>
+
+    <string name="reacao_cirurgia_abre">The operated grammar goes to Byte with the stack.</string>
+    <string name="reacao_cirurgia_conflito">Cell M[%1$s, %2$s] ended up with two rules. Byte does not know which one to use.</string>
+    <string name="reacao_cirurgia_aceitou">Byte parsed %1$s in %2$s steps, without backtracking.</string>
+    <string name="reacao_cirurgia_perdeu">The sentence %1$s belonged to the old grammar. The operated one no longer generates it.</string>
+    <string name="reacao_cirurgia_parou">With %1$s Byte stopped: %2$s</string>
+    <string name="reacao_cirurgia_longa">With %1$s Byte kept spinning in place.</string>
+
+    <string name="reacao_conflito_frase">The SLR parser reads %1$s.</string>
+    <string name="reacao_conflito_celula">In state %1$s, looking at %2$s, the table has %3$s. The parser gets stuck on this choice.</string>
+    <string name="reacao_conflito_ou"> and </string>
+    <string name="reacao_conflito_nenhum">The parser reads %1$s in %2$s steps without any doubt.</string>
+
+    <string name="reacao_escopo_sobe">The compiler looks for %1$s in the block on line %2$s and finds nothing. It goes up one block.</string>
+    <string name="reacao_escopo_achou">The use of %1$s on line %2$s finds line %3$s: %4$s</string>
+    <string name="reacao_escopo_nada">No block has %1$s. Line %2$s gives an undeclared variable error.</string>
+
+    <string name="reacao_panico_abre">The parser reads the whole input, with panic mode on.</string>
+    <string name="reacao_panico_fim">It reached the end. It found %1$s errors in a single pass.</string>
+    <string name="reacao_panico_fim_um">It reached the end. It found one error in a single pass.</string>
+    <string name="reacao_panico_parou">The parser stopped before the end of the input.</string>
+    <string name="reacao_porteiro_dentro">gets in</string>
+    <string name="reacao_porteiro_fora">stays out</string>
+    <string name="reacao_escopo_linha">Line %1$s: %2$s   ↑ block on line %3$s</string>
+</resources>

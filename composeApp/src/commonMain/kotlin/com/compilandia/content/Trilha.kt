@@ -15,7 +15,7 @@ enum class Etapa { BUG, VER, FAZER,
     REVISAO }
 
 /** Uma etapa da trilha. As de Prática e Pegadinha apontam para a aula da temporada. */
-data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null) {
+data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null, val formato: FormatoRevisao? = null) {
     /** Como a etapa fica guardada no save. */
     val chave: String get() = if (episodio != null && etapa != Etapa.VER) "${etapa.name}:${episodio.id}" else etapa.name
 
@@ -37,7 +37,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null) {
         Etapa.PROGRAMAR -> tx("trilha_etapa_programar_sub")
         Etapa.PRATICA, Etapa.PEGADINHA -> episodio?.title.orEmpty()
         Etapa.DESAFIO -> tx("trilha_etapa_desafio_sub")
-        Etapa.REVISAO -> tx("trilha_etapa_revisao_sub")
+        Etapa.REVISAO -> formato?.titulo ?: tx("trilha_etapa_revisao_sub")
     }
 }
 
@@ -86,13 +86,20 @@ object Trilha {
      */
     fun proximo(l: Learner, s: Skill, nowMs: Long? = null): PassoTrilha? =
         passos(s).firstOrNull { estado(l, s, it) == EstadoEtapa.PENDENTE && !opcional(l, it) }
-            ?: if (nowMs != null && l.skill(s).memory.isDue(nowMs)) revisao(l, s) else null
+            ?: if (nowMs != null && l.skill(s).memory.isDue(nowMs)) {
+                // R2: primeiro um formato de revisão; depois dele, o desafio que atualiza a memória.
+                if (Revisao.formatoFeito(l, s)) PassoTrilha(Etapa.DESAFIO) else revisao(l, s)
+            } else null
 
-    /** O clipe da revisão: muda a cada revisão, para não repetir. */
-    fun revisao(l: Learner, s: Skill): PassoTrilha? {
-        val clipes = Episodes.clipes.filter { it.skill == s }
-        if (clipes.isEmpty()) return null
-        return PassoTrilha(Etapa.REVISAO, clipes[l.skill(s).memory.reviews % clipes.size])
+    /** R2: a revisão da vez, num formato que a pessoa não usou ou usou há mais tempo. */
+    fun revisao(l: Learner, s: Skill): PassoTrilha {
+        val f = Revisao.escolhe(l, s)
+        val ep = when (f) {
+            FormatoRevisao.CLIPE -> Revisao.clipe(l, s)
+            FormatoRevisao.PEGADINHA -> Revisao.pegadinha(l, s)
+            else -> null
+        }
+        return PassoTrilha(Etapa.REVISAO, ep, f)
     }
 
     fun feitas(l: Learner, s: Skill): Int = passos(s).count { estado(l, s, it) == EstadoEtapa.FEITA }

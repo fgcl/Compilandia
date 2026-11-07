@@ -32,6 +32,8 @@ sealed class Screen {
     data class Bancada(val robo: com.compilandia.content.Robo, val fase: Int = -1) : Screen()
     /** A lista dos jogos de montar. */
     data object Bancadas : Screen()
+    /** R1: a retomada de 2 minutos de quem volta depois de 2 dias ou mais. */
+    data class Retomada(val r: com.compilandia.content.Retomada) : Screen()
     data class RegionView(val region: Region) : Screen()
     data class Lesson(
         val skill: Skill,
@@ -79,6 +81,10 @@ class AppState(val learner: Learner) {
     init {
         current = this
         applyPrefs()
+        // R1: quem volta depois de 2 dias ou mais abre na retomada. A sala fica embaixo, para o Voltar.
+        val agora = com.compilandia.platform.nowMs()
+        if (learner.state.onboardingDone) com.compilandia.content.Retomadas.monta(learner, agora)?.let { stack.add(Screen.Retomada(it)) }
+        learner.marcaVisita(agora)
     }
 
     private fun applyPrefs() {
@@ -100,6 +106,7 @@ class AppState(val learner: Learner) {
 
     /** Chame depois de qualquer alteração no aprendiz. */
     fun commit() {
+        learner.marcaVisita(com.compilandia.platform.nowMs())
         val paid = learner.claimQuests(com.compilandia.platform.nowMs())
         ls = learner.state
         applyPrefs()

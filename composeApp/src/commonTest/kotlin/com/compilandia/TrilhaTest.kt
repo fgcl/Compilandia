@@ -6,6 +6,7 @@ import com.compilandia.content.EstadoEtapa
 import com.compilandia.content.Library
 import com.compilandia.content.SeuCompilador
 import com.compilandia.content.Temporada
+import com.compilandia.content.Revisao
 import com.compilandia.content.Trilha
 import com.compilandia.content.episodes.Episodes
 import com.compilandia.learning.GameId
@@ -117,7 +118,7 @@ class TrilhaTest {
         assertEquals(p.indexOf(Etapa.VER) + 1, p.indexOf(Etapa.FAZER))
     }
 
-    @Test fun trilhaCompletaEsquecidaOfereceRevisaoComClipeQueMuda() {
+    @Test fun trilhaCompletaEsquecidaOfereceRevisaoQueTrocaDeFormato() {
         val l = Learner(LearnerState(), Random(1))
         val s = Skill.FIRST
         l.markEpisode(s)
@@ -126,12 +127,32 @@ class TrilhaTest {
         assertNull(Trilha.proximo(l, s), "sem relógio, nada de revisão")
         assertNull(Trilha.proximo(l, s, t0), "memória fresca não pede revisão")
         val depois = t0 + 60L * 86_400_000L
-        val r = Trilha.proximo(l, s, depois)
-        assertEquals(Etapa.REVISAO, r?.etapa)
-        assertEquals(Temporada.CLIPE, r?.episodio?.temporada)
-        l.recordAttempt(s, GameId.FIRST_FOLLOW_ALCHEMY, 1, 1.0, null, 1000, 0, depois)
+        val r = Trilha.proximo(l, s, depois)!!
+        assertEquals(Etapa.REVISAO, r.etapa)
+        assertEquals(Revisao.formatos(s).first(), r.formato)
+        // R2: depois do formato, o desafio que atualiza a memória.
+        l.usouFormato(s, r.formato!!.name, depois)
+        assertEquals(Etapa.DESAFIO, Trilha.proximo(l, s, depois)?.etapa)
+        l.recordAttempt(s, GameId.FIRST_FOLLOW_ALCHEMY, 1, 1.0, null, 1000, 0, depois + 1)
         val r2 = Trilha.revisao(l, s)
-        assertTrue(r2?.episodio?.id != r?.episodio?.id, "a revisão seguinte troca de clipe")
+        assertTrue(r2.formato != r.formato, "a revisão seguinte troca de formato")
+        // Todos os formatos passam antes de algum se repetir.
+        val vistos = mutableSetOf(r.formato!!)
+        var t = depois + 2
+        repeat(Revisao.formatos(s).size - 1) {
+            val f = Trilha.revisao(l, s).formato!!
+            assertTrue(vistos.add(f), "repetiu $f antes de usar todos")
+            l.usouFormato(s, f.name, t++)
+        }
+    }
+
+    @Test fun clipeDaRevisaoMudaACadaRevisao() {
+        val l = Learner(LearnerState(), Random(1))
+        val s = Skill.FIRST
+        l.recordAttempt(s, GameId.FIRST_FOLLOW_ALCHEMY, 1, 1.0, null, 1000, 0, t0)
+        val c1 = Revisao.clipe(l, s)
+        l.recordAttempt(s, GameId.FIRST_FOLLOW_ALCHEMY, 1, 1.0, null, 1000, 0, t0 + 86_400_000L * 30)
+        assertTrue(c1?.id != Revisao.clipe(l, s)?.id)
     }
 
     @Test fun saveAntigoAbreSemEtapas() {

@@ -86,3 +86,10 @@ actual object Idioma {
     actual fun doAparelho(): String = idiomaDoNavegador()
     actual fun reabrir(): Boolean { recarregar(); return true }
 }
+
+/** R4: sem lembrete fora do celular. A retomada aparece quando a pessoa abre o jogo. */
+actual object Lembrete {
+    actual val disponivel: Boolean = false
+    actual fun agenda(ligado: Boolean, hora: Int) {}
+    actual fun pedePermissao(onResultado: (Boolean) -> Unit) = onResultado(false)
+}

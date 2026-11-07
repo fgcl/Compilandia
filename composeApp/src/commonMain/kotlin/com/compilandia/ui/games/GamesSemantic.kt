@@ -154,6 +154,7 @@ fun ScopeDetectiveGame(ctx: GameCtx) {
     var msg by remember { mutableStateOf<Pair<Boolean, String>?>(null) }
     var answered by remember { mutableStateOf(false) }
     val cur = uses.getOrNull(k)
+    val respostas = remember { mutableMapOf<Int, Int?>() }
     val mono = LocalFonts.current.mono
     Text(tx("gamessemantic_variavel_destacada_em_amarelo_enxerga"), style = MaterialTheme.typography.titleSmall)
     HintBox(ctx, tx("gamessemantic_suba_partir_uso_procure_declaracao"))
@@ -171,6 +172,7 @@ fun ScopeDetectiveGame(ctx: GameCtx) {
                 modifier = Modifier.fillMaxWidth().background(bg).clickable(enabled = cur != null && !answered && line.declId != null) {
                     val right = prog.lines[cur!!].resolvesTo
                     val ok = idx == right
+                    respostas[cur] = idx
                     if (ok) correct++
                     answered = true
                     msg = ok to if (ok) tx("gamessemantic_isso_escopo_mais_interno_que", prog.lines[cur].use) else
@@ -182,11 +184,14 @@ fun ScopeDetectiveGame(ctx: GameCtx) {
     }
     if (cur == null) {
         FeedbackBanner(correct == uses.size, tx("gamessemantic_voce_resolveu_1_2_usos", correct, uses.size))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(if (uses.isEmpty()) 1.0 else correct.toDouble() / uses.size) }
+        // J8: o compilador procura cada uso bloco por bloco, começando pelos que você errou.
+        val passos = remember { com.compilandia.engine.Reacoes.escopo(prog, respostas.toMap()) }
+        Reacao(passos) { ctx.finish(if (uses.isEmpty()) 1.0 else correct.toDouble() / uses.size) }
         return
     }
     if (!answered) BigButton(tx("gamessemantic_nao_foi_declarada"), Modifier.fillMaxWidth(), color = Palette.red) {
         val ok = prog.lines[cur].resolvesTo == null
+        respostas[cur] = null
         if (ok) correct++
         answered = true
         msg = ok to if (ok) tx("gamessemantic_exato_erro_semantico_variavel_nao") else tx("gamessemantic_tem_sim_declaracao_visivel_destacada")

@@ -45,9 +45,12 @@ O teste `RenderSmokeTest` renderiza todas as telas, os 29 minijogos, as aulas, c
 ```
 
 As imagens ficam em `composeApp/build/screenshots`.
+Sem filtro, os episódios saem com uma foto por aula. Para fotografar todos os passos, rode com `EPISODIOS=BASICO` (as 29 aulas animadas) ou com o nome de uma temporada, como `EPISODIOS=TABELAS,EM_C`.
+Os testes rodam sem som e gravam o save em `composeApp/build/casa-teste`, nunca no seu.
 
 O teste `RenderSmokeTest.larguras` fotografa as telas principais em 360, 412, 700 e 1200 dp de largura e no celular deitado (pasta `larguras`).
 A tarefa `desktopTestIngles` roda logo depois do `desktopTest`, numa JVM própria, e renderiza o jogo em inglês (pasta `ingles`).
+Os robôs e as telas de revisão têm capturas próprias, nas pastas `bancada` e `revisao` (`BancadaRenderTest` e `RevisaoRenderTest`).
 
 ## O que tem dentro
 
@@ -56,8 +59,9 @@ A tela inicial é uma sala em 3D. Tocar num móvel abre o que ele guarda: o gave
 Jogar rende engrenagens, e cada engrenagem compra uma peça que entra na sala com sombra e luz. O botão **Continuar** sempre sabe o próximo passo.
 
 ### Aulas animadas com voz
-Cada um dos 29 assuntos tem um episódio curto: o algoritmo roda no palco e o Byte narra, com a boca sincronizada com a fala.
-- Uma ideia por cena, e quem controla o ritmo é você.
+Cada um dos 29 assuntos tem uma aula animada: o algoritmo roda no palco e o Byte narra, com a boca sincronizada com a fala.
+Toda aula segue o mesmo caminho. Primeiro vem por que o assunto existe, depois um exemplo, a receita à vista e um segundo exemplo em que você responde. O motor gera os exemplos, e um teste confere cada resposta contra ele.
+- Uma ideia por cena, e quem controla o ritmo é você. O play ao lado do Continuar deixa a aula seguir sozinha até a próxima pergunta.
 - O Byte entra na cena quando precisa. No autômato, ele é o trem.
 - A animação para e pede seu toque no próprio desenho.
 - Sem som, a legenda aparece sozinha. O botão CC liga a legenda quando quiser.
@@ -65,13 +69,21 @@ Cada um dos 29 assuntos tem um episódio curto: o algoritmo roda no palco e o By
 - **A fita de cenas** fica no alto, com a miniatura de cada cena. Toque ou arraste para voltar.
 - **Outro exemplo:** no fim da aula, o motor gera um exemplo novo do mesmo assunto.
 - **Não entendi:** cada fala tem esse botão. Ele guarda qual fala foi, e é o melhor sensor de texto ruim que existe.
+- **Termo sublinhado:** um toque abre um balão com a explicação curta e o caminho para a aula do assunto.
 
-Cada região tem até cinco temporadas:
-- **Básico:** o episódio de sempre.
-- **Pegadinhas:** 26 aulas com o que mais derruba na prova, como o else solto, o conflito sem ambiguidade e o `%left` trocado.
-- **Prática:** 11 aulas em que você pilota. Corte a linha, pilote o trem, opere a pilha, rode a esteira, suba os tipos. Cada toque roda o motor de verdade.
-- **Tabelas:** 4 aulas em que o assunto vira caixa com compartimentos, como num diagrama de classes. O estado do autômato traz uma linha por letra e o fio sai dela; o autômato vira tabela de transição; os itens LR ficam em caixas como no `bison --graph`; cada chamada de função ganha seu registro de ativação.
-- **Em C:** uma série de 5 aulas que escreve o compilador em C. O laço do `getchar`, uma função por regra, o `struct Node`, da árvore ao MIPS, e flex + bison + `main.c`. A série aparece inteira em qualquer região.
+### A trilha de cada assunto
+Na região, cada assunto ocupa uma linha. Tocar nela abre a trilha, com as etapas na ordem em que se aprende:
+1. Abertura com o Bug.
+2. Ver a aula animada. Embaixo dela ficam **Ler com calma**, a aula de texto, e, em quatro assuntos, **Outro jeito de ver**. Nele o autômato vira tabela de transição, os itens LR ficam em caixas como no `bison --graph` e cada chamada de função ganha seu registro de ativação.
+3. Fazer com ajuda: quatro problemas gerados pelo motor. No primeiro o Byte resolve tudo, e a cada problema ele faz menos, até você resolver sozinho.
+4. Programar o Byte, nos seis assuntos que têm robô (veja a Bancada do Byte, abaixo).
+5. Prática: você pilota. Corte a linha, pilote o trem, opere a pilha, rode a esteira, suba os tipos. Cada toque roda o motor de verdade.
+6. Pegadinha: o que mais derruba na prova, como o else solto, o conflito sem ambiguidade e o `%left` trocado.
+7. Desafio: um minijogo do assunto.
+
+Nem todo assunto tem todas as etapas. Qualquer uma tem **pular**, que não custa nada e deixa voltar depois.
+
+No mapa, **Seu compilador** junta a série em C e o Guia do TP numa trilha só: o laço do `getchar`, uma função por regra, o `struct Node`, da árvore ao MIPS, e flex + bison + `main.c`.
 
 A bolinha pode virar caixa na frente de você: é o mesmo autômato, desenhado de outro jeito.
 
@@ -114,6 +126,20 @@ Um Wordle de compiladores: a gramática é o dicionário, e cada palpite precisa
 - **Chefão:** o último acerto solta uma onda de choque e o letreiro COMPILOU.
 - **Sala viva:** o monitor pisca, a solda solta faísca, a poeira sobe, e um Bug passeia para você esmagar.
 
+### Bancada do Byte
+Em seis assuntos você programa o Byte. Monte a solução, toque em Rodar e veja o robô executar. Quando algo quebra, o Byte mostra o primeiro teste que falhou e o que esperava, como "Com a = 2, b = 3, ficou x = 4. Esperava x = 5."
+
+| Robô | O que você monta | Região |
+|---|---|---|
+| Trilho que você constrói | a tabela de transição e os estados finais | Floresta Léxica |
+| Fábrica de frases | as regras da gramática; frase que sai de dois jeitos mostra as duas árvores | Vale das Gramáticas |
+| Byte com a pilha | a tabela LL(1); o Byte para na célula vazia | Templo Top-Down |
+| Guindaste empilha-reduz | a ordem das regras de redução | Fortaleza Bottom-Up |
+| Carteiro do escopo | o bloco de cada declaração; o Byte entrega cada uso subindo de bloco em bloco | Cidade Semântica |
+| Robô MIPS | as instruções, que rodam no simulador MIPS | Forja do Código |
+
+O palco tem linha do tempo para pausar e andar passo a passo. A dica tem três degraus, e o próximo só abre depois de rodar.
+
 ### 29 minijogos
 | Jogo | Mecânica | Assunto |
 |---|---|---|
@@ -143,6 +169,8 @@ Um Wordle de compiladores: a gramática é o dicionário, e cada palpite precisa
 | 🧑‍💻 Programador Descendente | montar o método Java do parser (`casaToken`) | descida recursiva |
 | 🏭 Fábrica de Autômatos | montar o autômato com o dedo; robôs testam, e a frase que furou aparece | regex/AFD, minimização |
 
+Nove jogos de classificar terminam com **Agora roda**: o motor executa o que você respondeu. No Porteiro Regex, o autômato julga as palavras em que você errou. Nas Duas Árvores, com números no lugar dos ids, cada árvore dá uma conta diferente.
+
 Todos os desafios são **gerados pelo motor de compiladores do próprio jogo**, então a prática é infinita.
 Esse motor está em `composeApp/src/commonMain/kotlin/com/compilandia/engine` e inclui:
 - FIRST/FOLLOW com rastro passo a passo;
@@ -164,9 +192,10 @@ A pesquisa mostrou que o TP da disciplina pede um compilador completo:
 - geração de **MIPS** para o MARS.
 
 O guia percorre cada etapa com uma linguagem de exemplo original. Ver [docs/CURRICULO.md](docs/CURRICULO.md).
+No mapa, o guia fica em **Seu compilador**.
 
 ### Aulas de texto em 6 estilos
-Para quem quer ler mais, cada assunto também tem aulas de texto, abertas em "mais" na tela da região:
+Para quem quer ler mais, cada assunto também tem aulas de texto, abertas em **Ler com calma** na trilha. Elas começam com o palco animado das cenas do assunto, e **Não entendi** troca de estilo:
 - 📖 história/analogia
 - 🎬 passo a passo visual (widgets interativos do motor)
 - ✍️ exemplo resolvido
@@ -178,13 +207,16 @@ Nos jogos, **Não entendi** abre a aula animada do assunto e **Trocar jogo** mud
 
 ### Técnicas de aprendizagem usadas
 - **Prática de recuperação**: jogos, "pense e toque para revelar" e flashcards.
-- **Repetição espaçada**: curva de esquecimento estilo FSRS; o jogo chama você para revisar quando a memória cai abaixo de 90%.
+- **Repetição espaçada**: curva de esquecimento estilo FSRS. Quando a memória de um assunto cai abaixo de 90%, a trilha oferece uma revisão rápida, e o formato muda a cada vez: prever num exemplo novo, julgar as frases do Bug, uma fase do robô, um clipe de 30 segundos, explicar com suas palavras ou a pegadinha.
+- **Revisão por ideia**: cada frase dos Bugs do Álbum tem memória própria. A revisão volta só na ideia que você esqueceu.
+- **Retomada**: quem volta depois de 2 dias ou mais começa com três frases de verdade ou mentira, tiradas das ideias mais esquecidas. Depois o Continuar segue de onde parou.
+- **Lembrete**, só no celular e desligado até você ligar em Ajustes: uma notificação por dia, na hora escolhida, quando há revisão pendente.
 - **Intercalação**: a "Missão intercalada" mistura assuntos.
 - **Metacognição**: antes de cada jogo você diz sua confiança. Depois vê o espelho confiança × resultado × previsão da IA, e acompanha sua calibração (índice de Brier) no Painel do Cérebro.
 - **Efeito de geração**: blocos "preveja antes de ver".
 - **Técnica Feynman**: explicar com suas palavras, com checagem dos termos-chave.
 - **Interrogação elaborativa** ("por quê?"), **codificação dupla** (visual + verbal), **dificuldade desejável** e **mentalidade de crescimento**.
-- **Diário de bordo** para reflexão.
+- **Reflexão**: no fim de cada aula, você marca a cena que ficou confusa.
 
 ### A "rede neural" (honestamente)
 Tudo roda **no celular, offline**:
@@ -223,12 +255,15 @@ Também abre pela Oficina Yacc/Bison. Cada mudança no `.y` roda o motor na hora
 ## Estrutura
 
 ```
+composeApp/src/commonMain/textos/
+  pt/, en/   todo texto e fala do jogo, no formato do strings.xml
 composeApp/src/commonMain/kotlin/com/compilandia/
   engine/    motor de compiladores (Kotlin puro, testado)
   learning/  BKT, memória, rede neural, bandits, recomendação
   content/   episódios, clipes, aberturas, brinquedos, álbum, aulas de texto e Guia do TP
   tutor/     o que o Byte faz no Laboratório: lê a entrada, diagnostica e gera as simulações
   ui/        telas, minijogos e widgets (Compose)
+    bancada/ a Bancada do Byte: os robôs que você programa
     cast/    Byte, Profª Gramática e Bug, desenhados em Compose
     motion/  o palco: anima a diferença entre duas imagens
     voice/   narrador e sincronismo da boca
@@ -238,6 +273,7 @@ composeApp/src/commonMain/kotlin/com/compilandia/
     album/, corrida/, desafio/, feed/
 scripts/
   voice/     renderiza e confere as falas (Kokoro + Whisper)
+  bancada/   painel com as propostas jogáveis e os vereditos
   art/       renderiza a sala no Blender
   text_lint.py  revisa o texto: frase longa, vício de IA, voz passiva, índices do ALT e gramática
 verify/      build auxiliar para testar o Kotlin puro sem Android SDK

@@ -189,6 +189,9 @@ fun CacaBugScreen(app: AppState, id: String) {
         if (resposta != null || t == null) return
         resposta = diz
         if (diz == t.verdade) { Juice.correct(); hurt++ } else { Juice.wrong(); erros++ }
+        // R3: cada frase do Bug é uma ideia com memória própria.
+        val k = e.testes.indexOf(t)
+        if (k >= 0) app.learner.revisaIdeia(com.compilandia.content.Ideias.id(e, k), e.skill, if (diz == t.verdade) 1.0 else 0.0, nowMs())
     }
     fun proxima() {
         if (k + 1 < testes.size) k++ else {

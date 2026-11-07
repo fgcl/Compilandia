@@ -136,6 +136,8 @@ def main():
             velho[fid] = f"{fid} {ms} " + ','.join(f'{t}:{b}' for t, b in marcas)
             if k % 20 == 0:
                 print(f'  {k + 1}/{len(faltam)}', flush=True)
+                # Grava o índice aos poucos: se o processo morrer (falta de memória), a próxima rodada continua daqui.
+                idx.write_text('\n'.join(velho[i] for i in sorted(velho)) + '\n')
 
     usados = {l[0] for l in linhas}
     idx.write_text('\n'.join(velho[i] for i in sorted(usados) if i in velho) + '\n')
