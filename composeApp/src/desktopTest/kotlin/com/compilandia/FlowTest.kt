@@ -72,29 +72,6 @@ class FlowTest {
         assertTrue(depois is Screen.Play || (depois is Screen.Episode && depois.id != null), "depois da aula vem a próxima etapa, veio $depois")
     }
 
-    @Test fun todaPerguntaDeTodoEpisodioRespondeAoToque() = runDesktopComposeUiTest(412, 900, testTimeout = 8.minutes) {
-        mainClock.autoAdvance = false
-        val app = estado()
-        val comPergunta = Episodes.all.filter { e -> e.passos.any { it.ask != null } }
-        var atual by mutableStateOf(comPergunta.first())
-        setContent {
-            androidx.compose.runtime.key(atual.id) {
-                com.compilandia.ui.CompilandiaTheme {
-                    com.compilandia.ui.screens.EpisodeScreen(app, Screen.Episode(atual.skill, id = atual.id), onStep = atual.passos.indexOfFirst { it.ask != null }, abertura = false)
-                }
-            }
-        }
-        for (e in comPergunta) {
-            atual = e
-            anda(200)
-            val a = e.passos.first { it.ask != null }
-            val hits = Juice.hitTick
-            for (id in a.ask!!.right) toca(a.shot, id)
-            anda(100)
-            assertEquals(hits + 1, Juice.hitTick, "${e.skill}: tocar na resposta certa precisa acertar (${a.ask!!.right})")
-        }
-    }
-
     @Test fun tocarErradoNaoBloqueia() = runDesktopComposeUiTest(412, 900) {
         mainClock.autoAdvance = false
         val e = Episodes.of(Skill.TOKENS)!!
@@ -152,5 +129,42 @@ class FlowTest {
         Juice.wrong()
         anda()
         assertEquals(0, Juice.combo)
+    }
+}
+
+/** Toca na resposta de todo episódio com pergunta. Classe própria: é longa e roda ao lado das outras. */
+class FlowPerguntasTest {
+    init { Narrator.silent = true }
+
+    private fun estado(s: LearnerState = LearnerState(name = "Felipe", onboardingDone = true)) = AppState(Learner(s, Random(1)))
+
+    private fun ComposeUiTest.anda(ms: Long = 1500) = mainClock.advanceTimeBy(ms)
+
+    private fun ComposeUiTest.toca(shot: Shot, id: String) {
+        onNodeWithTag(STAGE_TAG).performTouchInput { click(stagePoint(shot, id, width.toFloat(), height.toFloat(), com.compilandia.ui.motion.alturaLogica(width.toFloat(), height.toFloat()))) }
+        anda(300)
+    }
+
+    @Test fun todaPerguntaDeTodoEpisodioRespondeAoToque() = runDesktopComposeUiTest(412, 900, testTimeout = 8.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado()
+        val comPergunta = Episodes.all.filter { e -> e.passos.any { it.ask != null } }
+        var atual by mutableStateOf(comPergunta.first())
+        setContent {
+            androidx.compose.runtime.key(atual.id) {
+                com.compilandia.ui.CompilandiaTheme {
+                    com.compilandia.ui.screens.EpisodeScreen(app, Screen.Episode(atual.skill, id = atual.id), onStep = atual.passos.indexOfFirst { it.ask != null }, abertura = false)
+                }
+            }
+        }
+        for (e in comPergunta) {
+            atual = e
+            anda(200)
+            val a = e.passos.first { it.ask != null }
+            val hits = Juice.hitTick
+            for (id in a.ask!!.right) toca(a.shot, id)
+            anda(100)
+            assertEquals(hits + 1, Juice.hitTick, "${e.skill}: tocar na resposta certa precisa acertar (${a.ask!!.right})")
+        }
     }
 }

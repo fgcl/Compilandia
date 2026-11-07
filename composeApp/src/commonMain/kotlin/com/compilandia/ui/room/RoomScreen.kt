@@ -193,6 +193,7 @@ private fun GavetaJogar(app: AppState, now: Long, onFechar: () -> Unit) {
         ) {
             Text(tx("sala_jogar"), style = MaterialTheme.typography.headlineSmall)
             BigButton(tx("desafioscreen_desafio_dia"), Modifier.fillMaxWidth(), color = if (app.ls.desafioDia != hoje) Palette.hazard else Palette.drawer, small = true) { onFechar(); app.go(Screen.Desafio) }
+            BigButton(tx("sala_programar"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Bancadas) }
             BigButton(tx("sala_corrida"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Corrida) }
             BigButton(tx("albumscreen_album_bugs"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Album) }
             BigButton(tx("sala_aulas_30"), Modifier.fillMaxWidth(), color = Palette.drawer, small = true) { onFechar(); app.go(Screen.Feed) }

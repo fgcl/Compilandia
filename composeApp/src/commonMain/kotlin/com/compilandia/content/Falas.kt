@@ -48,5 +48,5 @@ object Falas {
     )
 
     /** Toda fala solta, para gerar os áudios. */
-    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + guiado + boas + comoJogar.values
+    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + guiado + boas + comoJogar.values + Robos.falas()
 }

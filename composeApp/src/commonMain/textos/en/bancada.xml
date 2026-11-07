@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J1 Byte's Workbench, J2 MIPS Robot and J3 Build-the-Track. -->
+<resources>
+    <!-- The workbench (J1) -->
+    <string name="bancada_titulo">Program Byte</string>
+    <string name="bancada_sub">You build, Byte runs it, the workbench tests it.</string>
+    <string name="bancada_fase">Level %1$s</string>
+    <string name="bancada_rodar">Run</string>
+    <string name="bancada_dica">Hint</string>
+    <string name="bancada_limpar">Clear</string>
+    <string name="bancada_dica_n">Hint %1$s of 3.</string>
+    <string name="bancada_dica_trava">Run the program once before the next hint.</string>
+    <string name="bancada_testes">Test bench</string>
+    <string name="bancada_testes_vazio">Press Run. The bench tests several inputs at once.</string>
+    <string name="bancada_rever">Tap a test to watch Byte run it.</string>
+    <string name="bancada_achado">found by Byte</string>
+    <string name="bancada_esperava">expected %1$s</string>
+    <string name="bancada_passou">All %1$s tests passed.</string>
+    <string name="bancada_programa_vazio">The program is empty. Tap the cards to build it.</string>
+    <string name="bancada_proxima_fase">Next level</string>
+    <string name="bancada_concluir">Finish</string>
+    <string name="bancada_fases_feitas">%1$s of %2$s levels</string>
+    <string name="bancada_voltar_inicio">Back to the start</string>
+    <string name="bancada_passo_antes">Previous step</string>
+    <string name="bancada_passo_depois">Next step</string>
+    <string name="bancada_tocar">Play</string>
+    <string name="bancada_pausar">Pause</string>
+    <string name="bancada_velocidade">Speed</string>
+
+    <!-- The games -->
+    <string name="robo_mips_titulo">MIPS Robot</string>
+    <string name="robo_mips_sub">Build the program with cards. Byte carries the boxes.</string>
+    <string name="robo_trilho_titulo">Build the track</string>
+    <string name="robo_trilho_sub">Lay the tracks of the automaton. Byte reads the string.</string>
+    <string name="trilha_etapa_programar">Program Byte</string>
+    <string name="trilha_etapa_programar_sub">You build it and Byte runs it</string>
+    <string name="sala_programar">Program Byte</string>
+
+    <!-- J2 MIPS Robot: stage -->
+    <string name="robomips_memoria">Memory</string>
+    <string name="robomips_registradores">Registers</string>
+    <string name="robomips_somador">adder</string>
+    <string name="robomips_cartas">Cards</string>
+    <string name="robomips_programa">Program</string>
+    <string name="robomips_toque_cartas">Tap the cards to build the program.</string>
+    <string name="robomips_subir">move up</string>
+    <string name="robomips_tirar">remove</string>
+
+    <!-- J2: levels -->
+    <string name="robomips_fase_troca">swap a and b</string>
+    <string name="robomips_fase_se">if a = b, x = 1</string>
+    <string name="robomips_pedido_soma">Fetch the two numbers, add them and store the sum in the last box.</string>
+    <string name="robomips_pedido_dobro">Now store double the sum. There is no multiply card.</string>
+    <string name="robomips_pedido_troca">Swap what is in the two boxes without losing either value.</string>
+    <string name="robomips_pedido_se">If the two boxes are equal, store one in the last box. Otherwise, leave zero.</string>
+    <string name="robomips_pedido_laco">Add up from one to the number in the first box. Use a loop.</string>
+
+    <!-- J2: hints -->
+    <string name="robomips_dica_soma_1">add only adds registers. The numbers leave the shelf first, with lw.</string>
+    <string name="robomips_dica_soma_2">Load a and b into different registers. Add them and store into x with sw.</string>
+    <string name="robomips_dica_dobro_1">Doubling a number is adding it to itself.</string>
+    <string name="robomips_dica_dobro_2">With the sum in $t2, add $t2 to $t2.</string>
+    <string name="robomips_dica_troca_1">If you store into b before reading b, the old value of b is gone.</string>
+    <string name="robomips_dica_troca_2">Read both boxes first, into different registers. Only then store.</string>
+    <string name="robomips_dica_se_1">A branch jumps when its condition holds. Skip the store when a and b are different.</string>
+    <string name="robomips_dica_se_2">With bne, Byte jumps to fim when the two differ. Before fim, put 1 in x.</string>
+    <string name="robomips_dica_laco_1">On each pass, add the counter and take one from it. Stop when it reaches zero.</string>
+    <string name="robomips_dica_laco_2">At the top of the loop, test whether $t0 is zero and jump to fim. At the bottom, go back with j.</string>
+    <string name="robomips_dica_linha">Look at line %1$s. The card %2$s goes there.</string>
+    <string name="robomips_dica_linha_sobra">The start is right. Remove the cards after line %1$s.</string>
+
+    <!-- J2: caption for each step -->
+    <string name="robomips_nota_inicio">The boxes hold the test values. Byte starts at the first card.</string>
+    <string name="robomips_nota_lw">lw: Byte fetches %1$s from the shelf and puts it in %2$s.</string>
+    <string name="robomips_nota_sw">sw: Byte takes the value of %1$s and stores it in box %2$s.</string>
+    <string name="robomips_nota_add">add: adds %1$s and %2$s and stores the result in %3$s.</string>
+    <string name="robomips_nota_addi">addi: adds %2$s to %1$s and stores the result in %3$s.</string>
+    <string name="robomips_nota_li">li: puts %1$s in %2$s.</string>
+    <string name="robomips_nota_desvio_pula">%1$s, so the branch jumps to %2$s.</string>
+    <string name="robomips_nota_desvio_segue">%1$s, so the branch does not jump. It goes on to the next card.</string>
+    <string name="robomips_nota_j">j: Byte jumps to %1$s.</string>
+    <string name="robomips_nota_fim">The program ended. The bench checks the boxes.</string>
+    <string name="robomips_nota_parou">The program stopped: %1$s</string>
+
+    <!-- J2: verdict -->
+    <string name="robomips_nao_terminou">did not finish</string>
+    <string name="robomips_falha">With %1$s, you got %2$s. Expected %3$s. Change the program and run it again.</string>
+    <string name="robomips_falha_erro">With %1$s, the program did not finish. %2$s</string>
+    <string name="robomips_passou_curto">All %1$s tests passed. It can be done with %2$s instructions. Want to try?</string>
+
+    <!-- J3 Track: table -->
+    <string name="trilho_tabela">Tracks: the transition table</string>
+    <string name="trilho_estado">state</string>
+    <string name="trilho_lendo">reading %1$s</string>
+    <string name="trilho_toque_final">Tap a state to mark it as final.</string>
+    <string name="trilho_toque_celula">Tap a cell to change where its track goes.</string>
+    <string name="trilho_final">final</string>
+    <string name="trilho_palavra">String</string>
+
+    <!-- J3: levels -->
+    <string name="trilho_fase_termina1">ends in 1</string>
+    <string name="trilho_fase_par">even number of ones</string>
+    <string name="trilho_fase_contem00">contains 00</string>
+    <string name="trilho_fase_ident">identifier</string>
+    <string name="trilho_pedido_termina1">Lay the tracks to accept the strings that end in one.</string>
+    <string name="trilho_pedido_par">Now accept the strings with an even number of ones. The empty string has zero ones.</string>
+    <string name="trilho_pedido_contem00">With three states, accept the strings that have two zeros in a row.</string>
+    <string name="trilho_pedido_ident">Accept variable names. They start with a letter, then letters or digits follow.</string>
+
+    <!-- J3: hints -->
+    <string name="trilho_dica_termina1_1">Each state remembers one thing. Here it is enough to remember the last symbol read.</string>
+    <string name="trilho_dica_termina1_2">Make q1 the state of a string that just read 1. Only q1 is final.</string>
+    <string name="trilho_dica_par_1">Each state remembers whether you have read an even or odd number of ones so far.</string>
+    <string name="trilho_dica_par_2">Reading 0 does not change the count. Reading 1 switches state. The start is already even.</string>
+    <string name="trilho_dica_contem00_1">q0: no zero just now. q1: just saw one zero. q2: already saw 00.</string>
+    <string name="trilho_dica_contem00_2">Once 00 shows up, the string is in. From q2, every track goes back to q2.</string>
+    <string name="trilho_dica_ident_1">The first symbol decides. A digit at the start has no track, and the train stops.</string>
+    <string name="trilho_dica_ident_2">From q0, only a-z leads to q1. In q1, letters and digits stay in q1. q1 is final.</string>
+    <string name="trilho_olhe_celula">Look at the cell for q%1$s reading %2$s. The string %3$s goes through it.</string>
+    <string name="trilho_olhe_estado">Trace the string %1$s with your finger. It ends in q%2$s. Check the path and whether q%2$s is final.</string>
+
+    <!-- J3: caption for each step -->
+    <string name="trilho_nota_inicio">The train leaves from q%1$s.</string>
+    <string name="trilho_nota_anda">Read %1$s: went from q%2$s to q%3$s.</string>
+    <string name="trilho_nota_sem_trilho">In q%1$s, reading %2$s, there is no track. The train stops.</string>
+    <string name="trilho_nota_final">The string ended in q%1$s, which is final. It gets in.</string>
+    <string name="trilho_nota_nao_final">The string ended in q%1$s, which is not final. It stays out.</string>
+
+    <!-- J3: verdict -->
+    <string name="trilho_resultado_sem_trilho">no track</string>
+    <string name="trilho_resultado_entrou">gets in</string>
+    <string name="trilho_resultado_fora">stays out</string>
+    <string name="trilho_passou">All %1$s tests passed. Byte checked every string, and none got away.</string>
+    <string name="trilho_falha">The string %1$s %2$s, so it should %3$s. But %4$s.</string>
+    <string name="trilho_devia_entrar">get in</string>
+    <string name="trilho_devia_ficar_fora">stay out</string>
+    <string name="trilho_mas_sem_trilho">in q%1$s, reading %2$s, the train ran out of track</string>
+    <string name="trilho_mas_final">the train stopped in q%1$s, which is final</string>
+    <string name="trilho_mas_nao_final">the train stopped in q%1$s, which is not final</string>
+    <string name="trilho_motivo_vazia">is empty</string>
+    <string name="trilho_motivo_termina">ends in %1$s</string>
+    <string name="trilho_motivo_nenhum_um">has no 1 at all</string>
+    <string name="trilho_motivo_um_so">has a single 1</string>
+    <string name="trilho_motivo_uns">has %1$s ones</string>
+    <string name="trilho_motivo_tem00">has 00</string>
+    <string name="trilho_motivo_sem00">has no 00</string>
+    <string name="trilho_motivo_comeca_digito">starts with a digit</string>
+    <string name="trilho_motivo_comeca_letra">starts with a letter</string>
+
+    <!-- J4 Byte with the stack, J5 Shift-reduce crane and J6 Sentence factory -->
+    <string name="robo_pilha_titulo">Byte with the stack</string>
+    <string name="robo_pilha_sub">Fill in the LL(1) table. Byte parses the sentences with the stack.</string>
+    <string name="robo_guindaste_titulo">Shift-reduce crane</string>
+    <string name="robo_guindaste_sub">Order the rules. The crane shifts and replaces the top of the stack.</string>
+    <string name="robo_fabrica_titulo">Sentence factory</string>
+    <string name="robo_fabrica_sub">Switch on the grammar machines. The factory shows the sentences that come out.</string>
+
+    <string name="robopilha_gramatica">Grammar</string>
+    <string name="robopilha_tabela">LL(1) table</string>
+    <string name="robopilha_toque_celula">Tap a cell to change its rule. One more tap empties it.</string>
+    <string name="robopilha_entrada">Input</string>
+    <string name="robopilha_pilha">Stack</string>
+    <string name="robopilha_celula">Table cell</string>
+    <string name="robopilha_celula_vazia">empty</string>
+
+    <string name="robopilha_fase_parenteses">parentheses</string>
+    <string name="robopilha_fase_lista">comma list</string>
+    <string name="robopilha_fase_vazio">rule that vanishes</string>
+    <string name="robopilha_fase_expressao">expression</string>
+    <string name="robopilha_pedido_parenteses">Fill in the table. Byte follows the table to parse each sentence.</string>
+    <string name="robopilha_pedido_lista">Now a list separated by commas. One cell gets the empty rule.</string>
+    <string name="robopilha_pedido_vazio">Here a variable can vanish. Look at what comes after it.</string>
+    <string name="robopilha_pedido_expressao">Now the expression with plus and parentheses. Use FIRST and FOLLOW.</string>
+
+    <string name="robopilha_dica_parenteses_1">The column is the symbol Byte is reading. With ( in the input, only one rule of A starts with (.</string>
+    <string name="robopilha_dica_parenteses_2">The rule ( A ) goes in column (. The rule x goes in column x. The others stay empty.</string>
+    <string name="robopilha_dica_lista_1">R → ε goes in the columns of FOLLOW of R. After the list only the end comes, $.</string>
+    <string name="robopilha_dica_lista_2">With a comma in the input, R goes on: , id R. With $ in the input, R vanishes.</string>
+    <string name="robopilha_dica_vazio_1">A can vanish. So S → A b also works when the sentence already starts with b.</string>
+    <string name="robopilha_dica_vazio_2">FIRST of A b is a and b. After A comes b, so A → ε goes in column b.</string>
+    <string name="robopilha_dica_expressao_1">E and T start with id or (. Put the rule of each one in those two columns.</string>
+    <string name="robopilha_dica_expressao_2">E' → ε goes in FOLLOW of E': the ) and the $. With + in the input, E' goes on.</string>
+    <string name="robopilha_olhe_celula">Look at M[%1$s, %2$s]. The sentence %3$s goes through it.</string>
+    <string name="robopilha_olhe_sobra">Look at M[%1$s, %2$s]. Check FIRST and FOLLOW of %1$s.</string>
+
+    <string name="robopilha_nota_inicio">The stack starts with $ and %1$s. Byte looks at the top and the input.</string>
+    <string name="robopilha_nota_expande">Top %1$s, reading %2$s: the cell says to replace %1$s with %3$s.</string>
+    <string name="robopilha_nota_casa">The top is %1$s, same as the input. Byte removes both and moves on.</string>
+    <string name="robopilha_nota_aceita">The stack and the input ended together. The sentence is accepted.</string>
+    <string name="robopilha_nota_vazia">Top %1$s, reading %2$s, and the cell is empty. Byte stops.</string>
+    <string name="robopilha_nota_nao_casa">The top is %1$s, but the input has %2$s. Byte stops.</string>
+    <string name="robopilha_nota_sobrou">The stack ran out, but the input still has %1$s. Byte stops.</string>
+    <string name="robopilha_nota_longa">Byte took too many steps and stopped.</string>
+
+    <string name="robopilha_aceita">accepts</string>
+    <string name="robopilha_recusa">rejects</string>
+    <string name="robopilha_resultado_vazia">stopped at M[%1$s, %2$s]</string>
+    <string name="robopilha_resultado_nao_casa">stopped with %1$s on top</string>
+    <string name="robopilha_resultado_sobrou">input left over</string>
+    <string name="robopilha_resultado_longa">never stopped</string>
+    <string name="robopilha_tabela_vazia">The table is empty. Tap the cells to add the rules.</string>
+    <string name="robopilha_passou">All %1$s sentences passed, and the table matches the exam table.</string>
+    <string name="robopilha_falha_aceitou">The sentence %1$s is not in the grammar, but Byte accepted it.</string>
+    <string name="robopilha_falha_vazia">With %1$s, Byte stopped. I do not know what to do with %2$s and %3$s.</string>
+    <string name="robopilha_falha_nao_casa">With %1$s, the top became %2$s, but the input had %3$s. A cell picked the wrong rule.</string>
+    <string name="robopilha_falha_sobrou">With %1$s, the stack ran out early. There was still %2$s to read.</string>
+    <string name="robopilha_falha_longa">With %1$s, Byte kept replacing and never stopped.</string>
+    <string name="robopilha_falha_sobra">The sentences passed, but M[%1$s, %2$s] has %3$s. No correct sentence uses that cell. On the exam, it stays empty.</string>
+    <string name="robopilha_falha_celula">The sentences passed, but M[%1$s, %2$s] does not match the exam table.</string>
+
+    <string name="guindaste_cartas">Rules</string>
+    <string name="guindaste_programa">Crane program: it tries from top to bottom</string>
+    <string name="guindaste_toque_cartas">Tap the rules to add them to the program. The order matters.</string>
+    <string name="guindaste_antes_de">reduces before</string>
+    <string name="guindaste_espera_simbolo">reduces before %1$s</string>
+    <string name="guindaste_esteira">Belt</string>
+    <string name="guindaste_travou">stuck</string>
+    <string name="guindaste_olha_qualquer">any symbol</string>
+
+    <string name="guindaste_fase_parenteses">parentheses</string>
+    <string name="guindaste_fase_lista">comma list</string>
+    <string name="guindaste_fase_soma">sum</string>
+    <string name="guindaste_fase_vezes">sum and times</string>
+    <string name="guindaste_pedido_parenteses">Put the rules in the crane. It replaces the top of the stack using the rule.</string>
+    <string name="guindaste_pedido_lista">Now a list with commas. The order of the rules changes the result.</string>
+    <string name="guindaste_pedido_soma">Now sums. Make sure the crane does not reduce too early.</string>
+    <string name="guindaste_pedido_vezes">Now with times. Each rule can wait for the next symbol on the belt.</string>
+
+    <string name="guindaste_dica_parenteses_1">The crane replaces the top when it equals the right side of a rule.</string>
+    <string name="guindaste_dica_parenteses_2">The rule S → ( S is not in the grammar. With it, ( x gets in.</string>
+    <string name="guindaste_dica_lista_1">With L , id on top, the rule L → id replaces only the id. L , L is left.</string>
+    <string name="guindaste_dica_lista_2">Put the longer rule on top. It takes the whole L , id.</string>
+    <string name="guindaste_dica_soma_1">With E + id, replace the id with T first. Then E + T becomes E.</string>
+    <string name="guindaste_dica_soma_2">E → T cannot come before E → E + T. Otherwise E + T becomes E + E.</string>
+    <string name="guindaste_dica_vezes_1">With E + T on top and * on the belt, it is not time to reduce yet.</string>
+    <string name="guindaste_dica_vezes_2">The rules of E only reduce before + or $. Switch off the * on them.</string>
+    <string name="guindaste_olhe_linha">In line %1$s of the program, put the rule %2$s.</string>
+    <string name="guindaste_olhe_espera">The rule %1$s is in the right place. Let it reduce only before: %2$s.</string>
+    <string name="guindaste_olhe_sobra">The first %1$s lines are enough. Remove the ones after them.</string>
+
+    <string name="guindaste_nota_inicio">The stack is empty. The belt brings the sentence.</string>
+    <string name="guindaste_nota_empilha">No rule fits the top. The crane shifts %1$s.</string>
+    <string name="guindaste_nota_troca">The top is %1$s. The crane replaces it with %2$s.</string>
+    <string name="guindaste_nota_aceita">Only %1$s is left on the stack, and the belt is over. The sentence is accepted.</string>
+    <string name="guindaste_nota_trava">The belt is over, and no rule fits %1$s. The crane gets stuck.</string>
+    <string name="guindaste_nota_longa">The crane reduced too many times and stopped.</string>
+
+    <string name="guindaste_resultado_trava">stuck at %1$s</string>
+    <string name="guindaste_programa_vazio">The program is empty. Tap the rules to build it.</string>
+    <string name="guindaste_passou">All %1$s sentences passed. The crane also checked the short sentences outside the list.</string>
+    <string name="guindaste_falha_aceitou">The sentence %1$s is not in the grammar, but the crane accepted it. Check the rules in the program.</string>
+    <string name="guindaste_falha_longa">With %1$s, the crane kept reducing without stopping.</string>
+    <string name="guindaste_falha_trava">With %1$s, the stack got stuck at %2$s. The last reduction was %3$s.</string>
+    <string name="guindaste_falha_trava_sem_troca">With %1$s, the stack got stuck at %2$s. No rule fit.</string>
+
+    <string name="fabrica_maquinas">Machines</string>
+    <string name="fabrica_toque_maquina">Tap a machine to switch it on or off.</string>
+    <string name="fabrica_ligada">on</string>
+    <string name="fabrica_desligada">off</string>
+    <string name="fabrica_na_esteira">On the belt</string>
+    <string name="fabrica_saem">Coming out of the factory</string>
+
+    <string name="fabrica_fase_anbn">as many a as b</string>
+    <string name="fabrica_fase_parenteses">parentheses</string>
+    <string name="fabrica_fase_soma">sum in one way only</string>
+    <string name="fabrica_fase_vezes">sum and times</string>
+    <string name="fabrica_pedido_anbn">Switch on the right machines. First come letters a, then as many letters b.</string>
+    <string name="fabrica_pedido_parenteses">Now parentheses that open and close properly. None closes before opening.</string>
+    <string name="fabrica_pedido_soma">Build sums of id. Each sentence can come out in one way only.</string>
+    <string name="fabrica_pedido_vezes">Now sum and times together. Again, each sentence comes out in one way only.</string>
+
+    <string name="fabrica_dica_anbn_1">Each time the machine puts an a in front, it puts a b at the back.</string>
+    <string name="fabrica_dica_anbn_2">S → a S b grows on both sides. S → ε ends the sentence.</string>
+    <string name="fabrica_dica_parenteses_1">A pair ( ) can have something inside and something after it.</string>
+    <string name="fabrica_dica_parenteses_2">S → ( S ) S builds the pair, the filling and the rest. S → ε ends it.</string>
+    <string name="fabrica_dica_soma_1">With E → E + E, the sentence id + id + id comes out in two ways.</string>
+    <string name="fabrica_dica_soma_2">Make the sum grow on one side only: E → E + id.</string>
+    <string name="fabrica_dica_vezes_1">Use two levels. E builds the sums. T builds the products.</string>
+    <string name="fabrica_dica_vezes_2">E → E + T and E → T on the top level. T → T * id and T → id below.</string>
+    <string name="fabrica_olhe_desligue">Switch off the machine %1$s.</string>
+    <string name="fabrica_olhe_ligue">Switch on the machine %1$s.</string>
+
+    <string name="fabrica_nota_inicio">The factory starts with %1$s.</string>
+    <string name="fabrica_nota_maquina">The machine %1$s replaces the leftmost %2$s.</string>
+    <string name="fabrica_nota_saiu">Out came %1$s.</string>
+    <string name="fabrica_nota_outro_jeito">Now the other way to build %1$s.</string>
+    <string name="fabrica_nota_duas">The sentence %1$s came out in two ways. Those are two different trees.</string>
+    <string name="fabrica_nota_nao_monta">No machine that is on builds %1$s.</string>
+
+    <string name="fabrica_sem_inicial">Switch on at least one machine for %1$s. The factory starts there.</string>
+    <string name="fabrica_sai">comes out</string>
+    <string name="fabrica_nao_sai">does not come out</string>
+    <string name="fabrica_sai_um">comes out in one way</string>
+    <string name="fabrica_sai_dois">comes out in two ways</string>
+    <string name="fabrica_passou">All %1$s sentences came out right. The factory checked everything up to %2$s symbols.</string>
+    <string name="fabrica_passou_um">All %1$s sentences came out right, each in one way only. The factory checked up to %2$s symbols.</string>
+    <string name="fabrica_falha_falta">The sentence %1$s must come out, but no machine builds it.</string>
+    <string name="fabrica_falha_sobra">The sentence %1$s came out, but it should not. Tap it to see which machine built it.</string>
+    <string name="fabrica_falha_dois">The sentence %1$s comes out in two ways. Tap it to see both trees. The grammar is ambiguous.</string>
+</resources>

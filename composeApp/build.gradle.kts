@@ -112,7 +112,26 @@ compose.desktop {
     }
 }
 
+/**
+ * Quantas JVMs de teste rodam juntas. Cada uma renderiza com Skia e ocupa perto de 1,3 GB;
+ * com memória curta o earlyoom mata o daemon do Gradle. Fica com 2,5 GB de folga para o resto da máquina.
+ */
+fun forksQueCabem(): Int {
+    val nucleos = (Runtime.getRuntime().availableProcessors() / 3).coerceAtLeast(1)
+    val meminfo = File("/proc/meminfo")
+    if (!meminfo.exists()) return nucleos.coerceAtMost(2)
+    val linha = meminfo.readLines().firstOrNull { l -> l.startsWith("MemAvailable:") } ?: return nucleos.coerceAtMost(2)
+    val livreMb: Long = linha.split(Regex("\\s+"))[1].toLong() / 1024
+    val porMemoria = ((livreMb - 2500) / 1300).toInt()
+    return minOf(nucleos, porMemoria, 5).coerceAtLeast(1)
+}
+
 tasks.withType<Test>().configureEach {
+    // Cada classe de teste roda numa JVM; o Gradle só paraleliza entre classes, por isso as pesadas
+    // (episódios, aulas, fluxo) estão divididas. -Pforks=1 volta a rodar tudo numa JVM só.
+    maxParallelForks = (findProperty("forks") as String?)?.toIntOrNull() ?: forksQueCabem()
+    // O limite padrão do runTest é 60 s de relógio para o teste inteiro.
+    systemProperty("kotlinx.coroutines.test.default_timeout", "10m")
     testLogging {
         events("failed")
         exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL

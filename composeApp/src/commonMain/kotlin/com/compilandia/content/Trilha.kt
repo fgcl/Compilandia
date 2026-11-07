@@ -7,7 +7,10 @@ import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
 
 /** O tipo de cada etapa da trilha de um assunto, na ordem em que se aprende. */
-enum class Etapa { BUG, VER, FAZER, PRATICA, PEGADINHA, DESAFIO,
+enum class Etapa { BUG, VER, FAZER,
+    /** J1: a Bancada do Byte. A pessoa monta e o Byte executa. Só nos assuntos que têm um jogo de montar. */
+    PROGRAMAR,
+    PRATICA, PEGADINHA, DESAFIO,
     /** A7: depois da trilha completa, quando a memória cai, um clipe de 30 segundos e um desafio. Não fica na lista. */
     REVISAO }
 
@@ -20,6 +23,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null) {
         Etapa.BUG -> tx("trilha_etapa_bug")
         Etapa.VER -> tx("trilha_etapa_ver")
         Etapa.FAZER -> tx("trilha_etapa_fazer")
+        Etapa.PROGRAMAR -> tx("trilha_etapa_programar")
         Etapa.PRATICA -> tx("trilha_etapa_pratica")
         Etapa.PEGADINHA -> tx("trilha_etapa_pegadinha")
         Etapa.DESAFIO -> tx("trilha_etapa_desafio")
@@ -30,6 +34,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null) {
         Etapa.BUG -> tx("trilha_etapa_bug_sub")
         Etapa.VER -> episodio?.title ?: tx("trilha_etapa_ver_sub")
         Etapa.FAZER -> tx("trilha_etapa_fazer_sub")
+        Etapa.PROGRAMAR -> tx("trilha_etapa_programar_sub")
         Etapa.PRATICA, Etapa.PEGADINHA -> episodio?.title.orEmpty()
         Etapa.DESAFIO -> tx("trilha_etapa_desafio_sub")
         Etapa.REVISAO -> tx("trilha_etapa_revisao_sub")
@@ -47,6 +52,7 @@ object Trilha {
         if (Aberturas.of(s) != null) add(PassoTrilha(Etapa.BUG))
         Episodes.of(s)?.let { add(PassoTrilha(Etapa.VER, it)) }
         if (Guiado.disponivel(s)) add(PassoTrilha(Etapa.FAZER))
+        if (Robo.de(s) != null) add(PassoTrilha(Etapa.PROGRAMAR))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PRATICA }) add(PassoTrilha(Etapa.PRATICA, e))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PEGADINHA }) add(PassoTrilha(Etapa.PEGADINHA, e))
         add(PassoTrilha(Etapa.DESAFIO))
@@ -62,7 +68,7 @@ object Trilha {
             Etapa.BUG, Etapa.VER -> s.name in ls.episodesSeen
             Etapa.PRATICA, Etapa.PEGADINHA -> p.episodio?.id in ls.episodesSeen
             Etapa.DESAFIO -> l.skill(s).attempts > 0
-            Etapa.FAZER -> false
+            Etapa.FAZER, Etapa.PROGRAMAR -> false
             Etapa.REVISAO -> false
         }
         return when {

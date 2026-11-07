@@ -61,6 +61,7 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
         Etapa.VER -> Screen.Episode(s, abertura = bug != null && Trilha.estado(l, s, bug) == EstadoEtapa.PENDENTE)
         Etapa.PRATICA, Etapa.PEGADINHA -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.FAZER -> Screen.FazerComAjuda(s, semente = nowMs())
+        Etapa.PROGRAMAR -> com.compilandia.content.Robo.de(s)?.let { Screen.Bancada(it) } ?: return
         Etapa.REVISAO -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.DESAFIO -> Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs())
     }

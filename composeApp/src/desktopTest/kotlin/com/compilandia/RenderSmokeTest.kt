@@ -35,12 +35,12 @@ import kotlin.test.Test
  * e todos os "beats" de todas as aulas. Qualquer exceção em composição derruba o teste.
  * As imagens vão para build/screenshots (o CI publica).
  */
-class RenderSmokeTest {
-    private val out = File("build/screenshots").apply { mkdirs() }
+open class RenderBase {
+    protected val out = File("build/screenshots").apply { mkdirs() }
 
     init { com.compilandia.ui.voice.Narrator.silent = true }
 
-    private fun shot(name: String?, w: Int = 412, h: Int = 900, content: @Composable () -> Unit) {
+    protected fun shot(name: String?, w: Int = 412, h: Int = 900, content: @Composable () -> Unit) {
         val scene = ImageComposeScene(w * 2, h * 2, Density(2f)) { content() }
         try {
             scene.render(0)
@@ -54,9 +54,9 @@ class RenderSmokeTest {
         }
     }
 
-    private var cenas = 0
+    protected var cenas = 0
 
-    private fun stateWith(vararg screens: Screen): AppState {
+    protected fun stateWith(vararg screens: Screen): AppState {
         val l = Learner(LearnerState(name = "Felipe", onboardingDone = true, xp = 420, streakDays = 3), Random(1))
         val now = System.currentTimeMillis()
         repeat(6) { l.recordAttempt(Skill.PHASES, GameId.PIPELINE, 2, if (it % 2 == 0) 1.0 else 0.5, 0.9, 30_000, 0, now - 3 * 86_400_000L) }
@@ -67,6 +67,19 @@ class RenderSmokeTest {
         return app
     }
 
+    @Composable
+    protected fun gameFrame(game: GameId, skill: Skill, level: Int, hints: Int) {
+        AppState(Learner(LearnerState(onboardingDone = true), Random(2)))
+        CompilandiaTheme {
+            Column(Modifier.fillMaxSize().background(Palette.paper).padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                GameHost(game, GameCtx(skill, level, Random(level * 100 + game.ordinal), hints) {})
+            }
+        }
+    }
+
+}
+
+class RenderSmokeTest : RenderBase() {
     @Test fun screens() {
         shot("01_onboarding") { App(AppState(Learner(LearnerState(), Random(1)))) }
         shot("02_sala_inicio") { App(stateWith()) }
@@ -172,29 +185,6 @@ class RenderSmokeTest {
         }
     }
 
-    /** Fotografa todos os passos de todos os episódios: nenhum pode quebrar. */
-    @Test fun everyEpisodeStep() {
-        val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY) + com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
-        // EPISODIOS=TABELAS,EM_C renderiza só essas temporadas (ou ids que contenham o texto): bom para olhar uma aula nova.
-        val filtro = System.getenv("EPISODIOS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
-        for (e in com.compilandia.content.episodes.Episodes.all + com.compilandia.content.episodes.Episodes.clipes) {
-            if (filtro.isNotEmpty() && filtro.none { it == e.temporada.name || e.id.contains(it) }) continue
-            val slug = e.id.lowercase().replace('/', '_').filter { it.isLetterOrDigit() || it == '_' }.take(40)
-            e.passos.indices.forEach { k ->
-                val novo = e.temporada != com.compilandia.content.Temporada.BASICO
-                val name = if (e.skill in destaque && !novo) "ep_${e.skill.name.lowercase()}_$k" else if (novo) "epn_${slug}_$k" else if (k == e.passos.size / 2) "ep_${e.skill.name.lowercase()}" else null
-                try {
-                    shot(name) {
-                        val app = stateWith()
-                        CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(app, Screen.Episode(e.skill, id = e.id), onStep = k, abertura = false) }
-                    }
-                } catch (t: Throwable) {
-                    throw AssertionError("falhou no episódio ${e.title}, passo $k: $t", t)
-                }
-            }
-        }
-    }
-
     /** Laboratório Bison: cada exemplo, cada aba, um passo no meio da conta e um .y quebrado. */
     @Test fun labBison() {
         val ex = com.compilandia.ui.lab.BisonExemplos
@@ -236,16 +226,10 @@ class RenderSmokeTest {
         }
     }
 
-    @Composable
-    private fun gameFrame(game: GameId, skill: Skill, level: Int, hints: Int) {
-        AppState(Learner(LearnerState(onboardingDone = true), Random(2)))
-        CompilandiaTheme {
-            Column(Modifier.fillMaxSize().background(Palette.paper).padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                GameHost(game, GameCtx(skill, level, Random(level * 100 + game.ordinal), hints) {})
-            }
-        }
-    }
+}
 
+/** Aulas de texto, Guia do TP e todos os minijogos: classe própria para rodar ao lado das outras. */
+class RenderAulasTest : RenderBase() {
     @Test fun everyGameEveryLevel() {
         val timed = setOf(GameId.PHASE_DETECTIVE, GameId.REGEX_SORTER, GameId.SHIFT_REDUCE_RUSH)
         for (g in GameId.entries) {
@@ -286,4 +270,45 @@ class RenderSmokeTest {
             }
         }
     }
+
 }
+
+/**
+ * Todos os passos de todos os episódios, divididos em [PARTES] classes que o Gradle roda em paralelo.
+ * EPISODIOS=TABELAS,EM_C ./gradlew :composeApp:desktopTest --tests '*Episodios*' renderiza só essas temporadas.
+ */
+abstract class RenderEpisodios(private val parte: Int) : RenderBase() {
+    /** Fotografa todos os passos de todos os episódios: nenhum pode quebrar. */
+    @Test fun everyEpisodeStep() {
+        var n = -1
+        val destaque = setOf(com.compilandia.learning.Skill.TOKENS, com.compilandia.learning.Skill.SHIFT_REDUCE, com.compilandia.learning.Skill.REGEX_DFA, com.compilandia.learning.Skill.AMBIGUITY) + com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
+        // EPISODIOS=TABELAS,EM_C renderiza só essas temporadas (ou ids que contenham o texto): bom para olhar uma aula nova.
+        val filtro = System.getenv("EPISODIOS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
+        for (e in com.compilandia.content.episodes.Episodes.all + com.compilandia.content.episodes.Episodes.clipes) {
+            if (filtro.isNotEmpty() && filtro.none { it == e.temporada.name || e.id.contains(it) }) continue
+            val slug = e.id.lowercase().replace('/', '_').filter { it.isLetterOrDigit() || it == '_' }.take(40)
+            e.passos.indices.forEach { k ->
+                // Cada parte fotografa um passo a cada PARTES: as quatro rodam ao mesmo tempo.
+                if (++n % PARTES != parte) return@forEach
+                val novo = e.temporada != com.compilandia.content.Temporada.BASICO
+                val name = if (e.skill in destaque && !novo) "ep_${e.skill.name.lowercase()}_$k" else if (novo) "epn_${slug}_$k" else if (k == e.passos.size / 2) "ep_${e.skill.name.lowercase()}" else null
+                try {
+                    shot(name) {
+                        val app = stateWith()
+                        CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(app, Screen.Episode(e.skill, id = e.id), onStep = k, abertura = false) }
+                    }
+                } catch (t: Throwable) {
+                    throw AssertionError("falhou no episódio ${e.title}, passo $k: $t", t)
+                }
+            }
+        }
+    }
+
+
+    companion object { const val PARTES = 4 }
+}
+
+class EpisodiosParte0Test : RenderEpisodios(0)
+class EpisodiosParte1Test : RenderEpisodios(1)
+class EpisodiosParte2Test : RenderEpisodios(2)
+class EpisodiosParte3Test : RenderEpisodios(3)

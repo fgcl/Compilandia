@@ -89,6 +89,8 @@ fun App(injected: AppState? = null) {
                     is Screen.Trilha -> com.compilandia.ui.screens.TrilhaScreen(app, screen.skill)
                     Screen.SeuCompilador -> ColunaCentral { com.compilandia.ui.screens.SeuCompiladorScreen(app) }
                     is Screen.FazerComAjuda -> ColunaCentral { com.compilandia.ui.screens.FazerComAjudaScreen(app, screen) }
+                    is Screen.Bancada -> com.compilandia.ui.bancada.BancadaScreen(app, screen)
+                    Screen.Bancadas -> ColunaCentral { com.compilandia.ui.bancada.BancadasScreen(app) }
                     is Screen.Lesson -> ColunaCentral { LessonScreen(app, screen) }
                     is Screen.Feynman -> ColunaCentral { FeynmanScreen(app, screen.skill) }
                     is Screen.Play -> ColunaCentral { PlayScreen(app, screen) }

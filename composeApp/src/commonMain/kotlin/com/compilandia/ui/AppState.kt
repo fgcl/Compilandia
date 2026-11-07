@@ -28,6 +28,10 @@ sealed class Screen {
     data object SeuCompilador : Screen()
     /** Fazer com ajuda (A3): quatro problemas em que o Byte ajuda cada vez menos. */
     data class FazerComAjuda(val skill: Skill, val semente: Long = 0, val comeca: Int = 0) : Screen()
+    /** J1: um jogo de montar da Bancada do Byte. [fase] -1 abre na primeira por fazer. */
+    data class Bancada(val robo: com.compilandia.content.Robo, val fase: Int = -1) : Screen()
+    /** A lista dos jogos de montar. */
+    data object Bancadas : Screen()
     data class RegionView(val region: Region) : Screen()
     data class Lesson(
         val skill: Skill,

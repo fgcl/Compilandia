@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- J1 Bancada do Byte, J2 Robô MIPS e J3 Trilho que você constrói. -->
+<resources>
+    <!-- A bancada (J1) -->
+    <string name="bancada_titulo">Programar o Byte</string>
+    <string name="bancada_sub">Você monta, o Byte executa, a bancada testa.</string>
+    <string name="bancada_fase">Fase %1$s</string>
+    <string name="bancada_rodar">Rodar</string>
+    <string name="bancada_dica">Dica</string>
+    <string name="bancada_limpar">Limpar</string>
+    <string name="bancada_dica_n">Dica %1$s de 3.</string>
+    <string name="bancada_dica_trava">Rode o programa uma vez antes da próxima dica.</string>
+    <string name="bancada_testes">Bancada de testes</string>
+    <string name="bancada_testes_vazio">Aperte Rodar. A bancada testa várias entradas de uma vez.</string>
+    <string name="bancada_rever">Toque num teste para ver o Byte rodar com ele.</string>
+    <string name="bancada_achado">o Byte achou</string>
+    <string name="bancada_esperava">esperava %1$s</string>
+    <string name="bancada_passou">Os %1$s testes passaram.</string>
+    <string name="bancada_programa_vazio">O programa está vazio. Toque nas cartas para montar.</string>
+    <string name="bancada_proxima_fase">Próxima fase</string>
+    <string name="bancada_concluir">Concluir</string>
+    <string name="bancada_fases_feitas">%1$s de %2$s fases</string>
+    <string name="bancada_voltar_inicio">Voltar ao começo</string>
+    <string name="bancada_passo_antes">Passo anterior</string>
+    <string name="bancada_passo_depois">Próximo passo</string>
+    <string name="bancada_tocar">Tocar</string>
+    <string name="bancada_pausar">Pausar</string>
+    <string name="bancada_velocidade">Velocidade</string>
+
+    <!-- Os jogos -->
+    <string name="robo_mips_titulo">Robô MIPS</string>
+    <string name="robo_mips_sub">Monte o programa com cartas. O Byte carrega as caixas.</string>
+    <string name="robo_trilho_titulo">Trilho que você constrói</string>
+    <string name="robo_trilho_sub">Ligue os trilhos do autômato. O Byte lê a palavra.</string>
+    <string name="trilha_etapa_programar">Programar o Byte</string>
+    <string name="trilha_etapa_programar_sub">Você monta e o Byte executa</string>
+    <string name="sala_programar">Programar o Byte</string>
+
+    <!-- J2 Robô MIPS: palco -->
+    <string name="robomips_memoria">Memória</string>
+    <string name="robomips_registradores">Registradores</string>
+    <string name="robomips_somador">somador</string>
+    <string name="robomips_cartas">Cartas</string>
+    <string name="robomips_programa">Programa</string>
+    <string name="robomips_toque_cartas">Toque nas cartas para montar o programa.</string>
+    <string name="robomips_subir">subir</string>
+    <string name="robomips_tirar">tirar</string>
+
+    <!-- J2: fases. O pedido é falado; o nome é a fórmula. -->
+    <string name="robomips_fase_soma" translatable="false">x = a + b</string>
+    <string name="robomips_fase_dobro" translatable="false">x = 2 × (a + b)</string>
+    <string name="robomips_fase_troca">trocar a e b</string>
+    <string name="robomips_fase_se">se a = b, x = 1</string>
+    <string name="robomips_fase_laco" translatable="false">x = 1 + 2 + … + n</string>
+    <string name="robomips_pedido_soma">Busque os dois números, some e guarde a soma na última caixa.</string>
+    <string name="robomips_pedido_dobro">Agora guarde o dobro da soma. Não existe carta de multiplicar.</string>
+    <string name="robomips_pedido_troca">Troque o conteúdo das duas caixas sem perder nenhum valor.</string>
+    <string name="robomips_pedido_se">Se as duas caixas forem iguais, guarde um na última. Senão, deixe zero.</string>
+    <string name="robomips_pedido_laco">Some de um até o número da primeira caixa. Use um laço.</string>
+
+    <!-- J2: dicas. A terceira aponta a próxima linha. -->
+    <string name="robomips_dica_soma_1">O add só soma registradores. Os números saem da prateleira antes, com lw.</string>
+    <string name="robomips_dica_soma_2">Carregue a e b em registradores diferentes. Some os dois e guarde em x com sw.</string>
+    <string name="robomips_dica_dobro_1">Dobrar é somar o número com ele mesmo.</string>
+    <string name="robomips_dica_dobro_2">Com a soma em $t2, some $t2 com $t2.</string>
+    <string name="robomips_dica_troca_1">Se você guardar em b antes de ler b, o valor antigo de b some.</string>
+    <string name="robomips_dica_troca_2">Leia as duas caixas primeiro, em registradores diferentes. Só depois guarde.</string>
+    <string name="robomips_dica_se_1">O desvio pula quando a condição vale. Pule a gravação quando a e b forem diferentes.</string>
+    <string name="robomips_dica_se_2">Com bne, o Byte pula até fim quando os dois são diferentes. Antes de fim, ponha 1 em x.</string>
+    <string name="robomips_dica_laco_1">A cada volta, some o contador e tire um dele. Pare quando ele chegar a zero.</string>
+    <string name="robomips_dica_laco_2">No começo do laço, teste se $t0 é zero e pule para fim. No final do laço, volte com j.</string>
+    <string name="robomips_dica_linha">Olhe a linha %1$s. Ali vai a carta %2$s.</string>
+    <string name="robomips_dica_linha_sobra">O começo está certo. Tire as cartas depois da linha %1$s.</string>
+
+    <!-- J2: legenda de cada passo -->
+    <string name="robomips_nota_inicio">As caixas têm os valores do teste. O Byte começa na primeira carta.</string>
+    <string name="robomips_nota_lw">lw: o Byte busca %1$s na prateleira e põe em %2$s.</string>
+    <string name="robomips_nota_sw">sw: o Byte pega o valor de %1$s e guarda na caixa %2$s.</string>
+    <string name="robomips_nota_add">add: soma %1$s com %2$s e guarda em %3$s.</string>
+    <string name="robomips_nota_addi">addi: soma %2$s a %1$s e guarda em %3$s.</string>
+    <string name="robomips_nota_li">li: põe %1$s em %2$s.</string>
+    <string name="robomips_nota_desvio_pula">%1$s, então o desvio pula para %2$s.</string>
+    <string name="robomips_nota_desvio_segue">%1$s, então o desvio não pula. Segue para a próxima carta.</string>
+    <string name="robomips_nota_j">j: o Byte pula para %1$s.</string>
+    <string name="robomips_nota_fim">O programa acabou. A bancada confere as caixas.</string>
+    <string name="robomips_nota_parou">O programa parou: %1$s</string>
+
+    <!-- J2: veredito -->
+    <string name="robomips_nao_terminou">não terminou</string>
+    <string name="robomips_falha">Com %1$s, ficou %2$s. Esperava %3$s. Mexa no programa e rode de novo.</string>
+    <string name="robomips_falha_erro">Com %1$s, o programa não terminou. %2$s</string>
+    <string name="robomips_passou_curto">Os %1$s testes passaram. Dá para fazer com %2$s instruções. Quer tentar?</string>
+
+    <!-- J3 Trilho: tabela -->
+    <string name="trilho_tabela">Trilhos: a tabela de transição</string>
+    <string name="trilho_estado">estado</string>
+    <string name="trilho_lendo">lendo %1$s</string>
+    <string name="trilho_toque_final">Toque no estado para marcar como final.</string>
+    <string name="trilho_toque_celula">Toque na célula para trocar o destino do trilho.</string>
+    <string name="trilho_final">final</string>
+    <string name="trilho_palavra">Palavra</string>
+
+    <!-- J3: fases -->
+    <string name="trilho_fase_termina1">termina em 1</string>
+    <string name="trilho_fase_par">número par de uns</string>
+    <string name="trilho_fase_contem00">contém 00</string>
+    <string name="trilho_fase_ident">identificador</string>
+    <string name="trilho_pedido_termina1">Ligue os trilhos para aceitar as palavras que terminam em um.</string>
+    <string name="trilho_pedido_par">Agora aceite as palavras com número par de uns. A vazia tem zero uns.</string>
+    <string name="trilho_pedido_contem00">Com três estados, aceite as palavras que têm dois zeros seguidos.</string>
+    <string name="trilho_pedido_ident">Aceite os nomes de variável. Começam com letra, depois vêm letras ou dígitos.</string>
+
+    <!-- J3: dicas -->
+    <string name="trilho_dica_termina1_1">Cada estado lembra uma coisa. Aqui basta lembrar a última letra lida.</string>
+    <string name="trilho_dica_termina1_2">Faça q1 ser o estado de quem acabou de ler 1. Só ele é final.</string>
+    <string name="trilho_dica_par_1">Cada estado lembra se você leu um número par ou ímpar de uns até agora.</string>
+    <string name="trilho_dica_par_2">Ler 0 não muda a conta. Ler 1 troca de estado. O começo já é par.</string>
+    <string name="trilho_dica_contem00_1">q0: não vi zero agora. q1: acabei de ver um zero. q2: já vi 00.</string>
+    <string name="trilho_dica_contem00_2">Depois de achar 00, a palavra já entra. De q2, todo trilho volta para q2.</string>
+    <string name="trilho_dica_ident_1">A primeira letra decide. Dígito no começo não tem trilho, e o trem para.</string>
+    <string name="trilho_dica_ident_2">De q0, só a-z leva a q1. Em q1, letra ou dígito ficam em q1. O q1 é final.</string>
+    <string name="trilho_olhe_celula">Olhe a célula de q%1$s lendo %2$s. A palavra %3$s passa por ali.</string>
+    <string name="trilho_olhe_estado">Siga a palavra %1$s com o dedo. Ela termina em q%2$s. Confira o caminho e se q%2$s é final.</string>
+
+    <!-- J3: legenda de cada passo -->
+    <string name="trilho_nota_inicio">O trem sai de q%1$s.</string>
+    <string name="trilho_nota_anda">Leu %1$s: de q%2$s foi para q%3$s.</string>
+    <string name="trilho_nota_sem_trilho">Em q%1$s, lendo %2$s, não há trilho. O trem para.</string>
+    <string name="trilho_nota_final">A palavra acabou em q%1$s, que é final. Ela entra.</string>
+    <string name="trilho_nota_nao_final">A palavra acabou em q%1$s, que não é final. Ela fica de fora.</string>
+
+    <!-- J3: veredito -->
+    <string name="trilho_resultado_sem_trilho">sem trilho</string>
+    <string name="trilho_resultado_entrou">entra</string>
+    <string name="trilho_resultado_fora">fica de fora</string>
+    <string name="trilho_passou">Os %1$s testes passaram. O Byte conferiu todas as palavras, e nenhuma escapou.</string>
+    <string name="trilho_falha">A palavra %1$s %2$s, então devia %3$s. Mas %4$s.</string>
+    <string name="trilho_devia_entrar">entrar</string>
+    <string name="trilho_devia_ficar_fora">ficar de fora</string>
+    <string name="trilho_mas_sem_trilho">em q%1$s, lendo %2$s, o trem ficou sem trilho</string>
+    <string name="trilho_mas_final">o trem parou em q%1$s, que é final</string>
+    <string name="trilho_mas_nao_final">o trem parou em q%1$s, que não é final</string>
+    <string name="trilho_motivo_vazia">é vazia</string>
+    <string name="trilho_motivo_termina">termina em %1$s</string>
+    <string name="trilho_motivo_nenhum_um">não tem nenhum 1</string>
+    <string name="trilho_motivo_um_so">tem um 1 só</string>
+    <string name="trilho_motivo_uns">tem %1$s uns</string>
+    <string name="trilho_motivo_tem00">tem 00</string>
+    <string name="trilho_motivo_sem00">não tem 00</string>
+    <string name="trilho_motivo_comeca_digito">começa com dígito</string>
+    <string name="trilho_motivo_comeca_letra">começa com letra</string>
+
+    <!-- J4 Byte com a pilha, J5 Guindaste empilha-reduz e J6 Fábrica de frases -->
+    <string name="robo_pilha_titulo">Byte com a pilha</string>
+    <string name="robo_pilha_sub">Preencha a tabela LL(1). O Byte analisa as frases com a pilha.</string>
+    <string name="robo_guindaste_titulo">Guindaste empilha-reduz</string>
+    <string name="robo_guindaste_sub">Ordene as regras. O guindaste empilha e troca o topo da pilha.</string>
+    <string name="robo_fabrica_titulo">Fábrica de frases</string>
+    <string name="robo_fabrica_sub">Ligue as máquinas da gramática. A fábrica mostra as frases que saem.</string>
+
+    <!-- J4: tela -->
+    <string name="robopilha_gramatica">Gramática</string>
+    <string name="robopilha_tabela">Tabela LL(1)</string>
+    <string name="robopilha_toque_celula">Toque na célula para trocar a regra. Mais um toque esvazia.</string>
+    <string name="robopilha_entrada">Entrada</string>
+    <string name="robopilha_pilha">Pilha</string>
+    <string name="robopilha_celula">Célula da tabela</string>
+    <string name="robopilha_celula_vazia">vazia</string>
+
+    <!-- J4: fases -->
+    <string name="robopilha_fase_parenteses">parênteses</string>
+    <string name="robopilha_fase_lista">lista com vírgula</string>
+    <string name="robopilha_fase_vazio">regra que some</string>
+    <string name="robopilha_fase_expressao">expressão</string>
+    <string name="robopilha_pedido_parenteses">Preencha a tabela. O Byte segue a tabela para analisar cada frase.</string>
+    <string name="robopilha_pedido_lista">Agora uma lista separada por vírgula. Uma célula leva a regra vazia.</string>
+    <string name="robopilha_pedido_vazio">Aqui uma variável pode sumir. Olhe o que vem depois dela.</string>
+    <string name="robopilha_pedido_expressao">Agora a expressão com soma e parênteses. Use o FIRST e o FOLLOW.</string>
+
+    <!-- J4: dicas. A terceira aponta a célula. -->
+    <string name="robopilha_dica_parenteses_1">A coluna é o símbolo que o Byte está lendo. Com ( na entrada, só uma regra de A começa com (.</string>
+    <string name="robopilha_dica_parenteses_2">A regra ( A ) vai na coluna (. A regra x vai na coluna x. As outras ficam vazias.</string>
+    <string name="robopilha_dica_lista_1">R → ε vai nas colunas do FOLLOW de R. Depois da lista só vem o fim, $.</string>
+    <string name="robopilha_dica_lista_2">Com vírgula na entrada, R continua: , id R. Com $ na entrada, R some.</string>
+    <string name="robopilha_dica_vazio_1">A pode sumir. Então S → A b também serve quando a frase já começa com b.</string>
+    <string name="robopilha_dica_vazio_2">FIRST de A b é a e b. Depois de A vem b, então A → ε vai na coluna b.</string>
+    <string name="robopilha_dica_expressao_1">E e T começam com id ou (. Ponha a regra de cada um nessas duas colunas.</string>
+    <string name="robopilha_dica_expressao_2">E' → ε vai no FOLLOW de E': o ) e o $. Com + na entrada, E' continua.</string>
+    <string name="robopilha_olhe_celula">Olhe M[%1$s, %2$s]. A frase %3$s passa por ali.</string>
+    <string name="robopilha_olhe_sobra">Olhe M[%1$s, %2$s]. Confira o FIRST e o FOLLOW de %1$s.</string>
+
+    <!-- J4: legenda de cada passo -->
+    <string name="robopilha_nota_inicio">A pilha começa com $ e %1$s. O Byte olha o topo e a entrada.</string>
+    <string name="robopilha_nota_expande">Topo %1$s, lendo %2$s: a célula manda trocar %1$s por %3$s.</string>
+    <string name="robopilha_nota_casa">O topo é %1$s, igual à entrada. O Byte tira os dois e avança.</string>
+    <string name="robopilha_nota_aceita">A pilha e a entrada acabaram juntas. A frase entra.</string>
+    <string name="robopilha_nota_vazia">Topo %1$s, lendo %2$s, e a célula está vazia. O Byte para.</string>
+    <string name="robopilha_nota_nao_casa">O topo é %1$s, mas a entrada tem %2$s. O Byte para.</string>
+    <string name="robopilha_nota_sobrou">A pilha acabou, mas a entrada ainda tem %1$s. O Byte para.</string>
+    <string name="robopilha_nota_longa">O Byte deu passos demais e parou.</string>
+
+    <!-- J4: veredito -->
+    <string name="robopilha_aceita">aceita</string>
+    <string name="robopilha_recusa">recusa</string>
+    <string name="robopilha_resultado_vazia">parou em M[%1$s, %2$s]</string>
+    <string name="robopilha_resultado_nao_casa">parou no topo %1$s</string>
+    <string name="robopilha_resultado_sobrou">sobrou entrada</string>
+    <string name="robopilha_resultado_longa">não parou</string>
+    <string name="robopilha_tabela_vazia">A tabela está vazia. Toque nas células para pôr as regras.</string>
+    <string name="robopilha_passou">As %1$s frases passaram, e a tabela é igual à da prova.</string>
+    <string name="robopilha_falha_aceitou">A frase %1$s não é da gramática, mas o Byte aceitou.</string>
+    <string name="robopilha_falha_vazia">Com %1$s, o Byte parou. Não sei o que fazer com %2$s e %3$s.</string>
+    <string name="robopilha_falha_nao_casa">Com %1$s, o topo virou %2$s, mas a entrada tinha %3$s. Uma célula escolheu a regra errada.</string>
+    <string name="robopilha_falha_sobrou">Com %1$s, a pilha acabou cedo. Ainda faltava ler %2$s.</string>
+    <string name="robopilha_falha_longa">Com %1$s, o Byte não parou de trocar.</string>
+    <string name="robopilha_falha_sobra">As frases passaram, mas M[%1$s, %2$s] tem %3$s. Nenhuma frase certa usa essa célula. Na prova, ela fica vazia.</string>
+    <string name="robopilha_falha_celula">As frases passaram, mas M[%1$s, %2$s] não bate com a tabela da prova.</string>
+
+    <!-- J5: tela -->
+    <string name="guindaste_cartas">Regras</string>
+    <string name="guindaste_programa">Programa do guindaste: ele tenta de cima para baixo</string>
+    <string name="guindaste_toque_cartas">Toque nas regras para pôr no programa. A ordem importa.</string>
+    <string name="guindaste_antes_de">troca antes de</string>
+    <string name="guindaste_espera_simbolo">troca antes de %1$s</string>
+    <string name="guindaste_esteira">Esteira</string>
+    <string name="guindaste_travou">travou</string>
+    <string name="guindaste_olha_qualquer">qualquer símbolo</string>
+
+    <!-- J5: fases -->
+    <string name="guindaste_fase_parenteses">parênteses</string>
+    <string name="guindaste_fase_lista">lista com vírgula</string>
+    <string name="guindaste_fase_soma">soma</string>
+    <string name="guindaste_fase_vezes">soma e vezes</string>
+    <string name="guindaste_pedido_parenteses">Ponha as regras no guindaste. Ele troca o topo da pilha pela regra.</string>
+    <string name="guindaste_pedido_lista">Agora uma lista com vírgulas. A ordem das regras muda o resultado.</string>
+    <string name="guindaste_pedido_soma">Agora somas. Cuidado para o guindaste não trocar cedo demais.</string>
+    <string name="guindaste_pedido_vezes">Agora com vezes. Cada regra pode esperar o próximo símbolo da esteira.</string>
+
+    <!-- J5: dicas -->
+    <string name="guindaste_dica_parenteses_1">O guindaste troca o topo quando ele é igual ao lado direito de uma regra.</string>
+    <string name="guindaste_dica_parenteses_2">A regra S → ( S não é da gramática. Com ela, ( x entra.</string>
+    <string name="guindaste_dica_lista_1">Com L , id no topo, a regra L → id troca só o id. Sobra L , L.</string>
+    <string name="guindaste_dica_lista_2">Ponha a regra mais comprida em cima. Ela pega L , id inteiro.</string>
+    <string name="guindaste_dica_soma_1">Com E + id, troque o id por T primeiro. Depois E + T vira E.</string>
+    <string name="guindaste_dica_soma_2">E → T não pode vir antes de E → E + T. Senão E + T vira E + E.</string>
+    <string name="guindaste_dica_vezes_1">Com E + T no topo e * na esteira, ainda não é hora de trocar.</string>
+    <string name="guindaste_dica_vezes_2">As regras de E só trocam antes de + ou $. Desligue o * nelas.</string>
+    <string name="guindaste_olhe_linha">Na linha %1$s do programa, ponha a regra %2$s.</string>
+    <string name="guindaste_olhe_espera">A regra %1$s está no lugar certo. Deixe ela trocar só antes de: %2$s.</string>
+    <string name="guindaste_olhe_sobra">As %1$s primeiras linhas bastam. Tire as que vêm depois.</string>
+
+    <!-- J5: legenda -->
+    <string name="guindaste_nota_inicio">A pilha está vazia. A esteira traz a frase.</string>
+    <string name="guindaste_nota_empilha">Nenhuma regra serve no topo. O guindaste empilha %1$s.</string>
+    <string name="guindaste_nota_troca">O topo é %1$s. O guindaste troca por %2$s.</string>
+    <string name="guindaste_nota_aceita">Sobrou só %1$s na pilha, e a esteira acabou. A frase entra.</string>
+    <string name="guindaste_nota_trava">A esteira acabou e nenhuma regra serve para %1$s. O guindaste trava.</string>
+    <string name="guindaste_nota_longa">O guindaste trocou vezes demais e parou.</string>
+
+    <!-- J5: veredito -->
+    <string name="guindaste_resultado_trava">travou em %1$s</string>
+    <string name="guindaste_programa_vazio">O programa está vazio. Toque nas regras para montar.</string>
+    <string name="guindaste_passou">As %1$s frases passaram. O guindaste conferiu também as frases curtas fora da lista.</string>
+    <string name="guindaste_falha_aceitou">A frase %1$s não é da gramática, mas o guindaste aceitou. Confira as regras do programa.</string>
+    <string name="guindaste_falha_longa">Com %1$s, o guindaste ficou trocando sem parar.</string>
+    <string name="guindaste_falha_trava">Com %1$s, a pilha travou em %2$s. A última troca foi %3$s.</string>
+    <string name="guindaste_falha_trava_sem_troca">Com %1$s, a pilha travou em %2$s. Nenhuma regra serviu.</string>
+
+    <!-- J6: tela -->
+    <string name="fabrica_maquinas">Máquinas</string>
+    <string name="fabrica_toque_maquina">Toque numa máquina para ligar ou desligar.</string>
+    <string name="fabrica_ligada">ligada</string>
+    <string name="fabrica_desligada">desligada</string>
+    <string name="fabrica_na_esteira">Na esteira</string>
+    <string name="fabrica_saem">Saem da fábrica</string>
+
+    <!-- J6: fases -->
+    <string name="fabrica_fase_anbn">mesmo tanto de a e b</string>
+    <string name="fabrica_fase_parenteses">parênteses</string>
+    <string name="fabrica_fase_soma">soma de um jeito só</string>
+    <string name="fabrica_fase_vezes">soma e vezes</string>
+    <string name="fabrica_pedido_anbn">Ligue as máquinas certas. Primeiro saem letras a, depois o mesmo tanto de letras b.</string>
+    <string name="fabrica_pedido_parenteses">Agora parênteses que abrem e fecham certo. Nenhum fecha antes de abrir.</string>
+    <string name="fabrica_pedido_soma">Monte somas de id. Cada frase só pode sair de um jeito.</string>
+    <string name="fabrica_pedido_vezes">Agora soma e vezes juntas. De novo, cada frase sai de um jeito só.</string>
+
+    <!-- J6: dicas -->
+    <string name="fabrica_dica_anbn_1">Cada vez que a máquina põe um a na frente, ela põe um b atrás.</string>
+    <string name="fabrica_dica_anbn_2">S → a S b cresce dos dois lados. S → ε termina a frase.</string>
+    <string name="fabrica_dica_parenteses_1">Um par ( ) pode ter coisa dentro e coisa depois.</string>
+    <string name="fabrica_dica_parenteses_2">S → ( S ) S monta o par, o recheio e o resto. S → ε termina.</string>
+    <string name="fabrica_dica_soma_1">Com E → E + E, a frase id + id + id sai de dois jeitos.</string>
+    <string name="fabrica_dica_soma_2">Faça a soma crescer só de um lado: E → E + id.</string>
+    <string name="fabrica_dica_vezes_1">Use dois andares. E faz as somas. T faz as multiplicações.</string>
+    <string name="fabrica_dica_vezes_2">E → E + T e E → T no andar de cima. T → T * id e T → id embaixo.</string>
+    <string name="fabrica_olhe_desligue">Desligue a máquina %1$s.</string>
+    <string name="fabrica_olhe_ligue">Ligue a máquina %1$s.</string>
+
+    <!-- J6: legenda -->
+    <string name="fabrica_nota_inicio">A fábrica começa com %1$s.</string>
+    <string name="fabrica_nota_maquina">A máquina %1$s troca o %2$s mais à esquerda.</string>
+    <string name="fabrica_nota_saiu">Saiu %1$s.</string>
+    <string name="fabrica_nota_outro_jeito">Agora o outro jeito de montar %1$s.</string>
+    <string name="fabrica_nota_duas">A frase %1$s saiu de dois jeitos. São duas árvores diferentes.</string>
+    <string name="fabrica_nota_nao_monta">Nenhuma máquina ligada monta %1$s.</string>
+
+    <!-- J6: veredito -->
+    <string name="fabrica_sem_inicial">Ligue pelo menos uma máquina de %1$s. É por ela que a fábrica começa.</string>
+    <string name="fabrica_sai">sai</string>
+    <string name="fabrica_nao_sai">não sai</string>
+    <string name="fabrica_sai_um">sai de um jeito</string>
+    <string name="fabrica_sai_dois">sai de dois jeitos</string>
+    <string name="fabrica_passou">As %1$s frases saíram certas. A fábrica conferiu tudo até %2$s símbolos.</string>
+    <string name="fabrica_passou_um">As %1$s frases saíram certas, cada uma de um jeito só. A fábrica conferiu até %2$s símbolos.</string>
+    <string name="fabrica_falha_falta">A frase %1$s precisa sair, mas nenhuma máquina monta ela.</string>
+    <string name="fabrica_falha_sobra">A frase %1$s saiu, mas não podia. Toque nela para ver qual máquina montou.</string>
+    <string name="fabrica_falha_dois">A frase %1$s sai de dois jeitos. Toque nela para ver as duas árvores. A gramática é ambígua.</string>
+</resources>

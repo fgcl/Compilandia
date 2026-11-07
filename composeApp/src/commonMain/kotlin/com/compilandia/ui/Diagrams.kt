@@ -192,7 +192,10 @@ fun AutomatonView(
                     val out = if (a == start) Offset(0f, -1f) else (c - Offset(size.width / 2, size.height / 2)).let { v -> val l = max(1f, sqrt(v.x * v.x + v.y * v.y)); if (l < 2f) Offset(0f, -1f) else Offset(v.x / l, v.y / l) }
                     val lc = c + out * (r * 1.6f)
                     drawCircle(col, r * 0.75f, lc, style = Stroke(if (hl) 5f else 3f))
-                    centeredText(tm, text, c + out * (r * 2.9f), TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold, color = col))
+                    val estilo = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.Bold, color = col)
+                    // Rótulo comprido ("0-9,a-z") ao lado do laço: afasta pela metade da largura que passa do laço.
+                    val sobra = max(0f, tm.measure(text, estilo).size.width / 2f - r * 0.6f) * kotlin.math.abs(out.x)
+                    centeredText(tm, text, c + out * (r * 2.9f + sobra), estilo)
                 } else {
                     val bidir = labels.containsKey(b to a)
                     curvedArrow(ps[a], ps[b], r, if (bidir) 0.25f else 0.08f, col, if (hl) 5f else 3f)?.let { mid ->
