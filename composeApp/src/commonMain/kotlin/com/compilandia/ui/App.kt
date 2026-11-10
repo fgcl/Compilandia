@@ -103,6 +103,7 @@ fun App(injected: AppState? = null) {
                     Screen.Journal -> ColunaCentral { JournalScreen(app) }
                     Screen.Settings -> ColunaCentral { SettingsScreen(app) }
                     Screen.Lab -> ColunaCentral { com.compilandia.ui.lab.LabScreen(app) }
+                    Screen.FabGram -> com.compilandia.ui.fabgram.FabGramScreen(app)
                     is Screen.LabBison -> com.compilandia.ui.lab.LabBisonScreen(app, screen.spec)
                     is Screen.Exemplo -> ColunaCentral { com.compilandia.ui.lab.ExemploScreen(app, screen.skill) }
                     Screen.Album -> ColunaCentral { com.compilandia.ui.album.AlbumScreen(app) }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Grammar Factory: each rule is a machine on a grid seen from above. -->
+<resources>
+    <string name="fabgram_sub">Each rule becomes a machine. Write the grammar and test a sentence.</string>
+    <string name="fabgram_gramatica">Grammar</string>
+    <string name="fabgram_ajuda_texto">One rule per line. Put spaces between the pieces.</string>
+    <string name="fabgram_frase">Sentence</string>
+    <string name="fabgram_ligar">Start</string>
+    <string name="fabgram_parar">Stop</string>
+    <string name="fabgram_exemplos">Examples</string>
+    <string name="fabgram_toque">Tap a machine to see its rule.</string>
+    <string name="fabgram_maquina_1">This machine does %1$s.</string>
+    <string name="fabgram_fez">The whole sentence came out of the assembler.</string>
+    <string name="fabgram_nao_faz_2">The factory can't build %1$s. The closest it builds is %2$s.</string>
+    <string name="fabgram_nenhuma_1">The factory can't build %1$s. It builds nothing close to it.</string>
+    <string name="fabgram_ambigua">This sentence comes out two ways. The grammar is ambiguous.</string>
+    <string name="fabgram_erro_1">The factory is waiting for valid text. %1$s</string>
+    <string name="fabgram_vazia">Type a sentence to test.</string>
+    <string name="fabgram_sinais">Signs on the machines</string>
+    <string name="fabgram_sem_sinais">No signs. Every machine works.</string>
+    <string name="fabgram_sinal_fumaca">Smoke</string>
+    <string name="fabgram_sinal_poeira">Dust</string>
+    <string name="fabgram_sinal_pisca">Blinking belt</string>
+    <string name="fabgram_sinal_lampada">Yellow lamp</string>
+    <string name="fabgram_sinal_emperra">Jammed splitter</string>
+    <string name="fabgram_sinal_fichas">Two tokens</string>
+    <string name="fabgram_fonte">source</string>
+    <string name="fabgram_separador">splitter</string>
+    <string name="fabgram_filtro">filter</string>
+    <string name="fabgram_prensa">press</string>
+    <string name="fabgram_braco">arm</string>
+    <string name="fabgram_armario">cabinet</string>
+    <string name="fabgram_cofre">vault</string>
+    <string name="fabgram_montadora">assembler</string>
+    <string name="fabgram_cesto">bin</string>
+    <string name="fabgram_elevador">lift</string>
+</resources>

@@ -210,4 +210,5 @@
     <string name="comum_vazio_minusc">empty</string>
     <string name="comum_afd">DFA</string>
     <string name="comum_afn">NFA</string>
+    <string name="comum_fabrica_gramaticas">Grammar Factory</string>
 </resources>

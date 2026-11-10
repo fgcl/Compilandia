@@ -129,6 +129,7 @@ class RenderSmokeTest : RenderBase() {
         shot("24_feed") { App(stateWith(Screen.Feed)) }
         shot("25_outro_exemplo") { App(stateWith(Screen.Exemplo(Skill.LL1_PARSING))) }
         shot("26_abertura_bug") { App(stateWith(Screen.Episode(Skill.FOLLOW))) }
+        shot("27_fabgram") { App(stateWith(Screen.FabGram)) }
         for (t in com.compilandia.ui.ThemeMode.entries) {
             val st = stateWith(Screen.Lesson(Skill.FOLLOW, Style.VISUAL))
             st.learner.setTheme(t.name); st.commit()
@@ -161,6 +162,7 @@ class RenderSmokeTest : RenderBase() {
             "laboratorio" to { stateWith(Screen.Lab) },
             "ajustes" to { stateWith(Screen.Settings) },
             "fazer_com_ajuda" to { stateWith(Screen.FazerComAjuda(Skill.FIRST, semente = 42)) },
+            "fabgram" to { stateWith(Screen.FabGram) },
         )
         val so = System.getenv("TELAS")?.split(',')?.map { it.trim() }?.filter { it.isNotEmpty() }.orEmpty()
         for ((tela, cria) in telas) {

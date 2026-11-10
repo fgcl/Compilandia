@@ -55,6 +55,8 @@ sealed class Screen {
     data object Journal : Screen()
     data object Settings : Screen()
     data object Lab : Screen()
+    /** Fábrica de Gramáticas: cada regra é uma máquina numa grade vista de cima. */
+    data object FabGram : Screen()
     /** Laboratório Bison: abre com o .y colado na conversa, ou com a calculadora. */
     data class LabBison(val spec: String? = null) : Screen()
     data class Exemplo(val skill: Skill) : Screen()

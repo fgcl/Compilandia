@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fábrica de Gramáticas: cada regra é uma máquina numa grade vista de cima. -->
+<resources>
+    <string name="fabgram_sub">Cada regra vira uma máquina. Escreva a gramática e teste uma frase.</string>
+    <string name="fabgram_gramatica">Gramática</string>
+    <string name="fabgram_ajuda_texto">Uma regra por linha. Separe as peças com espaço.</string>
+    <string name="fabgram_frase">Frase</string>
+    <string name="fabgram_ligar">Ligar</string>
+    <string name="fabgram_parar">Parar</string>
+    <string name="fabgram_exemplos">Exemplos</string>
+    <string name="fabgram_toque">Toque numa máquina para ver a regra dela.</string>
+    <string name="fabgram_maquina_1">Esta máquina faz %1$s.</string>
+    <string name="fabgram_fez">A frase saiu inteira da montadora.</string>
+    <string name="fabgram_nao_faz_2">A fábrica não faz %1$s. O mais perto que sai é %2$s.</string>
+    <string name="fabgram_nenhuma_1">A fábrica não faz %1$s. Ela não monta nada parecido.</string>
+    <string name="fabgram_ambigua">Essa frase sai de dois jeitos. A gramática é ambígua.</string>
+    <string name="fabgram_erro_1">A fábrica espera o texto certo. %1$s</string>
+    <string name="fabgram_vazia">Escreva uma frase para testar.</string>
+    <string name="fabgram_sinais">Sinais nas máquinas</string>
+    <string name="fabgram_sem_sinais">Nenhum sinal. Todas as máquinas trabalham.</string>
+    <string name="fabgram_sinal_fumaca">Fumaça</string>
+    <string name="fabgram_sinal_poeira">Poeira</string>
+    <string name="fabgram_sinal_pisca">Esteira piscando</string>
+    <string name="fabgram_sinal_lampada">Lâmpada amarela</string>
+    <string name="fabgram_sinal_emperra">Separador emperrado</string>
+    <string name="fabgram_sinal_fichas">Duas fichas</string>
+    <string name="fabgram_fonte">fonte</string>
+    <string name="fabgram_separador">separador</string>
+    <string name="fabgram_filtro">filtro</string>
+    <string name="fabgram_prensa">prensa</string>
+    <string name="fabgram_braco">braço</string>
+    <string name="fabgram_armario">armário</string>
+    <string name="fabgram_cofre">cofre</string>
+    <string name="fabgram_montadora">montadora</string>
+    <string name="fabgram_cesto">cesto</string>
+    <string name="fabgram_elevador">elevador</string>
+</resources>

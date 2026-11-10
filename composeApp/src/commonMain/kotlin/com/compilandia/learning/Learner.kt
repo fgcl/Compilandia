@@ -105,6 +105,9 @@ data class LearnerState(
     /** R4: lembrete no celular. Desligado até a pessoa ligar. [lembreteHora] vai de 0 a 23. */
     val lembreteLigado: Boolean = false,
     val lembreteHora: Int = 19,
+    // ---- Fábrica de Gramáticas: a última gramática e a última frase testada.
+    val fabGramTexto: String = "",
+    val fabGramFrase: String = "",
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -327,6 +330,7 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun setTheme(t: String) { state = state.copy(theme = t, themeVersion = 1) }
     fun setFontScale(f: Float) { state = state.copy(fontScale = f) }
     fun setReduceMotion(v: Boolean) { state = state.copy(reduceMotion = v) }
+    fun setFabGram(texto: String, frase: String) { state = state.copy(fabGramTexto = texto, fabGramFrase = frase) }
 
     private fun touchDay(nowMs: Long) {
         val day = nowMs / 86_400_000L

@@ -234,4 +234,5 @@
     <string name="comum_vazio_minusc">vazio</string>
     <string name="comum_afd">AFD</string>
     <string name="comum_afn">AFN</string>
+    <string name="comum_fabrica_gramaticas">Fábrica de Gramáticas</string>
 </resources>
