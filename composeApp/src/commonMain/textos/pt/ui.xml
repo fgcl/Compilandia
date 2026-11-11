@@ -129,8 +129,8 @@
     <string name="gamesgrammar_arvore_2_2_tem_que">Árvore 2 de 2: tem que ser DIFERENTE!</string>
     <string name="gamesgrammar_na_primeira_arvore_qual_operador">Na primeira árvore, qual operador ficou mais perto da raiz? Tente colocar o OUTRO lá em cima.</string>
     <string name="gamesgrammar_duas_derivacoes_mais_esquerda_diferentes">Duas derivações mais à esquerda diferentes = duas árvores = **gramática ambígua**. É por isso que compiladores reescrevem a gramática ou usam precedência (%left no Bison)!</string>
-    <string name="gamesgrammar_paciente_com_recursao_esquerda">🩺 Paciente com RECURSÃO À ESQUERDA</string>
-    <string name="gamesgrammar_paciente_precisando_fatoracao">🩺 Paciente precisando de FATORAÇÃO</string>
+    <string name="gamesgrammar_paciente_com_recursao_esquerda">Paciente com RECURSÃO À ESQUERDA</string>
+    <string name="gamesgrammar_paciente_precisando_fatoracao">Paciente precisando de FATORAÇÃO</string>
     <string name="gamesgrammar_receita_vira">Receita: A → A α | β  vira  A → β A'  e  A' → α A' | ε</string>
     <string name="gamesgrammar_receita_1_2_vira_1">Receita: A → α β1 | α β2  vira  A → α A'  e  A' → β1 | β2</string>
     <string name="gamesgrammar_comece_pelos_espacos_producao_principal">Comece pelos espaços da produção principal: o que vem primeiro nela?</string>
@@ -296,7 +296,7 @@
     <string name="gameslexical_proximo_trem">Próximo trem ▶</string>
     <string name="gameslexical_1_2_com_3">"%1$s" %2$s com %3$s</string>
     <string name="gameslexical_nao_casa">NÃO casa</string>
-    <string name="gameslexical_balada_regex">🚪 Balada REGEX</string>
+    <string name="gameslexical_balada_regex">Balada REGEX</string>
     <string name="gameslexical_so_entra_quem_casa_com">só entra quem casa com:  %1$s</string>
     <string name="gameslexical_fila_1_pessoas">Fila: %1$s pessoas</string>
     <string name="gameslexical_arraste_pessoa_direita_entra_esquerda">👉 Arraste a pessoa: DIREITA = entra · ESQUERDA = barra</string>
@@ -479,7 +479,6 @@
     <string name="labbisonscreen_menos_unario">Menos unário</string>
     <string name="labbisonscreen_passo_passo">Passo a passo</string>
     <string name="labbisonscreen_estados">Estados</string>
-    <string name="labbisonscreen_mexa_no_y_veja_parser">Mexa no .y e veja o parser mudar</string>
     <string name="labbisonscreen_declaracoes">DECLARAÇÕES</string>
     <string name="labbisonscreen_sem_left_nem_right_toque">Sem %left nem %right. Toque num exemplo para ver a régua.</string>
     <string name="labbisonscreen_arraste_pela_alca_mais_embaixo">Arraste pela alça. Mais embaixo liga mais forte. Toque no %left para girar.</string>
@@ -589,7 +588,7 @@
     <string name="episodescreen_ver_novo">Ver de novo</string>
     <string name="episodescreen_ler_aula_completa">Ler a aula completa</string>
     <!-- GuideScreens.kt -->
-    <string name="guidescreens_guia_trabalho_pratico">🛠️ Guia do Trabalho Prático</string>
+    <string name="guidescreens_guia_trabalho_pratico">Guia do Trabalho Prático</string>
     <string name="guidescreens_construa_compilador_completo_txt_ao">Construa um compilador completo, do .txt ao MIPS</string>
     <string name="guidescreens_trabalho_pratico_pede">O trabalho prático de Compiladores pede um compilador inteiro: léxico com autômatos, gramática LL(1), descida recursiva, tabela de símbolos, tipos e geração de assembly MIPS. Este guia passa por cada etapa com uma linguagem de exemplo.</string>
     <string name="guidescreens_guia_em_construcao">Guia em construção.</string>
@@ -598,7 +597,7 @@
     <string name="guidescreens_guia_tp_relacionado_1">Guia do TP · relacionado a: %1$s</string>
     <string name="guidescreens_capitulo_concluido_quer_praticar_1">Capítulo concluído! Quer **praticar** "%1$s" num minijogo agora? Fazer logo depois de ler fixa muito mais.</string>
     <string name="guidescreens_praticar">🎮 Praticar</string>
-    <string name="guidescreens_proximo_capitulo_1">📘 Próximo capítulo: %1$s</string>
+    <string name="guidescreens_proximo_capitulo_1">Próximo capítulo: %1$s</string>
     <string name="guidescreens_voltar_ao_indice">Voltar ao índice</string>
     <!-- HomeScreens.kt -->
     <string name="homescreens_seu_nome">Seu nome</string>
@@ -606,15 +605,14 @@
     <string name="homescreens_compilandia">Compilândia</string>
     <string name="homescreens_bancada_1">Bancada de %1$s</string>
     <string name="homescreens_nivel_1_2_dia_seguidos">Nível %1$s · %2$s dia(s) seguidos</string>
-    <string name="homescreens_prova_hoje">📅 A prova é HOJE!</string>
-    <string name="homescreens_prova_em_1_dia">📅 Prova em %1$s dia(s)</string>
+    <string name="homescreens_prova_hoje">A prova é HOJE!</string>
+    <string name="homescreens_prova_em_1_dia">Prova em %1$s dia(s)</string>
     <string name="homescreens_modo_vespera_revisao_relampago_so">Modo véspera: revisão relâmpago e só os pontos fracos. Durma bem: o sono consolida a memória!</string>
     <string name="homescreens_faca_1_missoes_intercaladas_por">Faça %1$s missões intercaladas por dia. Foco: **%2$s**.</string>
     <string name="homescreens_ritmo_tranquilo_1_missao_por">Ritmo tranquilo: 1 missão por dia + revisões que aparecerem. Pontos a reforçar: **%1$s**.</string>
     <string name="homescreens_revisao">Revisão</string>
     <string name="homescreens_missao_4_desafios">Missão: 4 desafios</string>
     <string name="homescreens_entrar">entrar →</string>
-    <string name="homescreens_proxima">próxima</string>
     <string name="homescreens_mexa_no_y_arraste_precedencia">Mexa no .y, arraste a precedência e rode passo a passo.</string>
     <string name="homescreens_abrir_laboratorio">Abrir o laboratório</string>
     <string name="homescreens_chefao_1">Chefão: %1$s</string>
@@ -649,53 +647,50 @@
     <string name="lessonscreen_salvar_praticar">Salvar e praticar 🎮</string>
     <string name="lessonscreen_20_xp_por_explicar_explicar">+20 XP por explicar! Explicar é a forma mais forte de estudar.</string>
     <!-- ToolScreens.kt -->
-    <string name="toolscreens_revisao_relampago">⚡ Revisão relâmpago</string>
+    <string name="toolscreens_revisao_relampago">Revisão relâmpago</string>
     <string name="toolscreens_lembre_antes_virar_esforco_memoria">Lembre ANTES de virar. Esforço = memória.</string>
     <string name="toolscreens_ainda_nao_ha_cartoes_volte">Ainda não há cartões. Volte quando as aulas estiverem carregadas!</string>
     <string name="toolscreens_revisao_concluida">Revisão concluída! 🧠</string>
     <string name="toolscreens_cada_cartao_que_voce_tentou">Cada cartão que você tentou lembrar ficou mais forte, inclusive os que você errou.</string>
-    <string name="toolscreens_voltar_ao_mapa">🗺️ Voltar ao mapa</string>
+    <string name="toolscreens_voltar_ao_mapa">Voltar ao mapa</string>
     <string name="toolscreens_pense_na_resposta_verdade_toque">Pense na resposta (de verdade!) e toque no cartão.</string>
     <string name="toolscreens_pergunta_1">Pergunta: %1$s</string>
     <string name="toolscreens_como_foi_lembrar">Como foi lembrar?</string>
     <string name="toolscreens_errei">😵 Errei</string>
     <string name="toolscreens_dificil">😓 Difícil</string>
     <string name="toolscreens_facil">😎 Fácil</string>
-    <string name="toolscreens_painel_cerebro">🧠 Painel do cérebro</string>
-    <string name="toolscreens_que_ia_aprendeu_sobre_como">O que a IA aprendeu sobre como VOCÊ aprende</string>
-    <string name="toolscreens_conselhos_personalizados">🦉 Conselhos personalizados</string>
-    <string name="toolscreens_conquistas_1_2">🏅 Conquistas (%1$s/%2$s)</string>
-    <string name="toolscreens_calibracao_voce_sabe_que_sabe">🎯 Calibração (você sabe o que sabe?)</string>
+    <string name="toolscreens_painel_cerebro">Painel do cérebro</string>
+    <string name="toolscreens_conquistas_1_2">Conquistas (%1$s/%2$s)</string>
+    <string name="toolscreens_calibracao_voce_sabe_que_sabe">Calibração (você sabe o que sabe?)</string>
     <string name="toolscreens_responda_pergunta_confianca_antes_dos">Responda à pergunta de confiança antes dos jogos para ver isto.</string>
     <string name="toolscreens_1_acertou_2_3_vezes">%1$s → acertou %2$s% (%3$s vezes)</string>
     <string name="toolscreens_indice_brier_1_0_perfeito">Índice de Brier: %1$s (0 = perfeito). </string>
     <string name="toolscreens_tendencia_confianca_demais">Tendência: confiança DEMAIS.</string>
     <string name="toolscreens_tendencia_confianca_menos">Tendência: confiança de MENOS.</string>
     <string name="toolscreens_bem_calibrado">Bem calibrado!</string>
-    <string name="toolscreens_rede_neural">🤖 A rede neural</string>
+    <string name="toolscreens_rede_neural">A rede neural</string>
     <string name="toolscreens_rede_10_entradas_12_neuronios">Uma rede de **10 entradas → 12 neurônios → 1 saída** roda no seu celular e é treinada a cada partida. </string>
     <string name="toolscreens_ela_olha_seu_dominio_estimado">Ela olha seu domínio estimado (BKT), quanto você lembra (curva de esquecimento), acertos recentes, nível do desafio e sua confiança, e prevê sua chance de acerto. </string>
     <string name="toolscreens_jogo_usa_isso_para_escolher">O jogo usa isso para escolher desafios na faixa de ~75% de chance: difícil o bastante para ensinar, possível o bastante para não frustrar.</string>
     <string name="toolscreens_treinada_com_1_jogadas_erro">Treinada com %1$s jogadas · erro médio (log-loss): %2$s</string>
     <string name="toolscreens_acertou_1_das_previsoes_recentes">Acertou %1$s% das previsões recentes.</string>
-    <string name="toolscreens_estilos_explicacao_que_funcionam_para">📖 Estilos de explicação que funcionam para você</string>
+    <string name="toolscreens_estilos_explicacao_que_funcionam_para">Estilos de explicação que funcionam para você</string>
     <string name="toolscreens_calculado_com_thompson_sampling_jogo">Calculado com Thompson Sampling: o jogo testa estilos e aposta mais nos que você marca como "entendi".</string>
-    <string name="toolscreens_jogos_favoritos">🎮 Jogos favoritos</string>
-    <string name="toolscreens_dominio_memoria_por_assunto">🗺️ Domínio e memória por assunto</string>
-    <string name="toolscreens_ajustes">⚙️ Ajustes</string>
-    <string name="toolscreens_tema">🎨 Tema</string>
-    <string name="toolscreens_tamanho_texto">🔠 Tamanho do texto</string>
-    <string name="toolscreens_reduzir_animacoes_sem_confete_tremida">🐢 Reduzir animações (sem confete/tremida)</string>
-    <string name="toolscreens_perguntar_minha_confianca_antes_dos">Perguntar minha confiança antes dos jogos</string>
+    <string name="toolscreens_jogos_favoritos">Jogos favoritos</string>
+    <string name="toolscreens_dominio_memoria_por_assunto">Domínio por assunto</string>
+    <string name="toolscreens_ajustes">Ajustes</string>
+    <string name="toolscreens_tema">Tema</string>
+    <string name="toolscreens_tamanho_texto">Texto</string>
+    <string name="toolscreens_reduzir_animacoes_sem_confete_tremida">Menos animação</string>
+    <string name="toolscreens_perguntar_minha_confianca_antes_dos">Perguntar confiança</string>
     <string name="toolscreens_sons">Sons</string>
     <string name="toolscreens_voz_byte">Voz do Byte</string>
-    <string name="toolscreens_legenda_mesmo_com_voz">Legenda mesmo com voz</string>
-    <string name="toolscreens_data_prova">📅 Data da prova</string>
-    <string name="toolscreens_nenhuma_prova_marcada">Nenhuma prova marcada.</string>
+    <string name="toolscreens_legenda_mesmo_com_voz">Legenda</string>
+    <string name="toolscreens_data_prova">Data da prova</string>
     <string name="toolscreens_prova_em_1_dia_jogo">Prova em %1$s dia(s). O jogo prioriza seus pontos fracos nos últimos 10 dias.</string>
     <string name="toolscreens_remover_prova">remover prova</string>
-    <string name="toolscreens_rever_introducao">📘 Rever a introdução</string>
-    <string name="toolscreens_apagar_todo_progresso">🗑️ Apagar todo o progresso</string>
+    <string name="toolscreens_rever_introducao">Rever a introdução</string>
+    <string name="toolscreens_apagar_todo_progresso">Apagar todo o progresso</string>
     <string name="toolscreens_tem_certeza_isso_apaga_xp">Tem certeza? Isso apaga XP, memória, diário e a rede neural treinada.</string>
     <string name="toolscreens_cancelar">Cancelar</string>
     <string name="toolscreens_progresso_apagado_novo_comeco">Progresso apagado. Um novo começo! 🌱</string>
@@ -815,9 +810,6 @@
     <string name="visuals3_compilado_para_mips_desvios_em">Compilado para MIPS, desvios em rosa:</string>
     <!-- S2: idioma -->
     <string name="ajustes_idioma">Idioma</string>
-    <string name="ajustes_idioma_pt" translatable="false">Português</string>
-    <string name="ajustes_idioma_en" translatable="false">English</string>
-    <string name="ajustes_idioma_nota">Em inglês não tem voz. A fala do Byte aparece escrita.</string>
     <string name="ajustes_idioma_reabra">Feche o jogo e abra de novo para trocar o idioma.</string>
     <string name="fx_token_inesperado">TOKEN INESPERADO</string>
     <string name="gameslexical_casa">CASA</string>
@@ -826,10 +818,20 @@
     <string name="labbison_valores">VALORES</string>
     <string name="labbison_empilhar">EMPILHAR</string>
     <string name="labbison_reduzir">REDUZIR</string>
-    <string name="ajustes_exemplo_fonte">Exemplo: FIRST(E) = { (, id }</string>
     <string name="solta_visuals2_1">Regras: o MAIOR lexema vence; empate → a regra que vem primeiro.</string>
-    <string name="homescreens_assuntos">assuntos</string>
-    <string name="homescreens_jogos">jogos</string>
     <string name="homescreens_vencida">vencida</string>
-    <string name="lessonscreen_aula">aula</string>
+    <string name="ajustes_aparencia">Aparência</string>
+    <string name="ajustes_som_voz">Som e voz</string>
+    <string name="ajustes_estudo">Estudo</string>
+    <string name="ajustes_conta">Conta</string>
+    <string name="ajustes_marcar">marcar</string>
+    <string name="ajustes_em_dias_1">em %1$s dias</string>
+    <string name="ajustes_sobre">Sobre o Compilândia</string>
+    <string name="painel_rede_acerta">a rede acerta</string>
+    <string name="painel_conquistas">conquistas</string>
+    <string name="painel_memoria_fraca">memória mais fraca</string>
+    <string name="painel_hoje">Para hoje</string>
+    <string name="painel_ver_todas_1">ver as %1$s</string>
+    <string name="painel_ver_menos">ver menos</string>
+    <string name="painel_como">Como o jogo aprende sobre você</string>
 </resources>

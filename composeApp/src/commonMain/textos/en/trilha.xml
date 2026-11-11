@@ -21,7 +21,6 @@
     <string name="trilha_pulou_aviso">Step skipped. It stays here if you want to come back.</string>
     <string name="trilha_etapas_feitas">%1$s of %2$s steps</string>
     <string name="seucompilador_titulo">Your compiler</string>
-    <string name="seucompilador_sub">The C lessons and the Project Guide, in compiler order</string>
     <string name="seucompilador_trancado">Opens when you finish the Lexical Forest.</string>
     <string name="seucompilador_aula_c">C lesson</string>
     <string name="seucompilador_capitulo">Guide chapter %1$s</string>

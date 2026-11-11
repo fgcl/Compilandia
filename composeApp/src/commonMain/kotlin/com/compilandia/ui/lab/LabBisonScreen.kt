@@ -167,7 +167,7 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
     if (passo > quadros.lastIndex) passo = quadros.lastIndex.coerceAtLeast(0)
 
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
-        Header(tx("comum_laboratorio_bison"), tx("labbisonscreen_mexa_no_y_veja_parser"))
+        Header(tx("comum_laboratorio_bison"))
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 12.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             // Exemplos prontos
             Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {

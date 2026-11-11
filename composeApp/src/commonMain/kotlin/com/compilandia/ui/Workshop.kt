@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -114,63 +115,79 @@ fun GearIcon(color: Color, modifier: Modifier = Modifier) {
     }
 }
 
-/** Gaveta fechada: etiqueta à esquerda, puxador à direita, luz e sombra nas bordas. */
+/** Placa de metal da Oficina: luz em cima, sombra embaixo e um rebite em cada canto. */
+private fun Modifier.placaDeMetal(corpo: Color, luz: Color, sombra: Color, rebite: Color): Modifier = this.background(corpo).drawBehind {
+    drawRect(luz, size = Size(size.width, 2.dp.toPx()))
+    drawRect(sombra, Offset(0f, size.height - 3.dp.toPx()), Size(size.width, 3.dp.toPx()))
+    val r = 2.5f.dp.toPx(); val m = 7.dp.toPx()
+    for (x in listOf(m, size.width - m)) for (y in listOf(m, size.height - m)) {
+        drawCircle(sombra, r + 0.8f.dp.toPx(), Offset(x, y + 0.8f.dp.toPx()))
+        drawCircle(rebite, r, Offset(x, y))
+    }
+}
+
+/** O número da gaveta numa plaquinha da cor da região. */
 @Composable
-fun Drawer(label: String, modifier: Modifier = Modifier, note: String? = null, dimmed: Boolean = false, onClick: () -> Unit) {
+private fun NumeroDaGaveta(numero: Int, cor: Color) {
+    Box(Modifier.size(36.dp).clip(RoundedCornerShape(8.dp)).background(cor).drawBehind {
+        drawRect(Color.Black.copy(alpha = 0.22f), Offset(0f, size.height - 3.dp.toPx()), Size(size.width, 3.dp.toPx()))
+    }, contentAlignment = Alignment.Center) {
+        Text("$numero", color = Palette.on(cor), style = MaterialTheme.typography.titleMedium)
+    }
+}
+
+@Composable
+private fun BarraDaGaveta(progresso: Float, trilho: Color, cor: Color) {
+    Box(Modifier.fillMaxWidth().padding(top = 5.dp).height(7.dp).clip(RoundedCornerShape(4.dp)).background(trilho)) {
+        Box(Modifier.fillMaxWidth(progresso.coerceIn(0.02f, 1f)).height(7.dp).background(cor))
+    }
+}
+
+/**
+ * Gaveta fechada (Oficina caprichada, mural rodada 5): placa de metal com rebites,
+ * o número na cor da região, o nome direto na placa e a barra de progresso embaixo.
+ */
+@Composable
+fun Drawer(
+    label: String, modifier: Modifier = Modifier, note: String? = null, dimmed: Boolean = false,
+    numero: Int? = null, cor: Color = Palette.drawerHi, progresso: Float? = null, onClick: () -> Unit,
+) {
     val body = Palette.drawer
-    val hi = Palette.drawerHi
-    val lo = Palette.drawerLo
-    val shape = RoundedCornerShape(9.dp)
     Row(
-        modifier.fillMaxWidth().alpha(if (dimmed) 0.78f else 1f).height(62.dp).clip(shape).background(body)
-            .drawBehind {
-                drawRect(hi, size = Size(size.width, 2.dp.toPx()))
-                drawRect(lo, Offset(0f, size.height - 3.dp.toPx()), Size(size.width, 3.dp.toPx()))
-            }
-            .clickable { onClick() }.padding(horizontal = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier.fillMaxWidth().alpha(if (dimmed) 0.72f else 1f).heightIn(min = 64.dp).clip(RoundedCornerShape(9.dp))
+            .placaDeMetal(body, Palette.drawerHi, Palette.drawerLo, Palette.drawerHi)
+            .clickable { onClick() }.padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Box(
-            Modifier.weight(1f, fill = false).widthIn(min = 200.dp).clip(RoundedCornerShape(4.dp)).background(Palette.tag)
-                .border(2.dp, Palette.tagInk, RoundedCornerShape(4.dp)).padding(horizontal = 10.dp, vertical = 4.dp),
-        ) {
-            Text(label, color = Palette.tagInk, style = MaterialTheme.typography.titleSmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        if (numero != null) NumeroDaGaveta(numero, cor)
+        Column(Modifier.weight(1f)) {
+            Text(label, color = Palette.on(body), style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (progresso != null) BarraDaGaveta(progresso, Palette.drawerLo, cor)
         }
-        Row(Modifier.padding(start = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (note != null) {
-                Text(note, color = Palette.on(body), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, maxLines = 1)
-                Box(Modifier.width(8.dp))
-            }
-            Box(Modifier.size(46.dp, 12.dp).clip(RoundedCornerShape(6.dp)).background(Palette.drawerLo))
-        }
+        if (note != null) Text(note, color = Palette.on(body), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, maxLines = 1)
     }
 }
 
-/** Gaveta aberta: a região em destaque, com as peças à mostra. */
+/** Gaveta aberta: a região em que você está, a placa amarela da oficina. Tocar entra na região. */
 @Composable
-fun OpenDrawer(title: String, hint: String, onClick: () -> Unit, bins: @Composable RowScope.() -> Unit) {
+fun OpenDrawer(
+    title: String, hint: String, numero: Int? = null, cor: Color = Palette.drawer, progresso: Float? = null,
+    nota: String? = null, onClick: () -> Unit,
+) {
     val onHazard = Palette.hazardDark
-    Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.hazard)
-            .clickable { onClick() }.padding(start = 11.dp, end = 11.dp, top = 9.dp, bottom = 11.dp),
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 76.dp).clip(RoundedCornerShape(10.dp))
+            .placaDeMetal(Palette.hazard, Color.White.copy(alpha = 0.45f), Color.Black.copy(alpha = 0.25f), Color.Black.copy(alpha = 0.25f))
+            .clickable { onClick() }.padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 14.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(title, color = onHazard, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(hint, color = onHazard, fontFamily = LocalFonts.current.mono, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        if (numero != null) NumeroDaGaveta(numero, cor)
+        Column(Modifier.weight(1f)) {
+            Text(title, color = onHazard, style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (nota != null) Text(nota, color = onHazard.copy(alpha = 0.8f), style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            if (progresso != null) BarraDaGaveta(progresso, onHazard.copy(alpha = 0.25f), onHazard)
         }
-        Row(Modifier.fillMaxWidth().padding(top = 9.dp), horizontalArrangement = Arrangement.spacedBy(7.dp), content = bins)
-    }
-}
-
-@Composable
-fun RowScope.DrawerBin(value: String, label: String) {
-    Column(
-        Modifier.weight(1f).clip(RoundedCornerShape(6.dp)).background(Palette.hazardDark).padding(vertical = 8.dp, horizontal = 4.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(value, color = Palette.hazard, style = MaterialTheme.typography.titleLarge)
-        Text(label, color = Palette.tag, fontFamily = LocalFonts.current.mono, fontSize = 12.sp, maxLines = 1)
+        Text(hint, color = onHazard, fontFamily = LocalFonts.current.mono, fontSize = 13.sp, fontWeight = FontWeight.Bold)
     }
 }
 

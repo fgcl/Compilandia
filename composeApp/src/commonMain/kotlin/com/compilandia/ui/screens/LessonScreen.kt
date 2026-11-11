@@ -71,7 +71,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
     val color = Palette.region(s.skill.region)
     if (lesson == null) {
         Column(Modifier.fillMaxSize()) {
-            Header(s.skill.title, tx("lessonscreen_aula"), color)
+            Header(s.skill.title, null, color)
             CenterText(tx("lessonscreen_ainda_nao_ha_aula_para"))
         }
         return
@@ -94,7 +94,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
     }
 
     Column(Modifier.fillMaxSize()) {
-        Header("${lesson.style.emoji} ${lesson.title}", "${s.skill.title} · ${lesson.style.title}", color)
+        Header(lesson.title, "${s.skill.title} · ${lesson.style.title}", color)
         ProgressBar(shown.toFloat() / beats.size, color, Modifier.fillMaxWidth(), 6.dp)
         Column(
             Modifier.weight(1f).verticalScroll(scroll).padding(16.dp).larguraDeLeitura(),

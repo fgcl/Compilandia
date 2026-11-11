@@ -254,7 +254,7 @@ fun SeuCompiladorScreen(app: AppState) {
     val ls = app.ls
     val paradas = remember { SeuCompilador.paradas() }
     Column(Modifier.fillMaxSize()) {
-        Header(tx("seucompilador_titulo"), tx("seucompilador_sub"), Palette.teal)
+        Header(tx("seucompilador_titulo"), null, Palette.teal)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             for (p in paradas) {
                 val feita = p.episodio?.let { it.id in ls.episodesSeen } ?: (p.capitulo!!.number in ls.guideRead)

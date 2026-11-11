@@ -21,7 +21,6 @@
     <string name="trilha_pulou_aviso">Etapa pulada. Ela fica aqui se você quiser voltar.</string>
     <string name="trilha_etapas_feitas">%1$s de %2$s etapas</string>
     <string name="seucompilador_titulo">Seu compilador</string>
-    <string name="seucompilador_sub">As aulas em C e o Guia do TP, na ordem do compilador</string>
     <string name="seucompilador_trancado">Abre quando você terminar a Floresta Léxica.</string>
     <string name="seucompilador_aula_c">Aula em C</string>
     <string name="seucompilador_capitulo">Capítulo %1$s do guia</string>

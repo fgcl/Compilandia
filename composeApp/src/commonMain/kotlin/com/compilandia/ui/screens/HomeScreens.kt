@@ -52,7 +52,6 @@ import com.compilandia.ui.BoltIcon
 import com.compilandia.ui.Chip
 import com.compilandia.ui.ChipRow
 import com.compilandia.ui.Drawer
-import com.compilandia.ui.DrawerBin
 import com.compilandia.ui.GearIcon
 import com.compilandia.ui.HazardStripe
 import com.compilandia.ui.Header
@@ -205,16 +204,17 @@ private fun RegionDrawer(app: AppState, r: Region, number: Int, open: Boolean, r
     val skills = Skill.entries.filter { it.region == r }
     val percent = (app.learner.regionProgress(r) * 100).toInt()
     val bossDown = r.name in app.ls.bossesDefeated
+    val cor = Palette.region(r)
+    val progresso = app.learner.regionProgress(r).toFloat()
     if (open) {
-        val cor = Palette.region(r)
-        OpenDrawer("$number ${r.title}", tx("homescreens_entrar"), onClick = { com.compilandia.ui.fx.Fx.porta(r.title, cor) { app.go(Screen.RegionView(r)) } }) {
-            DrawerBin("$percent%", if (recommended) tx("homescreens_proxima") else tx("comum_dominio"))
-            DrawerBin("${skills.size}", tx("homescreens_assuntos"))
-            DrawerBin("${GameId.entries.count { g -> g != GameId.FLASHCARDS && g.skills.any { it in skills } }}", tx("homescreens_jogos"))
-        }
+        val proximo = remember(app.ls) { skills.firstOrNull { !com.compilandia.content.Trilha.completa(app.learner, it) } }
+        OpenDrawer(
+            r.title, tx("homescreens_entrar"), numero = number, cor = cor, progresso = progresso,
+            nota = proximo?.title, onClick = { com.compilandia.ui.fx.Fx.porta(r.title, cor) { app.go(Screen.RegionView(r)) } },
+        )
     } else {
         Drawer(
-            "$number ${r.title}",
+            r.title, numero = number, cor = cor, progresso = progresso,
             note = if (bossDown) tx("homescreens_vencida") else if (percent > 0) "$percent%" else null,
             dimmed = skills.none { app.learner.prereqsMet(it) },
             onClick = onOpen,
@@ -265,57 +265,49 @@ fun RegionScreen(app: AppState, region: Region) {
                 TrilhaCorpo(app, escolhido, Modifier.weight(1f).fillMaxHeight())
             }
         } else {
-            Column(Modifier.verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                for (s in skills) SkillRow(app, s, color, s == nextHere, etapasAbertas = faixa == com.compilandia.ui.Faixa.MEDIA)
+            Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                skills.forEachIndexed { i, s -> SkillRow(app, s, i + 1, color, s == nextHere, etapasAbertas = faixa == com.compilandia.ui.Faixa.MEDIA) }
                 extras()
-                VSpace(24)
+                VSpace(12)
+            }
+            // Um Continuar só para a região (mural, rodada 4): antes cada assunto tinha o seu.
+            val alvo = nextHere
+            val passo = remember(ls) { alvo?.let { com.compilandia.content.Trilha.proximo(l, it) } }
+            if (alvo != null && passo != null) Column(Modifier.fillMaxWidth().background(Palette.paperDark).padding(12.dp)) {
+                BigButton(tx("trilha_continuar", alvo.title), Modifier.fillMaxWidth()) { abrirPasso(app, alvo, passo) }
             }
         }
     }
 }
 
-/** Um assunto na região: anel de domínio, quantas etapas faltam e um botão só. Tocar no cartão abre a trilha. */
+/** Um assunto na região: a mesma placa das gavetas do mapa. O assunto da vez fica na placa amarela. Tocar abre a trilha. */
 @Composable
-private fun SkillRow(app: AppState, s: Skill, color: Color, isNext: Boolean, etapasAbertas: Boolean = false) {
+private fun SkillRow(app: AppState, s: Skill, numero: Int, color: Color, isNext: Boolean, etapasAbertas: Boolean = false) {
     val l = app.learner
     val ls = app.ls
     val passos = remember(s) { com.compilandia.content.Trilha.passos(s) }
     val feitas = remember(ls) { com.compilandia.content.Trilha.feitas(l, s) }
     val proximo = remember(ls) { com.compilandia.content.Trilha.proximo(l, s) }
-    PaperCard(
-        Modifier.fillMaxWidth().clickable { app.go(Screen.Trilha(s)) },
-        color = if (isNext) Palette.hazard.copy(alpha = 0.14f) else Palette.white, border = if (isNext) Palette.hazard else Palette.ink,
+    val progresso = if (passos.isEmpty()) 0f else feitas.toFloat() / passos.size
+    val abre = { app.go(Screen.Trilha(s)) }
+    if (isNext) com.compilandia.ui.OpenDrawer(s.title, "$feitas/${passos.size}", numero = numero, cor = color, progresso = progresso, nota = proximo?.titulo, onClick = abre)
+    else com.compilandia.ui.Drawer(s.title, numero = numero, cor = color, progresso = progresso, note = "$feitas/${passos.size}", onClick = abre)
+    // Faixa média: as etapas aparecem abertas, cada uma tocável.
+    if (etapasAbertas) androidx.compose.foundation.layout.FlowRow(
+        Modifier.fillMaxWidth().padding(start = 8.dp, bottom = 4.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            MasteryRing(l.mastery(s), color)
-            Spacer(Modifier.width(10.dp))
-            Column(Modifier.weight(1f)) {
-                Text(s.title, style = MaterialTheme.typography.titleSmall)
-                Text(tx("trilha_etapas_feitas", feitas, passos.size), style = MaterialTheme.typography.labelSmall, color = Palette.inkSoft)
-            }
-        }
-        // Faixa média: as etapas aparecem abertas, cada uma tocável.
-        if (etapasAbertas) androidx.compose.foundation.layout.FlowRow(
-            Modifier.fillMaxWidth().padding(vertical = 6.dp),
-            horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp),
-        ) {
-            for (p in passos) {
-                val estado = com.compilandia.content.Trilha.estado(l, s, p)
-                val feita = estado == com.compilandia.content.EstadoEtapa.FEITA
-                val atual = p == proximo
-                Text(
-                    (if (feita) "✓ " else "") + p.titulo,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = if (atual) Palette.on(Palette.hazard) else if (feita) Palette.green else Palette.ink,
-                    modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(if (atual) Palette.hazard else Palette.paperDark)
-                        .clickable { abrirPasso(app, s, p) }.padding(horizontal = 8.dp, vertical = 4.dp),
-                )
-            }
-        }
-        if (proximo != null) {
-            BigButton(tx("trilha_continuar", proximo.titulo), Modifier.fillMaxWidth(), color = if (isNext) Palette.action else Palette.drawer, small = true) {
-                abrirPasso(app, s, proximo)
-            }
+        for (p in passos) {
+            val estado = com.compilandia.content.Trilha.estado(l, s, p)
+            val feita = estado == com.compilandia.content.EstadoEtapa.FEITA
+            val atual = p == proximo
+            Text(
+                (if (feita) "✓ " else "") + p.titulo,
+                style = MaterialTheme.typography.labelMedium,
+                color = if (atual) Palette.on(Palette.hazard) else if (feita) Palette.green else Palette.ink,
+                modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(if (atual) Palette.hazard else Palette.paperDark)
+                    .clickable { abrirPasso(app, s, p) }.padding(horizontal = 8.dp, vertical = 4.dp),
+            )
         }
     }
 }
