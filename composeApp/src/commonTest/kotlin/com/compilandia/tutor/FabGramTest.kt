@@ -7,6 +7,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class FabGramTest {
@@ -25,31 +26,49 @@ class FabGramTest {
         }
     }
 
+    private val todas = FabGram.exemplos.map { it.first } + "A -> B C | ε\nB -> b | B b\nC -> c C d e | ε"
+
     @Test fun nadaSeSobrepoeNaPlanta() {
-        for ((t, _) in FabGram.exemplos + ("A -> B C | ε\nB -> b | B b\nC -> c C d e | ε" to "")) {
+        for (t in todas) {
             val pl = FabGram.planta(g(t))
             val ocupadas = HashMap<FabGram.Cel, String>()
-            for (b in pl.blocos) for (x in b.x until b.x + b.w) for (y in b.y until b.y + b.h) {
-                val c = FabGram.Cel(x, y)
+            for (b in pl.blocos) for (c in b.celulas()) {
                 assertTrue(c !in ocupadas, "$t: ${b.tipo} em cima de ${ocupadas[c]} em $c")
                 ocupadas[c] = b.tipo.name
             }
-            for (e in pl.esteiras) for (c in e.celulas) {
-                assertTrue(c.x in 0 until pl.largura && c.y in 0 until pl.altura, "$t: esteira fora da grade em $c")
-                assertTrue(c !in ocupadas, "$t: esteira ${e.papel} em cima de ${ocupadas[c]} em $c")
+            for (c in pl.esteiras.keys) {
+                assertTrue(c !in ocupadas, "$t: esteira em cima de ${ocupadas[c]} em $c")
             }
+        }
+    }
+
+    @Test fun todoBlocoQueFazAlgoTemSaida() {
+        for (t in todas) {
+            val pl = FabGram.planta(g(t))
+            for (b in pl.blocos) {
+                val precisa = b.tipo == TipoBloco.FONTE || b.tipo == TipoBloco.SEPARADOR || (b.tipo == TipoBloco.MAQUINA && b.prod!!.rhs.isNotEmpty())
+                if (precisa) assertNotNull(pl.saidaDe(b), "$t: ${b.tipo} ${b.prod} sem saída")
+            }
+        }
+    }
+
+    @Test fun plantaAutomaticaFazOsExemplos() {
+        for ((t, f) in FabGram.exemplos) {
+            val c = FabGram.corrida(FabGram.planta(g(t)), f.split(" "))
+            assertNull(c.quebra, "$t: travou em ${c.quebra}")
+            assertTrue(c.saiu, t)
+            assertEquals(f.split(" "), c.chegadas.sortedBy { it.casa }.map { it.simbolo }, t)
         }
     }
 
     @Test fun fazAFraseCertaEEnchendoTodasAsCasas() {
         val pl = FabGram.planta(g("S -> a S b | ε"))
         val c = FabGram.corrida(pl, listOf("a", "a", "b", "b"))
-        assertTrue(c.aceita)
+        assertTrue(c.saiu)
         assertFalse(c.ambigua)
         assertEquals(listOf("a", "a", "b", "b"), c.arvore!!.leaves())
-        assertEquals(4, c.chegadas.size)
-        assertEquals(setOf(0, 1, 2, 3), c.chegadas.map { it.casa }.toSet())
-        // cofre (S -> ε) trabalha uma vez, prensa duas
+        // cada peça cai na casa dela, mesmo chegando fora de ordem
+        assertEquals(listOf("a", "a", "b", "b"), c.chegadas.sortedBy { it.casa }.map { it.simbolo })
         val cofre = pl.blocos.first { it.modelo == Modelo.COFRE }
         assertEquals(1, c.trabalhos.count { it.bloco == cofre.id })
         assertTrue(c.duracao > 0f)
@@ -70,17 +89,66 @@ class FabGramTest {
         assertTrue(c.ambigua)
     }
 
-    @Test fun caixaPassaPorDentroDaMaquina() {
-        // nada teleporta: cada trecho começa onde o anterior do mesmo item terminou ou numa máquina
+    @Test fun nadaTeleporta() {
+        // todo trecho começa no centro de um bloco: o item sai de onde estava
         val pl = FabGram.planta(g("E -> E + T | T\nT -> id"))
         val c = FabGram.corrida(pl, listOf("id", "+", "id"))
-        val maquinas = pl.blocos.filter { it.tipo == TipoBloco.MAQUINA }
         for (tr in c.trechos) {
             val (x, y) = tr.pontos.first()
-            val naFonte = x == pl.fonte.cx && y == pl.fonte.cy
-            val naMaquina = maquinas.any { it.cx == x && it.cy == y }
-            val noCaminho = c.trechos.any { o -> o !== tr && o.pontos.last() == tr.pontos.first() }
-            assertTrue(naFonte || naMaquina || noCaminho, "trecho de ${tr.simbolo} começa do nada em ($x, $y)")
+            assertTrue(pl.blocos.any { it.cx == x && it.cy == y }, "trecho de ${tr.simbolo} começa do nada em ($x, $y)")
+            // e anda de célula vizinha em célula vizinha
+            for (i in 2 until tr.pontos.size - 1) {
+                val a = tr.pontos[i - 1]; val b = tr.pontos[i]
+                assertEquals(1f, kotlin.math.abs(a.first - b.first) + kotlin.math.abs(a.second - b.second), "salto em ${tr.simbolo}")
+            }
         }
+    }
+
+    @Test fun esteiraCortadaTravaAFabrica() {
+        val pl = FabGram.planta(g("S -> a S b | ε"))
+        // corta o elevador logo abaixo do separador: a caixa que volta não chega
+        val cortada = pl.semEsteira(FabGram.Cel(1, 5))
+        val c = FabGram.corrida(cortada, listOf("a", "a", "b", "b"))
+        val q = assertNotNull(c.quebra)
+        assertEquals(Motivo.ACABA, q.motivo)
+        assertEquals(TipoBloco.SEPARADOR, q.destino.tipo)
+        assertFalse(c.saiu)
+    }
+
+    @Test fun maquinaSemSaidaAvisa() {
+        val pl = FabGram.planta(g("S -> a S b | ε"))
+        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val c = FabGram.corrida(pl.semEsteira(pl.saidaDe(prensa)!!), listOf("a", "b"))
+        assertEquals(Motivo.SEM_SAIDA, c.quebra?.motivo)
+    }
+
+    @Test fun moverNaoDeixaEmpilhar() {
+        val pl = FabGram.planta(g("S -> a S b | ε"))
+        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val cofre = pl.blocos.first { it.modelo == Modelo.COFRE }
+        assertNull(pl.move(prensa.id, cofre.x, cofre.y))
+        assertNull(pl.move(prensa.id, 0, 0, FabGram.Area(1, 1, 50, 50)))
+        val longe = assertNotNull(pl.move(prensa.id, 20, 20))
+        assertEquals(20, longe.blocos.first { it.id == prensa.id }.x)
+        // longe da esteira, a prensa não recebe caixa: a fábrica para no caminho
+        assertNotNull(FabGram.corrida(longe, listOf("a", "b")).quebra)
+    }
+
+    @Test fun girarDaUmQuartoDeVolta() {
+        val pl = FabGram.planta(g("S -> a S b | ε"))
+        val c = pl.esteiras.keys.first()
+        val d = pl.esteiras.getValue(c)
+        assertEquals(d.gira(), pl.gira(c).esteiras[c])
+        assertEquals(d, pl.gira(c).gira(c).gira(c).gira(c).esteiras[c])
+    }
+
+    @Test fun salvaECarregaAMesmaPlanta() {
+        val gr = g("E -> E + T | T\nT -> id")
+        val pl = FabGram.planta(gr).let { it.move(it.montadora.id, 30, 30)!! }.semEsteira(FabGram.Cel(1, 4))
+        val volta = assertNotNull(FabGram.carrega(gr, FabGram.salva(pl)))
+        assertEquals(pl.blocos, volta.blocos)
+        assertEquals(pl.esteiras, volta.esteiras)
+        // a planta de outra gramática não serve
+        assertNull(FabGram.carrega(g("S -> a S b | ε\nA -> a"), FabGram.salva(pl)))
     }
 }

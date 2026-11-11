@@ -108,6 +108,8 @@ data class LearnerState(
     // ---- Fábrica de Gramáticas: a última gramática e a última frase testada.
     val fabGramTexto: String = "",
     val fabGramFrase: String = "",
+    /** A planta que o jogador montou, no formato de FabGram.salva. Vale para a gramática de [fabGramTexto]. */
+    val fabGramPlanta: String = "",
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -331,6 +333,7 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun setFontScale(f: Float) { state = state.copy(fontScale = f) }
     fun setReduceMotion(v: Boolean) { state = state.copy(reduceMotion = v) }
     fun setFabGram(texto: String, frase: String) { state = state.copy(fabGramTexto = texto, fabGramFrase = frase) }
+    fun setFabGramPlanta(texto: String, planta: String) { state = state.copy(fabGramTexto = texto, fabGramPlanta = planta) }
 
     private fun touchDay(nowMs: Long) {
         val day = nowMs / 86_400_000L

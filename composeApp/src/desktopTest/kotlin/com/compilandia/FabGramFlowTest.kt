@@ -4,7 +4,12 @@ import androidx.compose.ui.graphics.toAwtImage
 import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -36,15 +41,17 @@ class FabGramFlowTest {
     private fun ComposeUiTest.espera(texto: String) {
         repeat(120) {
             anda(150); Thread.sleep(30)
-            try { onNodeWithText(texto, substring = true).assertExists(); return } catch (_: AssertionError) {}
+            if (onAllNodesWithText(texto, substring = true).fetchSemanticsNodes().isNotEmpty()) return
         }
         onNodeWithText(texto, substring = true).assertExists()
     }
 
-    private fun ComposeUiTest.liga(gramatica: String?, frase: String) {
+    private fun ComposeUiTest.liga(gramatica: String?, frase: String, fechar: Boolean = false) {
+        if (onAllNodesWithTag("fabgram-frase").fetchSemanticsNodes().isEmpty()) { onNodeWithTag("fabgram-painel").performClick(); anda(300) }
         if (gramatica != null) { onNodeWithTag("fabgram-texto").performTextClearance(); onNodeWithTag("fabgram-texto").performTextInput(gramatica); anda(600) }
         onNodeWithTag("fabgram-frase").performTextClearance(); onNodeWithTag("fabgram-frase").performTextInput(frase); anda(300)
         repeat(20) { anda(100); Thread.sleep(30) } // diagnóstico fora da tela
+        if (fechar) { onNodeWithText("Fechar").performClick(); anda(300) }
         onNodeWithText("Ligar").performClick()
         repeat(10) { anda(50); Thread.sleep(30) }  // corrida calculada fora da tela
     }
@@ -67,7 +74,7 @@ class FabGramFlowTest {
         val app = estado(); app.stack.add(Screen.FabGram)
         setContent { App(app) }
         anda(800)
-        liga(null, "a b b")
+        liga(null, "a b b", fechar = true)
         espera("O mais perto que sai é a b.")
         foto("4_errada_celular")
     }
@@ -79,7 +86,24 @@ class FabGramFlowTest {
         anda(800)
         liga("E -> E + T | T\nT -> T * F | F\nF -> ( E ) | id\nX -> x", "id + id")
         espera("Poeira")
-        espera("Esteira piscando")
+        espera("Máquina piscando")
         foto("5_sinais")
+    }
+
+    @Test fun desenharEsteiraMudaAPlanta() = runDesktopComposeUiTest(1200, 800, testTimeout = 3.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado(); app.stack.add(Screen.FabGram)
+        setContent { App(app) }
+        anda(1500); Thread.sleep(300); anda(500)
+        foto("6_editor_mover")
+        onNodeWithTag("fabgram-esteira").performClick(); anda(200)
+        val antes = app.learner.state.fabGramPlanta
+        onNodeWithTag("fabgram-palco").performTouchInput { swipe(Offset(width * 0.85f, height * 0.2f), Offset(width * 0.85f, height * 0.6f), 400) }
+        anda(400)
+        foto("7_esteira_nova")
+        kotlin.test.assertNotEquals(antes, app.learner.state.fabGramPlanta)
+        onNodeWithTag("fabgram-arrumar").performClick(); anda(400)
+        onNodeWithTag("fabgram-apagar").performClick(); anda(200)
+        foto("8_apagar")
     }
 }
