@@ -71,4 +71,10 @@
     <string name="fabgram_desafio_1">Challenge %1$s</string>
     <string name="fabgram_contador_2">Belts: %1$s · 3 stars up to %2$s</string>
     <string name="fabgram_extra_falhou_1">The robot also tested %1$s, and it did not come out.</string>
+    <string name="fabgram_d_lista_titulo">Comma list</string>
+    <string name="fabgram_d_declaracao_titulo">Declaration</string>
+    <string name="fabgram_d_ifelse_titulo">The dangling else</string>
+    <string name="fabgram_dica_custa">Hint · costs 1 star</string>
+    <string name="fabgram_dica_mais_1">Another hint · used %1$s</string>
+    <string name="fabgram_ganhou_1">+%1$s gears</string>
 </resources>

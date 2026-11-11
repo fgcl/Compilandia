@@ -62,6 +62,13 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
         Etapa.PRATICA, Etapa.PEGADINHA -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.FAZER -> Screen.FazerComAjuda(s, semente = nowMs())
         Etapa.PROGRAMAR -> com.compilandia.content.Robo.de(s)?.let { Screen.Bancada(it) } ?: return
+        Etapa.FABRICA -> {
+            // Derivação abre o tutorial onde parou; ambiguidade e recursão abrem o desafio do assunto.
+            val m = Trilha.missaoDaFabrica(s) ?: return
+            val tutorial = com.compilandia.tutor.Missao.entries.take(com.compilandia.tutor.TUTORIAL)
+            app.fabGramPedida = if (m.desafio) m.name else (tutorial.getOrNull(l.state.fabGramMissoes) ?: tutorial.first()).name
+            Screen.FabGram
+        }
         Etapa.REVISAO -> {
             // R2: grava o formato usado, para a próxima revisão escolher outro.
             val f = p.formato ?: com.compilandia.content.FormatoRevisao.CLIPE

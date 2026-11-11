@@ -94,7 +94,7 @@ internal fun PalcoEditavel(
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val w = constraints.maxWidth.toFloat()
         val h = constraints.maxHeight.toFloat()
-        val topo = with(LocalDensity.current) { (if (e.missao != null) 150.dp else 70.dp).toPx() }
+        val topo = with(LocalDensity.current) { (when { e.missao?.missao?.desafio == true -> 200.dp; e.missao != null -> 150.dp; else -> 70.dp }).toPx() }
         val baixo = with(LocalDensity.current) { 72.dp.toPx() }
         val celMax = with(LocalDensity.current) { 88.dp.toPx() }
         val base = remember(planta.x0, planta.y0, planta.x1, planta.y1, w, h, topo) { gradePara(planta, w, h, topo, baixo, celMax) }
@@ -176,7 +176,7 @@ internal fun PalcoEditavel(
             desenhaFabrica(
                 Cena(
                     pl, gr, laudo, c, if (c == null) 0f else e.t, relogio, e.sel, reduz, ferramenta, fantasma, medidor, nomes,
-                    guia = e.missao?.guiaEsteiras.orEmpty(), guiaBloco = e.missao?.guiaBloco, mao = e.mostrarMao && rascunho == null && fantasma == null,
+                    guia = e.missao?.guiaEsteiras.orEmpty() + e.dicaGuia, guiaBloco = e.missao?.guiaBloco, mao = e.mostrarMao && rascunho == null && fantasma == null,
                 ),
             )
         }

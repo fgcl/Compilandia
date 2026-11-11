@@ -133,11 +133,23 @@ class FabGramFlowTest {
         mainClock.autoAdvance = false
         val app = estado(); app.stack.add(Screen.FabGram)
         setContent { App(app) }
-        anda(1500); Thread.sleep(300); anda(500)
+        anda(1000)
+        // cada missão abre pelo mesmo caminho da trilha: pedir a missão e entrar na fábrica
         for (m in com.compilandia.tutor.Missao.entries) {
-            if (onAllNodesWithTag("fabgram-missao-${m.ordinal + 1}").fetchSemanticsNodes().isEmpty()) { onNodeWithTag("fabgram-painel").performClick(); anda(300) }
-            onNodeWithTag("fabgram-missao-${m.ordinal + 1}").performClick(); anda(1200); Thread.sleep(200); anda(300)
+            app.back(); anda(300)
+            app.fabGramPedida = m.name; app.go(Screen.FabGram); anda(1200); Thread.sleep(200); anda(300)
+            onNodeWithTag("fabgram-missao").assertExists()
             foto("m${m.ordinal + 1}_${m.name.lowercase()}")
         }
+    }
+
+    @Test fun dicaNoDesafio() = runDesktopComposeUiTest(412, 900, testTimeout = 3.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado(); app.fabGramPedida = "D_LISTA"; app.stack.add(Screen.FabGram)
+        setContent { App(app) }
+        anda(1500); Thread.sleep(300); anda(500)
+        onNodeWithTag("fabgram-dica").performClick(); anda(600)
+        foto("d1_dica")
+        onNodeWithText("já usou 1", substring = true).assertExists()
     }
 }

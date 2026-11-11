@@ -34,6 +34,12 @@ enum class Missao(val gramatica: String, val frase: String, val extras: List<Str
     D_PARENTESES("S -> ( S ) S | ε", "( ) ( )", listOf("( ( ) )"), desafio = true),
     /** Expressão com duas letras. */
     D_EXPRESSAO("E -> E + T | T\nT -> id", "id + id", listOf("id", "id + id + id"), desafio = true),
+    /** Lista separada por vírgula, como nas listas de exercício: cauda que se repete ou some. */
+    D_LISTA("L -> id R\nR -> , id R | ε", "id , id", listOf("id", "id , id , id"), desafio = true),
+    /** Declaração de variável: tipo, nome e ponto e vírgula. */
+    D_DECLARACAO("D -> T id ;\nT -> int | float", "int id ;", listOf("float id ;"), desafio = true),
+    /** O else solto: a mesma frase sai de dois jeitos. */
+    D_IFELSE("S -> if E then S | if E then S else S | x\nE -> id", "if id then x else x", listOf("if id then x", "if id then if id then x else x"), desafio = true),
 }
 
 /** Quantas missões do tutorial vêm antes dos desafios. */
@@ -96,6 +102,26 @@ fun FabGram.prepara(m: Missao): MissaoPronta {
         Missao.LETRAS -> pl.celulasDaRota(pl.maquinaDe(pl.g.productionsOf("S")[0]), pl.separadorDe("A")).let { tira(it.takeLast(3)) }
         else -> error("desafio tratado acima")
     }
+}
+
+/**
+ * A dica do desafio: o próximo trecho que falta, na ordem em que a planta automática anda.
+ * Segue o caminho de cada item da corrida automática e devolve até [max] células seguidas
+ * que não existem (ou apontam para outro lado) na planta [atual].
+ */
+fun FabGram.dica(p: MissaoPronta, atual: Planta, max: Int = 4): Map<Cel, Dir> {
+    val pronta = planta(p.planta.g)
+    val c = corrida(pronta, p.missao.frase.split(" "))
+    val ordem = LinkedHashSet<Cel>()
+    for (tr in c.trechos) for ((x, y) in tr.pontos) {
+        val cel = Cel(kotlin.math.floor(x).toInt(), kotlin.math.floor(y).toInt())
+        if (cel in pronta.esteiras) ordem += cel
+    }
+    for (cel in pronta.esteiras.keys) ordem += cel
+    val falta = ordem.filter { atual.esteiras[it] != pronta.esteiras[it] }
+    if (falta.isEmpty()) return emptyMap()
+    val i0 = ordem.indexOf(falta.first())
+    return ordem.drop(i0).takeWhile { atual.esteiras[it] != pronta.esteiras[it] }.take(max).associateWith { pronta.esteiras.getValue(it) }
 }
 
 /** A planta resolvida: a missão com o fantasma preenchido. Serve para testar e para o botão de ajuda. */

@@ -72,4 +72,10 @@
     <string name="fabgram_desafio_1">Desafio %1$s</string>
     <string name="fabgram_contador_2">Esteiras: %1$s · 3 estrelas até %2$s</string>
     <string name="fabgram_extra_falhou_1">O robô também testou %1$s, e essa não saiu.</string>
+    <string name="fabgram_d_lista_titulo">Lista com vírgula</string>
+    <string name="fabgram_d_declaracao_titulo">Declaração</string>
+    <string name="fabgram_d_ifelse_titulo">O else solto</string>
+    <string name="fabgram_dica_custa">Dica · custa 1 estrela</string>
+    <string name="fabgram_dica_mais_1">Mais uma dica · já usou %1$s</string>
+    <string name="fabgram_ganhou_1">+%1$s engrenagens</string>
 </resources>

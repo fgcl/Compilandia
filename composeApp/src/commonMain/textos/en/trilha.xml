@@ -53,4 +53,6 @@
     <string name="revisao_desafio">Now a quick challenge</string>
     <string name="regiao_revisar">Review</string>
     <string name="regiao_revisar_assunto_1">Review: %1$s</string>
+    <string name="trilha_etapa_fabrica">Build it in the Factory</string>
+    <string name="trilha_etapa_fabrica_sub">The grammar becomes machines and belts.</string>
 </resources>

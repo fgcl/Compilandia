@@ -338,6 +338,23 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun setReduceMotion(v: Boolean) { state = state.copy(reduceMotion = v) }
     fun setFabGram(texto: String, frase: String) { state = state.copy(fabGramTexto = texto, fabGramFrase = frase) }
     fun setFabGramEstrelas(missao: String, n: Int) { state = state.copy(fabGramEstrelas = state.fabGramEstrelas + (missao to maxOf(n, state.fabGramEstrelas[missao] ?: 0))) }
+    /**
+     * Missão da Fábrica cumprida. O tutorial só avança na ordem (quem abre um desafio pela trilha não pula as missões).
+     * Rende 5 engrenagens na primeira vez de cada missão e 5 por estrela nova num desafio. Devolve quantas rendeu.
+     */
+    fun cumpreMissaoFabrica(nome: String, ordem: Int, estrelas: Int): Int {
+        val antes = state.fabGramEstrelas[nome]
+        val primeira = antes == null
+        var paga = 0
+        if (estrelas > 0) paga = 5 * (estrelas - (antes ?: 0)).coerceAtLeast(0)
+        else if (primeira) paga = 5
+        state = state.copy(
+            fabGramMissoes = if (ordem == state.fabGramMissoes) ordem + 1 else state.fabGramMissoes,
+            fabGramEstrelas = state.fabGramEstrelas + (nome to maxOf(estrelas, antes ?: 0)),
+            gears = state.gears + paga,
+        )
+        return paga
+    }
     fun setFabGramMissoes(n: Int) { state = state.copy(fabGramMissoes = maxOf(state.fabGramMissoes, n)) }
     fun setFabGramPlanta(texto: String, planta: String) { state = state.copy(fabGramTexto = texto, fabGramPlanta = planta) }
 

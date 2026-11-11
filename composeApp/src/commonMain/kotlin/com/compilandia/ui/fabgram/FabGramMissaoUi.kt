@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.compilandia.textos.tx
+import com.compilandia.tutor.dica
 import com.compilandia.tutor.Missao
 import com.compilandia.tutor.TUTORIAL
 import com.compilandia.ui.BigButton
@@ -39,6 +40,7 @@ internal fun tituloMissao(m: Missao) = when (m) {
     Missao.LIGAR -> tx("fabgram_m_ligar_titulo"); Missao.CONSERTAR -> tx("fabgram_m_consertar_titulo"); Missao.MOVER -> tx("fabgram_m_mover_titulo")
     Missao.ESCOLHA -> tx("fabgram_m_escolha_titulo"); Missao.VOLTA -> tx("fabgram_m_volta_titulo"); Missao.LETRAS -> tx("fabgram_m_letras_titulo")
     Missao.D_ANBN -> tx("fabgram_d_anbn_titulo"); Missao.D_PARENTESES -> tx("fabgram_d_parenteses_titulo"); Missao.D_EXPRESSAO -> tx("fabgram_d_expressao_titulo")
+    Missao.D_LISTA -> tx("fabgram_d_lista_titulo"); Missao.D_DECLARACAO -> tx("fabgram_d_declaracao_titulo"); Missao.D_IFELSE -> tx("fabgram_d_ifelse_titulo")
 }
 
 @Composable
@@ -73,9 +75,22 @@ internal fun CartaoMissao(e: EstadoFabrica, onProxima: (Missao?) -> Unit) {
             Estrelas(if (e.cumpriu) e.estrelas else 0, 16.dp)
         }
         if (e.cumpriu) {
-            Text(tx("fabgram_missao_feita"), color = PLACA, style = MaterialTheme.typography.bodyMedium)
+            Text(tx("fabgram_missao_feita") + if (e.ganhou > 0) "  " + tx("fabgram_ganhou_1", e.ganhou) else "", color = PLACA, style = MaterialTheme.typography.bodyMedium)
             BigButton(if (proxima != null) tx("fabgram_proxima") else tx("fabgram_livre"), small = true, color = Palette.green) { onProxima(proxima) }
-        } else Text(objetivoMissao(m), color = PLACA, style = MaterialTheme.typography.bodyMedium)
+        } else {
+            Text(objetivoMissao(m), color = PLACA, style = MaterialTheme.typography.bodyMedium)
+            // Dica do desafio: mostra em azul o próximo trecho que falta e custa uma estrela.
+            if (m.desafio) Text(
+                if (e.dicas == 0) tx("fabgram_dica_custa") else tx("fabgram_dica_mais_1", e.dicas),
+                color = Color(0xFF8CC4EE), style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.clip(RoundedCornerShape(8.dp)).border(1.dp, Color(0xFF8CC4EE), RoundedCornerShape(8.dp))
+                    .clickable {
+                        val pl = e.planta ?: return@clickable
+                        val d = com.compilandia.tutor.FabGram.dica(pronta, pl)
+                        if (d.isNotEmpty()) { e.dicaGuia = d; e.dicas++ }
+                    }.padding(horizontal = 12.dp, vertical = 6.dp).testTag("fabgram-dica"),
+            )
+        }
     }
 }
 

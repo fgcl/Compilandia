@@ -79,6 +79,8 @@ class AppState(val learner: Learner) {
     val screen: Screen get() = stack.last()
     /** Última compra: a sala anima a chegada dessa peça. */
     var justBought: String? by mutableStateOf(null)
+    /** A trilha pede uma missão da Fábrica (o nome da Missao); a tela consome ao abrir. */
+    var fabGramPedida: String? by mutableStateOf(null)
 
     init {
         current = this

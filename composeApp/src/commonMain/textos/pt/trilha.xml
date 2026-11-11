@@ -53,4 +53,6 @@
     <string name="revisao_desafio">Agora um desafio rápido</string>
     <string name="regiao_revisar">Revisar</string>
     <string name="regiao_revisar_assunto_1">Revisar: %1$s</string>
+    <string name="trilha_etapa_fabrica">Montar na Fábrica</string>
+    <string name="trilha_etapa_fabrica_sub">A gramática vira máquinas e esteiras.</string>
 </resources>

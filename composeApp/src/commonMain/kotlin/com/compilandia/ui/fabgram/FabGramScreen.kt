@@ -73,6 +73,11 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
     var pan by mutableStateOf(Offset.Zero)
     val desfazer = mutableStateListOf<Planta>()
     val refazer = mutableStateListOf<Planta>()
+    /** Dicas pedidas no desafio: cada uma tira uma estrela. */
+    var dicas by mutableStateOf(0)
+    var dicaGuia by mutableStateOf<Map<FabGram.Cel, FabGram.Dir>>(emptyMap())
+    /** Engrenagens que a missão cumprida rendeu agora. */
+    var ganhou by mutableStateOf(0)
     /** O robô testou as frases extras do desafio: nulo enquanto testa. */
     var extrasOk by mutableStateOf<Boolean?>(null)
     /** A primeira frase extra que não saiu. */
@@ -84,7 +89,7 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
     /** O Byte aparece no canto enquanto há um gesto para ensinar ou a primeira missão espera o Ligar. */
     val mostrarByte: Boolean get() = mostrarMao || (missao?.missao == Missao.LIGAR && corrida == null)
     /** Desafio: estrelas pelo número de esteiras usadas. */
-    val estrelas: Int get() = missao?.estrelas(planta?.esteiras?.size ?: 0) ?: 0
+    val estrelas: Int get() = (missao?.estrelas(planta?.esteiras?.size ?: 0) ?: 0).let { if (it == 0) 0 else maxOf(1, it - dicas) }
 
     /** Troca a planta guardando a anterior para o Desfazer. */
     fun troca(pl: Planta) {
@@ -98,7 +103,7 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
 
     fun abre(m: Missao) {
         val p = FabGram.prepara(m)
-        missao = p; texto = m.gramatica; frase = m.frase
+        missao = p; texto = m.gramatica; frase = m.frase; dicas = 0; dicaGuia = emptyMap(); ganhou = 0
         ferramenta = when (m) { Missao.MOVER, Missao.LIGAR -> Ferramenta.MOVER; else -> Ferramenta.ESTEIRA }
         recomeca(p.planta)
     }
@@ -113,8 +118,11 @@ fun FabGramScreen(app: AppState) {
     val ls = app.ls
     val e = remember {
         EstadoFabrica(ls.fabGramTexto.ifBlank { FabGram.exemplos[0].first }, ls.fabGramFrase.ifBlank { FabGram.exemplos[0].second }).also {
-            // quem chega pela primeira vez cai no tutorial, na missão em que parou
-            if (ls.fabGramMissoes < Missao.entries.size && ls.fabGramPlanta.isBlank()) it.abre(Missao.entries[ls.fabGramMissoes])
+            // a trilha pode pedir uma missão; quem chega pela primeira vez cai no tutorial, na missão em que parou
+            val pedida = app.fabGramPedida?.let { n -> Missao.entries.firstOrNull { m -> m.name == n } }
+            app.fabGramPedida = null
+            if (pedida != null) it.abre(pedida)
+            else if (ls.fabGramMissoes < Missao.entries.size && ls.fabGramPlanta.isBlank()) it.abre(Missao.entries[ls.fabGramMissoes])
         }
     }
     val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
@@ -141,8 +149,7 @@ fun FabGramScreen(app: AppState) {
     LaunchedEffect(e.cumpriu) {
         val m = e.missao ?: return@LaunchedEffect
         if (e.cumpriu) {
-            app.learner.setFabGramMissoes(m.missao.ordinal + 1)
-            if (m.missao.desafio) app.learner.setFabGramEstrelas(m.missao.name, e.estrelas)
+            e.ganhou = app.learner.cumpreMissaoFabrica(m.missao.name, m.missao.ordinal, if (m.missao.desafio) e.estrelas else 0)
             app.commit()
         }
     }
