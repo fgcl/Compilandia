@@ -44,7 +44,7 @@ internal fun DrawScope.bloco(cena: Cena, b: Bloco, brilhos: MutableList<Triple<O
     val movendo = cena.fantasma?.first == b.id
     val corTopo = when {
         b.tipo == TipoBloco.FONTE -> Color(0xFF8A6A3E); b.modelo == Modelo.COFRE -> Color(0xFF5A6F8A)
-        b.tipo == TipoBloco.CESTO -> Color(0xFF7A3426); b.tipo == TipoBloco.MONTADORA -> Color(0xFF4F6B58); else -> TOPO
+        b.tipo == TipoBloco.CESTO -> Color(0xFF7A3426); b.tipo == TipoBloco.ROTEADOR -> Color(0xFF4E5A78); b.tipo == TipoBloco.MONTADORA -> Color(0xFF4F6B58); else -> TOPO
     }
     corpo(x, y, w, h, u, corTopo)
     val th = h - F * u
@@ -60,9 +60,10 @@ internal fun DrawScope.bloco(cena: Cena, b: Bloco, brilhos: MutableList<Triple<O
             if (c != null && cena.t >= c.duracao && !c.saiu) caixa(cx, cy, 22 * u, u)
         }
         TipoBloco.MAQUINA -> maquina(cena, b, x, y, w, th, ativo, brilhos)
+        TipoBloco.ROTEADOR -> roteador(cena, b, x, y, th)
     }
     // sem esteira de saída: a máquina não tem para onde mandar o que faz
-    val precisaSair = b.tipo == TipoBloco.FONTE || b.tipo == TipoBloco.SEPARADOR || (b.tipo == TipoBloco.MAQUINA && b.prod?.rhs?.isNotEmpty() == true)
+    val precisaSair = b.tipo == TipoBloco.FONTE || b.tipo == TipoBloco.SEPARADOR || b.tipo == TipoBloco.ROTEADOR || (b.tipo == TipoBloco.MAQUINA && b.prod?.rhs?.isNotEmpty() == true)
     if (precisaSair && cena.pl.saidaDe(b) == null) {
         drawCircle(OL, 5 * u, Offset(x + w - 5 * u, y + 5 * u)); drawCircle(VERMELHO, 4 * u, Offset(x + w - 5 * u, y + 5 * u))
     }
@@ -83,6 +84,18 @@ private fun DrawScope.separador(cena: Cena, b: Bloco, cx: Float, cy: Float, bril
     drawText(lay, topLeft = Offset(cx - lay.size.width / 2f, cy - lay.size.height / 2f))
     if (cena.tem(b.nt, Falha.PREFIXO)) { drawCircle(Color(0xFFFFD64A), 3 * u, Offset(cx + 11 * u, cy - 9 * u)); brilhos += Triple(Offset(cx + 11 * u, cy - 9 * u), 10 * u, Color(0xFFFFD64A)) }
     brilhos += Triple(Offset(cx, cy), 9 * u, cor)
+}
+
+/** O roteador: uma fileira de losangos que acendem quando algo passa. */
+private fun DrawScope.roteador(cena: Cena, b: Bloco, x: Float, y: Float, th: Float) {
+    val u = cena.u; val cel = cena.cel
+    val cy = y + th / 2
+    for (i in 0 until b.w) {
+        val cx = x + i * cel + cel / 2
+        for (j in 0 until 5) { r(cx - j * u, cy - (5 - j) * u, (2 * j + 1) * u, u, AC); r(cx - j * u, cy + (5 - j) * u, (2 * j + 1) * u, u, AC) }
+        r(cx - 5 * u, cy, 11 * u, u, AC)
+        if (i < b.w - 1) for (k in 0 until 3) r(cx + (8 + k * 3) * u, cy - u / 2, 2 * u, u, TOPO_L)
+    }
 }
 
 private fun DrawScope.montadora(cena: Cena, x: Float, cy: Float, w: Float) {
@@ -158,6 +171,7 @@ internal fun DrawScope.placa(cena: Cena, b: Bloco) {
         TipoBloco.SEPARADOR -> cena.nomes.separador(b.nt.orEmpty())
         TipoBloco.MONTADORA -> cena.nomes.montadora
         TipoBloco.CESTO -> cena.nomes.cesto
+        TipoBloco.ROTEADOR -> cena.nomes.roteador
     }
     val maq = b.tipo == TipoBloco.MAQUINA
     val est = TextStyle(color = if (maq) OL else PLACA, fontSize = px(cel * if (maq) 0.21f else 0.19f, density), fontWeight = FontWeight.Bold, fontFamily = if (maq) FontFamily.Monospace else FontFamily.Default)

@@ -55,7 +55,7 @@ internal fun corSinal(f: Falha): Color = when (f) {
     Falha.AMBIGUA -> Color(0xFF8FB8FF)
 }
 
-internal data class NomesBlocos(val fonte: String, val separador: (String) -> String, val montadora: String, val cesto: String)
+internal data class NomesBlocos(val fonte: String, val separador: (String) -> String, val montadora: String, val cesto: String, val roteador: String)
 
 /** Tudo que um quadro do palco precisa. */
 internal class Cena(

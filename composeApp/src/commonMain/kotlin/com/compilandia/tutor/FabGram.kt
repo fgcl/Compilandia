@@ -7,9 +7,10 @@ import com.compilandia.engine.Production
  * Fábrica de Gramáticas: cada regra é uma máquina numa grade vista de cima.
  *
  * A planta é livre. O jogador arrasta as máquinas e desenha as esteiras célula a célula.
- * Uma caixa (não terminal) ou peça (terminal) segue a esteira em que está e entra
- * no bloco de destino quando passa ao lado dele: o separador carimba a caixa com a máquina da regra,
- * a máquina solta as peças em fila, e cada peça procura a montadora.
+ * Uma caixa (não terminal) ou peça (terminal) segue a esteira em que está e só entra
+ * no bloco para onde a esteira aponta, como no Mindustry. O separador tem uma saída por regra
+ * e carimba na caixa o número da máquina; o roteador recebe o que as máquinas soltam e manda
+ * cada peça para a montadora e cada caixa para o separador da letra dela.
  * Se a esteira acaba, bate em outro bloco ou fecha um círculo, o item para ali.
  *
  * [planta] monta uma fábrica que já funciona; a corrida está em FabGramCorrida.kt.
@@ -28,7 +29,8 @@ object FabGram {
         ARMARIO(2, 2),
     }
 
-    enum class TipoBloco { FONTE, SEPARADOR, MAQUINA, MONTADORA, CESTO }
+    /** O roteador é o sorter do Mindustry: recebe tudo e manda cada item pela esteira que leva ao destino dele. */
+    enum class TipoBloco { FONTE, SEPARADOR, MAQUINA, MONTADORA, CESTO, ROTEADOR }
 
     enum class Dir(val dx: Int, val dy: Int) {
         DIREITA(1, 0), BAIXO(0, 1), ESQUERDA(-1, 0), CIMA(0, -1);
@@ -84,10 +86,7 @@ object FabGram {
         val montadora: Bloco get() = blocos.first { it.tipo == TipoBloco.MONTADORA }
         val cesto: Bloco get() = blocos.first { it.tipo == TipoBloco.CESTO }
 
-        /**
-         * A esteira por onde [b] solta o que faz: uma célula colada no bloco que empurra para longe dele.
-         * Havendo mais de uma, vale a primeira de cima para baixo, da esquerda para a direita.
-         */
+        /** A primeira esteira que sai de [b] (colada nele e empurrando para longe), ou nulo: bloco sem saída. */
         fun saidaDe(b: Bloco): Cel? = esteiras.entries
             .filter { (c, d) -> b.encosta(c) && b.contem(c - d) }
             .minWithOrNull(compareBy({ it.key.y }, { it.key.x }))?.key

@@ -27,6 +27,7 @@
     <string name="fabgram_separador_1">sorter %1$s</string>
     <string name="fabgram_montadora">assembler</string>
     <string name="fabgram_cesto">bin</string>
+    <string name="fabgram_roteador">router</string>
     <string name="fabgram_mover">Move</string>
     <string name="fabgram_esteira">Belt</string>
     <string name="fabgram_apagar">Erase</string>

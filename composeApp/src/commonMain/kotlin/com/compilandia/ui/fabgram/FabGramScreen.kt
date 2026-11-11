@@ -145,7 +145,7 @@ fun FabGramScreen(app: AppState) {
     }
     val largo = LocalJanela.current.ladoALado
     val painelAberto = e.painel ?: (largo && e.missao == null)
-    val nomes = NomesBlocos(tx("fabgram_fonte"), { tx("fabgram_separador_1", it) }, tx("fabgram_montadora"), tx("fabgram_cesto"))
+    val nomes = NomesBlocos(tx("fabgram_fonte"), { tx("fabgram_separador_1", it) }, tx("fabgram_montadora"), tx("fabgram_cesto"), tx("fabgram_roteador"))
 
     Box(Modifier.fillMaxSize().background(Color(0xFF16181B))) {
         Column(Modifier.fillMaxSize()) {

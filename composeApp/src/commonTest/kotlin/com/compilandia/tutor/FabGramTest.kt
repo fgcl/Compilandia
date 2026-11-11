@@ -21,9 +21,25 @@ class FabGramTest {
 
     @Test fun blocosSoTemTamanhoFixo() {
         for ((t, _) in FabGram.exemplos) {
-            val pl = FabGram.planta(g(t))
-            for (b in pl.blocos) assertTrue((b.w to b.h) in setOf(1 to 1, 1 to 2, 2 to 2), "bloco ${b.tipo} ${b.w}x${b.h}")
+            val gr = g(t)
+            val pl = FabGram.planta(gr)
+            for (b in pl.blocos) when (b.tipo) {
+                // o separador tem uma saída por regra; o roteador, uma por letra mais a da montadora
+                TipoBloco.SEPARADOR -> assertEquals(1 to gr.productionsOf(b.nt!!).size, b.w to b.h)
+                TipoBloco.ROTEADOR -> assertEquals(FabGram.letras(gr).size + 1 to 1, b.w to b.h)
+                else -> assertTrue((b.w to b.h) in setOf(1 to 1, 1 to 2, 2 to 2), "bloco ${b.tipo} ${b.w}x${b.h}")
+            }
         }
+    }
+
+    @Test fun soEntraPelaFrente() {
+        // a caixa que passa ao lado da máquina não entra: a esteira precisa apontar para ela
+        val pl = FabGram.planta(g("S -> a b"))
+        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val entrada = pl.esteiras.entries.first { (c, d) -> prensa.contem(c + d) }.key
+        val deLado = pl.comEsteira(entrada, FabGram.Dir.DIREITA)!!.comEsteira(entrada + FabGram.Dir.DIREITA, FabGram.Dir.DIREITA)!!
+        val c = FabGram.corrida(deLado, listOf("a", "b"))
+        assertNotNull(c.quebra)
     }
 
     private val todas = FabGram.exemplos.map { it.first } + "A -> B C | ε\nB -> b | B b\nC -> c C d e | ε"
@@ -106,8 +122,10 @@ class FabGramTest {
 
     @Test fun esteiraCortadaTravaAFabrica() {
         val pl = FabGram.planta(g("S -> a S b | ε"))
-        // corta o elevador logo abaixo do separador: a caixa que volta não chega
-        val cortada = pl.semEsteira(FabGram.Cel(1, 5))
+        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        // corta a volta da caixa S nova, já perto do separador
+        val volta = (pl.rota(prensa, pl.separadorDe("S")) as Rota.Chega).celulas.filter { it in pl.esteiras }
+        val cortada = pl.semEsteira(volta[volta.size - 3])
         val c = FabGram.corrida(cortada, listOf("a", "a", "b", "b"))
         val q = assertNotNull(c.quebra)
         assertEquals(Motivo.ACABA, q.motivo)

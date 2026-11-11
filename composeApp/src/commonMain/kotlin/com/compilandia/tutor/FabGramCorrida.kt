@@ -73,19 +73,58 @@ internal sealed interface Rota {
     data class Trava(val celulas: List<Cel>, val motivo: Motivo) : Rota
 }
 
-internal fun Planta.rota(de: Bloco, para: Bloco): Rota {
-    var c = saidaDe(de) ?: return Rota.Trava(emptyList(), Motivo.SEM_SAIDA)
+/** As esteiras que saem de [b]: coladas nele e empurrando para longe, de cima para baixo, da esquerda para a direita. */
+internal fun Planta.saidas(b: Bloco): List<Cel> = esteiras.entries
+    .filter { (c, d) -> b.encosta(c) && b.contem(c - d) }
+    .sortedWith(compareBy({ it.key.y }, { it.key.x })).map { it.key }
+
+/**
+ * A rota de um item de [de] até [para], como no Mindustry: a esteira só entrega no bloco para onde aponta.
+ * Um bloco com várias saídas manda o item pela que chega ao destino; sem nenhuma, vale o caminho da primeira.
+ * O roteador deixa passar: o item entra e sai por outra esteira.
+ */
+internal fun Planta.rota(de: Bloco, para: Bloco, vistos: Set<Int> = emptySet()): Rota {
+    val saidas = saidas(de)
+    if (saidas.isEmpty()) return Rota.Trava(emptyList(), Motivo.SEM_SAIDA)
+    var primeira: Rota? = null
+    for (s in saidas) {
+        val r = segue(s, para, vistos + de.id)
+        if (r is Rota.Chega) return r
+        if (primeira == null) primeira = r
+    }
+    return primeira!!
+}
+
+private fun Planta.segue(inicio: Cel, para: Bloco, vistos: Set<Int>): Rota {
+    var c = inicio
     val caminho = mutableListOf<Cel>()
     val vistas = HashSet<Cel>()
     while (true) {
         if (!vistas.add(c)) return Rota.Trava(caminho, Motivo.VOLTA)
         caminho += c
-        if (para.encosta(c)) return Rota.Chega(caminho)
         val prox = c + esteiras.getValue(c)
-        if (blocoEm(prox) != null) return Rota.Trava(caminho, Motivo.BATE)
+        val b = blocoEm(prox)
+        if (b != null) {
+            if (b.id == para.id) return Rota.Chega(caminho)
+            if (b.tipo != FabGram.TipoBloco.ROTEADOR || b.id in vistos) return Rota.Trava(caminho, Motivo.BATE)
+            return when (val r = rota(b, para, vistos)) {
+                is Rota.Chega -> Rota.Chega(caminho + dentro(prox, r.celulas.first()) + r.celulas)
+                is Rota.Trava -> Rota.Trava(caminho + (r.celulas.firstOrNull()?.let { dentro(prox, it) } ?: listOf(prox)) + r.celulas, r.motivo)
+            }
+        }
         if (prox !in esteiras) return Rota.Trava(caminho, Motivo.ACABA)
         c = prox
     }
+}
+
+/** As células de dentro do bloco, da que o item entrou até a que fica atrás da saída [s]: nada teleporta. */
+private fun Planta.dentro(entrada: Cel, s: Cel): List<Cel> {
+    val alvo = s - esteiras.getValue(s)
+    val cs = mutableListOf(entrada)
+    var c = entrada
+    while (c.x != alvo.x) { c = Cel(c.x + if (alvo.x > c.x) 1 else -1, c.y); cs += c }
+    while (c.y != alvo.y) { c = Cel(c.x, c.y + if (alvo.y > c.y) 1 else -1); cs += c }
+    return cs
 }
 
 private class Animador(val pl: Planta, val pedida: List<String>, val feita: List<String>?, val aceita: Boolean, val ambigua: Boolean) {

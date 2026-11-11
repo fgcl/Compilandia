@@ -9,48 +9,69 @@ import com.compilandia.tutor.FabGram.TipoBloco
 
 /**
  * A planta automática: uma fábrica que já funciona, para o jogador mexer a partir dela.
+ * Nenhuma esteira cruza outra, e toda esteira entrega no bloco para onde aponta.
  *
- * Cada letra tem uma linha. O separador fica na coluna 2, colado no elevador (coluna 1, sobe).
- * A esteira de distribuição passa por cima das máquinas da letra; cada máquina solta as peças
- * numa descida curta até a linha de baixo, que corre para a direita até o coletor.
- * O coletor desce, a esteira do fundo passa pela montadora e volta ao elevador:
- * a caixa que sai de uma máquina dá a volta e entra no separador da letra dela.
+ * Cada letra tem uma faixa. O separador (1 de largura, 1 de altura por regra) fica na coluna 2;
+ * de cada saída dele parte uma esteira que vai para a direita e desce na máquina da regra.
+ * As máquinas ficam da direita para a esquerda (regra 1 na ponta), assim as esteiras não se cruzam.
+ * Cada máquina desce numa linha que corre para a direita até o coletor, que desce e entra no roteador.
+ * Do roteador sai uma esteira para a montadora e uma coluna de volta para o separador de cada letra:
+ * a da primeira letra fica mais por fora e sobe mais alto, e nenhuma corta a outra.
  */
-private const val PASSO = 6
 private const val Y0 = 3
-private const val X0 = 3
+private const val X0 = 4
+
+private class Faixa(val nt: String, val yA: Int, val maquinas: List<Bloco>)
 
 fun FabGram.planta(g: Grammar): Planta {
     val blocos = mutableListOf<Bloco>()
     val est = LinkedHashMap<Cel, Dir>()
     var id = 0
     val nts = letras(g)
-    blocos += Bloco(id++, TipoBloco.FONTE, 0, 0, 2, 2, nt = g.start)
-    est[Cel(1, 2)] = Dir.BAIXO
-    var xC = X0 + 2
-    nts.forEachIndexed { r, nt ->
-        val yA = Y0 + r * PASSO
-        blocos += Bloco(id++, TipoBloco.SEPARADOR, 2, yA, 1, 1, nt = nt)
-        var x = X0
-        var ultimo = X0
-        for (p in g.productionsOf(nt)) {
+    val n = nts.size
+    blocos += Bloco(id++, TipoBloco.FONTE, 2, 0, 2, 2, nt = g.start)
+    est[Cel(2, 2)] = Dir.BAIXO
+    val faixas = mutableListOf<Faixa>()
+    var yA = Y0
+    for (nt in nts) {
+        val regras = g.productionsOf(nt)
+        val k = regras.size
+        blocos += Bloco(id++, TipoBloco.SEPARADOR, 2, yA, 1, k, nt = nt)
+        val yM = yA + k
+        // a última regra fica colada no separador; cada regra anterior vai mais para a direita
+        val xs = IntArray(k)
+        xs[k - 1] = X0
+        for (j in k - 2 downTo 0) xs[j] = xs[j + 1] + modelo(regras[j + 1], g).w + 1
+        val ms = regras.mapIndexed { j, p ->
             val m = modelo(p, g)
-            blocos += Bloco(id++, TipoBloco.MAQUINA, x, yA + 1, m.w, m.h, nt = nt, prod = p, modelo = m)
-            if (p.rhs.isNotEmpty()) for (y in yA + 1 + m.h..yA + 3) est[Cel(x, y)] = Dir.BAIXO
-            ultimo = x
-            x += m.w + 1
+            Bloco(id++, TipoBloco.MAQUINA, xs[j], yM, m.w, m.h, nt = nt, prod = p, modelo = m)
         }
-        xC = maxOf(xC, x)
-        for (cx in X0..ultimo) est[Cel(cx, yA)] = Dir.DIREITA
+        blocos += ms
+        for ((j, m) in ms.withIndex()) {
+            for (x in 3 until m.x) est[Cel(x, yA + j)] = Dir.DIREITA
+            for (y in yA + j until yM) est[Cel(m.x, y)] = Dir.BAIXO
+            if (m.prod!!.rhs.isNotEmpty()) for (y in yM + m.h..yM + 2) est[Cel(m.x, y)] = Dir.BAIXO
+        }
+        faixas += Faixa(nt, yA, ms)
+        yA = yM + 5
     }
-    val yB = Y0 + nts.size * PASSO
-    nts.indices.forEach { r -> for (cx in X0 until xC) est[Cel(cx, Y0 + r * PASSO + 4)] = Dir.DIREITA }
-    for (y in Y0 + 4 until yB) est[Cel(xC, y)] = Dir.BAIXO
-    for (cx in 2..xC) est[Cel(cx, yB)] = Dir.ESQUERDA
-    for (y in Y0..yB) est[Cel(1, y)] = Dir.CIMA
-    val xM = maxOf(2, xC - 4)
-    blocos += Bloco(id++, TipoBloco.MONTADORA, xM, yB + 1, 2, 2)
-    blocos += Bloco(id, TipoBloco.CESTO, xM + 3, yB + 1, 2, 2)
+    val xC = faixas.maxOf { f -> f.maquinas.maxOf { it.x + it.w } } + 1
+    for (f in faixas) {
+        val yL = f.maquinas.first().y + 3
+        for (x in X0 until xC) est[Cel(x, yL)] = Dir.DIREITA
+    }
+    val yR = faixas.last().maquinas.first().y + 5
+    for (y in faixas.first().maquinas.first().y + 3 until yR) est[Cel(xC, y)] = Dir.BAIXO
+    for (x in 3..xC) est[Cel(x, yR)] = Dir.ESQUERDA
+    blocos += Bloco(id++, TipoBloco.ROTEADOR, 2 - n, yR, n + 1, 1)
+    faixas.forEachIndexed { r, f ->
+        val xr = 2 - n + r
+        for (y in f.yA + 1 until yR) est[Cel(xr, y)] = Dir.CIMA
+        for (x in xr..1) est[Cel(x, f.yA)] = Dir.DIREITA
+    }
+    est[Cel(2, yR + 1)] = Dir.BAIXO
+    blocos += Bloco(id++, TipoBloco.MONTADORA, 1, yR + 2, 2, 2)
+    blocos += Bloco(id, TipoBloco.CESTO, 4, yR + 2, 2, 2)
     return Planta(g, blocos, est)
 }
 

@@ -27,6 +27,7 @@
     <string name="fabgram_separador_1">separador %1$s</string>
     <string name="fabgram_montadora">montadora</string>
     <string name="fabgram_cesto">cesto</string>
+    <string name="fabgram_roteador">roteador</string>
     <!-- editor -->
     <string name="fabgram_mover">Mover</string>
     <string name="fabgram_esteira">Esteira</string>
