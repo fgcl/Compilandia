@@ -65,4 +65,11 @@
     <string name="fabgram_missoes">Missões</string>
     <string name="fabgram_desfazer">Desfazer</string>
     <string name="fabgram_refazer">Refazer</string>
+    <string name="fabgram_d_anbn_titulo">Tantos a quantos b</string>
+    <string name="fabgram_d_parenteses_titulo">Parênteses</string>
+    <string name="fabgram_d_expressao_titulo">Expressão</string>
+    <string name="fabgram_d_objetivo_1">Ligue as esteiras. O robô também testa: %1$s</string>
+    <string name="fabgram_desafio_1">Desafio %1$s</string>
+    <string name="fabgram_contador_2">Esteiras: %1$s · 3 estrelas até %2$s</string>
+    <string name="fabgram_extra_falhou_1">O robô também testou %1$s, e essa não saiu.</string>
 </resources>

@@ -64,6 +64,8 @@ internal class Cena(
     val medidor: TextMeasurer, val nomes: NomesBlocos,
     /** O que a missão pede para montar: esteiras e o lugar de um bloco. */
     val guia: Map<Cel, Dir> = emptyMap(), val guiaBloco: Pair<Int, Cel>? = null,
+    /** Mostrar a mãozinha fazendo o gesto da missão. */
+    val mao: Boolean = false,
 ) {
     val cel: Float get() = gr.cel
     /** Um "pixel" da arte: a célula tem 32. */
@@ -102,6 +104,7 @@ internal fun DrawScope.desenhaFabrica(cena: Cena) {
         fantasma(cena)
         itens(cena)
         for (b in cena.pl.blocos) placa(cena, b)
+        if (cena.mao) mao(cena)
         for ((o, raio, cor) in brilhos) drawCircle(Brush.radialGradient(listOf(cor.copy(alpha = 0.22f), cor.copy(alpha = 0f)), center = o, radius = raio * 2), raio * 2, o, blendMode = BlendMode.Plus)
     }
     drawRect(Brush.radialGradient(listOf(Color.Transparent, Color(0x40050310)), center = center, radius = size.maxDimension * 0.75f))
@@ -193,6 +196,37 @@ private fun DrawScope.guia(cena: Cena) {
 }
 
 private val AZUL_GUIA = Color(0xFF2F7FE0)
+
+/**
+ * A mãozinha do tutorial: aperta no começo do caminho, arrasta até o fim e some, em laço.
+ * Para a esteira ela passa pelas setas azuis; para mover, leva do bloco até o contorno.
+ */
+private fun DrawScope.mao(cena: Cena) {
+    val cel = cena.cel; val u = cena.u
+    val pts: List<Offset> = cena.guiaBloco?.let { (id, alvo) ->
+        val b = cena.pl.blocos.first { it.id == id }
+        listOf(Offset(b.cx * cel, b.cy * cel), Offset((alvo.x + b.w / 2f) * cel, (alvo.y + b.h / 2f) * cel))
+    } ?: cena.guia.keys.map { Offset((it.x + 0.5f) * cel, (it.y + 0.5f) * cel) }
+    if (pts.isEmpty()) return
+    val fase = if (cena.reduz) 0.5f else (cena.relogio % 2.8f) / 2.8f
+    val anda = ((fase - 0.15f) / 0.65f).coerceIn(0f, 1f)
+    val p = if (pts.size == 1) pts[0] else {
+        val f = anda * (pts.size - 1)
+        val i = f.toInt().coerceAtMost(pts.size - 2)
+        val t = f - i
+        Offset(pts[i].x + (pts[i + 1].x - pts[i].x) * t, pts[i].y + (pts[i + 1].y - pts[i].y) * t)
+    }
+    val alfa = if (fase > 0.85f) ((1f - fase) / 0.15f).coerceIn(0f, 1f) else 1f
+    if (fase in 0.05f..0.8f) drawCircle(Color.White.copy(alpha = 0.5f * alfa), 7 * u + 5 * u * ((fase * 6f) % 1f), p, style = Stroke(1.5f * u))
+    // o dedo aponta para cima-esquerda; a ponta fica no ponto
+    val dedo = Color.White.copy(alpha = alfa)
+    val borda = OL.copy(alpha = alfa)
+    drawRoundRect(borda, Offset(p.x - 3.5f * u, p.y - u), Size(7 * u, 15 * u), androidx.compose.ui.geometry.CornerRadius(3.5f * u))
+    drawRoundRect(dedo, Offset(p.x - 2.5f * u, p.y), Size(5 * u, 13 * u), androidx.compose.ui.geometry.CornerRadius(2.5f * u))
+    drawRoundRect(borda, Offset(p.x - 4 * u, p.y + 8 * u), Size(16 * u, 15 * u), androidx.compose.ui.geometry.CornerRadius(5 * u))
+    drawRoundRect(dedo, Offset(p.x - 3 * u, p.y + 9 * u), Size(14 * u, 13 * u), androidx.compose.ui.geometry.CornerRadius(4 * u))
+    for (k in 0 until 2) r(p.x + (2 + k * 4) * u, p.y + 10 * u, 0.8f * u, 4 * u, borda)
+}
 
 private fun DrawScope.fantasma(cena: Cena) {
     val (id, alvo) = cena.fantasma ?: return

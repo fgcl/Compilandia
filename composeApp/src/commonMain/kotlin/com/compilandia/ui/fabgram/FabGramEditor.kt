@@ -176,7 +176,7 @@ internal fun PalcoEditavel(
             desenhaFabrica(
                 Cena(
                     pl, gr, laudo, c, if (c == null) 0f else e.t, relogio, e.sel, reduz, ferramenta, fantasma, medidor, nomes,
-                    guia = e.missao?.guiaEsteiras.orEmpty(), guiaBloco = e.missao?.guiaBloco,
+                    guia = e.missao?.guiaEsteiras.orEmpty(), guiaBloco = e.missao?.guiaBloco, mao = e.mostrarMao && rascunho == null && fantasma == null,
                 ),
             )
         }

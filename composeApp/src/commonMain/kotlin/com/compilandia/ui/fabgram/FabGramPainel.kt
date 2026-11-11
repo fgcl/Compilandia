@@ -55,14 +55,14 @@ private val VIDRO = Color(0xE6202328)
 
 /** O painel da gramática: o texto, os exemplos, a frase e os sinais. */
 @Composable
-internal fun Painel(e: EstadoFabrica, laudo: Laudo?, feitas: Int, onFechar: () -> Unit) {
+internal fun Painel(e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<String, Int>, onFechar: () -> Unit) {
     val fonts = LocalFonts.current
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(tx("fabgram_gramatica"), style = MaterialTheme.typography.titleMedium, color = Palette.ink, modifier = Modifier.weight(1f))
             Text(tx("fabgram_fechar"), color = Palette.inkSoft, style = MaterialTheme.typography.labelLarge, modifier = Modifier.clip(RoundedCornerShape(6.dp)).clickable { onFechar() }.padding(8.dp))
         }
-        ListaMissoes(e, feitas)
+        ListaMissoes(e, feitas, estrelas)
         BasicTextField(
             e.texto, { e.livre(); e.texto = it; e.corrida = null; e.sel = null },
             Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(10.dp).testTag("fabgram-texto"),
@@ -140,6 +140,7 @@ internal fun Aviso(e: EstadoFabrica, l: Laudo?) {
         c != null && !e.terminou -> null
         q != null -> textoQuebra(q)
         e.cumpriu -> null
+        c != null && c.saiu && e.extraFalhou != null -> tx("fabgram_extra_falhou_1", e.extraFalhou)
         c != null && c.aceita && c.ambigua -> tx("fabgram_ambigua")
         c != null && c.aceita -> tx("fabgram_fez")
         c?.feita != null -> tx("fabgram_nao_faz_2", c.pedida.joinToString(" "), c.feita.joinToString(" ").ifEmpty { "ε" })
@@ -149,7 +150,7 @@ internal fun Aviso(e: EstadoFabrica, l: Laudo?) {
             Ferramenta.MOVER -> tx("fabgram_dica_mover"); Ferramenta.ESTEIRA -> tx("fabgram_dica_esteira"); Ferramenta.APAGAR -> tx("fabgram_dica_apagar")
         }
     } ?: return
-    val ruim = q != null || (c != null && e.terminou && !c.aceita)
+    val ruim = q != null || (c != null && e.terminou && !c.aceita) || e.extraFalhou != null
     Text(
         msg, color = PLACA, style = MaterialTheme.typography.bodyMedium,
         modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(VIDRO).then(if (ruim) Modifier.border(1.dp, VERMELHO, RoundedCornerShape(8.dp)) else Modifier)

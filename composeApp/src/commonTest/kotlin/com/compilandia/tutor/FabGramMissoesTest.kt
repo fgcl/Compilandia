@@ -39,3 +39,22 @@ class FabGramMissoesTest {
         assertTrue(c.trechos.any { it.caixa && it.marca == 2 }, "a caixa devia ir carimbada com o 2")
     }
 }
+
+class FabGramDesafiosTest {
+    @Test fun desafioComecaSemEsteiraEAPlantaAutomaticaGanhaTresEstrelas() {
+        for (m in Missao.entries.filter { it.desafio }) {
+            val p = FabGram.prepara(m)
+            assertTrue(p.planta.esteiras.isEmpty(), "$m devia começar sem esteiras")
+            assertTrue(!FabGram.cumpre(p, p.planta))
+            val pronta = FabGram.resolve(p)
+            assertTrue(FabGram.cumpre(p, pronta), "$m: a planta automática devia cumprir")
+            kotlin.test.assertEquals(3, p.estrelas(pronta.esteiras.size))
+            kotlin.test.assertEquals(1, p.estrelas(pronta.esteiras.size * 2))
+        }
+    }
+
+    @Test fun oTutorialVemAntesDosDesafios() {
+        kotlin.test.assertEquals(6, TUTORIAL)
+        assertTrue(Missao.entries.take(TUTORIAL).none { it.desafio })
+    }
+}

@@ -64,4 +64,11 @@
     <string name="fabgram_missoes">Missions</string>
     <string name="fabgram_desfazer">Undo</string>
     <string name="fabgram_refazer">Redo</string>
+    <string name="fabgram_d_anbn_titulo">As many a as b</string>
+    <string name="fabgram_d_parenteses_titulo">Parentheses</string>
+    <string name="fabgram_d_expressao_titulo">Expression</string>
+    <string name="fabgram_d_objetivo_1">Connect the belts. The robot also tests: %1$s</string>
+    <string name="fabgram_desafio_1">Challenge %1$s</string>
+    <string name="fabgram_contador_2">Belts: %1$s · 3 stars up to %2$s</string>
+    <string name="fabgram_extra_falhou_1">The robot also tested %1$s, and it did not come out.</string>
 </resources>

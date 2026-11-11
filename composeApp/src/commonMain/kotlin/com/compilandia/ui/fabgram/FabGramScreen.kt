@@ -73,8 +73,18 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
     var pan by mutableStateOf(Offset.Zero)
     val desfazer = mutableStateListOf<Planta>()
     val refazer = mutableStateListOf<Planta>()
+    /** O robô testou as frases extras do desafio: nulo enquanto testa. */
+    var extrasOk by mutableStateOf<Boolean?>(null)
+    /** A primeira frase extra que não saiu. */
+    var extraFalhou by mutableStateOf<String?>(null)
     val terminou: Boolean get() = corrida?.let { t >= it.duracao } == true
-    val cumpriu: Boolean get() = missao != null && terminou && corrida?.saiu == true
+    val cumpriu: Boolean get() = missao != null && terminou && corrida?.saiu == true && (missao?.missao?.extras.isNullOrEmpty() || extrasOk == true)
+    /** O tutorial mostra o gesto até o jogador mexer na fábrica. */
+    val mostrarMao: Boolean get() = missao.let { m -> m != null && !m.missao.desafio && desfazer.isEmpty() && corrida == null && (m.guiaEsteiras.isNotEmpty() || m.guiaBloco != null) }
+    /** O Byte aparece no canto enquanto há um gesto para ensinar ou a primeira missão espera o Ligar. */
+    val mostrarByte: Boolean get() = mostrarMao || (missao?.missao == Missao.LIGAR && corrida == null)
+    /** Desafio: estrelas pelo número de esteiras usadas. */
+    val estrelas: Int get() = missao?.estrelas(planta?.esteiras?.size ?: 0) ?: 0
 
     /** Troca a planta guardando a anterior para o Desfazer. */
     fun troca(pl: Planta) {
@@ -130,7 +140,11 @@ fun FabGramScreen(app: AppState) {
     }
     LaunchedEffect(e.cumpriu) {
         val m = e.missao ?: return@LaunchedEffect
-        if (e.cumpriu) { app.learner.setFabGramMissoes(m.missao.ordinal + 1); app.commit() }
+        if (e.cumpriu) {
+            app.learner.setFabGramMissoes(m.missao.ordinal + 1)
+            if (m.missao.desafio) app.learner.setFabGramEstrelas(m.missao.name, e.estrelas)
+            app.commit()
+        }
     }
     fun guarda(pl: Planta) {
         e.troca(pl)
@@ -141,7 +155,15 @@ fun FabGramScreen(app: AppState) {
         val toks = tokensOf(e.frase)
         if (toks.isEmpty()) return
         if (e.missao == null) { app.learner.setFabGram(e.texto, e.frase); app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
-        escopo.launch { e.corrida = withContext(Dispatchers.Default) { FabGram.corrida(pl, toks) } }
+        val m = e.missao
+        e.extrasOk = null; e.extraFalhou = null
+        escopo.launch {
+            e.corrida = withContext(Dispatchers.Default) { FabGram.corrida(pl, toks) }
+            if (m != null && m.missao.extras.isNotEmpty()) {
+                val falha = withContext(Dispatchers.Default) { m.missao.extras.firstOrNull { !FabGram.corrida(pl, tokensOf(it)).saiu } }
+                e.extraFalhou = falha; e.extrasOk = falha == null
+            }
+        }
     }
     val largo = LocalJanela.current.ladoALado
     val painelAberto = e.painel ?: (largo && e.missao == null)
@@ -171,12 +193,16 @@ fun FabGramScreen(app: AppState) {
                         if (e.missao != null) CartaoMissao(e) { prox -> if (prox == null) { e.livre(); laudo?.g?.let { e.recomeca(FabGram.planta(it)) } } else e.abre(prox) }
                         Aviso(e, laudo)
                     }
+                    if (e.mostrarByte) com.compilandia.ui.cast.ByteFigure(
+                        Modifier.align(Alignment.BottomStart).padding(start = 10.dp, bottom = 64.dp).width(54.dp),
+                        mood = com.compilandia.ui.cast.Mood.HAPPY,
+                    )
                     Ferramentas(e, Modifier.align(Alignment.BottomCenter), onArrumar = {
                         val m = e.missao
                         if (m != null) e.abre(m.missao) else laudo?.g?.let { guarda(FabGram.planta(it)); e.zoom = 1f; e.pan = Offset.Zero }
                     })
                 }
-                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) { Painel(e, laudo, ls.fabGramMissoes) { e.painel = false } }
+                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) { Painel(e, laudo, ls.fabGramMissoes, ls.fabGramEstrelas) { e.painel = false } }
             }
         }
         if (!largo && painelAberto) {
@@ -184,7 +210,7 @@ fun FabGramScreen(app: AppState) {
             Column(
                 Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.72f)
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)).background(Palette.paper),
-            ) { Painel(e, laudo, ls.fabGramMissoes) { e.painel = false } }
+            ) { Painel(e, laudo, ls.fabGramMissoes, ls.fabGramEstrelas) { e.painel = false } }
         }
     }
 }
