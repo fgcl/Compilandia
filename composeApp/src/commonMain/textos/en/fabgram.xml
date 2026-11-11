@@ -43,4 +43,24 @@
     <string name="fabgram_quebra_acaba_2">%1$s stopped where the belt ends. It was going to %2$s.</string>
     <string name="fabgram_quebra_bate_2">%1$s ran into the wrong block. It was going to %2$s.</string>
     <string name="fabgram_quebra_volta_2">%1$s went round in circles and never passed %2$s.</string>
+    <!-- tutorial -->
+    <string name="fabgram_m_ligar_titulo">Start the factory</string>
+    <string name="fabgram_m_ligar_objetivo">Tap Start. Box S turns into pieces a and b.</string>
+    <string name="fabgram_m_consertar_titulo">Fix the belt</string>
+    <string name="fabgram_m_consertar_objetivo">In Belt mode, drag your finger over the blue arrows.</string>
+    <string name="fabgram_m_mover_titulo">Put the machine back</string>
+    <string name="fabgram_m_mover_objetivo">In Move mode, drag the press onto the blue outline.</string>
+    <string name="fabgram_m_escolha_titulo">Two rules</string>
+    <string name="fabgram_m_escolha_objetivo">The sorter stamps the rule number on the box. Run the belt to machine 2.</string>
+    <string name="fabgram_m_volta_titulo">The box comes back</string>
+    <string name="fabgram_m_volta_objetivo">S → a S drops a new box S. Close the way back to the sorter.</string>
+    <string name="fabgram_m_letras_titulo">Two letters</string>
+    <string name="fabgram_m_letras_objetivo">Each letter has its own sorter. Take box A to sorter A.</string>
+    <string name="fabgram_missao_2">%1$s of %2$s</string>
+    <string name="fabgram_missao_feita">Mission complete!</string>
+    <string name="fabgram_proxima">Next mission</string>
+    <string name="fabgram_livre">Free mode</string>
+    <string name="fabgram_missoes">Missions</string>
+    <string name="fabgram_desfazer">Undo</string>
+    <string name="fabgram_refazer">Redo</string>
 </resources>

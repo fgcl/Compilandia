@@ -120,6 +120,9 @@ object FabGram {
         else -> Modelo.PRENSA
     }
 
+    /** O número da máquina entre as regras da mesma letra (1, 2, ...); nulo quando a letra tem uma regra só. */
+    fun numero(g: Grammar, p: Production): Int? = g.productionsOf(p.lhs).let { rs -> if (rs.size < 2) null else rs.indexOfFirst { it.id == p.id } + 1 }
+
     /** As letras na ordem em que a fábrica mostra: a inicial primeiro. */
     fun letras(g: Grammar): List<String> {
         val ordem = mutableListOf(g.start)

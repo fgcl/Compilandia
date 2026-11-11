@@ -114,15 +114,10 @@ fun RoomScreen(app: AppState) {
             Text(if (metasAbertas) "▴" else "▾", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium)
         }
     }
-    // Os quatro lugares da oficina, com nome: antes eram alfinetes dentro do desenho.
-    val destinos: @Composable () -> Unit = {
-        Destinos(app, desafioPendente = ls.desafioDia != now / 86_400_000L, largo = ladoALado) { gaveta = true }
-    }
     val proximo: @Composable () -> Unit = {
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
             // O Continuar segue a trilha do assunto que o modelo do aluno escolheu.
             val passo = remember(ls) { com.compilandia.content.Trilha.proximo(l, next.skill, now) }
-            Text(tx("comum_proximo"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
             Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = if (ladoALado) 3 else 2)
             Spacer(Modifier.height(8.dp))
             BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
@@ -135,7 +130,7 @@ fun RoomScreen(app: AppState) {
         BoxWithConstraints(mod.clipToBounds(), contentAlignment = Alignment.Center) {
             // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
             val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
-            RoomScene(app, side)
+            RoomScene(app, side, desafioPendente = ls.desafioDia != now / 86_400_000L) { gaveta = true }
         }
     }
     Box(Modifier.fillMaxSize()) {
@@ -148,7 +143,6 @@ fun RoomScreen(app: AppState) {
                     Column(Modifier.width(if (com.compilandia.ui.LocalJanela.current.faixa == com.compilandia.ui.Faixa.EXPANDIDA) 340.dp else 280.dp).fillMaxHeight().background(Palette.paper)) {
                         proximo()
                         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(top = 4.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                            destinos()
                             metas()
                             Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 for (q in quests) QuestChip(q, Modifier.fillMaxWidth(), Palette.paperDark)
@@ -160,7 +154,6 @@ fun RoomScreen(app: AppState) {
                 sala(Modifier.weight(1f).fillMaxWidth())
                 Column(Modifier.fillMaxWidth().background(Palette.paper)) {
                     proximo()
-                    destinos()
                     metas()
                     if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         for (q in quests) QuestChip(q, Modifier.weight(1f), Palette.paperDark)
@@ -169,35 +162,6 @@ fun RoomScreen(app: AppState) {
             }
         }
         if (gaveta) GavetaJogar(app, now) { gaveta = false }
-    }
-}
-
-/** Mapa, Jogar, Laboratório e Loja: o mesmo tamanho, o mesmo peso, cada um com o nome do que abre. */
-@Composable
-private fun Destinos(app: AppState, desafioPendente: Boolean, largo: Boolean, onJogar: () -> Unit) {
-    val itens = listOf(
-        Triple(tx("roomscreen_mapa"), tx("sala_mapa_dica")) { app.go(Screen.Map) },
-        Triple(tx("sala_jogar"), tx("sala_jogar_dica"), onJogar),
-        Triple(tx("comum_laboratorio"), tx("sala_lab_dica")) { app.go(Screen.Lab) },
-        Triple(tx("roomscreen_loja"), tx("sala_loja_dica")) { app.go(Screen.Shop) },
-    )
-    val linhas = itens.chunked(2)
-    Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        for (linha in linhas) Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            for ((nome, dica, abre) in linha) {
-                val marca = nome == tx("sala_jogar") && desafioPendente
-                Column(
-                    Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).background(Palette.paperDark)
-                        .clickable { Juice.click(); abre() }.padding(horizontal = 12.dp, vertical = if (largo) 9.dp else 7.dp),
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(nome, style = MaterialTheme.typography.titleSmall, color = Palette.ink, maxLines = 1)
-                        if (marca) { Spacer(Modifier.width(6.dp)); Box(Modifier.size(7.dp).clip(CircleShape).background(Palette.hazard)) }
-                    }
-                    if (largo) Text(dica, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft, maxLines = 2)
-                }
-            }
-        }
     }
 }
 
@@ -286,7 +250,7 @@ private fun QuestChip(q: Quest, modifier: Modifier, fundo: Color = Palette.paper
 }
 
 @Composable
-private fun RoomScene(app: AppState, side: Dp) {
+private fun RoomScene(app: AppState, side: Dp, desafioPendente: Boolean, onJogar: () -> Unit) {
     val l = app.learner
     val ls = app.ls
     val scope = rememberCoroutineScope()
@@ -298,6 +262,8 @@ private fun RoomScene(app: AppState, side: Dp) {
             val item = RoomItem.entries.firstOrNull { it.id == id } ?: continue
             if (l.owns(item)) RoomLayerImage(layer, side, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
         }
+        // os móveis são os botões: gaveteiro, monitor, quadro e caixas
+        MoveisDaSala(app, side, desafioPendente, onJogar)
         // o Byte mora na plataforma de recarga, que pulsa como um carregador
         val charge by rememberInfiniteTransition().animateFloat(0f, 1f, infiniteRepeatable(tween(1600), RepeatMode.Reverse))
         val glow = Color(0xFFFFD98A)

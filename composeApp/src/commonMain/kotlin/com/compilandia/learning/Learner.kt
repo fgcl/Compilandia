@@ -110,6 +110,8 @@ data class LearnerState(
     val fabGramFrase: String = "",
     /** A planta que o jogador montou, no formato de FabGram.salva. Vale para a gramática de [fabGramTexto]. */
     val fabGramPlanta: String = "",
+    /** Quantas missões do tutorial da fábrica já foram feitas, em ordem. */
+    val fabGramMissoes: Int = 0,
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -333,6 +335,7 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     fun setFontScale(f: Float) { state = state.copy(fontScale = f) }
     fun setReduceMotion(v: Boolean) { state = state.copy(reduceMotion = v) }
     fun setFabGram(texto: String, frase: String) { state = state.copy(fabGramTexto = texto, fabGramFrase = frase) }
+    fun setFabGramMissoes(n: Int) { state = state.copy(fabGramMissoes = maxOf(state.fabGramMissoes, n)) }
     fun setFabGramPlanta(texto: String, planta: String) { state = state.copy(fabGramTexto = texto, fabGramPlanta = planta) }
 
     private fun touchDay(nowMs: Long) {

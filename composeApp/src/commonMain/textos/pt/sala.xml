@@ -7,8 +7,4 @@
     <string name="sala_aulas_30">Aulas de 30 segundos</string>
     <string name="sala_fechar">Fechar</string>
     <string name="sala_proximo">%1$s, %2$s</string>
-    <string name="sala_mapa_dica">Todos os assuntos, na ordem do compilador</string>
-    <string name="sala_jogar_dica">Desafio do dia, robôs, corrida e fábrica</string>
-    <string name="sala_lab_dica">Cole uma gramática, regex ou código</string>
-    <string name="sala_loja_dica">Peças novas para a sala</string>
 </resources>

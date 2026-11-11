@@ -44,4 +44,24 @@
     <string name="fabgram_quebra_acaba_2">%1$s parou onde a esteira acaba. Ela ia para %2$s.</string>
     <string name="fabgram_quebra_bate_2">%1$s bateu num bloco que não é o dela. Ela ia para %2$s.</string>
     <string name="fabgram_quebra_volta_2">%1$s ficou dando voltas e não passou por %2$s.</string>
+    <!-- tutorial -->
+    <string name="fabgram_m_ligar_titulo">Ligue a fábrica</string>
+    <string name="fabgram_m_ligar_objetivo">Toque em Ligar. A caixa S vira as peças a e b.</string>
+    <string name="fabgram_m_consertar_titulo">Conserte a esteira</string>
+    <string name="fabgram_m_consertar_objetivo">No modo Esteira, arraste o dedo pelas setas azuis.</string>
+    <string name="fabgram_m_mover_titulo">Ponha a máquina no lugar</string>
+    <string name="fabgram_m_mover_objetivo">No modo Mover, arraste a prensa até o contorno azul.</string>
+    <string name="fabgram_m_escolha_titulo">Duas regras</string>
+    <string name="fabgram_m_escolha_objetivo">O separador carimba na caixa o número da regra. Leve a esteira até a máquina 2.</string>
+    <string name="fabgram_m_volta_titulo">A caixa volta</string>
+    <string name="fabgram_m_volta_objetivo">S → a S solta uma caixa S nova. Feche o caminho de volta ao separador.</string>
+    <string name="fabgram_m_letras_titulo">Duas letras</string>
+    <string name="fabgram_m_letras_objetivo">Cada letra tem seu separador. Leve a caixa A até o separador A.</string>
+    <string name="fabgram_missao_2">%1$s de %2$s</string>
+    <string name="fabgram_missao_feita">Missão cumprida!</string>
+    <string name="fabgram_proxima">Próxima missão</string>
+    <string name="fabgram_livre">Modo livre</string>
+    <string name="fabgram_missoes">Missões</string>
+    <string name="fabgram_desfazer">Desfazer</string>
+    <string name="fabgram_refazer">Refazer</string>
 </resources>

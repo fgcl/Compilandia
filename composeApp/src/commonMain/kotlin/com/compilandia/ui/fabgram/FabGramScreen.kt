@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -28,6 +29,7 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -38,11 +40,15 @@ import com.compilandia.tutor.Diagnostico
 import com.compilandia.tutor.FabGram
 import com.compilandia.tutor.FabGram.Planta
 import com.compilandia.tutor.Laudo
+import com.compilandia.tutor.Missao
+import com.compilandia.tutor.MissaoPronta
 import com.compilandia.tutor.carrega
 import com.compilandia.tutor.corrida
 import com.compilandia.tutor.planta
+import com.compilandia.tutor.prepara
 import com.compilandia.tutor.salva
 import com.compilandia.ui.AppState
+import com.compilandia.ui.BigButton
 import com.compilandia.ui.Header
 import com.compilandia.ui.LocalJanela
 import com.compilandia.ui.Palette
@@ -51,7 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** Estado da tela: a gramática escrita, a planta montada e a corrida que está passando. */
+/** Estado da tela: a gramática escrita, a planta montada, a missão do tutorial e a corrida que está passando. */
 internal class EstadoFabrica(texto0: String, frase0: String) {
     var texto by mutableStateOf(texto0)
     var frase by mutableStateOf(frase0)
@@ -61,7 +67,33 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
     var sel by mutableStateOf<Int?>(null)
     var ferramenta by mutableStateOf(Ferramenta.MOVER)
     var painel by mutableStateOf<Boolean?>(null)
+    /** A missão do tutorial em jogo; nulo é o modo livre. */
+    var missao by mutableStateOf<MissaoPronta?>(null)
+    var zoom by mutableFloatStateOf(1f)
+    var pan by mutableStateOf(Offset.Zero)
+    val desfazer = mutableStateListOf<Planta>()
+    val refazer = mutableStateListOf<Planta>()
     val terminou: Boolean get() = corrida?.let { t >= it.duracao } == true
+    val cumpriu: Boolean get() = missao != null && terminou && corrida?.saiu == true
+
+    /** Troca a planta guardando a anterior para o Desfazer. */
+    fun troca(pl: Planta) {
+        planta?.let { desfazer += it; if (desfazer.size > 60) desfazer.removeAt(0) }
+        refazer.clear()
+        planta = pl; corrida = null
+    }
+    fun volta() { val a = desfazer.removeLastOrNull() ?: return; planta?.let { refazer += it }; planta = a; corrida = null }
+    fun avanca() { val a = refazer.removeLastOrNull() ?: return; planta?.let { desfazer += it }; planta = a; corrida = null }
+    fun recomeca(pl: Planta?) { desfazer.clear(); refazer.clear(); planta = pl; corrida = null; sel = null; zoom = 1f; pan = Offset.Zero }
+
+    fun abre(m: Missao) {
+        val p = FabGram.prepara(m)
+        missao = p; texto = m.gramatica; frase = m.frase
+        ferramenta = when (m) { Missao.MOVER, Missao.LIGAR -> Ferramenta.MOVER; else -> Ferramenta.ESTEIRA }
+        recomeca(p.planta)
+    }
+
+    fun livre() { missao = null; ferramenta = Ferramenta.MOVER }
 }
 
 /** Fábrica de Gramáticas: o palco é a tela; a gramática fica num painel que abre e fecha. */
@@ -69,11 +101,18 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
 fun FabGramScreen(app: AppState) {
     val reduz = ThemeState.reduceMotion
     val ls = app.ls
-    val e = remember { EstadoFabrica(ls.fabGramTexto.ifBlank { FabGram.exemplos[0].first }, ls.fabGramFrase.ifBlank { FabGram.exemplos[0].second }) }
+    val e = remember {
+        EstadoFabrica(ls.fabGramTexto.ifBlank { FabGram.exemplos[0].first }, ls.fabGramFrase.ifBlank { FabGram.exemplos[0].second }).also {
+            // quem chega pela primeira vez cai no tutorial, na missão em que parou
+            if (ls.fabGramMissoes < Missao.entries.size && ls.fabGramPlanta.isBlank()) it.abre(Missao.entries[ls.fabGramMissoes])
+        }
+    }
     val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
     LaunchedEffect(laudo) {
-        val g = laudo?.g
-        e.planta = g?.let { runCatching { (if (app.ls.fabGramTexto == e.texto) FabGram.carrega(it, app.ls.fabGramPlanta) else null) ?: FabGram.planta(it) }.getOrNull() }
+        val l = laudo ?: return@LaunchedEffect
+        if (e.missao?.missao?.gramatica == e.texto) return@LaunchedEffect
+        val g = l.g ?: run { e.planta = null; return@LaunchedEffect }
+        e.recomeca(runCatching { (if (app.ls.fabGramTexto == e.texto) FabGram.carrega(g, app.ls.fabGramPlanta) else null) ?: FabGram.planta(g) }.getOrNull())
     }
     val escopo = rememberCoroutineScope()
     var relogio by remember { mutableFloatStateOf(0f) }
@@ -89,16 +128,23 @@ fun FabGramScreen(app: AppState) {
         var antes = 0L
         while (e.t < c.duracao) withFrameNanos { n -> if (antes != 0L) e.t = (e.t + (n - antes) / 1e9f).coerceAtMost(c.duracao); antes = n }
     }
-    fun guarda(pl: Planta) { e.planta = pl; e.corrida = null; app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
+    LaunchedEffect(e.cumpriu) {
+        val m = e.missao ?: return@LaunchedEffect
+        if (e.cumpriu) { app.learner.setFabGramMissoes(m.missao.ordinal + 1); app.commit() }
+    }
+    fun guarda(pl: Planta) {
+        e.troca(pl)
+        if (e.missao == null) { app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
+    }
     fun liga() {
         val pl = e.planta ?: return
         val toks = tokensOf(e.frase)
         if (toks.isEmpty()) return
-        app.learner.setFabGram(e.texto, e.frase); app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit()
+        if (e.missao == null) { app.learner.setFabGram(e.texto, e.frase); app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
         escopo.launch { e.corrida = withContext(Dispatchers.Default) { FabGram.corrida(pl, toks) } }
     }
     val largo = LocalJanela.current.ladoALado
-    val painelAberto = e.painel ?: largo
+    val painelAberto = e.painel ?: (largo && e.missao == null)
     val nomes = NomesBlocos(tx("fabgram_fonte"), { tx("fabgram_separador_1", it) }, tx("fabgram_montadora"), tx("fabgram_cesto"))
 
     Box(Modifier.fillMaxSize().background(Color(0xFF16181B))) {
@@ -114,16 +160,23 @@ fun FabGramScreen(app: AppState) {
                 Box(Modifier.weight(1f).fillMaxHeight()) {
                     val pl = e.planta
                     if (pl != null) PalcoEditavel(
-                        pl, e.ferramenta, laudo, e.corrida, if (e.corrida == null) 0f else e.t, relogio, e.sel, reduz, nomes,
+                        pl, e, laudo, relogio, reduz, nomes,
                         onPlanta = { guarda(it) }, onToque = { e.sel = it?.takeIf { b -> b.tipo == FabGram.TipoBloco.MAQUINA }?.id },
                     )
                     Column(Modifier.align(Alignment.TopCenter).padding(8.dp).widthIn(max = 640.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Casas(e.corrida, e.corrida?.pedida ?: tokensOf(e.frase), if (e.corrida == null) 0f else e.t)
+                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Box(Modifier.weight(1f, fill = false)) { Casas(e.corrida, e.corrida?.pedida ?: tokensOf(e.frase), if (e.corrida == null) 0f else e.t) }
+                            BigButton(tx("fabgram_ligar"), enabled = e.planta != null, small = true) { liga() }
+                        }
+                        if (e.missao != null) CartaoMissao(e) { prox -> if (prox == null) { e.livre(); laudo?.g?.let { e.recomeca(FabGram.planta(it)) } } else e.abre(prox) }
                         Aviso(e, laudo)
                     }
-                    Ferramentas(e, Modifier.align(Alignment.BottomCenter), onArrumar = { laudo?.g?.let { guarda(FabGram.planta(it)) } }, onLigar = { liga() })
+                    Ferramentas(e, Modifier.align(Alignment.BottomCenter), onArrumar = {
+                        val m = e.missao
+                        if (m != null) e.abre(m.missao) else laudo?.g?.let { guarda(FabGram.planta(it)); e.zoom = 1f; e.pan = Offset.Zero }
+                    })
                 }
-                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) { Painel(e, laudo) { e.painel = false } }
+                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) { Painel(e, laudo, ls.fabGramMissoes) { e.painel = false } }
             }
         }
         if (!largo && painelAberto) {
@@ -131,7 +184,7 @@ fun FabGramScreen(app: AppState) {
             Column(
                 Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.72f)
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)).background(Palette.paper),
-            ) { Painel(e, laudo) { e.painel = false } }
+            ) { Painel(e, laudo, ls.fabGramMissoes) { e.painel = false } }
         }
     }
 }

@@ -35,7 +35,8 @@ class FabGramFlowTest {
     init { Narrator.silent = true }
 
     private val saida = File("build/screenshots/fabgram").apply { mkdirs() }
-    private fun estado() = AppState(Learner(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false, xp = 300), Random(1)))
+    private fun estado(missoes: Int = com.compilandia.tutor.Missao.entries.size) =
+        AppState(Learner(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false, xp = 300, fabGramMissoes = missoes), Random(1)))
     private fun ComposeUiTest.anda(ms: Long) = mainClock.advanceTimeBy(ms)
     private fun ComposeUiTest.foto(nome: String) = ImageIO.write(onRoot().captureToImage().toAwtImage(), "png", File(saida, "$nome.png"))
     private fun ComposeUiTest.espera(texto: String) {
@@ -105,5 +106,38 @@ class FabGramFlowTest {
         onNodeWithTag("fabgram-arrumar").performClick(); anda(400)
         onNodeWithTag("fabgram-apagar").performClick(); anda(200)
         foto("8_apagar")
+    }
+
+    @Test fun tutorialComecaNaPrimeiraMissao() = runDesktopComposeUiTest(412, 900, testTimeout = 3.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado(missoes = 0); app.stack.add(Screen.FabGram)
+        setContent { App(app) }
+        anda(1500); Thread.sleep(300); anda(500)
+        onNodeWithText("Ligue a fábrica", substring = true).assertExists()
+        foto("t1_missao_ligar")
+        onNodeWithText("Ligar").performClick()
+        repeat(10) { anda(50); Thread.sleep(30) }
+        anda(1500); foto("t2_andando")
+        espera("Missão cumprida!")
+        foto("t3_cumprida")
+        assertEquals(1, app.learner.state.fabGramMissoes)
+        onNodeWithText("Próxima missão").performClick(); anda(800)
+        onNodeWithText("Conserte a esteira", substring = true).assertExists()
+        foto("t4_consertar")
+        onNodeWithTag("fabgram-painel").performClick(); anda(400)
+        onNodeWithTag("fabgram-missao-3").assertExists()
+        onNodeWithText("Fechar").performClick(); anda(300)
+    }
+
+    @Test fun fotosDasMissoes() = runDesktopComposeUiTest(1200, 800, testTimeout = 3.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado(); app.stack.add(Screen.FabGram)
+        setContent { App(app) }
+        anda(1500); Thread.sleep(300); anda(500)
+        for (m in com.compilandia.tutor.Missao.entries) {
+            if (onAllNodesWithTag("fabgram-missao-${m.ordinal + 1}").fetchSemanticsNodes().isEmpty()) { onNodeWithTag("fabgram-painel").performClick(); anda(300) }
+            onNodeWithTag("fabgram-missao-${m.ordinal + 1}").performClick(); anda(1200); Thread.sleep(200); anda(300)
+            foto("m${m.ordinal + 1}_${m.name.lowercase()}")
+        }
     }
 }

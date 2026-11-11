@@ -10,7 +10,8 @@ import com.compilandia.tutor.FabGram.Planta
 import kotlin.math.abs
 
 /** Um trecho do caminho de um item: anda pelos [pontos] entre [t0] e [t1] segundos. */
-data class Trecho(val simbolo: String, val caixa: Boolean, val pontos: List<Pair<Float, Float>>, val t0: Float, val t1: Float)
+/** [marca] é o número da máquina que o separador carimbou na caixa (1, 2, ...), ou nulo. */
+data class Trecho(val simbolo: String, val caixa: Boolean, val pontos: List<Pair<Float, Float>>, val t0: Float, val t1: Float, val marca: Int? = null)
 
 /** A máquina [bloco] trabalha entre [t0] e [t1]. */
 data class Trabalho(val bloco: Int, val t0: Float, val t1: Float)
@@ -99,21 +100,21 @@ private class Animador(val pl: Planta, val pedida: List<String>, val feita: List
         return Corrida(pedida, feita, aceita, ambigua, arv, trechos, trabalhos, chegadas.sortedBy { it.t }, t, quebra)
     }
 
-    private fun anda(sim: String, caixa: Boolean, pts: List<Pair<Float, Float>>) {
+    private fun anda(sim: String, caixa: Boolean, pts: List<Pair<Float, Float>>, marca: Int? = null) {
         var len = 0f
         for (i in 1 until pts.size) len += abs(pts[i].first - pts[i - 1].first) + abs(pts[i].second - pts[i - 1].second)
         val d = len / FABGRAM_VEL
-        trechos += Trecho(sim, caixa, pts, t, t + d)
+        trechos += Trecho(sim, caixa, pts, t, t + d, marca)
         t += d
     }
 
     /** Leva o item de [de] até [para]. Falso se ele travou no caminho. */
-    private fun leva(sim: String, caixa: Boolean, de: Bloco, para: Bloco): Boolean {
+    private fun leva(sim: String, caixa: Boolean, de: Bloco, para: Bloco, marca: Int? = null): Boolean {
         val centro = listOf(de.cx to de.cy)
         return when (val r = pl.rota(de, para)) {
-            is Rota.Chega -> { anda(sim, caixa, centro + r.celulas.map { it.x + 0.5f to it.y + 0.5f } + (para.cx to para.cy)); true }
+            is Rota.Chega -> { anda(sim, caixa, centro + r.celulas.map { it.x + 0.5f to it.y + 0.5f } + (para.cx to para.cy), marca); true }
             is Rota.Trava -> {
-                anda(sim, caixa, centro + r.celulas.map { it.x + 0.5f to it.y + 0.5f })
+                anda(sim, caixa, centro + r.celulas.map { it.x + 0.5f to it.y + 0.5f }, marca)
                 quebra = Quebra(sim, caixa, r.celulas.lastOrNull() ?: Cel(de.x, de.y), r.motivo, para)
                 false
             }
@@ -128,7 +129,7 @@ private class Animador(val pl: Planta, val pedida: List<String>, val feita: List
         val filhos = no.children.filter { it.symbol != EPS }
         val p = pl.g.productionsOf(nt).first { pr -> pr.rhs == filhos.map { it.symbol } }
         val m = pl.maquinaDe(p)
-        if (!leva(nt, true, sep, m)) return false
+        if (!leva(nt, true, sep, m, FabGram.numero(pl.g, p))) return false
         trabalhos += Trabalho(m.id, t, t + FABGRAM_TRABALHO)
         t += FABGRAM_TRABALHO
         val pendentes = mutableListOf<Pair<ParseNode, Int>>()

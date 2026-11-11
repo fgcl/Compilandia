@@ -7,8 +7,4 @@
     <string name="sala_aulas_30">30-second lessons</string>
     <string name="sala_fechar">Close</string>
     <string name="sala_proximo">%1$s, %2$s</string>
-    <string name="sala_mapa_dica">Every topic, in compiler order</string>
-    <string name="sala_jogar_dica">Daily challenge, robots, run and factory</string>
-    <string name="sala_lab_dica">Paste a grammar, regex or code</string>
-    <string name="sala_loja_dica">New pieces for the room</string>
 </resources>

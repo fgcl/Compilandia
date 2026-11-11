@@ -134,6 +134,7 @@ private fun DrawScope.maquina(cena: Cena, b: Bloco, x: Float, y: Float, w: Float
         null -> {}
     }
     val p = b.prod
+    p?.let { com.compilandia.tutor.FabGram.numero(cena.pl.g, it) }?.let { numero(cena, it, x + 6 * u, y + 6 * u, 5.5f * u) }
     // esteira piscando virou máquina piscando: a regra que começa pela própria letra (ou por outra letra, na indireta)
     val recursiva = p != null && cena.tem(b.nt, Falha.RECURSAO, Falha.RECURSAO_INDIRETA) && p.rhs.firstOrNull()?.let { cena.pl.g.isNonTerminal(it) } == true
     if (recursiva && (cena.pisca || cena.reduz)) drawRect(AC, Offset(x, y), Size(w, th + F * u), style = Stroke(2 * u))

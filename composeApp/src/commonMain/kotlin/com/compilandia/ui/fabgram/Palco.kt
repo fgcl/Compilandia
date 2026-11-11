@@ -24,8 +24,8 @@ import kotlin.math.sin
 
 // Pixel com frente (Y01) + luz e sombra projetada (Z4). O palco é sempre a oficina escura,
 // em qualquer tema: é a cena do jogo, como a sala.
-internal val CHAO = listOf(Color(0xFF22252A), Color(0xFF24272C), Color(0xFF202327))
-internal val LINHA = Color(0xFF2A2E34)
+internal val CHAO = listOf(Color(0xFFB4B2AA), Color(0xFFB8B6AE), Color(0xFFB0AEA6))
+internal val LINHA = Color(0xFFA6A49C)
 internal val OL = Color(0xFF0F1114)
 internal val TOPO = Color(0xFF5B636E)
 internal val TOPO_L = Color(0xFF7C858F)
@@ -62,6 +62,8 @@ internal class Cena(
     val pl: Planta, val gr: Grade, val laudo: Laudo?, val c: Corrida?, val t: Float, val relogio: Float,
     val sel: Int?, val reduz: Boolean, val ferramenta: Ferramenta, val fantasma: Pair<Int, Cel>?,
     val medidor: TextMeasurer, val nomes: NomesBlocos,
+    /** O que a missão pede para montar: esteiras e o lugar de um bloco. */
+    val guia: Map<Cel, Dir> = emptyMap(), val guiaBloco: Pair<Int, Cel>? = null,
 ) {
     val cel: Float get() = gr.cel
     /** Um "pixel" da arte: a célula tem 32. */
@@ -90,23 +92,24 @@ private fun noCaminho(pts: List<Pair<Float, Float>>, u: Float): Pair<Float, Floa
 }
 
 internal fun DrawScope.desenhaFabrica(cena: Cena) {
-    drawRect(Color(0xFF16181B))
+    drawRect(CHAO[0])
     translate(cena.gr.ox - cena.gr.x0 * cena.cel, cena.gr.oy - cena.gr.y0 * cena.cel) {
         chao(cena)
         esteiras(cena)
         val brilhos = mutableListOf<Triple<Offset, Float, Color>>()
         for (b in cena.pl.blocos) bloco(cena, b, brilhos)
+        guia(cena)
         fantasma(cena)
         itens(cena)
         for (b in cena.pl.blocos) placa(cena, b)
-        for ((o, raio, cor) in brilhos) drawCircle(Brush.radialGradient(listOf(cor.copy(alpha = 0.33f), cor.copy(alpha = 0f)), center = o, radius = raio * 2), raio * 2, o, blendMode = BlendMode.Plus)
+        for ((o, raio, cor) in brilhos) drawCircle(Brush.radialGradient(listOf(cor.copy(alpha = 0.22f), cor.copy(alpha = 0f)), center = o, radius = raio * 2), raio * 2, o, blendMode = BlendMode.Plus)
     }
-    drawRect(Brush.radialGradient(listOf(Color.Transparent, Color(0x80050310)), center = center, radius = size.maxDimension * 0.75f))
+    drawRect(Brush.radialGradient(listOf(Color.Transparent, Color(0x40050310)), center = center, radius = size.maxDimension * 0.75f))
 }
 
 private fun DrawScope.chao(cena: Cena) {
     val cel = cena.cel; val u = cena.u
-    val grade = if (cena.ferramenta == Ferramenta.MOVER) LINHA else Color(0xFF353A42)
+    val grade = if (cena.ferramenta == Ferramenta.MOVER) LINHA else Color(0xFF8F8D85)
     for (x in cena.gr.x0 until cena.gr.x0 + cena.gr.cols) for (y in cena.gr.y0 until cena.gr.y0 + cena.gr.rows) {
         r(x * cel, y * cel, cel, cel, CHAO[(hsh(x, y) * 3).toInt().coerceIn(0, 2)])
         r(x * cel, y * cel, cel, u, grade); r(x * cel, y * cel, u, cel, grade)
@@ -165,6 +168,32 @@ private fun DrawScope.seta(mx: Float, my: Float, d: Dir, u: Float) {
     }
 }
 
+/** O fantasma da missão: esteira tracejada com a seta, e o contorno de onde o bloco deve ficar. */
+private fun DrawScope.guia(cena: Cena) {
+    val cel = cena.cel; val u = cena.u
+    val a = if (cena.reduz) 0.9f else 0.55f + 0.35f * ((sin(cena.relogio * 4f) + 1f) / 2f)
+    val traco = Stroke(2 * u, pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(4 * u, 3 * u)))
+    for ((c, d) in cena.guia) {
+        if (cena.pl.esteiras[c] == d) continue
+        val x = c.x * cel; val y = c.y * cel
+        drawRect(AZUL_GUIA.copy(alpha = 0.18f * a), Offset(x + 3 * u, y + 3 * u), Size(cel - 6 * u, cel - 6 * u))
+        drawRect(AZUL_GUIA.copy(alpha = a), Offset(x + 3 * u, y + 3 * u), Size(cel - 6 * u, cel - 6 * u), style = traco)
+        val mx = x + cel / 2; val my = y + cel / 2
+        for (j in 0 until 5) {
+            val ax = mx + d.dx * (j - 2) * 1.6f * u; val ay = my + d.dy * (j - 2) * 1.6f * u
+            val l = (5 - j) * 1.3f * u
+            if (d.dx != 0) r(ax, ay - l, 1.6f * u, 2 * l, AZUL_GUIA.copy(alpha = a)) else r(ax - l, ay, 2 * l, 1.6f * u, AZUL_GUIA.copy(alpha = a))
+        }
+    }
+    val (id, alvo) = cena.guiaBloco ?: return
+    val b = cena.pl.blocos.firstOrNull { it.id == id } ?: return
+    if (b.x == alvo.x && b.y == alvo.y) return
+    drawRect(AZUL_GUIA.copy(alpha = 0.18f * a), Offset(alvo.x * cel, alvo.y * cel), Size(b.w * cel, b.h * cel))
+    drawRect(AZUL_GUIA.copy(alpha = a), Offset(alvo.x * cel, alvo.y * cel), Size(b.w * cel, b.h * cel), style = traco)
+}
+
+private val AZUL_GUIA = Color(0xFF2F7FE0)
+
 private fun DrawScope.fantasma(cena: Cena) {
     val (id, alvo) = cena.fantasma ?: return
     val b = cena.pl.blocos.firstOrNull { it.id == id } ?: return
@@ -188,6 +217,8 @@ private fun DrawScope.itens(cena: Cena) {
         val est = TextStyle(color = if (tr.caixa) Color(0xFF3A2810) else Color(0xFF141619), fontSize = (cel * 0.3f / density).sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace)
         val lay = cena.medidor.measure(tr.simbolo, est)
         drawText(lay, topLeft = Offset(ox - lay.size.width / 2f, oy - lay.size.height / 2f))
+        // o carimbo do separador: o número da máquina para onde a caixa vai
+        tr.marca?.let { numero(cena, it, ox + 8 * u, oy - 8 * u, 5.5f * u) }
     }
     val q = c.quebra ?: return
     if (cena.t < c.duracao) return
@@ -197,6 +228,17 @@ private fun DrawScope.itens(cena: Cena) {
     drawCircle(VERMELHO, 6 * u, Offset(qx + cel - 2 * u, qy + 2 * u))
     r(qx + cel - 2.6f * u, qy - 1.5f * u, 1.2f * u, 4 * u, Color.White); r(qx + cel - 2.6f * u, qy + 3.6f * u, 1.2f * u, 1.2f * u, Color.White)
 }
+
+/** Uma bolinha com o número da máquina; o mesmo desenho na máquina e na caixa carimbada. */
+internal fun DrawScope.numero(cena: Cena, n: Int, cx: Float, cy: Float, raio: Float) {
+    drawCircle(OL, raio + cena.u, Offset(cx, cy))
+    drawCircle(CORES_NUMERO[(n - 1) % CORES_NUMERO.size], raio, Offset(cx, cy))
+    val est = TextStyle(color = Color.White, fontSize = (raio * 1.35f / density).sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace)
+    val lay = cena.medidor.measure("$n", est)
+    drawText(lay, topLeft = Offset(cx - lay.size.width / 2f, cy - lay.size.height / 2f))
+}
+
+private val CORES_NUMERO = listOf(Color(0xFF2F7FE0), Color(0xFFD9533B), Color(0xFF2E9E5B), Color(0xFF8E5BD0), Color(0xFFCC8A12))
 
 private val Float.sp get() = androidx.compose.ui.unit.TextUnit(this, androidx.compose.ui.unit.TextUnitType.Sp)
 
