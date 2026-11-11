@@ -10,6 +10,8 @@ import com.compilandia.textos.tx
 enum class Etapa { BUG, VER, FAZER,
     /** J1: a Bancada do Byte. A pessoa monta e o Byte executa. Só nos assuntos que têm um jogo de montar. */
     PROGRAMAR,
+    /** Mural, rodada 3: montar a gramática na Fábrica. Derivação faz o tutorial; ambiguidade e recursão, um desafio. */
+    FABRICA,
     PRATICA, PEGADINHA, DESAFIO,
     /** A7: depois da trilha completa, quando a memória cai, um clipe de 30 segundos e um desafio. Não fica na lista. */
     REVISAO }
@@ -24,6 +26,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null, val form
         Etapa.VER -> tx("trilha_etapa_ver")
         Etapa.FAZER -> tx("trilha_etapa_fazer")
         Etapa.PROGRAMAR -> tx("trilha_etapa_programar")
+        Etapa.FABRICA -> tx("trilha_etapa_fabrica")
         Etapa.PRATICA -> tx("trilha_etapa_pratica")
         Etapa.PEGADINHA -> tx("trilha_etapa_pegadinha")
         Etapa.DESAFIO -> tx("trilha_etapa_desafio")
@@ -35,6 +38,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null, val form
         Etapa.VER -> episodio?.title ?: tx("trilha_etapa_ver_sub")
         Etapa.FAZER -> tx("trilha_etapa_fazer_sub")
         Etapa.PROGRAMAR -> tx("trilha_etapa_programar_sub")
+        Etapa.FABRICA -> tx("trilha_etapa_fabrica_sub")
         Etapa.PRATICA, Etapa.PEGADINHA -> episodio?.title.orEmpty()
         Etapa.DESAFIO -> tx("trilha_etapa_desafio_sub")
         Etapa.REVISAO -> formato?.titulo ?: tx("trilha_etapa_revisao_sub")
@@ -53,9 +57,24 @@ object Trilha {
         Episodes.of(s)?.let { add(PassoTrilha(Etapa.VER, it)) }
         if (Guiado.disponivel(s)) add(PassoTrilha(Etapa.FAZER))
         if (Robo.de(s) != null) add(PassoTrilha(Etapa.PROGRAMAR))
+        if (missaoDaFabrica(s) != null) add(PassoTrilha(Etapa.FABRICA))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PRATICA }) add(PassoTrilha(Etapa.PRATICA, e))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PEGADINHA }) add(PassoTrilha(Etapa.PEGADINHA, e))
         add(PassoTrilha(Etapa.DESAFIO))
+    }
+
+    /** A missão da Fábrica que treina o assunto: o tutorial para derivação, um desafio para os outros dois. */
+    fun missaoDaFabrica(s: Skill): com.compilandia.tutor.Missao? = when (s) {
+        Skill.CFG_DERIVATION -> com.compilandia.tutor.Missao.LIGAR
+        Skill.AMBIGUITY -> com.compilandia.tutor.Missao.D_IFELSE
+        Skill.LEFT_RECURSION -> com.compilandia.tutor.Missao.D_EXPRESSAO
+        else -> null
+    }
+
+    /** Derivação: o tutorial inteiro. Os outros: o desafio cumprido, com qualquer número de estrelas. */
+    fun fabricaFeita(l: Learner, s: Skill): Boolean = when (s) {
+        Skill.CFG_DERIVATION -> l.state.fabGramMissoes >= com.compilandia.tutor.TUTORIAL
+        else -> missaoDaFabrica(s)?.name?.let { it in l.state.fabGramEstrelas } == true
     }
 
     /** A aula de tabelas do assunto, oferecida como outro jeito de ver dentro da etapa Ver. */
@@ -69,6 +88,7 @@ object Trilha {
             Etapa.PRATICA, Etapa.PEGADINHA -> p.episodio?.id in ls.episodesSeen
             Etapa.DESAFIO -> l.skill(s).attempts > 0
             Etapa.FAZER, Etapa.PROGRAMAR -> false
+            Etapa.FABRICA -> fabricaFeita(l, s)
             Etapa.REVISAO -> false
         }
         return when {

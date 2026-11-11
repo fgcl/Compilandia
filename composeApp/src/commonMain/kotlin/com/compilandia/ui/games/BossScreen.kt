@@ -71,7 +71,7 @@ fun BossScreen(app: AppState, region: Region) {
 
     androidx.compose.foundation.layout.Box(Modifier.fillMaxSize()) {
     Column(Modifier.fillMaxSize()) {
-        Header("${boss.emoji} ${boss.bossName}", tx("bossscreen_chefao_1", region.title), color)
+        Header(boss.bossName, tx("bossscreen_chefao_1", region.title), color)
         val won = hp <= 0.001f
         val lost = round >= plan.size && !won
         MachinePanel(((1f - hpAnim) * MACHINE_LAMPS + 0.01f).toInt(), won, region.title)

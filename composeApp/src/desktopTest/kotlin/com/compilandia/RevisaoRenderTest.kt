@@ -153,6 +153,22 @@ class RevisaoRenderTest {
         shot("revisao_trilha_2") { App(pendente(formatos.take(1))) }
     }
 
+    /** Rodada 6 do mural: na região, o assunto feito e esquecido mostra "Revisar" na placa e embaixo, ao lado do Continuar. */
+    @Test fun revisaoNaRegiao() {
+        val agora = System.currentTimeMillis()
+        val antes = agora - 60L * 86_400_000L
+        val l = Learner(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false), Random(1))
+        for (s in listOf(Skill.FIRST, Skill.FOLLOW)) {
+            l.markEpisode(s)
+            for (p in Trilha.passos(s)) l.marcaEtapa(s, p.chave, feita = true, antes)
+            l.recordAttempt(s, GameId.FIRST_FOLLOW_ALCHEMY, 1, 1.0, null, 1000, 0, antes)
+        }
+        l.marcaVisita(agora)
+        assertTrue(l.skill(Skill.FIRST).memory.isDue(agora), "FIRST devia estar vencido")
+        val app = AppState(l).also { it.go(Screen.RegionView(Skill.FIRST.region)) }
+        shot("revisao_regiao") { App(app) }
+    }
+
     /** R4: o quadro do lembrete como aparece no celular, desligado e ligado. No computador ele só mostra o aviso. */
     @Test fun lembreteNoCelular() {
         for (ligado in listOf(false, true)) {

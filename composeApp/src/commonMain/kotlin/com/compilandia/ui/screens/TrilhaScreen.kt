@@ -62,6 +62,13 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
         Etapa.PRATICA, Etapa.PEGADINHA -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.FAZER -> Screen.FazerComAjuda(s, semente = nowMs())
         Etapa.PROGRAMAR -> com.compilandia.content.Robo.de(s)?.let { Screen.Bancada(it) } ?: return
+        Etapa.FABRICA -> {
+            // Derivação abre o tutorial onde parou; ambiguidade e recursão abrem o desafio do assunto.
+            val m = Trilha.missaoDaFabrica(s) ?: return
+            val tutorial = com.compilandia.tutor.Missao.entries.take(com.compilandia.tutor.TUTORIAL)
+            app.fabGramPedida = if (m.desafio) m.name else (tutorial.getOrNull(l.state.fabGramMissoes) ?: tutorial.first()).name
+            Screen.FabGram
+        }
         Etapa.REVISAO -> {
             // R2: grava o formato usado, para a próxima revisão escolher outro.
             val f = p.formato ?: com.compilandia.content.FormatoRevisao.CLIPE
@@ -254,7 +261,7 @@ fun SeuCompiladorScreen(app: AppState) {
     val ls = app.ls
     val paradas = remember { SeuCompilador.paradas() }
     Column(Modifier.fillMaxSize()) {
-        Header(tx("seucompilador_titulo"), tx("seucompilador_sub"), Palette.teal)
+        Header(tx("seucompilador_titulo"), null, Palette.teal)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             for (p in paradas) {
                 val feita = p.episodio?.let { it.id in ls.episodesSeen } ?: (p.capitulo!!.number in ls.guideRead)

@@ -41,7 +41,6 @@
     <string name="comum_descida_recursiva">Recursive descent</string>
     <string name="comum_dica">Hint</string>
     <string name="comum_dobra_constantes">Constant folding</string>
-    <string name="comum_dominio">domain</string>
     <string name="comum_duas_arvores">Two trees</string>
     <string name="comum_empilhar_2">Shift</string>
     <string name="comum_empilhar_ou_reduzir">Shift or reduce</string>

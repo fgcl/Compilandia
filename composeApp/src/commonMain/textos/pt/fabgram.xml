@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Fábrica de Gramáticas: cada regra é uma máquina numa grade vista de cima. -->
 <resources>
-    <string name="fabgram_sub">Cada regra vira uma máquina. Escreva a gramática e teste uma frase.</string>
     <string name="fabgram_gramatica">Gramática</string>
     <string name="fabgram_ajuda_texto">Uma regra por linha. Separe as peças com espaço.</string>
     <string name="fabgram_frase">Frase</string>
     <string name="fabgram_ligar">Ligar</string>
-    <string name="fabgram_parar">Parar</string>
     <string name="fabgram_exemplos">Exemplos</string>
+    <string name="fabgram_fechar">Fechar</string>
     <string name="fabgram_toque">Toque numa máquina para ver a regra dela.</string>
     <string name="fabgram_maquina_1">Esta máquina faz %1$s.</string>
     <string name="fabgram_fez">A frase saiu inteira da montadora.</string>
@@ -20,18 +19,63 @@
     <string name="fabgram_sem_sinais">Nenhum sinal. Todas as máquinas trabalham.</string>
     <string name="fabgram_sinal_fumaca">Fumaça</string>
     <string name="fabgram_sinal_poeira">Poeira</string>
-    <string name="fabgram_sinal_pisca">Esteira piscando</string>
+    <string name="fabgram_sinal_pisca">Máquina piscando</string>
     <string name="fabgram_sinal_lampada">Lâmpada amarela</string>
     <string name="fabgram_sinal_emperra">Separador emperrado</string>
     <string name="fabgram_sinal_fichas">Duas fichas</string>
     <string name="fabgram_fonte">fonte</string>
-    <string name="fabgram_separador">separador</string>
-    <string name="fabgram_filtro">filtro</string>
-    <string name="fabgram_prensa">prensa</string>
-    <string name="fabgram_braco">braço</string>
-    <string name="fabgram_armario">armário</string>
-    <string name="fabgram_cofre">cofre</string>
+    <string name="fabgram_separador_1">separador %1$s</string>
     <string name="fabgram_montadora">montadora</string>
     <string name="fabgram_cesto">cesto</string>
-    <string name="fabgram_elevador">elevador</string>
+    <string name="fabgram_roteador">roteador</string>
+    <!-- editor -->
+    <string name="fabgram_mover">Mover</string>
+    <string name="fabgram_esteira">Esteira</string>
+    <string name="fabgram_apagar">Apagar</string>
+    <string name="fabgram_arrumar">Arrumar</string>
+    <string name="fabgram_dica_mover">Arraste uma máquina para outro lugar. Toque nela para ver a regra.</string>
+    <string name="fabgram_dica_esteira">Arraste para desenhar a esteira. Toque numa esteira para girar.</string>
+    <string name="fabgram_dica_apagar">Passe o dedo por cima das esteiras para apagar.</string>
+    <string name="fabgram_caixa_1">A caixa %1$s</string>
+    <string name="fabgram_peca_1">A peça %1$s</string>
+    <string name="fabgram_destino_separador_1">o separador %1$s</string>
+    <string name="fabgram_destino_maquina_1">a máquina %1$s</string>
+    <string name="fabgram_destino_montadora">a montadora</string>
+    <string name="fabgram_quebra_sem_saida_2">%1$s não tem por onde sair. Ponha uma esteira saindo do bloco, rumo a %2$s.</string>
+    <string name="fabgram_quebra_acaba_2">%1$s parou onde a esteira acaba. Ela ia para %2$s.</string>
+    <string name="fabgram_quebra_bate_2">%1$s bateu num bloco que não é o dela. Ela ia para %2$s.</string>
+    <string name="fabgram_quebra_volta_2">%1$s ficou dando voltas e não passou por %2$s.</string>
+    <!-- tutorial -->
+    <string name="fabgram_m_ligar_titulo">Ligue a fábrica</string>
+    <string name="fabgram_m_ligar_objetivo">Toque em Ligar. A caixa S vira as peças a e b.</string>
+    <string name="fabgram_m_consertar_titulo">Conserte a esteira</string>
+    <string name="fabgram_m_consertar_objetivo">No modo Esteira, arraste o dedo pelas setas azuis.</string>
+    <string name="fabgram_m_mover_titulo">Ponha a máquina no lugar</string>
+    <string name="fabgram_m_mover_objetivo">No modo Mover, arraste a prensa até o contorno azul.</string>
+    <string name="fabgram_m_escolha_titulo">Duas regras</string>
+    <string name="fabgram_m_escolha_objetivo">O separador carimba na caixa o número da regra. Leve a esteira até a máquina 2.</string>
+    <string name="fabgram_m_volta_titulo">A caixa volta</string>
+    <string name="fabgram_m_volta_objetivo">S → a S solta uma caixa S nova. Feche o caminho de volta ao separador.</string>
+    <string name="fabgram_m_letras_titulo">Duas letras</string>
+    <string name="fabgram_m_letras_objetivo">Cada letra tem seu separador. Leve a caixa A até o separador A.</string>
+    <string name="fabgram_missao_2">%1$s de %2$s</string>
+    <string name="fabgram_missao_feita">Missão cumprida!</string>
+    <string name="fabgram_proxima">Próxima missão</string>
+    <string name="fabgram_livre">Modo livre</string>
+    <string name="fabgram_missoes">Missões</string>
+    <string name="fabgram_desfazer">Desfazer</string>
+    <string name="fabgram_refazer">Refazer</string>
+    <string name="fabgram_d_anbn_titulo">Tantos a quantos b</string>
+    <string name="fabgram_d_parenteses_titulo">Parênteses</string>
+    <string name="fabgram_d_expressao_titulo">Expressão</string>
+    <string name="fabgram_d_objetivo_1">Ligue as esteiras. O robô também testa: %1$s</string>
+    <string name="fabgram_desafio_1">Desafio %1$s</string>
+    <string name="fabgram_contador_2">Esteiras: %1$s · 3 estrelas até %2$s</string>
+    <string name="fabgram_extra_falhou_1">O robô também testou %1$s, e essa não saiu.</string>
+    <string name="fabgram_d_lista_titulo">Lista com vírgula</string>
+    <string name="fabgram_d_declaracao_titulo">Declaração</string>
+    <string name="fabgram_d_ifelse_titulo">O else solto</string>
+    <string name="fabgram_dica_custa">Dica · custa 1 estrela</string>
+    <string name="fabgram_dica_mais_1">Mais uma dica · já usou %1$s</string>
+    <string name="fabgram_ganhou_1">+%1$s engrenagens</string>
 </resources>

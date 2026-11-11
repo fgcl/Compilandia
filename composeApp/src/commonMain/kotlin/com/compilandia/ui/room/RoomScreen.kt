@@ -56,7 +56,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.compilandia.learning.DAILY_XP_GOAL
 import com.compilandia.learning.FREEZE_PRICE
 import com.compilandia.learning.Quest
 import com.compilandia.learning.RoomItem
@@ -105,26 +104,21 @@ fun RoomScreen(app: AppState) {
     // T2: as três metas viram um anel; o detalhe abre ao toque.
     val metas: @Composable () -> Unit = {
         Row(
-            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp).clip(RoundedCornerShape(8.dp))
+                .clickable { metasAbertas = !metasAbertas }.padding(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(
-                Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).clickable { metasAbertas = !metasAbertas }.padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(26.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-            }
-            ToolTag(tx("sala_jogar"), highlighted = ls.desafioDia != now / 86_400_000L) { gaveta = true }
+            MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(22.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft, modifier = Modifier.weight(1f))
+            Text(if (metasAbertas) "▴" else "▾", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium)
         }
     }
     val proximo: @Composable () -> Unit = {
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
             // O Continuar segue a trilha do assunto que o modelo do aluno escolheu.
             val passo = remember(ls) { com.compilandia.content.Trilha.proximo(l, next.skill, now) }
-            Text(tx("comum_proximo"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-            Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = if (ladoALado) 3 else 1)
+            Text(tx("sala_proximo", next.skill.title, passo?.titulo ?: next.game.title), style = MaterialTheme.typography.titleMedium, maxLines = if (ladoALado) 3 else 2)
             Spacer(Modifier.height(8.dp))
             BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
                 if (passo != null) com.compilandia.ui.screens.abrirPasso(app, next.skill, passo)
@@ -136,33 +130,35 @@ fun RoomScreen(app: AppState) {
         BoxWithConstraints(mod.clipToBounds(), contentAlignment = Alignment.Center) {
             // A sala passa um pouco das laterais: as paredes externas não têm nada para tocar.
             val side = minOf(maxWidth * 1.26f, maxHeight * 1.04f)
-            RoomScene(app, side)
+            RoomScene(app, side, desafioPendente = ls.desafioDia != now / 86_400_000L) { gaveta = true }
         }
     }
     Box(Modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
             RoomHud(app)
             if (ladoALado) {
-                // T1: janela larga ou celular deitado. A sala à esquerda, o próximo passo num painel à direita.
+                // T1: janela larga ou celular deitado. A sala à esquerda; à direita, de cima para baixo: o próximo passo, os lugares e as metas.
                 Row(Modifier.weight(1f).fillMaxWidth()) {
                     sala(Modifier.weight(1f).fillMaxHeight())
-                    Column(Modifier.width(if (com.compilandia.ui.LocalJanela.current.faixa == com.compilandia.ui.Faixa.EXPANDIDA) 320.dp else 260.dp).fillMaxHeight().background(Palette.paper)) {
-                        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(top = 6.dp)) {
+                    Column(Modifier.width(if (com.compilandia.ui.LocalJanela.current.faixa == com.compilandia.ui.Faixa.EXPANDIDA) 340.dp else 280.dp).fillMaxHeight().background(Palette.paper)) {
+                        proximo()
+                        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(top = 4.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             metas()
                             Column(Modifier.fillMaxWidth().padding(horizontal = 12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 for (q in quests) QuestChip(q, Modifier.fillMaxWidth(), Palette.paperDark)
                             }
                         }
-                        proximo()
                     }
                 }
             } else {
                 sala(Modifier.weight(1f).fillMaxWidth())
-                metas()
-                if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 6.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    for (q in quests) QuestChip(q, Modifier.weight(1f))
+                Column(Modifier.fillMaxWidth().background(Palette.paper)) {
+                    proximo()
+                    metas()
+                    if (metasAbertas) Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp).padding(bottom = 8.dp), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        for (q in quests) QuestChip(q, Modifier.weight(1f), Palette.paperDark)
+                    }
                 }
-                proximo()
             }
         }
         if (gaveta) GavetaJogar(app, now) { gaveta = false }
@@ -218,10 +214,6 @@ private fun RoomHud(app: AppState) {
         Image(painterResource(Res.drawable.prop_gear), tx("comum_engrenagens"), Modifier.size(24.dp))
         HudText("${ls.gears}")
         Spacer(Modifier.weight(1f))
-        Ring((ls.dailyXp.toFloat() / DAILY_XP_GOAL).coerceIn(0f, 1f), Modifier.size(32.dp))
-        Column {
-            Text("${ls.dailyXp}/$DAILY_XP_GOAL", color = Color(0xFFF2EEE3), style = MaterialTheme.typography.labelMedium)
-        }
         Box(Modifier.size(36.dp).clip(RoundedCornerShape(8.dp)).clickable { app.go(Screen.Settings) }, contentAlignment = Alignment.Center) {
             GearIcon(Color(0xFFF2EEE3))
         }
@@ -249,19 +241,6 @@ fun Flame(modifier: Modifier) {
 }
 
 @Composable
-private fun Ring(p: Float, modifier: Modifier) {
-    val track = Palette.drawerLo
-    val fill = Palette.hazard
-    Canvas(modifier) {
-        val w = size.width * 0.16f
-        val r = size.width / 2 - w / 2
-        val c = Offset(size.width / 2, size.height / 2)
-        drawCircle(track, r, c, style = Stroke(w))
-        drawArc(fill, -90f, 360f * p, false, Offset(w / 2, w / 2), androidx.compose.ui.geometry.Size(r * 2, r * 2), style = Stroke(w, cap = StrokeCap.Round))
-    }
-}
-
-@Composable
 private fun QuestChip(q: Quest, modifier: Modifier, fundo: Color = Palette.paper) {
     Column(modifier.clip(RoundedCornerShape(6.dp)).background(fundo).padding(horizontal = 8.dp, vertical = 5.dp)) {
         Text(q.title, style = MaterialTheme.typography.labelSmall, color = Palette.ink, maxLines = 1)
@@ -271,21 +250,20 @@ private fun QuestChip(q: Quest, modifier: Modifier, fundo: Color = Palette.paper
 }
 
 @Composable
-private fun RoomScene(app: AppState, side: Dp) {
+private fun RoomScene(app: AppState, side: Dp, desafioPendente: Boolean, onJogar: () -> Unit) {
     val l = app.learner
     val ls = app.ls
     val scope = rememberCoroutineScope()
     var hop by remember { mutableIntStateOf(0) }
-    val nextGhosts = remember(ls) { RoomItem.entries.filter { !l.owns(it) }.take(3) }
     Box(Modifier.requiredSize(side)) {
         Image(painterResource(Res.drawable.room_base), tx("roomscreen_oficina_byte"), Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
+        // Só o que você já tem. O que falta comprar fica na Loja, não no meio da sala.
         for ((id, layer) in roomLayers) {
             val item = RoomItem.entries.firstOrNull { it.id == id } ?: continue
-            when {
-                l.owns(item) -> RoomLayerImage(layer, side, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
-                item in nextGhosts -> GhostLayer(layer, side, item, ls.gears >= item.price) { app.go(Screen.Shop) }
-            }
+            if (l.owns(item)) RoomLayerImage(layer, side, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
         }
+        // os móveis são os botões: gaveteiro, monitor, quadro e caixas
+        MoveisDaSala(app, side, desafioPendente, onJogar)
         // o Byte mora na plataforma de recarga, que pulsa como um carregador
         val charge by rememberInfiniteTransition().animateFloat(0f, 1f, infiniteRepeatable(tween(1600), RepeatMode.Reverse))
         val glow = Color(0xFFFFD98A)
@@ -308,9 +286,6 @@ private fun RoomScene(app: AppState, side: Dp) {
             mood = if (ls.streakDays >= 2) Mood.HAPPY else Mood.NEUTRAL, hop = hop,
         )
         com.compilandia.ui.fx.SalaViva(app, side)
-        Pin(side, 0.62f, 0.27f, tx("roomscreen_mapa")) { app.go(Screen.Map) }
-        Pin(side, 0.27f, 0.40f, tx("comum_laboratorio")) { app.go(Screen.Lab) }
-        Pin(side, 0.61f, 0.86f, tx("roomscreen_loja")) { app.go(Screen.Shop) }
     }
 }
 
@@ -329,37 +304,6 @@ private fun RoomLayerImage(layer: RoomLayer, side: Dp, popIn: Boolean, onDone: (
         Modifier.offset(side * layer.x, side * layer.y).size(side * layer.w, side * layer.h).scale(s.value),
         contentScale = ContentScale.FillBounds,
     )
-}
-
-@Composable
-private fun GhostLayer(layer: RoomLayer, side: Dp, item: RoomItem, canBuy: Boolean, onClick: () -> Unit) {
-    val a by rememberInfiniteTransition().animateFloat(0.45f, 1f, infiniteRepeatable(tween(1200), RepeatMode.Reverse))
-    Box(Modifier.offset(side * layer.x, side * layer.y).size(side * layer.w, side * layer.h).clickable(remember { MutableInteractionSource() }, null) { onClick() }) {
-        Image(painterResource(layer.ghost), item.title, Modifier.fillMaxSize().alpha(if (canBuy) a else 0.55f), contentScale = ContentScale.FillBounds)
-        Row(
-            // O preço não quebra linha, mesmo quando o móvel fica estreito na sala pequena.
-            Modifier.align(Alignment.Center).wrapContentSize(unbounded = true).clip(RoundedCornerShape(5.dp)).background(Palette.hazard).padding(horizontal = 5.dp, vertical = 1.dp),
-            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Image(painterResource(Res.drawable.prop_gear), null, Modifier.size(13.dp))
-            Text("${item.price}", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium, softWrap = false)
-        }
-    }
-}
-
-@Composable
-private fun Pin(side: Dp, fx: Float, fy: Float, label: String, onClick: () -> Unit) {
-    val pulse by rememberInfiniteTransition().animateFloat(1f, 1.5f, infiniteRepeatable(tween(1000), RepeatMode.Reverse))
-    Row(
-        Modifier.offset(side * fx, side * fy).clip(RoundedCornerShape(6.dp)).clickable { onClick() }.padding(3.dp),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Box(Modifier.size(11.dp).scale(pulse).clip(CircleShape).background(Palette.hazard))
-        Text(
-            label, color = Color(0xFFF2EEE3), fontFamily = LocalFonts.current.display, style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.clip(RoundedCornerShape(4.dp)).background(Palette.hazardDark.copy(alpha = 0.85f)).padding(horizontal = 6.dp, vertical = 1.dp),
-        )
-    }
 }
 
 /** Loja da oficina: cada peça entra na sala assim que você compra. */

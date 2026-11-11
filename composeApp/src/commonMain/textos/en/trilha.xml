@@ -21,7 +21,6 @@
     <string name="trilha_pulou_aviso">Step skipped. It stays here if you want to come back.</string>
     <string name="trilha_etapas_feitas">%1$s of %2$s steps</string>
     <string name="seucompilador_titulo">Your compiler</string>
-    <string name="seucompilador_sub">The C lessons and the Project Guide, in compiler order</string>
     <string name="seucompilador_trancado">Opens when you finish the Lexical Forest.</string>
     <string name="seucompilador_aula_c">C lesson</string>
     <string name="seucompilador_capitulo">Guide chapter %1$s</string>
@@ -52,4 +51,8 @@
     <string name="trilha_etapa_revisao">Quick review</string>
     <string name="trilha_etapa_revisao_sub">A 30-second clip and a challenge.</string>
     <string name="revisao_desafio">Now a quick challenge</string>
+    <string name="regiao_revisar">Review</string>
+    <string name="regiao_revisar_assunto_1">Review: %1$s</string>
+    <string name="trilha_etapa_fabrica">Build it in the Factory</string>
+    <string name="trilha_etapa_fabrica_sub">The grammar becomes machines and belts.</string>
 </resources>

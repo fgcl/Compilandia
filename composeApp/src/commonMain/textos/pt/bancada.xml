@@ -3,7 +3,6 @@
 <resources>
     <!-- A bancada (J1) -->
     <string name="bancada_titulo">Programar o Byte</string>
-    <string name="bancada_sub">Você monta, o Byte executa, a bancada testa.</string>
     <string name="bancada_fase">Fase %1$s</string>
     <string name="bancada_rodar">Rodar</string>
     <string name="bancada_dica">Dica</string>

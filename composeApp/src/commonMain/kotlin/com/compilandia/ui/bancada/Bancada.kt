@@ -203,7 +203,7 @@ fun BancadasScreen(app: AppState) {
     val l = app.learner
     val ls = app.ls
     Column(Modifier.fillMaxSize()) {
-        Header(tx("bancada_titulo"), tx("bancada_sub"), Palette.hazard)
+        Header(tx("bancada_titulo"), null, Palette.hazard)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             for (r in Robo.entries) {
                 val feitas = remember(ls, r) { Robos.feitas(l, r) }

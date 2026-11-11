@@ -3,7 +3,6 @@
 <resources>
     <!-- The workbench (J1) -->
     <string name="bancada_titulo">Program Byte</string>
-    <string name="bancada_sub">You build, Byte runs it, the workbench tests it.</string>
     <string name="bancada_fase">Level %1$s</string>
     <string name="bancada_rodar">Run</string>
     <string name="bancada_dica">Hint</string>
