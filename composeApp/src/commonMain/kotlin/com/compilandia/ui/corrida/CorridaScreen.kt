@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -161,6 +162,9 @@ fun CorridaScreen(app: AppState, comecaNaOficina: Boolean = false) {
 private fun Hud(sala: Int, vida: Int, pecas: List<Peca>) {
     Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 12.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            // Sair no meio da corrida volta para onde você estava; a corrida não conta.
+            com.compilandia.ui.BotaoVoltar(Palette.ink)
+            Spacer(Modifier.width(10.dp))
             Text(tx("corridascreen_corrida_sala_1_2", sala + 1, SALAS), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
                 for (i in 0 until INTEGRIDADE) Box(Modifier.size(22.dp, 13.dp).clip(RoundedCornerShape(3.dp)).background(if (i < vida) Palette.green else Palette.drawerLo))

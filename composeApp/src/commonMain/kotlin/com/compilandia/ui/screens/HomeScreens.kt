@@ -133,6 +133,11 @@ fun MapScreen(app: AppState) {
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                // O mapa tem cabeçalho próprio, mas a saída fica no mesmo canto das outras telas.
+                if (app.stack.size > 1) {
+                    com.compilandia.ui.BotaoVoltar(Palette.ink)
+                    Spacer(Modifier.width(10.dp))
+                }
                 ByteFigure(Modifier.height(70.dp))
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier.weight(1f)) {
@@ -164,8 +169,10 @@ fun MapScreen(app: AppState) {
                 }
                 // A5: a série em C e o Guia do TP numa trilha só, aberta depois da Floresta Léxica.
                 val compiladorAberto = remember(ls) { com.compilandia.content.SeuCompilador.aberta(l) }
+                // Trancada, a gaveta mostra só um cadeado; a frase de quando abre aparece ao tocar.
                 Drawer(
-                    tx("seucompilador_titulo"), note = if (compiladorAberto) null else tx("seucompilador_trancado"), dimmed = !compiladorAberto,
+                    tx("seucompilador_titulo"), dimmed = !compiladorAberto,
+                    fim = if (compiladorAberto) null else ({ com.compilandia.ui.lab.Cadeado(Palette.on(Palette.drawer), Modifier.size(18.dp, 21.dp)) }),
                 ) {
                     if (compiladorAberto) app.go(Screen.SeuCompilador) else app.say(tx("seucompilador_trancado"))
                 }

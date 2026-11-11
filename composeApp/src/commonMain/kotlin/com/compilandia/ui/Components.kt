@@ -2,6 +2,11 @@
 
 package com.compilandia.ui
 
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.compilandia.textos.tx
+
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -157,11 +162,7 @@ fun Header(title: String, subtitle: String? = null, color: Color = Palette.drawe
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (app.stack.size > 1) {
-            Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(fg.copy(alpha = 0.18f))
-                    .clickable { Sound.play(Sfx.CLICK); app.back() },
-                contentAlignment = Alignment.Center,
-            ) { Text("←", color = fg, fontSize = 22.sp, fontWeight = FontWeight.Bold) }
+            BotaoVoltar(fg)
             Spacer(Modifier.width(8.dp))
         }
         Column(Modifier.weight(1f)) {
@@ -367,3 +368,18 @@ fun Pill(text: String, color: Color) {
 
 @Composable
 fun VSpace(h: Int) = Spacer(Modifier.height(h.dp))
+
+/**
+ * O botão de voltar do cabeçalho. Telas com cabeçalho próprio (mapa, corrida) usam o mesmo,
+ * para que toda tela tenha uma saída no mesmo lugar, no canto de cima à esquerda.
+ */
+@Composable
+fun BotaoVoltar(fg: Color, aoVoltar: (() -> Unit)? = null) {
+    val app = AppState.current
+    Box(
+        Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(fg.copy(alpha = 0.18f))
+            .clickable { Sound.play(Sfx.CLICK); if (aoVoltar != null) aoVoltar() else app.back() }
+            .semantics { contentDescription = tx("comum_voltar") }.testTag("voltar"),
+        contentAlignment = Alignment.Center,
+    ) { Text("←", color = fg, fontSize = 22.sp, fontWeight = FontWeight.Bold) }
+}
