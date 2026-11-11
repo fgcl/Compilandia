@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -160,11 +159,7 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
                     }
                 }
                 // A ação da rodada (Conferir, Continuar) fica em cima da barra, perto do polegar.
-                barra.acao?.let { a ->
-                    Box(Modifier.fillMaxWidth().background(Palette.paperDark).padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
-                        BigButton(a.texto, Modifier.fillMaxWidth().testTag("acao-do-jogo"), color = a.cor, textColor = a.corTexto, enabled = a.ativo) { a.faz() }
-                    }
-                }
+                AcaoDaBarra(barra, embaixo = 0.dp)
                 Row(
                     Modifier.fillMaxWidth().background(Palette.paperDark).padding(8.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp),

@@ -11,7 +11,6 @@ private val p4Cards: List<SkillCard> = listOf(
         skill = Skill.NFA_TO_DFA,
         oneLiner = tx("lessonspart4_construcao_subconjuntos_transforma_afn_em"),
         hook = tx("lessonspart4_anda_fecha_porta_move_com"),
-        feynmanPrompt = tx("lessonspart4_explique_para_amigo_12_anos"),
         keyTerms = listOf(tx("comum_kt_conjunto"), tx("comum_kt_fecho"), "move", "final", tx("comum_kt_morto"), tx("comum_kt_inicial")),
         commonMistakes = listOf(
             tx("lessonspart4_esquecer_fecho_depois_move"),
@@ -36,7 +35,6 @@ private val p4Cards: List<SkillCard> = listOf(
         skill = Skill.LEX_FLEX,
         oneLiner = tx("lessonspart4_lex_flex_le_arquivo_l"),
         hook = tx("lessonspart4_d_r_c_guloso_mas"),
-        feynmanPrompt = tx("lessonspart4_explique_para_amigo_12_anos_2"),
         keyTerms = listOf(tx("comum_kt_regra"), tx("comum_kt_padr"), tx("comum_kt_maior"), tx("comum_kt_primeir"), "yytext", "yylex", "return"),
         commonMistakes = listOf(
             tx("lessonspart4_por_regra_identificador_antes_das"),
@@ -61,7 +59,6 @@ private val p4Cards: List<SkillCard> = listOf(
         skill = Skill.ERROR_RECOVERY,
         oneLiner = tx("lessonspart4_analisador_detecta_erro_no_primeiro"),
         hook = tx("lessonspart4_first_fica_follow_foge_panico"),
-        feynmanPrompt = tx("lessonspart4_explique_para_amigo_12_anos_3"),
         keyTerms = listOf(tx("lessonspart4_panico"), tx("comum_kt_sincroniza"), "follow", tx("comum_kt_descart"), tx("comum_kt_prefixo"), tx("comum_kt_erro")),
         commonMistakes = listOf(
             tx("lessonspart4_achar_que_recuperar_erro_corrigir"),

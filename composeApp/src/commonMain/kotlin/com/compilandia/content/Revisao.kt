@@ -19,14 +19,14 @@ enum class FormatoRevisao {
     ROBO,
     /** O clipe de 30 segundos (A7). */
     CLIPE,
-    /** Explicar com as próprias palavras. */
-    FEYNMAN,
+    /** Um jogo do assunto: existe para todo assunto, então é o último da fila. */
+    JOGO,
     /** A pegadinha do assunto. */
     PEGADINHA;
 
     val titulo: String get() = when (this) {
         PREVER -> tx("revisao_formato_prever"); BUG -> tx("revisao_formato_bug"); ROBO -> tx("revisao_formato_robo")
-        CLIPE -> tx("revisao_formato_clipe"); FEYNMAN -> tx("revisao_formato_feynman"); PEGADINHA -> tx("revisao_formato_pegadinha")
+        CLIPE -> tx("revisao_formato_clipe"); JOGO -> tx("revisao_formato_jogo"); PEGADINHA -> tx("revisao_formato_pegadinha")
     }
 }
 
@@ -44,7 +44,7 @@ object Revisao {
         if (Robo.de(s) != null) add(FormatoRevisao.ROBO)
         if (Episodes.clipes.any { it.skill == s }) add(FormatoRevisao.CLIPE)
         if (Episodes.all.any { it.skill == s && it.temporada == Temporada.PEGADINHA }) add(FormatoRevisao.PEGADINHA)
-        add(FormatoRevisao.FEYNMAN)
+        add(FormatoRevisao.JOGO)
     }
 
     /** O formato da próxima revisão: o nunca usado primeiro; depois o usado há mais tempo. */

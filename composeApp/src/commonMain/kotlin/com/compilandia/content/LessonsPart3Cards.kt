@@ -10,7 +10,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.SLR_TABLE,
         oneLiner = tx("lessonspart3cards_tabela_slr_1_usa_estados"),
         hook = tx("lessonspart3cards_slr_so_libera_reducao_se"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos"),
         keyTerms = listOf("follow", "shift", "reduce", "goto", tx("comum_kt_conflito"), tx("comum_kt_estado"), "lr(0)"),
         commonMistakes = listOf(
             tx("lessonspart3cards_colocar_reduce_em_todas_colunas"),
@@ -34,7 +33,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.LALR,
         oneLiner = tx("lessonspart3cards_lr_1_poe_lookahead_em"),
         hook = tx("lessonspart3cards_mesmo_esqueleto_roupas_somadas_fusao"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_2"),
         keyTerms = listOf("lookahead", tx("lessonspart3cards_nucleo"), tx("lessonspart3cards_fusao"), "lr(1)", tx("comum_kt_reduzir_reduzir"), "first"),
         commonMistakes = listOf(
             tx("lessonspart3cards_calcular_lookahead_dos_novos_itens"),
@@ -58,7 +56,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.YACC_BISON,
         oneLiner = tx("lessonspart3cards_bison_le_declaracoes_regras_codigo"),
         hook = tx("lessonspart3cards_d_r_c_declara_regra"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_3"),
         keyTerms = listOf("%token", "%left", tx("comum_precedencia"), tx("comum_kt_associatividade"), "yylex", "yyparse", "shift"),
         commonMistakes = listOf(
             tx("lessonspart3cards_achar_que_primeira_linha_left"),
@@ -84,7 +81,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.ATTRIBUTES_TYPES,
         oneLiner = tx("lessonspart3cards_sdd_pendura_atributos_nos_simbolos"),
         hook = tx("lessonspart3cards_h_sintetizado_sobe_herdado_desce"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_4"),
         keyTerms = listOf(tx("comum_kt_sintetizado"), tx("comum_kt_herdado"), tx("lessonspart3cards_atribuida"), tx("lessonspart3cards_l_atribuida"), tx("lessonspart3cards_coercao"), tx("comum_kt_tipo")),
         commonMistakes = listOf(
             tx("lessonspart3cards_chamar_herdado_atributo_calculado_partir"),
@@ -109,7 +105,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.SCOPE_SYMBOLS,
         oneLiner = tx("lessonspart3cards_tabela_simbolos_guarda_nome_tipo"),
         hook = tx("lessonspart3cards_escopo_cebola_procure_dentro_para"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_5"),
         keyTerms = listOf(tx("comum_kt_escopo"), tx("comum_kt_pilha"), tx("comum_tabela_simbolos_2"), tx("comum_kt_aninhamento"), tx("comum_kt_sombreamento"), tx("lessonspart3cards_declaracao")),
         commonMistakes = listOf(
             tx("lessonspart3cards_buscar_base_para_topo_certo"),
@@ -133,7 +128,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.TAC,
         oneLiner = tx("lessonspart3cards_codigo_tres_enderecos_linguagem_intermediari"),
         hook = tx("lessonspart3cards_dois_entram_sai_quadrupla_quatro"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_6"),
         keyTerms = listOf(tx("lessonspart3cards_temporario"), tx("lessonspart3cards_tres_enderecos"), tx("lessonspart3cards_quadrupla"), tx("comum_kt_tripla"), tx("lessonspart3cards_pos_ordem"), tx("lessonspart3cards_rotulo")),
         commonMistakes = listOf(
             tx("lessonspart3cards_colocar_dois_operadores_numa_instrucao"),
@@ -156,7 +150,6 @@ internal val p3Cards: List<SkillCard> = listOf(
         skill = Skill.OPTIMIZATION,
         oneLiner = tx("lessonspart3cards_otimizar_melhorar_codigo_sem_mudar"),
         hook = tx("lessonspart3cards_dopa_sumo_dobra_propaga_subexpressao"),
-        feynmanPrompt = tx("lessonspart3cards_explique_para_amigo_12_anos_7"),
         keyTerms = listOf(tx("lessonspart3cards_dobra_constantes"), tx("lessonspart3cards_propagacao"), tx("lessonspart3cards_subexpressao_comum"), tx("lessonspart3cards_codigo_morto"), tx("lessonspart3cards_bloco_basico"), tx("lessonspart3cards_lider")),
         commonMistakes = listOf(
             tx("lessonspart3cards_reaproveitar_b_depois_ter_sido"),

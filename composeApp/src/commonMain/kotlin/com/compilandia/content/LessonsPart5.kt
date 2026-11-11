@@ -16,7 +16,6 @@ private val p5Cards: List<SkillCard> = listOf(
         skill = Skill.RUNTIME,
         oneLiner = tx("lessonspart5_em_tempo_execucao_cada_chamada"),
         hook = tx("lessonspart5_pilha_pratos_prato_novo_em"),
-        feynmanPrompt = tx("lessonspart5_explique_para_amigo_12_anos"),
         keyTerms = listOf(tx("comum_kt_pilha"), tx("comum_kt_ativa"), tx("comum_kt_retorno"), tx("comum_kt_chamad"), "local", "recurs"),
         commonMistakes = listOf(
             tx("lessonspart5_achar_que_cada_funcao_tem"),
@@ -42,7 +41,6 @@ private val p5Cards: List<SkillCard> = listOf(
         skill = Skill.CODEGEN_MIPS,
         oneLiner = tx("lessonspart5_gerador_traduz_cada_instrucao_tac"),
         hook = tx("lessonspart5_busca_busca_mistura_guarda_falso"),
-        feynmanPrompt = tx("lessonspart5_explique_para_amigo_12_anos_2"),
         keyTerms = listOf(tx("comum_kt_registrador"), "lw", "sw", "data", "text", tx("comum_kt_desvi"), "syscall"),
         commonMistakes = listOf(
             tx("lessonspart5_usar_variavel_memoria_direto_no"),

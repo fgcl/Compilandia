@@ -30,7 +30,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.FIRST,
         oneLiner = tx("lessonspart2_first_conjunto_terminais_que_podem"),
         hook = tx("lessonspart2_first_fila_quem_inicia_terminal"),
-        feynmanPrompt = tx("lessonspart2_explique_para_amigo_que_nunca"),
         keyTerms = listOf("terminal", tx("lessonspart2_comec"), "ε", tx("lessonspart2_anulavel"), tx("comum_nao_terminal"), tx("lessonspart2_ponto_fixo")),
         commonMistakes = listOf(
             tx("lessonspart2_continuar_para_proximo_simbolo_mesmo"),
@@ -54,7 +53,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.FOLLOW,
         oneLiner = tx("lessonspart2_follow_conjunto_terminais_que_podem"),
         hook = tx("lessonspart2_dolar_vizinho_heranca_no_inicial"),
-        feynmanPrompt = tx("lessonspart2_explique_para_sua_avo_como"),
         keyTerms = listOf(tx("comum_kt_depois"), "\$", "first", tx("comum_kt_herda"), tx("comum_kt_inicial"), tx("lessonspart2_anulavel")),
         commonMistakes = listOf(
             tx("lessonspart2_colocar_em_follow_follow_nunca"),
@@ -78,7 +76,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.LL1_TABLE,
         oneLiner = tx("lessonspart2_tabela_preditiva_m_diz_qual"),
         hook = tx("lessonspart2_linha_variavel_coluna_token_primeiro"),
-        feynmanPrompt = tx("lessonspart2_explique_para_colega_outro_curso"),
         keyTerms = listOf("first", "follow", "ε", tx("lessonspart2_celula"), tx("comum_kt_conflito"), "lookahead"),
         commonMistakes = listOf(
             tx("lessonspart2_por_em_colunas_first_em"),
@@ -102,7 +99,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.LL1_PARSING,
         oneLiner = tx("lessonspart2_analisador_preditivo_nao_recursivo_usa"),
         hook = tx("lessonspart2_terminal_no_topo_casa_anda"),
-        feynmanPrompt = tx("lessonspart2_explique_para_amigo_como_se"),
         keyTerms = listOf(tx("comum_kt_pilha"), tx("comum_kt_topo"), tx("comum_kt_tabela"), tx("comum_kt_casa"), tx("comum_kt_invertid"), "\$"),
         commonMistakes = listOf(
             tx("lessonspart2_empilhar_lado_direito_na_ordem"),
@@ -126,7 +122,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.RECURSIVE_DESCENT,
         oneLiner = tx("lessonspart2_descida_recursiva_funcao_por_nao"),
         hook = tx("lessonspart2_variavel_funcao_terminal_match_recursao"),
-        feynmanPrompt = tx("lessonspart2_explique_para_alguem_que_programa"),
         keyTerms = listOf(tx("lessonspart2_funcao"), tx("comum_nao_terminal"), "lookahead", "match", tx("comum_recursao_esquerda"), "first"),
         commonMistakes = listOf(
             tx("lessonspart2_usar_gramatica_com_recursao_esquerda"),
@@ -150,7 +145,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.SHIFT_REDUCE,
         oneLiner = tx("lessonspart2_analise_empilha_reduz_bottom_up"),
         hook = tx("lessonspart2_empilha_ate_ver_alca_achou"),
-        feynmanPrompt = tx("lessonspart2_explique_para_amigo_como_se_2"),
         keyTerms = listOf(tx("comum_kt_empilha"), tx("comum_kt_reduz"), "handle", tx("comum_kt_topo"), tx("lessonspart2_mais_direita"), tx("comum_kt_conflito")),
         commonMistakes = listOf(
             tx("lessonspart2_reduzir_qualquer_ocorrencia_lado_direito"),
@@ -173,7 +167,6 @@ val cardsPart2: List<SkillCard> = listOf(
         skill = Skill.LR0_ITEMS,
         oneLiner = tx("lessonspart2_item_lr_0_producao_com"),
         hook = tx("lessonspart2_ponto_voce_esta_aqui_closure"),
-        feynmanPrompt = tx("lessonspart2_explique_para_colega_como_se"),
         keyTerms = listOf(tx("comum_kt_ponto"), "item", "closure", "goto", tx("comum_kt_estado"), tx("comum_kt_aumentada")),
         commonMistakes = listOf(
             tx("lessonspart2_esquecer_aplicar_fechamento_depois_goto"),

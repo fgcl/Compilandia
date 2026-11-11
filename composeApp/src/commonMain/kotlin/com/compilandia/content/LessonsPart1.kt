@@ -13,7 +13,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.PHASES,
         oneLiner = tx("lessonspart1_compilador_linha_montagem_lexica_sintatica"),
         hook = tx("lessonspart1_la_sempre_sai_isso_otimo"),
-        feynmanPrompt = tx("lessonspart1_explique_para_amigo_que_trabalha"),
         keyTerms = listOf(tx("lessonspart1_lexica"), tx("comum_sintatica_2"), tx("lessonspart1_semantica"), tx("lessonspart1_codigo_intermediario"), tx("comum_otimizacao"), tx("comum_tabela_simbolos_2")),
         commonMistakes = listOf(
             tx("lessonspart1_dizer_que_variavel_nao_declarada"),
@@ -36,7 +35,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.TOKENS,
         oneLiner = tx("lessonspart1_lexema_texto_real_token_classe"),
         hook = tx("lessonspart1_token_gaveta_lexema_meia_padrao"),
-        feynmanPrompt = tx("lessonspart1_explique_para_sua_avo_diferenca"),
         keyTerms = listOf("token", tx("comum_kt_lexema"), tx("lessonspart1_padrao"), tx("comum_kt_atributo"), tx("comum_maior_casamento_2"), tx("comum_kt_palavra_chave")),
         commonMistakes = listOf(
             tx("lessonspart1_contar_espacos_comentarios_como_tokens"),
@@ -59,7 +57,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.REGEX_DFA,
         oneLiner = tx("lessonspart1_expressoes_regulares_descrevem_padroes_dos"),
         hook = tx("lessonspart1_thompson_transforma_er_afn_subconjuntos"),
-        feynmanPrompt = tx("lessonspart1_explique_para_amigo_como_trem"),
         keyTerms = listOf(tx("lessonspart1_expressao_regular"), tx("comum_kt_afn"), tx("comum_kt_afd"), tx("comum_kt_estado"), tx("lessonspart1_transicao"), tx("comum_kt_subconjuntos"), "thompson"),
         commonMistakes = listOf(
             tx("lessonspart1_achar_que_afn_reconhece_mais"),
@@ -83,7 +80,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.CFG_DERIVATION,
         oneLiner = tx("lessonspart1_gramatica_livre_contexto_n_t"),
         hook = tx("lessonspart1_g_n_t_p_nunca"),
-        feynmanPrompt = tx("lessonspart1_explique_para_colega_ensino_medio"),
         keyTerms = listOf("terminal", tx("comum_nao_terminal"), tx("lessonspart1_producao"), tx("comum_simbolo_inicial"), tx("lessonspart1_derivacao"), tx("comum_arvore")),
         commonMistakes = listOf(
             tx("lessonspart1_numa_derivacao_mais_esquerda_trocar"),
@@ -106,7 +102,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.AMBIGUITY,
         oneLiner = tx("lessonspart1_gramatica_ambigua_se_alguma_sentenca"),
         hook = tx("lessonspart1_ambi_dois_duas_arvores_para"),
-        feynmanPrompt = tx("lessonspart1_explique_para_amigo_por_que"),
         keyTerms = listOf(tx("comum_ambigua"), tx("lessonspart1_duas_arvores"), tx("lessonspart1_mais_esquerda"), tx("comum_precedencia"), tx("comum_kt_associatividade")),
         commonMistakes = listOf(
             tx("lessonspart1_tentar_provar_ambiguidade_com_derivacao"),
@@ -129,7 +124,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.LEFT_RECURSION,
         oneLiner = tx("solta_lessonspart1_1"),
         hook = tx("lessonspart1_beta_comeca_alfa_repete_epsilon"),
-        feynmanPrompt = tx("lessonspart1_explique_para_seu_irmao_mais"),
         keyTerms = listOf(tx("comum_recursao_esquerda"), tx("comum_kt_descendente"), tx("lessonspart1_laco_infinito"), tx("lessonspart1_novo_nao_terminal"), tx("lessonspart1_mesma_linguagem")),
         commonMistakes = listOf(
             tx("lessonspart1_esquecer_em"),
@@ -153,7 +147,6 @@ val cardsPart1: List<SkillCard> = listOf(
         skill = Skill.LEFT_FACTORING,
         oneLiner = tx("lessonspart1_quando_duas_alternativas_comecam_com"),
         hook = tx("lessonspart1_ab_ac_b_c_coloque"),
-        feynmanPrompt = tx("lessonspart1_explique_para_amigo_como_menu"),
         keyTerms = listOf(tx("comum_prefixo_comum"), tx("comum_fatoracao"), tx("lessonspart1_novo_nao_terminal"), tx("comum_kt_adiar"), tx("comum_kt_preditivo")),
         commonMistakes = listOf(
             tx("lessonspart1_achar_que_fatoracao_elimina_ambiguidade"),

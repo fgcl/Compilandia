@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -392,6 +393,13 @@ fun LL1SudokuGame(ctx: GameCtx) {
         tx("gamesgrammar_se_pode_virar_coloque_tambem"),
         "FIRST/FOLLOW: " + t.grammar.nonTerminals.joinToString("  ") { "$it: F{${t.ff.first.getValue(it).joinToString(",")}} W{${t.ff.follow.getValue(it).joinToString(",")}}" },
     )
+    // Sem frase de instrução (mural, rodada 10): a primeira célula pisca uma vez e mostra onde tocar.
+    val pisca = remember { androidx.compose.animation.core.Animatable(0f) }
+    LaunchedEffect(Unit) {
+        if (com.compilandia.ui.ThemeState.reduceMotion) return@LaunchedEffect
+        repeat(2) { pisca.animateTo(0.7f, androidx.compose.animation.core.tween(380)); pisca.animateTo(0f, androidx.compose.animation.core.tween(380)) }
+    }
+    val primeira = g.nonTerminals.first() to t.columns.first()
     Column(Modifier.horizontalScroll(rememberScrollState())) {
         Row { Cell("M", header = true, w = 48); for (c in t.columns) Cell(c, header = true, w = 86) }
         for (nt in g.nonTerminals) Row {
@@ -407,6 +415,7 @@ fun LL1SudokuGame(ctx: GameCtx) {
                         checked && ids == truthIds -> if (ids.isEmpty()) null else Palette.green.copy(alpha = 0.25f)
                         checked -> Palette.red.copy(alpha = 0.25f)
                         key == sel -> Palette.yellow.copy(alpha = 0.6f)
+                        key == primeira && sel == null && pisca.value > 0f -> Palette.yellow.copy(alpha = pisca.value)
                         else -> null
                     },
                     onClick = { if (!checked) sel = key },
@@ -425,7 +434,7 @@ fun LL1SudokuGame(ctx: GameCtx) {
                 }
             }
         }
-    } else if (!checked) Text(tx("gamesgrammar_toque_numa_celula_para_preenche"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
+    }
 
     if (!checked) {
         Text(tx("gamesgrammar_entao_gramatica_ll_1"), style = MaterialTheme.typography.titleSmall)

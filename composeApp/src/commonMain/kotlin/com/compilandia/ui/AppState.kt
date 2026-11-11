@@ -42,7 +42,6 @@ sealed class Screen {
         /** Se veio de um jogo ("Não entendi" durante a partida), volta para ele depois. */
         val returnToGame: Boolean = false,
     ) : Screen()
-    data class Feynman(val skill: Skill) : Screen()
     data class Play(
         val skill: Skill,
         val game: GameId,

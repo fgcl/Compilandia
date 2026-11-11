@@ -48,29 +48,33 @@ import com.compilandia.textos.tx
 private const val SALAS = 9
 private const val INTEGRIDADE = 5
 
-private enum class Peca(val nome: String, val desc: String) {
-    ESCUDO(tx("corridascreen_escudo"), tx("corridascreen_ignora_falha")),
-    DICA(tx("corridascreen_dica_extra"), tx("corridascreen_cada_sala_comeca_com_dica")),
-    REPARO(tx("corridascreen_reparo"), tx("corridascreen_devolve_2_integridade")),
-    IMA(tx("corridascreen_ima"), tx("corridascreen_rende_50_mais_engrenagens")),
+/** A Oficina aparece sozinha antes destas salas (contando de zero): depois da terceira e da sexta. */
+private val SALAS_COM_OFICINA = setOf(3, 6)
+
+/** Escudo ignora uma falha, Dica abre uma dica em cada sala, Reparo devolve 2 de integridade, Ímã rende 50% mais. */
+internal enum class Peca(val nome: String) {
+    ESCUDO(tx("corridascreen_escudo")),
+    DICA(tx("corridascreen_dica_extra")),
+    REPARO(tx("corridascreen_reparo")),
+    IMA(tx("corridascreen_ima")),
 }
 
-private enum class Fase { PORTAS, OFICINA, SALA, BALANCO, FIM }
+private enum class Fase { OFICINA, SALA, BALANCO, FIM }
 
 
 /**
- * Corrida de portas: nove salas com assuntos misturados. Cada escolha muda o risco e o prêmio.
- * Misturar assuntos é o ponto: intercalar faz lembrar mais do que treinar um de cada vez.
- * Perder a corrida não bloqueia nada: dá para recomeçar na hora.
+ * Corrida: nove salas com assuntos misturados, uma atrás da outra, sem porta para escolher
+ * (mural, rodada 10). O nível de cada sala vem do modelo do aluno. Depois da terceira e da sexta
+ * sala, a Oficina oferece uma peça. Misturar assuntos é o ponto: intercalar faz lembrar mais
+ * do que treinar um de cada vez. Perder não bloqueia nada: dá para recomeçar na hora.
  */
 @Composable
-fun CorridaScreen(app: AppState) {
+fun CorridaScreen(app: AppState, comecaNaOficina: Boolean = false) {
     val l = app.learner
     val plano = remember { l.dailyMix(nowMs(), SALAS).let { m -> List(SALAS) { m[it % m.size] } } }
     var sala by remember { mutableIntStateOf(0) }
     var vida by remember { mutableIntStateOf(INTEGRIDADE) }
-    var fase by remember { mutableStateOf(Fase.PORTAS) }
-    var perigosa by remember { mutableStateOf(false) }
+    var fase by remember { mutableStateOf(if (comecaNaOficina) Fase.OFICINA else Fase.SALA) }
     var ganhos by remember { mutableIntStateOf(0) }
     var ultimo by remember { mutableStateOf(0.0) }
     var ganhouSala by remember { mutableIntStateOf(0) }
@@ -86,35 +90,22 @@ fun CorridaScreen(app: AppState) {
             return
         }
         val prox = sala + 1
-        Fx.porta(tx("corridascreen_sala_1_2", prox + 1, SALAS), Palette.drawer) { sala = prox; fase = Fase.PORTAS }
+        Fx.porta(tx("corridascreen_sala_1_2", prox + 1, SALAS), Palette.drawer) { sala = prox; fase = if (prox in SALAS_COM_OFICINA) Fase.OFICINA else Fase.SALA }
     }
 
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
         Hud(sala, vida, pecas)
         HazardStripe()
         when (fase) {
-            Fase.PORTAS -> Portas(plano[sala], onEscolhe = { p ->
-                perigosa = p.perigosa
-                if (p.oficina) fase = Fase.OFICINA else fase = Fase.SALA
-            })
-            Fase.OFICINA -> Column(Modifier.weight(1f).fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                ByteFigure(Modifier.height(150.dp), Mood.HAPPY)
-                Text(tx("corridascreen_oficina_escolha_peca"), style = MaterialTheme.typography.headlineSmall)
-                for (o in ofertas) Column(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(Palette.white).clickable {
-                        Juice.drop()
-                        if (o == Peca.REPARO) vida = (vida + 2).coerceAtMost(INTEGRIDADE) else pecas += o
-                        avanca()
-                    }.padding(14.dp),
-                ) {
-                    Text(o.nome, style = MaterialTheme.typography.titleMedium)
-                    Text(o.desc, style = MaterialTheme.typography.bodyMedium, color = Palette.inkSoft)
-                }
+            Fase.OFICINA -> Oficina(ofertas) { o ->
+                Juice.drop()
+                if (o == Peca.REPARO) vida = (vida + 2).coerceAtMost(INTEGRIDADE) else pecas += o
+                fase = Fase.SALA
             }
             Fase.SALA -> {
                 val m = plano[sala]
-                val nivel = (m.level + if (perigosa) 1 else 0).coerceAtMost(5)
-                val dicas = if (Peca.DICA in pecas && !perigosa) 1 else 0
+                val nivel = m.level.coerceAtMost(5)
+                val dicas = if (Peca.DICA in pecas) 1 else 0
                 DisposableEffect(sala) {
                     Juice.arenas++
                     onDispose {
@@ -122,14 +113,15 @@ fun CorridaScreen(app: AppState) {
                         Juice.combo = 0
                     }
                 }
+                val barra = remember(sala) { com.compilandia.ui.games.BarraDoJogo() }
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text("${m.game.title}: ${m.skill.title}", style = MaterialTheme.typography.titleSmall)
-                    key(sala) {
+                    key(sala) { androidx.compose.runtime.CompositionLocalProvider(com.compilandia.ui.games.LocalBarraDoJogo provides barra) {
                         GameHost(m.game, GameCtx(m.skill, nivel, Random(semente + sala), dicas) { score ->
                             l.recordAttempt(m.skill, m.game, nivel, score, null, 40_000, dicas, nowMs())
                             ultimo = score
                             val passou = score >= 0.6
-                            val base = if (perigosa) 20 else 10
+                            val base = 10
                             val ima = if (Peca.IMA in pecas) 1.5 else 1.0
                             ganhouSala = if (passou) (base * ima).toInt() else 0
                             ganhos += ganhouSala
@@ -140,8 +132,9 @@ fun CorridaScreen(app: AppState) {
                             app.commit()
                             fase = Fase.BALANCO
                         })
-                    }
+                    } }
                 }
+                com.compilandia.ui.games.AcaoDaBarra(barra)
             }
             Fase.BALANCO -> Column(Modifier.weight(1f).fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                 val passou = ultimo >= 0.6
@@ -174,9 +167,7 @@ private fun Hud(sala: Int, vida: Int, pecas: List<Peca>) {
             }
         }
         if (pecas.isNotEmpty()) Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            for (p in pecas) Box(Modifier.clip(RoundedCornerShape(6.dp)).background(Palette.white).padding(horizontal = 8.dp, vertical = 3.dp)) {
-                Text(p.nome, style = MaterialTheme.typography.labelMedium)
-            }
+            for (p in pecas) PecaIcone(p, 26.dp)
         }
     }
 }

@@ -3,7 +3,6 @@
 <resources>
     <string name="lessonspart1_compilador_linha_montagem_lexica_sintatica">A compiler is an assembly line: lexical → syntactic → semantic → intermediate code → optimization → code generation, with the symbol table following every phase.</string>
     <string name="lessonspart1_la_sempre_sai_isso_otimo">Lucky Sam Saw Ice On Glass! (Lexical, Syntactic, Semantic, Intermediate, Optimization, Generation)</string>
-    <string name="lessonspart1_explique_para_amigo_que_trabalha">Explain to a friend who works at a snack bar how a compiler turns code into a program, as if it were an order going from the counter to the kitchen.</string>
     <string name="lessonspart1_lexica">lexical</string>
     <string name="lessonspart1_semantica">semantic</string>
     <string name="lessonspart1_codigo_intermediario">intermediate code</string>
@@ -29,7 +28,6 @@
     <string name="lessonspart1_m_linguagens_n_maquinas_m">m languages + n machines = m + n pieces, not m × n compilers</string>
     <string name="lessonspart1_lexema_texto_real_token_classe">The lexeme is the actual text, the token is the class (name + attribute) and the pattern is the rule that says which lexemes belong to the token.</string>
     <string name="lessonspart1_token_gaveta_lexema_meia_padrao">The token is the drawer, the lexeme is the sock, the pattern is the label.</string>
-    <string name="lessonspart1_explique_para_sua_avo_diferenca">Explain to your grandma the difference between token, lexeme and pattern, as if you were organizing her sock drawer.</string>
     <string name="lessonspart1_padrao">pattern</string>
     <string name="lessonspart1_contar_espacos_comentarios_como_tokens">Counting spaces and comments as tokens.</string>
     <string name="lessonspart1_separar_em_dois_tokens_maior">Splitting `&gt;=` into two tokens (longest match takes `&gt;=` whole).</string>
@@ -51,7 +49,6 @@
     <string name="lessonspart1_nao_fi_identificador_valido">No: fi is a valid identifier</string>
     <string name="lessonspart1_expressoes_regulares_descrevem_padroes_dos">Regular expressions describe token patterns; Thompson turns them into an NFA, and the subset construction produces a DFA that recognizes each string with one step per character.</string>
     <string name="lessonspart1_thompson_transforma_er_afn_subconjuntos">Thompson Transforms (regex → NFA), Subsets Simplify (NFA → DFA).</string>
-    <string name="lessonspart1_explique_para_amigo_como_trem">Explain to a friend how a train that only runs on tracks marked with letters can decide whether a word is valid, as if they were the driver.</string>
     <string name="lessonspart1_expressao_regular">regular expression</string>
     <string name="lessonspart1_transicao">transition</string>
     <string name="lessonspart1_achar_que_afn_reconhece_mais">Thinking an NFA recognizes more languages than a DFA.</string>
@@ -73,7 +70,6 @@
     <string name="lessonspart1_nao_linguagem_nao_regular">No: the language isn't regular</string>
     <string name="lessonspart1_gramatica_livre_contexto_n_t">A context-free grammar (N, T, P, S) generates sentences by replacing nonterminals with the right sides of productions; the parse tree sums up those replacements.</string>
     <string name="lessonspart1_g_n_t_p_nunca">G = (N, T, P, S): Never Take a Paper unStudied.</string>
-    <string name="lessonspart1_explique_para_colega_ensino_medio">Explain to a high school friend what a leftmost derivation is, as if it were sentence diagramming from English class.</string>
     <string name="lessonspart1_producao">production</string>
     <string name="lessonspart1_derivacao">derivation</string>
     <string name="lessonspart1_numa_derivacao_mais_esquerda_trocar">In a leftmost derivation, replacing a nonterminal that isn't the leftmost one.</string>
@@ -96,7 +92,6 @@
     <string name="lessonspart1_lado_esquerdo_unico_nt_trocado">The left side is a single nonterminal, replaced without looking at what's around it</string>
     <string name="lessonspart1_gramatica_ambigua_se_alguma_sentenca">A grammar is ambiguous if some sentence has two parse trees (two leftmost derivations); it's fixed with precedence levels or disambiguation rules.</string>
     <string name="lessonspart1_ambi_dois_duas_arvores_para">Ambi = two: two trees for the same sentence. More precedence = deeper in the tree.</string>
-    <string name="lessonspart1_explique_para_amigo_por_que">Explain to a friend why 'The police saw the thief with binoculars' and 2 + 3 * 4 show the same problem a compiler must avoid.</string>
     <string name="lessonspart1_duas_arvores">two trees</string>
     <string name="lessonspart1_mais_esquerda">leftmost</string>
     <string name="lessonspart1_tentar_provar_ambiguidade_com_derivacao">Trying to prove ambiguity with one ⇒lm derivation and one ⇒rm derivation.</string>
@@ -119,7 +114,6 @@
     <string name="lessonspart1_decidir_se_glc_ambigua_decidivel">Is deciding whether a CFG is ambiguous decidable?</string>
     <string name="lessonspart1_nao_indecidivel">No, it's undecidable</string>
     <string name="lessonspart1_beta_comeca_alfa_repete_epsilon">Beta starts, alpha repeats, epsilon ends.</string>
-    <string name="lessonspart1_explique_para_seu_irmao_mais">Explain to your little brother why the sign 'to get document A, show document A' locks up a top-down parser, and how to fix the rule.</string>
     <string name="lessonspart1_laco_infinito">infinite loop</string>
     <string name="lessonspart1_novo_nao_terminal">new nonterminal</string>
     <string name="lessonspart1_mesma_linguagem">same language</string>
@@ -140,7 +134,6 @@
     <string name="lessonspart1_nao_lr_lida_bem_com">No, LR handles it well</string>
     <string name="lessonspart1_quando_duas_alternativas_comecam_com">When two alternatives start with the same prefix α, pull α out: A → αA' and A' → β₁ | β₂, putting off the predictive parser's decision.</string>
     <string name="lessonspart1_ab_ac_b_c_coloque">ab + ac = a(b + c): pull out the common prefix.</string>
-    <string name="lessonspart1_explique_para_amigo_como_menu">Explain to a friend how a phone menu with options that start the same way ('billing…') shows why we need left factoring.</string>
     <string name="lessonspart1_achar_que_fatoracao_elimina_ambiguidade">Thinking factoring removes ambiguity.</string>
     <string name="lessonspart1_parar_na_primeira_rodada_sem">Stopping after the first round without factoring the new nonterminal.</string>
     <string name="lessonspart1_usar_prefixo_que_nao_comum">Using a prefix that isn't common to all alternatives in the group.</string>
@@ -886,7 +879,6 @@
     <string name="lessonspart1c_prefixo_comum_x_y_x">Common prefix `x y`: A → x y A'; A' → z | ε.</string>
     <string name="lessonspart2_first_conjunto_terminais_que_podem">FIRST(α) is the set of terminals that can start some string derived from α, plus ε if α can derive the empty string.</string>
     <string name="lessonspart2_first_fila_quem_inicia_terminal">FIRST = who's First in line. A terminal in front goes in, done; a variable in front lends its FIRST; if it can be absent, it passes the turn to its neighbor.</string>
-    <string name="lessonspart2_explique_para_amigo_que_nunca">Explain to a friend who has never seen a grammar, as if it were a cafeteria line, what the FIRST of a nonterminal is and when ε goes into the set.</string>
     <string name="lessonspart2_comec">start</string>
     <string name="lessonspart2_anulavel">nullable</string>
     <string name="lessonspart2_ponto_fixo">fixed point</string>
@@ -907,7 +899,6 @@
     <string name="lessonspart2_c_calculo_nao_trava_com">{c}: the computation doesn't get stuck on left recursion.</string>
     <string name="lessonspart2_follow_conjunto_terminais_que_podem">FOLLOW(A) is the set of terminals that can appear immediately to the right of A in some sentential form; $ goes in if A can end the sentence.</string>
     <string name="lessonspart2_dolar_vizinho_heranca_no_inicial">Dollar, Neighbor, Inheritance: $ in the start symbol; the right neighbor lends its FIRST (without ε); whoever is at the end inherits the parent's FOLLOW.</string>
-    <string name="lessonspart2_explique_para_sua_avo_como">Explain to your grandma, as if it were the bus line, who can come right after someone, and why the last one in a group inherits whoever comes after the group.</string>
     <string name="lessonspart2_colocar_em_follow_follow_nunca">Putting ε in FOLLOW (FOLLOW never has ε).</string>
     <string name="lessonspart2_esquecer_no_follow_simbolo_inicial">Forgetting the $ in the FOLLOW of the start symbol.</string>
     <string name="lessonspart2_inverter_heranca_follow_follow_b">Flipping the inheritance: it's FOLLOW(A) ⊆ FOLLOW(B) for A → α B, not the other way around.</string>
@@ -924,7 +915,6 @@
     <string name="lessonspart2_decidir_onde_colocar_producoes_que">Deciding where to put the productions that derive ε.</string>
     <string name="lessonspart2_tabela_preditiva_m_diz_qual">The predictive table M[A, a] says which production of A to use when the next token is a; the grammar is LL(1) if no cell has two productions.</string>
     <string name="lessonspart2_linha_variavel_coluna_token_primeiro">Row is the Variable, Column is the Token. First the FIRST; if ε shows up, call the FOLLOW. LL(1) Sudoku: one cell, one production.</string>
-    <string name="lessonspart2_explique_para_colega_outro_curso">Explain to a classmate from another program, as if it were a doorman's notebook, how each production ends up in each cell of the LL(1) table and what a conflict is.</string>
     <string name="lessonspart2_celula">cell</string>
     <string name="lessonspart2_por_em_colunas_first_em">Putting A → ε in FIRST columns instead of the FOLLOW(A) columns.</string>
     <string name="lessonspart2_esquecer_coluna">Forgetting the $ column.</string>
@@ -947,7 +937,6 @@
     <string name="lessonspart2_m_na_gramatica_expressoes_ll">M[E', )] in the LL(1) expression grammar?</string>
     <string name="lessonspart2_analisador_preditivo_nao_recursivo_usa">The nonrecursive predictive parser uses a stack (starting with $ S) and the table M: a terminal on top matches the input; a nonterminal on top is replaced by the right side, reversed.</string>
     <string name="lessonspart2_terminal_no_topo_casa_anda">Terminal on top? Match and move. Variable on top? Check and swap. $ with $? Party! (And pack the backpack: what you use first goes in last.)</string>
-    <string name="lessonspart2_explique_para_amigo_como_se">Explain to a friend, as if the stack were a to-do list, how the LL(1) parser decides what to do at each step and when it accepts.</string>
     <string name="lessonspart2_empilhar_lado_direito_na_ordem">Pushing the right side in normal order (the first symbol has to end up on top).</string>
     <string name="lessonspart2_avancar_entrada_numa_expansao_so">Advancing the input on an expansion (only matching consumes a token).</string>
     <string name="lessonspart2_empilhar_producao_vazia_so_desempilha">Pushing ε (an empty production only pops).</string>
@@ -968,7 +957,6 @@
     <string name="lessonspart2_analisador_preditivo_faz_backtracking">Does the predictive parser backtrack?</string>
     <string name="lessonspart2_descida_recursiva_funcao_por_nao">Recursive descent: one function per nonterminal; the lookahead picks the production, terminals become matches and nonterminals become calls.</string>
     <string name="lessonspart2_variavel_funcao_terminal_match_recursao">One variable, one function; one terminal, one match. Left recursion = a dog chasing its tail.</string>
-    <string name="lessonspart2_explique_para_alguem_que_programa">Explain to someone who programs but never studied compilers, as if it were an office with one clerk per window, how to write a recursive descent parser.</string>
     <string name="lessonspart2_funcao">function</string>
     <string name="lessonspart2_usar_gramatica_com_recursao_esquerda">Using a grammar with left recursion (infinite loop).</string>
     <string name="lessonspart2_nao_fatorar_esquerda_token_nao">Not left factoring (one token doesn't decide).</string>
@@ -991,7 +979,6 @@
     <string name="lessonspart2_que_classe_gramaticas_forma_preditiva">What class of grammars does the predictive form accept?</string>
     <string name="lessonspart2_analise_empilha_reduz_bottom_up">Shift-reduce (bottom-up) parsing: shift tokens until the handle shows up on top and then reduce to the left side; the reductions form the rightmost derivation in reverse.</string>
     <string name="lessonspart2_empilha_ate_ver_alca_achou">Shift until you see the handle; found the handle on top, reduce. LR = rightmost, back to front.</string>
-    <string name="lessonspart2_explique_para_amigo_como_se_2">Explain to a friend, as if it were building Lego from the bottom up, what the shift and reduce actions are and what a handle is.</string>
     <string name="lessonspart2_mais_direita">rightmost</string>
     <string name="lessonspart2_reduzir_qualquer_ocorrencia_lado_direito">Reducing any occurrence of a right side (not every occurrence is a handle).</string>
     <string name="lessonspart2_achar_que_reduzir_consome_token">Thinking reducing consumes an input token.</string>
@@ -1015,7 +1002,6 @@
     <string name="lessonspart2_rightmost_derivacao_mais_direita_ao">Rightmost: rightmost derivation (in reverse).</string>
     <string name="lessonspart2_item_lr_0_producao_com">An LR(0) item is a production with a dot marking the progress; the closure adds B → •γ when the dot is before B, and the goto moves the dot over a symbol and closes.</string>
     <string name="lessonspart2_ponto_voce_esta_aqui_closure">Dot = 'you are here'. Closure = invites the family. Goto = kicks the dot one step and celebrates with the family.</string>
-    <string name="lessonspart2_explique_para_colega_como_se">Explain to a classmate, as if the dot were a download progress bar, what an LR(0) item is and how closure and goto build the states.</string>
     <string name="lessonspart2_esquecer_aplicar_fechamento_depois_goto">Forgetting to apply the closure after the goto.</string>
     <string name="lessonspart2_no_fechamento_adicionar_itens_com">In the closure, adding items with the dot not at the start.</string>
     <string name="lessonspart2_fechar_sobre_terminais_so_nao">Closing over terminals (only nonterminals after the dot invite productions).</string>
@@ -2085,7 +2071,6 @@
     <string name="lessonspart3_slr_vs_lalr_ao_pe">SLR vs LALR, by the fireside. SLR: 'I'm simple, everyone understands me.' LALR: 'And I'm your size, but I know where each item came from. On the pointer grammar, you got stuck and I didn't.'</string>
     <string name="lessonspart3cards_tabela_slr_1_usa_estados">The SLR(1) table uses the LR(0) states: a terminal after the dot becomes shift, a nonterminal becomes GOTO and a complete item A → α • becomes reduce only in the FOLLOW(A) columns.</string>
     <string name="lessonspart3cards_slr_so_libera_reducao_se">SLR = 'Sure, Let it Reduce', only if the next token is on the FOLLOW doorman's clipboard.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos">Explain to a 12-year-old friend how the server at the açaí bar decides between putting one more ingredient in the cup or closing the combo, and what happens when the chart on the wall says both.</string>
     <string name="lessonspart3cards_colocar_reduce_em_todas_colunas">Putting the reduce in every column (that's LR(0), not SLR)</string>
     <string name="lessonspart3cards_usar_first_em_vez_follow">Using FIRST instead of FOLLOW to decide the reductions</string>
     <string name="lessonspart3cards_escrever_shift_na_tabela_goto">Writing shift in the GOTO table or a plain number in ACTION</string>
@@ -2107,7 +2092,6 @@
     <string name="lessonspart3cards_toda_gramatica_ambigua_conflito_slr">Does every ambiguous grammar give an SLR conflict?</string>
     <string name="lessonspart3cards_lr_1_poe_lookahead_em">LR(1) puts a lookahead on each item and only reduces on it; LALR(1) merges LR(1) states with the same core, ending up the size of SLR with almost all the power of LR(1).</string>
     <string name="lessonspart3cards_mesmo_esqueleto_roupas_somadas_fusao">Same skeleton, clothes added up: merging only creates double Reduces, never Shift/Reduce.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_2">Explain to a 12-year-old friend the bus company that writes on each passenger's forehead where they get off, and why merging buses with the same routes saves money but sometimes confuses who gets off.</string>
     <string name="lessonspart3cards_nucleo">core</string>
     <string name="lessonspart3cards_fusao">merging</string>
     <string name="lessonspart3cards_calcular_lookahead_dos_novos_itens">Computing the lookahead of the new items with FOLLOW instead of FIRST(β a)</string>
@@ -2130,7 +2114,6 @@
     <string name="lessonspart3cards_exemplo_lr_1_mas_nao">Example of LR(1) but not LALR(1)?</string>
     <string name="lessonspart3cards_bison_le_declaracoes_regras_codigo">Bison reads declarations %% rules %% code, generates an LALR(1) parser in C (yyparse) that asks yylex for tokens, and resolves conflicts with %left/%right/%nonassoc, %prec or, by default, shift.</string>
     <string name="lessonspart3cards_d_r_c_declara_regra">D-R-C: Declare %% Rule %% Code. When in doubt, shift; the last one in the %left line is the VIP.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_3">Explain to a 12-year-old friend how the parser factory takes an order form in three parts and why the calculator without %left thinks 2*3+4 is 14.</string>
     <string name="lessonspart3cards_achar_que_primeira_linha_left">Thinking the first %left line has the highest precedence (it's the lowest)</string>
     <string name="lessonspart3cards_usar_right_para_subtracao_ou">Using %right for subtraction or division</string>
     <string name="lessonspart3cards_achar_que_bison_falha_em">Thinking Bison fails on a conflict: it warns and picks shift (or the first rule in R/R)</string>
@@ -2156,7 +2139,6 @@
     <string name="lessonspart3cards_yylex_escrito_mao_ou_gerado">yylex (written by hand or generated by Flex)</string>
     <string name="lessonspart3cards_sdd_pendura_atributos_nos_simbolos">An SDD hangs attributes on grammar symbols: synthesized ones go up from the children, inherited ones come down from the parent/siblings; type checking is an SDD that computes types and inserts coercions.</string>
     <string name="lessonspart3cards_h_sintetizado_sobe_herdado_desce">S↑ I↓: Synthesized goes up, Inherited comes down. S-attributed = Synthesized only; L-attributed = inherits from the Left.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_4">Explain to a 12-year-old friend how the semester average (which goes up from the grades) and the family name (which comes down from the parents) help the compiler find out that a + x * 2 is float.</string>
     <string name="lessonspart3cards_atribuida">s-attributed</string>
     <string name="lessonspart3cards_l_atribuida">l-attributed</string>
     <string name="lessonspart3cards_coercao">coercion</string>
@@ -2183,7 +2165,6 @@
     <string name="lessonspart3cards_1_3_no_bison_que">What kind of attribute is $$ = $1 + $3 in Bison?</string>
     <string name="lessonspart3cards_tabela_simbolos_guarda_nome_tipo">The symbol table keeps name, type and kind; with static scope, it's a stack of tables: entering a block pushes, leaving pops, and the lookup goes from the top to the bottom.</string>
     <string name="lessonspart3cards_escopo_cebola_procure_dentro_para">Scope is an onion: search from the inside out. An opening brace pushes, a closing brace pops.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_5">Explain to a 12-year-old friend how the condo doorman finds the right John when there's one John in the apartment and another in the building.</string>
     <string name="lessonspart3cards_declaracao">declaration</string>
     <string name="lessonspart3cards_buscar_base_para_topo_certo">Searching from the bottom to the top (the right way is from the top, innermost, to the bottom)</string>
     <string name="lessonspart3cards_confundir_sombreamento_escopo_interno_com">Mixing up shadowing (inner scope) with redeclaration (same scope)</string>
@@ -2208,7 +2189,6 @@
     <string name="lessonspart3cards_pela_cadeia_chamadas_em_execucao">By the chain of calls running</string>
     <string name="lessonspart3cards_codigo_tres_enderecos_linguagem_intermediari">Three-address code is an intermediate language with at most one operator per instruction (x = y op z), generated in post-order with temporaries, and represented as quadruples or triples.</string>
     <string name="lessonspart3cards_dois_entram_sai_quadrupla_quatro">Two go in, one comes out. QUADruple = four fields; the TRIple lives at its address (position).</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_6">Explain to a 12-year-old friend how to write a + b * c as a recipe for a helper who only does one operation at a time and keeps everything in bowls t1, t2.</string>
     <string name="lessonspart3cards_temporario">temporary</string>
     <string name="lessonspart3cards_tres_enderecos">three addresses</string>
     <string name="lessonspart3cards_quadrupla">quadruple</string>
@@ -2234,7 +2214,6 @@
     <string name="lessonspart3cards_desvios_condicionais_goto_rotulos">Conditional jumps, goto and labels</string>
     <string name="lessonspart3cards_otimizar_melhorar_codigo_sem_mudar">Optimizing means improving code without changing its behavior: constant folding and propagation, eliminating common subexpressions and dead code, usually within basic blocks.</string>
     <string name="lessonspart3cards_dopa_sumo_dobra_propaga_subexpressao">FPCD: Fold, Propagate, Common subexpression, Dead code. Leaders = FTA: First, Target, After a jump.</string>
-    <string name="lessonspart3cards_explique_para_amigo_12_anos_7">Explain to a 12-year-old friend why you compute 2 × 6 eggs at home, buy milk only once and cross off the yeast no recipe uses.</string>
     <string name="lessonspart3cards_dobra_constantes">constant folding</string>
     <string name="lessonspart3cards_propagacao">propagation</string>
     <string name="lessonspart3cards_subexpressao_comum">common subexpression</string>
@@ -2810,7 +2789,6 @@
     <string name="lessonspart3c_dobra_constantes_eu_faco_contas">Constant folding: 'I do the math before the show starts.' Dead code: 'And I take off the stage whoever has no lines.' Common subexpression: 'And I don't let anyone repeat the same joke.'</string>
     <string name="lessonspart4_construcao_subconjuntos_transforma_afn_em">The subset construction turns an NFA into a DFA: each DFA state is a SET of NFA states, starting at ε-closure({s₀}), with Dtran[T, a] = ε-closure(move(T, a)); every set that contains an NFA final state is final.</string>
     <string name="lessonspart4_anda_fecha_porta_move_com">Move and close the door: move with the letter, then ε-closure. A basket with one prize fruit is final; an empty basket is the dead state.</string>
-    <string name="lessonspart4_explique_para_amigo_12_anos">Explain to a 12-year-old friend how you can keep track of a group that splits up at the bus station just by looking at the group chat's list, and why that list becomes an automaton that's never in doubt.</string>
     <string name="lessonspart4_esquecer_fecho_depois_move">Forgetting the ε-closure after the move</string>
     <string name="lessonspart4_usar_s0_como_estado_inicial">Using {s₀} as the start state instead of ε-closure({s₀})</string>
     <string name="lessonspart4_marcar_como_final_so_conjunto">Marking as final only the set where ALL states are final (one is enough)</string>
@@ -2834,7 +2812,6 @@
     <string name="lessonspart4_passo_por_caractere_sem_carregar">One step per character, without carrying sets</string>
     <string name="lessonspart4_lex_flex_le_arquivo_l">Lex/Flex reads a .l file (definitions %% rules 'pattern { action }' %% C code) and generates lex.yy.c with the function yylex(), which returns one token per call using the longest match and, on a tie, the rule listed first.</string>
     <string name="lessonspart4_d_r_c_guloso_mas">D-R-C, greedy but polite: eat the biggest piece; on a tie, respect the line. A keyword is VIP: it comes before ID.</string>
-    <string name="lessonspart4_explique_para_amigo_12_anos_2">Explain to a 12-year-old friend how a post office rule sheet becomes a sorting robot, and why the order of the sheet's lines sometimes matters and sometimes doesn't.</string>
     <string name="lessonspart4_por_regra_identificador_antes_das">Putting the identifier rule before the keywords</string>
     <string name="lessonspart4_por_regra_coringa_antes_das">Putting the catch-all '.' rule before the other rules</string>
     <string name="lessonspart4_achar_que_ordem_das_regras">Thinking rule order beats lexeme length</string>
@@ -2858,7 +2835,6 @@
     <string name="lessonspart4_como_compilar_scanner_tp">How do you compile the project's scanner?</string>
     <string name="lessonspart4_analisador_detecta_erro_no_primeiro">The parser detects the error at the first token that makes the input impossible (viable prefix), reports the line and 'expected × found' and recovers to find more errors; in LL(1), panic mode drops tokens until one in FIRST(A) (continue) or in FOLLOW(A) ∪ {$} (pop A).</string>
     <string name="lessonspart4_first_fica_follow_foge_panico">FIRST stays, FOLLOW flees. Panic skips, Phrase patches, Productions predict, Global is a genius.</string>
-    <string name="lessonspart4_explique_para_amigo_12_anos_3">Explain to a 12-year-old friend how an essay grader who finds a mistake keeps reading from the next period, and why that's better than stopping at the first slip.</string>
     <string name="lessonspart4_panico">panic</string>
     <string name="lessonspart4_achar_que_recuperar_erro_corrigir">Thinking recovering from an error means fixing the program</string>
     <string name="lessonspart4_usar_first_como_conjunto_para">Using FIRST(A) as the set for popping A (it's FOLLOW(A))</string>
@@ -3310,7 +3286,6 @@
     <string name="lessonspart4c_mensagem_boa_verdade_tem_linha">A good message has the line and 'expected × found': 'Syntax error on line 7: expected ';' but found 'id''. That's what the professor wants to see in your project.</string>
     <string name="lessonspart5_em_tempo_execucao_cada_chamada">At runtime, each function call gets an activation record (frame) on the stack: parameters, return value and address, links, locals and temporaries; pushed on the call and popped on the return. Whatever needs to outlive the call goes to the heap.</string>
     <string name="lessonspart5_pilha_pratos_prato_novo_em">A stack of plates: a new plate on top, a finished plate comes off the top. Control is for Calls, Access is for Nesting.</string>
-    <string name="lessonspart5_explique_para_amigo_12_anos">Explain to a 12-year-old friend how the restaurant kitchen stacks plates with notes when one recipe needs another recipe, and why, running fat(3), each plate remembers its own n and where to go back to.</string>
     <string name="lessonspart5_achar_que_cada_funcao_tem">Thinking each function has ONE fixed place for its variables (that's static allocation, which doesn't support recursion)</string>
     <string name="lessonspart5_esquecer_quadro_main_ao_contar">Forgetting main's frame when counting the stack's maximum height</string>
     <string name="lessonspart5_confundir_vinculo_controle_quem_chamou">Mixing up the control link (who called) with the access link (where the function was declared in the text)</string>
@@ -3334,7 +3309,6 @@
     <string name="lessonspart5_para_que_lado_pilha_cresce">Which way does the stack grow in MIPS?</string>
     <string name="lessonspart5_gerador_traduz_cada_instrucao_tac">The generator translates each TAC instruction to MIPS in the simple style: it fetches the operands from .data with lw/li, operates in registers and stores with sw, and turns if/while into comparisons (slt/sgt), jumps (beq/bne/j) and new labels.</string>
     <string name="lessonspart5_busca_busca_mistura_guarda_falso">Fetch, fetch, mix, store. False? beq jumps. End of then? j over the else.</string>
-    <string name="lessonspart5_explique_para_amigo_12_anos_2">Explain to a 12-year-old friend how a cook with a tiny counter and a huge pantry prepares x = a + b * 2, and how they skip steps in the recipe with sticky notes like 'if it's false, go to L0'.</string>
     <string name="lessonspart5_usar_variavel_memoria_direto_no">Using a variable from memory directly in add (in MIPS only lw/sw touch memory)</string>
     <string name="lessonspart5_esquecer_j_l1_no_fim">Forgetting the j L1 at the end of the then, making execution 'slide' into the else</string>
     <string name="lessonspart5_reaproveitar_mesmo_rotulo_em_dois">Reusing the same label in two ifs (assembly error)</string>
@@ -3572,7 +3546,6 @@
     <string name="lessonspart5b_memoria_eu_guardo_tudo_sou">Memory: 'I keep everything, I'm huge!' Register: 'And I'm much faster.' Memory: 'But only 32 of you fit...' Register allocator: 'Calm down, everyone, that's what I'm here for.'</string>
     <string name="lessonspart6_minimizar_afd_fundir_estados_equivalentes">Minimizing a DFA means merging the equivalent states (which no string can tell apart): mark every final × non-final pair, propagate the marks through the transitions until it stabilizes, and the pairs left unmarked become a single state: the minimal DFA, unique up to names.</string>
     <string name="lessonspart6_mpj_marca_propaga_junta_morto">MPM: Mark, Propagate, Merge. The dead state votes too.</string>
-    <string name="lessonspart6_explique_para_amigo_12_anos">Explain to a 12-year-old friend how a snack bar owner finds out which servers do exactly the same job, and why, in the DFA for (a|b)*abb, states q0 and q2 become one.</string>
     <string name="lessonspart6_esquecer_completar_afd_com_estado">Forgetting to complete the DFA with the dead state before building the table</string>
     <string name="lessonspart6_marcar_par_com_base_num">Marking a pair based on a destination pair that is NOT marked yet</string>
     <string name="lessonspart6_parar_depois_rodada_sem_repetir">Stopping after one round, without repeating until nothing changes</string>
@@ -3598,7 +3571,6 @@
     <string name="lessonspart6_sim_menos_renomear_estados_myhill">Yes, up to renaming the states (Myhill–Nerode)</string>
     <string name="lessonspart6_arvore_sintatica_abstrata_guarda_so">The abstract syntax tree keeps only operators, operands and constructs (BinOp, Var, Num, Atrib, Se, Enquanto, Bloco), throwing away chains of nonterminals, parentheses, punctuation and ε; the parser builds it (new BinOp in top-down or $$ = new BinOp(...) in Bison) and the later phases walk over it.</string>
     <string name="lessonspart6_ast_arvore_sem_tralha_corta">AST = A Slimmed Tree: it cuts the CPE (Chains, Parentheses, Epsilons). Whoever is deeper works first.</string>
-    <string name="lessonspart6_explique_para_amigo_12_anos_2">Explain to a 12-year-old friend the difference between reading the whole book and reading a good summary, and why the tree for 'a + b * c' drops from 13 nodes to 5 without losing the order of the operations.</string>
     <string name="lessonspart6_criar_nos_para_parenteses_ou">Creating nodes for parentheses or for chain nonterminals (E → T → F)</string>
     <string name="lessonspart6_montar_ast_pendurada_para_direita">Building the AST hanging to the right (recursion instead of a loop) and flipping the associativity of - and /</string>
     <string name="lessonspart6_achar_que_sem_parenteses_precedencia">Thinking that without parentheses the precedence is lost (it lives in the shape of the tree)</string>
@@ -3620,7 +3592,6 @@
     <string name="lessonspart6_nos_ast_com_n_operadores">AST nodes with n binary operators?</string>
     <string name="lessonspart6_alocar_registradores_manter_temporarios_em">Allocating registers means keeping the temporaries in registers instead of memory: liveness is computed back to front (in = use ∪ (out − def)), whoever is alive at the same time gets connected in the interference graph and the graph is colored with k colors (k registers); if that's not possible, some temporary is spilled to memory.</string>
     <string name="lessonspart6_vigor_vivacidade_grafo_colorir_registradores">LGCR: Liveness, Graph, Coloring, Registers. Def kills, use revives. $t = tossed, $s = sacred.</string>
-    <string name="lessonspart6_explique_para_amigo_12_anos_3">Explain to a 12-year-old friend how a kitchen with few counters decides which prep goes on which counter, and why in r = a * b + c * d 2 counters are enough and the trips to the pantry drop from 11 to 5.</string>
     <string name="lessonspart6_fazer_analise_vivacidade_cima_para">Doing the liveness analysis from top to bottom</string>
     <string name="lessonspart6_achar_que_vivo_ja_foi">Thinking 'alive' means 'already defined' (alive means 'will still be read')</string>
     <string name="lessonspart6_ligar_no_grafo_temporarios_que">Connecting in the graph temporaries that are never alive at the same time</string>

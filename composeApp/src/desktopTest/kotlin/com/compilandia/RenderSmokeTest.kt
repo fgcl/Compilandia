@@ -100,7 +100,6 @@ class RenderSmokeTest : RenderBase() {
         shot("03_regiao_templo") { App(stateWith(Screen.RegionView(Region.TEMPLO_TOPDOWN))) }
         shot("04_aula_first_visual") { App(stateWith(Screen.Lesson(Skill.FIRST, Style.VISUAL))) }
         shot("05_aula_bison_historia") { App(stateWith(Screen.Lesson(Skill.YACC_BISON, Style.STORY))) }
-        shot("06_feynman") { App(stateWith(Screen.Feynman(Skill.FOLLOW))) }
         shot("07_jogo_confianca") { App(stateWith(Screen.Play(Skill.TOKENS, GameId.TOKEN_SLICER, 2, seed = 3))) }
         shot("08_flashcards") { App(stateWith(Screen.Flashcards(listOf(Skill.FIRST, Skill.FOLLOW)))) }
         shot("09_painel") { App(stateWith(Screen.Brain)) }
@@ -127,6 +126,7 @@ class RenderSmokeTest : RenderBase() {
         }
         shot("21_caca_bug") { App(stateWith(Screen.CacaBug("else-solto"))) }
         shot("22_corrida") { App(stateWith(Screen.Corrida)) }
+        shot("22_corrida_oficina") { val st = stateWith(Screen.Corrida); CompilandiaTheme { com.compilandia.ui.corrida.CorridaScreen(st, comecaNaOficina = true) } }
         shot("23_desafio") { App(stateWith(Screen.Desafio)) }
         shot("24_feed") { App(stateWith(Screen.Feed)) }
         shot("25_outro_exemplo") { App(stateWith(Screen.Exemplo(Skill.LL1_PARSING))) }

@@ -24,8 +24,8 @@
     <string name="revisao_formato_bug">Revisão: julgar as frases do Bug</string>
     <string name="revisao_formato_robo">Revisão: uma fase do robô</string>
     <string name="revisao_formato_clipe">Revisão: clipe de 30 segundos</string>
-    <string name="revisao_formato_feynman">Revisão: explicar com suas palavras</string>
     <string name="revisao_formato_pegadinha">Revisão: a pegadinha do assunto</string>
+    <string name="revisao_formato_jogo">Revisão: um jogo do assunto</string>
 
     <string name="lembrete_1">%1$s está sumindo da memória. Dois minutos resolvem.</string>
     <string name="lembrete_2">Uma pergunta de %1$s espera por você na oficina.</string>

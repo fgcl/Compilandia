@@ -74,18 +74,19 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
             val f = p.formato ?: com.compilandia.content.FormatoRevisao.CLIPE
             l.usouFormato(s, f.name, nowMs())
             app.commit()
+            val jogo = Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs())
             when (f) {
                 com.compilandia.content.FormatoRevisao.CLIPE, com.compilandia.content.FormatoRevisao.PEGADINHA ->
-                    p.episodio?.let { Screen.Episode(s, id = it.id) } ?: Screen.Feynman(s)
+                    p.episodio?.let { Screen.Episode(s, id = it.id) } ?: jogo
                 com.compilandia.content.FormatoRevisao.PREVER -> Screen.Exemplo(s)
                 com.compilandia.content.FormatoRevisao.BUG -> com.compilandia.content.Ideias.de(s)
-                    .minByOrNull { com.compilandia.content.Ideias.retencao(l, it, nowMs()) }?.let { Screen.CacaBug(it.especie.id) } ?: Screen.Feynman(s)
+                    .minByOrNull { com.compilandia.content.Ideias.retencao(l, it, nowMs()) }?.let { Screen.CacaBug(it.especie.id) } ?: jogo
                 com.compilandia.content.FormatoRevisao.ROBO -> com.compilandia.content.Robo.de(s)?.let { r ->
                     // Uma fase já feita, que gira a cada revisão.
                     val feitas = (0 until r.fases).filter { com.compilandia.content.Robos.feita(l, r, it) }
                     Screen.Bancada(r, feitas.getOrNull(l.skill(s).memory.reviews % feitas.size.coerceAtLeast(1)) ?: -1)
-                } ?: Screen.Feynman(s)
-                com.compilandia.content.FormatoRevisao.FEYNMAN -> Screen.Feynman(s)
+                } ?: jogo
+                com.compilandia.content.FormatoRevisao.JOGO -> jogo
             }
         }
         Etapa.DESAFIO -> Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs())

@@ -104,7 +104,7 @@ data class Lesson(
     val beats: List<Beat>,
 )
 
-/** Ficha de cada habilidade: base para revisão espaçada e autoexplicação (técnica Feynman). */
+/** Ficha de cada habilidade: base para a revisão espaçada. */
 /** Capítulo do Guia do Trabalho Prático: construir um compilador completo. */
 data class GuideChapter(val number: Int, val title: String, val summary: String, val skill: Skill, val beats: List<Beat>)
 
@@ -112,7 +112,6 @@ data class SkillCard(
     val skill: Skill,
     val oneLiner: String,                 // a ideia em uma frase
     val hook: String,                     // gancho mnemônico
-    val feynmanPrompt: String,            // "explique para um amigo de 12 anos..."
     val keyTerms: List<String>,           // termos que uma boa explicação deve conter
     val commonMistakes: List<String>,
     val flashcards: List<Pair<String, String>>, // pergunta -> resposta (revisão relâmpago)

@@ -33,7 +33,6 @@ import com.compilandia.platform.Storage
 import com.compilandia.ui.fx.FxOverlay
 import com.compilandia.ui.games.PlayScreen
 import com.compilandia.ui.screens.BrainScreen
-import com.compilandia.ui.screens.FeynmanScreen
 import com.compilandia.ui.screens.FlashcardScreen
 import com.compilandia.ui.screens.JournalScreen
 import com.compilandia.ui.screens.LessonScreen
@@ -96,7 +95,6 @@ fun App(injected: AppState? = null) {
                     Screen.Bancadas -> ColunaCentral { com.compilandia.ui.bancada.BancadasScreen(app) }
                     is Screen.Retomada -> ColunaCentral { com.compilandia.ui.screens.RetomadaScreen(app, screen.r) }
                     is Screen.Lesson -> ColunaCentral { LessonScreen(app, screen) }
-                    is Screen.Feynman -> ColunaCentral { FeynmanScreen(app, screen.skill) }
                     is Screen.Play -> ColunaCentral { PlayScreen(app, screen) }
                     is Screen.Flashcards -> ColunaCentral { FlashcardScreen(app, screen.skills) }
                     Screen.Brain -> ColunaCentral { BrainScreen(app) }

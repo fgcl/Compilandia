@@ -112,8 +112,8 @@ Fortaleza Bottom-Up (LR) → Oficina Yacc/Bison → Cidade Semântica → Forja 
 Cada erro comum de prova é um Bug com nome: o do Else Solto, o do FOLLOW Vazio, o da Recursão Única. São 34.
 O Bug solta a mentira dele, e você julga três frases, arrastando a carta para um lado ou para o outro. Acertou todas, a figurinha cola.
 
-### Corrida de portas
-Nove salas com assuntos misturados. A cada sala você escolhe uma porta: a tranquila, a perigosa ou a oficina, que dá uma peça.
+### Corrida
+Nove salas com assuntos misturados, uma atrás da outra, no nível que o jogo escolhe para você. Depois da terceira e da sexta sala, a Oficina oferece duas peças: escudo, dica extra, reparo ou ímã.
 Perdeu a integridade, a corrida acaba e dá para recomeçar na hora. Misturar assuntos é o ponto: faz lembrar mais do que treinar um de cada vez.
 
 ### Desafio do dia
@@ -207,14 +207,13 @@ Nos jogos, **Não entendi** abre a aula animada do assunto e **Trocar jogo** mud
 
 ### Técnicas de aprendizagem usadas
 - **Prática de recuperação**: jogos, "pense e toque para revelar" e flashcards.
-- **Repetição espaçada**: curva de esquecimento estilo FSRS. Quando a memória de um assunto cai abaixo de 90%, a trilha oferece uma revisão rápida, e o formato muda a cada vez: prever num exemplo novo, julgar as frases do Bug, uma fase do robô, um clipe de 30 segundos, explicar com suas palavras ou a pegadinha.
+- **Repetição espaçada**: curva de esquecimento estilo FSRS. Quando a memória de um assunto cai abaixo de 90%, a trilha oferece uma revisão rápida, e o formato muda a cada vez: prever num exemplo novo, julgar as frases do Bug, uma fase do robô, um clipe de 30 segundos, a pegadinha ou um jogo do assunto.
 - **Revisão por ideia**: cada frase dos Bugs do Álbum tem memória própria. A revisão volta só na ideia que você esqueceu.
 - **Retomada**: quem volta depois de 2 dias ou mais começa com três frases de verdade ou mentira, tiradas das ideias mais esquecidas. Depois o Continuar segue de onde parou.
 - **Lembrete**, só no celular e desligado até você ligar em Ajustes: uma notificação por dia, na hora escolhida, quando há revisão pendente.
 - **Intercalação**: a "Missão intercalada" mistura assuntos.
 - **Metacognição**: antes de cada jogo você diz sua confiança. Depois vê o espelho confiança × resultado × previsão da IA, e acompanha sua calibração (índice de Brier) no Painel do Cérebro.
 - **Efeito de geração**: blocos "preveja antes de ver".
-- **Técnica Feynman**: explicar com suas palavras, com checagem dos termos-chave.
 - **Interrogação elaborativa** ("por quê?"), **codificação dupla** (visual + verbal), **dificuldade desejável** e **mentalidade de crescimento**.
 - **Reflexão**: no fim de cada aula, você marca a cena que ficou confusa.
 

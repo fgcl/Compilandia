@@ -24,8 +24,8 @@
     <string name="revisao_formato_bug">Review: judge the Bug's sentences</string>
     <string name="revisao_formato_robo">Review: one robot level</string>
     <string name="revisao_formato_clipe">Review: 30-second clip</string>
-    <string name="revisao_formato_feynman">Review: explain in your own words</string>
     <string name="revisao_formato_pegadinha">Review: the topic's trick question</string>
+    <string name="revisao_formato_jogo">Review: a game on the topic</string>
 
     <string name="lembrete_1">%1$s is fading from memory. Two minutes fix it.</string>
     <string name="lembrete_2">A question about %1$s is waiting for you in the workshop.</string>

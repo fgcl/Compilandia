@@ -266,13 +266,12 @@ class NovidadesFlowTest {
         foto("44_desafio_certo")
     }
 
-    @Test fun portasDaCorridaLevamParaASala() = runDesktopComposeUiTest(412, 900, testTimeout = 2.minutes) {
+    /** Mural, rodada 10: sem porta para escolher, a corrida começa direto na primeira sala. */
+    @Test fun corridaComecaDiretoNaSala() = runDesktopComposeUiTest(412, 900, testTimeout = 2.minutes) {
         mainClock.autoAdvance = false
         val app = estado()
         app.stack.add(Screen.Corrida)
         setContent { App(app) }
-        anda()
-        onNodeWithText("Tranquila").performClick()
         anda(1500)
         foto("45_corrida_sala")
         assertTrue(Juice.inArena, "dentro da sala, os efeitos do jogo valem")

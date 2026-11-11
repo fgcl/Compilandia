@@ -30,13 +30,9 @@
     <string name="albumscreen_verdade">Verdade</string>
     <!-- CorridaScreen.kt -->
     <string name="corridascreen_escudo">Escudo</string>
-    <string name="corridascreen_ignora_falha">Ignora uma falha</string>
     <string name="corridascreen_dica_extra">Dica extra</string>
-    <string name="corridascreen_cada_sala_comeca_com_dica">Cada sala começa com uma dica</string>
     <string name="corridascreen_reparo">Reparo</string>
-    <string name="corridascreen_devolve_2_integridade">Devolve 2 de integridade</string>
     <string name="corridascreen_ima">Ímã</string>
-    <string name="corridascreen_rende_50_mais_engrenagens">Rende 50% mais engrenagens</string>
     <string name="corridascreen_sala_1_2">Sala %1$s de %2$s</string>
     <string name="corridascreen_oficina_escolha_peca">Oficina: escolha uma peça</string>
     <string name="corridascreen_sala_limpa_1">Sala limpa: +%1$s</string>
@@ -48,9 +44,6 @@
     <string name="corridascreen_1_engrenagens_melhor_corrida_2">+%1$s engrenagens. Melhor corrida: %2$s salas.</string>
     <string name="corridascreen_correr_novo">Correr de novo</string>
     <string name="corridascreen_corrida_sala_1_2">Corrida · sala %1$s de %2$s</string>
-    <string name="corridascreen_tranquila">Tranquila</string>
-    <string name="corridascreen_perigosa">Perigosa</string>
-    <string name="corridascreen_peca">peça</string>
     <!-- DesafioScreen.kt -->
     <string name="desafioscreen_desafio_dia">Desafio do dia</string>
     <string name="desafioscreen_ache_frase_secreta_1_tokens">Ache a frase secreta de %1$s tokens. Só vale frase que a gramática aceita.</string>
@@ -146,7 +139,6 @@
     <string name="gamesgrammar_para_cada_coloque_em_m">Para cada A → α: coloque-a em M[A, a] para todo a em FIRST(α).</string>
     <string name="gamesgrammar_se_pode_virar_coloque_tambem">Se α pode virar ε, coloque também em M[A, b] para todo b em FOLLOW(A).</string>
     <string name="gamesgrammar_m_1_2">M[%1$s, %2$s] =</string>
-    <string name="gamesgrammar_toque_numa_celula_para_preenche">Toque numa célula para preenchê-la.</string>
     <string name="gamesgrammar_entao_gramatica_ll_1">E então, a gramática é LL(1)?</string>
     <string name="gamesgrammar_sim_ll_1">Sim, é LL(1)</string>
     <string name="gamesgrammar_nao_tem_conflito">Não: tem conflito</string>
@@ -608,7 +600,6 @@
     <string name="lessonscreen_sem_problema_vamos_outro_jeito">Sem problema! Vamos de outro jeito: %1$s %2$s</string>
     <string name="lessonscreen_ai_como_foi">E aí, como foi?</string>
     <string name="lessonscreen_seja_sincero_eu_uso_isso">Seja sincero(a): eu uso isso para escolher como explicar da próxima vez.</string>
-    <string name="lessonscreen_entendi_quero_explicar_com_minhas">👍 Entendi! Quero explicar com minhas palavras</string>
     <string name="lessonscreen_entendi_quero_praticar_direto">🎮 Entendi, quero praticar direto</string>
     <string name="lessonscreen_nao_entendi_explica_outro_jeito">😕 Não entendi: explica de outro jeito</string>
     <string name="lessonscreen_nao_entendi">😕 Não entendi</string>
@@ -620,17 +611,6 @@
     <string name="lessonscreen_pense_primeiro_depois_toque">🧠 Pense primeiro, depois toque</string>
     <string name="lessonscreen_pensei_mostrar_resposta">Pensei! Mostrar resposta</string>
     <string name="lessonscreen_proximo_passo">próximo passo</string>
-    <string name="lessonscreen_explique_com_suas_palavras">Explique com suas palavras</string>
-    <string name="lessonscreen_quem_consegue_explicar_entendeu_verdade">Quem consegue explicar, entendeu de verdade. Escreva como se fosse mandar um áudio para um amigo, sem copiar, sem olhar. Frases tortas valem!</string>
-    <string name="lessonscreen_explique_1_para_colega_que">Explique "%1$s" para um colega que faltou à aula.</string>
-    <string name="lessonscreen_minha_explicacao">Minha explicação</string>
-    <string name="lessonscreen_espelho_sua_explicacao">Espelho da sua explicação</string>
-    <string name="lessonscreen_voce_usou_todas_ideias_chave">Você usou todas as ideias-chave. Excelente! 🏆</string>
-    <string name="lessonscreen_muito_bom_que_tal_encaixar">Muito bom! Que tal encaixar as ideias que faltaram (○)?</string>
-    <string name="lessonscreen_otimo_comeco_releia_termos_com">Ótimo começo. Releia os termos com ○, consegue explicar como eles se ligam ao que você escreveu?</string>
-    <string name="lessonscreen_erros_comuns_para_evitar">Erros comuns para evitar:</string>
-    <string name="lessonscreen_salvar_praticar">Salvar e praticar 🎮</string>
-    <string name="lessonscreen_20_xp_por_explicar_explicar">+20 XP por explicar! Explicar é a forma mais forte de estudar.</string>
     <!-- ToolScreens.kt -->
     <string name="toolscreens_revisao_relampago">Revisão relâmpago</string>
     <string name="toolscreens_ainda_nao_ha_cartoes_volte">Ainda não há cartões. Volte quando as aulas estiverem carregadas!</string>
