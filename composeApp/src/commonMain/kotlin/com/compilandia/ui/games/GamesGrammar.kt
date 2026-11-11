@@ -129,7 +129,7 @@ fun DerivationBoard(
     if (finished) {
         FeedbackBanner(true, tx("gamesgrammar_derivacao_completa_em_1_passos", history.size))
         TreeView(DerivationHelper.treeOf(g, history.toList()).toUi(g))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { onDone(mistakes, history.toList()) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { onDone(mistakes, history.toList()) }
     } else if (idx >= 0) {
         Text(tx("gamesgrammar_expandir_1_com", form.symbols[idx]), style = MaterialTheme.typography.titleSmall)
         for (p in g.productionsOf(form.symbols[idx])) {
@@ -268,7 +268,7 @@ private fun SurgeryRound(ctx: GameCtx, g: Grammar, leftRec: Boolean, done: (Doub
     ChipRow {
         for ((id, s) in pieces) if (id !in used) Chip(s, selected = selected == id, mono = true, color = Palette.purple, enabled = result == null) { selected = if (selected == id) null else id }
     }
-    if (result == null) BigButton(tx("gamesgrammar_operar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = slots.all { s -> s.all { it != null } }) {
+    if (result == null) BotaoDoJogo(tx("gamesgrammar_operar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = slots.all { s -> s.all { it != null } }) {
         val good = skeleton.indices.count { correctSlot(skeleton, slots, it) }
         result = good.toDouble() / skeleton.size
         if (result == 1.0) Juice.correct() else Juice.wrong()
@@ -359,11 +359,11 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
                 }
             }
         }
-        BigButton(tx("gamesgrammar_destilar"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true; if (keys.all { sets[it].orEmpty() == truth(it) }) Juice.correct() else Juice.wrong() }
+        BotaoDoJogo(tx("gamesgrammar_destilar"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true; if (keys.all { sets[it].orEmpty() == truth(it) }) Juice.correct() else Juice.wrong() }
     } else {
         val score = keys.count { sets[it].orEmpty() == truth(it) }.toDouble() / keys.size
         FeedbackBanner(score == 1.0, if (score == 1.0) tx("gamesgrammar_pocao_perfeita_todos_conjuntos_certos") else tx("gamesgrammar_1_dos_caldeiroes_certos_respostas", (score * 100).toInt()))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(score) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(score) }
     }
 }
 
@@ -433,7 +433,7 @@ fun LL1SudokuGame(ctx: GameCtx) {
             Chip(tx("gamesgrammar_sim_ll_1"), selected = verdictLL1 == true, color = Palette.green) { verdictLL1 = true }
             Chip(tx("gamesgrammar_nao_tem_conflito"), selected = verdictLL1 == false, color = Palette.red) { verdictLL1 = false }
         }
-        BigButton(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = verdictLL1 != null) { checked = true }
+        BotaoDoJogo(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = verdictLL1 != null) { checked = true }
     } else {
         val relevant = (t.filledCells().keys + mine.filterValues { it.isNotEmpty() }.keys).toSet()
         val good = relevant.count { k -> mine[k].orEmpty() == t.cell(k.first, k.second).map { it.id }.toSet() }
@@ -442,7 +442,7 @@ fun LL1SudokuGame(ctx: GameCtx) {
         FeedbackBanner(cellScore == 1.0 && verdictOk,
             tx("gamesgrammar_celulas_1_2", good, relevant.size) + (if (verdictOk) tx("gamesgrammar_veredito_certo") else tx("gamesgrammar_veredito_errado")) +
                 (if (t.isLL1) tx("gamesgrammar_nenhuma_celula_tem_duas_producoes") else tx("gamesgrammar_ha_celulas_com_2_producoes")))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.8 * cellScore + 0.2 * (if (verdictOk) 1.0 else 0.0)) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.8 * cellScore + 0.2 * (if (verdictOk) 1.0 else 0.0)) }
     }
 }
 
@@ -481,7 +481,7 @@ private fun StackTowerRound(ctx: GameCtx, g: Grammar, input: List<String>, done:
     if (finished) {
         val last = trace.last().action
         FeedbackBanner(true, if (last is LLAction.Accept) tx("gamesgrammar_aceito_pilha_esvaziou_junto_com") else tx("gamesgrammar_erro_detectado_corretamente_entrada_nao"))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     cur!!

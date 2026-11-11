@@ -212,7 +212,7 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
         }
     }
     if (ok) Text(tx("gamefactory_passou_nos_robos_com_1", pos.size, minimo), style = MaterialTheme.typography.titleSmall, color = Palette.green)
-    if (!ok) BigButton(tx("gamefactory_testar_nos_robos"), Modifier.fillMaxWidth()) {
+    if (!ok) BotaoDoJogo(tx("gamefactory_testar_nos_robos"), Modifier.fillMaxWidth()) {
         tentativas++
         val m = montado()
         val c = DfaCheck.diferenca(m, alvo)
@@ -225,7 +225,7 @@ private fun Bancada(e: Encomenda, ctx: GameCtx, done: (Double) -> Unit) {
             furoAceitou = m.accepts(c)
             Juice.wrong()
         }
-    } else BigButton(tx("comum_continuar"), Modifier.fillMaxWidth()) {
+    } else BotaoDoJogo(tx("comum_continuar"), Modifier.fillMaxWidth()) {
         val folga = (pos.size - minimo).coerceAtLeast(0)
         done((1.0 - 0.15 * folga - 0.1 * (tentativas - 1).coerceAtLeast(0)).coerceIn(0.5, 1.0))
     }

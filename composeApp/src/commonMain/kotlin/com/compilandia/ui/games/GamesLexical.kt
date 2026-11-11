@@ -135,7 +135,7 @@ private fun PipelineMatch(ctx: GameCtx, done: (Double) -> Unit) {
     }
     answered?.let { ok ->
         FeedbackBanner(ok, if (ok) tx("gameslexical_isso_1_produz_2", it.name, it.output) else tx("gameslexical_era_1_ela_produz_2", it.name, it.output))
-        BigButton(tx("gameslexical_proximo"), Modifier.fillMaxWidth()) { answered = null; current++ }
+        BotaoDoJogo(tx("gameslexical_proximo"), Modifier.fillMaxWidth()) { answered = null; current++ }
     }
 }
 
@@ -223,7 +223,7 @@ fun PhaseDetectiveGame(ctx: GameCtx) {
     }
     answer?.let { a ->
         FeedbackBanner(a == c.phase, (if (a == -1) tx("gameslexical_tempo_esgotado") else "") + "**${detectiveBins[c.phase]}** — ${c.why}")
-        BigButton(tx("gameslexical_proximo_caso"), Modifier.fillMaxWidth()) { answer = null; i++ }
+        BotaoDoJogo(tx("gameslexical_proximo_caso"), Modifier.fillMaxWidth()) { answer = null; i++ }
     }
 }
 
@@ -293,7 +293,7 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
             }
         }
         HintBox(ctx, tx("gameslexical_regra_maior_casamento_scanner_engole"), tx("gameslexical_palavras_como_iff_ou_whilex"))
-        BigButton(tx("gameslexical_cortar"), Modifier.fillMaxWidth(), color = Palette.red) {
+        BotaoDoJogo(tx("gameslexical_cortar"), Modifier.fillMaxWidth(), color = Palette.red) {
             val mine = playerTokens()
             val hit = mine.count { it in truthSpans }
             cutScore = (2f * hit / (mine.size + truthSpans.size)).coerceIn(0f, 1f)
@@ -345,7 +345,7 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
                 }
             }
         }
-        if (phase == 1) BigButton(tx("gameslexical_conferir_classes"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = classes.size == spans.size) {
+        if (phase == 1) BotaoDoJogo(tx("gameslexical_conferir_classes"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = classes.size == spans.size) {
             classScore = spans.indices.count { classes[it] == truth[it].cls }.toFloat() / spans.size
             if (classScore > 0.99f) Juice.correct() else Juice.wrong()
             phase = 2
@@ -417,7 +417,7 @@ private fun DfaTrainRound(ctx: GameCtx, done: (Double) -> Unit) {
             }
         }
     }
-    if (verdict != null) BigButton(tx("gameslexical_proximo_trem"), Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.2).coerceAtLeast(0.0)) }
+    if (verdict != null) BotaoDoJogo(tx("gameslexical_proximo_trem"), Modifier.fillMaxWidth()) { done((1.0 - mistakes * 0.2).coerceAtLeast(0.0)) }
 }
 
 // ============================================================ Porteiro Regex

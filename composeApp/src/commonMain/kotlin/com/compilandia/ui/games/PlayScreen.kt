@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -135,6 +136,7 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
             }
             Phase.PLAYING -> {
                 if (useArena) GameArena(defeated = ending && score >= 0.6, escaped = ending && score < 0.6)
+                val barra = remember { BarraDoJogo() }
                 Box(Modifier.weight(1f)) {
                     val ctx = GameCtx(s.skill, s.level, rnd, hints) { sc ->
                         if (!ending) {
@@ -153,8 +155,14 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
                         }
                     }
                     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                        GameHost(s.game, ctx)
-                        VSpace(70)
+                        androidx.compose.runtime.CompositionLocalProvider(LocalBarraDoJogo provides barra) { GameHost(s.game, ctx) }
+                        VSpace(24)
+                    }
+                }
+                // A ação da rodada (Conferir, Continuar) fica em cima da barra, perto do polegar.
+                barra.acao?.let { a ->
+                    Box(Modifier.fillMaxWidth().background(Palette.paperDark).padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
+                        BigButton(a.texto, Modifier.fillMaxWidth().testTag("acao-do-jogo"), color = a.cor, textColor = a.corTexto, enabled = a.ativo) { a.faz() }
                     }
                 }
                 Row(
@@ -343,8 +351,8 @@ fun Rounds(ctx: GameCtx, total: Int, content: @Composable (round: Int, done: (Do
 /** Barra inferior padrão de "conferir / próxima" dentro de um jogo. */
 @Composable
 fun CheckOrNext(checked: Boolean, canCheck: Boolean = true, onCheck: () -> Unit, onNext: () -> Unit) {
-    if (!checked) BigButton(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = canCheck) { onCheck() }
-    else BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth(), color = Palette.orange) { onNext() }
+    if (!checked) BotaoDoJogo(tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = canCheck) { onCheck() }
+    else BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth(), color = Palette.orange) { onNext() }
 }
 
 @Composable

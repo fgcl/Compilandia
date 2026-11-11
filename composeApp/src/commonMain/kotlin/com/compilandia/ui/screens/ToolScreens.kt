@@ -81,7 +81,7 @@ fun FlashcardScreen(app: AppState, skills: List<Skill>) {
     var revealed by remember { mutableStateOf(false) }
     val perSkill = remember { mutableMapOf<Skill, MutableList<Double>>() }
     Column(Modifier.fillMaxSize()) {
-        Header(tx("toolscreens_revisao_relampago"), tx("toolscreens_lembre_antes_virar_esforco_memoria"), Palette.teal)
+        Header(tx("toolscreens_revisao_relampago"), null, Palette.teal)
         if (cards.isEmpty()) { CenterText(tx("toolscreens_ainda_nao_ha_cartoes_volte")); return }
         ProgressBar(i.toFloat() / cards.size, Palette.teal, Modifier.fillMaxWidth(), 6.dp)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {

@@ -67,7 +67,7 @@ fun DesafioScreen(app: AppState) {
     val clip = LocalClipboardManager.current
     val mono = LocalFonts.current.mono
     Column(Modifier.fillMaxSize()) {
-        Header(tx("desafioscreen_desafio_dia"), tx("desafioscreen_no_1_sequencia_2", d.numero, app.ls.desafioSequencia), Palette.drawer)
+        Header(tx("desafioscreen_desafio_dia"), null, Palette.drawer)
         Column(
             Modifier.weight(1f).fillMaxWidth().background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f)).verticalScroll(rememberScrollState()).padding(14.dp),
             horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp),

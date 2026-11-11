@@ -171,7 +171,10 @@ fun LabBisonScreen(app: AppState, inicial: String?, abaInicial: Int = 0, passoIn
 
     val topo: @Composable ColumnScope.() -> Unit = {
         Exemplos(spec) { s, e -> spec = s; entrada = e; passo = 0 }
-        Placa(bison, compilado.exceptionOrNull()?.message, entrada, resultado) { entrada = it.take(24); passo = 0 }
+        // No passo a passo, a árvore cresce junto com a pilha: o que ainda não foi montado fica fantasma.
+        // No passo 0 ela aparece inteira, que é a resposta da conta; o primeiro Próximo começa a montagem.
+        val progresso = if (aba == AbaBison.PASSOS && passo > 0) progressoNoPasso(quadros, passo) else null
+        Placa(bison, compilado.exceptionOrNull()?.message, entrada, resultado, progresso) { entrada = it.take(24); passo = 0 }
         if (bison != null || linhasDePrecedencia(spec).isNotEmpty()) Regua(spec, muda)
     }
     val baixo: @Composable ColumnScope.() -> Unit = {
@@ -234,7 +237,7 @@ private fun Abas(aba: AbaBison, conflitos: Int, onAba: (AbaBison) -> Unit) {
  * da matemática, ele fica vermelho e a conta certa aparece embaixo.
  */
 @Composable
-private fun Placa(bison: MiniBison?, erro: String?, entrada: String, r: MiniBison.RunResult?, onEntrada: (String) -> Unit) {
+private fun Placa(bison: MiniBison?, erro: String?, entrada: String, r: MiniBison.RunResult?, progresso: Progresso?, onEntrada: (String) -> Unit) {
     val fonts = LocalFonts.current
     val certa = remember(entrada) { contaCerta(entrada) }
     val bate = r?.accepted == true && (certa == null || certa == r.value)
@@ -269,7 +272,7 @@ private fun Placa(bison: MiniBison?, erro: String?, entrada: String, r: MiniBiso
             Text(nota, Modifier.weight(1f), color = onPlaca, style = MaterialTheme.typography.bodyMedium, maxLines = 2)
         }
         if (bison == null && erro != null) Text(erro, color = onPlaca.copy(alpha = 0.8f), fontFamily = fonts.mono, fontSize = 12.sp)
-        val arvore = remember(bison, r) { r?.tree?.let { t -> bison?.arvoreDaConta(entrada, t) } }
+        val arvore = remember(bison, r, progresso) { r?.tree?.let { t -> bison?.arvoreDaConta(entrada, t, progresso) } }
         if (arvore != null) {
             Box(Modifier.fillMaxWidth().heightIn(min = 120.dp).clip(RoundedCornerShape(8.dp)).background(Palette.paper).padding(vertical = 6.dp), contentAlignment = Alignment.Center) {
                 TreeView(arvore, Modifier.testTag("lab-bison-arvore"), centro = true)

@@ -18,6 +18,8 @@ import com.compilandia.ui.lab.LabBisonScreen
 import com.compilandia.ui.lab.arvoreDaConta
 import com.compilandia.ui.lab.contaCerta
 import com.compilandia.ui.lab.pontoDePrecedencia
+import com.compilandia.ui.lab.progressoNoPasso
+import com.compilandia.ui.Palette
 import com.compilandia.ui.voice.Narrator
 import kotlin.random.Random
 import kotlin.test.Test
@@ -35,6 +37,19 @@ class LabBisonFlowTest {
         assertEquals("14", raiz.sub)
         assertEquals(listOf("2", "*"), raiz.children.map { it.label })
         assertEquals("12", raiz.children[1].sub)
+    }
+
+    /** Passo a passo: a vezes acende quando é reduzida, e a soma, que vem depois, ainda é fantasma. */
+    @Test fun aArvoreCresceComAPilha() {
+        val b = MiniBison.compile(BisonExemplos.calculadora)
+        val quadros = b.quadros("2+3*4")
+        val passo = quadros.indexOfFirst { (it.acao as? com.compilandia.engine.LRAction.Reduce)?.let { r -> b.table.grammar.productions[r.prodId].rhs.contains("'*'") } == true }
+        val raiz = b.arvoreDaConta("2+3*4", b.run("2+3*4").tree!!, progressoNoPasso(quadros, passo))
+        val vezes = raiz.children[1]
+        assertEquals("*", vezes.label)
+        assertEquals(Palette.nodeActive, vezes.color)
+        assertEquals(null, raiz.sub)
+        assertEquals("12", vezes.sub)
     }
 
     @Test fun semPrecedenciaAContaSaiErradaEOPontoDePrecedenciaConserta() {

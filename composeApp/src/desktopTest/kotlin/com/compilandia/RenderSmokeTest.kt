@@ -94,6 +94,8 @@ class RenderSmokeTest : RenderBase() {
         shot("03_jogo_arena") { App(jogo(GameId.TOKEN_SLICER)) }
         shot("03_jogo_esteira") { App(jogo(GameId.SHIFT_REDUCE_RUSH)) }
         shot("03_jogo_torre") { App(jogo(GameId.STACK_TOWER)) }
+        shot("03_jogo_tabela") { App(jogo(GameId.MIN_TABLE)) }
+        shot("03_jogo_sudoku") { App(jogo(GameId.LL1_SUDOKU)) }
         shot("02_mapa") { App(stateWith(Screen.Map)) }
         shot("03_regiao_templo") { App(stateWith(Screen.RegionView(Region.TEMPLO_TOPDOWN))) }
         shot("04_aula_first_visual") { App(stateWith(Screen.Lesson(Skill.FIRST, Style.VISUAL))) }
@@ -201,6 +203,7 @@ class RenderSmokeTest : RenderBase() {
             Triple("lab_bison_quebrado", "%token NUM\ne: e '+' ;", 0 to 0),
             Triple("lab_bison_sem_prec_passos", ex.semPrecedencia, 0 to 5),
             Triple("lab_bison_arquivo", ex.calculadora, 3 to 0),
+            Triple("lab_bison_crescendo", ex.calculadora, 0 to 8),
         )
         for ((nome, spec, abaPasso) in casos) {
             shot(nome, h = 1600) {

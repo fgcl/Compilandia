@@ -44,14 +44,9 @@
     <string name="corridascreen_correr_novo">Race again</string>
     <string name="corridascreen_corrida_sala_1_2">Race · room %1$s of %2$s</string>
     <string name="corridascreen_tranquila">Calm</string>
-    <string name="corridascreen_1_nivel_2">%1$s, level %2$s</string>
     <string name="corridascreen_perigosa">Dangerous</string>
-    <string name="corridascreen_mais_dificil_sem_dica">Harder and no hint</string>
-    <string name="corridascreen_pule_sala_pegue_peca">Skip the room and grab a part</string>
     <string name="corridascreen_peca">part</string>
-    <string name="corridascreen_escolha_porta_assuntos_misturados_ficam">Pick a door. Mixed topics stay in memory longer.</string>
     <string name="desafioscreen_desafio_dia">Daily challenge</string>
-    <string name="desafioscreen_no_1_sequencia_2">#%1$s · streak %2$s</string>
     <string name="desafioscreen_ache_frase_secreta_1_tokens">Find the secret sentence of %1$s tokens. Only sentences the grammar accepts count.</string>
     <string name="desafioscreen_voce_ja_jogou_hoje_volte">You already played today. Come back tomorrow.</string>
     <string name="desafioscreen_compilou_em_1">Compiled in %1$s.</string>
@@ -116,8 +111,8 @@
     <string name="gamesgrammar_arvore_2_2_tem_que">Tree 2 of 2: it has to be DIFFERENT!</string>
     <string name="gamesgrammar_na_primeira_arvore_qual_operador">In the first tree, which operator ended up closer to the root? Try putting the OTHER one up there.</string>
     <string name="gamesgrammar_duas_derivacoes_mais_esquerda_diferentes">Two different leftmost derivations = two trees = **ambiguous grammar**. That's why compilers rewrite the grammar or use precedence (%left in Bison)!</string>
-    <string name="gamesgrammar_paciente_com_recursao_esquerda">Patient with LEFT RECURSION</string>
-    <string name="gamesgrammar_paciente_precisando_fatoracao">Patient in need of FACTORING</string>
+    <string name="gamesgrammar_paciente_com_recursao_esquerda">Patient with left recursion</string>
+    <string name="gamesgrammar_paciente_precisando_fatoracao">Patient in need of factoring</string>
     <string name="gamesgrammar_receita_vira">Recipe: A → A α | β  becomes  A → β A'  and  A' → α A' | ε</string>
     <string name="gamesgrammar_receita_1_2_vira_1">Recipe: A → α β1 | α β2  becomes  A → α A'  and  A' → β1 | β2</string>
     <string name="gamesgrammar_comece_pelos_espacos_producao_principal">Start with the slots of the main production: what comes first in it?</string>
@@ -170,7 +165,7 @@
     <string name="gameslr_empilhar_1">Shift %1$s</string>
     <string name="gameslr_reduzir_1">Reduce %1$s</string>
     <string name="gameslr_nucleo_kernel_estado">State kernel:</string>
-    <string name="gameslr_quais_itens_fechamento_acrescenta">Which items does the CLOSURE add?</string>
+    <string name="gameslr_quais_itens_fechamento_acrescenta">Which items does the closure add?</string>
     <string name="gameslr_para_cada_item_com_antes">For each item with • before a NONTERMINAL B, add B → •γ for EVERY production of B. Repeat for the new items!</string>
     <string name="gameslr_itens_com_no_meio_como">Items with the • in the middle (like X → a • b) are never added by the closure.</string>
     <string name="gameslr_fechar_estado">Close state</string>
@@ -178,7 +173,7 @@
     <string name="gameslr_estado_completo">The full state is:</string>
     <string name="gameslr_agora_goto_i_1_2">Now: GOTO(I%1$s, %2$s) = which state? (move the • over %3$s and close)</string>
     <string name="gameslr_gramatica_1">Grammar: %1$s</string>
-    <string name="gameslr_algumas_celulas_tabela_slr_estao">Some cells of the SLR table are hidden (?). Tap the ones with a CONFLICT (two actions).</string>
+    <string name="gameslr_algumas_celulas_tabela_slr_estao">Tap the hidden cells that have a conflict.</string>
     <string name="gameslr_conflito_shift_reduce_estado_tem">Shift/reduce conflict: the state has an item A → α • (reduce) AND an item with • before the terminal t, with t ∈ FOLLOW(A).</string>
     <string name="gameslr_nao_ha_conflitos">There are no conflicts</string>
     <string name="gameslr_voce_acertou_1_das_celulas">You got %1$s% of the hidden cells right. Real conflicts: </string>
@@ -213,7 +208,7 @@
     <string name="gameslr_mostrar_dica_completa_encerrar">Show the full hint and finish</string>
     <string name="gameslr_encerrar_vou_revisar_depois">Finish (I'll review later)</string>
     <string name="gameslexical_ainda_nao_antes_1_vem">Not yet! Another phase comes before **%1$s**.</string>
-    <string name="gameslexical_arraste_fases_para_esteira_na">Drag the phases onto the CONVEYOR in the order the code goes through them:</string>
+    <string name="gameslexical_arraste_fases_para_esteira_na">Drag the phases onto the conveyor, in order.</string>
     <string name="gameslexical_codigo_fonte">source code</string>
     <string name="gameslexical_solte_proxima_fase_aqui">drop the next phase here</string>
     <string name="gameslexical_primeiro_texto_vira_tokens_depois">First the text becomes tokens, then the tokens become a tree. Only after that can you check types.</string>
@@ -247,7 +242,7 @@
     <string name="gameslexical_scanner_gera_num_2_id">The scanner produces NUM(2) and ID(x), valid tokens! But 'int NUM ID' doesn't match the declaration rule: syntactic.</string>
     <string name="gameslexical_caso_1_2_quem_pega">Case %1$s/%2$s: who catches this error?</string>
     <string name="gameslexical_lexico_caractere_palavra_impossivel_sintatic">Lexical = impossible character/word. Syntactic = tokens OK but wrong structure. Semantic = structure OK but wrong meaning (types, declarations). Runtime = depends on real values.</string>
-    <string name="gameslexical_arraste_cartao_suspeito_ate_setor">Drag the suspect's card to the department that catches this error:</string>
+    <string name="gameslexical_arraste_cartao_suspeito_ate_setor">Drag the card to the department that catches the error.</string>
     <string name="gameslexical_caso_1">CASE %1$s</string>
     <string name="gameslexical_tempo_esgotado">Time's up! </string>
     <string name="gameslexical_proximo_caso">Next case ▶</string>
@@ -284,7 +279,7 @@
     <string name="gameslexical_balada_regex">Club REGEX</string>
     <string name="gameslexical_so_entra_quem_casa_com">only those who match get in:  %1$s</string>
     <string name="gameslexical_fila_1_pessoas">Line: %1$s people</string>
-    <string name="gameslexical_arraste_pessoa_direita_entra_esquerda">Drag the person: RIGHT = in · LEFT = blocked</string>
+    <string name="gameslexical_arraste_pessoa_direita_entra_esquerda">Drag right to let in, left to block.</string>
     <string name="gameslexical_cadeia_vazia">ε (empty string)</string>
     <string name="gameslexical_leia_regex_como_receita_zero">Read the regex like a recipe: * = zero or more times, + = one or more, | = or.</string>
     <string name="gameslexical_tente_andar_com_cadeia_pela">Try 'walking' the string through the regex from left to right.</string>
@@ -298,11 +293,11 @@
     <string name="gamessemantic_que_1">what does %1$s give?</string>
     <string name="gamessemantic_toque_num_no_cujos_filhos">Tap a node whose children are ready (green).</string>
     <string name="gamessemantic_raiz_tipo_1_valor_2">Root: type %1$s, value %2$s. You did a POST-ORDER evaluation; that's how an LR parser evaluates an S-attributed SDD.</string>
-    <string name="gamessemantic_dobra_constantes_toque_nos_operadores">Constant folding: tap the OPERATORS the compiler can compute at compile time.</string>
+    <string name="gamessemantic_dobra_constantes_toque_nos_operadores">Tap the operators the compiler can already compute.</string>
     <string name="gamessemantic_no_constante_se_todas_folhas">A node is constant if ALL the leaves under it are numbers (no variables).</string>
     <string name="gamessemantic_dobrar">Fold!</string>
     <string name="gamessemantic_depois_dobra_1">After folding: %1$s</string>
-    <string name="gamessemantic_variavel_destacada_em_amarelo_enxerga">Which declaration does the variable highlighted in yellow see?</string>
+    <string name="gamessemantic_variavel_destacada_em_amarelo_enxerga">Which declaration does the yellow variable see?</string>
     <string name="gamessemantic_suba_partir_uso_procure_declaracao">Go up from the use: look for the declaration in the SAME block (before the use); if you don't find it, go to the outer block. It's a STACK of symbol tables.</string>
     <string name="gamessemantic_isso_escopo_mais_interno_que">Right! The innermost scope that already declared '%1$s'.</string>
     <string name="gamessemantic_nenhuma_declaracao_visivel_1_nao">No visible declaration: '%1$s' was NOT declared here!</string>
@@ -317,10 +312,10 @@
     <string name="gamessemantic_temporario_t1_t2_so_pode">A temporary (t1, t2…) can only be used AFTER the instruction that computes it.</string>
     <string name="gamessemantic_comece_pelas_folhas_mais_fundas">Start with the deepest leaves of the tree: they become the first instructions.</string>
     <string name="gamessemantic_programa_tac_solte_pecas_aqui">program.tac: drop the pieces here</string>
-    <string name="gamessemantic_pecas_esteira_arraste_para_programa">Conveyor pieces (drag them into the program):</string>
+    <string name="gamessemantic_pecas_esteira_arraste_para_programa">Drag the pieces into the program:</string>
     <string name="gamessemantic_programa_montado_cada_instrucao_tem">Program built! Each instruction has at most one operator; that's why it's called THREE-address code.</string>
     <string name="gamesv2_fabrica_concluida_cada_estado_afd">Factory done! Each DFA state is a SET of NFA states. The full DFA has %1$s states.</string>
-    <string name="gamesv2_calcule_fecho_move_1_2">Compute **ε-closure(move(%1$s = %2$s, '%3$s'))**: tap the NFA states that make up the result.</string>
+    <string name="gamesv2_calcule_fecho_move_1_2">Tap the states of **ε-closure(move(%1$s = %2$s, '%3$s'))**.</string>
     <string name="gamesv2_selecionados_1">Selected: %1$s</string>
     <string name="gamesv2_primeiro_move_cada_estado_1">First the MOVE: from each state of %1$s, where does a '%2$s' arrow go? = %3$s</string>
     <string name="gamesv2_depois_fecho_siga_tambem_todas">Then the ε-CLOSURE: also follow every ε arrow from those states (and include them).</string>
@@ -336,13 +331,13 @@
     <string name="gamesv2_lexemas">lexemes: </string>
     <string name="gamesv2_scanner_certo_em_1_execucao">Scanner right in %1$s run(s)!</string>
     <string name="gamesv2_desistir_ver_dica_encerrar">Give up (see the hint and finish)</string>
-    <string name="gamesv2_em_qual_token_parser_ll">At which token does the LL(1) parser NOTICE the error?</string>
+    <string name="gamesv2_em_qual_token_parser_ll">At which token does LL(1) notice the error?</string>
     <string name="gamesv2_recuperacao">Recovery</string>
     <string name="gamesv2_ll_1_le_esquerda_para">LL(1) reads from left to right and stops at the FIRST token that no valid sentence could have in that position.</string>
     <string name="gamesv2_no_modo_panico_parser_joga">In panic mode, the parser throws tokens away until it finds a sync token (a token in the nonterminal's FOLLOW, like ';').</string>
     <string name="gamesv2_este">It's this one!</string>
     <string name="gamesv2_erro_detectado_em_1_token">The error is detected at '%1$s' (token %2$s). Viable prefix property: everything before it could still be a valid program.</string>
-    <string name="gamesv2_agora_modo_panico_toque_no">Now **panic mode**: tap the token where the parser GETS BACK to normal work (the sync token).</string>
+    <string name="gamesv2_agora_modo_panico_toque_no">**Panic mode:** tap the token where the parser resumes.</string>
     <string name="gamesv2_volta_aqui">It resumes here</string>
     <string name="gamesv2_em_vez_parar_no_primeiro">Instead of stopping at the first error, the compiler recovers and keeps going; that way it lists ALL the errors in a single compilation.</string>
     <string name="gamesv2_programa_terminou_com_1_pico">The program ended with %1$s. Stack peak: %2$s activation records.</string>
@@ -353,7 +348,7 @@
     <string name="gamesv2_olhe_registro_topo_em_qual">Look at the record on TOP: which line is it on? If it calls someone, PUSH. If it ends, POP and return the value.</string>
     <string name="gamesv2_nao_pense_no_registro_topo">No. Think about the record on top of the stack.</string>
     <string name="gamesv2_rodando_no_mars_bolso_r">Running on "pocket MARS": r = %1$s. Your assembly works!</string>
-    <string name="gamesv2_traduza_1_tijolo_por_vez">Translate **%1$s** (one brick at a time, in order):</string>
+    <string name="gamesv2_traduza_1_tijolo_por_vez">Translate **%1$s**, one brick at a time:</string>
     <string name="gamesv2_padrao_carrega_operandos_em_registradores">Pattern: load the operands into registers (lw, or li for constants), do the math in the register, store the result in memory (sw).</string>
     <string name="gamesv2_lw_load_word_memoria_registrador">lw = load word (memory → register); sw = store word (register → memory).</string>
     <string name="gamesv2_instrucao_traduzida">Instruction translated!</string>
@@ -361,12 +356,12 @@
     <string name="gamesv2_conta_ja_esta_no_registrador">The math is already in the register; now STORE the result (sw).</string>
     <string name="gamesv2_nao_essa_ainda_siga_carregar">Not that one yet. Follow: load → operate → store.</string>
     <string name="gamesv2_solte_tijolo_aqui_1_2">drop the brick here (%1$s/%2$s)</string>
-    <string name="gamesv2_escreva_metodo_1_parser_descendente">Write the **%1$s** method of the recursive descent parser (tap the lines in order).</string>
+    <string name="gamesv2_escreva_metodo_1_parser_descendente">Build the **%1$s()** method: tap the lines in order.</string>
     <string name="gamesv2_producao_vira_sequencia_terminal_casatoken">A production becomes a sequence: terminal → casaToken("x"); nonterminal → a call X();</string>
     <string name="gamesv2_com_varias_producoes_escolha_pelo">With several productions, pick by the current token: if (tok in the production's FIRST). The ε production becomes the else that does nothing.</string>
     <string name="gamesv2_ainda_nao_essa_linha_pense">Not that line yet. Think about the order of the production's symbols.</string>
     <string name="gamesv2_metodo_pronto_repare_pilha_analisador">Method done! Notice: the LL(1) parser's stack turned into Java's CALL stack.</string>
-    <string name="gamesv3_toque_nas_celulas_para_marcar">Tap the cells to mark **X** on the DISTINGUISHABLE pairs. The ones left blank are equivalent and become a single state.</string>
+    <string name="gamesv3_toque_nas_celulas_para_marcar">Mark **X** on the pairs you can tell apart. Blank pairs become one state.</string>
     <string name="gamesv3_rodada_1_todo_par_com">Round 1: every pair with one final state and one non-final state is distinguishable.</string>
     <string name="gamesv3_depois_p_q_distinguivel_se">Then: {p,q} is distinguishable if, on some symbol, they go to a pair already marked. Repeat until nothing changes.</string>
     <string name="gamesv3_transicoes">Transitions: </string>
@@ -382,13 +377,13 @@
     <string name="gamesv3_ast_completa_1_nos_contra">AST complete! %1$s nodes, against %2$s in the parse tree.</string>
     <string name="gamesv3_qual_no_vai_no_proximo">Which node goes in the next ▢?</string>
     <string name="gamesv3_nao_pense_neste_ponto_expressao">No. Think: at this point of the expression, which operation or operand comes first (from the outside in)?</string>
-    <string name="gamesv3_passo_1_vivacidade_marque_quais">**Step 1: liveness:** mark which temporaries are ALIVE right AFTER each instruction (they'll still be used further down).</string>
+    <string name="gamesv3_passo_1_vivacidade_marque_quais">**Step 1:** mark the temporaries alive after each instruction.</string>
     <string name="gamesv3_trabalhe_baixo_para_cima_depois">Work from the BOTTOM UP: after the last instruction nothing is alive.</string>
     <string name="gamesv3_in_use_out_def_temporario">in = use ∪ (out − def): a temporary stays alive from where it's defined until its last use.</string>
     <string name="gamesv3_instrucao">instruction</string>
     <string name="gamesv3_conferir_vivacidade">Check liveness</string>
     <string name="gamesv3_vivacidade_1_correto">Liveness: %1$s%. Correct: </string>
-    <string name="gamesv3_passo_2_coloracao_use_so">**Step 2: coloring:** use only **%1$s** register(s). Tap a temporary and then a register. Neighbors (alive together) can't share a register!</string>
+    <string name="gamesv3_passo_2_coloracao_use_so">**Step 2:** use **%1$s** register(s). Temporaries alive together can't share one.</string>
     <string name="gamesv3_comece_pelo_no_com_mais">Start with the node with the MOST neighbors. Nodes with no edge between them can reuse a register.</string>
     <string name="gamesv3_alocar">Allocate</string>
     <string name="gamesv3_alocacao_valida_com_1_registrador">Valid allocation with %1$s register(s)!</string>
@@ -536,7 +531,6 @@
     <string name="episodescreen_ver_novo">Watch again</string>
     <string name="episodescreen_ler_aula_completa">Read the full lesson</string>
     <string name="guidescreens_guia_trabalho_pratico">Project Guide</string>
-    <string name="guidescreens_construa_compilador_completo_txt_ao">Build a complete compiler, from .txt to MIPS</string>
     <string name="guidescreens_trabalho_pratico_pede">The Compilers course project asks for a whole compiler: a scanner with automata, an LL(1) grammar, recursive descent, a symbol table, types and MIPS assembly generation. This guide walks through each step with an example language.</string>
     <string name="guidescreens_guia_em_construcao">Guide under construction.</string>
     <string name="guidescreens_guia">Guide</string>
@@ -580,7 +574,7 @@
     <string name="lessonscreen_pense_primeiro_depois_toque">🧠 Think first, then tap</string>
     <string name="lessonscreen_pensei_mostrar_resposta">I thought! Show the answer</string>
     <string name="lessonscreen_proximo_passo">next step</string>
-    <string name="lessonscreen_explique_com_suas_palavras">✍️ Explain it in your own words</string>
+    <string name="lessonscreen_explique_com_suas_palavras">Explain it in your own words</string>
     <string name="lessonscreen_quem_consegue_explicar_entendeu_verdade">If you can explain it, you really got it. Write as if you were sending a voice note to a friend, no copying, no looking. Clumsy sentences count!</string>
     <string name="lessonscreen_explique_1_para_colega_que">Explain "%1$s" to a classmate who missed the lesson.</string>
     <string name="lessonscreen_minha_explicacao">My explanation</string>
@@ -592,7 +586,6 @@
     <string name="lessonscreen_salvar_praticar">Save and practice 🎮</string>
     <string name="lessonscreen_20_xp_por_explicar_explicar">+20 XP for explaining! Explaining is the strongest way to study.</string>
     <string name="toolscreens_revisao_relampago">Lightning review</string>
-    <string name="toolscreens_lembre_antes_virar_esforco_memoria">Remember BEFORE you flip. Effort = memory.</string>
     <string name="toolscreens_ainda_nao_ha_cartoes_volte">No cards yet. Come back when the lessons are loaded!</string>
     <string name="toolscreens_revisao_concluida">Review done! 🧠</string>
     <string name="toolscreens_cada_cartao_que_voce_tentou">Every card you tried to remember got stronger, including the ones you got wrong.</string>

@@ -109,7 +109,7 @@ private fun AttributeRound(ctx: GameCtx, done: (Double) -> Unit) {
     if (done0) {
         val root = attrs.getValue(e.id)
         FeedbackBanner(true, tx("gamessemantic_raiz_tipo_1_valor_2", root.type.label, TypeChecker.formatValue(root)))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
     }
 }
 
@@ -134,12 +134,12 @@ private fun FoldingHunt(ctx: GameCtx) {
         }
     })) { key -> if (!checked) picked[key] = picked[key] != true }
     HintBox(ctx, tx("gamessemantic_no_constante_se_todas_folhas"))
-    if (!checked) BigButton(tx("gamessemantic_dobrar"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
+    if (!checked) BotaoDoJogo(tx("gamessemantic_dobrar"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
     else {
         val mine = picked.filterValues { it }.keys
         val score = if ((mine + truth).isEmpty()) 1.0 else mine.intersect(truth).size.toDouble() / (mine + truth).size
         FeedbackBanner(score == 1.0, tx("gamessemantic_depois_dobra_1", TacGen.constantFold(e).render()))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(score) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(score) }
     }
 }
 
@@ -198,7 +198,7 @@ fun ScopeDetectiveGame(ctx: GameCtx) {
         if (ok) Juice.correct() else Juice.wrong()
     }
     msg?.let { FeedbackBanner(it.first, it.second) }
-    if (answered) BigButton(tx("gamessemantic_proximo_uso"), Modifier.fillMaxWidth()) { k++; answered = false; msg = null }
+    if (answered) BotaoDoJogo(tx("gamessemantic_proximo_uso"), Modifier.fillMaxWidth()) { k++; answered = false; msg = null }
 }
 
 // ============================================================ Linha de Montagem TAC
@@ -254,6 +254,6 @@ private fun TacRound(ctx: GameCtx, done: (Double) -> Unit) {
         }
     } else {
         FeedbackBanner(true, tx("gamessemantic_programa_montado_cada_instrucao_tem"))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
     }
 }

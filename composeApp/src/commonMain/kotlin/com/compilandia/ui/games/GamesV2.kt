@@ -108,7 +108,7 @@ fun SubsetFactoryGame(ctx: GameCtx) {
     }
     if (cur == null) {
         FeedbackBanner(mistakes == 0, tx("gamesv2_fabrica_concluida_cada_estado_afd", res.states.size))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val fromName = dfaLetter(res.states.indexOf(cur.from))
@@ -118,14 +118,14 @@ fun SubsetFactoryGame(ctx: GameCtx) {
     msg?.let { FeedbackBanner(it.first, it.second) }
     if (!revealed) Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         BigButton(tx("gamesv2_nenhum"), small = true, color = Palette.white, textColor = Palette.ink) { picked.clear() }
-        BigButton(tx("gamesv2_confirmar"), Modifier.weight(1f), small = true, color = Palette.teal) {
+        BotaoDoJogo(tx("gamesv2_confirmar"), Modifier.weight(1f), small = true, color = Palette.teal) {
             val ok = picked.toSet() == cur.to
             if (!ok) mistakes++
             msg = ok to (if (ok) tx("gamesv2_isso") else "Era ${setText(cur.to)}. ") + tx("gamesv2_move_1_depois_fecho_2", setText(cur.moved), setText(cur.to))
             if (ok) Juice.correct() else Juice.wrong()
             revealed = true
         }
-    } else BigButton(tx("gamesv2_proxima_transicao"), Modifier.fillMaxWidth()) { k++; picked.clear(); revealed = false; msg = null }
+    } else BotaoDoJogo(tx("gamesv2_proxima_transicao"), Modifier.fillMaxWidth()) { k++; picked.clear(); revealed = false; msg = null }
 }
 
 // ============================================================ Oficina Flex
@@ -172,7 +172,7 @@ fun FlexWorkshopGame(ctx: GameCtx) {
         }
         if (ok) {
             FeedbackBanner(true, tx("gamesv2_scanner_certo_em_1_execucao", runs))
-            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * (runs - 1)).coerceIn(0.4, 1.0)) }
+            BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * (runs - 1)).coerceIn(0.4, 1.0)) }
         } else if (runs >= 4) BigButton(tx("gamesv2_desistir_ver_dica_encerrar"), Modifier.fillMaxWidth(), small = true, color = Palette.white, textColor = Palette.ink) { ctx.finish(0.2) }
     }
 }
@@ -227,7 +227,7 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
     }
     HintBox(ctx, tx("gamesv2_ll_1_le_esquerda_para"), tx("gamesv2_no_modo_panico_parser_joga"))
     when (phase) {
-        0 -> BigButton(tx("gamesv2_este"), Modifier.fillMaxWidth(), color = Palette.red, enabled = tapped != null) {
+        0 -> BotaoDoJogo(tx("gamesv2_este"), Modifier.fillMaxWidth(), color = Palette.red, enabled = tapped != null) {
             val ok = tapped == errPos
             score += if (ok) 0.5 else 0.0
             if (ok) Juice.correct() else Juice.wrong()
@@ -236,7 +236,7 @@ private fun PanicRound(ctx: GameCtx, done: (Double) -> Unit) {
         1 -> {
             FeedbackBanner(true, tx("gamesv2_erro_detectado_em_1_token", input[errPos], errPos + 1))
             RichText(tx("gamesv2_agora_modo_panico_toque_no"), style = MaterialTheme.typography.bodyMedium)
-            BigButton(tx("gamesv2_volta_aqui"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = tapped != null) {
+            BotaoDoJogo(tx("gamesv2_volta_aqui"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = tapped != null) {
                 val ok = tapped == ev.position
                 score += if (ok) 0.5 else 0.0
                 if (ok) Juice.correct() else Juice.wrong()
@@ -263,7 +263,7 @@ fun CallStackGame(ctx: GameCtx) {
     CodeBlock(p.code, p.title)
     if (i >= p.events.size) {
         FeedbackBanner(mistakes == 0, tx("gamesv2_programa_terminou_com_1_pico", p.result, p.events.maxOf { it.stack.size }))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val before = if (i == 0) emptyList() else p.events[i - 1].stack
@@ -330,7 +330,7 @@ fun MipsForgeGame(ctx: GameCtx) {
     if (k >= tac.size) {
         val st = Mips.run(built.toList(), Mips.intEnv).last()
         FeedbackBanner(true, tx("gamesv2_rodando_no_mars_bolso_r", st.mem["r"]))
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val ins = tac[k]
@@ -442,7 +442,7 @@ private fun DescentRound(ctx: GameCtx, g: Grammar, t: LL1Table, nt: String, done
         }
     } else {
         FeedbackBanner(true, tx("gamesv2_metodo_pronto_repare_pilha_analisador"))
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.1 * mistakes).coerceAtLeast(0.0)) }
     }
 }
 

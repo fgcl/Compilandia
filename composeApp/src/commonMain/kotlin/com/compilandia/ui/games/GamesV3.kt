@@ -95,7 +95,7 @@ fun MinTableGame(ctx: GameCtx) {
             onClick = { if (!checked) { marks[key] = !on; Sound.play(Sfx.CLICK) } },
         )
     }
-    if (!checked) BigButton(tx("gamesv3_conferir_tabela"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
+    if (!checked) BotaoDoJogo(tx("gamesv3_conferir_tabela"), Modifier.fillMaxWidth(), color = Palette.teal) { checked = true }
     else {
         val total = d.stateCount * (d.stateCount - 1) / 2
         val wrong = (0 until d.stateCount).sumOf { i -> (0 until i).count { j -> (marks[j to i] == true) != ((j to i) in truth) } }
@@ -105,7 +105,7 @@ fun MinTableGame(ctx: GameCtx) {
             tx("gamesv3_afd_minimo_com_1_estados", r.minimized.stateCount), style = MaterialTheme.typography.bodyMedium)
         val m = r.minimized
         AutomatonView(m.stateCount, m.start, m.accepting, m.delta.map { (k, t) -> Triple(k.first, k.second.toString(), t) }, stateLabel = { "m$it" })
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(score) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(score) }
     }
 }
 
@@ -150,7 +150,7 @@ private fun AstRound(ctx: GameCtx, done: (Double) -> Unit) {
     if (k >= order.size) {
         FeedbackBanner(true, tx("gamesv3_ast_completa_1_nos_contra", AstTools.countNodes(e), AstTools.concreteTree(src)?.let { AstTools.countNodes(it) } ?: "?"))
         TreeView(e.toUi())
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val target = order[k]
@@ -210,7 +210,7 @@ fun RegColoringGame(ctx: GameCtx) {
                 }
             }
         }
-        BigButton(tx("gamesv3_conferir_vivacidade"), Modifier.fillMaxWidth(), color = Palette.teal) {
+        BotaoDoJogo(tx("gamesv3_conferir_vivacidade"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val cells = code.indices.flatMap { i -> temps.map { i to it } }
             val ok = cells.count { (i, t) -> (live[i to t] == true) == (t in lv.liveOut[i]) }
             liveScore = ok.toDouble() / cells.size
@@ -224,7 +224,7 @@ fun RegColoringGame(ctx: GameCtx) {
         HintBox(ctx, tx("gamesv3_comece_pelo_no_com_mais"))
         if (phase == 1) {
             ChipRow { for (c in 0 until k) Chip("\$s$c", color = Palette.purple) { sel?.let { colors[it] = c; Sound.play(Sfx.CLICK) } } }
-            BigButton(tx("gamesv3_alocar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = temps.all { it in colors }) {
+            BotaoDoJogo(tx("gamesv3_alocar"), Modifier.fillMaxWidth(), color = Palette.teal, enabled = temps.all { it in colors }) {
                 val clashes = g.entries.sumOf { (v, nbs) -> nbs.count { colors[it] == colors[v] } } / 2
                 colorMistakes = clashes
                 if (clashes == 0) Juice.levelUp() else Juice.wrong()
@@ -237,7 +237,7 @@ fun RegColoringGame(ctx: GameCtx) {
             val before = Mips.fromTac(code); val after = RegAlloc.mips(code, alloc)
             RichText(tx("gamesv3_acessos_memoria_1_tudo_na", RegAlloc.memoryAccesses(before), RegAlloc.memoryAccesses(after)), style = MaterialTheme.typography.bodyMedium)
             CodeBlock(after.joinToString("\n"), tx("gamesv3_mips_com_alocacao"))
-            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.5 * liveScore + 0.5 * (if (valid) 1.0 else 0.3)) }
+            BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.5 * liveScore + 0.5 * (if (valid) 1.0 else 0.3)) }
         }
     }
 }
@@ -276,7 +276,7 @@ fun BranchMazeGame(ctx: GameCtx) {
     if (current >= blanks.size) {
         FeedbackBanner(mistakes == 0, tx("gamesv3_desvios_completos_agora_rode_no"))
         MipsRunView(MiniLang.asmText(lines), highlightBranches = true)
-        BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.15 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     val bi = blanks[current]

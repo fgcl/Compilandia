@@ -7,15 +7,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -32,12 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.compilandia.learning.Mission
 import com.compilandia.platform.nowMs
 import com.compilandia.ui.AppState
 import com.compilandia.ui.BigButton
@@ -49,7 +42,6 @@ import com.compilandia.ui.cast.Mood
 import com.compilandia.ui.fx.Fx
 import com.compilandia.ui.games.GameCtx
 import com.compilandia.ui.games.GameHost
-import com.compilandia.ui.pegboard
 import kotlin.random.Random
 import com.compilandia.textos.tx
 
@@ -65,7 +57,6 @@ private enum class Peca(val nome: String, val desc: String) {
 
 private enum class Fase { PORTAS, OFICINA, SALA, BALANCO, FIM }
 
-private data class Porta(val titulo: String, val desc: String, val premio: String, val cor: Color, val corEscura: Color, val perigosa: Boolean, val oficina: Boolean)
 
 /**
  * Corrida de portas: nove salas com assuntos misturados. Cada escolha muda o risco e o prêmio.
@@ -188,38 +179,4 @@ private fun Hud(sala: Int, vida: Int, pecas: List<Peca>) {
             }
         }
     }
-}
-
-@Composable
-private fun androidx.compose.foundation.layout.ColumnScope.Portas(m: Mission, onEscolhe: (Porta) -> Unit) {
-    val portas = listOf(
-        Porta(tx("corridascreen_tranquila"), tx("corridascreen_1_nivel_2", m.game.title, m.level), "+10", Color(0xFF2E7D4F), Color(0xFF17472D), false, false),
-        Porta(tx("corridascreen_perigosa"), tx("corridascreen_mais_dificil_sem_dica"), "+20", Color(0xFFB23A2A), Color(0xFF6A1F15), true, false),
-        Porta(tx("comum_oficina"), tx("corridascreen_pule_sala_pegue_peca"), tx("corridascreen_peca"), Color(0xFF1F6F8F), Color(0xFF10435A), false, true),
-    )
-    Row(
-        Modifier.weight(1f).fillMaxWidth().pegboard(Palette.drawerHi.copy(alpha = 0.14f)).padding(horizontal = 10.dp).padding(top = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom,
-    ) {
-        portas.forEachIndexed { i, p ->
-            Box(
-                Modifier.weight(1f).fillMaxHeight(if (i == 1) 0.96f else 0.84f).clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp))
-                    .background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(p.cor, p.corEscura))).clickable { Juice.click(); onEscolhe(p) }.padding(9.dp),
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
-                    Text(p.titulo, color = Color.White, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
-                    Text(p.desc, color = Color.White, style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
-                    Text(p.premio, color = Palette.hazard, style = MaterialTheme.typography.headlineSmall)
-                }
-                Box(Modifier.align(Alignment.CenterEnd).size(13.dp).clip(CircleShape).background(Palette.hazard))
-            }
-        }
-    }
-    Text(
-        tx("corridascreen_escolha_porta_assuntos_misturados_ficam"),
-        Modifier.fillMaxWidth().background(Palette.paper).padding(12.dp), style = MaterialTheme.typography.titleSmall, textAlign = TextAlign.Center,
-    )
-    @Suppress("UNUSED_EXPRESSION") Offset.Zero
-    @Suppress("UNUSED_EXPRESSION") Size.Zero
-    Spacer(Modifier.width(0.dp))
 }

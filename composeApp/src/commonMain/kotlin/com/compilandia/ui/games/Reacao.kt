@@ -36,7 +36,7 @@ import com.compilandia.ui.bancada.TocaLinha
 @Composable
 fun Reacao(passos: List<PassoReacao>, onContinuar: () -> Unit) {
     if (passos.isEmpty()) {
-        BigButton(tx("reacao_continuar"), Modifier.fillMaxWidth()) { onContinuar() }
+        BotaoDoJogo(tx("reacao_continuar"), Modifier.fillMaxWidth()) { onContinuar() }
         return
     }
     val linha = remember(passos) { LinhaDoTempo() }
@@ -68,5 +68,5 @@ fun Reacao(passos: List<PassoReacao>, onContinuar: () -> Unit) {
         }
     }
     ControlesPalco(linha, atual.nota)
-    BigButton(tx("reacao_continuar"), Modifier.fillMaxWidth()) { onContinuar() }
+    BotaoDoJogo(tx("reacao_continuar"), Modifier.fillMaxWidth()) { onContinuar() }
 }

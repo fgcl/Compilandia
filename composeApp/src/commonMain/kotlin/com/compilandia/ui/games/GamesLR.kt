@@ -100,7 +100,7 @@ private fun ShiftReduceRound(ctx: GameCtx, g: Grammar, input: List<String>, done
     if (cur == null) {
         FeedbackBanner(true, tx("gameslr_aceito_repare_reducoes_lidas_tras"))
         res.tree?.let { TreeView(it.toUi(t.grammar)) }
-        BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
+        BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done((1.0 - 0.12 * mistakes).coerceAtLeast(0.0)) }
         return
     }
     fun choose(a: LRAction?) {
@@ -198,7 +198,7 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
                     .clickable { picked[o] = !on; Sound.play(Sfx.CLICK) }.padding(10.dp)
             ) { Mono((if (on) "☑ " else "☐ ") + o.render(g), size = 15) }
         }
-        BigButton(tx("gameslr_fechar_estado"), Modifier.fillMaxWidth(), color = Palette.teal) {
+        BotaoDoJogo(tx("gameslr_fechar_estado"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val mine = picked.filterValues { it }.keys
             val inter = mine.intersect(closureOnly).size
             val union = (mine + closureOnly).size
@@ -210,7 +210,7 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
         FeedbackBanner(closureScore == 1f, if (closureScore == 1f) tx("gameslr_fechamento_perfeito") else tx("gameslr_estado_completo"))
         PaperCard { for (it in st.items) Mono((if (it in st.kernel) "★ " else "  ") + it.render(g), bold = it in st.kernel) }
         if (gotoSym == null || gotoTarget == null) {
-            BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(closureScore.toDouble()) }
+            BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) { done(closureScore.toDouble()) }
         } else {
             Text(tx("gameslr_agora_goto_i_1_2", stateId, gotoSym, gotoSym), style = MaterialTheme.typography.titleSmall)
             for (opt in gotoOptions) {
@@ -221,7 +221,7 @@ private fun ItemRound(ctx: GameCtx, a: LRAutomaton, stateId: Int, done: (Double)
                         .clickable(enabled = gotoPick == null) { gotoPick = opt; if (opt == gotoTarget) Juice.correct() else Juice.wrong() }.padding(10.dp)
                 ) { for (it in a.states[opt].kernel) Mono(it.render(g), size = 14) }
             }
-            if (gotoPick != null) BigButton(tx("comum_continuar_2"), Modifier.fillMaxWidth()) {
+            if (gotoPick != null) BotaoDoJogo(tx("comum_continuar_2"), Modifier.fillMaxWidth()) {
                 done(0.6 * closureScore + 0.4 * (if (gotoPick == gotoTarget) 1.0 else 0.0))
             }
         }
@@ -269,7 +269,7 @@ fun ConflictHunterGame(ctx: GameCtx) {
             }
         }
         StatesPeek(t)
-        BigButton(if (marks.values.none { it }) tx("gameslr_nao_ha_conflitos") else tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal) {
+        BotaoDoJogo(if (marks.values.none { it }) tx("gameslr_nao_ha_conflitos") else tx("comum_conferir_2"), Modifier.fillMaxWidth(), color = Palette.teal) {
             val mine = marks.filterValues { it }.keys
             val good = hidden.count { (it in mine) == (it in conflicts) }
             huntScore = good.toFloat() / hidden.size.coerceAtLeast(1)
@@ -335,7 +335,7 @@ private fun ConflictResolution(ctx: GameCtx, gid: String, g: Grammar, conflicts:
         }
         if (pick != null) {
             FeedbackBanner(pick == q.right, q.why)
-            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.6 * huntScore + 0.4 * (if (pick == q.right) 1.0 else 0.0)) }
+            BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish(0.6 * huntScore + 0.4 * (if (pick == q.right) 1.0 else 0.0)) }
         }
     }
 }
@@ -395,7 +395,7 @@ fun BisonWorkshopGame(ctx: GameCtx) {
         }
         if (v.passed) {
             FeedbackBanner(true, tx("gameslr_todos_testes_passaram_em_1", runs))
-            BigButton(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.08 * (runs - 1)).coerceIn(0.5, 1.0)) }
+            BotaoDoJogo(tx("comum_concluir"), Modifier.fillMaxWidth()) { ctx.finish((1.0 - 0.08 * (runs - 1)).coerceIn(0.5, 1.0)) }
         }
     }
     if (verdict?.passed != true) {

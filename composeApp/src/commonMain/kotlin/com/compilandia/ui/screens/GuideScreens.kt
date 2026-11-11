@@ -1,5 +1,8 @@
 package com.compilandia.ui.screens
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+
 import com.compilandia.ui.larguraDeLeitura
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,7 +52,7 @@ private val guideColor get() = Palette.teal
 fun GuideScreen(app: AppState) {
     val chapters = Library.guide
     Column(Modifier.fillMaxSize()) {
-        Header(tx("guidescreens_guia_trabalho_pratico"), tx("guidescreens_construa_compilador_completo_txt_ao"), guideColor)
+        Header(tx("guidescreens_guia_trabalho_pratico"), null, guideColor)
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             SpeechBubble("🦉", tx("comum_profa_gramatica"), tx("guidescreens_trabalho_pratico_pede"))
             if (chapters.isEmpty()) Text(tx("guidescreens_guia_em_construcao"), color = Palette.inkSoft)
@@ -58,11 +61,9 @@ fun GuideScreen(app: AppState) {
                 val read = c.number in app.ls.guideRead
                 PaperCard(Modifier.fillMaxWidth().clickable { app.go(Screen.GuideChapter(c.number)) }, border = guideColor, color = if (read) guideColor.copy(alpha = 0.07f) else Palette.white) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(if (read) "✅" else "${c.number}", fontSize = 22.sp, modifier = Modifier.width(36.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(c.title, style = MaterialTheme.typography.titleSmall)
-                            Text(c.summary, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-                        }
+                        // Lido vira um visto desenhado: o emoji pode faltar na fonte do navegador.
+                        Box(Modifier.width(36.dp)) { if (read) VistoDesenhado(Palette.green) else Text("${c.number}", fontSize = 22.sp) }
+                        Text(c.title, Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
                     }
                 }
             }
@@ -110,5 +111,15 @@ fun GuideChapterScreen(app: AppState, number: Int) {
             Spacer(Modifier.weight(1f))
             if (!finished) BigButton(if (blocking) tx("comum_responda") else tx("comum_continuar_2"), small = true, enabled = !blocking, color = guideColor) { Sound.play(Sfx.CLICK); shown++ }
         }
+    }
+}
+
+/** Um visto em dois traços. */
+@Composable
+private fun VistoDesenhado(cor: androidx.compose.ui.graphics.Color) {
+    androidx.compose.foundation.Canvas(Modifier.size(22.dp)) {
+        val w = size.width; val h = size.height; val t = 3.dp.toPx()
+        drawLine(cor, androidx.compose.ui.geometry.Offset(w * 0.12f, h * 0.55f), androidx.compose.ui.geometry.Offset(w * 0.4f, h * 0.82f), t, androidx.compose.ui.graphics.StrokeCap.Round)
+        drawLine(cor, androidx.compose.ui.geometry.Offset(w * 0.4f, h * 0.82f), androidx.compose.ui.geometry.Offset(w * 0.9f, h * 0.2f), t, androidx.compose.ui.graphics.StrokeCap.Round)
     }
 }
