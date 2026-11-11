@@ -270,11 +270,19 @@ fun RegionScreen(app: AppState, region: Region) {
                 extras()
                 VSpace(12)
             }
-            // Um Continuar só para a região (mural, rodada 4): antes cada assunto tinha o seu.
+            // Um Continuar só para a região (mural, rodada 4); a revisão aparece ao lado quando há assunto esquecendo (rodada 6).
+            val agora = remember { nowMs() }
             val alvo = nextHere
             val passo = remember(ls) { alvo?.let { com.compilandia.content.Trilha.proximo(l, it) } }
-            if (alvo != null && passo != null) Column(Modifier.fillMaxWidth().background(Palette.paperDark).padding(12.dp)) {
-                BigButton(tx("trilha_continuar", alvo.title), Modifier.fillMaxWidth()) { abrirPasso(app, alvo, passo) }
+            val revisar = remember(ls) { skills.filter { com.compilandia.content.Trilha.completa(l, it) && l.skill(it).memory.isDue(agora) } }
+            fun revisa(s: Skill) { com.compilandia.content.Trilha.proximo(l, s, agora)?.let { abrirPasso(app, s, it) } }
+            if ((alvo != null && passo != null) || revisar.isNotEmpty()) Row(
+                Modifier.fillMaxWidth().background(Palette.paperDark).padding(12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (alvo != null && passo != null) {
+                    BigButton(tx("trilha_continuar", alvo.title), Modifier.weight(1f)) { abrirPasso(app, alvo, passo) }
+                    if (revisar.isNotEmpty()) BigButton(tx("comum_revisar_1", revisar.size), color = Palette.hazard, textColor = Palette.hazardDark) { revisa(revisar.first()) }
+                } else BigButton(tx("regiao_revisar_assunto_1", revisar.first().title), Modifier.weight(1f), color = Palette.hazard, textColor = Palette.hazardDark) { revisa(revisar.first()) }
             }
         }
     }
@@ -290,8 +298,22 @@ private fun SkillRow(app: AppState, s: Skill, numero: Int, color: Color, isNext:
     val proximo = remember(ls) { com.compilandia.content.Trilha.proximo(l, s) }
     val progresso = if (passos.isEmpty()) 0f else feitas.toFloat() / passos.size
     val abre = { app.go(Screen.Trilha(s)) }
-    if (isNext) com.compilandia.ui.OpenDrawer(s.title, "$feitas/${passos.size}", numero = numero, cor = color, progresso = progresso, nota = proximo?.titulo, onClick = abre)
-    else com.compilandia.ui.Drawer(s.title, numero = numero, cor = color, progresso = progresso, note = "$feitas/${passos.size}", onClick = abre)
+    val agora = remember { nowMs() }
+    val revisao = remember(ls) { if (proximo == null && l.skill(s).memory.isDue(agora)) com.compilandia.content.Trilha.proximo(l, s, agora) else null }
+    // O canto da placa diz o estado: em andamento (2/6), feito (✓) ou pedindo revisão (botão Revisar).
+    val fim: @Composable () -> Unit = {
+        when {
+            revisao != null -> Text(
+                tx("regiao_revisar"), color = Palette.hazardDark, style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.clip(RoundedCornerShape(7.dp)).background(Palette.hazard).clickable { abrirPasso(app, s, revisao) }
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+            )
+            proximo == null -> Text("✓", color = Palette.green, style = MaterialTheme.typography.titleLarge)
+            else -> Text("$feitas/${passos.size}", color = if (isNext) Palette.hazardDark else Palette.on(Palette.drawer), fontFamily = com.compilandia.ui.LocalFonts.current.mono, style = MaterialTheme.typography.labelMedium)
+        }
+    }
+    if (isNext) com.compilandia.ui.OpenDrawer(s.title, "", numero = numero, cor = color, progresso = progresso, nota = proximo?.titulo, fim = fim, onClick = abre)
+    else com.compilandia.ui.Drawer(s.title, numero = numero, cor = color, progresso = progresso, fim = fim, onClick = abre)
     // Faixa média: as etapas aparecem abertas, cada uma tocável.
     if (etapasAbertas) androidx.compose.foundation.layout.FlowRow(
         Modifier.fillMaxWidth().padding(start = 8.dp, bottom = 4.dp),

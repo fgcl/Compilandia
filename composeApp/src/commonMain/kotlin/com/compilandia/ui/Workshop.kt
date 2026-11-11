@@ -150,7 +150,8 @@ private fun BarraDaGaveta(progresso: Float, trilho: Color, cor: Color) {
 @Composable
 fun Drawer(
     label: String, modifier: Modifier = Modifier, note: String? = null, dimmed: Boolean = false,
-    numero: Int? = null, cor: Color = Palette.drawerHi, progresso: Float? = null, onClick: () -> Unit,
+    numero: Int? = null, cor: Color = Palette.drawerHi, progresso: Float? = null,
+    fim: (@Composable () -> Unit)? = null, onClick: () -> Unit,
 ) {
     val body = Palette.drawer
     Row(
@@ -164,7 +165,8 @@ fun Drawer(
             Text(label, color = Palette.on(body), style = MaterialTheme.typography.titleMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (progresso != null) BarraDaGaveta(progresso, Palette.drawerLo, cor)
         }
-        if (note != null) Text(note, color = Palette.on(body), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, maxLines = 1)
+        if (fim != null) fim()
+        else if (note != null) Text(note, color = Palette.on(body), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, maxLines = 1)
     }
 }
 
@@ -172,7 +174,7 @@ fun Drawer(
 @Composable
 fun OpenDrawer(
     title: String, hint: String, numero: Int? = null, cor: Color = Palette.drawer, progresso: Float? = null,
-    nota: String? = null, onClick: () -> Unit,
+    nota: String? = null, fim: (@Composable () -> Unit)? = null, onClick: () -> Unit,
 ) {
     val onHazard = Palette.hazardDark
     Row(
@@ -187,7 +189,8 @@ fun OpenDrawer(
             if (nota != null) Text(nota, color = onHazard.copy(alpha = 0.8f), style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (progresso != null) BarraDaGaveta(progresso, onHazard.copy(alpha = 0.25f), onHazard)
         }
-        Text(hint, color = onHazard, fontFamily = LocalFonts.current.mono, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        if (fim != null) fim()
+        else Text(hint, color = onHazard, fontFamily = LocalFonts.current.mono, fontSize = 13.sp, fontWeight = FontWeight.Bold)
     }
 }
 

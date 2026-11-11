@@ -51,4 +51,6 @@
     <string name="trilha_etapa_revisao">Revisão rápida</string>
     <string name="trilha_etapa_revisao_sub">Um clipe de 30 segundos e um desafio.</string>
     <string name="revisao_desafio">Agora um desafio rápido</string>
+    <string name="regiao_revisar">Revisar</string>
+    <string name="regiao_revisar_assunto_1">Revisar: %1$s</string>
 </resources>
