@@ -246,11 +246,13 @@ As tabelas de sempre seguem lá, em "Tabelas completas", para conferir exercíci
 
 ### Laboratório Bison
 Também abre pela Oficina Yacc/Bison. Cada mudança no `.y` roda o motor na hora.
-- **Arquivo em blocos:** declarações e regras viram blocos. A régua de precedência se arrasta pela alça, e tocar no `%left` gira para `%right` e `%nonassoc`.
-- **Passo a passo:** pilha de estados, de símbolos e de valores lado a lado. Ao reduzir, a conta aparece com os números: `$$ = 2 + 12 = 14`.
-- **Conflitos:** cada célula com duas ações vira um duelo entre o item que empilha e o item que reduz, com o que decidiu a briga.
-- **Estados:** os estados do relatório `bison -v`, e o topo da pilha acende durante a execução.
-- Exemplos prontos: calculadora, sem precedência, potência com `%right` e menos unário com `%prec`.
+- **A conta e a árvore:** no alto ficam a entrada, o valor que o `.y` calculou e a árvore da conta, com o valor de cada operador. Quem fica embaixo é calculado primeiro. Se o valor não bate com a matemática, ele fica vermelho e a conta certa aparece.
+- **Régua de precedência:** cada `%left` é uma barra que se arrasta pela alça, e a árvore muda junto. Tocar no `%left` gira para `%right` e `%nonassoc`. Sem precedência, **Pôr %left** cria uma linha por operador.
+- **Passo a passo:** a pilha numa fila só, com o estado em cima e o valor embaixo de cada símbolo, e a ação do passo: empilhar, ou reduzir com a conta (`$$ = 2 + 12 = 14`).
+- **Conflitos:** os que sobraram ficam abertos, como um duelo entre empilhar e reduzir. Os que a precedência resolveu ocupam uma linha cada, e um toque abre o duelo.
+- **Estados:** os estados do relatório `bison -v` que estão na pilha, com o topo aceso. Os outros abrem num toque.
+- **Arquivo .y:** o texto inteiro, para ler ou editar.
+- Exemplos prontos: calculadora, sem precedência (`2*3+4` sai 14), potência com `%right` e menos unário com `%prec`.
 
 ## Estrutura
 

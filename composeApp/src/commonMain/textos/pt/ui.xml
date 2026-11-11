@@ -115,7 +115,7 @@
     <string name="gamefactory_passou_nos_robos_com_1">Passou nos robôs com %1$s estado(s). O mínimo é %2$s.</string>
     <string name="gamefactory_testar_nos_robos">Testar nos robôs</string>
     <!-- GamesGrammar.kt -->
-    <string name="gamesgrammar_alvo">🎯 Alvo: </string>
+    <string name="gamesgrammar_alvo">Alvo:</string>
     <string name="gamesgrammar_forma_sentencial_atual">Forma sentencial atual:</string>
     <string name="gamesgrammar_1_passos_2_becos">%1$s passos · %2$s becos</string>
     <string name="gamesgrammar_olhe_proximo_terminal_alvo_que">Olhe o próximo terminal do ALVO que ainda não apareceu: qual produção pode começar com ele?</string>
@@ -136,18 +136,18 @@
     <string name="gamesgrammar_comece_pelos_espacos_producao_principal">Comece pelos espaços da produção principal: o que vem primeiro nela?</string>
     <string name="gamesgrammar_gramatica_curada_preencha_espacos">Gramática curada (preencha os espaços):</string>
     <string name="gamesgrammar_pecas">Peças:</string>
-    <string name="gamesgrammar_operar">Operar ✔</string>
+    <string name="gamesgrammar_operar">Operar</string>
     <string name="gamesgrammar_cirurgia_perfeita_nova_gramatica_gera">Cirurgia perfeita! A nova gramática gera a MESMA linguagem, sem o problema.</string>
     <string name="gamesgrammar_quase_versao_certa">Quase! A versão certa é:</string>
-    <string name="gamesgrammar_agora_ela_ll_1">E agora ela é LL(1) ✅</string>
+    <string name="gamesgrammar_agora_ela_ll_1">E agora ela é LL(1)</string>
     <string name="gamesgrammar_ainda_nao_ll_1_mas">Ainda não é LL(1), mas melhorou.</string>
     <string name="gamesgrammar_first_olhe_inicio_cada_producao">FIRST(A): olhe o INÍCIO de cada produção de A. Terminal entra direto; não-terminal → copie o FIRST dele (e, se ele pode sumir, olhe o próximo).</string>
     <string name="gamesgrammar_follow_procure_no_lado_direito">FOLLOW: procure A no LADO DIREITO das produções e veja quem vem logo depois. O inicial sempre tem $. Se A está no fim, herda o FOLLOW do lado esquerdo.</string>
     <string name="gamesgrammar_anulaveis_podem_virar">Anuláveis (podem virar ε): </string>
     <string name="gamesgrammar_ingredientes_para_1_2">Ingredientes para %1$s(%2$s):</string>
-    <string name="gamesgrammar_destilar">Destilar ✔</string>
+    <string name="gamesgrammar_destilar">Destilar</string>
     <string name="gamesgrammar_pocao_perfeita_todos_conjuntos_certos">Poção perfeita! Todos os conjuntos certos.</string>
-    <string name="gamesgrammar_1_dos_caldeiroes_certos_respostas">%1$s% dos caldeirões certos. As respostas corretas estão marcadas com ✔.</string>
+    <string name="gamesgrammar_1_dos_caldeiroes_certos_respostas">%1$s% dos caldeirões certos. As respostas corretas aparecem embaixo.</string>
     <string name="gamesgrammar_para_cada_coloque_em_m">Para cada A → α: coloque-a em M[A, a] para todo a em FIRST(α).</string>
     <string name="gamesgrammar_se_pode_virar_coloque_tambem">Se α pode virar ε, coloque também em M[A, b] para todo b em FOLLOW(A).</string>
     <string name="gamesgrammar_m_1_2">M[%1$s, %2$s] =</string>
@@ -167,10 +167,10 @@
     <string name="gamesgrammar_nao_se_aplica_topo_terminal">não se aplica: o topo é terminal</string>
     <string name="gamesgrammar_acao_certa_era_1_ja">A ação certa era: %1$s (já apliquei para você).</string>
     <string name="gamesgrammar_hmm_nao_olhe_topo_pilha">Hmm, não. Olhe o topo da pilha e o próximo token de novo.</string>
-    <string name="gamesgrammar_casar_1">✅ casar '%1$s'</string>
+    <string name="gamesgrammar_casar_1">casar '%1$s'</string>
     <string name="gamesgrammar_expandir_1_2">expandir %1$s→%2$s</string>
-    <string name="gamesgrammar_aceitar">🏁 aceitar</string>
-    <string name="gamesgrammar_erro">🚨 erro</string>
+    <string name="gamesgrammar_aceitar">aceitar</string>
+    <string name="gamesgrammar_erro">erro</string>
     <!-- GamesLR.kt -->
     <string name="gameslr_aceito_repare_reducoes_lidas_tras">ACEITO! Repare: as reduções, lidas de trás para frente, são uma derivação mais à DIREITA.</string>
     <string name="gameslr_ainda_nao_ha_handle_completo">Ainda não há um handle completo no topo. Empilhe mais!</string>
@@ -187,14 +187,14 @@
     <string name="gameslr_quais_itens_fechamento_acrescenta">Quais itens o FECHAMENTO acrescenta?</string>
     <string name="gameslr_para_cada_item_com_antes">Para cada item com • antes de um NÃO-TERMINAL B, adicione B → •γ para TODA produção de B. Repita para os novos itens!</string>
     <string name="gameslr_itens_com_no_meio_como">Itens com o • no meio (como X → a • b) nunca são adicionados pelo fechamento.</string>
-    <string name="gameslr_fechar_estado">Fechar estado ✔</string>
+    <string name="gameslr_fechar_estado">Fechar estado</string>
     <string name="gameslr_fechamento_perfeito">Fechamento perfeito!</string>
     <string name="gameslr_estado_completo">O estado completo é:</string>
     <string name="gameslr_agora_goto_i_1_2">Agora: GOTO(I%1$s, %2$s) = qual estado? (avance o • sobre %3$s e feche)</string>
     <string name="gameslr_gramatica_1">Gramática: %1$s</string>
     <string name="gameslr_algumas_celulas_tabela_slr_estao">Algumas células da tabela SLR estão escondidas (?). Toque nas que têm CONFLITO (duas ações).</string>
     <string name="gameslr_conflito_shift_reduce_estado_tem">Conflito shift/reduce: o estado tem um item A → α • (reduz) E um item com • antes do terminal t, com t ∈ FOLLOW(A).</string>
-    <string name="gameslr_nao_ha_conflitos">Não há conflitos ✔</string>
+    <string name="gameslr_nao_ha_conflitos">Não há conflitos</string>
     <string name="gameslr_voce_acertou_1_das_celulas">Você acertou %1$s% das células escondidas. Conflitos reais: </string>
     <string name="gameslr_nenhum_gramatica_slr_1">nenhum: a gramática é SLR(1)!</string>
     <string name="gameslr_esconder_estados">▲ esconder estados</string>
@@ -225,14 +225,14 @@
     <string name="gameslr_bison_calc_y_calc" translatable="false">▶ bison calc.y &amp;&amp; ./calc</string>
     <string name="gameslr_detalhes_dos_conflitos">Detalhes dos conflitos:</string>
     <string name="gameslr_estado_1_token_2_3">estado %1$s, token %2$s: %3$s → %4$s</string>
-    <string name="gameslr_todos_testes_passaram_em_1">Todos os testes passaram em %1$s execução(ões)! Você acabou de programar um gerador de analisadores. 🎉</string>
-    <string name="gameslr_mostrar_dica_completa_encerrar">🏳️ Mostrar a dica completa e encerrar</string>
+    <string name="gameslr_todos_testes_passaram_em_1">Todos os testes passaram em %1$s execução(ões)! Você acabou de programar um gerador de analisadores.</string>
+    <string name="gameslr_mostrar_dica_completa_encerrar">Mostrar a dica completa e encerrar</string>
     <string name="gameslr_encerrar_vou_revisar_depois">Encerrar (vou revisar depois)</string>
     <!-- GamesLexical.kt -->
     <string name="gameslexical_ainda_nao_antes_1_vem">Ainda não! Antes de **%1$s** vem outra fase.</string>
-    <string name="gameslexical_arraste_fases_para_esteira_na">🏭 Arraste as fases para a ESTEIRA na ordem em que o código passa por elas:</string>
-    <string name="gameslexical_codigo_fonte">📄 código-fonte</string>
-    <string name="gameslexical_solte_proxima_fase_aqui">   ⬇\n   📥 solte a próxima fase aqui</string>
+    <string name="gameslexical_arraste_fases_para_esteira_na">Arraste as fases para a ESTEIRA na ordem em que o código passa por elas:</string>
+    <string name="gameslexical_codigo_fonte">código-fonte</string>
+    <string name="gameslexical_solte_proxima_fase_aqui">solte a próxima fase aqui</string>
     <string name="gameslexical_primeiro_texto_vira_tokens_depois">Primeiro o texto vira tokens, depois os tokens viram árvore. Só depois disso dá para checar tipos.</string>
     <string name="gameslexical_otimizacao_vem_depois_codigo_intermediario">Otimização vem depois do código intermediário e antes do código final.</string>
     <string name="gameslexical_pipeline_montado_lexico_sintatico_semantico">Pipeline montado! Léxico → Sintático → Semântico → Intermediário → Otimização → Código.</string>
@@ -241,10 +241,10 @@
     <string name="gameslexical_isso_1_produz_2">Isso! %1$s produz %2$s.</string>
     <string name="gameslexical_era_1_ela_produz_2">Era **%1$s**: ela produz %2$s.</string>
     <string name="gameslexical_proximo">Próximo ▶</string>
-    <string name="gameslexical_lexico">🔪 Léxico</string>
-    <string name="gameslexical_sintatico">🌳 Sintático</string>
-    <string name="gameslexical_semantico">🔍 Semântico</string>
-    <string name="gameslexical_execucao">💥 Execução</string>
+    <string name="gameslexical_lexico">Léxico</string>
+    <string name="gameslexical_sintatico">Sintático</string>
+    <string name="gameslexical_semantico">Semântico</string>
+    <string name="gameslexical_execucao">Execução</string>
     <string name="gameslexical_nao_pertence_nenhum_padrao_token">'@' não pertence a nenhum padrão de token: o scanner nem sabe o que é isso.</string>
     <string name="gameslexical_string_nunca_fecha_aspas_lexico">A string nunca fecha as aspas: o léxico não consegue formar o token string.</string>
     <string name="gameslexical_caractere_invalido_na_linguagem_erro">'#' é um caractere inválido na linguagem: erro léxico.</string>
@@ -264,20 +264,20 @@
     <string name="gameslexical_scanner_gera_num_2_id">O scanner gera NUM(2) e ID(x), tokens válidos! Mas 'int NUM ID' não casa com a regra de declaração: sintático.</string>
     <string name="gameslexical_caso_1_2_quem_pega">Caso %1$s/%2$s: quem pega este erro?</string>
     <string name="gameslexical_lexico_caractere_palavra_impossivel_sintatic">Léxico = caractere/palavra impossível. Sintático = tokens OK mas estrutura errada. Semântico = estrutura OK mas significado errado (tipos, declarações). Execução = depende de valores reais.</string>
-    <string name="gameslexical_arraste_cartao_suspeito_ate_setor">🕵️ Arraste o cartão do suspeito até o setor que pega esse erro:</string>
-    <string name="gameslexical_caso_1">📁 CASO %1$s</string>
+    <string name="gameslexical_arraste_cartao_suspeito_ate_setor">Arraste o cartão do suspeito até o setor que pega esse erro:</string>
+    <string name="gameslexical_caso_1">CASO %1$s</string>
     <string name="gameslexical_tempo_esgotado">Tempo esgotado! </string>
     <string name="gameslexical_proximo_caso">Próximo caso ▶</string>
-    <string name="gameslexical_toque_nos_espacos_entre_caracteres">✂️ Toque nos espaços entre os caracteres para cortar</string>
-    <string name="gameslexical_toque_em_cada_token_para">🏷️ Toque em cada token para escolher a classe</string>
+    <string name="gameslexical_toque_nos_espacos_entre_caracteres">Toque nos espaços entre os caracteres para cortar</string>
+    <string name="gameslexical_toque_em_cada_token_para">Toque em cada token para escolher a classe</string>
     <string name="gameslexical_resultado">Resultado</string>
     <string name="gameslexical_regra_maior_casamento_scanner_engole">Regra do maior casamento: o scanner engole o MAIOR lexema possível. `&gt;=` é UM token; `count2` é UM identificador.</string>
     <string name="gameslexical_palavras_como_iff_ou_whilex">Palavras como `iff` ou `whilex` NÃO são palavras-chave: são identificadores!</string>
-    <string name="gameslexical_cortar">Cortar! ✂️</string>
+    <string name="gameslexical_cortar">Cortar!</string>
     <string name="gameslexical_cortes_certos_eram_estes_1">Os cortes certos eram estes (%1$s% de acerto nos cortes). Agora classifique:</string>
     <string name="gameslexical_cortes_perfeitos_agora_classifique">Cortes perfeitos! Agora classifique:</string>
     <string name="gameslexical_arraste_cada_token_para_caixa">Arraste cada token para a caixa da classe dele (ou toque para alternar):</string>
-    <string name="gameslexical_conferir_classes">Conferir classes ✔</string>
+    <string name="gameslexical_conferir_classes">Conferir classes</string>
     <string name="gameslexical_cortes_1_classes_2_total">Cortes: %1$s% · Classes: %2$s%. Total de tokens: %3$s (espaços somem, o scanner os descarta).</string>
     <string name="gameslexical_regex_1_2">regex: %1$s   (%2$s)</string>
     <string name="gameslexical_nao_existe_transicao_q_1">Não existe transição de q%1$s com '%2$s'. Use o botão 'travou'!</string>
@@ -286,11 +286,13 @@
     <string name="gameslexical_vazia">ε (vazia)</string>
     <string name="gameslexical_ache_circulo_amarelo_estado_atual">Ache o círculo amarelo (estado atual) e procure a seta que sai dele com o símbolo amarelo da cadeia.</string>
     <string name="gameslexical_se_nao_houver_seta_com">Se não houver seta com aquele símbolo, o AFD trava e REJEITA.</string>
-    <string name="gameslexical_travou_sem_transicao">💥 Travou! (sem transição)</string>
+    <string name="gameslexical_travou_sem_transicao">Travou! (sem transição)</string>
     <string name="gameslexical_isso_sem_transicao_rejeita_na">Isso! Sem transição = rejeita na hora.</string>
     <string name="gameslexical_fim_cadeia_trem_parou_em">Fim da cadeia! O trem parou em q%1$s. E aí?</string>
-    <string name="gameslexical_aceita">✅ Aceita</string>
-    <string name="gameslexical_rejeita">❌ Rejeita</string>
+    <string name="gameslexical_aceita">Aceita</string>
+    <string name="gameslexical_rejeita">Rejeita</string>
+    <string name="gameslexical_barra">BARRA</string>
+    <string name="gameslexical_entra">ENTRA</string>
     <string name="gameslexical_parou_num_estado_aceitacao_circulo">Parou num estado de ACEITAÇÃO (círculo duplo): aceita.</string>
     <string name="gameslexical_nao_parou_num_circulo_duplo">Não parou num círculo duplo: rejeita.</string>
     <string name="gameslexical_proximo_trem">Próximo trem ▶</string>
@@ -299,7 +301,7 @@
     <string name="gameslexical_balada_regex">Balada REGEX</string>
     <string name="gameslexical_so_entra_quem_casa_com">só entra quem casa com:  %1$s</string>
     <string name="gameslexical_fila_1_pessoas">Fila: %1$s pessoas</string>
-    <string name="gameslexical_arraste_pessoa_direita_entra_esquerda">👉 Arraste a pessoa: DIREITA = entra · ESQUERDA = barra</string>
+    <string name="gameslexical_arraste_pessoa_direita_entra_esquerda">Arraste a pessoa: DIREITA = entra · ESQUERDA = barra</string>
     <string name="gameslexical_cadeia_vazia">ε (cadeia vazia)</string>
     <string name="gameslexical_leia_regex_como_receita_zero">Leia a regex como uma receita: * = zero ou mais vezes, + = uma ou mais, | = ou.</string>
     <string name="gameslexical_tente_andar_com_cadeia_pela">Tente 'andar' com a cadeia pela regex da esquerda para a direita.</string>
@@ -316,17 +318,17 @@
     <string name="gamessemantic_raiz_tipo_1_valor_2">Raiz: tipo %1$s, valor %2$s. Você fez uma avaliação em PÓS-ORDEM, é assim que um analisador LR avalia uma SDD S-atribuída.</string>
     <string name="gamessemantic_b_6_2" translatable="false">a + b * ( 6 / 2 )</string>
     <string name="gamessemantic_1_2_3_3" translatable="false">( 1 + 2 ) * ( a + 3 * 3 )</string>
-    <string name="gamessemantic_dobra_constantes_toque_nos_operadores">⚡ Dobra de constantes: toque nos OPERADORES que o compilador pode calcular já em tempo de compilação.</string>
+    <string name="gamessemantic_dobra_constantes_toque_nos_operadores">Dobra de constantes: toque nos OPERADORES que o compilador pode calcular já em tempo de compilação.</string>
     <string name="gamessemantic_no_constante_se_todas_folhas">Um nó é constante se TODAS as folhas abaixo dele são números (nenhuma variável).</string>
-    <string name="gamessemantic_dobrar">Dobrar! ✔</string>
+    <string name="gamessemantic_dobrar">Dobrar!</string>
     <string name="gamessemantic_depois_dobra_1">Depois da dobra: %1$s</string>
-    <string name="gamessemantic_variavel_destacada_em_amarelo_enxerga">🔦 A variável destacada em amarelo enxerga QUAL declaração?</string>
+    <string name="gamessemantic_variavel_destacada_em_amarelo_enxerga">A variável destacada em amarelo enxerga QUAL declaração?</string>
     <string name="gamessemantic_suba_partir_uso_procure_declaracao">Suba a partir do uso: procure a declaração no MESMO bloco (antes do uso); se não achar, vá para o bloco de fora. É uma PILHA de tabelas de símbolos.</string>
     <string name="gamessemantic_isso_escopo_mais_interno_que">Isso! O escopo mais interno que já declarou '%1$s'.</string>
     <string name="gamessemantic_nenhuma_declaracao_visivel_1_nao">Nenhuma declaração visível: '%1$s' NÃO foi declarada aqui!</string>
     <string name="gamessemantic_nao_essa_declaracao_nao_mais">Não: essa declaração não é a mais próxima visível (ou ainda não estava declarada / já saiu de escopo).</string>
     <string name="gamessemantic_voce_resolveu_1_2_usos">Você resolveu %1$s de %2$s usos.</string>
-    <string name="gamessemantic_nao_foi_declarada">🚫 Não foi declarada!</string>
+    <string name="gamessemantic_nao_foi_declarada">Não foi declarada!</string>
     <string name="gamessemantic_exato_erro_semantico_variavel_nao">Exato: erro semântico, variável não declarada.</string>
     <string name="gamessemantic_tem_sim_declaracao_visivel_destacada">Tem sim uma declaração visível (destacada em verde).</string>
     <string name="gamessemantic_proximo_uso">Próximo uso ▶</string>
@@ -334,8 +336,8 @@
     <string name="gamessemantic_atribuicao_final_vem_por_ultimo">A atribuição final vem por último!</string>
     <string name="gamessemantic_temporario_t1_t2_so_pode">Um temporário (t1, t2…) só pode ser usado DEPOIS da instrução que o calcula.</string>
     <string name="gamessemantic_comece_pelas_folhas_mais_fundas">Comece pelas folhas mais fundas da árvore: elas viram as primeiras instruções.</string>
-    <string name="gamessemantic_programa_tac_solte_pecas_aqui">programa.tac  ⬅ solte as peças aqui</string>
-    <string name="gamessemantic_pecas_esteira_arraste_para_programa">🔧 Peças da esteira (arraste para o programa):</string>
+    <string name="gamessemantic_programa_tac_solte_pecas_aqui">programa.tac: solte as peças aqui</string>
+    <string name="gamessemantic_pecas_esteira_arraste_para_programa">Peças da esteira (arraste para o programa):</string>
     <string name="gamessemantic_programa_montado_cada_instrucao_tem">Programa montado! Cada instrução tem no máximo um operador, é por isso que se chama código de TRÊS endereços.</string>
     <!-- GamesV2.kt -->
     <string name="gamesv2_fabrica_concluida_cada_estado_afd">Fábrica concluída! Cada estado do AFD é um CONJUNTO de estados do AFN. O AFD completo tem %1$s estados.</string>
@@ -344,7 +346,7 @@
     <string name="gamesv2_primeiro_move_cada_estado_1">Primeiro o MOVE: de cada estado de %1$s, para onde vai uma seta '%2$s'? = %3$s</string>
     <string name="gamesv2_depois_fecho_siga_tambem_todas">Depois o ε-FECHO: siga também todas as setas ε a partir desses estados (e deles mesmos).</string>
     <string name="gamesv2_nenhum">∅ nenhum</string>
-    <string name="gamesv2_confirmar">Confirmar ✔</string>
+    <string name="gamesv2_confirmar">Confirmar</string>
     <string name="gamesv2_isso">Isso! </string>
     <string name="gamesv2_move_1_depois_fecho_2">move = %1$s, depois ε-fecho = %2$s.</string>
     <string name="gamesv2_proxima_transicao">Próxima transição ▶</string>
@@ -356,19 +358,19 @@
     <string name="gamesv2_lexemas">lexemas: </string>
     <string name="gamesv2_scanner_certo_em_1_execucao">Scanner certo em %1$s execução(ões)!</string>
     <string name="gamesv2_desistir_ver_dica_encerrar">Desistir (ver dica e encerrar)</string>
-    <string name="gamesv2_em_qual_token_parser_ll">🚨 Em qual token o parser LL(1) PERCEBE o erro?</string>
+    <string name="gamesv2_em_qual_token_parser_ll">Em qual token o parser LL(1) PERCEBE o erro?</string>
     <string name="gamesv2_recuperacao">Recuperação</string>
     <string name="gamesv2_ll_1_le_esquerda_para">O LL(1) lê da esquerda para a direita e para no PRIMEIRO token que nenhuma frase válida poderia ter naquela posição.</string>
     <string name="gamesv2_no_modo_panico_parser_joga">No modo pânico, o parser joga tokens fora até achar um sincronizador (um token do FOLLOW do não-terminal, como ';').</string>
-    <string name="gamesv2_este">É este! ✔</string>
+    <string name="gamesv2_este">É este!</string>
     <string name="gamesv2_erro_detectado_em_1_token">O erro é detectado em '%1$s' (token %2$s). Propriedade do prefixo viável: tudo antes dele ainda poderia ser um programa válido.</string>
     <string name="gamesv2_agora_modo_panico_toque_no">Agora o **modo pânico**: toque no token onde o parser VOLTA a trabalhar normalmente (o sincronizador).</string>
-    <string name="gamesv2_volta_aqui">Volta aqui ✔</string>
+    <string name="gamesv2_volta_aqui">Volta aqui</string>
     <string name="gamesv2_em_vez_parar_no_primeiro">Em vez de parar no primeiro erro, o compilador se recupera e continua, assim ele lista TODOS os erros numa compilação só.</string>
     <string name="gamesv2_programa_terminou_com_1_pico">Programa terminou com %1$s. Pico da pilha: %2$s registros de ativação.</string>
-    <string name="gamesv2_chamar_1_2">📥 chamar %1$s(%2$s)</string>
-    <string name="gamesv2_1_retorna_2">📤 %1$s retorna %2$s</string>
-    <string name="gamesv2_chamar_1_0">📥 chamar %1$s(0)</string>
+    <string name="gamesv2_chamar_1_2">chamar %1$s(%2$s)</string>
+    <string name="gamesv2_1_retorna_2">%1$s retorna %2$s</string>
+    <string name="gamesv2_chamar_1_0">chamar %1$s(0)</string>
     <string name="gamesv2_que_acontece_agora">O que acontece agora?</string>
     <string name="gamesv2_olhe_registro_topo_em_qual">Olhe o registro do TOPO: em qual linha ele está? Se ele chama alguém, EMPILHA. Se termina, DESEMPILHA e devolve o valor.</string>
     <string name="gamesv2_nao_pense_no_registro_topo">Não. Pense no registro do topo da pilha.</string>
@@ -376,7 +378,7 @@
     <string name="gamesv2_1_b_c" translatable="false">( a + 1 ) * ( b - c )</string>
     <string name="gamesv2_d_b_2" translatable="false">d * ( a - b ) / 2</string>
     <string name="gamesv2_r_1_4_b_2" translatable="false">r = %1$s     (a=4, b=2, c=3, d=5)</string>
-    <string name="gamesv2_rodando_no_mars_bolso_r">Rodando no "MARS de bolso": r = %1$s. Seu assembly funciona! 🎉</string>
+    <string name="gamesv2_rodando_no_mars_bolso_r">Rodando no "MARS de bolso": r = %1$s. Seu assembly funciona!</string>
     <string name="gamesv2_traduza_1_tijolo_por_vez">Traduza **%1$s** (um tijolo por vez, na ordem):</string>
     <string name="gamesv2_padrao_carrega_operandos_em_registradores">Padrão: carrega os operandos em registradores (lw ou li para constantes), faz a conta no registrador, guarda o resultado na memória (sw).</string>
     <string name="gamesv2_lw_load_word_memoria_registrador">lw = load word (memória → registrador); sw = store word (registrador → memória).</string>
@@ -384,7 +386,7 @@
     <string name="gamesv2_primeiro_precisa_carregar_valores_lw">Primeiro precisa CARREGAR os valores (lw) para um registrador.</string>
     <string name="gamesv2_conta_ja_esta_no_registrador">A conta já está no registrador; agora GUARDE o resultado (sw).</string>
     <string name="gamesv2_nao_essa_ainda_siga_carregar">Não é essa ainda. Siga: carregar → operar → guardar.</string>
-    <string name="gamesv2_solte_tijolo_aqui_1_2">🔩 solte o tijolo aqui (%1$s/%2$s)</string>
+    <string name="gamesv2_solte_tijolo_aqui_1_2">solte o tijolo aqui (%1$s/%2$s)</string>
     <string name="gamesv2_escreva_metodo_1_parser_descendente">Escreva o método de **%1$s** do parser descendente recursivo (toque nas linhas na ordem).</string>
     <string name="gamesv2_producao_vira_sequencia_terminal_casatoken">Uma produção vira uma sequência: terminal → casaToken("x"); não-terminal → chamada X();</string>
     <string name="gamesv2_com_varias_producoes_escolha_pelo">Com várias produções, escolha pelo token atual: if (tok em FIRST da produção). A produção ε vira o else que não faz nada.</string>
@@ -395,7 +397,7 @@
     <string name="gamesv3_rodada_1_todo_par_com">Rodada 1: todo par com um estado final e outro não-final é distinguível.</string>
     <string name="gamesv3_depois_p_q_distinguivel_se">Depois: {p,q} é distinguível se, com algum símbolo, eles vão para um par já marcado. Repita até não mudar nada.</string>
     <string name="gamesv3_transicoes">Transições: </string>
-    <string name="gamesv3_conferir_tabela">Conferir tabela ✔</string>
+    <string name="gamesv3_conferir_tabela">Conferir tabela</string>
     <string name="gamesv3_tabela_perfeita">Tabela perfeita!</string>
     <string name="gamesv3_1_celula_erradas_em_vermelho">%1$s célula(s) erradas (em vermelho).</string>
     <string name="gamesv3_classes_equivalentes">Classes equivalentes: </string>
@@ -417,11 +419,11 @@
     <string name="gamesv3_trabalhe_baixo_para_cima_depois">Trabalhe de BAIXO para CIMA: depois da última instrução nada está vivo.</string>
     <string name="gamesv3_in_use_out_def_temporario">in = use ∪ (out − def): um temporário fica vivo de onde é definido até o último uso.</string>
     <string name="gamesv3_instrucao">instrução</string>
-    <string name="gamesv3_conferir_vivacidade">Conferir vivacidade ✔</string>
+    <string name="gamesv3_conferir_vivacidade">Conferir vivacidade</string>
     <string name="gamesv3_vivacidade_1_correto">Vivacidade: %1$s%. Correto: </string>
     <string name="gamesv3_passo_2_coloracao_use_so">**Passo 2: coloração:** use só **%1$s** registrador(es). Toque num temporário e depois num registrador. Vizinhos (vivos juntos) não podem dividir registrador!</string>
     <string name="gamesv3_comece_pelo_no_com_mais">Comece pelo nó com MAIS vizinhos. Nós sem aresta entre si podem repetir registrador.</string>
-    <string name="gamesv3_alocar">Alocar ✔</string>
+    <string name="gamesv3_alocar">Alocar</string>
     <string name="gamesv3_alocacao_valida_com_1_registrador">Alocação válida com %1$s registrador(es)!</string>
     <string name="gamesv3_1_conflito_temporarios_vivos_ao">%1$s conflito(s): temporários vivos ao mesmo tempo dividindo registrador.</string>
     <string name="gamesv3_acessos_memoria_1_tudo_na">Acessos à memória: **%1$s** (tudo na memória) → **%2$s** (com registradores).</string>
@@ -436,8 +438,7 @@
     <string name="machine_grande_compilador">Grande Compilador</string>
     <string name="machine_religado">Religado</string>
     <!-- PlayScreen.kt -->
-    <string name="playscreen_faltam_1"> · faltam %1$s</string>
-    <string name="playscreen_dicas_1">Dicas: %1$s</string>
+    <string name="playscreen_faltam_1">Faltam %1$s</string>
     <string name="playscreen_voce_sabe_isso">Você sabe isso?</string>
     <string name="playscreen_vou_chutar">Vou chutar</string>
     <string name="playscreen_dica_1">Dica %1$s</string>
@@ -465,8 +466,6 @@
     <string name="playscreen_1_dias">%1$s dias</string>
     <string name="playscreen_use_revisao_relampago_no_mapa">Use a Revisão Relâmpago no mapa.</string>
     <string name="playscreen_rodada_1_2">Rodada %1$s/%2$s</string>
-    <string name="playscreen_mostrar_resolvendo_abre_depois_sua">Mostrar resolvendo. Abre depois da sua tentativa.</string>
-    <string name="playscreen_abre_depois_sua_tentativa">Abre depois da sua tentativa.</string>
     <!-- Reward.kt -->
     <string name="reward_sequencia_1_2">Sequência de %1$s: +%2$s</string>
     <string name="reward_1_xp">+%1$s XP</string>
@@ -479,26 +478,18 @@
     <string name="labbisonscreen_menos_unario">Menos unário</string>
     <string name="labbisonscreen_passo_passo">Passo a passo</string>
     <string name="labbisonscreen_estados">Estados</string>
-    <string name="labbisonscreen_declaracoes">DECLARAÇÕES</string>
-    <string name="labbisonscreen_sem_left_nem_right_toque">Sem %left nem %right. Toque num exemplo para ver a régua.</string>
-    <string name="labbisonscreen_arraste_pela_alca_mais_embaixo">Arraste pela alça. Mais embaixo liga mais forte. Toque no %left para girar.</string>
     <string name="labbisonscreen_fechar_texto">Fechar o texto</string>
-    <string name="labbisonscreen_editar_texto_y">Editar o texto do .y</string>
     <string name="labbisonscreen_y_nao_compilou">O .y não compilou</string>
-    <string name="labbisonscreen_1_2_estados">%1$s · %2$s estados</string>
     <string name="labbisonscreen_0_conflitos">0 conflitos</string>
     <string name="labbisonscreen_1_conflito_2">%1$s conflito%2$s</string>
     <string name="labbisonscreen_precedencia_decidiu_1_celula_2">A precedência decidiu %1$s célula%2$s.</string>
     <string name="labbisonscreen_entrada_nao_virou_tokens_use">A entrada não virou tokens. Use números, + - * / ^ e parênteses.</string>
-    <string name="labbisonscreen_falta_ler">falta ler</string>
-    <string name="labbisonscreen_simbolos">SÍMBOLOS</string>
     <string name="labbisonscreen_ate_fim">Até o fim</string>
     <string name="labbisonscreen_nenhuma_celula_tabela_tem_duas">Nenhuma célula da tabela tem duas ações. O Bison não reclama de nada.</string>
     <string name="labbisonscreen_estado_1_chega_2">Estado %1$s, chega %2$s</string>
     <string name="labbisonscreen_sobrou_1">Sobrou: %1$s</string>
     <string name="labbisonscreen_bison_escolhe_avisa">o Bison escolhe e avisa</string>
     <string name="labbisonscreen_resolvido_1">Resolvido: %1$s</string>
-    <string name="labbisonscreen_como_no_arquivo_output_amarelo">Como no arquivo .output. Amarelo é o topo da pilha no passo atual. Verde-água está na pilha.</string>
     <!-- LabConversa.kt -->
     <string name="labconversa_cole_aqui_exercicio_gramatica_regex">Cole aqui o exercício: gramática, regex, expressão ou linha de código. Também pode perguntar.</string>
     <string name="labconversa_que_handle">o que é handle?</string>
@@ -813,11 +804,18 @@
     <string name="ajustes_idioma_reabra">Feche o jogo e abra de novo para trocar o idioma.</string>
     <string name="fx_token_inesperado">TOKEN INESPERADO</string>
     <string name="gameslexical_casa">CASA</string>
-    <string name="labbison_regras">REGRAS</string>
-    <string name="labbison_estados">ESTADOS</string>
-    <string name="labbison_valores">VALORES</string>
     <string name="labbison_empilhar">EMPILHAR</string>
     <string name="labbison_reduzir">REDUZIR</string>
+    <string name="labbison_arquivo_y">Arquivo .y</string>
+    <string name="labbison_conta_certa">A conta certa dá %1$s.</string>
+    <string name="labbison_por_left">Pôr %left</string>
+    <string name="labbison_forte">forte</string>
+    <string name="labbison_fraco">fraco</string>
+    <string name="labbison_editar">Editar</string>
+    <string name="labbison_aceita">ACEITA</string>
+    <string name="labbison_erro">ERRO</string>
+    <string name="labbison_so_da_pilha">Só os da pilha</string>
+    <string name="labbison_ver_todos">Ver os %1$s</string>
     <string name="solta_visuals2_1">Regras: o MAIOR lexema vence; empate → a regra que vem primeiro.</string>
     <string name="homescreens_vencida">vencida</string>
     <string name="ajustes_aparencia">Aparência</string>

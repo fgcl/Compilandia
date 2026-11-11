@@ -472,13 +472,12 @@ fun RegexSorterGame(ctx: GameCtx) {
             Modifier.fillMaxWidth(0.82f).height(190.dp).clip(RoundedCornerShape(22.dp)).background(Palette.paperDark).border(2.dp, Palette.ink.copy(alpha = 0.3f), RoundedCornerShape(22.dp))
         )
         androidx.compose.runtime.key(i) {
-            com.compilandia.ui.SwipeCard(i, "BARRA ⛔", "ENTRA ✅", Modifier.fillMaxWidth(0.9f), onSwipe = { right -> judge(right) }) {
+            com.compilandia.ui.SwipeCard(i, tx("gameslexical_barra"), tx("gameslexical_entra"), Modifier.fillMaxWidth(0.9f), onSwipe = { right -> judge(right) }) {
                 Column(
                     Modifier.fillMaxWidth().height(200.dp).clip(RoundedCornerShape(22.dp)).background(Palette.yellow)
                         .border(3.dp, Palette.inkOnLight, RoundedCornerShape(22.dp)).padding(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
                 ) {
-                    Text("🧍", fontSize = 54.sp)
                     Text(s.ifEmpty { tx("gameslexical_cadeia_vazia") }, fontFamily = LocalFonts.current.mono, fontWeight = FontWeight.Bold, fontSize = 30.sp, color = Palette.inkOnLight)
                     Text("${i + 1}/${queue.size}", fontSize = 12.sp, color = Palette.inkOnLight.copy(alpha = 0.6f))
                 }
@@ -489,8 +488,8 @@ fun RegexSorterGame(ctx: GameCtx) {
     if (ctx.hints >= 2) DfaView(dfa)
     last?.let { FeedbackBanner(it.first, it.second) }
     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-        BigButton("⛔", Modifier.weight(1f), color = Palette.red, small = true) { judge(false) }
-        BigButton("✅", Modifier.weight(1f), color = Palette.green, small = true) { judge(true) }
+        BigButton(tx("gameslexical_barra"), Modifier.weight(1f), color = Palette.red, small = true) { judge(false) }
+        BigButton(tx("gameslexical_entra"), Modifier.weight(1f), color = Palette.green, small = true) { judge(true) }
     }
 }
 

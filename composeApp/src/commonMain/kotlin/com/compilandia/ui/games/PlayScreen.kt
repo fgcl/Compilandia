@@ -110,9 +110,8 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
     }
 
     Column(Modifier.fillMaxSize()) {
-        Header(s.game.title, s.skill.title + if (s.queue.isNotEmpty()) tx("playscreen_faltam_1", s.queue.size) else "", color) {
-            if (phase == Phase.PLAYING) Text(tx("playscreen_dicas_1", hints), color = Palette.on(color), style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(end = 4.dp))
-        }
+        // Sem subtítulo (mural rodada 4): o nome do jogo basta, e a dica já mostra a conta no botão Dica.
+        Header(s.game.title, if (s.queue.isNotEmpty()) tx("playscreen_faltam_1", s.queue.size) else null, color)
         when (phase) {
             Phase.CONFIDENCE -> Column(
                 Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(16.dp),
@@ -352,22 +351,20 @@ fun CheckOrNext(checked: Boolean, canCheck: Boolean = true, onCheck: () -> Unit,
 fun HintBox(ctx: GameCtx, vararg hints: String) {
     if (ctx.hints <= 0 || hints.isEmpty()) return
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
-        hints.take(ctx.hints).forEachIndexed { i, h -> Degrau(i + 1, h, aberto = true) }
-        // O último degrau é ver resolvendo: ele mora na aula, e não na caixinha.
-        if (ctx.hints < 3) Degrau(ctx.hints + 1, if (ctx.hints + 1 >= 3) tx("playscreen_mostrar_resolvendo_abre_depois_sua") else tx("playscreen_abre_depois_sua_tentativa"), aberto = false)
+        // Só as dicas abertas. O próximo degrau mora no botão Dica, que fica cinza até você tentar.
+        hints.take(ctx.hints).forEachIndexed { i, h -> Degrau(i + 1, h) }
     }
 }
 
 @Composable
-private fun Degrau(n: Int, texto: String, aberto: Boolean) {
+private fun Degrau(n: Int, texto: String) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(if (aberto) Palette.white else Palette.paperDark).padding(horizontal = 8.dp, vertical = 7.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(Palette.white).padding(horizontal = 8.dp, vertical = 7.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Box(Modifier.size(26.dp).clip(RoundedCornerShape(13.dp)).background(if (aberto) Palette.hazard else Palette.drawer), contentAlignment = Alignment.Center) {
-            Text("$n", color = if (aberto) Palette.hazardDark else Palette.on(Palette.drawer), style = MaterialTheme.typography.labelMedium)
+        Box(Modifier.size(26.dp).clip(RoundedCornerShape(13.dp)).background(Palette.hazard), contentAlignment = Alignment.Center) {
+            Text("$n", color = Palette.hazardDark, style = MaterialTheme.typography.labelMedium)
         }
-        RichText(texto, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = if (aberto) Palette.ink else Palette.inkSoft)
-        if (!aberto) com.compilandia.ui.lab.Cadeado(Palette.inkSoft)
+        RichText(texto, Modifier.weight(1f), style = MaterialTheme.typography.bodySmall, color = Palette.ink)
     }
 }

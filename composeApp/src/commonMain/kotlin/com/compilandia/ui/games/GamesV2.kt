@@ -101,7 +101,7 @@ fun SubsetFactoryGame(ctx: GameCtx) {
             Cell(setText(st), w = 92)
             for (c in nfa.alphabet) {
                 val s = done.firstOrNull { it.from == st && it.symbol == c }
-                Cell(s?.let { if (it.to.isEmpty()) "∅" else dfaLetter(res.states.indexOf(it.to)) } ?: if (cur?.from == st && cur.symbol == c) "❓" else "", w = 52,
+                Cell(s?.let { if (it.to.isEmpty()) "∅" else dfaLetter(res.states.indexOf(it.to)) } ?: if (cur?.from == st && cur.symbol == c) "?" else "", w = 52,
                     color = if (cur?.from == st && cur.symbol == c) Palette.yellow.copy(alpha = 0.6f) else null)
             }
         }
@@ -137,7 +137,7 @@ fun FlexWorkshopGame(ctx: GameCtx) {
     var runs by remember { mutableIntStateOf(0) }
     var result by remember { mutableStateOf<Pair<Boolean, MiniFlex.Result>?>(null) }
     PaperCard(color = Palette.paper, border = Palette.green) {
-        Text("🦎 ${ch.title}", style = MaterialTheme.typography.headlineSmall)
+        Text(ch.title, style = MaterialTheme.typography.headlineSmall)
         RichText(ch.story, style = MaterialTheme.typography.bodyMedium)
         Mono(tx("comum_entrada_1", ch.input.replace("\n", "⏎")), bold = true)
         Mono(tx("gamesv2_esperado_1", ch.expected.joinToString(" ")), color = Palette.teal)
@@ -153,7 +153,7 @@ fun FlexWorkshopGame(ctx: GameCtx) {
             Text(r.display(), color = Color(0xFFE8E6F0), fontFamily = LocalFonts.current.mono, fontSize = 12.sp, modifier = Modifier.weight(1f))
             Text("▲", color = Palette.onAccent, fontSize = 18.sp, modifier = Modifier.padding(4.dp).clickable(enabled = i > 0) { val x = rules.removeAt(i); rules.add(i - 1, x); Sound.play(Sfx.CLICK) })
             Text("▼", color = Palette.onAccent, fontSize = 18.sp, modifier = Modifier.padding(4.dp).clickable(enabled = i < rules.lastIndex) { val x = rules.removeAt(i); rules.add(i + 1, x); Sound.play(Sfx.CLICK) })
-            Text("✖", color = Palette.red, fontSize = 16.sp, modifier = Modifier.padding(4.dp).clickable { rules.removeAt(i); Sound.play(Sfx.CLICK) })
+            Text("x", color = Palette.red, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(4.dp).clickable { rules.removeAt(i); Sound.play(Sfx.CLICK) })
         }
     }
     if (ch.extra.isNotEmpty()) {
@@ -167,7 +167,7 @@ fun FlexWorkshopGame(ctx: GameCtx) {
     }
     result?.let { (ok, r) ->
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
-            Text(tx("gamesv2_saida") + r.tokens.joinToString(" ") { it.token } + (r.error?.let { "  ✘ $it" } ?: ""), color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
+            Text(tx("gamesv2_saida") + r.tokens.joinToString(" ") { it.token } + (r.error?.let { "  x $it" } ?: ""), color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
             Text(tx("gamesv2_lexemas") + r.tokens.joinToString(" ") { "\"${it.text}\"" }, color = Color(0xFF9CA3AF), fontFamily = LocalFonts.current.mono, fontSize = 11.sp)
         }
         if (ok) {

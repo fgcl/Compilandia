@@ -116,7 +116,7 @@ fun GearIcon(color: Color, modifier: Modifier = Modifier) {
 }
 
 /** Placa de metal da Oficina: luz em cima, sombra embaixo e um rebite em cada canto. */
-private fun Modifier.placaDeMetal(corpo: Color, luz: Color, sombra: Color, rebite: Color): Modifier = this.background(corpo).drawBehind {
+internal fun Modifier.placaDeMetal(corpo: Color, luz: Color, sombra: Color, rebite: Color): Modifier = this.background(corpo).drawBehind {
     drawRect(luz, size = Size(size.width, 2.dp.toPx()))
     drawRect(sombra, Offset(0f, size.height - 3.dp.toPx()), Size(size.width, 3.dp.toPx()))
     val r = 2.5f.dp.toPx(); val m = 7.dp.toPx()

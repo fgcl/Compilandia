@@ -4,6 +4,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -69,7 +71,7 @@ private class Placed(val node: UiNode, val x: Float, val y: Float)
 
 /** Desenha uma árvore (sintática ou AST). Toque num nó chama [onTap] com a `key` do nó. */
 @Composable
-fun TreeView(root: UiNode, modifier: Modifier = Modifier, onTap: ((Int) -> Unit)? = null) {
+fun TreeView(root: UiNode, modifier: Modifier = Modifier, centro: Boolean = false, onTap: ((Int) -> Unit)? = null) {
     val tm = rememberTextMeasurer()
     val density = LocalDensity.current
     val hGap = 58f; val vGap = 72f; val r = 22f
@@ -96,7 +98,11 @@ fun TreeView(root: UiNode, modifier: Modifier = Modifier, onTap: ((Int) -> Unit)
     val widthPx = (nodes.maxOf { it.x } + 2 * hGap)
     val heightPx = (nodes.maxOf { it.y } + vGap + 20f)
     val scale = with(density) { 1.dp.toPx() }
-    Box(modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
+    // Centralizada, a árvore pequena fica no meio da largura; a grande continua rolando de lado.
+    androidx.compose.foundation.layout.BoxWithConstraints(modifier.fillMaxWidth()) {
+    val minimo = if (centro) maxWidth else 0.dp
+    Box(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
+    Box(Modifier.widthIn(min = minimo), contentAlignment = Alignment.TopCenter) {
         Canvas(
             Modifier.width((widthPx).dp).height((heightPx).dp).then(
                 if (onTap != null) Modifier.pointerInput(root) {
@@ -124,6 +130,8 @@ fun TreeView(root: UiNode, modifier: Modifier = Modifier, onTap: ((Int) -> Unit)
                 p.node.sub?.let { centeredText(tm, it, Offset(c.x, c.y + h / 2 + 10f * s), TextStyle(fontSize = 11.sp, color = Palette.orange, fontWeight = FontWeight.Bold)) }
             }
         }
+    }
+    }
     }
 }
 

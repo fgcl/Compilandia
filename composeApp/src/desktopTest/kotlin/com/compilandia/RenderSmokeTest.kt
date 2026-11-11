@@ -199,11 +199,24 @@ class RenderSmokeTest : RenderBase() {
             Triple("lab_bison_potencia", ex.potencia, 0 to 10),
             Triple("lab_bison_unario", ex.menosUnario, 0 to 3),
             Triple("lab_bison_quebrado", "%token NUM\ne: e '+' ;", 0 to 0),
+            Triple("lab_bison_sem_prec_passos", ex.semPrecedencia, 0 to 5),
+            Triple("lab_bison_arquivo", ex.calculadora, 3 to 0),
         )
         for ((nome, spec, abaPasso) in casos) {
             shot(nome, h = 1600) {
                 val app = stateWith(Screen.LabBison(spec))
                 CompilandiaTheme { com.compilandia.ui.lab.LabBisonScreen(app, spec, abaPasso.first, abaPasso.second) }
+            }
+        }
+    }
+
+    /** Laboratório Bison na tela larga: a conta e a régua à esquerda, as abas à direita. */
+    @Test fun labBisonLargo() {
+        val ex = com.compilandia.ui.lab.BisonExemplos
+        shot("lab_bison_largo", w = 1200, h = 800) {
+            val app = stateWith(Screen.LabBison(ex.semPrecedencia))
+            androidx.compose.runtime.CompositionLocalProvider(com.compilandia.ui.LocalJanela provides com.compilandia.ui.Janela(1200.dp, 800.dp)) {
+                CompilandiaTheme { com.compilandia.ui.lab.LabBisonScreen(app, ex.semPrecedencia, 1, 0) }
             }
         }
     }

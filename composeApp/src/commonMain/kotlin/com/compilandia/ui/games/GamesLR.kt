@@ -263,7 +263,7 @@ fun ConflictHunterGame(ctx: GameCtx) {
                 Cell("$s", header = true, w = 40)
                 for (c in t.terminals) {
                     val key = s to c
-                    if (key in hidden) Cell(if (marks[key] == true) "⚔️" else "?", w = 58, color = if (marks[key] == true) Palette.red.copy(alpha = 0.3f) else Palette.yellow.copy(alpha = 0.4f), onClick = { marks[key] = marks[key] != true })
+                    if (key in hidden) Cell(if (marks[key] == true) "!" else "?", w = 58, color = if (marks[key] == true) Palette.red.copy(alpha = 0.3f) else Palette.yellow.copy(alpha = 0.4f), onClick = { marks[key] = marks[key] != true })
                     else Cell(t.rawActions[key].orEmpty().joinToString("/") { it.short() }, w = 58)
                 }
             }
@@ -326,7 +326,7 @@ private fun ConflictResolution(ctx: GameCtx, gid: String, g: Grammar, conflicts:
     }
     var pick by remember { mutableStateOf<Int?>(null) }
     PaperCard(border = Palette.purple) {
-        RichText("🦬 " + q.text, style = MaterialTheme.typography.titleSmall)
+        RichText(q.text, style = MaterialTheme.typography.titleSmall)
         q.options.forEachIndexed { i, o ->
             BigButton(o, Modifier.fillMaxWidth(), small = true, enabled = pick == null || i == pick || i == q.right,
                 color = when { pick == null -> Palette.white; i == q.right -> Palette.green; else -> Palette.red }) {
@@ -359,7 +359,7 @@ fun BisonWorkshopGame(ctx: GameCtx) {
     var verdict by remember { mutableStateOf<BisonChallenges.Verdict?>(null) }
     var gaveUp by remember { mutableStateOf(false) }
     PaperCard(color = Palette.paper, border = Palette.orange) {
-        Text("🦬 ${ch.title}", style = MaterialTheme.typography.headlineSmall)
+        Text(ch.title, style = MaterialTheme.typography.headlineSmall)
         RichText(ch.story, style = MaterialTheme.typography.bodyMedium)
         Text(tx("gameslr_testes") + ch.tests.joinToString("   ") { "${it.first} → ${it.second ?: tx("sims_erro")}" }, style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
     }
@@ -386,7 +386,7 @@ fun BisonWorkshopGame(ctx: GameCtx) {
     }
     verdict?.let { v ->
         Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).padding(10.dp)) {
-            for ((ok, line) in v.lines) Text((if (ok) "✔ " else "✘ ") + line, color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
+            for ((ok, line) in v.lines) Text((if (ok) "ok  " else "x   ") + line, color = if (ok) Palette.green else Palette.red, fontFamily = LocalFonts.current.mono, fontSize = 12.sp)
         }
         val compiled = try { MiniBison.compile(spec.text) } catch (e: Exception) { null }
         if (compiled != null && compiled.conflicts.isNotEmpty()) {

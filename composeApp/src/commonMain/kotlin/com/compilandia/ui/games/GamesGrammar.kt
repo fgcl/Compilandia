@@ -329,14 +329,14 @@ private fun AlchemyRound(ctx: GameCtx, g: Grammar, withFollow: Boolean, done: (D
         tx("gamesgrammar_anulaveis_podem_virar") + ff.nullable.ifEmpty { setOf(tx("lessonspart2a_nenhum")) }.joinToString(),
     )
     Column(Modifier.horizontalScroll(rememberScrollState())) {
-        Row { Cell("", header = true, w = 48); Cell("⚗️ FIRST", header = true, w = 140); if (withFollow) Cell("🧪 FOLLOW", header = true, w = 140) }
+        Row { Cell("", header = true, w = 48); Cell("FIRST", header = true, w = 140); if (withFollow) Cell("FOLLOW", header = true, w = 140) }
         for (nt in g.nonTerminals) Row {
             Cell(nt, header = true, w = 48)
             for (k in listOfNotNull("F:$nt", if (withFollow) "W:$nt" else null)) {
                 val mine = sets[k].orEmpty()
                 val ok = mine == truth(k)
                 Cell(
-                    "{ " + mine.joinToString(", ") + " }" + if (checked && !ok) "\n✔ { " + truth(k).joinToString(", ") + " }" else "",
+                    "{ " + mine.joinToString(", ") + " }" + if (checked && !ok) "\n→ { " + truth(k).joinToString(", ") + " }" else "",
                     w = 140,
                     color = when {
                         checked -> if (ok) Palette.green.copy(alpha = 0.25f) else Palette.red.copy(alpha = 0.2f)
