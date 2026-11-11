@@ -76,6 +76,8 @@ internal fun CartaoMissao(e: EstadoFabrica, onProxima: (Missao?) -> Unit) {
         }
         if (e.cumpriu) {
             Text(tx("fabgram_missao_feita") + if (e.ganhou > 0) "  " + tx("fabgram_ganhou_1", e.ganhou) else "", color = PLACA, style = MaterialTheme.typography.bodyMedium)
+            // No else solto o ponto é este: a mesma frase saiu de dois jeitos.
+            if (e.corrida?.ambigua == true) Text(tx("fabgram_ambigua"), color = Color(0xFF8FB8FF), style = MaterialTheme.typography.bodyMedium)
             BigButton(if (proxima != null) tx("fabgram_proxima") else tx("fabgram_livre"), small = true, color = Palette.green) { onProxima(proxima) }
         } else {
             Text(objetivoMissao(m), color = PLACA, style = MaterialTheme.typography.bodyMedium)

@@ -28,18 +28,19 @@ enum class Missao(val gramatica: String, val frase: String, val extras: List<Str
 
     // Desafios: os blocos no lugar e nenhuma esteira. As estrelas contam quantas você gastou,
     // e o robô também testa as frases extras.
+    // Do menor para o maior: a dificuldade sobe aos poucos. Só leva duas letras o desafio em que a segunda é o assunto.
     /** a^n b^n, a gramática da prova. */
     D_ANBN("S -> a S b | ε", "a a b b", listOf("a b", "a a a b b b"), desafio = true),
     /** Parênteses balanceados. */
     D_PARENTESES("S -> ( S ) S | ε", "( ) ( )", listOf("( ( ) )"), desafio = true),
-    /** Expressão com duas letras. */
-    D_EXPRESSAO("E -> E + T | T\nT -> id", "id + id", listOf("id", "id + id + id"), desafio = true),
-    /** Lista separada por vírgula, como nas listas de exercício: cauda que se repete ou some. */
-    D_LISTA("L -> id R\nR -> , id R | ε", "id , id", listOf("id", "id , id , id"), desafio = true),
+    /** Lista separada por vírgula, na forma das listas de exercício. */
+    D_LISTA("L -> id , L | id", "id , id", listOf("id", "id , id , id"), desafio = true),
     /** Declaração de variável: tipo, nome e ponto e vírgula. */
-    D_DECLARACAO("D -> T id ;\nT -> int | float", "int id ;", listOf("float id ;"), desafio = true),
-    /** O else solto: a mesma frase sai de dois jeitos. */
-    D_IFELSE("S -> if E then S | if E then S else S | x\nE -> id", "if id then x else x", listOf("if id then x", "if id then if id then x else x"), desafio = true),
+    D_DECLARACAO("D -> int id ; | float id ;", "int id ;", listOf("float id ;"), desafio = true),
+    /** O else solto: "if if x else x" sai de dois jeitos. */
+    D_IFELSE("S -> if S | if S else S | x", "if if x else x", listOf("if x", "if x else x"), desafio = true),
+    /** Recursão à esquerda: aqui a segunda letra é o assunto. */
+    D_EXPRESSAO("E -> E + T | T\nT -> id", "id + id", listOf("id", "id + id + id"), desafio = true),
 }
 
 /** Quantas missões do tutorial vêm antes dos desafios. */
