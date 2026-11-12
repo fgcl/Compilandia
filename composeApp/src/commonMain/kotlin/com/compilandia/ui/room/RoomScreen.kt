@@ -102,16 +102,17 @@ fun RoomScreen(app: AppState) {
     val ladoALado = com.compilandia.ui.LocalJanela.current.ladoALado
     val cumpridas = quests.count { it.progress >= 1f }
     // T2: as três metas viram um anel; o detalhe abre ao toque.
+    // Na janela larga a lista fica sempre aberta: sem seta e sem toque.
     val metas: @Composable () -> Unit = {
         Row(
             Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 4.dp).clip(RoundedCornerShape(8.dp))
-                .clickable { metasAbertas = !metasAbertas }.padding(4.dp),
+                .then(if (ladoALado) Modifier else Modifier.clickable { metasAbertas = !metasAbertas }).padding(4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             MetasAnel(quests.map { it.progress.coerceIn(0f, 1f) }.average().toFloat(), Modifier.size(22.dp))
             Spacer(Modifier.width(8.dp))
             Text(tx("sala_metas", cumpridas, quests.size), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft, modifier = Modifier.weight(1f))
-            Text(if (metasAbertas) "▴" else "▾", color = Palette.inkSoft, style = MaterialTheme.typography.labelMedium)
+            if (!ladoALado) com.compilandia.ui.SetaDeAbrir(metasAbertas)
         }
     }
     val proximo: @Composable () -> Unit = {

@@ -7,8 +7,8 @@
   <title>Compilândia</title>
   <style>
     html, body { margin: 0; height: 100%; background: #171C1E; overflow: hidden; }
-    /* O jogo foi desenhado para celular em pé: no computador ele fica numa coluna no meio. */
-    #jogo { position: relative; height: 100%; width: 100%; max-width: 460px; margin: 0 auto; background: #222A2C; }
+    /* O jogo ocupa a janela toda: ele mesmo escolhe o arranjo pela largura (ui/Janela.kt). */
+    #jogo { position: relative; height: 100%; width: 100%; background: #222A2C; }
     #carregando { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
       color: #F2EEE3; font: 600 18px system-ui, sans-serif; letter-spacing: .02em; }
     #carregando b { color: #F5B700; }

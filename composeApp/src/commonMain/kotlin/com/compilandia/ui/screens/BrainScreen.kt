@@ -123,7 +123,7 @@ fun BrainScreen(app: AppState) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(tx("painel_como"), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
-                Text(if (como) "▴" else "▾", color = Palette.inkSoft)
+                com.compilandia.ui.SetaDeAbrir(como)
             }
             if (como) {
     PaperCard {
