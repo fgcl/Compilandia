@@ -1,5 +1,7 @@
 package com.compilandia.content.episodes
 
+import com.compilandia.content.fecho
+import com.compilandia.content.Fecho
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
 import com.compilandia.content.Look
@@ -146,6 +148,11 @@ val gramaticas by lazy {
             cena(tx("cfg_l_13"), who = PROF) {
                 drop("sim", "nao"); tint("f", Tint.RED)
             }
+            fecho(Fecho(
+                tx("cfg_f_af"), false, tx("cfg_f_q"), tx("cfg_f_dica"), tx("cfg_f_ok"), tx("cfg_f_certo"),
+                tx("cfg_f_erro2"), tx("cfg_f_certo2"), tx("cfg_f_fala2"),
+                listOf(tx("cfg_f_z1"), tx("cfg_f_z2"), tx("cfg_f_z3")), tx("cfg_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── AMBIGUIDADE ───────────────────────────────
@@ -242,6 +249,11 @@ val gramaticas by lazy {
                 val (b, w) = arvore(ARVORE_AMB_CONSERTO, 120f, passoY = 52f, largura = 300f)
                 add(b); for (x in w) wire(x)
             }
+            fecho(Fecho(
+                tx("amb_f_af"), false, tx("amb_f_q"), tx("amb_f_dica"), tx("amb_f_ok"), tx("amb_f_certo"),
+                tx("amb_f_erro2"), tx("amb_f_certo2"), tx("amb_f_fala2"),
+                listOf(tx("amb_f_z1"), tx("amb_f_z2"), tx("amb_f_z3")), tx("amb_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── RECURSÃO À ESQUERDA ───────────────────────────────
@@ -333,6 +345,11 @@ val gramaticas by lazy {
                 drop("sim", "nao"); tint("f", Tint.TEAL)
                 hot("r0")
             }
+            fecho(Fecho(
+                tx("rec_f_af"), false, tx("rec_f_q"), tx("rec_f_dica"), tx("rec_f_ok"), tx("rec_f_certo"),
+                tx("rec_f_erro2"), tx("rec_f_certo2"), tx("rec_f_fala2"),
+                listOf(tx("rec_f_z1"), tx("rec_f_z2"), tx("rec_f_z3")), tx("rec_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── FATORAÇÃO ───────────────────────────────
@@ -417,6 +434,11 @@ val gramaticas by lazy {
             cena(tx("fat_l_12"), mood = EpMood.HAPPY) {
                 drop("k1", "k2"); hot()
             }
+            fecho(Fecho(
+                tx("fat_f_af"), false, tx("fat_f_q"), tx("fat_f_dica"), tx("fat_f_ok"), tx("fat_f_certo"),
+                tx("fat_f_erro2"), tx("fat_f_certo2"), tx("fat_f_fala2"),
+                listOf(tx("fat_f_z1"), tx("fat_f_z2"), tx("fat_f_z3")), tx("fat_f_resumo"),
+            ))
         },
     )
 }

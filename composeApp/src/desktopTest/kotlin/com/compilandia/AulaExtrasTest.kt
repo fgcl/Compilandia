@@ -104,7 +104,7 @@ class AulaExtrasTest {
     /** Mural, rodada 14: toda aula básica se divide em por quê, exemplo, receita e sua vez. */
     @Test fun todaAulaTemAsQuatroPartes() {
         val basicas = Episodes.all.filter { it.temporada == Temporada.BASICO }
-        val sem = basicas.filter { e -> partesDaAula(e.passos, e.inicioDoExemplo).let { p -> p == null || p.size != 4 || p.any { it.isEmpty() } || p.last().last != e.passos.lastIndex } }
+        val sem = basicas.filter { e -> partesDaAula(e.passos, e.inicioDoExemplo).let { p -> p == null || p.size !in 4..5 || p.any { it.isEmpty() } || p.last().last != e.passos.lastIndex } }
         assertTrue(sem.isEmpty(), "aulas sem as quatro partes: ${sem.map { it.skill }}")
     }
 

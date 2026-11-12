@@ -2,43 +2,43 @@
 <!-- Aulas básicas longas dos analisadores (A9): preditivo, descida recursiva, recuperação de erros, empilha-reduz e Bison. -->
 <resources>
     <!-- Analisador preditivo com pilha -->
-    <string name="pred_l_01">O parser leu abre parêntese e depois id. Ele ainda deve alguma coisa.</string>
+    <string name="pred_l_01">O parser leu abre parêntese e depois id. A frase ainda não acabou, e ele precisa lembrar o que falta.</string>
     <string name="pred_l_02">O que ele ainda precisa ler, cedo ou tarde? Toque.</string>
     <string name="pred_l_02_dica">Todo parêntese aberto precisa fechar.</string>
-    <string name="pred_l_02_ok">Isso. Ele precisa guardar essa dívida até lá.</string>
+    <string name="pred_l_02_ok">Isso. Ele precisa guardar essa pendência até o parêntese chegar.</string>
     <string name="pred_l_palavra">PREDITIVO</string>
-    <string name="pred_l_03">Ele anota na pilha o que espera ver. Esse é o analisador preditivo.</string>
-    <string name="pred_l_05">O analisador repete três casos até a entrada acabar.</string>
+    <string name="pred_l_03">Ele guarda numa pilha o que ainda espera ler. Esse é o analisador preditivo: a pilha e a tabela LL(1) decidem tudo.</string>
+    <string name="pred_l_05">O analisador repete três casos até a entrada acabar. O topo da pilha diz qual caso vale.</string>
     <string name="pred_l_r1">1. Topo terminal igual ao token: casa e avança.</string>
-    <string name="pred_l_r2">2. Topo não-terminal: troca pela regra da casa.</string>
-    <string name="pred_l_r3">3. Cifrão com cifrão: aceita. Casa vazia: erro.</string>
+    <string name="pred_l_r2">2. Topo não-terminal: troca pela regra da tabela.</string>
+    <string name="pred_l_r3">3. $ com $: aceita. Casa vazia: erro.</string>
     <string name="pred_l_q">topo: X, token: )</string>
     <string name="pred_l_06">No topo está X, e o token é fecha parêntese. Qual caso vale? Toque.</string>
     <string name="pred_l_06_dica">O X do topo não é token. Ele é um não-terminal.</string>
-    <string name="pred_l_06_ok">Isso. A tabela manda trocar X por épsilon.</string>
-    <string name="pred_l_07">Se a casa da tabela estiver vazia, a frase tem erro de sintaxe.</string>
-    <string name="pred_l_08">Agora uma lista: id, vírgula, id. Você decide cada passo.</string>
+    <string name="pred_l_06_ok">Isso. Caso dois. A tabela manda trocar X por épsilon, ou seja, só tirar X da pilha.</string>
+    <string name="pred_l_07">Se a casa da tabela está vazia, ou o terminal do topo é diferente do token, a frase tem erro de sintaxe.</string>
+    <string name="pred_l_08">Agora uma lista: id, vírgula, id. A tabela é a da aula passada, e você decide cada passo.</string>
     <string name="pred_l_ra_l">topo: L, token: id</string>
     <string name="pred_l_ra_r">topo: R, token: ,</string>
     <string name="pred_l_ra_fim">topo: R, token: $</string>
     <string name="pred_l_09">A tabela troca L por id R. Qual dos dois fica no topo? Toque.</string>
     <string name="pred_l_09_dica">O lado direito entra na pilha de trás para a frente.</string>
     <string name="pred_l_09_ok">Isso. O id fica em cima, pronto para casar.</string>
-    <string name="pred_l_10">O id do topo casa com o id da entrada. Sobra R no topo.</string>
+    <string name="pred_l_10">O id do topo casa com o id da entrada. Os dois saem, e sobra R no topo.</string>
     <string name="pred_l_11">Topo R, token vírgula. Qual regra a tabela manda usar? Toque.</string>
     <string name="pred_l_11_dica">Qual das duas regras começa com a vírgula?</string>
     <string name="pred_l_11_ok">Isso. É a regra que começa com vírgula.</string>
     <string name="pred_l_12">Casa a vírgula, casa o id. De novo, R fica sozinho no topo.</string>
     <string name="pred_l_13">Agora a entrada acabou. Qual regra de R vale? Toque.</string>
     <string name="pred_l_13_dica">O cifrão está no FOLLOW de R.</string>
-    <string name="pred_l_13_ok">Isso. R some, e sobra só o cifrão.</string>
-    <string name="pred_l_14">Cifrão com cifrão. A lista foi aceita em sete passos.</string>
+    <string name="pred_l_13_ok">Isso. R vai para épsilon: R sai da pilha e nada entra.</string>
+    <string name="pred_l_14">Cifrão com cifrão: aceita. As regras usadas, na ordem, formam a derivação mais à esquerda da lista.</string>
 
     <!-- Descida recursiva -->
-    <string name="desc_l_01">A tabela funciona, mas vira uma grade de letras difícil de ler.</string>
-    <string name="desc_l_02">Quando dá erro, você quer saber em que regra o parser estava.</string>
-    <string name="desc_l_03">Cada não-terminal vira uma função. Uma chama a outra, descendo pela gramática.</string>
-    <string name="desc_l_05">A receita passa cada regra para o código, linha por linha.</string>
+    <string name="desc_l_01">A tabela LL(1) funciona, mas é uma grade de casas. Ninguém gosta de preencher nem de depurar isso à mão.</string>
+    <string name="desc_l_02">E quando dá erro, você quer saber em que regra o parser estava, para dar uma mensagem boa.</string>
+    <string name="desc_l_03">Na descida recursiva, cada não-terminal vira uma função. A pilha do analisador vira a pilha de chamadas do programa.</string>
+    <string name="desc_l_05">A receita traduz cada regra para código, símbolo por símbolo.</string>
     <string name="desc_l_r1">1. Cada não-terminal vira uma função.</string>
     <string name="desc_l_r2">2. Não-terminal na regra: chama a função dele.</string>
     <string name="desc_l_r3">3. Terminal na regra: casa confere e avança.</string>
@@ -46,7 +46,7 @@
     <string name="desc_l_06">Na regra dos parênteses, o símbolo do meio vira o quê? Toque na regra.</string>
     <string name="desc_l_06_dica">O símbolo do meio é um não-terminal, não um token.</string>
     <string name="desc_l_06_ok">Isso. O E vira a chamada da função dele.</string>
-    <string name="desc_l_07">Se nenhuma regra some, o último else avisa o erro de sintaxe.</string>
+    <string name="desc_l_07">Se o não-terminal não é anulável, o último else não pode ficar vazio. Ele avisa o erro de sintaxe.</string>
     <string name="desc_l_08">A lista de ids de novo. Agora quem escreve o código é você.</string>
     <string name="desc_l_09">L pede id e depois R. O que completa a função L? Toque.</string>
     <string name="desc_l_09_dica">Não-terminal na regra vira chamada de função.</string>
@@ -58,15 +58,15 @@
     <string name="desc_l_12">Nessa entrada, quantas vezes o parser chama a função R? Toque.</string>
     <string name="desc_l_12_dica">Uma chamada vem de L. Outra vem de dentro do if.</string>
     <string name="desc_l_12_ok">Isso. Duas vezes. Na segunda, a entrada já acabou.</string>
-    <string name="desc_l_13">Na segunda chamada, o if falha. R não casa nada e volta.</string>
+    <string name="desc_l_13">Na segunda chamada o token é cifrão, e o if falha. R usa a regra épsilon: não casa nada e volta.</string>
 
     <!-- Erros sintáticos e recuperação -->
     <string name="erro_l_titulo">Dois erros</string>
-    <string name="erro_l_01">Este código tem dois erros. Um compilador simples para no primeiro.</string>
-    <string name="erro_l_02">Aí você corrige, compila de novo e só então vê o segundo.</string>
+    <string name="erro_l_01">Este código tem dois erros de sintaxe. Um compilador simples para no primeiro e não diz mais nada.</string>
+    <string name="erro_l_02">Você corrige, compila de novo, e só então descobre o segundo. Com dez erros, são dez compilações.</string>
     <string name="erro_l_palavra">RECUPERAÇÃO</string>
-    <string name="erro_l_03">Avisar o erro e continuar lendo se chama recuperação de erros.</string>
-    <string name="erro_l_05">No analisador preditivo, o modo pânico segue quatro regras.</string>
+    <string name="erro_l_03">Avisar o erro, se ajeitar e continuar a análise se chama recuperação de erros.</string>
+    <string name="erro_l_05">No analisador preditivo, o modo pânico segue quatro regras. Elas dizem o que fazer quando a casa da tabela está vazia.</string>
     <string name="erro_l_r1">1. Casa vazia, não-terminal no topo: descarta.</string>
     <string name="erro_l_r2">2. Achou um token do FIRST do topo: continua.</string>
     <string name="erro_l_r3">3. Achou um do FOLLOW do topo: tira o topo.</string>
@@ -74,7 +74,7 @@
     <string name="erro_l_06">Ele parou num token que pode vir depois do topo. Qual regra vale? Toque.</string>
     <string name="erro_l_06_dica">O que pode vir depois está no FOLLOW.</string>
     <string name="erro_l_06_ok">Isso. O topo sai da pilha e a análise segue.</string>
-    <string name="erro_l_07">Terminal errado no topo sai da pilha, como se o token tivesse vindo.</string>
+    <string name="erro_l_07">Regra quatro: terminal no topo diferente do token. O parser tira o terminal da pilha, como se ele tivesse vindo, e avisa.</string>
     <string name="erro_l_08">Outra gramática: comandos de atribuição. A entrada tem dois erros.</string>
     <string name="erro_l_09">O parser lê da esquerda para a direita. Onde ele trava primeiro? Toque.</string>
     <string name="erro_l_09_dica">Depois do igual vem um valor. O que veio?</string>
@@ -91,20 +91,20 @@
     <string name="erro_l_descarta">descarta ;</string>
 
     <!-- Empilha-reduz -->
-    <string name="sr_l_01">O preditivo troca E por E mais n, e o E volta ao topo.</string>
+    <string name="sr_l_01">A gramática E vai para E mais n tem recursão à esquerda. O preditivo troca E por E mais n, e o E volta ao topo.</string>
     <string name="sr_l_02">Quantas trocas ele faz até ler o primeiro n? Toque.</string>
     <string name="sr_l_02_dica">Depois de cada troca, o E continua na frente.</string>
-    <string name="sr_l_02_ok">Isso. Ele troca para sempre e nunca lê nada.</string>
+    <string name="sr_l_02_ok">Isso. Ele troca para sempre e nunca lê nada. O preditivo decide a regra cedo demais.</string>
     <string name="sr_l_sem_fim">sem fim</string>
-    <string name="sr_l_03">A saída é ler primeiro e trocar pela regra depois. É o empilha-reduz.</string>
-    <string name="sr_l_05">A cada passo, o parser escolhe entre três ações.</string>
-    <string name="sr_l_r1">1. Sem lado direito no topo: empilha um token.</string>
-    <string name="sr_l_r2">2. Lado direito de uma regra no topo: reduz.</string>
-    <string name="sr_l_r3">3. Só o símbolo inicial e o cifrão: aceita.</string>
+    <string name="sr_l_03">A saída é ler primeiro e escolher a regra depois, quando o lado direito inteiro já está na pilha. É o empilha-reduz.</string>
+    <string name="sr_l_05">A cada passo, o parser escolhe entre três ações, olhando o topo da pilha.</string>
+    <string name="sr_l_r1">1. Sem handle no topo: empilha um token.</string>
+    <string name="sr_l_r2">2. Handle no topo: reduz pela regra dele.</string>
+    <string name="sr_l_r3">3. Só o símbolo inicial e $: aceita.</string>
     <string name="sr_l_06">Pilha só com E, entrada no cifrão. Qual ação vale? Toque.</string>
     <string name="sr_l_06_dica">Olhe o que sobrou na pilha e na entrada.</string>
     <string name="sr_l_06_ok">Isso. Aceita, e a frase está certa.</string>
-    <string name="sr_l_07">Reduzir tira o lado direito da pilha e põe o lado esquerdo no lugar.</string>
+    <string name="sr_l_07">Reduzir tira da pilha o lado direito inteiro e põe no lugar o não-terminal do lado esquerdo.</string>
     <string name="sr_l_08">Agora parênteses em volta de id. Você decide cada passo.</string>
     <string name="sr_l_09">Nada para reduzir ainda. Empilho o abre parêntese e depois o id.</string>
     <string name="sr_l_10">Na pilha, abre parêntese e id. Empilho ou reduzo? Toque.</string>
@@ -117,7 +117,7 @@
     <string name="sr_l_13">Toque nas peças que a redução troca por S.</string>
     <string name="sr_l_13_dica">O lado direito inteiro sai junto.</string>
     <string name="sr_l_13_ok">Isso. As três saem, e entra um S.</string>
-    <string name="sr_l_14">Sobrou só o símbolo inicial, com o cifrão na entrada. Aceita em seis passos.</string>
+    <string name="sr_l_14">Sobrou só o símbolo inicial, com o cifrão na entrada: aceita. Saber onde está o handle é o trabalho da tabela LR.</string>
 
     <!-- Yacc/Bison -->
     <string name="bison_l_01">Uma calculadora com parênteses já vira uma tabela LALR de 14 estados.</string>
@@ -125,7 +125,7 @@
     <string name="bison_l_02">Cada estado tem 8 colunas de token. Quantas casas você confere à mão? Toque.</string>
     <string name="bison_l_02_dica">Multiplique os estados pelas colunas.</string>
     <string name="bison_l_02_ok">Isso. E cada regra nova muda muitas delas.</string>
-    <string name="bison_l_03">O Bison monta essa tabela sozinho. Ele é o herdeiro do Yacc.</string>
+    <string name="bison_l_03">O Bison monta essa tabela sozinho, a partir da gramática. Ele é a versão livre do Yacc e gera um parser LALR(1) em C.</string>
     <string name="bison_l_05">A receita do arquivo .y tem três passos.</string>
     <string name="bison_l_r1">1. Antes do %%: %token e a precedência.</string>
     <string name="bison_l_r2">2. Depois do %%: as regras e suas ações.</string>
@@ -133,7 +133,7 @@
     <string name="bison_l_06">Onde vai a linha do left com o menos? Toque na parte certa.</string>
     <string name="bison_l_06_dica">Precedência é declaração. Ela não é regra.</string>
     <string name="bison_l_06_ok">Isso. Precedência fica nas declarações, lá em cima.</string>
-    <string name="bison_l_07">Conflito avisado não trava o Bison. Ele escolhe sozinho e pode errar.</string>
+    <string name="bison_l_07">Conflito avisado não trava o Bison. No shift-reduce ele empilha; no reduce-reduce, usa a regra que vem primeiro. E pode errar a sua conta.</string>
     <string name="bison_l_08">Uma calculadora só de menos, sem nenhuma linha de precedência.</string>
     <string name="bison_l_09">Rodo o Bison neste arquivo. Quantos conflitos ele avisa? Toque.</string>
     <string name="bison_l_09_dica">Em cinco menos dois menos um, quem junta primeiro?</string>

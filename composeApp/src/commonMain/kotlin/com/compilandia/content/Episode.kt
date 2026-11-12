@@ -23,6 +23,7 @@ enum class Look {
     GHOST,  // contorno tracejado: onde a peça pode cair
     BANG,   // palavra que cai letra por letra e levanta poeira
     RECORD, // caixa com compartimentos: nome em cima e uma linha por item (estado, struct, registro)
+    CARD,   // cartão de frase: texto de ler, que quebra em linhas dentro da caixa
 }
 
 /**
@@ -265,4 +266,49 @@ fun arvore(raiz: ParseNode, y0: Float, passoY: Float = 52f, largura: Float = 340
 /** Estados em posições dadas. Ids: q<n>. */
 fun estados(pos: List<Pair<Float, Float>>, finais: Set<Int> = emptySet(), nomes: List<String>? = null): List<Box> = pos.mapIndexed { i, (x, y) ->
     Box("q$i", nomes?.get(i) ?: "q$i", x, y, 46f, 46f, if (i in finais) Look.ACCEPT else Look.STATE, size = 14f)
+}
+
+// ------------------------------------------------------------ fecho da aula
+
+/** A primeira peça do fecho. É por ela que a fita da aula acha a quinta parte. */
+const val CUIDADO_ID = "cu1"
+
+/** Cartão de frase: o texto quebra em linhas dentro da caixa. */
+fun cartao(id: String, text: String, y: Float, tint: Tint = Tint.NONE, h: Float = 66f) = Box(id, text, 180f, y, 336f, h, Look.CARD, tint, size = 16.5f)
+
+/**
+ * O fecho de uma aula básica: os erros que mais derrubam na prova e o resumo.
+ * Primeiro a pessoa julga uma afirmação; depois vê a versão certa, um segundo erro ao lado do conserto, e três linhas de resumo.
+ */
+class Fecho(
+    /** A afirmação que a pessoa julga, e se ela vale. */
+    val afirmacao: String, val vale: Boolean,
+    val pergunta: String, val dica: String, val porque: String,
+    /** A afirmação consertada. Quando [vale], é a própria afirmação. */
+    val certo: String,
+    /** O segundo erro e o conserto dele, com a fala que explica. */
+    val erro2: String, val certo2: String, val fala2: String,
+    val resumo: List<String>, val falaResumo: String,
+)
+
+fun EpisodeBuilder.fecho(f: Fecho) {
+    pergunta(f.pergunta, setOf(if (f.vale) "cuS" else "cuN"), setOf(if (f.vale) "cuN" else "cuS"), f.dica, f.porque) {
+        clear()
+        add(titulo(tx("aula_titulo_erros")))
+        add(cartao(CUIDADO_ID, f.afirmacao, 130f))
+        add(Box("cuS", tx("aula_certo"), 110f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
+        add(Box("cuN", tx("aula_errado"), 250f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
+    }
+    cena(f.fala2) {
+        drop("cuS", "cuN")
+        change(CUIDADO_ID) { it.copy(text = tx("aula_certo_prefixo", f.certo), tint = Tint.GREEN, y = 104f) }
+        add(cartao("cu2", tx("aula_errado_prefixo", f.erro2), 206f, Tint.RED))
+        add(cartao("cu3", tx("aula_certo_prefixo", f.certo2), 284f, Tint.GREEN))
+        hot("cu2", "cu3")
+    }
+    cena(f.falaResumo, mood = EpMood.HAPPY) {
+        clear()
+        add(titulo(tx("aula_titulo_resumo")))
+        f.resumo.forEachIndexed { i, t -> add(cartao("z${i + 1}", t, 100f + i * 78f, h = 68f)) }
+    }
 }

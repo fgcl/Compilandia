@@ -53,15 +53,20 @@ object Cola {
         return shot.boxes.filter { it.look == Look.CELL && linhaDaReceita.matches(it.id) }.sortedBy { it.id.drop(1).toInt() }.map { it.text }
     }
 
+    /** A última cena da Sua vez: o segundo exemplo resolvido. O fecho (erros e resumo) vem depois e fica de fora. */
+    fun fimDaSuaVez(ep: com.compilandia.content.Episode): Int =
+        partesDaAula(ep.passos, ep.inicioDoExemplo)?.getOrNull(3)?.last ?: ep.passos.lastIndex
+
     /** A gramática do exemplo resolvido, para mostrar em letra de ler em cima do desenho. */
     fun gramatica(s: Skill): List<String> {
         val ep = Episodes.of(s) ?: return emptyList()
-        return gramaticaDaAula(ep, ep.passos.lastIndex).orEmpty()
+        return gramaticaDaAula(ep, fimDaSuaVez(ep)).orEmpty()
     }
 
     /** O fim da aula: o segundo exemplo já resolvido. Sem o título e sem a gramática, que a cola mostra maiores. */
     fun exemplo(s: Skill): Shot? {
-        val ultimo = Episodes.of(s)?.passos?.lastOrNull()?.shot ?: return null
+        val ep = Episodes.of(s) ?: return null
+        val ultimo = ep.passos.getOrNull(fimDaSuaVez(ep))?.shot ?: return null
         val regras = gramatica(s).toSet()
         val pecas = ultimo.boxes.filter { it.id != TITULO_ID && it.text.trim() !in regras }
         // Sobrou só a gramática, que a cola já mostra em letra grande: sem caixa vazia.

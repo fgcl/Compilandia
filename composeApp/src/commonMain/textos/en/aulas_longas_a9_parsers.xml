@@ -2,43 +2,43 @@
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas_a9_parsers.xml. -->
 <resources>
     <!-- Predictive parser with a stack -->
-    <string name="pred_l_01">The parser read an opening parenthesis and then id. It still owes something.</string>
+    <string name="pred_l_01">The parser read open paren and then id. The sentence is not over, and it must remember what is missing.</string>
     <string name="pred_l_02">What does it still have to read, sooner or later? Tap it.</string>
     <string name="pred_l_02_dica">Every open parenthesis has to close.</string>
-    <string name="pred_l_02_ok">Right. It has to keep that debt until then.</string>
+    <string name="pred_l_02_ok">Right. It must keep that pending item until the paren arrives.</string>
     <string name="pred_l_palavra">PREDICTIVE</string>
-    <string name="pred_l_03">It writes what it expects on a stack. That is the predictive parser.</string>
-    <string name="pred_l_05">The parser repeats three cases until the input ends.</string>
+    <string name="pred_l_03">It keeps on a stack what it still expects to read. That is the predictive parser: the stack and the LL(1) table decide everything.</string>
+    <string name="pred_l_05">The parser repeats three cases until the input ends. The top of the stack says which case applies.</string>
     <string name="pred_l_r1">1. Terminal on top equals token: match, advance.</string>
-    <string name="pred_l_r2">2. Nonterminal on top: use the table's rule.</string>
-    <string name="pred_l_r3">3. Dollar with dollar: accept. Empty: error.</string>
+    <string name="pred_l_r2">2. Nonterminal on top: replace by the table's rule.</string>
+    <string name="pred_l_r3">3. $ with $: accept. Empty cell: error.</string>
     <string name="pred_l_q">top: X, token: )</string>
     <string name="pred_l_06">X is on top, and the token is a closing parenthesis. Which case applies? Tap it.</string>
     <string name="pred_l_06_dica">The X on top is not a token. It is a nonterminal.</string>
-    <string name="pred_l_06_ok">Right. The table says to replace X by epsilon.</string>
-    <string name="pred_l_07">If the table cell is empty, the sentence has a syntax error.</string>
-    <string name="pred_l_08">Now a list: id, comma, id. You decide each step.</string>
+    <string name="pred_l_06_ok">Right. Case two. The table says to replace X with epsilon, that is, just pop X.</string>
+    <string name="pred_l_07">If the table cell is empty, or the terminal on top differs from the token, the sentence has a syntax error.</string>
+    <string name="pred_l_08">Now a list: id, comma, id. The table is the one from last lesson, and you decide each step.</string>
     <string name="pred_l_ra_l">top: L, token: id</string>
     <string name="pred_l_ra_r">top: R, token: ,</string>
     <string name="pred_l_ra_fim">top: R, token: $</string>
     <string name="pred_l_09">The table replaces L by id R. Which of the two ends up on top? Tap it.</string>
     <string name="pred_l_09_dica">The right side goes onto the stack back to front.</string>
     <string name="pred_l_09_ok">Right. The id stays on top, ready to match.</string>
-    <string name="pred_l_10">The id on top matches the id in the input. R is left on top.</string>
+    <string name="pred_l_10">The id on top matches the id in the input. Both leave, and R is left on top.</string>
     <string name="pred_l_11">Top R, token comma. Which rule does the table pick? Tap it.</string>
     <string name="pred_l_11_dica">Which of the two rules starts with the comma?</string>
     <string name="pred_l_11_ok">Right. It's the rule that starts with a comma.</string>
     <string name="pred_l_12">Match the comma, match the id. Again, R sits alone on top.</string>
     <string name="pred_l_13">Now the input is over. Which rule of R applies? Tap it.</string>
     <string name="pred_l_13_dica">The dollar sign is in the FOLLOW of R.</string>
-    <string name="pred_l_13_ok">Right. R vanishes, and only the dollar sign is left.</string>
-    <string name="pred_l_14">Dollar with dollar. The list was accepted in seven steps.</string>
+    <string name="pred_l_13_ok">Right. R goes to epsilon: R leaves the stack and nothing goes in.</string>
+    <string name="pred_l_14">Dollar with dollar: accept. The rules used, in order, form the leftmost derivation of the list.</string>
 
     <!-- Recursive descent -->
-    <string name="desc_l_01">The table works, but it turns into a grid of letters that is hard to read.</string>
-    <string name="desc_l_02">When an error happens, you want to know which rule the parser was in.</string>
-    <string name="desc_l_03">Each nonterminal becomes a function. One calls the other, descending through the grammar.</string>
-    <string name="desc_l_05">The recipe turns each rule into code, line by line.</string>
+    <string name="desc_l_01">The LL(1) table works, but it is a grid of cells. Nobody likes filling it in or debugging it by hand.</string>
+    <string name="desc_l_02">And when an error shows up, you want to know which rule the parser was in, to give a good message.</string>
+    <string name="desc_l_03">In recursive descent, each nonterminal becomes a function. The parser's stack becomes the program's call stack.</string>
+    <string name="desc_l_05">The recipe translates each rule into code, symbol by symbol.</string>
     <string name="desc_l_r1">1. Each nonterminal becomes a function.</string>
     <string name="desc_l_r2">2. Nonterminal in the rule: call its function.</string>
     <string name="desc_l_r3">3. Terminal in the rule: match and advance.</string>
@@ -46,7 +46,7 @@
     <string name="desc_l_06">In the rule with parentheses, what does the middle symbol become? Tap the rule.</string>
     <string name="desc_l_06_dica">The middle symbol is a nonterminal, not a token.</string>
     <string name="desc_l_06_ok">Right. The E becomes a call to its function.</string>
-    <string name="desc_l_07">If no rule can vanish, the last else reports the syntax error.</string>
+    <string name="desc_l_07">If the nonterminal is not nullable, the last else cannot stay empty. It reports the syntax error.</string>
     <string name="desc_l_08">The list of ids again. Now you write the code.</string>
     <string name="desc_l_09">L asks for id and then R. What completes function L? Tap it.</string>
     <string name="desc_l_09_dica">A nonterminal in the rule becomes a function call.</string>
@@ -58,15 +58,15 @@
     <string name="desc_l_12">On this input, how many times does the parser call function R? Tap it.</string>
     <string name="desc_l_12_dica">One call comes from L. Another comes from inside the if.</string>
     <string name="desc_l_12_ok">Right. Twice. On the second, the input is already over.</string>
-    <string name="desc_l_13">On the second call, the if fails. R matches nothing and returns.</string>
+    <string name="desc_l_13">On the second call the token is dollar, and the if fails. R uses the epsilon rule: it matches nothing and returns.</string>
 
     <!-- Syntax errors and recovery -->
     <string name="erro_l_titulo">Two errors</string>
-    <string name="erro_l_01">This code has two errors. A simple compiler stops at the first one.</string>
-    <string name="erro_l_02">Then you fix it, compile again, and only then see the second.</string>
+    <string name="erro_l_01">This code has two syntax errors. A simple compiler stops at the first and says nothing more.</string>
+    <string name="erro_l_02">You fix it, compile again, and only then find the second. With ten errors, that is ten compilations.</string>
     <string name="erro_l_palavra">RECOVERY</string>
-    <string name="erro_l_03">Reporting the error and reading on is called error recovery.</string>
-    <string name="erro_l_05">In the predictive parser, panic mode follows four rules.</string>
+    <string name="erro_l_03">Reporting the error, adjusting and carrying on with the analysis is called error recovery.</string>
+    <string name="erro_l_05">In the predictive parser, panic mode follows four rules. They say what to do when the table cell is empty.</string>
     <string name="erro_l_r1">1. Empty cell, nonterminal on top: skip tokens.</string>
     <string name="erro_l_r2">2. Found a token in FIRST of the top: go on.</string>
     <string name="erro_l_r3">3. Found one in FOLLOW of the top: pop the top.</string>
@@ -74,7 +74,7 @@
     <string name="erro_l_06">It stopped at a token that can come after the top. Which rule applies? Tap it.</string>
     <string name="erro_l_06_dica">What can come after is in the FOLLOW.</string>
     <string name="erro_l_06_ok">Right. The top is popped and parsing goes on.</string>
-    <string name="erro_l_07">A wrong terminal on top is popped, as if the token had come.</string>
+    <string name="erro_l_07">Rule four: terminal on top different from the token. The parser pops the terminal, as if it had arrived, and reports it.</string>
     <string name="erro_l_08">Another grammar: assignment statements. The input has two errors.</string>
     <string name="erro_l_09">The parser reads from left to right. Where does it get stuck first? Tap it.</string>
     <string name="erro_l_09_dica">After the equals sign comes a value. What came?</string>
@@ -91,20 +91,20 @@
     <string name="erro_l_descarta">skip ;</string>
 
     <!-- Shift-reduce -->
-    <string name="sr_l_01">The predictive parser replaces E by E plus n, and E is back on top.</string>
+    <string name="sr_l_01">The grammar E goes to E plus n is left-recursive. The predictive parser replaces E with E plus n, and E is back on top.</string>
     <string name="sr_l_02">How many replacements until it reads the first n? Tap it.</string>
     <string name="sr_l_02_dica">After each replacement, the E is still in front.</string>
-    <string name="sr_l_02_ok">Right. It replaces forever and never reads anything.</string>
+    <string name="sr_l_02_ok">Right. It replaces forever and never reads anything. The predictive parser picks the rule too early.</string>
     <string name="sr_l_sem_fim">endless</string>
-    <string name="sr_l_03">The way out is to read first and replace by the rule later. That is shift-reduce.</string>
-    <string name="sr_l_05">At each step, the parser picks one of three actions.</string>
-    <string name="sr_l_r1">1. No right side on top: shift a token.</string>
-    <string name="sr_l_r2">2. A rule's right side on top: reduce.</string>
-    <string name="sr_l_r3">3. Only the start symbol and dollar: accept.</string>
+    <string name="sr_l_03">The way out is to read first and pick the rule later, when the whole right-hand side is already on the stack. That is shift-reduce.</string>
+    <string name="sr_l_05">At each step, the parser chooses among three actions, looking at the top of the stack.</string>
+    <string name="sr_l_r1">1. No handle on top: shift a token.</string>
+    <string name="sr_l_r2">2. Handle on top: reduce by its rule.</string>
+    <string name="sr_l_r3">3. Only the start symbol and $: accept.</string>
     <string name="sr_l_06">Stack with only E, input at the dollar. Which action applies? Tap it.</string>
     <string name="sr_l_06_dica">Look at what is left on the stack and in the input.</string>
     <string name="sr_l_06_ok">Right. Accept, and the sentence is correct.</string>
-    <string name="sr_l_07">Reducing takes the right side off the stack and puts the left side in its place.</string>
+    <string name="sr_l_07">Reducing pops the whole right-hand side and puts the left-hand nonterminal in its place.</string>
     <string name="sr_l_08">Now parentheses around id. You decide each step.</string>
     <string name="sr_l_09">Nothing to reduce yet. I shift the opening parenthesis and then the id.</string>
     <string name="sr_l_10">On the stack, an opening parenthesis and id. Shift or reduce? Tap it.</string>
@@ -117,7 +117,7 @@
     <string name="sr_l_13">Tap the pieces that the reduction replaces by S.</string>
     <string name="sr_l_13_dica">The whole right side leaves together.</string>
     <string name="sr_l_13_ok">Right. The three leave, and one S comes in.</string>
-    <string name="sr_l_14">Only the start symbol is left, with the dollar in the input. Accepted in six steps.</string>
+    <string name="sr_l_14">Only the start symbol is left, with dollar in the input: accept. Knowing where the handle is, that is the job of the LR table.</string>
 
     <!-- Yacc/Bison -->
     <string name="bison_l_01">A calculator with parentheses already becomes an LALR table with 14 states.</string>
@@ -125,7 +125,7 @@
     <string name="bison_l_02">Each state has 8 token columns. How many cells would you check by hand? Tap it.</string>
     <string name="bison_l_02_dica">Multiply the states by the columns.</string>
     <string name="bison_l_02_ok">Right. And each new rule changes many of them.</string>
-    <string name="bison_l_03">Bison builds that table by itself. It is the heir of Yacc.</string>
+    <string name="bison_l_03">Bison builds that table by itself, from the grammar. It is the free version of Yacc and generates an LALR(1) parser in C.</string>
     <string name="bison_l_05">The recipe for the .y file has three steps.</string>
     <string name="bison_l_r1">1. Before the %%: %token and precedence.</string>
     <string name="bison_l_r2">2. After the %%: the rules and their actions.</string>
@@ -133,7 +133,7 @@
     <string name="bison_l_06">Where does the left line for minus go? Tap the right part.</string>
     <string name="bison_l_06_dica">Precedence is a declaration. It is not a rule.</string>
     <string name="bison_l_06_ok">Right. Precedence goes in the declarations, up top.</string>
-    <string name="bison_l_07">A reported conflict doesn't stop Bison. It picks by itself and can get it wrong.</string>
+    <string name="bison_l_07">A reported conflict does not stop Bison. On shift-reduce it shifts; on reduce-reduce it uses the rule that comes first. And it may get your arithmetic wrong.</string>
     <string name="bison_l_08">A calculator with only minus, and no precedence line at all.</string>
     <string name="bison_l_09">I run Bison on this file. How many conflicts does it report? Tap it.</string>
     <string name="bison_l_09_dica">In five minus two minus one, which pair groups first?</string>

@@ -2,13 +2,13 @@
 <!-- Aulas básicas longas de gramática (A9): derivação, ambiguidade, recursão à esquerda e fatoração. -->
 <resources>
     <string name="cfg_l_titulo_porque">Frase certa ou errada?</string>
-    <string name="cfg_l_01">O parser recebe tokens. Ele precisa saber quais sequências valem.</string>
+    <string name="cfg_l_01">O parser recebe os tokens do scanner. Ele precisa saber quais sequências de tokens são frases válidas.</string>
     <string name="cfg_l_02">Uma destas frases está mal escrita. Toque nela.</string>
     <string name="cfg_l_02_dica">Depois de um mais, precisa vir um número.</string>
     <string name="cfg_l_02_ok">Isso. Falta um número depois do mais.</string>
-    <string name="cfg_l_03">Listar todas as frases certas não dá. Elas não têm fim.</string>
+    <string name="cfg_l_03">Listar todas as frases certas não dá: elas são infinitas. E expressão regular não basta, porque não sabe casar parênteses.</string>
     <string name="cfg_l_palavra">GRAMÁTICA</string>
-    <string name="cfg_l_04">Uma lista curta de trocas gera todas elas. Essa lista é a gramática.</string>
+    <string name="cfg_l_04">Uma gramática livre de contexto é uma lista curta de regras de troca que gera todas as frases válidas.</string>
     <string name="cfg_l_05">Derivar uma frase tem três passos. Eles ficam aqui na tela.</string>
     <string name="cfg_l_r1">1. Comece pelo símbolo inicial.</string>
     <string name="cfg_l_r2">2. Troque o não-terminal mais à esquerda.</string>
@@ -30,14 +30,14 @@
     <string name="cfg_l_12">E a frase int id id ponto e vírgula? Ela está na linguagem?</string>
     <string name="cfg_l_12_dica">Procure uma regra que ponha dois id seguidos.</string>
     <string name="cfg_l_12_ok">Isso. Nenhuma regra põe dois id seguidos.</string>
-    <string name="cfg_l_13">Sem derivação que chegue nela, a frase fica fora da linguagem.</string>
+    <string name="cfg_l_13">Sem derivação que chegue nela, a frase fica fora da linguagem. É assim que o parser acusa erro de sintaxe.</string>
 
     <string name="amb_l_titulo_porque">Qual conta vem primeiro?</string>
     <string name="amb_l_01">Dois mais três vezes quatro dá catorze, porque o vezes vem antes.</string>
     <string name="amb_l_02">Se alguém somar antes, o resultado muda. Toque no número que sai.</string>
     <string name="amb_l_02_dica">Some dois com três. Depois multiplique por quatro.</string>
     <string name="amb_l_02_ok">Isso. Vinte, e não catorze.</string>
-    <string name="amb_l_03">No compilador, a árvore do parser decide a ordem das contas.</string>
+    <string name="amb_l_03">No compilador, quem decide a ordem das contas é a forma da árvore que o parser monta.</string>
     <string name="amb_l_04">Para mostrar que uma gramática é ambígua, a receita tem três passos.</string>
     <string name="amb_l_r1">1. Escolha uma frase da linguagem.</string>
     <string name="amb_l_r2">2. Tente montar duas árvores diferentes para ela.</string>
@@ -54,18 +54,18 @@
     <string name="amb_l_09_dica">Faça cinco menos dois antes. Depois tire o resultado de nove.</string>
     <string name="amb_l_09_ok">Isso. Seis. A outra árvore dava dois.</string>
     <string name="amb_l_10">As duas árvores dão contas diferentes. Pela receita, a gramática é ambígua.</string>
-    <string name="amb_l_11">Conserto: à direita do menos, a regra nova só aceita um n.</string>
+    <string name="amb_l_11">Conserto: à direita do menos, a regra nova só aceita um n. A recursão fica só à esquerda, e o menos associa à esquerda.</string>
     <string name="amb_l_12">Com a regra nova, quantas árvores tem n menos n menos n?</string>
     <string name="amb_l_12_dica">À direita do menos só cabe um n.</string>
     <string name="amb_l_12_ok">Isso. Agora só existe uma árvore.</string>
-    <string name="amb_l_13">Esta é a única árvore. O menos agrupa pela esquerda, como na escola.</string>
+    <string name="amb_l_13">Esta é a única árvore. O menos associa à esquerda, como na matemática.</string>
 
-    <string name="rec_l_01">Num parser descendente, cada não-terminal vira uma função em C.</string>
+    <string name="rec_l_01">Num parser descendente, cada não-terminal vira uma função. A função segue o lado direito da regra, da esquerda para a direita.</string>
     <string name="rec_l_02">Antes de ler qualquer token, o que a função E faz? Toque na linha.</string>
     <string name="rec_l_02_dica">Olhe a primeira linha dentro da função.</string>
     <string name="rec_l_02_ok">Isso. Ela chama a si mesma, sem ler nada.</string>
     <string name="rec_l_palavra">RECURSÃO À ESQUERDA</string>
-    <string name="rec_l_03">Regra que começa com o próprio lado esquerdo tem recursão à esquerda.</string>
+    <string name="rec_l_03">Regra em que o lado direito começa com o próprio lado esquerdo tem recursão à esquerda. Nenhum parser descendente aceita isso.</string>
     <string name="rec_l_04">O conserto tem três passos. Ele vale para qualquer regra desse tipo.</string>
     <string name="rec_l_r1">1. Separe: A → A α tem laço, A → β não tem.</string>
     <string name="rec_l_r2">2. Troque cada A → β por A → β A'.</string>
@@ -88,7 +88,7 @@
     <string name="rec_l_11">A gramática nova ainda gera id vírgula id? Toque na resposta.</string>
     <string name="rec_l_11_dica">Primeiro, L vai para id e L linha. Depois, vírgula, id e épsilon.</string>
     <string name="rec_l_11_ok">Isso. A linguagem continua a mesma.</string>
-    <string name="rec_l_12">Agora a função de L lê um id antes de chamar outra função.</string>
+    <string name="rec_l_12">Agora a função de L lê um id antes de chamar outra função. A cada chamada a entrada anda, e o parser termina.</string>
 
     <string name="fat_l_01">Um comando pode ser atribuição ou chamada. Os dois começam com id.</string>
     <string name="fat_l_nao_da">não dá para saber</string>
@@ -96,7 +96,7 @@
     <string name="fat_l_02_dica">Olhe o primeiro token de cada regra.</string>
     <string name="fat_l_02_ok">Isso. Um token só não decide entre as duas.</string>
     <string name="fat_l_03">A fatoração tem quatro passos. Eles ficam aqui na tela.</string>
-    <string name="fat_l_r1">1. Ache o maior começo comum α.</string>
+    <string name="fat_l_r1">1. Ache o maior prefixo comum α.</string>
     <string name="fat_l_r2">2. Troque as regras por A → α A'.</string>
     <string name="fat_l_r3">3. Em A', ponha o resto de cada regra.</string>
     <string name="fat_l_r4">4. Repita enquanto duas regras começarem igual.</string>
@@ -119,5 +119,5 @@
     <string name="fat_l_11">O parser está na segunda regra e lê abre parêntese. Quantas alternativas servem?</string>
     <string name="fat_l_11_dica">Conte as alternativas que começam com abre parêntese.</string>
     <string name="fat_l_11_ok">Isso. Uma só. A gramática fatorada é LL(1).</string>
-    <string name="fat_l_12">Fatorar adia a escolha até chegar o token que decide.</string>
+    <string name="fat_l_12">Fatorar não muda a linguagem. Só adia a escolha até chegar o token que decide.</string>
 </resources>

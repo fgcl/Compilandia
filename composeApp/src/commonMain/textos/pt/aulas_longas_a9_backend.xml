@@ -2,10 +2,10 @@
 <!-- Aulas básicas longas de semântica e back-end (A9): atributos, escopo, TAC, otimização, registros de ativação e alocação. -->
 <resources>
     <string name="attr_l_01">Na máquina, somar inteiros e somar reais são instruções diferentes.</string>
-    <string name="attr_l_02">Para escolher a instrução, o compilador precisa do tipo de cada pedaço.</string>
+    <string name="attr_l_02">Para escolher a instrução certa, o compilador precisa saber o tipo de cada pedaço da expressão.</string>
     <string name="attr_l_palavra">ATRIBUTO</string>
-    <string name="attr_l_03">Informação pendurada num nó da árvore, como o tipo, é um atributo.</string>
-    <string name="attr_l_05">Os tipos sobem das folhas até a raiz, um nó por vez.</string>
+    <string name="attr_l_03">Um atributo é uma informação associada a um nó da árvore, como o tipo ou o valor. As regras que o calculam vêm junto com a gramática.</string>
+    <string name="attr_l_05">A verificação de tipos sobe das folhas até a raiz, um nó por vez.</string>
     <string name="attr_l_r1">1. Número com ponto é float. Sem ponto, int.</string>
     <string name="attr_l_r2">2. Variável: o tipo vem da tabela de símbolos.</string>
     <string name="attr_l_r3">3. Conta: um filho float dá float. Senão, int.</string>
@@ -13,7 +13,7 @@
     <string name="attr_l_06">No primeiro exemplo, o x era float. Que regra disse isso? Toque.</string>
     <string name="attr_l_06_dica">O x é uma variável. Onde mora o tipo dela?</string>
     <string name="attr_l_06_ok">Isso. A declaração do x ficou na tabela.</string>
-    <string name="attr_l_07">Na regra três, o int que encontra um float vira float antes da conta.</string>
+    <string name="attr_l_07">No passo três, o int que encontra um float sofre coerção: vira float antes da conta.</string>
     <string name="attr_l_08">Outra conta. As folhas já têm tipo, pelas regras um e dois.</string>
     <string name="attr_l_09">Qual é o tipo de c vezes dois? Toque.</string>
     <string name="attr_l_09_dica">Os dois filhos são int. Nenhum é float.</string>
@@ -24,11 +24,11 @@
     <string name="attr_l_11">Agora o y deu lugar ao ok, que é bool. Que tipo sobe?</string>
     <string name="attr_l_11_dica">Regra quatro: bool não entra em conta.</string>
     <string name="attr_l_11_ok">Isso. A raiz fica com erro de tipo.</string>
-    <string name="attr_l_12">O erro sobe até a raiz, e o compilador avisa você.</string>
+    <string name="attr_l_12">O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce.</string>
 
     <string name="esc_l_01">Duas funções declaram uma variável i. Cada uma quer a sua.</string>
     <string name="esc_l_02">Em cada uso do i, o compilador precisa achar a declaração certa.</string>
-    <string name="esc_l_03">O trecho onde uma declaração vale é o escopo dela.</string>
+    <string name="esc_l_03">O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita.</string>
     <string name="esc_l_05">Cada bloco tem a sua tabela. A receita cuida da pilha delas.</string>
     <string name="esc_l_r1">1. Abriu bloco: empilhe uma tabela vazia.</string>
     <string name="esc_l_r2">2. Declarou: anote o nome na tabela do topo.</string>
@@ -37,7 +37,7 @@
     <string name="esc_l_06">O x de dentro escondeu o de fora. Que regra fez isso? Toque.</string>
     <string name="esc_l_06_dica">Pense em onde a busca começa.</string>
     <string name="esc_l_06_ok">Isso. A busca para no primeiro x que acha.</string>
-    <string name="esc_l_07">Regra quatro: o bloco fechou, e os nomes dele somem juntos.</string>
+    <string name="esc_l_07">Regra quatro: o bloco fechou, e os nomes declarados nele somem juntos.</string>
     <string name="esc_l_08">Agora a busca é sua. O bloco de fora já tem a tabela dele.</string>
     <string name="esc_l_fora">fora: %1$s</string>
     <string name="esc_l_dentro">dentro: %1$s</string>
@@ -58,7 +58,7 @@
     <string name="tac_l_02">Quantas contas há nessa linha? Toque no número.</string>
     <string name="tac_l_02_dica">Conte os operadores. Cada um é uma conta.</string>
     <string name="tac_l_02_ok">Isso. Duas contas, então duas linhas.</string>
-    <string name="tac_l_04">Primeiro a árvore. Ela já diz qual conta vem antes.</string>
+    <string name="tac_l_04">Primeiro a árvore sintática. Ela já diz qual conta vem antes.</string>
     <string name="tac_l_05">Para gerar as linhas, ande pela árvore de baixo para cima.</string>
     <string name="tac_l_r1">1. Gere os filhos antes do pai.</string>
     <string name="tac_l_r2">2. Cada operador ganha um temporário novo.</string>
@@ -81,12 +81,12 @@
     <string name="tac_l_12">Falta guardar no x. Qual temporário vai para ele? Toque.</string>
     <string name="tac_l_12_dica">Regra quatro: o último temporário, o da raiz.</string>
     <string name="tac_l_12_ok">Isso. A última linha só copia o valor.</string>
-    <string name="tac_l_13">Quatro linhas, e nenhuma faz mais de uma conta.</string>
+    <string name="tac_l_13">Quatro linhas, e nenhuma faz mais de uma conta. Na etapa de prática, o if e o while também viram linhas, com rótulos e desvios.</string>
 
     <string name="otim_l_01">Esta linha roda mil vezes dentro de um laço.</string>
     <string name="otim_l_02">Cada conta feita antes poupa mil contas quando o programa roda.</string>
     <string name="otim_l_palavra">OTIMIZAR</string>
-    <string name="otim_l_03">Trocar o código por outro mais rápido, com o mesmo resultado, é otimizar.</string>
+    <string name="otim_l_03">Otimizar é trocar o código por outro mais rápido ou menor, que dá exatamente o mesmo resultado.</string>
     <string name="otim_l_05">A dobra anda pela árvore, das folhas até a raiz.</string>
     <string name="otim_l_r1">1. Só números: troque a conta pelo resultado.</string>
     <string name="otim_l_r2">2. Suba: o resultado pode fechar outra conta.</string>
@@ -94,7 +94,7 @@
     <string name="otim_l_06">No primeiro exemplo, a soma com y ficou. Que regra manda? Toque.</string>
     <string name="otim_l_06_dica">O y só tem valor quando o programa roda.</string>
     <string name="otim_l_06_ok">Isso. A variável segura a conta para depois.</string>
-    <string name="otim_l_07">A regra dois faz uma dobra puxar a outra.</string>
+    <string name="otim_l_07">O passo dois faz uma dobra puxar a outra: o resultado vira uma constante nova.</string>
     <string name="otim_l_08">Sem otimizar, esta conta vira três linhas. Vamos dobrar.</string>
     <string name="otim_l_09">Qual conta o compilador dobra primeiro? Toque no operador.</string>
     <string name="otim_l_09_dica">Procure um operador com dois números embaixo.</string>
@@ -105,23 +105,23 @@
     <string name="otim_l_11">Sobrou quatro vezes x. Toque na única linha que o programa roda.</string>
     <string name="otim_l_11_dica">O x só existe quando o programa roda. Essa conta fica.</string>
     <string name="otim_l_11_ok">Isso. Uma linha no lugar de três.</string>
-    <string name="otim_l_12">O resultado é o mesmo para qualquer x. Só o caminho encurtou.</string>
+    <string name="otim_l_12">O resultado é o mesmo para qualquer x. Só o caminho encurtou. Outras otimizações clássicas: propagar cópias e eliminar código morto.</string>
 
     <string name="rt_l_01">A função fat chama a si mesma, com um n menor.</string>
     <string name="rt_l_02">Se o n morasse num lugar só, qual valor seria perdido? Toque.</string>
     <string name="rt_l_02_dica">A chamada nova escreve por cima da antiga.</string>
     <string name="rt_l_02_ok">Isso. O fat de dois perderia o seu n.</string>
     <string name="rt_l_palavra">REGISTRO</string>
-    <string name="rt_l_03">Cada chamada ganha uma caixa própria na pilha: o registro de ativação.</string>
+    <string name="rt_l_03">Cada chamada de função ganha um bloco próprio na pilha de execução: o registro de ativação.</string>
     <string name="rt_l_04">O fat de um não chama ninguém. Ele devolve um na hora.</string>
     <string name="rt_l_05">Chamar e retornar seguem sempre a mesma receita.</string>
-    <string name="rt_l_r1">1. Chamou: empilhe parâmetros e volta.</string>
+    <string name="rt_l_r1">1. Chamou: empilhe o registro (parâmetros, retorno).</string>
     <string name="rt_l_r2">2. Só o registro do topo está rodando.</string>
-    <string name="rt_l_r3">3. Retornou: desempilhe e vá para a volta.</string>
+    <string name="rt_l_r3">3. Retornou: desempilhe e vá para o retorno.</string>
     <string name="rt_l_06">O fat de um voltou para o fat de dois. Qual regra? Toque.</string>
     <string name="rt_l_06_dica">O registro saiu, e o controle voltou.</string>
     <string name="rt_l_06_ok">Isso. Regra três: desempilha e volta.</string>
-    <string name="rt_l_07">Regra um: o endereço de volta entra no registro, junto com o n.</string>
+    <string name="rt_l_07">Regra um: o endereço de retorno entra no registro, junto com o n. É por ele que a função sabe para onde voltar.</string>
     <string name="rt_l_08">Outro programa. O main chamou f com c igual a um.</string>
     <string name="rt_l_09">Quem o f chama primeiro? Toque na função.</string>
     <string name="rt_l_09_dica">Leia a linha do f da esquerda para a direita.</string>
@@ -150,7 +150,7 @@
     <string name="reg_l_06">O fio entre as duas primeiras variáveis veio de qual passo? Toque.</string>
     <string name="reg_l_06_dica">O fio liga quem vive ao mesmo tempo.</string>
     <string name="reg_l_06_ok">Isso. Interferência vira fio no grafo.</string>
-    <string name="reg_l_07">A vivacidade anda de trás para frente, da última linha até a primeira.</string>
+    <string name="reg_l_07">A análise de vivacidade anda de trás para a frente, da última linha até a primeira.</string>
     <string name="reg_l_08">Agora com temporários de verdade. Quatro linhas, quatro temporários.</string>
     <string name="reg_l_09">Logo depois da linha acesa, quem ainda está vivo? Toque nos temporários.</string>
     <string name="reg_l_09_dica">Vivo é quem ainda vai ser lido mais abaixo.</string>

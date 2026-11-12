@@ -1,5 +1,7 @@
 package com.compilandia.content.episodes
 
+import com.compilandia.content.fecho
+import com.compilandia.content.Fecho
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
 import com.compilandia.content.Look
@@ -194,6 +196,11 @@ val semantica by lazy {
                 add(tipoDe("kt", at3.getValue(e3.id).type.label, box2.getValue("t"), Tint.RED))
                 hot("t")
             }
+            fecho(Fecho(
+                tx("attr_f_af"), false, tx("attr_f_q"), tx("attr_f_dica"), tx("attr_f_ok"), tx("attr_f_certo"),
+                tx("attr_f_erro2"), tx("attr_f_certo2"), tx("attr_f_fala2"),
+                listOf(tx("attr_f_z1"), tx("attr_f_z2"), tx("attr_f_z3")), tx("attr_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── ESCOPO ───────────────────────────────
@@ -258,6 +265,11 @@ val semantica by lazy {
                 drop("pd")
                 hot("c${ex.depois}", "pf")
             }
+            fecho(Fecho(
+                tx("esc_f_af"), false, tx("esc_f_q"), tx("esc_f_dica"), tx("esc_f_ok"), tx("esc_f_certo"),
+                tx("esc_f_erro2"), tx("esc_f_certo2"), tx("esc_f_fala2"),
+                listOf(tx("esc_f_z1"), tx("esc_f_z2"), tx("esc_f_z3")), tx("esc_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── AST ───────────────────────────────
@@ -356,6 +368,11 @@ val backend by lazy {
                 add(linha(3))
                 hot("l00", "l10", "l20", "l30")
             }
+            fecho(Fecho(
+                tx("tac_f_af"), false, tx("tac_f_q"), tx("tac_f_dica"), tx("tac_f_ok"), tx("tac_f_certo"),
+                tx("tac_f_erro2"), tx("tac_f_certo2"), tx("tac_f_fala2"),
+                listOf(tx("tac_f_z1"), tx("tac_f_z2"), tx("tac_f_z3")), tx("tac_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── OTIMIZAÇÃO ───────────────────────────────
@@ -440,6 +457,11 @@ val backend by lazy {
                 move("d0", 180f, 310f); tint("d0", Tint.GREEN)
                 hot("d0")
             }
+            fecho(Fecho(
+                tx("otim_f_af"), false, tx("otim_f_q"), tx("otim_f_dica"), tx("otim_f_ok"), tx("otim_f_certo"),
+                tx("otim_f_erro2"), tx("otim_f_certo2"), tx("otim_f_fala2"),
+                listOf(tx("otim_f_z1"), tx("otim_f_z2"), tx("otim_f_z3")), tx("otim_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── REGISTROS DE ATIVAÇÃO ───────────────────────────────
@@ -540,6 +562,11 @@ val backend by lazy {
                 add(Box("res", "f($RT_ARGUMENTO_2) = ${prog.result}", 290f, 386f, 120f, 38f, Look.TOKEN, Tint.GREEN, size = 15f))
                 hot("k0", "res")
             }
+            fecho(Fecho(
+                tx("rt_f_af"), false, tx("rt_f_q"), tx("rt_f_dica"), tx("rt_f_ok"), tx("rt_f_certo"),
+                tx("rt_f_erro2"), tx("rt_f_certo2"), tx("rt_f_fala2"),
+                listOf(tx("rt_f_z1"), tx("rt_f_z2"), tx("rt_f_z3")), tx("rt_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── MIPS ───────────────────────────────
@@ -627,6 +654,11 @@ val backend by lazy {
                     add(rotulo("s$id", "\$s$c", b.x, b.y + 40f, tint, 16f))
                 }
             }
+            fecho(Fecho(
+                tx("reg_f_af"), false, tx("reg_f_q"), tx("reg_f_dica"), tx("reg_f_ok"), tx("reg_f_certo"),
+                tx("reg_f_erro2"), tx("reg_f_certo2"), tx("reg_f_fala2"),
+                listOf(tx("reg_f_z1"), tx("reg_f_z2"), tx("reg_f_z3")), tx("reg_f_resumo"),
+            ))
         },
     )
 }

@@ -2,13 +2,13 @@
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas_a9_gramatica.xml. -->
 <resources>
     <string name="cfg_l_titulo_porque">Right or wrong sentence?</string>
-    <string name="cfg_l_01">The parser receives tokens. It needs to know which sequences are valid.</string>
+    <string name="cfg_l_01">The parser gets the tokens from the scanner. It must know which token sequences are valid sentences.</string>
     <string name="cfg_l_02">One of these sentences is badly written. Tap it.</string>
     <string name="cfg_l_02_dica">After a plus, a number must come.</string>
     <string name="cfg_l_02_ok">Right. A number is missing after the plus.</string>
-    <string name="cfg_l_03">Listing every valid sentence is impossible. There is no end to them.</string>
+    <string name="cfg_l_03">Listing every correct sentence is impossible: there are infinitely many. And a regular expression is not enough, because it cannot match parentheses.</string>
     <string name="cfg_l_palavra">GRAMMAR</string>
-    <string name="cfg_l_04">A short list of replacements generates all of them. That list is the grammar.</string>
+    <string name="cfg_l_04">A context-free grammar is a short list of rewriting rules that generates every valid sentence.</string>
     <string name="cfg_l_05">Deriving a sentence takes three steps. They stay here on screen.</string>
     <string name="cfg_l_r1">1. Start from the start symbol.</string>
     <string name="cfg_l_r2">2. Replace the leftmost nonterminal.</string>
@@ -30,14 +30,14 @@
     <string name="cfg_l_12">What about int id id semicolon? Is it in the language?</string>
     <string name="cfg_l_12_dica">Look for a rule that puts two ids in a row.</string>
     <string name="cfg_l_12_ok">Right. No rule puts two ids in a row.</string>
-    <string name="cfg_l_13">With no derivation that reaches it, the sentence is outside the language.</string>
+    <string name="cfg_l_13">With no derivation reaching it, the sentence is outside the language. That is how the parser reports a syntax error.</string>
 
     <string name="amb_l_titulo_porque">Which operation goes first?</string>
     <string name="amb_l_01">Two plus three times four is fourteen, because the times goes first.</string>
     <string name="amb_l_02">If someone adds first, the result changes. Tap the number they get.</string>
     <string name="amb_l_02_dica">Add two and three. Then multiply by four.</string>
     <string name="amb_l_02_ok">Right. Twenty, not fourteen.</string>
-    <string name="amb_l_03">In the compiler, the parse tree decides the order of the operations.</string>
+    <string name="amb_l_03">In the compiler, the shape of the tree the parser builds decides the order of the operations.</string>
     <string name="amb_l_04">To show that a grammar is ambiguous, the recipe has three steps.</string>
     <string name="amb_l_r1">1. Pick a sentence of the language.</string>
     <string name="amb_l_r2">2. Try to build two different trees for it.</string>
@@ -54,18 +54,18 @@
     <string name="amb_l_09_dica">Do five minus two first. Then subtract the result from nine.</string>
     <string name="amb_l_09_ok">Right. Six. The other tree gave two.</string>
     <string name="amb_l_10">The two trees give different results. By the recipe, the grammar is ambiguous.</string>
-    <string name="amb_l_11">The fix: to the right of the minus, the new rule accepts only an n.</string>
+    <string name="amb_l_11">The fix: to the right of minus, the new rule accepts only an n. The recursion stays on the left only, and minus is left-associative.</string>
     <string name="amb_l_12">With the new rule, how many trees does n minus n minus n have?</string>
     <string name="amb_l_12_dica">To the right of the minus, only an n fits.</string>
     <string name="amb_l_12_ok">Right. Just one tree.</string>
-    <string name="amb_l_13">This is the only tree. The minus groups from the left, as in school.</string>
+    <string name="amb_l_13">This is the only tree. Minus is left-associative, as in math.</string>
 
-    <string name="rec_l_01">In a top-down parser, each nonterminal becomes a function in C.</string>
+    <string name="rec_l_01">In a top-down parser, each nonterminal becomes a function. The function follows the rule's right-hand side, from left to right.</string>
     <string name="rec_l_02">Before reading any token, what does the function E do? Tap the line.</string>
     <string name="rec_l_02_dica">Look at the first line inside the function.</string>
     <string name="rec_l_02_ok">Right. It calls itself without reading anything.</string>
     <string name="rec_l_palavra">LEFT RECURSION</string>
-    <string name="rec_l_03">A rule that starts with its own left side has left recursion.</string>
+    <string name="rec_l_03">A rule whose right-hand side starts with its own left-hand side has left recursion. No top-down parser accepts that.</string>
     <string name="rec_l_04">The fix has three steps. It works for any rule of this kind.</string>
     <string name="rec_l_r1">1. Split: A → A α loops, A → β does not.</string>
     <string name="rec_l_r2">2. Replace each A → β with A → β A'.</string>
@@ -88,7 +88,7 @@
     <string name="rec_l_11">Does the new grammar still generate id comma id? Tap the answer.</string>
     <string name="rec_l_11_dica">First, L goes to id and L prime. Then comma, id and epsilon.</string>
     <string name="rec_l_11_ok">Right. The language stays the same.</string>
-    <string name="rec_l_12">Now the function for L reads an id before calling another function.</string>
+    <string name="rec_l_12">Now the function for L reads an id before calling another function. With each call the input moves on, and the parser terminates.</string>
 
     <string name="fat_l_01">A command can be an assignment or a call. Both start with id.</string>
     <string name="fat_l_nao_da">can't tell</string>
@@ -119,5 +119,5 @@
     <string name="fat_l_11">The parser is in the second rule and reads an open parenthesis. How many alternatives fit?</string>
     <string name="fat_l_11_dica">Count the alternatives that start with an open parenthesis.</string>
     <string name="fat_l_11_ok">Right. Only one. The factored grammar is LL(1).</string>
-    <string name="fat_l_12">Factoring delays the choice until the deciding token arrives.</string>
+    <string name="fat_l_12">Factoring does not change the language. It only postpones the choice until the deciding token arrives.</string>
 </resources>

@@ -163,7 +163,7 @@
     <string name="bugs_se_slr_tem_conflito_gramatica">Se o SLR tem conflito, a gramática é ambígua.</string>
     <string name="bugs_bug_estado_repetido">Bug do Estado Repetido</string>
     <string name="bugs_lalr_tem_estados_lr_1">LALR tem os estados do LR(1).</string>
-    <string name="bugs_lalr_funde_estados_mesmo_miolo">LALR funde estados de mesmo miolo. Fica do tamanho do SLR.</string>
+    <string name="bugs_lalr_funde_estados_mesmo_miolo">LALR funde estados de mesmo núcleo. Fica do tamanho do SLR.</string>
     <string name="bugs_juntar_estados_pode_criar_conflito">Juntar estados pode criar conflito reduce-reduce.</string>
     <string name="bugs_juntar_estados_nao_cria_shift">Juntar estados não cria shift-reduce novo.</string>
     <string name="bugs_slr_lalr_usam_mesmos_simbolos">SLR e LALR usam os mesmos símbolos de previsão.</string>

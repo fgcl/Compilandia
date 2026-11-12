@@ -3,6 +3,8 @@ package com.compilandia.content.episodes
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
 import com.compilandia.content.EpisodeBuilder
+import com.compilandia.content.Fecho
+import com.compilandia.content.fecho
 import com.compilandia.content.Look
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.content.Tint
@@ -156,6 +158,11 @@ val aulasLongas by lazy {
                 for (i in 0..5) tint("f$i", Tint.TEAL)
                 hot()
             }
+            fecho(Fecho(
+                tx("fases_f_af"), false, tx("fases_f_q"), tx("fases_f_dica"), tx("fases_f_ok"), tx("fases_f_certo"),
+                tx("fases_f_erro2"), tx("fases_f_certo2"), tx("fases_f_fala2"),
+                listOf(tx("fases_f_z1"), tx("fases_f_z2"), tx("fases_f_z3")), tx("fases_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── FIRST ───────────────────────────────
@@ -195,14 +202,15 @@ val aulasLongas by lazy {
             cena(tx("first_l_05")) {
                 clear()
                 add(titulo(tx("first_l_titulo_receita")))
-                add(regra("r1", tx("first_l_r1"), 110f), regra("r2", tx("first_l_r2"), 166f), regra("r3", tx("first_l_r3"), 222f))
+                add(regra("r1", tx("first_l_r1"), 104f), regra("r2", tx("first_l_r2"), 152f), regra("r3", tx("first_l_r3"), 200f), regra("r4", tx("first_l_r4"), 248f))
             }
             cena(tx("first_l_06")) { hot("r1") }
             pergunta(tx("first_l_07"), setOf("r2"), setOf("r1", "r3"), tx("first_l_07_dica"), tx("first_l_07_ok")) {
                 hot()
-                add(codigo("q", listOf("E -> T X"), 300f, x = 130f, size = 16f))
+                add(codigo("q", listOf("E -> T X"), 318f, x = 130f, size = 16f))
             }
             cena(tx("first_l_08")) { drop("q"); hot("r3") }
+            cena(tx("first_l_08b")) { hot("r4") }
             // 4. Segundo exemplo, com perguntas
             cena(tx("first_l_09")) {
                 clear()
@@ -230,6 +238,11 @@ val aulasLongas by lazy {
                 add(ficha("s3", "c", 292f, 296f))
                 hot("s1", "s2", "s3")
             }
+            fecho(Fecho(
+                tx("first_f_af"), false, tx("first_f_q"), tx("first_f_dica"), tx("first_f_ok"), tx("first_f_certo"),
+                tx("first_f_erro2"), tx("first_f_certo2"), tx("first_f_fala2"),
+                listOf(tx("first_f_z1"), tx("first_f_z2"), tx("first_f_z3")), tx("first_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── FOLLOW ───────────────────────────────
@@ -276,14 +289,15 @@ val aulasLongas by lazy {
             cena(tx("follow_l_05")) {
                 clear()
                 add(titulo(tx("follow_l_titulo_receita")))
-                add(regra("r1", tx("follow_l_r1"), 110f), regra("r2", tx("follow_l_r2"), 166f), regra("r3", tx("follow_l_r3"), 222f))
+                add(regra("r1", tx("follow_l_r1"), 104f), regra("r2", tx("follow_l_r2"), 152f), regra("r3", tx("follow_l_r3"), 200f), regra("r4", tx("follow_l_r4"), 248f))
             }
             cena(tx("follow_l_06")) { hot("r1") }
             pergunta(tx("follow_l_07"), setOf("r2"), setOf("r1", "r3"), tx("follow_l_07_dica"), tx("follow_l_07_ok")) {
                 hot()
-                add(codigo("q", listOf("E -> T X"), 300f, x = 130f, size = 16f))
+                add(codigo("q", listOf("E -> T X"), 318f, x = 130f, size = 16f))
             }
             cena(tx("follow_l_08")) { drop("q"); hot("r3") }
+            cena(tx("follow_l_08b")) { hot("r4") }
             // 4. Segundo exemplo, com perguntas
             cena(tx("follow_l_09")) {
                 clear()
@@ -310,6 +324,11 @@ val aulasLongas by lazy {
                 add(ficha("f2", "+", 248f, 310f, 22f), ficha("f3", ")", 272f, 310f, 22f), ficha("f4", "$", 296f, 310f, 22f))
                 hot("f1", "f2", "f3", "f4")
             }
+            fecho(Fecho(
+                tx("follow_f_af"), false, tx("follow_f_q"), tx("follow_f_dica"), tx("follow_f_ok"), tx("follow_f_certo"),
+                tx("follow_f_erro2"), tx("follow_f_certo2"), tx("follow_f_fala2"),
+                listOf(tx("follow_f_z1"), tx("follow_f_z2"), tx("follow_f_z3")), tx("follow_f_resumo"),
+            ))
         },
     )
 }

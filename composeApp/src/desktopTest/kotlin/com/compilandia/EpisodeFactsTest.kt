@@ -36,10 +36,10 @@ class EpisodeFactsTest {
     @Test fun cadaEpisodioPedeUmToqueETemRitmoCurto() {
         for (e in Episodes.all) {
             assertTrue(e.passos.any { it.ask != null || it.brinquedo != null }, "${e.title} não pede nenhuma ação")
-            // A2: a aula básica longa tem de 14 a 22 cenas e ao menos 2 perguntas; as outras seguem curtas até serem refeitas.
+            // A2: a aula básica longa tem de 14 a 30 cenas (com o fecho de erros comuns e resumo) e ao menos 2 perguntas; as outras seguem curtas até serem refeitas.
             val longa = e.temporada == com.compilandia.content.Temporada.BASICO && e.skill in com.compilandia.content.episodes.ASSUNTOS_COM_AULA_LONGA
             if (longa) {
-                assertTrue(e.passos.size in 14..22, "${e.title} (longa) tem ${e.passos.size} passos")
+                assertTrue(e.passos.size in 14..30, "${e.title} (longa) tem ${e.passos.size} passos")
                 assertTrue(e.passos.count { it.ask != null } >= 2, "${e.title} (longa) tem menos de 2 perguntas")
             } else {
                 assertTrue(e.passos.size in 5..10, "${e.title} tem ${e.passos.size} passos")

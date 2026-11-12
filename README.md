@@ -61,6 +61,9 @@ Jogar rende engrenagens, e cada engrenagem compra uma peça que entra na sala co
 ### Aulas animadas com voz
 Cada um dos 29 assuntos tem uma aula animada: o algoritmo roda no palco e o Byte narra, com a boca sincronizada com a fala.
 Toda aula segue o mesmo caminho. Primeiro vem por que o assunto existe, depois um exemplo, a receita à vista e um segundo exemplo em que você responde. O motor gera os exemplos, e um teste confere cada resposta contra ele.
+A aula fecha com uma quinta parte, **Erros**: você julga uma afirmação que costuma cair em prova (certo ou errado), vê a versão certa ao lado de um segundo erro comum, e termina num resumo de três linhas.
+As falas usam os termos da disciplina (anulável, handle, núcleo, lookahead, closure e goto, ACTION e GOTO, coerção, registro de ativação), sempre explicados na primeira vez em que aparecem.
+FIRST e FOLLOW ensinam o cálculo até o ponto fixo ("repita até uma rodada não mudar nada").
 - Uma ideia por cena, e quem controla o ritmo é você. O play ao lado do Continuar deixa a aula seguir sozinha até a próxima pergunta.
 - O Byte entra na cena quando precisa. No autômato, ele é o trem.
 - A animação para e pede seu toque no próprio desenho.
@@ -80,6 +83,11 @@ Na região, cada assunto ocupa uma linha. Tocar nela abre a trilha, com as etapa
 5. Prática: você pilota. Corte a linha, pilote o trem, opere a pilha, rode a esteira, suba os tipos. Cada toque roda o motor de verdade.
 6. Pegadinha: o que mais derruba na prova, como o else solto, o conflito sem ambiguidade e o `%left` trocado.
 7. Desafio: um minijogo do assunto.
+
+Três aulas de prática cobrem o que as aulas básicas só citavam:
+- **Rode a tabela SLR** (Tabela SLR): uma entrada passo a passo com a pilha de estados, ACTION e GOTO.
+- **if e while viram desvios** (Três endereços): rótulos, desvio condicional e desvio incondicional.
+- **O tipo que desce** (Atributos): atributo herdado, definição S-atribuída e L-atribuída.
 
 Nem todo assunto tem todas as etapas. Qualquer uma tem **pular**, que não custa nada e deixa voltar depois.
 

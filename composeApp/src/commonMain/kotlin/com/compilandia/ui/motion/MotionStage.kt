@@ -326,6 +326,13 @@ private fun DrawScope.drawBox(l: Live, tm: TextMeasurer, display: FontFamily, mo
             val c = if (b.tint == Tint.NONE) Palette.inkSoft else tintColor(b.tint)
             txt(b.text, TextStyle(fontFamily = display, fontWeight = FontWeight.SemiBold, fontSize = u(b.size), color = c))
         }
+        Look.CARD -> {
+            drawRoundRect(l.tint.copy(alpha = l.alpha), tl, Size(w, h), CornerRadius(8f))
+            drawRoundRect(Color.Black.copy(alpha = 0.22f * l.alpha), Offset(tl.x, tl.y + h - 3f), Size(w, 3f), CornerRadius(3f))
+            val estilo = TextStyle(fontFamily = display, fontWeight = FontWeight.SemiBold, fontSize = u(b.size), color = fg.copy(alpha = l.alpha * l.textMix), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+            val medida = tm.measure(b.text, estilo, constraints = androidx.compose.ui.unit.Constraints(maxWidth = (w * 0.92f).toInt().coerceAtLeast(1)))
+            drawText(medida, topLeft = Offset(l.x - medida.size.width / 2f, l.y - medida.size.height / 2f))
+        }
         Look.TITLE -> txt(b.text, TextStyle(fontFamily = display, fontWeight = FontWeight.Bold, fontSize = u(b.size), color = Palette.ink))
         Look.CODE -> {
             if (b.hot) drawRoundRect(Palette.yellow.copy(alpha = 0.22f * l.alpha), tl, Size(w, h), CornerRadius(4f))

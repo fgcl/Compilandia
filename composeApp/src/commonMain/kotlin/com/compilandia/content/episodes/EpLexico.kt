@@ -1,5 +1,7 @@
 package com.compilandia.content.episodes
 
+import com.compilandia.content.fecho
+import com.compilandia.content.Fecho
 import com.compilandia.content.Actor
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
@@ -207,6 +209,11 @@ val lexicos by lazy {
                 add(fichas("z", toks2, 220f))
                 hot()
             }
+            fecho(Fecho(
+                tx("tok_f_af"), false, tx("tok_f_q"), tx("tok_f_dica"), tx("tok_f_ok"), tx("tok_f_certo"),
+                tx("tok_f_erro2"), tx("tok_f_certo2"), tx("tok_f_fala2"),
+                listOf(tx("tok_f_z1"), tx("tok_f_z2"), tx("tok_f_z3")), tx("tok_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── REGEX E AFD ───────────────────────────────
@@ -311,6 +318,11 @@ val lexicos by lazy {
                 drop("sim", "nao")
                 hot(*finais.toTypedArray())
             }
+            fecho(Fecho(
+                tx("regex_f_af"), false, tx("regex_f_q"), tx("regex_f_dica"), tx("regex_f_ok"), tx("regex_f_certo"),
+                tx("regex_f_erro2"), tx("regex_f_certo2"), tx("regex_f_fala2"),
+                listOf(tx("regex_f_z1"), tx("regex_f_z2"), tx("regex_f_z3")), tx("regex_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── AFN → AFD ───────────────────────────────
@@ -422,6 +434,11 @@ val lexicos by lazy {
                 wire("d1", "d1", "b")
                 hot(*finaisD.toTypedArray())
             }
+            fecho(Fecho(
+                tx("afn_f_af"), false, tx("afn_f_q"), tx("afn_f_dica"), tx("afn_f_ok"), tx("afn_f_certo"),
+                tx("afn_f_erro2"), tx("afn_f_certo2"), tx("afn_f_fala2"),
+                listOf(tx("afn_f_z1"), tx("afn_f_z2"), tx("afn_f_z3")), tx("afn_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── MINIMIZAÇÃO ───────────────────────────────
@@ -503,6 +520,11 @@ val lexicos by lazy {
                 add(fileira("tk", certo.map { it.token to if (it.token == "WHILE") Tint.PINK else Tint.TEAL }, 300f, w = 76f, size = 14f))
                 hot("r1")
             }
+            fecho(Fecho(
+                tx("flex_f_af"), false, tx("flex_f_q"), tx("flex_f_dica"), tx("flex_f_ok"), tx("flex_f_certo"),
+                tx("flex_f_erro2"), tx("flex_f_certo2"), tx("flex_f_fala2"),
+                listOf(tx("flex_f_z1"), tx("flex_f_z2"), tx("flex_f_z3")), tx("flex_f_resumo"),
+            ))
         },
     )
 }

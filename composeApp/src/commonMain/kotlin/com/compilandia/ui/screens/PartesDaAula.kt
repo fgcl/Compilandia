@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.compilandia.content.CUIDADO_ID
 import com.compilandia.content.Look
 import com.compilandia.content.Passo
 import com.compilandia.content.TITULO_ID
@@ -22,8 +23,8 @@ import com.compilandia.textos.tx
 import com.compilandia.ui.Palette
 
 /**
- * As quatro partes de uma aula longa (mural, rodada 14): por que existe, o primeiro exemplo,
- * a receita e o segundo exemplo, em que a pessoa faz. Saem do próprio roteiro:
+ * As partes de uma aula longa (mural, rodada 14): por que existe, o primeiro exemplo,
+ * a receita, o segundo exemplo, em que a pessoa faz, e o fecho com os erros comuns e o resumo. Saem do próprio roteiro:
  * a palavra grande (ou o primeiro título novo) fecha o porquê, a cena com as linhas r1, r2... abre a receita,
  * e o primeiro título diferente depois dela abre a sua vez. Aula que não segue esse
  * caminho (pegadinha, clipe) devolve nulo e fica com a fita de sempre.
@@ -40,10 +41,13 @@ fun partesDaAula(passos: List<Passo>, marcado: Int? = null): List<IntRange>? {
         else (1 until receita).firstOrNull { k -> titulo(k) != null && titulo(k) != titulo(k - 1) } ?: return null
     val tituloDaReceita = titulo(receita)
     val suaVez = (receita + 1 until passos.size).firstOrNull { k -> titulo(k) != null && titulo(k) != tituloDaReceita } ?: return null
-    return listOf(0 until exemplo, exemplo until receita, receita until suaVez, suaVez until passos.size)
+    // O fecho (erros comuns e resumo) é a quinta parte, quando a aula tem: começa no primeiro cartão de cuidado.
+    val fecho = (suaVez + 1 until passos.size).firstOrNull { k -> passos[k].shot.boxes.any { it.id == CUIDADO_ID } }
+    val antes = listOf(0 until exemplo, exemplo until receita, receita until suaVez)
+    return if (fecho == null) antes + listOf(suaVez until passos.size) else antes + listOf(suaVez until fecho, fecho until passos.size)
 }
 
-private val nomes get() = listOf(tx("aula_parte_porque"), tx("aula_parte_exemplo"), tx("aula_parte_receita"), tx("aula_parte_sua_vez"))
+private val nomes get() = listOf(tx("aula_parte_porque"), tx("aula_parte_exemplo"), tx("aula_parte_receita"), tx("aula_parte_sua_vez"), tx("aula_parte_erros"))
 
 /** Os nomes das partes em cima da fita, cada um com a largura da sua parte. Um toque pula para o começo dela. */
 @Composable

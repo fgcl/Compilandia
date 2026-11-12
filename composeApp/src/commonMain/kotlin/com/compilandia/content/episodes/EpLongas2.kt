@@ -1,5 +1,7 @@
 package com.compilandia.content.episodes
 
+import com.compilandia.content.fecho
+import com.compilandia.content.Fecho
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
 import com.compilandia.content.Look
@@ -100,6 +102,11 @@ val aulasLongas2 by lazy {
                 text("ml2c3", "ε")
                 hot("ml1c1", "ml2c2", "ml2c3")
             }
+            fecho(Fecho(
+                tx("ll_f_af"), false, tx("ll_f_q"), tx("ll_f_dica"), tx("ll_f_ok"), tx("ll_f_certo"),
+                tx("ll_f_erro2"), tx("ll_f_certo2"), tx("ll_f_fala2"),
+                listOf(tx("ll_f_z1"), tx("ll_f_z2"), tx("ll_f_z3")), tx("ll_f_resumo"),
+            ))
         },
 
         episodio(Skill.LR0_ITEMS, tx("epparsers_ponto_que_anda")) {
@@ -170,6 +177,11 @@ val aulasLongas2 by lazy {
                 add(Box("i2", "S -> • ( S )", 180f, 314f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f), Box("i3", "S -> • id", 180f, 356f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f))
                 hot("i1", "i2", "i3")
             }
+            fecho(Fecho(
+                tx("lr_f_af"), false, tx("lr_f_q"), tx("lr_f_dica"), tx("lr_f_ok"), tx("lr_f_certo"),
+                tx("lr_f_erro2"), tx("lr_f_certo2"), tx("lr_f_fala2"),
+                listOf(tx("lr_f_z1"), tx("lr_f_z2"), tx("lr_f_z3")), tx("lr_f_resumo"),
+            ))
         },
 
         episodio(Skill.SLR_TABLE, tx("epparsers_quando_reduzir")) {
@@ -228,6 +240,11 @@ val aulasLongas2 by lazy {
                 drop("o1", "o2", "o3")
                 hot("ml1c3", "ml1c4")
             }
+            fecho(Fecho(
+                tx("slr_f_af"), false, tx("slr_f_q"), tx("slr_f_dica"), tx("slr_f_ok"), tx("slr_f_certo"),
+                tx("slr_f_erro2"), tx("slr_f_certo2"), tx("slr_f_fala2"),
+                listOf(tx("slr_f_z1"), tx("slr_f_z2"), tx("slr_f_z3")), tx("slr_f_resumo"),
+            ))
         },
 
         episodio(Skill.LALR, tx("epparsers_mais_precisao_mesma_tabela")) {
@@ -288,6 +305,11 @@ val aulasLongas2 by lazy {
                 drop("e1", "e2", "e3", "o2", "o3")
                 move("o1", 180f, 160f); tint("o1", Tint.GREEN); hot("o1")
             }
+            fecho(Fecho(
+                tx("lalr_f_af"), false, tx("lalr_f_q"), tx("lalr_f_dica"), tx("lalr_f_ok"), tx("lalr_f_certo"),
+                tx("lalr_f_erro2"), tx("lalr_f_certo2"), tx("lalr_f_fala2"),
+                listOf(tx("lalr_f_z1"), tx("lalr_f_z2"), tx("lalr_f_z3")), tx("lalr_f_resumo"),
+            ))
         },
 
         episodio(Skill.DFA_MINIMIZATION, tx("eplexico_juntar_gemeos")) {
@@ -365,6 +387,11 @@ val aulasLongas2 by lazy {
                 drop("o1", "o2")
                 tint("pq", Tint.GREEN); hot("pq")
             }
+            fecho(Fecho(
+                tx("min_f_af"), false, tx("min_f_q"), tx("min_f_dica"), tx("min_f_ok"), tx("min_f_certo"),
+                tx("min_f_erro2"), tx("min_f_certo2"), tx("min_f_fala2"),
+                listOf(tx("min_f_z1"), tx("min_f_z2"), tx("min_f_z3")), tx("min_f_resumo"),
+            ))
         },
 
         episodio(Skill.AST_BUILD, tx("epbackend_arvore_enxuta")) {
@@ -426,6 +453,11 @@ val aulasLongas2 by lazy {
                 wire("n2", "n3", arrow = false); wire("n2", "n4", arrow = false)
                 hot("n0", "n2")
             }
+            fecho(Fecho(
+                tx("ast_f_af"), false, tx("ast_f_q"), tx("ast_f_dica"), tx("ast_f_ok"), tx("ast_f_certo"),
+                tx("ast_f_erro2"), tx("ast_f_certo2"), tx("ast_f_fala2"),
+                listOf(tx("ast_f_z1"), tx("ast_f_z2"), tx("ast_f_z3")), tx("ast_f_resumo"),
+            ))
         },
 
         episodio(Skill.CODEGEN_MIPS, tx("epbackend_carrega_opera_guarda")) {
@@ -482,6 +514,11 @@ val aulasLongas2 by lazy {
                 mips2.indices.forEach { i -> move("l$i", 180f, 120f + i * 54f); tint("l$i", Tint.TEAL) }
                 hot()
             }
+            fecho(Fecho(
+                tx("mips_f_af"), false, tx("mips_f_q"), tx("mips_f_dica"), tx("mips_f_ok"), tx("mips_f_certo"),
+                tx("mips_f_erro2"), tx("mips_f_certo2"), tx("mips_f_fala2"),
+                listOf(tx("mips_f_z1"), tx("mips_f_z2"), tx("mips_f_z3")), tx("mips_f_resumo"),
+            ))
         },
     )
 }

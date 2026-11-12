@@ -1,5 +1,7 @@
 package com.compilandia.content.episodes
 
+import com.compilandia.content.fecho
+import com.compilandia.content.Fecho
 import com.compilandia.content.Actor
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
@@ -202,6 +204,11 @@ val topDown by lazy {
                 text("ra", tx("sims_aceita"))
                 hot("p0", "i3")
             }
+            fecho(Fecho(
+                tx("pred_f_af"), false, tx("pred_f_q"), tx("pred_f_dica"), tx("pred_f_ok"), tx("pred_f_certo"),
+                tx("pred_f_erro2"), tx("pred_f_certo2"), tx("pred_f_fala2"),
+                listOf(tx("pred_f_z1"), tx("pred_f_z2"), tx("pred_f_z3")), tx("pred_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── DESCIDA RECURSIVA ───────────────────────────────
@@ -295,6 +302,11 @@ val topDown by lazy {
                 drop("n1", "n2", "n3")
                 hot("c2", "k3")
             }
+            fecho(Fecho(
+                tx("desc_f_af"), false, tx("desc_f_q"), tx("desc_f_dica"), tx("desc_f_ok"), tx("desc_f_certo"),
+                tx("desc_f_erro2"), tx("desc_f_certo2"), tx("desc_f_fala2"),
+                listOf(tx("desc_f_z1"), tx("desc_f_z2"), tx("desc_f_z3")), tx("desc_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── RECUPERAÇÃO DE ERROS ───────────────────────────────
@@ -373,6 +385,11 @@ val topDown by lazy {
                 tint("k7", Tint.GREEN)
                 hot("k8")
             }
+            fecho(Fecho(
+                tx("erro_f_af"), false, tx("erro_f_q"), tx("erro_f_dica"), tx("erro_f_ok"), tx("erro_f_certo"),
+                tx("erro_f_erro2"), tx("erro_f_certo2"), tx("erro_f_fala2"),
+                listOf(tx("erro_f_z1"), tx("erro_f_z2"), tx("erro_f_z3")), tx("erro_f_resumo"),
+            ))
         },
     )
 }
@@ -487,6 +504,11 @@ val bottomUp by lazy {
                 add(Box("p0", "S", 300f, 340f, 70f, 34f, Look.TOKEN, Tint.ORANGE))
                 hot("p0", "i3")
             }
+            fecho(Fecho(
+                tx("sr_f_af"), false, tx("sr_f_q"), tx("sr_f_dica"), tx("sr_f_ok"), tx("sr_f_certo"),
+                tx("sr_f_erro2"), tx("sr_f_certo2"), tx("sr_f_fala2"),
+                listOf(tx("sr_f_z1"), tx("sr_f_z2"), tx("sr_f_z3")), tx("sr_f_resumo"),
+            ))
         },
 
         // ─────────────────────────────── ITENS LR(0) ───────────────────────────────
@@ -574,6 +596,11 @@ val bottomUp by lazy {
                 add(codigo("o", listOf("\$ bison calc.y"), 230f, x = 20f, passo = 26f, size = 12f))
                 hot("v2")
             }
+            fecho(Fecho(
+                tx("bison_f_af"), false, tx("bison_f_q"), tx("bison_f_dica"), tx("bison_f_ok"), tx("bison_f_certo"),
+                tx("bison_f_erro2"), tx("bison_f_certo2"), tx("bison_f_fala2"),
+                listOf(tx("bison_f_z1"), tx("bison_f_z2"), tx("bison_f_z3")), tx("bison_f_resumo"),
+            ))
         },
     )
 }
