@@ -113,6 +113,7 @@ val lexicos by lazy {
                 add(fichas("w", toks0, 280f, size = 14f))
             }
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("eplexico_para_computador_esta_linha_so")) {
                 clear()
                 add(titulo(tx("eplexico_scanner")))
@@ -222,6 +223,7 @@ val lexicos by lazy {
             val ruim = "n${REGEX_NOMES.indexOf("1x")}"
             pergunta(tx("regex_l_02"), setOf(ruim), REGEX_NOMES.indices.map { "n$it" }.toSet() - ruim, tx("regex_l_02_dica"), tx("regex_l_02_ok")) {}
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("eplexico_expressao_regular_descreve_formato_esta")) {
                 clear()
                 add(titulo(tx("eplexico_b")))
@@ -334,6 +336,7 @@ val lexicos by lazy {
                 add(Box("s0", "{0}", 70f, 240f, 86f, 46f, Look.TOKEN, Tint.YELLOW, size = 16f))
             }
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("eplexico_conjunto_zero_lendo_posso_estar")) {
                 add(Box("s1", "{0,1}", 180f, 240f, 86f, 46f, Look.TOKEN, Tint.YELLOW, size = 16f))
                 wire("s0", "s1", "a")
@@ -434,6 +437,7 @@ val lexicos by lazy {
             }
             pergunta(tx("flex_l_02"), setOf("m2"), setOf("m0", "m4"), tx("flex_l_02_dica"), tx("flex_l_02_ok")) {}
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("eplexico_fazer_automato_na_mao_cansa")) {
                 clear()
                 add(titulo(tx("comum_arquivo_l")))

@@ -100,6 +100,7 @@ val semantica by lazy {
             cena(tx("attr_l_02")) { hot("src", "ii", "ff") }
             palavra(tx("attr_l_palavra"), tx("attr_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             val raiz = no("+", no("a"), no("*", no("x"), no("2")))
             val (b, w) = arvore(raiz, 96f, passoY = 80f, largura = 300f)
             fun tipo(id: String, t: String, alvo: Box) = Box(id, t, alvo.x, alvo.y + 26f, 56f, 20f, Look.LABEL, Tint.YELLOW, size = 14f)
@@ -205,6 +206,7 @@ val semantica by lazy {
             cena(tx("esc_l_02")) { hot("c1", "c4") }
             palavra(tx("epbackend_escopo").uppercase(), tx("esc_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             val src = listOf("int x;", "void f() {", "  float x;", "  x = 1.5;", "}", "x = 2;")
             cena(tx("epbackend_mesmo_nome_pode_existir_em")) {
                 clear()
@@ -280,6 +282,7 @@ val backend by lazy {
             }
             palavra("TAC", tx("epbackend_maquina_nao_entende_conta_comprida"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             val (b, w) = arvore(no("+", no("a"), no("*", no("b"), no("c"))), 86f, passoY = 62f, largura = 240f)
             cena(tx("tac_l_04")) {
                 clear()
@@ -369,6 +372,7 @@ val backend by lazy {
             }
             palavra(tx("otim_l_palavra"), tx("otim_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             val parts = listOf("x", "=", "2", "*", "3", "+", "y")
             fun item(i: Int, t: String, x: Float) = Box("o$i", t, x, 140f, 40f, 48f, Look.TOKEN, Tint.TEAL, size = 18f)
             cena(tx("epbackend_se_para_fazer_conta_agora")) {
@@ -455,6 +459,7 @@ val backend by lazy {
             }
             palavra(tx("rt_l_palavra"), tx("rt_l_03"))
             // 2. Primeiro exemplo: o fat do motor para em n = 1 (if n <= 1)
+            comecaExemplo()
             fun reg(id: String, t: String, i: Int, c: Tint) = Box(id, t, 180f, 330f - i * 62f, 250f, 54f, Look.TOKEN, c, size = 15f)
             cena(tx("epbackend_toda_chamada_funcao_ganha_registro")) {
                 clear()
@@ -549,6 +554,7 @@ val backend by lazy {
             pergunta(tx("reg_l_02"), setOf("reg"), setOf("mem"), tx("reg_l_02_dica"), tx("reg_l_02_ok")) { hot() }
             palavra(tx("epbackend_alocacao").uppercase(), tx("reg_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             fun v(id: String, x: Float, y: Float) = Box(id, id, x, y, 56f, 56f, Look.STATE, Tint.NONE, size = 18f)
             cena(tx("epbackend_registrador_pouco_variavel_muita_vamos")) {
                 clear()

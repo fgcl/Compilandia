@@ -108,6 +108,7 @@ val topDown by lazy {
             }
             palavra(tx("pred_l_palavra"), tx("pred_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epparsers_parser_preditivo_tem_pilha_entrada")) {
                 clear()
                 add(titulo("id + id"))
@@ -228,6 +229,7 @@ val topDown by lazy {
             }
             palavra(tx("comum_descida_recursiva").uppercase(), tx("desc_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epparsers_para_escrever_parser_mao_cada")) {
                 clear()
                 add(titulo(tx("comum_descida_recursiva")))
@@ -307,6 +309,7 @@ val topDown by lazy {
             cena(tx("erro_l_02")) { hot("c2") }
             palavra(tx("erro_l_palavra"), tx("erro_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epparsers_erro_nao_pode_derrubar_compilador")) {
                 clear()
                 add(titulo(tx("comum_modo_panico")))
@@ -393,6 +396,7 @@ val bottomUp by lazy {
             }
             palavra(tx("epparsers_empilha_reduz").uppercase(), tx("sr_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epparsers_agora_gente_monta_arvore_baixo")) {
                 clear()
                 add(titulo("E -> E + n | n"))
@@ -505,6 +509,7 @@ val bottomUp by lazy {
             }
             palavra("BISON", tx("bison_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epparsers_bison_le_gramatica_escreve_parser")) {
                 clear()
                 add(titulo(tx("epparsers_arquivo_y")))

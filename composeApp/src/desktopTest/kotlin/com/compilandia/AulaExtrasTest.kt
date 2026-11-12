@@ -22,6 +22,7 @@ import com.compilandia.ui.AppState
 import com.compilandia.ui.Screen
 import com.compilandia.ui.screens.Cola
 import com.compilandia.ui.screens.gramaticaDaAula
+import com.compilandia.ui.screens.partesDaAula
 import com.compilandia.ui.voice.Narrator
 import java.io.File
 import javax.imageio.ImageIO
@@ -39,6 +40,13 @@ class AulaExtrasTest {
     @Test fun todaAulaTemCola() {
         val semCola = Skill.entries.filter { s -> Episodes.all.any { it.skill == s && it.temporada == Temporada.BASICO } && Cola.receita(s).size < 2 }
         assertTrue(semCola.isEmpty(), "aulas sem receita para a cola: $semCola")
+    }
+
+    /** Mural, rodada 14: toda aula básica se divide em por quê, exemplo, receita e sua vez. */
+    @Test fun todaAulaTemAsQuatroPartes() {
+        val basicas = Episodes.all.filter { it.temporada == Temporada.BASICO }
+        val sem = basicas.filter { e -> partesDaAula(e.passos, e.inicioDoExemplo).let { p -> p == null || p.size != 4 || p.any { it.isEmpty() } || p.last().last != e.passos.lastIndex } }
+        assertTrue(sem.isEmpty(), "aulas sem as quatro partes: ${sem.map { it.skill }}")
     }
 
     @Test fun aGramaticaDaAulaEAQueEstaEmUso() {

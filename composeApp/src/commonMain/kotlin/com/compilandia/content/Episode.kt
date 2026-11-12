@@ -107,7 +107,8 @@ enum class Temporada(val titulo: String) {
     EM_C(tx("episode_em_c")),
 }
 
-data class Episode(val skill: Skill, val title: String, val passos: List<Passo>, val temporada: Temporada = Temporada.BASICO) {
+/** [inicioDoExemplo]: a cena em que o primeiro exemplo começa, quando o roteiro marca (veja [EpisodeBuilder.comecaExemplo]). */
+data class Episode(val skill: Skill, val title: String, val passos: List<Passo>, val temporada: Temporada = Temporada.BASICO, val inicioDoExemplo: Int? = null) {
     /** O básico fica com o nome do assunto, para os saves antigos continuarem certos. */
     val id: String get() = if (temporada == Temporada.BASICO) skill.name else "${skill.name}/${com.compilandia.textos.Txt.paraPt(title).lowercase().filter { it.isLetterOrDigit() }}"
     /** Duração aproximada da aula, para a lista. */
@@ -185,7 +186,10 @@ class EpisodeBuilder(private val skill: Skill, private val title: String, privat
         passos += Passo(novo().shot, Fala(who, fala), null, EpMood.THINK, Brinquedo(Fala(who, dica), Fala(who, acerto), novo))
     }
 
-    fun build() = Episode(skill, title, passos.toList(), temporada)
+    private var inicioDoExemplo: Int? = null
+    /** Marca que a próxima cena abre o primeiro exemplo, para a fita da aula saber onde ele começa. */
+    fun comecaExemplo() { inicioDoExemplo = passos.size }
+    fun build() = Episode(skill, title, passos.toList(), temporada, inicioDoExemplo)
 }
 
 fun episodio(skill: Skill, title: String, temporada: Temporada = Temporada.BASICO, f: EpisodeBuilder.() -> Unit): Episode =

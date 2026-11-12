@@ -334,7 +334,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                 app.commit()
                 goPractice(app, s)
             })
-        if (!ladoALado) FitaDeCenas(ep.passos, index, maisLonge) { irPara(it) }
+        if (!ladoALado) FitaDeCenas(ep.passos, index, maisLonge, ep.inicioDoExemplo) { irPara(it) }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             val altura = maxHeight
             val largura = maxWidth
@@ -366,7 +366,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                 Row(Modifier.fillMaxSize()) {
                     palco(Modifier.width(palcoW).fillMaxHeight(), alturaLogica)
                     Column(Modifier.width(painelW).fillMaxHeight().background(Palette.paper)) {
-                        FitaDeCenas(ep.passos, index, maisLonge) { irPara(it) }
+                        FitaDeCenas(ep.passos, index, maisLonge, ep.inicioDoExemplo) { irPara(it) }
                         val dens = androidx.compose.ui.platform.LocalDensity.current
                         Column(
                             Modifier.weight(1f).fillMaxWidth().onPlaced { topoDoPainel = with(dens) { it.positionInParent().y.toDp() } }
@@ -445,12 +445,16 @@ private fun PainelBrinquedo(toy: com.compilandia.content.Toy, tick: Int, aperta:
  * Para a frente só vale até onde a pessoa já chegou.
  */
 @Composable
-private fun FitaDeCenas(passos: List<Passo>, index: Int, maisLonge: Int, onSeek: (Int) -> Unit) {
+private fun FitaDeCenas(passos: List<Passo>, index: Int, maisLonge: Int, marcado: Int?, onSeek: (Int) -> Unit) {
     val fundo = Palette.paperDark
     val luz = Palette.hazard
     val apagada = Palette.drawerLo
     val n = passos.size
     fun cena(x: Float, w: Float) = (x / w * n).toInt().coerceIn(0, n - 1)
+    // Mural, rodada 14: a fita em quatro partes, com o nome de cada uma em cima.
+    val partes = remember(passos) { partesDaAula(passos, marcado) }
+    val divisa = Palette.hazard.copy(alpha = 0.7f)
+    if (partes != null) RotulosDasPartes(partes, index, maisLonge, onSeek)
     Canvas(
         Modifier.fillMaxWidth().height(34.dp).background(Palette.paper).padding(horizontal = 8.dp, vertical = 3.dp)
             .testTag(FITA_TAG)
@@ -475,6 +479,7 @@ private fun FitaDeCenas(passos: List<Passo>, index: Int, maisLonge: Int, onSeek:
                 drawRoundRect(apagada, Offset(x + w * 0.25f, size.height * 0.4f), Size(w * 0.5f, size.height * 0.2f), CornerRadius(2f))
             }
             if (i == index) drawRoundRect(luz, Offset(x, 0f), Size(w, size.height), CornerRadius(4.dp.toPx()), style = Stroke(2.dp.toPx()))
+            if (partes != null && i > 0 && partes.any { it.first == i }) drawRect(divisa, Offset(x - gap / 2 - 1.dp.toPx(), 0f), Size(2.dp.toPx(), size.height))
         }
     }
 }

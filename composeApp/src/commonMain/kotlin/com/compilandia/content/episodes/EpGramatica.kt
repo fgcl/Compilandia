@@ -71,6 +71,7 @@ val gramaticas by lazy {
             }
             palavra(tx("cfg_l_palavra"), tx("cfg_l_04"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epgramatica_gramatica_lista_trocas_pode_virar")) {
                 clear()
                 add(titulo(tx("epgramatica_gramatica")))
@@ -163,6 +164,7 @@ val gramaticas by lazy {
                 drop("k1", "k3"); tint("k2", Tint.RED)
             }
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epgramatica_esta_gramatica_aceita_mais_vezes")) {
                 clear()
                 add(titulo("n + n * n"))
@@ -251,6 +253,7 @@ val gramaticas by lazy {
             }
             pergunta(tx("rec_l_02"), setOf("c1"), setOf("c2", "c3"), tx("rec_l_02_dica"), tx("rec_l_02_ok")) {}
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epgramatica_olhe_esta_regra_comeca_com")) {
                 clear()
                 add(titulo("E -> E + n | n"))
@@ -340,6 +343,7 @@ val gramaticas by lazy {
                 add(Box("nd", tx("fat_l_nao_da"), 180f, 380f, 210f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
             }
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("epgramatica_estas_duas_regras_comecam_igual"), mood = EpMood.THINK) {
                 clear()
                 add(titulo(tx("epgramatica_qual_das_duas")))

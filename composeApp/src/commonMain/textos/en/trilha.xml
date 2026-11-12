@@ -15,6 +15,10 @@
     <string name="cola_ver_aula">Watch the lesson</string>
     <string name="cola_fechar">Close</string>
     <string name="aula_gramatica">Grammar</string>
+    <string name="aula_parte_porque">Why</string>
+    <string name="aula_parte_exemplo">Example</string>
+    <string name="aula_parte_receita">Recipe</string>
+    <string name="aula_parte_sua_vez">Your turn</string>
     <string name="trilha_outro_jeito">Another way to see it: %1$s</string>
     <string name="trilha_pular">skip</string>
     <string name="trilha_pulada">skipped</string>

@@ -80,6 +80,7 @@ val aulasLongas by lazy {
                 add(rotulo("q", "?", 184f, 170f, Tint.RED, size = 30f))
             }
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("fases_l_04")) {
                 clear()
                 add(titulo(tx("eplexico_seis_fases")))
@@ -165,6 +166,7 @@ val aulasLongas by lazy {
             cena(tx("first_l_02")) { hot("ra", "rb", "g2") }
             palavra("FIRST", tx("first_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("first_l_04")) {
                 clear()
                 add(titulo("FIRST"))
@@ -238,6 +240,7 @@ val aulasLongas by lazy {
             cena(tx("follow_l_02")) { hot("rb", "tok", "g1") }
             palavra("FOLLOW", tx("follow_l_03"))
             // 2. Primeiro exemplo
+            comecaExemplo()
             cena(tx("follow_l_04")) {
                 clear()
                 add(titulo("FOLLOW"))
