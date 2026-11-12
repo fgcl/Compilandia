@@ -3,12 +3,15 @@ package com.compilandia.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
@@ -48,6 +51,9 @@ val LocalJanela = staticCompositionLocalOf { Janela(360.dp, 760.dp) }
 /** Largura máxima do texto corrido. Linha mais longa que isso cansa o olho. */
 val TEXTO_MAX = 640.dp
 
+/** Largura máxima do jogo inteiro. Num monitor maior que isso, o jogo fica no meio, com a parede de furos dos lados. */
+val APP_MAX = 1440.dp
+
 /** Largura máxima de uma tela de lista quando a janela é larga. */
 val LISTA_MAX = 760.dp
 
@@ -67,5 +73,21 @@ fun ColunaCentral(max: Dp = LISTA_MAX, content: @Composable BoxScope.() -> Unit)
     }
     Box(Modifier.fillMaxSize().background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f)), contentAlignment = Alignment.TopCenter) {
         Box(Modifier.fillMaxHeight().widthIn(max = max).fillMaxWidth().background(Palette.paper), content = content)
+    }
+}
+
+/**
+ * A janela que as telas enxergam. Até [APP_MAX] é a janela toda; num monitor maior, o jogo fica numa faixa
+ * de [APP_MAX] no meio, para nenhuma tela espalhar texto e botões de uma borda à outra.
+ */
+@Composable
+fun JanelaDoApp(content: @Composable () -> Unit) {
+    BoxWithConstraints {
+        val largura = if (maxWidth > APP_MAX) APP_MAX else maxWidth
+        val dentro: @Composable () -> Unit = { CompositionLocalProvider(LocalJanela provides Janela(largura, maxHeight), content = content) }
+        if (maxWidth <= APP_MAX) { dentro(); return@BoxWithConstraints }
+        Box(Modifier.fillMaxSize().background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f)), contentAlignment = Alignment.TopCenter) {
+            Box(Modifier.fillMaxHeight().width(APP_MAX)) { dentro() }
+        }
     }
 }

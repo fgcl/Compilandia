@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.horizontalScroll
@@ -110,9 +111,10 @@ private val PROF_W = 100.dp
 /**
  * A aula animada: palco em cima, Byte narrando embaixo. Uma ideia por cena, e quem manda no ritmo é você.
  * Quando a cena pede, o Byte entra no palco; quando há pergunta, o desenho para e espera seu toque.
+ * [noFim] abre direto na tela do fim (para as capturas).
  */
 @Composable
-fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: Boolean = true) {
+fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: Boolean = true, noFim: Boolean = false) {
     val ep = remember(s) { s.id?.let { Episodes.byId(it) } ?: Episodes.of(s.skill) }
     if (ep == null) {
         LaunchedEffect(Unit) { app.replace(Screen.Lesson(s.skill, app.learner.chooseStyle(s.skill), returnToGame = s.returnToGame)) }
@@ -130,7 +132,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
     }
     var index by remember { mutableIntStateOf(onStep.coerceIn(0, ep.passos.lastIndex)) }
     var maisLonge by remember { mutableIntStateOf(onStep.coerceIn(0, ep.passos.lastIndex)) }
-    var finished by remember { mutableStateOf(false) }
+    var finished by remember { mutableStateOf(noFim) }
     val passo = ep.passos[index]
     val ask = passo.ask
     val brinq = passo.brinquedo
@@ -537,7 +539,7 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
         Text(a.desafio, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, fontFamily = com.compilandia.ui.LocalFonts.current.mono)
         val r = resposta
         if (r == null) {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.widthIn(max = com.compilandia.ui.LISTA_MAX), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 a.opcoes.forEachIndexed { i, o ->
                     BigButton(o, Modifier.weight(1f), color = Palette.drawer) {
                         resposta = i
@@ -547,8 +549,8 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
             }
         } else {
             Text(if (r == a.certa) tx("episodescreen_acertou_primeira") else tx("episodescreen_errar_aqui_ajuda_aula_colar"), style = MaterialTheme.typography.titleMedium, color = if (r == a.certa) Palette.green else Palette.yellow)
-            RichText(a.depois.text, style = MaterialTheme.typography.bodyLarge)
-            BigButton(tx("episodescreen_agora_aula"), Modifier.fillMaxWidth()) { Narrator.stop(); onDone() }
+            RichText(a.depois.text, Modifier.widthIn(max = com.compilandia.ui.TEXTO_MAX), style = MaterialTheme.typography.bodyLarge)
+            BigButton(tx("episodescreen_agora_aula"), Modifier.fillMaxWidth().widthIn(max = com.compilandia.ui.LISTA_MAX)) { Narrator.stop(); onDone() }
         }
     }
 }
@@ -600,9 +602,10 @@ private fun SoundBars(modifier: Modifier) {
 }
 
 @Composable
-private fun EpisodeEnd(app: AppState, s: Screen.Episode, ep: Episode, onReplay: () -> Unit, onPractice: () -> Unit) {
+private fun EpisodeEnd(app: AppState, s: Screen.Episode, ep: Episode, onReplay: () -> Unit, onPractice: () -> Unit) = Box(Modifier.fillMaxSize().background(Palette.paper)) {
+    // Na janela larga, uma coluna de leitura no meio: botão e texto de borda a borda cansam a vista.
     Column(
-        Modifier.fillMaxSize().background(Palette.paper).verticalScroll(rememberScrollState()).padding(20.dp),
+        Modifier.align(Alignment.TopCenter).fillMaxHeight().widthIn(max = com.compilandia.ui.LISTA_MAX).verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom), horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         var hop by remember { mutableIntStateOf(0) }
