@@ -43,8 +43,8 @@ val aulasLongas2 by lazy {
                 listOf("X", "", "", "", "", ""),
                 listOf("T", "", "", "", "", ""),
             )
-            cena(tx("ll_l_01"), mood = EpMood.THINK) { escolha("X", "+", "X -> + T X", "X -> ε") }
-            cena(tx("ll_l_02")) { hot("ra", "rb") }
+            cena(tx("ll_l_01"), mood = EpMood.THINK) { escolha("X", "+", "X -> + T X", "X -> ε", GRAMATICA_EXPR, 1) }
+            cena(tx("ll_l_02")) { hot("ra", "rb", "g1") }
             palavra("LL(1)", tx("ll_l_03"))
             cena(tx("epparsers_tabela_ll_1_junta_tudo")) {
                 clear()

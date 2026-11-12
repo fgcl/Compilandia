@@ -312,14 +312,20 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
             }
         }
     }
+    // Mural, rodada 13: a gramática da aula a um toque, por cima do palco. Fecha ao mudar de cena.
+    val gramatica = remember(ep, index) { gramaticaDaAula(ep, index) }
+    var gramaticaAberta by remember { mutableStateOf(false) }
+    LaunchedEffect(index) { gramaticaAberta = false }
     val palco: @Composable (Modifier, Float) -> Unit = { mod, alturaLogica ->
         Box(mod.background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f))) {
             MotionStage(shot, Modifier.fillMaxSize().testTag(STAGE_TAG), if (ask != null && !solved) ask.right + ask.wrong else emptySet(), found, stageH = alturaLogica) { tap(it) }
+            PainelGramatica(gramatica, gramaticaAberta) { gramaticaAberta = false }
         }
     }
 
     Column(Modifier.fillMaxSize().background(Palette.paperDark)) {
         EpisodeTop(app.ls.captionsOn,
+            gramatica = if (gramatica != null) ({ BotaoGramatica(gramaticaAberta) { gramaticaAberta = !gramaticaAberta } }) else null,
             onClose = { Narrator.stop(); app.back() },
             onCaptions = { app.learner.setCaptions(!app.ls.captionsOn); app.commit() },
             onSkip = {
@@ -549,12 +555,13 @@ private fun goPractice(app: AppState, s: Screen.Episode) {
 }
 
 @Composable
-private fun EpisodeTop(captions: Boolean, onClose: () -> Unit, onCaptions: () -> Unit, onSkip: () -> Unit) {
+private fun EpisodeTop(captions: Boolean, gramatica: (@Composable () -> Unit)?, onClose: () -> Unit, onCaptions: () -> Unit, onSkip: () -> Unit) {
     Row(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(38.dp).clip(RoundedCornerShape(8.dp)).background(Palette.white).clickable { onClose() }, contentAlignment = Alignment.Center) {
             Text("✕", color = Palette.ink, style = MaterialTheme.typography.labelLarge)
         }
         Spacer(Modifier.weight(1f))
+        if (gramatica != null) { gramatica(); Spacer(Modifier.width(6.dp)) }
         Box(
             Modifier.clip(RoundedCornerShape(6.dp)).background(if (captions) Palette.hazard else Palette.white).clickable { onCaptions() }.padding(horizontal = 7.dp, vertical = 5.dp),
         ) { Text("CC", color = if (captions) Palette.hazardDark else Palette.ink, style = MaterialTheme.typography.labelMedium) }

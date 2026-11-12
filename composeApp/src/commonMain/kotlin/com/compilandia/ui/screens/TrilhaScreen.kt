@@ -29,6 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -233,6 +235,13 @@ private fun EtapaLinha(app: AppState, s: Skill, p: PassoTrilha, ultima: Boolean,
                         tx("trilha_ler_com_calma"), color = Palette.teal, style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.clickable { app.go(Screen.Lesson(s, l.chooseStyle(s))) }.padding(vertical = 4.dp),
                     )
+                    // A cola do assunto: a receita e o exemplo resolvido, sem rever a aula inteira.
+                    var cola by remember { mutableStateOf(false) }
+                    if (Cola.receita(s).isNotEmpty()) Text(
+                        tx("trilha_cola"), color = Palette.teal, style = MaterialTheme.typography.labelMedium,
+                        modifier = Modifier.clickable { cola = true }.padding(vertical = 4.dp).testTag("abre-cola"),
+                    )
+                    if (cola) ColaDialog(s, onFechar = { cola = false }, onAula = { cola = false; app.go(Screen.Episode(s)) })
                     Trilha.outroJeito(s)?.let { e ->
                         Text(
                             tx("trilha_outro_jeito", e.title), color = Palette.teal, style = MaterialTheme.typography.labelMedium,

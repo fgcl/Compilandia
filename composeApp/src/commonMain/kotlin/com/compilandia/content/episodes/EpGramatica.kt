@@ -335,9 +335,9 @@ val gramaticas by lazy {
         // ─────────────────────────────── FATORAÇÃO ───────────────────────────────
         episodio(Skill.LEFT_FACTORING, tx("epgramatica_por_em_evidencia")) {
             // 1. Por que existe
-            cena(tx("fat_l_01"), mood = EpMood.THINK) { escolha("C", "id", "C -> id = n", "C -> id ( )") }
+            cena(tx("fat_l_01"), mood = EpMood.THINK) { escolha("C", "id", "C -> id = n", "C -> id ( )", listOf("C -> id = n | id ( )"), 0) }
             pergunta(tx("fat_l_02"), setOf("nd"), setOf("ra", "rb"), tx("fat_l_02_dica"), tx("fat_l_02_ok")) {
-                add(Box("nd", tx("fat_l_nao_da"), 180f, 340f, 210f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("nd", tx("fat_l_nao_da"), 180f, 380f, 210f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
             }
             // 2. Primeiro exemplo
             cena(tx("epgramatica_estas_duas_regras_comecam_igual"), mood = EpMood.THINK) {
@@ -361,7 +361,10 @@ val gramaticas by lazy {
             cena(tx("epgramatica_escolha_fica_para_depois_ai")) {
                 clear()
                 add(titulo(tx("epgramatica_fatorada")))
-                add(codigo("b", listOf("A  -> a A'", "A' -> b | c"), 90f, x = 90f, passo = 34f, size = 18f))
+                // O antes fica em cima, apagado, para ver o que mudou (mural, rodada 13).
+                add(Box("antes", "A  -> a b | a c", 180f, 92f, 220f, 36f, Look.CELL, Tint.DARK, size = 15f))
+                add(codigo("b", listOf("A  -> a A'", "A' -> b | c"), 170f, x = 90f, passo = 34f, size = 18f))
+                wire("antes", "b0")
                 hot("b1")
             }
             cena(tx("epgramatica_com_simbolo_so_olhada_parser"), mood = EpMood.HAPPY) {}

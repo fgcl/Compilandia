@@ -10,6 +10,11 @@
     <string name="trilha_etapa_desafio">Desafio</string>
     <string name="trilha_etapa_desafio_sub">Um jogo no seu nível</string>
     <string name="trilha_ler_com_calma">Ler com calma</string>
+    <string name="trilha_cola">Cola</string>
+    <string name="cola_titulo">Cola: %1$s</string>
+    <string name="cola_ver_aula">Ver a aula</string>
+    <string name="cola_fechar">Fechar</string>
+    <string name="aula_gramatica">Gramática</string>
     <string name="trilha_outro_jeito">Outro jeito de ver: %1$s</string>
     <string name="trilha_pular">pular</string>
     <string name="trilha_pulada">pulada</string>

@@ -72,6 +72,7 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
     var phase by remember { mutableStateOf(if (app.ls.askConfidence) Phase.CONFIDENCE else Phase.PLAYING) }
     var confidence by remember { mutableStateOf<Double?>(null) }
     var hints by remember { mutableIntStateOf(0) }
+    var colaAberta by remember { mutableStateOf(false) }
     var score by remember { mutableDoubleStateOf(0.0) }
     var attempt by remember { mutableStateOf<Attempt?>(null) }
     var xpBefore by remember { mutableIntStateOf(app.ls.xp) }
@@ -136,6 +137,9 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
             Phase.PLAYING -> {
                 if (useArena) GameArena(defeated = ending && score >= 0.6, escaped = ending && score < 0.6)
                 val barra = remember { BarraDoJogo() }
+                if (colaAberta) com.compilandia.ui.screens.ColaDialog(s.skill, onFechar = { colaAberta = false }) {
+                    colaAberta = false; app.go(Screen.Episode(s.skill, returnToGame = true))
+                }
                 Box(Modifier.weight(1f)) {
                     val ctx = GameCtx(s.skill, s.level, rnd, hints) { sc ->
                         if (!ending) {
@@ -169,7 +173,8 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
                     BigButton(if (hints == 0) tx("comum_dica") else tx("playscreen_dica_1", hints + 1), small = true, color = if (travada) Palette.drawer else Palette.yellow) {
                         when {
                             travada -> app.say(tx("playscreen_tente_vez_proxima_dica_abre"))
-                            hints >= 2 -> app.go(Screen.Episode(s.skill, returnToGame = true))
+                            // O último degrau da dica é a cola do assunto, sem sair da partida (mural, rodada 13).
+                            hints >= 2 -> { colaAberta = true; Sound.play(Sfx.WHOOSH) }
                             else -> {
                                 hints++
                                 jogadasNaDica = Juice.hitTick + Juice.missTick

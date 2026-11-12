@@ -36,19 +36,29 @@ val ASSUNTOS_COM_AULA_LONGA = setOf(
 )
 
 internal fun saco(id: String, nome: String, x: Float, y: Float = 300f) = Box(id, nome, x, y, 104f, 90f, Look.BIN, Tint.NONE, size = 15f)
-internal fun ficha(id: String, t: String, x: Float, y: Float = 280f, w: Float = 30f) = Box(id, t, x, y, w, 28f, Look.TOKEN, Tint.TEAL, size = 13f)
+/** Uma ficha que entra num saco: grande o bastante para ler no celular, e já dentro do saco (mural, rodada 13). */
+internal fun ficha(id: String, t: String, x: Float, y: Float = 280f, w: Float = 30f) = Box(id, t, x, y + 14f, w, 32f, Look.TOKEN, Tint.TEAL, size = 17f)
 internal fun opcao(id: String, t: String, x: Float, y: Float = 200f) = Box(id, t, x, y, 50f, 40f, Look.TOKEN, Tint.YELLOW)
 /** Uma regra da receita. Texto longo ganha fonte menor para caber na caixa. */
 internal fun regra(id: String, t: String, y: Float) = Box(id, t, 180f, y, 340f, 40f, Look.CELL, Tint.NONE, size = if (t.length > 44) 11f else 12f)
 
-/** O parser parado diante de uma escolha: pilha à esquerda, token à direita, as duas regras no meio. */
-internal fun EpisodeBuilder.escolha(topo: String, token: String, a: String, b: String) {
+/**
+ * O parser parado diante de uma escolha: pilha à esquerda, token à direita, as duas regras no meio.
+ * A gramática inteira fica no alto, com a linha das duas regras acesa (mural, rodada 13):
+ * sem ela, quem chega não sabe de onde vem o símbolo nem o token.
+ */
+internal fun EpisodeBuilder.escolha(topo: String, token: String, a: String, b: String, gram: List<String>, linha: Int) {
     clear()
-    add(Box("topo", topo, 62f, 200f, 56f, 44f, Look.TOKEN, Tint.ORANGE, size = 18f))
-    add(Box("tok", token, 298f, 200f, 56f, 44f, Look.TOKEN, Tint.TEAL, size = 18f))
-    add(Box("ra", a, 180f, 136f, 150f, 40f, Look.CELL, size = 14f), Box("rb", b, 180f, 264f, 150f, 40f, Look.CELL, size = 14f))
+    add(codigo("g", gram, 56f, x = 90f, passo = 26f, size = 15f))
+    add(Box("topo", topo, 62f, 250f, 56f, 44f, Look.TOKEN, Tint.ORANGE, size = 18f))
+    add(Box("tok", token, 298f, 250f, 56f, 44f, Look.TOKEN, Tint.TEAL, size = 18f))
+    add(Box("ra", a, 180f, 192f, 150f, 40f, Look.CELL, size = 14f), Box("rb", b, 180f, 308f, 150f, 40f, Look.CELL, size = 14f))
     wire("topo", "ra", arrow = false); wire("topo", "rb", arrow = false)
+    hot("g$linha")
 }
+
+/** A gramática das aulas de FIRST, FOLLOW e tabela LL(1). */
+internal val GRAMATICA_EXPR = listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )")
 
 val aulasLongas by lazy {
     listOf(
@@ -151,8 +161,8 @@ val aulasLongas by lazy {
         episodio(Skill.FIRST, tx("epgramatica_com_que_isso_comeca")) {
             val gram = listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )")
             // 1. Por que existe
-            cena(tx("first_l_01"), mood = EpMood.THINK) { escolha("T", "id", "T -> id", "T -> ( E )") }
-            cena(tx("first_l_02")) { hot("ra", "rb") }
+            cena(tx("first_l_01"), mood = EpMood.THINK) { escolha("T", "id", "T -> id", "T -> ( E )", GRAMATICA_EXPR, 2) }
+            cena(tx("first_l_02")) { hot("ra", "rb", "g2") }
             palavra("FIRST", tx("first_l_03"))
             // 2. Primeiro exemplo
             cena(tx("first_l_04")) {
@@ -224,8 +234,8 @@ val aulasLongas by lazy {
         episodio(Skill.FOLLOW, tx("epgramatica_que_vem_depois")) {
             val gram = listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )")
             // 1. Por que existe
-            cena(tx("follow_l_01"), mood = EpMood.THINK) { escolha("X", ")", "X -> + T X", "X -> ε") }
-            cena(tx("follow_l_02")) { hot("rb", "tok") }
+            cena(tx("follow_l_01"), mood = EpMood.THINK) { escolha("X", ")", "X -> + T X", "X -> ε", GRAMATICA_EXPR, 1) }
+            cena(tx("follow_l_02")) { hot("rb", "tok", "g1") }
             palavra("FOLLOW", tx("follow_l_03"))
             // 2. Primeiro exemplo
             cena(tx("follow_l_04")) {

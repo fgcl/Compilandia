@@ -231,22 +231,24 @@ val topDown by lazy {
             cena(tx("epparsers_para_escrever_parser_mao_cada")) {
                 clear()
                 add(titulo(tx("comum_descida_recursiva")))
-                add(codigo("c", src, 64f, passo = 27f, size = 12f))
+                // As regras em cima e o código embaixo: cada linha acesa no código acende a regra que a gerou.
+                add(codigo("g", GRAMATICA_EXPR, 58f, x = 100f, passo = 22f, size = 14f))
+                add(codigo("c", src, 128f, passo = 23f, size = 12f))
             }
-            cena(tx("epparsers_regra_pede_t_depois_x")) { hot("c0") }
-            cena(tx("epparsers_terminal_vira_casa_ele_confere")) { hot("c3") }
+            cena(tx("epparsers_regra_pede_t_depois_x")) { hot("c0", "g0") }
+            cena(tx("epparsers_terminal_vira_casa_ele_confere")) { hot("c3", "g1") }
             pergunta(
                 tx("epparsers_se_token_nao_for_mais"),
                 setOf("r1"), setOf("r0"),
                 tx("epparsers_nao_fazer_nada_mesmo_que"),
                 tx("epparsers_isso_nao_fazer_nada_regra"),
             ) {
-                hot("c2")
-                add(Box("r0", "X -> + T X", 110f, 350f, 150f, 44f, Look.TOKEN, Tint.TEAL, size = 15f), Box("r1", "X -> ε", 270f, 350f, 130f, 44f, Look.TOKEN, Tint.ORANGE, size = 15f))
+                hot("c2", "g1")
+                add(Box("r0", "X -> + T X", 110f, 386f, 150f, 44f, Look.TOKEN, Tint.TEAL, size = 15f), Box("r1", "X -> ε", 270f, 386f, 130f, 44f, Look.TOKEN, Tint.ORANGE, size = 15f))
             }
             cena(tx("epparsers_ifs_usam_first_para_escolher")) {
                 drop("r0", "r1")
-                hot("c7", "c8")
+                hot("c7", "c8", "g2")
             }
             cena(tx("epparsers_esse_parser_que_trabalho_pratico"), who = PROF, mood = EpMood.HAPPY) { hot() }
             // 3. A receita
@@ -308,12 +310,14 @@ val topDown by lazy {
             cena(tx("epparsers_erro_nao_pode_derrubar_compilador")) {
                 clear()
                 add(titulo(tx("comum_modo_panico")))
-                add(fileira("k", itens.map { it to Tint.TEAL }, 130f, w = 34f, h = 42f, gap = 4f))
+                // A mesma gramática do segundo exemplo: o erro só se entende vendo a regra que ele quebra.
+                add(codigo("g", GRAMATICA_ERRO_2, 66f, x = 80f, passo = 27f, size = 14f))
+                add(fileira("k", itens.map { it to Tint.TEAL }, 190f, w = 34f, h = 42f, gap = 4f))
             }
             cena(tx("epparsers_aqui_parser_trava_depois_igual"), mood = EpMood.SURPRISED) {
                 tint("k2", Tint.RED)
-                hot("k2")
-                add(rotulo("e", tx("epparsers_erro_aqui"), 110f, 180f, Tint.RED, 17f))
+                hot("k2", "g2")
+                add(rotulo("e", tx("epparsers_erro_aqui"), 110f, 240f, Tint.RED, 17f))
             }
             pergunta(
                 tx("epparsers_no_modo_panico_ele_descarta"),
@@ -324,7 +328,7 @@ val topDown by lazy {
             cena(tx("epparsers_tudo_ate_ali_vai_fora")) {
                 drop("k2", "k3", "e")
                 tint("k4", Tint.GREEN)
-                hot("k5")
+                hot("k5", "g1")
             }
             cena(tx("epparsers_bons_sincronizadores_saem_follow_cada"), who = PROF) { hot() }
             cena(tx("epparsers_assim_compilacao_so_aponta_varios"), mood = EpMood.HAPPY) {}
