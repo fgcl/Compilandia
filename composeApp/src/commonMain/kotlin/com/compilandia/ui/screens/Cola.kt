@@ -3,11 +3,12 @@ package com.compilandia.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -24,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.compilandia.content.Camera
 import com.compilandia.content.Look
 import com.compilandia.content.Shot
 import com.compilandia.content.TITULO_ID
@@ -34,6 +36,7 @@ import com.compilandia.ui.BigButton
 import com.compilandia.ui.HazardStripe
 import com.compilandia.ui.Palette
 import com.compilandia.ui.motion.MotionStage
+import com.compilandia.ui.motion.STAGE_W
 import com.compilandia.ui.placaDeMetal
 
 /**
@@ -60,7 +63,53 @@ object Cola {
     fun exemplo(s: Skill): Shot? {
         val ultimo = Episodes.of(s)?.passos?.lastOrNull()?.shot ?: return null
         val regras = gramatica(s).toSet()
-        return ultimo.copy(boxes = ultimo.boxes.filter { it.id != TITULO_ID && it.text.trim() !in regras }, actor = null)
+        val pecas = ultimo.boxes.filter { it.id != TITULO_ID && it.text.trim() !in regras }
+        // Sobrou só a gramática, que a cola já mostra em letra grande: sem caixa vazia.
+        if (pecas.isEmpty()) return null
+        return ultimo.copy(boxes = pecas, actor = null)
+    }
+
+    /** O retângulo que as peças ocupam no palco: esquerda, topo, direita, base. */
+    fun moldura(shot: Shot): FloatArray {
+        val m = floatArrayOf(Float.MAX_VALUE, Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE)
+        for (b in shot.boxes) {
+            val cx = if (b.look == Look.CODE) b.x + b.w / 2 else b.x
+            m[0] = minOf(m[0], cx - b.w / 2); m[1] = minOf(m[1], b.y - b.h / 2)
+            m[2] = maxOf(m[2], cx + b.w / 2); m[3] = maxOf(m[3], b.y + b.h / 2)
+        }
+        // Os fios também ocupam lugar: o laço sobe acima do estado, e o fio curvo sai da reta.
+        val porId = shot.boxes.associateBy { it.id }
+        fun ponto(x: Float, y: Float, r: Float) { m[0] = minOf(m[0], x - r); m[1] = minOf(m[1], y - r); m[2] = maxOf(m[2], x + r); m[3] = maxOf(m[3], y + r) }
+        for (w in shot.wires) {
+            val a = porId[w.from] ?: continue
+            val b = porId[w.to] ?: continue
+            if (w.from == w.to) { ponto(a.x, a.y - a.h / 2 - 30f, 12f); continue }
+            val dx = b.x - a.x; val dy = b.y - a.y
+            val len = kotlin.math.sqrt(dx * dx + dy * dy).coerceAtLeast(1f)
+            ponto((a.x + b.x) / 2 - dy / len * w.bend / 2, (a.y + b.y) / 2 + dx / len * w.bend / 2, 10f)
+        }
+        return m
+    }
+
+    /**
+     * A câmera olha só para onde há desenho (mural, rodada 16): sem a metade vazia do palco,
+     * e o exemplo cresce até encher a caixa de altura [stageH].
+     */
+    fun enquadra(shot: Shot, stageH: Float): Shot {
+        if (shot.boxes.isEmpty()) return shot
+        val m = moldura(shot)
+        val folga = 14f
+        val w = m[2] - m[0] + 2 * folga
+        val h = m[3] - m[1] + 2 * folga
+        val zoom = minOf(STAGE_W / w, stageH / h, 2.4f)
+        return shot.copy(camera = Camera((m[0] + m[2]) / 2, (m[1] + m[3]) / 2, zoom))
+    }
+
+    /** Altura da caixa do exemplo, em proporção à largura: a do desenho, nem baixa nem alta demais. */
+    fun proporcao(shot: Shot): Float {
+        if (shot.boxes.isEmpty()) return 0.55f
+        val m = moldura(shot)
+        return ((m[3] - m[1] + 28f) / (m[2] - m[0] + 28f)).coerceIn(0.38f, 0.7f)
     }
 }
 
@@ -84,8 +133,11 @@ fun ColaDialog(s: Skill, onFechar: () -> Unit, onAula: (() -> Unit)?, onPraticar
                 val regras = remember(s) { Cola.gramatica(s) }
                 for (r in regras) LinhaDeRegra(r)
                 if (exemplo != null) {
-                    Box(Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(10.dp)).background(Palette.codeBg)) {
-                        MotionStage(exemplo, Modifier.fillMaxSize().padding(4.dp))
+                    val prop = remember(exemplo) { Cola.proporcao(exemplo) }
+                    BoxWithConstraints(Modifier.fillMaxWidth().aspectRatio(1f / prop).clip(RoundedCornerShape(10.dp)).background(Palette.codeBg).testTag("cola-exemplo")) {
+                        val stageH = STAGE_W * maxHeight.value / maxWidth.value
+                        val enquadrado = remember(exemplo, stageH) { Cola.enquadra(exemplo, stageH) }
+                        MotionStage(enquadrado, Modifier.fillMaxSize(), stageH = stageH, center = false)
                     }
                 }
                 if (onPraticar != null) BigButton(tx("cola_praticar"), Modifier.fillMaxWidth().testTag("cola-praticar"), color = Palette.action) { onPraticar() }

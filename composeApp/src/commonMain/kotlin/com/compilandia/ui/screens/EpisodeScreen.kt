@@ -316,6 +316,10 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
     val gramatica = remember(ep, index) { gramaticaDaAula(ep, index) }
     var gramaticaAberta by remember { mutableStateOf(false) }
     LaunchedEffect(index) { gramaticaAberta = false }
+    // Mural, rodada 16: na Sua vez, a tira acende o passo da receita que a cena usa.
+    val passoAceso = remember(ep, index) { PassoDaReceita.na(ep, index) }
+    val linhasDaReceita = remember(ep) { Cola.receita(ep.skill) }
+    val tira: @Composable () -> Unit = { val a = passoAceso; if (a != null && linhasDaReceita.isNotEmpty()) TiraDaReceita(linhasDaReceita, a) }
     val palco: @Composable (Modifier, Float) -> Unit = { mod, alturaLogica ->
         Box(mod.background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f))) {
             MotionStage(shot, Modifier.fillMaxSize().testTag(STAGE_TAG), if (ask != null && !solved) ask.right + ask.wrong else emptySet(), found, stageH = alturaLogica) { tap(it) }
@@ -334,7 +338,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                 app.commit()
                 goPractice(app, s)
             })
-        if (!ladoALado) FitaDeCenas(ep.passos, index, maisLonge, ep.inicioDoExemplo) { irPara(it) }
+        if (!ladoALado) { FitaDeCenas(ep.passos, index, maisLonge, ep.inicioDoExemplo) { irPara(it) }; tira() }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth()) {
             val altura = maxHeight
             val largura = maxWidth
@@ -367,6 +371,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                     palco(Modifier.width(palcoW).fillMaxHeight(), alturaLogica)
                     Column(Modifier.width(painelW).fillMaxHeight().background(Palette.paper)) {
                         FitaDeCenas(ep.passos, index, maisLonge, ep.inicioDoExemplo) { irPara(it) }
+                        tira()
                         val dens = androidx.compose.ui.platform.LocalDensity.current
                         Column(
                             Modifier.weight(1f).fillMaxWidth().onPlaced { topoDoPainel = with(dens) { it.positionInParent().y.toDp() } }

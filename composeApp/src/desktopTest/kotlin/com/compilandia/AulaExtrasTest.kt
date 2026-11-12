@@ -42,6 +42,48 @@ class AulaExtrasTest {
         assertTrue(semCola.isEmpty(), "aulas sem receita para a cola: $semCola")
     }
 
+    /** Mural, rodada 16: a câmera da cola mostra o exemplo inteiro, sem peça cortada na borda. */
+    @Test fun oExemploDaColaCabeNaCaixa() {
+        val cortados = Skill.entries.mapNotNull { s ->
+            val ex = Cola.exemplo(s) ?: return@mapNotNull null
+            val stageH = com.compilandia.ui.motion.STAGE_W * Cola.proporcao(ex)
+            val c = Cola.enquadra(ex, stageH).camera!!
+            val m = Cola.moldura(ex)
+            fun vx(x: Float) = com.compilandia.ui.motion.STAGE_W / 2 + (x - c.x) * c.zoom
+            fun vy(y: Float) = stageH / 2 + (y - c.y) * c.zoom
+            s.takeIf { vx(m[0]) < 0f || vx(m[2]) > com.compilandia.ui.motion.STAGE_W || vy(m[1]) < 0f || vy(m[3]) > stageH }
+        }
+        assertTrue(cortados.isEmpty(), "exemplo cortado na cola: $cortados")
+    }
+
+    /** Mural, rodada 16: cada cena da Sua vez tem um passo da receita (ou 0), e só passos que existem. */
+    @Test fun aSuaVezDizOPassoDaReceita() {
+        val erros = Episodes.all.filter { it.temporada == Temporada.BASICO }.mapNotNull { e ->
+            val digitos = com.compilandia.ui.screens.PassoDaReceita.porAssunto[e.skill] ?: return@mapNotNull "${e.skill}: sem linha"
+            val suaVez = partesDaAula(e.passos, e.inicioDoExemplo)!![3]
+            val passos = Cola.receita(e.skill).size
+            when {
+                digitos.length != suaVez.count() -> "${e.skill}: ${digitos.length} dígitos para ${suaVez.count()} cenas"
+                digitos.any { it.digitToInt() > passos } -> "${e.skill}: passo além dos $passos da receita"
+                digitos.all { it == '0' } -> "${e.skill}: nenhum passo aceso"
+                else -> null
+            }
+        }
+        assertTrue(erros.isEmpty(), erros.joinToString("\n"))
+    }
+
+    @Test fun aTiraDaReceitaApareceNaSuaVez() {
+        val ep = Episodes.of(Skill.FIRST)!!
+        val k = partesDaAula(ep.passos, ep.inicioDoExemplo)!![3].first + 1
+        for ((nome, w, h) in listOf(Triple("aula_tira_receita", 412, 900), Triple("aula_tira_receita_larga", 1200, 800))) runDesktopComposeUiTest(w, h) {
+            mainClock.autoAdvance = false
+            setContent { com.compilandia.ui.CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(estado(), Screen.Episode(Skill.FIRST), onStep = k, abertura = false) } }
+            mainClock.advanceTimeBy(1500)
+            foto(nome)
+            onNodeWithTag("tira-da-receita").assertExists()
+        }
+    }
+
     /** Mural, rodada 14: toda aula básica se divide em por quê, exemplo, receita e sua vez. */
     @Test fun todaAulaTemAsQuatroPartes() {
         val basicas = Episodes.all.filter { it.temporada == Temporada.BASICO }
