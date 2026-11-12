@@ -151,9 +151,9 @@ fun ColaDialog(s: Skill, onFechar: () -> Unit, onAula: (() -> Unit)?, onPraticar
 }
 
 @Composable
-private fun LinhaDaCola(n: Int, texto: String) {
+internal fun LinhaDaCola(n: Int, texto: String, fundo: androidx.compose.ui.graphics.Color = Palette.paper) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(Palette.paper).padding(horizontal = 10.dp, vertical = 9.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(fundo).padding(horizontal = 10.dp, vertical = 9.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         Box(Modifier.size(26.dp).clip(RoundedCornerShape(13.dp)).background(Palette.hazard), contentAlignment = Alignment.Center) {

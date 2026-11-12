@@ -319,7 +319,12 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
     // Mural, rodada 16: na Sua vez, a tira acende o passo da receita que a cena usa.
     val passoAceso = remember(ep, index) { PassoDaReceita.na(ep, index) }
     val linhasDaReceita = remember(ep) { Cola.receita(ep.skill) }
-    val tira: @Composable () -> Unit = { val a = passoAceso; if (a != null && linhasDaReceita.isNotEmpty()) TiraDaReceita(linhasDaReceita, a) }
+    var colaAberta by remember { mutableStateOf(false) }
+    val tira: @Composable () -> Unit = {
+        val a = passoAceso
+        if (a != null && !finished && linhasDaReceita.isNotEmpty()) TiraDaReceita(linhasDaReceita, a) { colaAberta = true }
+        if (colaAberta) ColaDialog(ep.skill, onFechar = { colaAberta = false }, onAula = null)
+    }
     val palco: @Composable (Modifier, Float) -> Unit = { mod, alturaLogica ->
         Box(mod.background(Palette.paperDark).pegboard(Palette.drawerHi.copy(alpha = 0.14f))) {
             MotionStage(shot, Modifier.fillMaxSize().testTag(STAGE_TAG), if (ask != null && !solved) ask.right + ask.wrong else emptySet(), found, stageH = alturaLogica) { tap(it) }
@@ -606,6 +611,7 @@ private fun EpisodeEnd(app: AppState, s: Screen.Episode, ep: Episode, onReplay: 
         Text(ep.title, style = MaterialTheme.typography.headlineMedium)
         CenaConfusa(app, s, ep)
         Text(tx("episodescreen_agora_com_voce_testar_logo"), style = MaterialTheme.typography.bodyLarge, color = Palette.inkSoft)
+        if (ep.temporada == Temporada.BASICO) ReceitaDoFim(s.skill)
         // Fim de aula da trilha: o botão leva à próxima etapa. Em C e Tabelas voltam para onde a pessoa estava.
         val naTrilha = !s.returnToGame && ep.temporada in setOf(Temporada.BASICO, Temporada.PRATICA, Temporada.PEGADINHA)
         val proximo = remember(app.ls) { if (naTrilha) com.compilandia.content.Trilha.proximo(app.learner, s.skill) else null }

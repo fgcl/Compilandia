@@ -7,6 +7,7 @@ import androidx.compose.ui.test.ComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 
 import androidx.compose.ui.test.isRoot
@@ -81,7 +82,23 @@ class AulaExtrasTest {
             mainClock.advanceTimeBy(1500)
             foto(nome)
             onNodeWithTag("tira-da-receita").assertExists()
+            // Rodada 17: um toque na tira abre a cola por cima da aula.
+            onNodeWithTag("tira-da-receita").performClick()
+            mainClock.advanceTimeBy(900)
+            onNodeWithTag("cola").assertExists()
         }
+    }
+
+    /** Rodada 17: o fim da aula repete a receita em cima do botão de praticar. */
+    @Test fun oFimDaAulaRepeteAReceita() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val ep = Episodes.of(Skill.FIRST)!!
+        setContent { com.compilandia.ui.CompilandiaTheme { com.compilandia.ui.screens.EpisodeScreen(estado(), Screen.Episode(Skill.FIRST), onStep = ep.passos.lastIndex, abertura = false) } }
+        mainClock.advanceTimeBy(1500)
+        onNodeWithText(com.compilandia.textos.tx("comum_continuar")).performClick()
+        mainClock.advanceTimeBy(1500)
+        foto("aula_fim_receita")
+        onNodeWithTag("receita-do-fim").assertExists()
     }
 
     /** Mural, rodada 14: toda aula básica se divide em por quê, exemplo, receita e sua vez. */

@@ -2,6 +2,8 @@ package com.compilandia.ui.screens
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -78,9 +80,10 @@ object PassoDaReceita {
  * e, ao lado, o texto desse passo numa linha. Liga o que a pessoa faz à regra que ela usa.
  */
 @Composable
-fun TiraDaReceita(linhas: List<String>, aceso: Int) {
+fun TiraDaReceita(linhas: List<String>, aceso: Int, onClick: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 8.dp).padding(bottom = 4.dp).height(26.dp).testTag("tira-da-receita"),
+        // Mural, rodada 17: um toque na tira abre a cola com a receita inteira.
+        Modifier.fillMaxWidth().background(Palette.paper).clickable { onClick() }.padding(horizontal = 8.dp).padding(bottom = 4.dp).height(26.dp).testTag("tira-da-receita"),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         linhas.indices.forEach { i ->
@@ -95,5 +98,15 @@ fun TiraDaReceita(linhas: List<String>, aceso: Int) {
             texto, Modifier.weight(1f).padding(start = 4.dp), color = Palette.ink, maxLines = 1, overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelMedium,
         )
+    }
+}
+
+/** O fim da aula repete a receita, numerada, logo antes do botão de praticar (mural, rodada 17). */
+@Composable
+fun ReceitaDoFim(s: Skill) {
+    val linhas = androidx.compose.runtime.remember(s) { Cola.receita(s) }
+    if (linhas.size < 2) return
+    Column(Modifier.fillMaxWidth().testTag("receita-do-fim"), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        linhas.forEachIndexed { i, l -> LinhaDaCola(i + 1, l, Palette.paperDark) }
     }
 }
