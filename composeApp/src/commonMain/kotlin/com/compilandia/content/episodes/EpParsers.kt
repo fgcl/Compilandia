@@ -111,18 +111,21 @@ val topDown by lazy {
             cena(tx("epparsers_parser_preditivo_tem_pilha_entrada")) {
                 clear()
                 add(titulo("id + id"))
-                add(rotulo("rs", tx("sims_pilha"), 74f, 326f), rotulo("ra", tx("epparsers_topo_token_id"), 240f, 200f, Tint.YELLOW, 17f))
+                // A gramática fica à vista no primeiro exemplo, como no segundo: "olho a tabela" precisa de regra na tela.
+                add(codigo("g", listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )"), 250f, x = 150f, passo = 25f, size = 14f))
+                add(rotulo("rs", tx("sims_pilha"), 74f, 326f), rotulo("ra", tx("epparsers_topo_token_id"), 240f, 180f, Tint.YELLOW, 17f))
                 parser(listOf("$", "E"), listOf("id", "+", "id", "$"), n)
                 hot("p1", "i0")
             }
             cena(tx("epparsers_topo_nao_terminal_olho_tabela")) {
                 parser(listOf("$", "X", "T"), listOf("id", "+", "id", "$"), n)
                 text("ra", "E -> T X")
+                hot("g0")
             }
             cena(tx("epparsers_agora_t_esta_no_topo")) {
                 parser(listOf("$", "X", "id"), listOf("id", "+", "id", "$"), n)
                 text("ra", "T -> id")
-                hot("p2", "i0")
+                hot("p2", "i0", "g2")
             }
             pergunta(
                 tx("epparsers_topo_id_token_id_que"),
@@ -131,7 +134,7 @@ val topDown by lazy {
                 tx("epparsers_isso_casou_dois_saem"),
             ) {
                 text("ra", tx("epparsers_topo_id_token_id"))
-                add(Box("casar", tx("comum_casar_2"), 190f, 260f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("expandir", tx("comum_expandir"), 310f, 260f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("casar", tx("comum_casar_2"), 178f, 360f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("expandir", tx("comum_expandir"), 296f, 360f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
             }
             cena(tx("epparsers_jogo_segue_igual_expande_nao")) {
                 drop("casar", "expandir")

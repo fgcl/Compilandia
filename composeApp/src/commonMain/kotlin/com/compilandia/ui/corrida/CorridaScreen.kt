@@ -77,6 +77,14 @@ fun CorridaScreen(app: AppState, comecaNaOficina: Boolean = false) {
     var vida by remember { mutableIntStateOf(INTEGRIDADE) }
     var fase by remember { mutableStateOf(if (comecaNaOficina) Fase.OFICINA else Fase.SALA) }
     var ganhos by remember { mutableIntStateOf(0) }
+    // Salas terminadas e se a corrida já foi contada: sair no meio guarda o que foi ganho (mural, rodada 12).
+    var feitas by remember { mutableIntStateOf(0) }
+    var contada by remember { mutableStateOf(false) }
+    DisposableEffect(Unit) {
+        onDispose {
+            if (!contada && feitas > 0) { l.fimCorrida(feitas, ganhos); app.commit() }
+        }
+    }
     var ultimo by remember { mutableStateOf(0.0) }
     var ganhouSala by remember { mutableIntStateOf(0) }
     val pecas = remember { mutableStateListOf<Peca>() }
@@ -87,6 +95,7 @@ fun CorridaScreen(app: AppState, comecaNaOficina: Boolean = false) {
         if (vida <= 0 || sala + 1 >= SALAS) {
             fase = Fase.FIM
             l.fimCorrida(sala + 1, ganhos)
+            contada = true
             app.commit()
             return
         }
@@ -126,6 +135,7 @@ fun CorridaScreen(app: AppState, comecaNaOficina: Boolean = false) {
                             val ima = if (Peca.IMA in pecas) 1.5 else 1.0
                             ganhouSala = if (passou) (base * ima).toInt() else 0
                             ganhos += ganhouSala
+                            feitas = sala + 1
                             if (!passou) {
                                 if (Peca.ESCUDO in pecas) pecas.remove(Peca.ESCUDO) else vida--
                                 Juice.wrong()

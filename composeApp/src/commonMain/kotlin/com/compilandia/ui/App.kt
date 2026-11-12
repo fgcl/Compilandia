@@ -26,6 +26,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.foundation.focusable
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.compilandia.learning.Learner
@@ -63,7 +72,19 @@ fun App(injected: AppState? = null) {
                 try { com.compilandia.platform.Sound.load(sfx, com.compilandia.resources.Res.readBytes("files/${sfx.file}")) } catch (e: Exception) { }
             }
         }
-        Box(Modifier.fillMaxSize().background(Palette.paper).safeDrawingPadding()) {
+        // Esc volta uma tela no computador e no site (mural, rodada 12). Numa caixa de texto, ele só sai da caixa.
+        val raiz = remember { androidx.compose.ui.focus.FocusRequester() }
+        var raizComFoco by remember { mutableStateOf(false) }
+        LaunchedEffect(app.screen) { runCatching { raiz.requestFocus() } }
+        Box(
+            Modifier.fillMaxSize().background(Palette.paper).safeDrawingPadding()
+                .focusRequester(raiz).onFocusChanged { raizComFoco = it.isFocused }.focusable()
+                .onKeyEvent { e ->
+                    if (e.key != androidx.compose.ui.input.key.Key.Escape || e.type != androidx.compose.ui.input.key.KeyEventType.KeyUp) return@onKeyEvent false
+                    if (raizComFoco) app.back() else runCatching { raiz.requestFocus() }
+                    true
+                },
+        ) {
             val shake = shakeOffset()
             // Avançar entra pela direita, voltar pela esquerda. A chave garante estado novo a cada tela.
             AnimatedContent(

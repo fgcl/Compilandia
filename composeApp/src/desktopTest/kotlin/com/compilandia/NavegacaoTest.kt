@@ -5,6 +5,10 @@ package com.compilandia
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.test.runDesktopComposeUiTest
 import com.compilandia.learning.GameId
 import com.compilandia.learning.Learner
@@ -53,5 +57,30 @@ class NavegacaoTest {
             }
         }
         assertTrue(presas.isEmpty(), "telas sem voltar: $presas")
+    }
+
+    /** Esc no computador faz o mesmo que o voltar. */
+    @Test fun escVoltaUmaTela() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = AppState(Learner(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false), Random(1)))
+        app.stack.add(Screen.Map)
+        setContent { App(app) }
+        mainClock.advanceTimeBy(800)
+        onRoot().performKeyInput { pressKey(Key.Escape) }
+        mainClock.advanceTimeBy(800)
+        assertEquals(Screen.Room, app.screen)
+    }
+
+    /** Sair da corrida depois de uma sala guarda as engrenagens e conta a sala. */
+    @Test fun sairDaCorridaGuardaOGanho() = runDesktopComposeUiTest(412, 900) {
+        mainClock.autoAdvance = false
+        val app = AppState(Learner(LearnerState(name = "Felipe", onboardingDone = true, askConfidence = false), Random(1)))
+        val antes = app.ls.melhorCorrida
+        app.stack.add(Screen.Corrida)
+        setContent { App(app) }
+        mainClock.advanceTimeBy(800)
+        onAllNodesWithTag("voltar")[0].performClick()
+        mainClock.advanceTimeBy(800)
+        assertEquals(antes, app.ls.melhorCorrida, "sem sala feita, nada muda")
     }
 }
