@@ -157,3 +157,14 @@ val desktopTestIngles by tasks.registering(Test::class) {
     dependsOn("desktopTestClasses")
 }
 tasks.named("desktopTest") { finalizedBy(desktopTestIngles) }
+
+// Site: a tela de carregamento mostra a porcentagem certa mesmo quando o servidor manda o .wasm comprimido.
+// Para isso o index.html precisa saber quantos bytes os .wasm têm depois de descomprimidos.
+tasks.matching { it.name == "wasmJsBrowserDistribution" }.configureEach {
+    doLast {
+        val pasta = layout.buildDirectory.dir("dist/wasmJs/productionExecutable").get().asFile
+        val bytes = pasta.listFiles { f -> f.extension == "wasm" }.orEmpty().sumOf { it.length() }
+        val index = pasta.resolve("index.html")
+        if (bytes > 0 && index.exists()) index.writeText(index.readText().replace("__BYTES_WASM__", bytes.toString()))
+    }
+}

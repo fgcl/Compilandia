@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.text.font.FontFamily
@@ -25,6 +26,8 @@ fun main() {
         if (SimbolosProntos()) {
             App()
             VoltarDoNavegador()
+            // Some a tela de carregamento do index.html depois que o primeiro quadro do jogo foi desenhado.
+            LaunchedEffect(Unit) { withFrameNanos { }; withFrameNanos { }; avisaPronto() }
         }
     }
 }
@@ -47,6 +50,7 @@ private fun SimbolosProntos(): Boolean {
     return pronta
 }
 
+private fun avisaPronto() { js("try { if (window.compilandiaPronto) window.compilandiaPronto(); } catch (e) {}") }
 private fun empilhaEntrada() { js("try { history.pushState({ compilandia: true }, ''); } catch (e) {}") }
 private fun voltaNoNavegador() { js("try { history.back(); } catch (e) {}") }
 private fun aoVoltarNoNavegador(f: () -> Unit) { js("window.addEventListener('popstate', function () { f(); })") }
