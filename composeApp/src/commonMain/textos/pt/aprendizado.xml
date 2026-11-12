@@ -60,18 +60,18 @@
     <string name="learner_fronteira_1_esta_quase_la">Fronteira: "%1$s" está quase lá (%2$s%)</string>
     <string name="learner_ainda_faltam_bases_para_1">Ainda faltam bases para "%1$s"</string>
     <string name="learner_manutencao_1">Manutenção de "%1$s"</string>
-    <string name="learner_prova_em_1_dia_reforcando">📅 Prova em %1$s dia(s): reforçando "%2$s", um dos seus pontos mais fracos</string>
+    <string name="learner_prova_em_1_dia_reforcando">Prova em %1$s dia(s): reforçando "%2$s", um dos seus pontos mais fracos</string>
     <string name="learner_chutei">Chutei</string>
-    <string name="learner_voce_tem_se_sentido_mais">🎭 Você tem se sentido mais confiante do que seus resultados mostram. Antes de responder, tente explicar o porquê em voz alta.</string>
-    <string name="learner_voce_sabe_mais_que_pensa">🌱 Você sabe mais do que pensa. Sua confiança está abaixo do seu desempenho. Confie mais no seu raciocínio.</string>
-    <string name="learner_sua_calibracao_esta_otima_voce">🎯 Sua calibração está ótima: você sabe o que sabe.</string>
-    <string name="learner_1_esta_sendo_esquecido_memoria">⏰ "%1$s" está sendo esquecido (memória perto de %2$s%). Uma revisão rápida agora vale mais que uma hora na véspera da prova.</string>
-    <string name="learner_1_seu_estilo_explicacao_favorito">%1$s Seu estilo de explicação favorito até agora: %2$s. Vou dar mais dele, e de vez em quando outro, porque misturar estilos também ajuda a lembrar.</string>
-    <string name="learner_percebi_que_1_nao_te">😴 Percebi que "%1$s" não te empolga. Vou mostrar menos.</string>
-    <string name="learner_1_esta_dificil_errar_aqui">🧗 "%1$s" está difícil. Errar aqui é normal e faz parte de aprender. Tente a aula em outro estilo e depois um nível mais fácil.</string>
-    <string name="learner_minha_rede_neural_acertou_1">🤖 Minha rede neural acertou %1$s% das previsões sobre você nas últimas tentativas.</string>
-    <string name="learner_1_dias_seguidos_estudar_pouco">🔥 %1$s dias seguidos. Estudar um pouco todo dia rende mais que estudar muito de uma vez.</string>
-    <string name="learner_jogue_algumas_missoes_eu_comeco">👋 Jogue algumas missões e eu começo a entender como você aprende melhor.</string>
+    <string name="learner_voce_tem_se_sentido_mais">Você tem se sentido mais confiante do que seus resultados mostram. Antes de responder, tente explicar o porquê em voz alta.</string>
+    <string name="learner_voce_sabe_mais_que_pensa">Você sabe mais do que pensa. Sua confiança está abaixo do seu desempenho. Confie mais no seu raciocínio.</string>
+    <string name="learner_sua_calibracao_esta_otima_voce">Sua calibração está ótima: você sabe o que sabe.</string>
+    <string name="learner_1_esta_sendo_esquecido_memoria">"%1$s" está sendo esquecido (memória perto de %2$s%). Uma revisão rápida agora vale mais que uma hora na véspera da prova.</string>
+    <string name="learner_1_seu_estilo_explicacao_favorito">Seu estilo de explicação favorito até agora: %1$s. Vou dar mais dele, e de vez em quando outro, porque misturar estilos também ajuda a lembrar.</string>
+    <string name="learner_percebi_que_1_nao_te">Percebi que "%1$s" não te empolga. Vou mostrar menos.</string>
+    <string name="learner_1_esta_dificil_errar_aqui">"%1$s" está difícil. Errar aqui é normal e faz parte de aprender. Tente a aula em outro estilo e depois um nível mais fácil.</string>
+    <string name="learner_minha_rede_neural_acertou_1">Minha rede neural acertou %1$s% das previsões sobre você nas últimas tentativas.</string>
+    <string name="learner_1_dias_seguidos_estudar_pouco">%1$s dias seguidos. Estudar um pouco todo dia rende mais que estudar muito de uma vez.</string>
+    <string name="learner_jogue_algumas_missoes_eu_comeco">Jogue algumas missões e eu começo a entender como você aprende melhor.</string>
     <string name="learner_aaaaaeeeeiiiiooooouuuucn" translatable="false">áàâãäéèêëíìîïóòôõöúùûüçñ</string>
     <!-- Skills.kt -->
     <string name="skills_porto_partida">Porto da Partida</string>

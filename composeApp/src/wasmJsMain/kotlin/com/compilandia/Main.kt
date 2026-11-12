@@ -2,9 +2,19 @@ package com.compilandia
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.ComposeViewport
+import com.compilandia.resources.Res
+import com.compilandia.resources.simbolos
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.preloadFont
 import com.compilandia.ui.App
 import com.compilandia.ui.AppState
 
@@ -12,9 +22,29 @@ import com.compilandia.ui.AppState
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     ComposeViewport("jogo") {
-        App()
-        VoltarDoNavegador()
+        if (SimbolosProntos()) {
+            App()
+            VoltarDoNavegador()
+        }
     }
+}
+
+/**
+ * No navegador não há fonte do sistema: o glifo que falta nas fontes do jogo vira quadrado.
+ * A fonte de símbolos (setas, letras gregas, matemática) entra como reserva antes da primeira tela.
+ */
+@OptIn(ExperimentalResourceApi::class)
+@Composable
+private fun SimbolosProntos(): Boolean {
+    val resolver = LocalFontFamilyResolver.current
+    val fonte by preloadFont(Res.font.simbolos)
+    var pronta by remember { mutableStateOf(false) }
+    LaunchedEffect(fonte) {
+        val f = fonte ?: return@LaunchedEffect
+        resolver.preload(FontFamily(f))
+        pronta = true
+    }
+    return pronta
 }
 
 private fun empilhaEntrada() { js("try { history.pushState({ compilandia: true }, ''); } catch (e) {}") }

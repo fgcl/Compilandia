@@ -90,7 +90,7 @@ private fun PipelineOrder(ctx: GameCtx, done: (Double) -> Unit) {
                 .border(if (hovered) 4.dp else 2.dp, if (hovered) Palette.orange else Palette.ink.copy(alpha = 0.4f), RoundedCornerShape(16.dp)).padding(12.dp),
         ) {
             Text(tx("gameslexical_codigo_fonte"), style = MaterialTheme.typography.labelLarge)
-            for (i in placed) Text("   ⬇\n${stages[i].emoji} ${stages[i].name}", style = MaterialTheme.typography.bodyMedium)
+            for (i in placed) Text("   ↓\n${stages[i].name}", style = MaterialTheme.typography.bodyMedium)
             if (placed.size < stages.size) Text(tx("gameslexical_solte_proxima_fase_aqui"), color = Palette.inkSoft)
         }
     }
@@ -101,7 +101,7 @@ private fun PipelineOrder(ctx: GameCtx, done: (Double) -> Unit) {
             val idx = stages.indexOf(p)
             if (idx in placed) continue
             com.compilandia.ui.Draggable(dd, p, onTap = { place(p) }, onDrop = { place(p) }) {
-                com.compilandia.ui.Tile("${p.emoji} ${p.name}", Palette.orange.copy(alpha = 0.25f), mono = false)
+                com.compilandia.ui.Tile(p.name, Palette.orange.copy(alpha = 0.25f), mono = false)
             }
         }
     }
@@ -127,7 +127,7 @@ private fun PipelineMatch(ctx: GameCtx, done: (Double) -> Unit) {
     val it = items[current]
     Text(tx("gameslexical_qual_fase_fabricou_este_produto", current + 1, items.size), style = MaterialTheme.typography.titleSmall)
     CodeBlock(it.example, tx("gameslexical_entrada_posicao_inicial_taxa_60"))
-    for (o in options) BigButton("${o.emoji} ${o.name}", Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink, small = true, enabled = answered == null) {
+    for (o in options) BigButton(o.name, Modifier.fillMaxWidth(), color = Palette.white, textColor = Palette.ink, small = true, enabled = answered == null) {
         val ok = o == it
         if (ok) correct++
         answered = ok
@@ -326,7 +326,7 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Mono(lex, bold = true, size = 16)
-                        Text(chosen?.let { "${it.emoji} ${it.label}" } ?: "?", fontSize = 10.sp, color = chosen?.let { tokenColor(it) } ?: Palette.inkSoft)
+                        Text(chosen?.label ?: "?", fontSize = 10.sp, color = chosen?.let { tokenColor(it) } ?: Palette.inkSoft)
                         if (phase == 2 && chosen != right) Text("➜ ${right.label}", fontSize = 10.sp, color = Palette.green, fontWeight = FontWeight.Bold)
                     }
                 }
@@ -339,7 +339,6 @@ private fun TokenSlicerRound(ctx: GameCtx, done: (Double) -> Unit) {
                         .border(if (hovered) 4.dp else 2.dp, tokenColor(cl), RoundedCornerShape(14.dp)).padding(horizontal = 12.dp, vertical = 10.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Text(cl.emoji, fontSize = 22.sp)
                     Text(cl.label, fontSize = 12.sp, fontWeight = FontWeight.Bold, color = Palette.ink)
                     Text("${classes.values.count { it == cl }}", fontSize = 11.sp, color = Palette.inkSoft)
                 }

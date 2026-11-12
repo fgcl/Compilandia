@@ -154,7 +154,7 @@ fun BrainScreen(app: AppState) {
         Text(tx("toolscreens_estilos_explicacao_que_funcionam_para"), style = MaterialTheme.typography.titleSmall)
         for ((st, v) in l.styleRanking()) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("${st.emoji} ${st.title}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(170.dp))
+                Text(st.title, style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(170.dp))
                 ProgressBar(v.toFloat(), Palette.pink, Modifier.weight(1f), 8.dp)
             }
         }
@@ -164,7 +164,7 @@ fun BrainScreen(app: AppState) {
         Text(tx("toolscreens_jogos_favoritos"), style = MaterialTheme.typography.titleSmall)
         for ((g, v) in l.gameRanking().filter { it.first != GameId.FLASHCARDS }.take(6)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("${g.emoji} ${g.title}", style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(170.dp))
+                Text(g.title, style = MaterialTheme.typography.bodySmall, modifier = Modifier.width(170.dp))
                 ProgressBar(v.toFloat(), Palette.orange, Modifier.weight(1f), 8.dp)
             }
         }

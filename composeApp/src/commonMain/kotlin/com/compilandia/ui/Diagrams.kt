@@ -225,7 +225,7 @@ fun AutomatonView(
                 val pa = ps[a]; val pb = ps[b]
                 val pos = if (a == b) pa + Offset(0f, -r * 1.6f) + Offset((kotlin.math.sin(t * 6.28f) * r * 0.7f), -(kotlin.math.cos(t * 6.28f) * r * 0.7f))
                           else pa + (pb - pa) * t + Offset(0f, -r * 1.1f)
-                centeredText(tm, "🚂", pos, TextStyle(fontSize = 26.sp))
+                locomotiva(pos, r * 1.3f)
             }
         }
     }

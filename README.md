@@ -289,7 +289,7 @@ Testes: `./gradlew :composeApp:desktopTest` (ou `cd verify && ../gradlew test`).
 - **Vozes:** geradas com [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M), licença Apache 2.0.
 - **Sons novos:** bipes, impacto, portão, glitch e tique foram sintetizados para o jogo, sem material de terceiros.
 - **Desktop:** o áudio OGG usa [vorbisspi](https://github.com/Trilarion/java-vorbis-support), licença LGPL. Não entra no APK.
-- **Fontes tipográficas:** Atkinson Hyperlegible, Space Mono e Barlow Condensed, sob a SIL Open Font License (ver `docs/licenses`).
+- **Fontes tipográficas:** Atkinson Hyperlegible, Space Mono e Barlow Condensed, sob a SIL Open Font License, e um recorte do DejaVu Sans para os símbolos (setas, letras gregas, matemática), sob a licença Bitstream Vera (ver `docs/licenses`).
 
 ## Conforto visual
 Em **Ajustes** você escolhe:

@@ -141,7 +141,7 @@ fun RegAllocView(src: String) {
 fun MipsRunView(asm: String, highlightBranches: Boolean = false) {
     val vm = remember(asm) { try { MipsVM(asm) } catch (e: Exception) { null } }
     var steps by remember(asm) { mutableIntStateOf(0) }
-    if (vm == null) { Text("⚠️ " + (try { MipsVM(asm); "" } catch (e: Exception) { e.message }), color = Palette.red); return }
+    if (vm == null) { Text((try { MipsVM(asm); "" } catch (e: Exception) { e.message }).orEmpty(), color = Palette.red); return }
     // reexecuta do zero até 'steps' (simples e determinístico)
     val state = remember(asm, steps) {
         val v = MipsVM(asm)
@@ -165,7 +165,7 @@ fun MipsRunView(asm: String, highlightBranches: Boolean = false) {
         BigButton("↺", small = true, color = Palette.white, textColor = Palette.ink) { steps = 0 }
     }
     Text(tx("visuals3_instrucoes_executadas_1", cur.steps) + if (cur.halted) tx("visuals3_programa_terminou") else "", style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
-    err?.let { Text("💥 $it", color = Palette.red, fontWeight = FontWeight.Bold) }
+    err?.let { Text(it, color = Palette.red, fontWeight = FontWeight.Bold) }
     val regs = cur.regs.filterKeys { it != "\$gp" }.entries.sortedBy { it.key }.associate { it.key to it.value }
     if (regs.isNotEmpty()) Row(Modifier.horizontalScroll(rememberScrollState())) {
         for ((r, v) in regs) Cell("$r\n${if (r == "\$sp" || r == "\$ra") v.toString(16) else v.toString()}", w = 70)

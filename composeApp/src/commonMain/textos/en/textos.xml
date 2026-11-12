@@ -152,12 +152,12 @@
     <string name="lessonspart1a_perai_que_lanchonete_tem_ver">Wait… what does a snack bar have to do with a compiler?</string>
     <string name="lessonspart1a_tudo_pedido_passa_por_linha">Everything! The order goes through an assembly line: each person does ONE task and passes it on. A compiler is exactly that: a sequence of **phases**.</string>
     <string name="lessonspart1a_linha_montagem_lanchonete">The snack bar's assembly line</string>
-    <string name="lessonspart1a_atendente_le_papel_letra_por">🧾 The cashier reads the paper letter by letter and separates the items: [Deluxe burger] [no onions] [+] [orange juice] → **lexical analysis** (characters become tokens).</string>
-    <string name="lessonspart1a_chefe_confere_se_pedido_esta">📋 The boss checks the order is well put together: 'Deluxe with with fries no' isn't an order → **syntax analysis** (tokens become a tree).</string>
-    <string name="lessonspart1a_gerente_confere_sentido_suco_feijoada">🤔 The manager checks the MEANING: 'bean stew juice' has the shape of an order, but it doesn't exist → **semantic analysis** (types, declarations).</string>
-    <string name="lessonspart1a_pedido_vira_comanda_padronizada_que">📄 The order becomes a standard ticket any cook understands → **intermediate code generation**.</string>
-    <string name="lessonspart1a_cozinha_percebe_que_para_esquentar">⚡ The kitchen notices it can toast both buns on the same grill → **optimization**.</string>
-    <string name="lessonspart1a_lanche_sai_pronto_geracao_codigo">🍔 The sandwich comes out ready → **code generation** (machine code).</string>
+    <string name="lessonspart1a_atendente_le_papel_letra_por">The cashier reads the paper letter by letter and separates the items: [Deluxe burger] [no onions] [+] [orange juice] → **lexical analysis** (characters become tokens).</string>
+    <string name="lessonspart1a_chefe_confere_se_pedido_esta">The boss checks the order is well put together: 'Deluxe with with fries no' isn't an order → **syntax analysis** (tokens become a tree).</string>
+    <string name="lessonspart1a_gerente_confere_sentido_suco_feijoada">The manager checks the MEANING: 'bean stew juice' has the shape of an order, but it doesn't exist → **semantic analysis** (types, declarations).</string>
+    <string name="lessonspart1a_pedido_vira_comanda_padronizada_que">The order becomes a standard ticket any cook understands → **intermediate code generation**.</string>
+    <string name="lessonspart1a_cozinha_percebe_que_para_esquentar">The kitchen notices it can toast both buns on the same grill → **optimization**.</string>
+    <string name="lessonspart1a_lanche_sai_pronto_geracao_codigo">The sandwich comes out ready → **code generation** (machine code).</string>
     <string name="lessonspart1a_se_alguem_linha_errar">What if someone on the line makes a mistake?</string>
     <string name="lessonspart1a_cada_fase_pega_tipo_erro">Each phase catches one kind of error. Unreadable writing is the cashier's job (lexical). An order that makes no sense in shape is the boss's (syntactic). An order with no meaning is the manager's (semantic).</string>
     <string name="lessonspart1a_cliente_escreveu_x_tudo_batata">The customer wrote 'Deluxe burger §§ fries'. Who complains FIRST?</string>
@@ -256,10 +256,10 @@
     <string name="lessonspart1a_decorar_seis_fases_em_ordem">Memorize six phases in order? Easy, if you give your brain a little push.</string>
     <string name="lessonspart1a_l_empre_ai_i_sso">**L**ucky **S**am **S**aw **I**ce **O**n **G**lass! → **L**exical, **S**yntactic, **S**emantic, **I**ntermediate code, **O**ptimization, **G**eneration of code.</string>
     <string name="lessonspart1a_imagine_narrador_radio_gritando_toda">Picture Sam slipping on the ice. The last word is 'Glass': the last phase, code generation, where the program finally comes out.</string>
-    <string name="lessonspart1a_palacio_memoria_mapa_compilandia_pipeline">📍 **Memory palace**: the Compilândia map IS the pipeline. You board at the ⚓ Port (source code), cut tokens in the 🌲 Lexical Forest, cross the 🌄 Grammar Valley and the syntax analysis fortresses, reach the 🏙️ Semantic City and finish at the ⚒️ Code Forge.</string>
+    <string name="lessonspart1a_palacio_memoria_mapa_compilandia_pipeline">**Memory palace**: the Compilândia map IS the pipeline. You board at the Port (source code), cut tokens in the Lexical Forest, cross the Grammar Valley and the syntax analysis fortresses, reach the Semantic City and finish at the Code Forge.</string>
     <string name="lessonspart1a_feche_olhos_ande_pelo_mapa">Close your eyes and walk the map: which regions, in order?</string>
     <string name="lessonspart1a_zoom_crescente_letra_palavra_frase">Growing zoom: **letter → word → sentence → meaning**. The scanner joins letters into words; the parser joins words into sentences; the semantic phase asks whether the sentence makes sense.</string>
-    <string name="lessonspart1a_frase_famosa_chomsky_ideias_verdes">Chomsky's famous sentence: *'Colorless green ideas sleep furiously.'* Valid words ✅ (scanner OK), well-built sentence ✅ (syntax OK), zero meaning ❌ (semantics would complain!).</string>
+    <string name="lessonspart1a_frase_famosa_chomsky_ideias_verdes">Chomsky's famous sentence: *'Colorless green ideas sleep furiously.'* Valid words ✓ (scanner OK), well-built sentence ✓ (syntax OK), zero meaning ✗ (semantics would complain!).</string>
     <string name="lessonspart1a_gato_bebeu_em_que_nivel">'The cat drank the.': at what level is the problem?</string>
     <string name="lessonspart1a_palavra_lexico">Word (lexical)</string>
     <string name="lessonspart1a_estrutura_sintaxe">Structure (syntax)</string>
@@ -274,9 +274,9 @@
     <string name="lessonspart1a_supermercado_em_dia_promocao_lexi">Supermarket on sale day. Lexi is at the checkout, passing the products on the belt one by one.</string>
     <string name="lessonspart1a_bip_guarana_2l_bip_pao">Beep! 'Soda 2L'. Beep! 'French bread'. Beep! 'Soda can'. For me, each product goes into a CATEGORY on the receipt.</string>
     <string name="lessonspart1a_repare_em_tres_coisas_diferentes">Notice three different things: the actual product in her hand, the category printed on the receipt and the rule that says which product goes in which category.</string>
-    <string name="lessonspart1a_produto_concreto_guarana_2l_lexema">🥤 The actual product ('Soda 2L') → **lexeme**: the real piece of text in the program, like `counter` or `42`.</string>
-    <string name="lessonspart1a_categoria_no_cupom_bebida_token">🏷️ The category on the receipt (DRINK) → **token**: the name of the class, like `id` or `num`.</string>
-    <string name="lessonspart1a_regra_todo_liquido_engarrafado_bebida">📏 The rule ('every bottled liquid is a DRINK') → **pattern**: the description of which lexemes belong to the token, like 'a letter followed by letters or digits'.</string>
+    <string name="lessonspart1a_produto_concreto_guarana_2l_lexema">The actual product ('Soda 2L') → **lexeme**: the real piece of text in the program, like `counter` or `42`.</string>
+    <string name="lessonspart1a_categoria_no_cupom_bebida_token">The category on the receipt (DRINK) → **token**: the name of the class, like `id` or `num`.</string>
+    <string name="lessonspart1a_regra_todo_liquido_engarrafado_bebida">The rule ('every bottled liquid is a DRINK') → **pattern**: the description of which lexemes belong to the token, like 'a letter followed by letters or digits'.</string>
     <string name="lessonspart1a_entao_guarana_2l_guarana_lata">So 'Soda 2L' and 'Soda can' are different lexemes of the SAME token?</string>
     <string name="lessonspart1a_exatamente_como_x_total_lexemas">Exactly! Like `x` and `total`: different lexemes, same token `id`.</string>
     <string name="lessonspart1a_mas_no_cupom_categoria_sozinha">But on the receipt the category alone isn't enough: you need to know WHICH drink it was. That's why the token carries an **attribute**: ⟨id, pointer to `total` in the symbol table⟩.</string>
@@ -367,7 +367,7 @@
     <string name="lessonspart1a_token_gaveta_lexema_meia_que">**The token is the drawer**, **the lexeme is the sock** you put away, **the pattern is the label** that says which socks go in that drawer.</string>
     <string name="lessonspart1a_outro_truque_lexema_letra_exata">Another trick: **LEXeme = LEtter EXact**. It's the literal text, exactly as it appears in the code.</string>
     <string name="lessonspart1a_abstrato_ao_concreto_t_ipo">From abstract to concrete: **T**ype (token) → **P**rescription (pattern) → **L**iteral (lexeme).</string>
-    <string name="lessonspart1a_palacio_memoria_floresta_lexica_primeira">📍 **Memory palace**: the Lexical Forest, first stop after the Port. Lexi cuts the logs of text with her katana; each cut log is a lexeme, and she tosses each log into the right cart (the token).</string>
+    <string name="lessonspart1a_palacio_memoria_floresta_lexica_primeira">**Memory palace**: the Lexical Forest, first stop after the Port. Lexi cuts the logs of text with her katana; each cut log is a lexeme, and she tosses each log into the right cart (the token).</string>
     <string name="lessonspart1a_maior_casamento_guloso_lexi_sempre">**Longest match = greedy**: Lexi always bites the biggest piece she can. `&gt;=` whole, `count2` whole, `iff` whole.</string>
     <string name="lessonspart1a_reservada_vip_em_empate_tamanho">**Reserved is VIP**: on a length tie, the keyword cuts the line ahead of the identifier.</string>
     <string name="lessonspart1a_lendo_y_42_qual_lexema">Reading `y = 42;`, what is the LEXEME of the token ⟨num, 42⟩?</string>
@@ -387,10 +387,10 @@
     <string name="lessonspart1a_ai_afn_nao_deterministico_trem">Then it's an **NFA** (nondeterministic): a magic train that splits and follows ALL the paths at once, like in a multiverse. And it also has ε tracks, which it takes without reading any letter.</string>
     <string name="lessonspart1a_afn_eu_sou_facil_construir">NFA: 'I'm easy to build from the regular expression!' DFA: 'But I'm fast: one step per letter, no doubt at all.' Both recognize exactly the same languages: the regular ones.</string>
     <string name="lessonspart1a_fabrica_trens">The train factory</string>
-    <string name="lessonspart1a_expressao_regular_desenho_trajeto_como">📝 **Regular expression**: the drawing of the route, like `(a|b)*abb`.</string>
-    <string name="lessonspart1a_construcao_thompson_transforma_er_num">🔀 **Thompson's construction**: turns the regex into an NFA, piece by piece (union, concatenation, closure).</string>
-    <string name="lessonspart1a_construcao_subconjuntos_cada_estacao_afd">🧺 **Subset construction**: each DFA station is a BASKET of NFA stations where the magic train could be.</string>
-    <string name="lessonspart1a_minimizacao_junta_estacoes_que_se">✂️ **Minimization**: merges stations that behave the same. The DFA for `(a|b)*abb` ends up with 4 states.</string>
+    <string name="lessonspart1a_expressao_regular_desenho_trajeto_como">**Regular expression**: the drawing of the route, like `(a|b)*abb`.</string>
+    <string name="lessonspart1a_construcao_thompson_transforma_er_num">**Thompson's construction**: turns the regex into an NFA, piece by piece (union, concatenation, closure).</string>
+    <string name="lessonspart1a_construcao_subconjuntos_cada_estacao_afd">**Subset construction**: each DFA station is a BASKET of NFA stations where the magic train could be.</string>
+    <string name="lessonspart1a_minimizacao_junta_estacoes_que_se">**Minimization**: merges stations that behave the same. The DFA for `(a|b)*abb` ends up with 4 states.</string>
     <string name="lessonspart1a_afn_com_3_estados_vira">An NFA with 3 states becomes a DFA with AT MOST how many states?</string>
     <string name="lessonspart1a_cada_estado_afd_subconjunto_dos">Each DFA state is a SUBSET of the NFA's states: 2³ = 8 possible subsets. In practice, it's almost always far fewer.</string>
     <string name="lessonspart1a_lex_flex_fazem_exatamente_isso">Lex/Flex do exactly that: you write the token regexes and they generate the DFA that becomes the heart of the scanner.</string>
@@ -482,7 +482,7 @@
     <string name="lessonspart1a_qual_er_aceita_cadeia_vazia">Which regex accepts the empty string?</string>
     <string name="lessonspart1a_so_estrela_no_lado_fora">Only the star on the 'outside' allows zero repetitions of everything. The others require at least one symbol.</string>
     <string name="lessonspart1a_estado_inicial_ja_final_cadeia">The start state is already final: the empty string is accepted!</string>
-    <string name="lessonspart1a_palacio_memoria_ainda_na_floresta">📍 **Memory palace**: still in the Lexical Forest, the **Automaton Train**. Lexi draws the route (regex), Thompson's elves scatter ε tracks everywhere (NFA), and the driver gathers stations into baskets (subsets) so she's never in doubt (DFA).</string>
+    <string name="lessonspart1a_palacio_memoria_ainda_na_floresta">**Memory palace**: still in the Lexical Forest, the **Automaton Train**. Lexi draws the route (regex), Thompson's elves scatter ε tracks everywhere (NFA), and the driver gathers stations into baskets (subsets) so she's never in doubt (DFA).</string>
     <string name="lessonspart1a_confusoes_classicas_1_achar_que_2">Classic mix-ups: (1) thinking an NFA is more powerful than a DFA; they recognize the same languages; (2) forgetting the ε-closure after the move; (3) thinking a regex can count (aⁿbⁿ isn't regular!).</string>
     <string name="lessonspart1a_regular_nao_conta_nao_aninha">**Regular doesn't count and doesn't nest.** Need to count or match parentheses? That's a grammar's job.</string>
     <string name="lessonspart1a_recite_esteira_com_nome_cada">Recite the conveyor with the name of each algorithm.</string>
@@ -574,7 +574,7 @@
     <string name="lessonspart1b_g_n_t_p_n">**G = (N, T, P, S)** → '**N**ever **T**ake a **P**aper un**S**tudied': Nonterminals, Terminals, Productions, Start symbol.</string>
     <string name="lessonspart1b_terminal_termina_folha_nao_se">**A terminal terminates**: it's a leaf, it doesn't expand anymore. The nonterminal 'hasn't terminated' yet; it will be replaced.</string>
     <string name="lessonspart1b_derivacao_mais_esquerda_ler_livro">Leftmost derivation = **reading a book**: you sort things out in the order you read, from left to right.</string>
-    <string name="lessonspart1b_palacio_memoria_vale_das_gramaticas">📍 **Memory palace**: the **Grammar Valley**. Productions are seeds: a planted nonterminal (S) sprouts branches (the right side) until it's only leaves (terminals). The parse tree is, literally, a tree that grew in the valley.</string>
+    <string name="lessonspart1b_palacio_memoria_vale_das_gramaticas">**Memory palace**: the **Grammar Valley**. Productions are seeds: a planted nonterminal (S) sprouts branches (the right side) until it's only leaves (terminals). The parse tree is, literally, a tree that grew in the valley.</string>
     <string name="lessonspart1b_forma_sentencial_predio_em_obra">A **sentential** form = a building under construction (it still has scaffolding, the nonterminals). A **sentence** = a finished building, terminals only.</string>
     <string name="lessonspart1b_numa_arvore_derivacao_terminais_ficam">In a parse tree, the terminals sit…</string>
     <string name="lessonspart1b_na_raiz">at the root</string>
@@ -679,7 +679,7 @@
     <string name="lessonspart1b_prova_ambiguidade_duas_mesma_mao">Proof of ambiguity = **'two from the same hand'**: two leftmost (or two rightmost). One from each hand doesn't count!</string>
     <string name="lessonspart1b_precedencia_profundidade_quem_tem_mais">**Precedence = depth.** Whoever has MORE precedence sits DEEPER in the tree (it's computed first). The + sits near the root; the * further down.</string>
     <string name="lessonspart1b_recursao_aponta_associatividade_t_recursao">**Recursion points to associativity.** E → **E** + T: left recursion → left associative. P → B ^ **P**: right recursion → right associative.</string>
-    <string name="lessonspart1b_palacio_memoria_no_vale_das">📍 **Memory palace**: in the Grammar Valley there are two twin trees planted side by side, with the same sign: `id + id * id`. It's the **Two Trees** minigame.</string>
+    <string name="lessonspart1b_palacio_memoria_no_vale_das">**Memory palace**: in the Grammar Valley there are two twin trees planted side by side, with the same sign: `id + id * id`. It's the **Two Trees** minigame.</string>
     <string name="lessonspart1b_else_pendurado_casa_com_vizinho">**The dangling else goes with the neighbor**: the else stays with the nearest if that's still unpaired.</string>
     <string name="lessonspart1b_em_2_3_2_potencia">In `2 ^ 3 ^ 2` (power, right associative), what's the correct grouping?</string>
     <string name="lessonspart1b_associativa_direita_mais_direita_se">Right associative: the rightmost one joins first. 3² = 9, and 2⁹ = 512.</string>
@@ -693,7 +693,7 @@
     <string name="lessonspart1c_pois_exatamente_isso_que_acontece">Well, that's exactly what happens to a **top-down** parser facing `E -&gt; E + T`.</string>
     <string name="lessonspart1c_na_descida_recursiva_cada_nao">In recursive descent, each nonterminal becomes a function. Function E() tries the production E → E + T: 'to recognize E, first recognize E'. It calls E()… which calls E()… which calls E()…</string>
     <string name="lessonspart1c_laco_infinito_estouro_pilha">Infinite loop → stack overflow</string>
-    <string name="lessonspart1c_eu_so_vejo_topo_ele">E()… E()… E()… E()… I… only… see… the… top… and… it… won't… stop… growing… I BURST. 💥</string>
+    <string name="lessonspart1c_eu_so_vejo_topo_ele">E()… E()… E()… E()… I… only… see… the… top… and… it… won't… stop… growing… I BURST.</string>
     <string name="lessonspart1c_problema_nao_ter_recursao_recursao">The problem isn't having recursion, it's the recursion being the FIRST thing, before consuming any token. A dog chasing its tail: it spins and spins and goes nowhere.</string>
     <string name="lessonspart1c_como_sai_ciclo">And how do you get out of the loop?</string>
     <string name="lessonspart1c_olha_que_t_t_realmente">Look at what `E -&gt; E + T | T` really generates: a T and then as many '+ T' as you like. T + T + T… So we start with the T (the part that is NOT recursive) and leave the repetition for the end.</string>
@@ -781,7 +781,7 @@
     <string name="lessonspart1c_rabo_esquerda_morde_em_morde">**A tail on the left bites**: in A → **A**α, the A bites its own tail right away. RIGHT recursion (A → αA) is harmless: it eats α first (consumes tokens), then calls.</string>
     <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β comes 'before': it's the start of the string, the non-recursive part. α is the chorus that repeats. Language: β α α α… = βα*.</string>
     <string name="lessonspart1c_linha_while_disfarcado_enquanto_aparecer">**A-prime is a while in disguise**: as long as α shows up, repeat; when it doesn't, ε and leave the loop.</string>
-    <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">📍 **Memory palace**: at the head of the **Transformation Bridge**, a dog chases its tail (A → Aα). The bridge guard only lets through whoever shows the β first. In the middle of the bridge, a carousel (A') spins α, α, α… until someone shouts ε.</string>
+    <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">**Memory palace**: at the head of the **Transformation Bridge**, a dog chases its tail (A → Aα). The bridge guard only lets through whoever shows the β first. In the middle of the bridge, a carousel (A') spins α, α, α… until someone shouts ε.</string>
     <string name="lessonspart1c_elimine_recursao_l_l_id">Remove the recursion from `L -&gt; L , id | id`.</string>
     <string name="lessonspart1c_id_comeca_id_repete_encerra">β = `id` starts; α = `, id` repeats; ε ends. (The third one even generates the same language, but it would need factoring to be LL(1).)</string>
     <string name="lessonspart1c_lista_identificadores_separados_por_virgula">List of identifiers separated by commas.</string>
@@ -869,7 +869,7 @@
     <string name="lessonspart1c_ab_ac_b_c_fatoracao">**ab + ac = a(b + c)**: left factoring is middle school 'factoring out', with the common prefix playing the role of a.</string>
     <string name="lessonspart1c_primeiro_que_igual_depois_que">**First what's equal, then what differs.** A → (equal part) A'; A' → (the differences).</string>
     <string name="lessonspart1c_recursao_rabo_fatoracao_gemeos_na">**Recursion = tail; factoring = twins.** In left recursion, the nonterminal shows up at the start of its own right side. In factoring, two alternatives are born with the same face.</string>
-    <string name="lessonspart1c_palacio_memoria_outro_lado_ponte">📍 **Memory palace**: on the other side of the **Transformation Bridge**, far from the dog, there's a fork with two identical signs 'if E then S…'. The engineer joins the two roads into a single stretch and only puts the fork later (S'), where the signs become different.</string>
+    <string name="lessonspart1c_palacio_memoria_outro_lado_ponte">**Memory palace**: on the other side of the **Transformation Bridge**, far from the dog, there's a fork with two identical signs 'if E then S…'. The engineer joins the two roads into a single stretch and only puts the fork later (S'), where the signs become different.</string>
     <string name="lessonspart1c_qual_gramatica_precisa_fatoracao_nao">Which grammar NEEDS factoring (and not left recursion removal)?</string>
     <string name="lessonspart1c_duas_alternativas_comecam_com_id">Both alternatives of S start with id: twins! The first option is a tail (recursion); the third one is already fine.</string>
     <string name="lessonspart1c_gemeos_separados_id_em_evidencia">Twins separated: id factored out.</string>
@@ -2863,12 +2863,12 @@
     <string name="lessonspart4a_afn_faz_diferente_ele_nao">An **NFA** does it differently: it doesn't choose. The group SPLITS UP and each one goes to a possibility. And there are open corridors, with no turnstile: whoever is at a point can cross for free. Those are the **ε** tracks.</string>
     <string name="lessonspart4a_agora_truque_em_vez_acompanhar">Now the trick: instead of following each friend, you just look at the **group chat** and write down: 'right now the group is at {1, 3, 4}'. That whole set becomes ONE state of a **DFA**.</string>
     <string name="lessonspart4a_rodoviaria_construcao_subconjuntos">Bus station → subset construction</string>
-    <string name="lessonspart4a_cada_plataforma_estado_afn">🚏 Each platform is an **NFA state**.</string>
-    <string name="lessonspart4a_corredor_livre_sem_ler_letra">🚶 An open corridor (reading no letter) is an **ε transition**. Gathering everyone you can reach on foot is the **ε-closure**.</string>
-    <string name="lessonspart4a_usar_passagem_com_letra_move">🎫 Using a ticket with the letter 'a' is **move(T, a)**: where each friend can go reading 'a'.</string>
-    <string name="lessonspart4a_lista_grupo_estamos_em_0">📱 The group's list ('we're at {0, 1}') is a **DFA state**: a SET of NFA states.</string>
-    <string name="lessonspart4a_se_ninguem_turma_tem_para">😵 If nobody in the group has anywhere to go, the group is empty: it's the **dead state ∅**.</string>
-    <string name="lessonspart4a_se_pelo_menos_amigo_chegou">🏁 If at least ONE friend reached the destination, the whole group celebrates: the set is **final** if it contains some NFA final state.</string>
+    <string name="lessonspart4a_cada_plataforma_estado_afn">Each platform is an **NFA state**.</string>
+    <string name="lessonspart4a_corredor_livre_sem_ler_letra">An open corridor (reading no letter) is an **ε transition**. Gathering everyone you can reach on foot is the **ε-closure**.</string>
+    <string name="lessonspart4a_usar_passagem_com_letra_move">Using a ticket with the letter 'a' is **move(T, a)**: where each friend can go reading 'a'.</string>
+    <string name="lessonspart4a_lista_grupo_estamos_em_0">The group's list ('we're at {0, 1}') is a **DFA state**: a SET of NFA states.</string>
+    <string name="lessonspart4a_se_ninguem_turma_tem_para">If nobody in the group has anywhere to go, the group is empty: it's the **dead state ∅**.</string>
+    <string name="lessonspart4a_se_pelo_menos_amigo_chegou">If at least ONE friend reached the destination, the whole group celebrates: the set is **final** if it contains some NFA final state.</string>
     <string name="lessonspart4a_entao_afd_so_diario_grupo">So the DFA is just the group's diary: 'we were here, we read such a letter, we ended up there'?</string>
     <string name="lessonspart4a_exatamente_como_diario_anotado_antes">Exactly. And since the diary is written down BEFORE the trip, when reading the input there's no doubt anymore: one step per letter.</string>
     <string name="lessonspart4a_no_afn_b_ab_turma">In the NFA for '(a|b)*ab' the group starts at {0}. From 0, reading 'a', you can stay at 0 or go to 1. Reading 'a', where does the group end up?</string>
@@ -2960,7 +2960,7 @@
     <string name="lessonspart4a_entao_por_que_analisadores_lexicos">So why do scanners use DFAs anyway?</string>
     <string name="lessonspart4a_porque_explosao_rara_com_padroes">Because the blowup is rare with real token patterns, the conversion happens ONCE (when generating the scanner) and after that each character costs a single step. Pay at the factory to save on the road.</string>
     <string name="lessonspart4a_construcao_subconjuntos_definicao_prova">Subset construction: exam definition</string>
-    <string name="lessonspart4a_afn_n_s0_f_com">**NFA**: N = (S, Σ, δ, s₀, F), with δ: S × (Σ ∪ {ε}) → 𝒫(S). **DFA**: a special case with no ε transitions and exactly one destination for each (state, symbol) pair.</string>
+    <string name="lessonspart4a_afn_n_s0_f_com">**NFA**: N = (S, Σ, δ, s₀, F), with δ: S × (Σ ∪ {ε}) → P(S). **DFA**: a special case with no ε transitions and exactly one destination for each (state, symbol) pair.</string>
     <string name="lessonspart4a_fecho_estados_alcancaveis_partir_usando">**ε-closure(s)**: states reachable from s using only ε transitions (includes s). **ε-closure(T)** = ∪ ε-closure(s), s ∈ T. **move(T, a)**: states reachable from some s ∈ T by ONE transition labeled a.</string>
     <string name="lessonspart4a_fecho_t_empilhe_todos_estados">ε-closure(T):\n    push all the states of T\n    closure ← T\n    while the stack isn't empty:\n        pop t\n        for each u with t --ε--&gt; u:\n            if u ∉ closure: closure ← closure ∪ {u}; push u\n    return closure</string>
     <string name="lessonspart4a_calculo_fecho_livro_dragao_fig">Computing the ε-closure (Dragon Book, Fig. 3.33)</string>
@@ -2989,7 +2989,7 @@
     <string name="lessonspart4a_anda_fecha_porta">Move and Close the Door</string>
     <string name="lessonspart4a_anda_fecha_porta_primeiro_anda">**Move and close the door!** First MOVE with the letter (move), then CLOSE (ε-closure). Like your mom yelling from the kitchen: you came in, close the door!</string>
     <string name="lessonspart4a_cesto_frutas_cada_estado_afd">**Fruit basket**: each DFA state is a basket with NFA states inside. The basket is **final if it has ONE prize fruit** (an NFA final state). The **empty basket ∅** is the dead state.</string>
-    <string name="lessonspart4a_palacio_memoria_na_floresta_lexica">📍 **Memory palace**: in the Lexical Forest, right after the Automaton Train, is the **Subset Factory** 🧺. Thompson's elves deliver messy tracks (NFA); the workers put states in baskets, stamp them A, B, C… and hand the train a map with no doubts (DFA).</string>
+    <string name="lessonspart4a_palacio_memoria_na_floresta_lexica">**Memory palace**: in the Lexical Forest, right after the Automaton Train, is the **Subset Factory** . Thompson's elves deliver messy tracks (NFA); the workers put states in baskets, stamp them A, B, C… and hand the train a map with no doubts (DFA).</string>
     <string name="lessonspart4a_2n_interruptores_cada_estado_afn">**2ⁿ = light switches**: each NFA state is a lamp that's on (in the basket) or off. n lamps → 2ⁿ combinations. It's the CEILING, not the norm.</string>
     <string name="lessonspart4a_qual_ordem_correta_dentro_cada">What's the correct order inside each step of the construction?</string>
     <string name="lessonspart4a_fecho_depois_move">ε-closure, then move</string>
@@ -3008,11 +3008,11 @@
     <string name="lessonspart4b_triagem_dos_correios">The post office sorting center</string>
     <string name="lessonspart4b_centro_triagem_dos_correios_madrugada">A post office sorting center, at dawn. An endless conveyor of characters passes in front of a robot. Lexi holds a laminated sheet full of rules.</string>
     <string name="lessonspart4b_eu_nao_separo_nada_na">I don't sort anything by hand. I write the RULE SHEET, hand it to the factory, and the factory builds the robot that does the sorting on its own.</string>
-    <string name="lessonspart4b_folha_regras_pacote_assim_carimbo">📄 The rule sheet ('package like this → such a stamp') is the **.l file**: each line is a **pattern** (regular expression) and an **action** in C.</string>
-    <string name="lessonspart4b_fabrica_que_le_folha_monta">🏭 The factory that reads the sheet and builds the robot is the **lex** (or **flex**) program: it generates the file **lex.yy.c**.</string>
-    <string name="lessonspart4b_robo_funcao_yylex_cada_vez">🤖 The robot is the function **yylex()**: each time someone calls it, it takes the next package and returns the stamp.</string>
-    <string name="lessonspart4b_pacote_que_robo_pegou_lexema">📦 The package the robot took is the **lexeme**: it's in **yytext**, and its length in **yyleng**.</string>
-    <string name="lessonspart4b_carimbo_return_token_acao_acao">🏷️ The stamp is the action's **return TOKEN;**. An empty action **{ }** is the trash bin: spaces and comments vanish.</string>
+    <string name="lessonspart4b_folha_regras_pacote_assim_carimbo">The rule sheet ('package like this → such a stamp') is the **.l file**: each line is a **pattern** (regular expression) and an **action** in C.</string>
+    <string name="lessonspart4b_fabrica_que_le_folha_monta">The factory that reads the sheet and builds the robot is the **lex** (or **flex**) program: it generates the file **lex.yy.c**.</string>
+    <string name="lessonspart4b_robo_funcao_yylex_cada_vez">The robot is the function **yylex()**: each time someone calls it, it takes the next package and returns the stamp.</string>
+    <string name="lessonspart4b_pacote_que_robo_pegou_lexema">The package the robot took is the **lexeme**: it's in **yytext**, and its length in **yyleng**.</string>
+    <string name="lessonspart4b_carimbo_return_token_acao_acao">The stamp is the action's **return TOKEN;**. An empty action **{ }** is the trash bin: spaces and comments vanish.</string>
     <string name="lessonspart4b_robo_obedece_duas_regras_ouro">The robot obeys TWO golden rules. First: it's **greedy**: it always takes the BIGGEST package some rule accepts. Second: if two rules accept packages of the same size, the one **higher up on the sheet** wins.</string>
     <string name="lessonspart4b_veja_qual_regra_carimbou_cada">See which rule stamped each lexeme. Edit the input and test it!</string>
     <string name="lessonspart4b_com_essa_folha_if_acima">With this sheet ("if" above the identifier rule), what does 'iffy' become?</string>
@@ -3133,7 +3133,7 @@
     <string name="lessonspart4b_d_r_c_d_efinicoes">**D-R-C**: **D**efinitions %% **R**ules %% **C**ode. Just like Bison: Declare, Rule, Code. The two %% are the two walls of the rules room.</string>
     <string name="lessonspart4b_flex_guloso_mas_educado_guloso">Flex is **greedy, but polite**: GREEDY because it always eats the biggest piece; POLITE because, on a tie, it respects the line: whoever got to the file first is served.</string>
     <string name="lessonspart4b_palavra_chave_vip_entra_antes">**A keyword is VIP**: it goes BEFORE the ID on the sheet. If the ID cuts in front, 'if' becomes a variable and your project breaks.</string>
-    <string name="lessonspart4b_palacio_memoria_na_floresta_lexica">📍 **Memory palace**: in the Lexical Forest, on the riverbank, is the **Flex Workshop** 🦎. The D-R-C sheet is nailed to the door. Inside, Lexi feeds the machine regular expressions and out the other side comes a robot called lex.yy.c.</string>
+    <string name="lessonspart4b_palacio_memoria_na_floresta_lexica">**Memory palace**: in the Lexical Forest, on the riverbank, is the **Flex Workshop** . The D-R-C sheet is nailed to the door. Inside, Lexi feeds the machine regular expressions and out the other side comes a robot called lex.yy.c.</string>
     <string name="lessonspart4b_tudo_lex_comeca_com_yy">Everything in lex starts with **yy**: **yytext** = the lexeme's TEXT; **yyleng** = its LENGth; **yylval** = the VALue that goes to Bison; **yylex** = the LEXer itself; **yywrap** = 'wrap it up' (is the file over?).</string>
     <string name="lessonspart4b_vazio_lixeira_sem_return_lexema">**Empty { } = trash bin.** Without return, the lexeme goes to the trash and the robot keeps going. That's how spaces and comments vanish.</string>
     <string name="lessonspart4b_yytext_ou_yylval_onde_esta">yytext or yylval: where is the text "42" right after matching `[0-9]+`?</string>
@@ -3147,15 +3147,15 @@
     <string name="lessonspart4c_ai_ele_rasga_redacao_vai">So he tears up the essay and leaves?</string>
     <string name="lessonspart4c_claro_que_nao_ele_marca">Of course not! He marks the mistake, finds a safe point to continue, the next period, and keeps reading. In the end, the student gets ALL the mistakes at once. A good compiler does the same.</string>
     <string name="lessonspart4c_tipos_erro_na_redacao_no">Kinds of errors, in the essay and in the code</string>
-    <string name="lessonspart4c_caza_em_vez_casa_erro">✏️ 'Hous' instead of 'house' → **lexical error**: a character or word that doesn't exist (in C, a stray `@`).</string>
-    <string name="lessonspart4c_frase_sem_verbo_parentese_sem">🧱 A sentence with no verb, an unclosed parenthesis → **syntax error**: the structure is broken (`x = (a + ;`).</string>
-    <string name="lessonspart4c_sol_congelou_feijoada_erro_semantico">🤯 'The sun froze the stew' → **semantic error**: structure OK, meaning not (adding a string to an int, an undeclared variable).</string>
-    <string name="lessonspart4c_texto_perfeito_mas_fugiu_tema">🎯 A perfect text, but off topic → **logic error**: it compiles and runs, but does the wrong thing (`if (x = 0)` instead of `==`).</string>
+    <string name="lessonspart4c_caza_em_vez_casa_erro">'Hous' instead of 'house' → **lexical error**: a character or word that doesn't exist (in C, a stray `@`).</string>
+    <string name="lessonspart4c_frase_sem_verbo_parentese_sem">A sentence with no verb, an unclosed parenthesis → **syntax error**: the structure is broken (`x = (a + ;`).</string>
+    <string name="lessonspart4c_sol_congelou_feijoada_erro_semantico">'The sun froze the stew' → **semantic error**: structure OK, meaning not (adding a string to an int, an undeclared variable).</string>
+    <string name="lessonspart4c_texto_perfeito_mas_fugiu_tema">A perfect text, but off topic → **logic error**: it compiles and runs, but does the wrong thing (`if (x = 0)` instead of `==`).</string>
     <string name="lessonspart4c_quatro_estrategias_corretor">The grader's four strategies</string>
-    <string name="lessonspart4c_modo_panico_pula_tudo_ate">🏃 **Panic mode**: skip everything until the next period and start again from there. Simple and never loops; but it can skip a big stretch.</string>
-    <string name="lessonspart4c_nivel_frase_faz_remendo_local">🩹 **Phrase level**: make a local patch, 'a comma is missing here, I'll pretend it's there'. Careful: badly chosen patches can create infinite loops.</string>
-    <string name="lessonspart4c_producoes_erro_gabarito_ja_preve">📋 **Error productions**: the answer key already predicts the most common mistakes and has a ready message for each.</string>
-    <string name="lessonspart4c_correcao_global_reescrever_redacao_com">🧠 **Global correction**: rewrite the essay with the MINIMUM changes until it's right. Beautiful in theory, too expensive in practice.</string>
+    <string name="lessonspart4c_modo_panico_pula_tudo_ate">**Panic mode**: skip everything until the next period and start again from there. Simple and never loops; but it can skip a big stretch.</string>
+    <string name="lessonspart4c_nivel_frase_faz_remendo_local">**Phrase level**: make a local patch, 'a comma is missing here, I'll pretend it's there'. Careful: badly chosen patches can create infinite loops.</string>
+    <string name="lessonspart4c_producoes_erro_gabarito_ja_preve">**Error productions**: the answer key already predicts the most common mistakes and has a ready message for each.</string>
+    <string name="lessonspart4c_correcao_global_reescrever_redacao_com">**Global correction**: rewrite the essay with the MINIMUM changes until it's right. Beautiful in theory, too expensive in practice.</string>
     <string name="lessonspart4c_qual_dessas_estrategias_compiladores_verdade">Which of these strategies do real compilers use most?</string>
     <string name="lessonspart4c_correcao_global">Global correction</string>
     <string name="lessonspart4c_modo_panico_vezes_com_remendos">Panic mode (sometimes with phrase-level patches)</string>
@@ -3192,7 +3192,7 @@
     <string name="lessonspart4c_rastreando_panico_na_mao">Tracing panic by hand</string>
     <string name="lessonspart4c_vamos_rastrear_com_calma_modo">Let's slowly trace panic mode on `id = ; id = num ;`: the programmer forgot the value of the first assignment.</string>
     <string name="lessonspart4c_resolvido_topo_pilha_direita">Solved (top of the stack on the right)</string>
-    <string name="lessonspart4c_m_esta_vazia_erro_detectado">🚨 M[E, ;] is empty → **error detected at the 3rd token**. Message: 'expected id or num, found ;'.</string>
+    <string name="lessonspart4c_m_esta_vazia_erro_detectado">M[E, ;] is empty → **error detected at the 3rd token**. Message: 'expected id or num, found ;'.</string>
     <string name="lessonspart4c_panico_first_mas_follow_nada">Panic: ';' ∉ FIRST(E), but ';' ∈ FOLLOW(E). Nothing to drop: **pop E**.</string>
     <string name="lessonspart4c_pilha_p_casa_resto_id">Stack `$ P ;`: match `;`. The rest, `id = num ;`, is parsed normally.</string>
     <string name="lessonspart4c_no_fim_p_com_parser">At the end, P → ε with `$` and the parser reaches the end: 1 error reported, complete analysis.</string>
@@ -3269,7 +3269,7 @@
     <string name="lessonspart4c_first_fica_follow_foge">FIRST stays, FOLLOW flees</string>
     <string name="lessonspart4c_first_fica_follow_foge_achou">**FIRST stays, FOLLOW flees.** Found a token in FIRST(A)? A STAYS on top and starts over. Found one in FOLLOW(A)? A FLEES (it's popped). Neither? Throw the token away.</string>
     <string name="lessonspart4c_terminal_teimoso_finge_que_estava">**Stubborn terminal? Pretend it was there.** A terminal on top that doesn't match the input is popped, like skipping a forgotten comma.</string>
-    <string name="lessonspart4c_palacio_memoria_no_templo_top">📍 **Memory palace**: in the Top-Down Temple, behind the LL(1) table's altar, there's a door with a red light: the **Panic Room** 🚨. Stack runs through it throwing tokens out the window until he sees an exit sign, `;` or `}`, painted in FOLLOW's colors.</string>
+    <string name="lessonspart4c_palacio_memoria_no_templo_top">**Memory palace**: in the Top-Down Temple, behind the LL(1) table's altar, there's a door with a red light: the **Panic Room** . Stack runs through it throwing tokens out the window until he sees an exit sign, `;` or `}`, painted in FOLLOW's colors.</string>
     <string name="lessonspart4c_tipos_erro_em_zoom_crescente">Kinds of errors in growing zoom: **Letter → Sentence → Meaning → Result**. Lexical (a word that doesn't exist), syntactic (a badly built sentence), semantic (a meaningless sentence), logical (everything compiles, but the result comes out wrong).</string>
     <string name="lessonspart4c_estrategias_mais_simples_mais_ambiciosa">Strategies, from the simplest to the most ambitious: **P**anic **P**ounces, **P**hrase **P**atches, **P**roduction **P**redicts, **G**lobal is a **G**enius, but nobody pays its salary.</string>
     <string name="lessonspart4c_no_topo_token_x_na">E on top, token 'x' in the input, x ∉ FIRST(E) and x ∉ FOLLOW(E). What do you do?</string>
@@ -3619,12 +3619,12 @@
     <string name="lessonspart6a_lanchonete_bairro_hora_almoco_dono">The neighborhood snack bar, lunchtime. The owner looks at the payroll and frowns: 'Five servers... do I need all of them?'</string>
     <string name="lessonspart6a_ue_demite_quem_trabalha_menos">Huh, fire whoever works the least?</string>
     <string name="lessonspart6a_nao_bem_isso_ele_faz">Not quite. He runs a test: he gives the same sequence of orders to two servers. If, for ANY sequence, both end up the same way (delivering the sandwich or not), they're **interchangeable**. He can merge both into a single position.</string>
-    <string name="lessonspart6a_cada_atendente_estado_afd">🧑‍🍳 Each server is a DFA **state**.</string>
-    <string name="lessonspart6a_cada_pedido_cliente_b_simbolo">📝 Each customer order ('a', 'b') is an input **symbol**: the server passes you on to someone.</string>
-    <string name="lessonspart6a_entregar_lanche_no_fim_fila">🍔 'Delivering the sandwich' at the end of the line of orders is ending in a **final state**.</string>
-    <string name="lessonspart6a_dois_atendentes_que_sempre_terminam">🤝 Two servers who ALWAYS end the same way are **equivalent** (indistinguishable).</string>
-    <string name="lessonspart6a_se_existe_sequencia_pedidos_em">🔎 If there's ONE sequence of orders where one delivers and the other doesn't, they're **distinguishable**.</string>
-    <string name="lessonspart6a_juntar_todos_equivalentes_afd_minimo">📉 Merging all the equivalent ones gives the **minimal DFA**: the same service, a smaller payroll.</string>
+    <string name="lessonspart6a_cada_atendente_estado_afd">Each server is a DFA **state**.</string>
+    <string name="lessonspart6a_cada_pedido_cliente_b_simbolo">Each customer order ('a', 'b') is an input **symbol**: the server passes you on to someone.</string>
+    <string name="lessonspart6a_entregar_lanche_no_fim_fila">'Delivering the sandwich' at the end of the line of orders is ending in a **final state**.</string>
+    <string name="lessonspart6a_dois_atendentes_que_sempre_terminam">Two servers who ALWAYS end the same way are **equivalent** (indistinguishable).</string>
+    <string name="lessonspart6a_se_existe_sequencia_pedidos_em">If there's ONE sequence of orders where one delivers and the other doesn't, they're **distinguishable**.</string>
+    <string name="lessonspart6a_juntar_todos_equivalentes_afd_minimo">Merging all the equivalent ones gives the **minimal DFA**: the same service, a smaller payroll.</string>
     <string name="lessonspart6a_na_floresta_lexica_isso_importa">And in the Lexical Forest this matters a lot: my scanner is a giant DFA. Fewer states = a smaller table = a lighter scanner.</string>
     <string name="lessonspart6a_sim_se_repassarem_pedidos_para">Yes, if they pass the orders on to the same people</string>
     <string name="lessonspart6a_nao_com_fila_vazia_entrega">No: with an EMPTY line one delivers and the other doesn't</string>
@@ -3741,7 +3741,7 @@
     <string name="lessonspart6a_p_q_sao_distinguiveis_se">p and q are distinguishable if there's a w with δ*(p, w) ∈ F and δ*(q, w) ∉ F (or vice versa). Round 1 marks every final × non-final pair, whose witness is ε.</string>
     <string name="lessonspart6a_marca_propaga_junta">Mark, Propagate, Merge</string>
     <string name="lessonspart6a_mpj_marca_propaga_junta_marca">**MPM: Mark, Propagate, Merge.** MARK final × non-final. PROPAGATE the marks through the arrows, round after round. MERGE whoever was left unmarked. (Think 'MPM = Most People Merge'.)</string>
-    <string name="lessonspart6a_palacio_memoria_na_floresta_lexica">📍 **Memory palace**: in the Lexical Forest, right after the Subset Factory, is the **Table of Pairs** 🧮: a stone staircase. Each step has little cells, one for each pair of states. The guard paints the cells of different pairs red; the ones that stay white become a single house.</string>
+    <string name="lessonspart6a_palacio_memoria_na_floresta_lexica">**Memory palace**: in the Lexical Forest, right after the Subset Factory, is the **Table of Pairs** : a stone staircase. Each step has little cells, one for each pair of states. The guard paints the cells of different pairs red; the ones that stay white become a single house.</string>
     <string name="lessonspart6a_escadinha_nao_quadrado_p_q">**A staircase, not a square.** {p,q} = {q,p} and {p,p} doesn't matter: draw only the bottom triangle. n states → n(n−1)/2 cells. With 5 states: 10 cells.</string>
     <string name="lessonspart6a_final_nao_final_sao_agua">**Final and non-final are oil and water**: they never mix. That's why round 1 is automatic.</string>
     <string name="lessonspart6a_domino_se_filhos_sao_diferentes">**Dominoes**: 'if the CHILDREN are different, the PARENTS are too'. If p and q, on the same letter, land on a red cell, paint {p,q} red.</string>
@@ -3763,11 +3763,11 @@
     <string name="lessonspart6b_resumo_obvio_mas_nao_perde">The summary, obviously! But... doesn't it lose anything important?</string>
     <string name="lessonspart6b_bom_resumo_nao_perde_nada">A GOOD summary loses nothing that matters for the exam: characters, who did what, in what order. It only throws away what was there for the book to be READ: transition chapters, page numbers, notes. The **abstract syntax tree (AST)** is the summary; the **parse tree** is the whole book.</string>
     <string name="lessonspart6b_livro_resumo_arvore_derivacao_ast">Book × summary → parse tree × AST</string>
-    <string name="lessonspart6b_livro_inteiro_arvore_derivacao_concreta">📖 The whole book → **parse tree (concrete)**: a node for EACH step of the grammar.</string>
-    <string name="lessonspart6b_capitulos_transicao_vira_t_que">🔁 Transition chapters ('E becomes T, which becomes F...') → **chain nonterminals**: E → T → F → a. They vanish in the AST.</string>
-    <string name="lessonspart6b_numeracao_indice_parenteses_pontuacao_so">📑 Page numbers and contents → **parentheses and punctuation**: they were only there for the parser to know the order. The AST's shape already keeps that order.</string>
-    <string name="lessonspart6b_paginas_em_branco_producoes_somem">🗒️ Blank pages → **ε** productions: they vanish.</string>
-    <string name="lessonspart6b_personagens_acoes_operadores_operandos_viram">⭐ Characters and actions → **operators and operands**: they become `BinOp`, `Var`, `Num` nodes.</string>
+    <string name="lessonspart6b_livro_inteiro_arvore_derivacao_concreta">The whole book → **parse tree (concrete)**: a node for EACH step of the grammar.</string>
+    <string name="lessonspart6b_capitulos_transicao_vira_t_que">Transition chapters ('E becomes T, which becomes F...') → **chain nonterminals**: E → T → F → a. They vanish in the AST.</string>
+    <string name="lessonspart6b_numeracao_indice_parenteses_pontuacao_so">Page numbers and contents → **parentheses and punctuation**: they were only there for the parser to know the order. The AST's shape already keeps that order.</string>
+    <string name="lessonspart6b_paginas_em_branco_producoes_somem">Blank pages → **ε** productions: they vanish.</string>
+    <string name="lessonspart6b_personagens_acoes_operadores_operandos_viram">Characters and actions → **operators and operands**: they become `BinOp`, `Var`, `Num` nodes.</string>
     <string name="lessonspart6b_para_b_c_arvore_derivacao">For 'a + b * c', the parse tree of the E/T/F grammar has 13 nodes. How many does the AST have?</string>
     <string name="lessonspart6b_so_sobram_3_operandos_2">Only the 3 operands and the 2 operators are left: BinOp('+') with Var(a) and BinOp('*') with Var(b) and Var(c). 13 → 5: a real summary!</string>
     <string name="lessonspart6b_lado_lado_livro_derivacao_resumo">Side by side: the book (derivation) and the summary (AST). Notice that * is still DEEPER than +: precedence survived.</string>
@@ -3870,7 +3870,7 @@
     <string name="lessonspart6b_arvore_em_que_nos_internos">A tree where internal nodes are operators/constructs and children are meaningful operands. It throws away: chain nonterminals (E → T → F), parentheses/punctuation and ε productions (and, with them, the keywords that only marked the construct).</string>
     <string name="lessonspart6b_arvore_dieta">The tree on a diet</string>
     <string name="lessonspart6b_ast_arvore_sem_tralha_tira">**AST = A Slimmed Tree.** It removes three kinds of clutter: **C**hains (E → T → F), **P**arentheses (and punctuation) and **E**psilons. 'Cut the CPE.'</string>
-    <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">📍 **Memory palace**: in Semantic City, next to the symbol table's registry office, is the **AST Factory** 🪵, a carpentry shop. A huge log arrives (the parse tree); the carpenter saws off the branches that only pass things along, throws away the sawdust of the parentheses and hands over a 5-piece table, ready to use.</string>
+    <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">**Memory palace**: in Semantic City, next to the symbol table's registry office, is the **AST Factory** , a carpentry shop. A huge log arrives (the parse tree); the carpenter saws off the branches that only pass things along, throws away the sawdust of the parentheses and hands over a 5-piece table, ready to use.</string>
     <string name="lessonspart6b_parenteses_sao_andaimes_indispensaveis_enqua">**Parentheses are scaffolding**: needed while the building is under construction (parsing), removed when it's done. The building's shape (the tree) already keeps what they were holding.</string>
     <string name="lessonspart6b_corrente_whatsapp_t_f_como">**A chain message**: E → T → F → a is like a message forwarded five times. The content is the 'a'; the forwards add nothing. In the AST: Var(a), and that's it.</string>
     <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**Whoever is deeper works first.** In the AST of a + b * c, the * is in the basement: it's done first. Depth = precedence.</string>
@@ -3893,12 +3893,12 @@
     <string name="lessonspart6c_cozinha_aula_mips_bancada_registrador">It's the kitchen from the MIPS lesson! A counter is a register, the pantry is memory.</string>
     <string name="lessonspart6c_isso_chef_novo_faz_burrice">Right. And the new chef does something silly: finishes the sauce, TAKES it to the pantry, and five minutes later goes down again to FETCH the same sauce. That's the naive code: an `sw` followed by an `lw` of the same temporary.</string>
     <string name="lessonspart6c_chef_experiente_pensa_diferente_molho">The experienced chef thinks differently: 'The sauce will be used soon, it stays on a counter. When the sauce is used for the last time, the counter becomes FREE for another prep.'</string>
-    <string name="lessonspart6c_cada_preparacao_intermediaria_molho_massa">🍲 Each intermediate prep (sauce, dough) is a **temporary** (t1, t2, ...).</string>
-    <string name="lessonspart6c_cada_bancada_registrador_so_ha">🪵 Each counter is a **register**. There are only k counters.</string>
-    <string name="lessonspart6c_momento_em_que_preparacao_fica">⏳ From the moment the prep is ready until its LAST use, it's **alive** and takes up a counter: that's its **live range**.</string>
-    <string name="lessonspart6c_duas_preparacoes_vivas_ao_mesmo">🚫 Two preps alive AT THE SAME TIME can't share a counter: they **interfere**.</string>
-    <string name="lessonspart6c_dar_bancada_cada_preparacao_sem">🎨 Giving each prep a counter, with no neighbors fighting, is **coloring a graph**: each color is a register.</string>
-    <string name="lessonspart6c_se_nao_houver_bancadas_suficientes">🪣 If there aren't enough counters, some prep goes down to the pantry and is fetched again when needed: that's the **spill**.</string>
+    <string name="lessonspart6c_cada_preparacao_intermediaria_molho_massa">Each intermediate prep (sauce, dough) is a **temporary** (t1, t2, ...).</string>
+    <string name="lessonspart6c_cada_bancada_registrador_so_ha">Each counter is a **register**. There are only k counters.</string>
+    <string name="lessonspart6c_momento_em_que_preparacao_fica">From the moment the prep is ready until its LAST use, it's **alive** and takes up a counter: that's its **live range**.</string>
+    <string name="lessonspart6c_duas_preparacoes_vivas_ao_mesmo">Two preps alive AT THE SAME TIME can't share a counter: they **interfere**.</string>
+    <string name="lessonspart6c_dar_bancada_cada_preparacao_sem">Giving each prep a counter, with no neighbors fighting, is **coloring a graph**: each color is a register.</string>
+    <string name="lessonspart6c_se_nao_houver_bancadas_suficientes">If there aren't enough counters, some prep goes down to the pantry and is fetched again when needed: that's the **spill**.</string>
     <string name="lessonspart6c_mesmo_problema_pintar_mapa_brasil">It's the same problem as coloring a map of the world: countries that share a border can't have the same color. In allocation, the 'border' is being alive at the same time. Four colors are enough for any flat map, but a program's graph isn't a map: sometimes it needs more.</string>
     <string name="lessonspart6c_em_r_b_c_d">In r = a * b + c * d: t1 = a * b is ready; then t2 = c * d; then t3 = t1 + t2. Which temporaries need different counters?</string>
     <string name="lessonspart6c_t1_t2">t1 and t2</string>
@@ -4001,7 +4001,7 @@
     <string name="lessonspart6c_in_i_use_i_out">in[i] = use[i] ∪ (out[i] − def[i]); out[i] = ∪ in of the successors. x and y interfere if x is defined at an instruction where y is alive on exit (y ∈ out[i]).</string>
     <string name="lessonspart6c_pinte_mapa_cozinha">Paint the kitchen map</string>
     <string name="lessonspart6c_vigor_vi_vacidade_g_rafo">**LGCR**: **L**iveness → **G**raph → **C**oloring → **R**egisters. (And if you run out of colors? Spill: 'it spills on the floor'.)</string>
-    <string name="lessonspart6c_palacio_memoria_na_forja_codigo">📍 **Memory palace**: in the Code Forge, next to the MIPS Assembler, is the **Coloring Studio** 🎨. On the wall, a map with dots (the temporaries). The painter has only k paint cans (registers). Dots connected by a wire can't have the same color. Whichever is left without paint goes to the basement (memory).</string>
+    <string name="lessonspart6c_palacio_memoria_na_forja_codigo">**Memory palace**: in the Code Forge, next to the MIPS Assembler, is the **Coloring Studio** . On the wall, a map with dots (the temporaries). The painter has only k paint cans (registers). Dots connected by a wire can't have the same color. Whichever is left without paint goes to the basement (memory).</string>
     <string name="lessonspart6c_vivacidade_se_faz_como_desfazer">**Liveness is done like unpacking a suitcase: back to front.** The last item that went in is the first one out. Start at the end of the code with out = { }.</string>
     <string name="lessonspart6c_in_use_out_def_se">**in = use ∪ (out − def)** reads as: 'alive before is whoever I USE now, plus whoever was alive after and I did NOT kill'. Def kills, use revives.</string>
     <string name="lessonspart6c_interferencia_nasceu_enquanto_outro_estava">**Interference = 'born while the other was alive'.** Whoever is defined gets an edge with everyone in that instruction's out.</string>

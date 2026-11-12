@@ -130,7 +130,7 @@ fun FlexView(spec: String, input: String) {
             Text(tx("visuals2_regra_1", lx.rule + 1), fontSize = 10.sp, color = Palette.inkSoft)
         }
     }
-    r.error?.let { Text("❌ $it", color = Palette.red) }
+    r.error?.let { Text(it, color = Palette.red) }
     Text(tx("solta_visuals2_1"), style = MaterialTheme.typography.bodySmall, color = Palette.inkSoft)
 }
 
@@ -156,7 +156,7 @@ fun PanicView(g: Grammar, input: String) {
         val s = tr.steps[i]
         StackAndInput(g, s.stack, s.input)
         val a = s.action
-        Text(if (a is LLAction.Error) "🚨 ${a.message}" else a.label(), style = MaterialTheme.typography.bodyMedium, color = if (a is LLAction.Error) Palette.red else Palette.ink)
+        Text(if (a is LLAction.Error) a.message else a.label(), style = MaterialTheme.typography.bodyMedium, color = if (a is LLAction.Error) Palette.red else Palette.ink)
     }
     Text(tx("visuals2_recuperacoes_feitas"), style = MaterialTheme.typography.titleSmall)
     for (e in tr.events) RichText("• " + e.message, style = MaterialTheme.typography.bodySmall)

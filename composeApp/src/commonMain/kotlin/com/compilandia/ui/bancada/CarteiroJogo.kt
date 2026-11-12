@@ -156,7 +156,7 @@ private fun PalcoCarteiro(e: CarteiroEstado, q: Carteiro.Quadro?, fim: Boolean) 
                 if (aqui && nomeAtual != null) {
                     ByteFigure(Modifier.width(30.dp), mood = if (semNada) Mood.SAD else if (fim) Mood.HAPPY else Mood.THINK, animate = !ThemeState.reduceMotion)
                     Text(
-                        "✉ $nomeAtual", Modifier.padding(start = 4.dp).clip(RoundedCornerShape(6.dp)).background(Palette.hazard).padding(horizontal = 6.dp, vertical = 2.dp),
+                        nomeAtual, Modifier.padding(start = 4.dp).clip(RoundedCornerShape(6.dp)).background(Palette.hazard).padding(horizontal = 6.dp, vertical = 2.dp),
                         fontFamily = mono, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Palette.on(Palette.hazard),
                     )
                 }

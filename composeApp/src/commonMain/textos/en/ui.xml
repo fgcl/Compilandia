@@ -2,7 +2,7 @@
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/ui.xml. -->
 <resources>
     <string name="appstate_meta_dia_cumprida_1_engrenagens">Daily goal done: +%1$s gears</string>
-    <string name="juice_combo_x_1">🔥 COMBO x%1$s</string>
+    <string name="juice_combo_x_1">COMBO x%1$s</string>
     <string name="theme_metal_escuro_bancada_byte_padrao">Dark metal of Byte's workbench, default</string>
     <string name="theme_galpao_claro">Bright shed</string>
     <string name="theme_chapa_clara_bom_sob_luz">Light sheet metal, good under strong light</string>
@@ -150,7 +150,7 @@
     <string name="gameslr_topo_pilha_ja_forma_lado">The top of the stack already forms the right side of a production (handle) and the next token is in its FOLLOW.</string>
     <string name="gameslr_so_sobrou_simbolo_inicial_entrada">Only the start symbol is left and the input is over!</string>
     <string name="gameslr_nenhuma_acao_vale_aqui_erro">No action applies here: it's a syntax error.</string>
-    <string name="gameslr_tempo_era_1">⏰ Time! It was: %1$s</string>
+    <string name="gameslr_tempo_era_1">Time! It was: %1$s</string>
     <string name="gameslr_estado_1">state %1$s</string>
     <string name="gameslr_olhe_estado_topo_1_token">Look at the state on top (%1$s) and the token '%2$s': ACTION[%3$s, %4$s] = %5$s</string>
     <string name="gameslr_abaixo_tabela_slr_inteira">Below, the whole SLR table.</string>
@@ -529,7 +529,7 @@
     <string name="guidescreens_capitulo_nao_encontrado">Chapter not found</string>
     <string name="guidescreens_guia_tp_relacionado_1">Project Guide · related to: %1$s</string>
     <string name="guidescreens_capitulo_concluido_quer_praticar_1">Chapter done! Want to **practice** "%1$s" in a minigame now? Doing it right after reading fixes it much better.</string>
-    <string name="guidescreens_praticar">🎮 Practice</string>
+    <string name="guidescreens_praticar">Practice</string>
     <string name="guidescreens_proximo_capitulo_1">Next chapter: %1$s</string>
     <string name="guidescreens_voltar_ao_indice">Back to the contents</string>
     <string name="homescreens_seu_nome">Your name</string>
@@ -550,32 +550,32 @@
     <string name="homescreens_chefao_1">Boss: %1$s</string>
     <string name="homescreens_religar_novo">Turn it back on again</string>
     <string name="homescreens_enfrentar">Face it</string>
-    <string name="lessonscreen_ainda_nao_ha_aula_para">There's no lesson for this topic yet.\nTry practicing in the minigame! 🎮</string>
-    <string name="lessonscreen_sem_problema_vamos_outro_jeito">No problem! Let's try another way: %1$s %2$s</string>
+    <string name="lessonscreen_ainda_nao_ha_aula_para">There's no lesson for this topic yet.\nTry practicing in the minigame!</string>
+    <string name="lessonscreen_sem_problema_vamos_outro_jeito">No problem! Let's try another way: %1$s</string>
     <string name="lessonscreen_ai_como_foi">So, how did it go?</string>
     <string name="lessonscreen_seja_sincero_eu_uso_isso">Be honest: I use this to choose how to explain next time.</string>
-    <string name="lessonscreen_entendi_quero_praticar_direto">🎮 Got it, I want to practice right away</string>
-    <string name="lessonscreen_nao_entendi_explica_outro_jeito">😕 I didn't get it: explain it another way</string>
-    <string name="lessonscreen_nao_entendi">😕 I didn't get it</string>
-    <string name="lessonscreen_chato">😴 Boring</string>
+    <string name="lessonscreen_entendi_quero_praticar_direto">Got it, I want to practice right away</string>
+    <string name="lessonscreen_nao_entendi_explica_outro_jeito">I didn't get it: explain it another way</string>
+    <string name="lessonscreen_nao_entendi">I didn't get it</string>
+    <string name="lessonscreen_chato">Boring</string>
     <string name="lessonscreen_bora_aprender_jogando_entao_errar">Let's learn by playing then! Getting it wrong in the game also teaches.</string>
     <string name="lessonscreen_rodar_no_mars_bolso">▶ Run on pocket MARS</string>
-    <string name="lessonscreen_preveja_antes_ver">🔮 Predict before you see</string>
+    <string name="lessonscreen_preveja_antes_ver">Predict before you see</string>
     <string name="lessonscreen_boa_tentativa_errar_aqui_ajuda">**Nice try: and getting it wrong here HELPS you remember.** </string>
-    <string name="lessonscreen_pense_primeiro_depois_toque">🧠 Think first, then tap</string>
+    <string name="lessonscreen_pense_primeiro_depois_toque">Think first, then tap</string>
     <string name="lessonscreen_pensei_mostrar_resposta">I thought! Show the answer</string>
     <string name="lessonscreen_proximo_passo">next step</string>
     <string name="toolscreens_revisao_relampago">Lightning review</string>
     <string name="toolscreens_ainda_nao_ha_cartoes_volte">No cards yet. Come back when the lessons are loaded!</string>
-    <string name="toolscreens_revisao_concluida">Review done! 🧠</string>
+    <string name="toolscreens_revisao_concluida">Review done!</string>
     <string name="toolscreens_cada_cartao_que_voce_tentou">Every card you tried to remember got stronger, including the ones you got wrong.</string>
     <string name="toolscreens_voltar_ao_mapa">Back to the map</string>
     <string name="toolscreens_pense_na_resposta_verdade_toque">Think of the answer (for real!) and tap the card.</string>
     <string name="toolscreens_pergunta_1">Question: %1$s</string>
     <string name="toolscreens_como_foi_lembrar">How was remembering it?</string>
-    <string name="toolscreens_errei">😵 Got it wrong</string>
-    <string name="toolscreens_dificil">😓 Hard</string>
-    <string name="toolscreens_facil">😎 Easy</string>
+    <string name="toolscreens_errei">Got it wrong</string>
+    <string name="toolscreens_dificil">Hard</string>
+    <string name="toolscreens_facil">Easy</string>
     <string name="toolscreens_painel_cerebro">Brain dashboard</string>
     <string name="toolscreens_conquistas_1_2">Achievements (%1$s/%2$s)</string>
     <string name="toolscreens_calibracao_voce_sabe_que_sabe">Calibration (do you know what you know?)</string>
@@ -610,7 +610,7 @@
     <string name="toolscreens_apagar_todo_progresso">Delete all progress</string>
     <string name="toolscreens_tem_certeza_isso_apaga_xp">Are you sure? This deletes XP, memory, journal and the trained neural network.</string>
     <string name="toolscreens_cancelar">Cancel</string>
-    <string name="toolscreens_progresso_apagado_novo_comeco">Progress deleted. A fresh start! 🌱</string>
+    <string name="toolscreens_progresso_apagado_novo_comeco">Progress deleted. A fresh start!</string>
     <string name="toolscreens_sobre_creditos">Compilândia, made for people who think they're not good at compilers. The content follows the Compilers course syllabus. Art and sounds: Kenney (CC0). Voices: Kokoro-82M (Apache 2.0). Fonts: Atkinson Hyperlegible, Space Mono and Barlow Condensed (SIL Open Font License).</string>
     <string name="visuals_eliminando_recursao_esquerda">removing left recursion</string>
     <string name="visuals_fatorando_esquerda">left factoring</string>
@@ -628,26 +628,26 @@
     <string name="visuals_duplo_circulo_estado_aceitacao_seta">Double circle = accepting state. The loose arrow points to the start.</string>
     <string name="visuals_cadeia_para_testar_alfabeto_1">string to test (alphabet: %1$s)</string>
     <string name="visuals_passo">step</string>
-    <string name="visuals_sem_transicao_automato_travou_rejeita">💥 No transition: the automaton got STUCK → reject.</string>
-    <string name="visuals_terminou_em_q_1_aceitacao">✅ Ended at q%1$s (accepting): ACCEPT</string>
-    <string name="visuals_terminou_em_q_1_nao">❌ Ended at q%1$s (not accepting): REJECT</string>
+    <string name="visuals_sem_transicao_automato_travou_rejeita">No transition: the automaton got STUCK → reject.</string>
+    <string name="visuals_terminou_em_q_1_aceitacao">Ended at q%1$s (accepting): ACCEPT</string>
+    <string name="visuals_terminou_em_q_1_nao">Ended at q%1$s (not accepting): REJECT</string>
     <string name="visuals_estado_atual_q_1_proximo">Current state: q%1$s. Next symbol: '%2$s'</string>
     <string name="visuals_essa_cadeia_nao_gerada_pela">This string isn't generated by the grammar.</string>
     <string name="visuals_usou_1_sempre_no_nao">used: %1$s  (always on the LEFTMOST nonterminal)</string>
     <string name="visuals_arvore_derivacao">Parse tree:</string>
     <string name="visuals_frase_1">sentence: %1$s</string>
-    <string name="visuals_unica_arvore">A single tree 👍</string>
-    <string name="visuals_duas_arvores_diferentes_para_mesma">⚠️ TWO different trees for the same sentence → AMBIGUOUS grammar</string>
-    <string name="visuals_resultado_ll_1">✅ The result is LL(1).</string>
-    <string name="visuals_i_resultado_ainda_nao_ll">ℹ️ The result isn't LL(1) yet (it may need another transformation).</string>
+    <string name="visuals_unica_arvore">A single tree</string>
+    <string name="visuals_duas_arvores_diferentes_para_mesma">TWO different trees for the same sentence → AMBIGUOUS grammar</string>
+    <string name="visuals_resultado_ll_1">The result is LL(1).</string>
+    <string name="visuals_i_resultado_ainda_nao_ll">The result isn't LL(1) yet (it may need another transformation).</string>
     <string name="visuals_ponto_fixo_repete_regras_ate">Fixed point: repeat the rules until nothing changes.</string>
     <string name="visuals_comeca_tudo_vazio">Everything starts empty…</string>
-    <string name="visuals_nenhuma_celula_com_duas_producoes">✅ No cell with two productions: the grammar is LL(1).</string>
-    <string name="visuals_celulas_vermelhas_tem_2_producoes">❌ Red cells have 2+ productions: CONFLICT, not LL(1).</string>
+    <string name="visuals_nenhuma_celula_com_duas_producoes">No cell with two productions: the grammar is LL(1).</string>
+    <string name="visuals_celulas_vermelhas_tem_2_producoes">Red cells have 2+ productions: CONFLICT, not LL(1).</string>
     <string name="visuals_topo_1_olho_2_m">Top is %1$s, I look at '%2$s': M[%3$s, %4$s] = %5$s. Swap the top for the right side (back to front).</string>
     <string name="visuals_topo_entrada_sao_1_casa">Top and input are '%1$s': match and move on!</string>
-    <string name="visuals_pilha_so_com_entrada_acabou">Stack with only $ and the input is over: ACCEPT ✅</string>
-    <string name="visuals_erro_1">Error: %1$s ❌</string>
+    <string name="visuals_pilha_so_com_entrada_acabou">Stack with only $ and the input is over: ACCEPT</string>
+    <string name="visuals_erro_1">Error: %1$s</string>
     <string name="visuals_pilha_topo_direita">Stack (top on the right)</string>
     <string name="visuals_gramatica_aumentada_1">Augmented grammar: %1$s</string>
     <string name="visuals_estado_i_1">State I%1$s</string>
@@ -655,8 +655,8 @@
     <string name="visuals_goto_i_1_2_i">goto(I%1$s, %2$s) = I%3$s</string>
     <string name="visuals_item_completo_1_reduzir">complete item: %1$s → reduce</string>
     <string name="visuals_producoes_numeradas">Numbered productions: </string>
-    <string name="visuals_sem_conflitos_gramatica_1">✅ No conflicts: the grammar is %1$s.</string>
-    <string name="visuals_1_celula_em_conflito_em">❌ %1$s cell(s) in conflict (in red).</string>
+    <string name="visuals_sem_conflitos_gramatica_1">No conflicts: the grammar is %1$s.</string>
+    <string name="visuals_1_celula_em_conflito_em">%1$s cell(s) in conflict (in red).</string>
     <string name="visuals_pilha_estados_simbolos_topo_direita">Stack (states and symbols, top on the right)</string>
     <string name="visuals_tabela_simbolos_b_c_int">Symbol table: a,b,c: int (4,2,3) · x,y: float (1.5, 0.5) · ok: bool</string>
     <string name="visuals_no_1_2">Node '%1$s': %2$s</string>
@@ -666,11 +666,11 @@
     <string name="visuals_toque_num_uso_variavel_para">Tap a USE of a variable to see the declaration it sees (static scope: the innermost one already declared).</string>
     <string name="visuals_1_nao_foi_declarada_em">'%1$s' was NOT declared in any visible scope → semantic error!</string>
     <string name="visuals_1_refere_se_declaracao_destacada">'%1$s' refers to the declaration highlighted in green.</string>
-    <string name="visuals_outro_programa">🎲 another program</string>
+    <string name="visuals_outro_programa">another program</string>
     <string name="visuals_especificacao_y">.y specification</string>
-    <string name="visuals_bison_1_conflito">⚠️ bison: %1$s conflict(s), </string>
+    <string name="visuals_bison_1_conflito">bison: %1$s conflict(s), </string>
     <string name="visuals_estado_1_2_3">state %1$s, %2$s: %3$s</string>
-    <string name="visuals_1_conflito_resolvido_por_precedencia">✅ %1$s conflict(s) resolved by precedence/associativity.</string>
+    <string name="visuals_1_conflito_resolvido_por_precedencia">%1$s conflict(s) resolved by precedence/associativity.</string>
     <string name="visuals_resultado_1">Result: %1$s</string>
     <string name="visuals_reducoes_cada_executa_acao">Reductions (each one runs an action):</string>
     <string name="visuals2_estado_inicial_afd_fecho_1">DFA start state: **A = ε-closure({%1$s}) = %2$s** (yellow).</string>
@@ -683,16 +683,16 @@
     <string name="visuals2_regra_1">rule %1$s</string>
     <string name="visuals2_erro_detectado_no_token_1">The error is DETECTED at token %1$s ('%2$s'): it's the first one that can't continue any valid sentence.</string>
     <string name="visuals2_recuperacoes_feitas">Recoveries made:</string>
-    <string name="visuals2_parser_continuou_ate_fim_pode">✅ The parser went on to the end and could report all the errors at once.</string>
+    <string name="visuals2_parser_continuou_ate_fim_pode">The parser went on to the end and could report all the errors at once.</string>
     <string name="visuals2_parser_desistiu">The parser gave up.</string>
-    <string name="visuals2_topo_pilha">⬆ top of the stack</string>
+    <string name="visuals2_topo_pilha">↑ top of the stack</string>
     <string name="visuals2_retorna_para_1_vinculo_controle">returns to: %1$s · control link → %2$s</string>
     <string name="visuals2_vazia">(empty)</string>
-    <string name="visuals2_chama_1_2_empilha_registro">📥 calls %1$s(%2$s) → PUSHES an activation record</string>
-    <string name="visuals2_1_retorna_2_desempilha_registro">📤 %1$s returns %2$s → POPS the record</string>
+    <string name="visuals2_chama_1_2_empilha_registro">calls %1$s(%2$s) → PUSHES an activation record</string>
+    <string name="visuals2_1_retorna_2_desempilha_registro">%1$s returns %2$s → POPS the record</string>
     <string name="visuals2_resultado_final_1_profundidade_maxima">Final result: %1$s. Maximum depth: %2$s records.</string>
     <string name="visuals2_memoria_data">Memory (.data)</string>
-    <string name="visuals2_r_1_isso_que_mars">✅ r = %1$s: that's what MARS would show in memory.</string>
+    <string name="visuals2_r_1_isso_que_mars">r = %1$s: that's what MARS would show in memory.</string>
     <string name="visuals2_parser_java_metodo_por_nao">Parser.java (one method per nonterminal)</string>
     <string name="visuals2_pilha_chamadas_pilha_escondida_java">Call stack (Java's "hidden" stack):</string>
     <string name="visuals2_comparacao_slr_1_tem_1">Comparison: SLR(1) has %1$s cell(s) in conflict; LALR(1) has %2$s. </string>
@@ -714,7 +714,7 @@
     <string name="visuals3_tudo_na_memoria_1_lw">All in memory: %1$s lw/sw</string>
     <string name="visuals3_com_registradores_1_lw_sw">With registers: %1$s lw/sw</string>
     <string name="visuals3_passo">▶ step</string>
-    <string name="visuals3_rodar_tudo">⏩ run all</string>
+    <string name="visuals3_rodar_tudo">run all</string>
     <string name="visuals3_instrucoes_executadas_1">instructions run: %1$s</string>
     <string name="visuals3_programa_terminou"> · program ended</string>
     <string name="visuals3_console">Console</string>

@@ -573,7 +573,7 @@ private fun goPractice(app: AppState, s: Screen.Episode) {
 private fun EpisodeTop(captions: Boolean, gramatica: (@Composable () -> Unit)?, onClose: () -> Unit, onCaptions: () -> Unit, onSkip: () -> Unit) {
     Row(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 8.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(38.dp).clip(RoundedCornerShape(8.dp)).background(Palette.white).clickable { onClose() }, contentAlignment = Alignment.Center) {
-            Text("✕", color = Palette.ink, style = MaterialTheme.typography.labelLarge)
+            com.compilandia.ui.IconeDesenhado(com.compilandia.ui.Icone.FECHAR, Palette.ink, tamanho = 18.dp)
         }
         Spacer(Modifier.weight(1f))
         if (gramatica != null) { gramatica(); Spacer(Modifier.width(6.dp)) }

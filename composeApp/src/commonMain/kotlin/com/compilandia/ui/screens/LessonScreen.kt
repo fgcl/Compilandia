@@ -89,7 +89,7 @@ fun LessonScreen(app: AppState, s: Screen.Lesson) {
         val next = app.learner.notUnderstood(s.skill, lesson.style, s.tried, nowMs())
         app.commit()
         Sound.play(Sfx.WHOOSH)
-        app.say(tx("lessonscreen_sem_problema_vamos_outro_jeito", next.emoji, next.title))
+        app.say(tx("lessonscreen_sem_problema_vamos_outro_jeito", next.title))
         app.replace(s.copy(style = next, tried = s.tried + lesson.style))
     }
 
@@ -159,7 +159,7 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             }
         }
         is Beat.Callout -> PaperCard(color = calloutColor(b.kind).copy(alpha = 0.15f), border = calloutColor(b.kind)) {
-            Text("${b.kind.emoji} ${b.kind.title}", style = MaterialTheme.typography.titleSmall, color = calloutColor(b.kind))
+            Text(b.kind.title, style = MaterialTheme.typography.titleSmall, color = calloutColor(b.kind))
             RichText(b.text, style = MaterialTheme.typography.bodyMedium)
         }
         is Beat.Predict -> PaperCard(border = Palette.orange) {
@@ -205,7 +205,7 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
 private fun StepsBeat(b: Beat.Steps) {
     var n by remember { mutableIntStateOf(1) }
     PaperCard(border = Palette.blue) {
-        Text("🪜 ${b.title}", style = MaterialTheme.typography.titleSmall)
+        Text(b.title, style = MaterialTheme.typography.titleSmall)
         b.steps.take(n).forEachIndexed { i, st ->
             Row {
                 Text("${i + 1}.", fontWeight = FontWeight.Bold, color = Palette.blue, modifier = Modifier.width(26.dp))

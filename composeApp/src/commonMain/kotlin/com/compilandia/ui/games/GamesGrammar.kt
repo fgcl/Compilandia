@@ -261,7 +261,7 @@ private fun SurgeryRound(ctx: GameCtx, g: Grammar, leftRec: Boolean, done: (Doub
                             }
                         }.padding(vertical = 8.dp),
                     contentAlignment = Alignment.Center,
-                ) { Text(v ?: "＿", fontFamily = LocalFonts.current.mono, fontWeight = FontWeight.Bold, fontSize = 15.sp) }
+                ) { Text(v ?: "_", fontFamily = LocalFonts.current.mono, fontWeight = FontWeight.Bold, fontSize = 15.sp) }
             }
         }
     }

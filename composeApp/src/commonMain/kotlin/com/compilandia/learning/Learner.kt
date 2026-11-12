@@ -68,7 +68,8 @@ data class LearnerState(
     val music: Boolean = false,
     // ---- reforma: voz, sala e metas do dia (saves antigos caem nos valores padrão)
     val voiceOn: Boolean = true,
-    val captionsOn: Boolean = false,
+    /** Legenda ligada para quem começa: a fala também aparece escrita. Save antigo guarda a escolha que já tinha. */
+    val captionsOn: Boolean = true,
     /** "pt" ou "en". Vazio: o jogo decide na abertura (save antigo fica em português, jogo novo segue o aparelho). */
     val idioma: String = "",
     val gears: Int = 0,
@@ -647,7 +648,7 @@ object Coach {
             out += tx("learner_1_esta_sendo_esquecido_memoria", s.title, (r * 100).toInt())
         }
         val styles = l.styleRanking().filter { (st.styleArms[it.first.name]?.let { a -> a.alpha + a.beta } ?: 2.0) > 3 }
-        if (styles.isNotEmpty()) out += tx("learner_1_seu_estilo_explicacao_favorito", styles.first().first.emoji, styles.first().first.title)
+        if (styles.isNotEmpty()) out += tx("learner_1_seu_estilo_explicacao_favorito", styles.first().first.title)
         val bored = st.feedback.filter { it.kind == "chato" }.groupBy { it.target }.maxByOrNull { it.value.size }
         if (bored != null && bored.value.size >= 2) {
             GameId.entries.firstOrNull { it.name == bored.key }?.let { out += tx("learner_percebi_que_1_nao_te", it.title) }

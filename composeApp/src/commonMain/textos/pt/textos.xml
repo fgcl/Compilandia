@@ -156,12 +156,12 @@
     <string name="lessonspart1a_perai_que_lanchonete_tem_ver">Peraí… o que uma lanchonete tem a ver com compilador?</string>
     <string name="lessonspart1a_tudo_pedido_passa_por_linha">Tudo! O pedido passa por uma linha de montagem: cada pessoa faz UMA tarefa e passa adiante. Um compilador é exatamente isso: uma sequência de **fases**.</string>
     <string name="lessonspart1a_linha_montagem_lanchonete">A linha de montagem da lanchonete</string>
-    <string name="lessonspart1a_atendente_le_papel_letra_por">🧾 O atendente lê o papel letra por letra e separa os itens: [X-tudo] [sem cebola] [+] [suco de laranja] → **análise léxica** (caracteres viram tokens).</string>
-    <string name="lessonspart1a_chefe_confere_se_pedido_esta">📋 O chefe confere se o pedido está bem montado: 'X-tudo com com batata sem' não é pedido → **análise sintática** (tokens viram árvore).</string>
-    <string name="lessonspart1a_gerente_confere_sentido_suco_feijoada">🤔 O gerente confere o SENTIDO: 'suco de feijoada' tem forma de pedido, mas não existe → **análise semântica** (tipos, declarações).</string>
-    <string name="lessonspart1a_pedido_vira_comanda_padronizada_que">📄 O pedido vira uma comanda padronizada que qualquer cozinheiro entende → **geração de código intermediário**.</string>
-    <string name="lessonspart1a_cozinha_percebe_que_para_esquentar">⚡ A cozinha percebe que dá para esquentar os dois pães na mesma chapa → **otimização**.</string>
-    <string name="lessonspart1a_lanche_sai_pronto_geracao_codigo">🍔 O lanche sai pronto → **geração de código** (código de máquina).</string>
+    <string name="lessonspart1a_atendente_le_papel_letra_por">O atendente lê o papel letra por letra e separa os itens: [X-tudo] [sem cebola] [+] [suco de laranja] → **análise léxica** (caracteres viram tokens).</string>
+    <string name="lessonspart1a_chefe_confere_se_pedido_esta">O chefe confere se o pedido está bem montado: 'X-tudo com com batata sem' não é pedido → **análise sintática** (tokens viram árvore).</string>
+    <string name="lessonspart1a_gerente_confere_sentido_suco_feijoada">O gerente confere o SENTIDO: 'suco de feijoada' tem forma de pedido, mas não existe → **análise semântica** (tipos, declarações).</string>
+    <string name="lessonspart1a_pedido_vira_comanda_padronizada_que">O pedido vira uma comanda padronizada que qualquer cozinheiro entende → **geração de código intermediário**.</string>
+    <string name="lessonspart1a_cozinha_percebe_que_para_esquentar">A cozinha percebe que dá para esquentar os dois pães na mesma chapa → **otimização**.</string>
+    <string name="lessonspart1a_lanche_sai_pronto_geracao_codigo">O lanche sai pronto → **geração de código** (código de máquina).</string>
     <string name="lessonspart1a_se_alguem_linha_errar">E se alguém da linha errar?</string>
     <string name="lessonspart1a_cada_fase_pega_tipo_erro">Cada fase pega um tipo de erro. Letra ilegível é com o atendente (léxico). Pedido sem pé nem cabeça é com o chefe (sintático). Pedido sem sentido é com o gerente (semântico).</string>
     <string name="lessonspart1a_cliente_escreveu_x_tudo_batata">O cliente escreveu 'X-tudo §§ batata'. Quem reclama PRIMEIRO?</string>
@@ -261,10 +261,10 @@
     <string name="lessonspart1a_decorar_seis_fases_em_ordem">Decorar seis fases em ordem? Fácil, se você der um empurrãozinho no cérebro.</string>
     <string name="lessonspart1a_l_empre_ai_i_sso">**L**á **S**empre **S**ai **I**sso: **Ó**timo **G**ol! → **L**éxica, **S**intática, **S**emântica, código **I**ntermediário, **O**timização, **G**eração de código.</string>
     <string name="lessonspart1a_imagine_narrador_radio_gritando_toda">Imagine o narrador do rádio gritando. Toda vez que ouvir 'GOL', lembre da última fase: a geração de código, o programa finalmente 'sai'.</string>
-    <string name="lessonspart1a_palacio_memoria_mapa_compilandia_pipeline">📍 **Palácio da memória**: o mapa da Compilândia É o pipeline. Você embarca no ⚓ Porto (código-fonte), corta tokens na 🌲 Floresta Léxica, atravessa o 🌄 Vale das Gramáticas e as fortalezas da análise sintática, chega à 🏙️ Cidade Semântica e termina na ⚒️ Forja do Código.</string>
+    <string name="lessonspart1a_palacio_memoria_mapa_compilandia_pipeline">**Palácio da memória**: o mapa da Compilândia É o pipeline. Você embarca no Porto (código-fonte), corta tokens na Floresta Léxica, atravessa o Vale das Gramáticas e as fortalezas da análise sintática, chega à Cidade Semântica e termina na Forja do Código.</string>
     <string name="lessonspart1a_feche_olhos_ande_pelo_mapa">Feche os olhos e ande pelo mapa: quais regiões, em ordem?</string>
     <string name="lessonspart1a_zoom_crescente_letra_palavra_frase">Zoom crescente: **letra → palavra → frase → sentido**. O léxico junta letras em palavras; o sintático junta palavras em frases; o semântico pergunta se a frase faz sentido.</string>
-    <string name="lessonspart1a_frase_famosa_chomsky_ideias_verdes">Frase famosa de Chomsky: *'Ideias verdes incolores dormem furiosamente.'* Palavras válidas ✅ (léxico ok), frase bem montada ✅ (sintaxe ok), sentido zero ❌ (a semântica reclamaria!).</string>
+    <string name="lessonspart1a_frase_famosa_chomsky_ideias_verdes">Frase famosa de Chomsky: *'Ideias verdes incolores dormem furiosamente.'* Palavras válidas ✓ (léxico ok), frase bem montada ✓ (sintaxe ok), sentido zero ✗ (a semântica reclamaria!).</string>
     <string name="lessonspart1a_gato_bebeu_em_que_nivel">'O gato bebeu o.': em que nível está o problema?</string>
     <string name="lessonspart1a_palavra_lexico">Palavra (léxico)</string>
     <string name="lessonspart1a_estrutura_sintaxe">Estrutura (sintaxe)</string>
@@ -279,9 +279,9 @@
     <string name="lessonspart1a_supermercado_em_dia_promocao_lexi">Supermercado em dia de promoção. A Lexi está no caixa, passando os produtos da esteira um por um.</string>
     <string name="lessonspart1a_bip_guarana_2l_bip_pao">Bip! 'Guaraná 2L'. Bip! 'Pão francês'. Bip! 'Guaraná lata'. Pra mim, cada produto vai para uma CATEGORIA no cupom fiscal.</string>
     <string name="lessonspart1a_repare_em_tres_coisas_diferentes">Repare em três coisas diferentes: o produto concreto na mão dela, a categoria impressa no cupom e a regra que diz qual produto vai em qual categoria.</string>
-    <string name="lessonspart1a_produto_concreto_guarana_2l_lexema">🥤 O produto concreto ('Guaraná 2L') → **lexema**: o pedaço de texto real do programa, como `contador` ou `42`.</string>
-    <string name="lessonspart1a_categoria_no_cupom_bebida_token">🏷️ A categoria no cupom (BEBIDA) → **token**: o nome da classe, como `id` ou `num`.</string>
-    <string name="lessonspart1a_regra_todo_liquido_engarrafado_bebida">📏 A regra ('todo líquido engarrafado é BEBIDA') → **padrão**: a descrição de quais lexemas pertencem ao token, como 'letra seguida de letras ou dígitos'.</string>
+    <string name="lessonspart1a_produto_concreto_guarana_2l_lexema">O produto concreto ('Guaraná 2L') → **lexema**: o pedaço de texto real do programa, como `contador` ou `42`.</string>
+    <string name="lessonspart1a_categoria_no_cupom_bebida_token">A categoria no cupom (BEBIDA) → **token**: o nome da classe, como `id` ou `num`.</string>
+    <string name="lessonspart1a_regra_todo_liquido_engarrafado_bebida">A regra ('todo líquido engarrafado é BEBIDA') → **padrão**: a descrição de quais lexemas pertencem ao token, como 'letra seguida de letras ou dígitos'.</string>
     <string name="lessonspart1a_entao_guarana_2l_guarana_lata">Então 'Guaraná 2L' e 'Guaraná lata' são lexemas diferentes do MESMO token?</string>
     <string name="lessonspart1a_exatamente_como_x_total_lexemas">Exatamente! Como `x` e `total`: lexemas diferentes, mesmo token `id`.</string>
     <string name="lessonspart1a_mas_no_cupom_categoria_sozinha">Mas no cupom a categoria sozinha não basta: precisa saber QUAL bebida foi. Por isso o token carrega um **atributo**: ⟨id, ponteiro para `total` na tabela de símbolos⟩.</string>
@@ -372,7 +372,7 @@
     <string name="lessonspart1a_token_gaveta_lexema_meia_que">**Token é a gaveta**, **lexema é a meia** que você guarda, **padrão é a etiqueta** que diz quais meias vão naquela gaveta.</string>
     <string name="lessonspart1a_outro_truque_lexema_letra_exata">Outro truque: **LEXema = LEtra EXata**. É o texto literal, do jeitinho que está no código.</string>
     <string name="lessonspart1a_abstrato_ao_concreto_t_ipo">Do abstrato ao concreto: **T**ipo (token) → **P**rescrição (padrão) → **L**iteral (lexema).</string>
-    <string name="lessonspart1a_palacio_memoria_floresta_lexica_primeira">📍 **Palácio da memória**: Floresta Léxica, primeira parada depois do Porto. A Lexi corta os troncos de texto com a katana, cada tora cortada é um lexema, e joga cada tora na carroça certa (o token).</string>
+    <string name="lessonspart1a_palacio_memoria_floresta_lexica_primeira">**Palácio da memória**: Floresta Léxica, primeira parada depois do Porto. A Lexi corta os troncos de texto com a katana, cada tora cortada é um lexema, e joga cada tora na carroça certa (o token).</string>
     <string name="lessonspart1a_maior_casamento_guloso_lexi_sempre">**Maior casamento = guloso**: a Lexi sempre morde o maior pedaço que dá. `&gt;=` inteiro, `count2` inteiro, `iff` inteiro.</string>
     <string name="lessonspart1a_reservada_vip_em_empate_tamanho">**Reservada é VIP**: em empate de tamanho, palavra-chave fura a fila na frente do identificador.</string>
     <string name="lessonspart1a_lendo_y_42_qual_lexema">Lendo `y = 42;`, qual é o LEXEMA do token ⟨num, 42⟩?</string>
@@ -393,10 +393,10 @@
     <string name="lessonspart1a_ai_afn_nao_deterministico_trem">Aí é um **AFN** (não determinístico): um trem mágico que se divide e segue TODOS os caminhos ao mesmo tempo, como num multiverso. E ainda tem trilhos ε, que ele pega sem ler letra nenhuma.</string>
     <string name="lessonspart1a_afn_eu_sou_facil_construir">AFN: 'Eu sou fácil de construir a partir da expressão regular!' AFD: 'Mas eu sou rápido: um passo por letra, sem dúvida nenhuma.' Os dois reconhecem exatamente as mesmas linguagens: as regulares.</string>
     <string name="lessonspart1a_fabrica_trens">A fábrica de trens</string>
-    <string name="lessonspart1a_expressao_regular_desenho_trajeto_como">📝 **Expressão regular**: o desenho do trajeto, como `(a|b)*abb`.</string>
-    <string name="lessonspart1a_construcao_thompson_transforma_er_num">🔀 **Construção de Thompson**: transforma a ER num AFN, peça por peça (união, concatenação, fecho).</string>
-    <string name="lessonspart1a_construcao_subconjuntos_cada_estacao_afd">🧺 **Construção de subconjuntos**: cada estação do AFD é um CESTO de estações do AFN onde o trem mágico poderia estar.</string>
-    <string name="lessonspart1a_minimizacao_junta_estacoes_que_se">✂️ **Minimização**: junta estações que se comportam igual. O AFD de `(a|b)*abb` fica com 4 estados.</string>
+    <string name="lessonspart1a_expressao_regular_desenho_trajeto_como">**Expressão regular**: o desenho do trajeto, como `(a|b)*abb`.</string>
+    <string name="lessonspart1a_construcao_thompson_transforma_er_num">**Construção de Thompson**: transforma a ER num AFN, peça por peça (união, concatenação, fecho).</string>
+    <string name="lessonspart1a_construcao_subconjuntos_cada_estacao_afd">**Construção de subconjuntos**: cada estação do AFD é um CESTO de estações do AFN onde o trem mágico poderia estar.</string>
+    <string name="lessonspart1a_minimizacao_junta_estacoes_que_se">**Minimização**: junta estações que se comportam igual. O AFD de `(a|b)*abb` fica com 4 estados.</string>
     <string name="lessonspart1a_afn_com_3_estados_vira">Um AFN com 3 estados vira um AFD com, NO MÁXIMO, quantos estados?</string>
     <string name="lessonspart1a_cada_estado_afd_subconjunto_dos">Cada estado do AFD é um SUBCONJUNTO dos estados do AFN: 2³ = 8 subconjuntos possíveis. Na prática, quase sempre são bem menos.</string>
     <string name="lessonspart1a_lex_flex_fazem_exatamente_isso">Lex/Flex fazem exatamente isso: você escreve as ERs dos tokens e eles geram o AFD que vira o coração do analisador léxico.</string>
@@ -489,7 +489,7 @@
     <string name="lessonspart1a_qual_er_aceita_cadeia_vazia">Qual ER aceita a cadeia vazia?</string>
     <string name="lessonspart1a_so_estrela_no_lado_fora">Só a estrela no 'lado de fora' permite zero repetições de tudo. As outras exigem pelo menos um símbolo.</string>
     <string name="lessonspart1a_estado_inicial_ja_final_cadeia">O estado inicial já é final: a cadeia vazia é aceita!</string>
-    <string name="lessonspart1a_palacio_memoria_ainda_na_floresta">📍 **Palácio da memória**: ainda na Floresta Léxica, o **Trem do Autômato**. A Lexi desenha o trajeto (ER), os duendes de Thompson espalham trilhos ε por todo lado (AFN), e o maquinista junta estações em cestos (subconjuntos) para nunca ficar em dúvida (AFD).</string>
+    <string name="lessonspart1a_palacio_memoria_ainda_na_floresta">**Palácio da memória**: ainda na Floresta Léxica, o **Trem do Autômato**. A Lexi desenha o trajeto (ER), os duendes de Thompson espalham trilhos ε por todo lado (AFN), e o maquinista junta estações em cestos (subconjuntos) para nunca ficar em dúvida (AFD).</string>
     <string name="lessonspart1a_confusoes_classicas_1_achar_que_2">Confusões clássicas: (1) achar que AFN é mais poderoso que AFD, reconhecem as mesmas linguagens; (2) esquecer o ε-fecho depois do move; (3) achar que ER sabe contar (aⁿbⁿ não é regular!).</string>
     <string name="lessonspart1a_regular_nao_conta_nao_aninha">**Regular não conta e não aninha.** Precisou contar ou casar parênteses? É trabalho de gramática.</string>
     <string name="lessonspart1a_recite_esteira_com_nome_cada">Recite a esteira com o nome de cada algoritmo.</string>
@@ -587,7 +587,7 @@
     <string name="lessonspart1b_g_n_t_p_n">**G = (N, T, P, S)** → '**N**unca **T**ire **P**rova **S**em estudar': Não-terminais, Terminais, Produções, Símbolo inicial.</string>
     <string name="lessonspart1b_terminal_termina_folha_nao_se">**Terminal termina**: é folha, não se expande mais. O não-terminal ainda 'não terminou', vai ser trocado.</string>
     <string name="lessonspart1b_derivacao_mais_esquerda_ler_livro">Derivação mais à esquerda = **ler um livro**: você resolve as coisas na ordem em que lê, da esquerda para a direita.</string>
-    <string name="lessonspart1b_palacio_memoria_vale_das_gramaticas">📍 **Palácio da memória**: o **Vale das Gramáticas**. As produções são sementes: um não-terminal plantado (S) brota galhos (o lado direito) até virar só folhas (terminais). A árvore de derivação é, literalmente, uma árvore que cresceu no vale.</string>
+    <string name="lessonspart1b_palacio_memoria_vale_das_gramaticas">**Palácio da memória**: o **Vale das Gramáticas**. As produções são sementes: um não-terminal plantado (S) brota galhos (o lado direito) até virar só folhas (terminais). A árvore de derivação é, literalmente, uma árvore que cresceu no vale.</string>
     <string name="lessonspart1b_forma_sentencial_predio_em_obra">Forma **sentencial** = prédio em obra (ainda tem andaime, os NTs). **Sentença** = prédio pronto, só terminais.</string>
     <string name="lessonspart1b_numa_arvore_derivacao_terminais_ficam">Numa árvore de derivação, os terminais ficam…</string>
     <string name="lessonspart1b_na_raiz">na raiz</string>
@@ -702,7 +702,7 @@
     <string name="lessonspart1b_prova_ambiguidade_duas_mesma_mao">Prova de ambiguidade = **'duas da mesma mão'**: duas mais à esquerda (ou duas mais à direita). Uma de cada mão não vale!</string>
     <string name="lessonspart1b_precedencia_profundidade_quem_tem_mais">**Precedência = profundidade.** Quem tem MAIS precedência fica MAIS FUNDO na árvore (é calculado antes). O + fica perto da raiz; o * mais embaixo.</string>
     <string name="lessonspart1b_recursao_aponta_associatividade_t_recursao">**A recursão aponta a associatividade.** E → **E** + T: recursão à esquerda → associa à esquerda. P → B ^ **P**: recursão à direita → associa à direita.</string>
-    <string name="lessonspart1b_palacio_memoria_no_vale_das">📍 **Palácio da memória**: no Vale das Gramáticas há duas árvores gêmeas plantadas lado a lado, com a mesma placa: `id + id * id`. É o minijogo **Duas Árvores**.</string>
+    <string name="lessonspart1b_palacio_memoria_no_vale_das">**Palácio da memória**: no Vale das Gramáticas há duas árvores gêmeas plantadas lado a lado, com a mesma placa: `id + id * id`. É o minijogo **Duas Árvores**.</string>
     <string name="lessonspart1b_else_pendurado_casa_com_vizinho">**Else pendurado casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.</string>
     <string name="lessonspart1b_em_2_3_2_potencia">Em `2 ^ 3 ^ 2` (potência, associativa à direita), qual o agrupamento correto?</string>
     <string name="lessonspart1b_associativa_direita_mais_direita_se">Associativa à direita: o de mais à direita se junta primeiro. 3² = 9, e 2⁹ = 512.</string>
@@ -717,7 +717,7 @@
     <string name="lessonspart1c_pois_exatamente_isso_que_acontece">Pois é exatamente isso que acontece com um analisador **descendente** (top-down) diante de `E -&gt; E + T`.</string>
     <string name="lessonspart1c_na_descida_recursiva_cada_nao">Na descida recursiva, cada não-terminal vira uma função. A função E() tenta a produção E → E + T: 'para reconhecer E, primeiro reconheça E'. Ela chama E()… que chama E()… que chama E()…</string>
     <string name="lessonspart1c_laco_infinito_estouro_pilha">Laço infinito → estouro de pilha</string>
-    <string name="lessonspart1c_eu_so_vejo_topo_ele">E()… E()… E()… E()… Eu… só… vejo… o… topo… e… ele… não… para… de… crescer… ESTOUREI. 💥</string>
+    <string name="lessonspart1c_eu_so_vejo_topo_ele">E()… E()… E()… E()… Eu… só… vejo… o… topo… e… ele… não… para… de… crescer… ESTOUREI.</string>
     <string name="lessonspart1c_problema_nao_ter_recursao_recursao">O problema não é ter recursão, é a recursão ser a PRIMEIRA coisa, antes de consumir qualquer token. Cachorro correndo atrás do rabo: gira, gira e não sai do lugar.</string>
     <string name="lessonspart1c_como_sai_ciclo">E como sai do ciclo?</string>
     <string name="lessonspart1c_olha_que_t_t_realmente">Olha o que `E -&gt; E + T | T` realmente gera: um T e depois quantos '+ T' quiser. T + T + T… Então começamos pelo T (a parte que NÃO é recursiva) e deixamos a repetição para o final.</string>
@@ -805,7 +805,7 @@
     <string name="lessonspart1c_rabo_esquerda_morde_em_morde">**Rabo à esquerda morde**: em A → **A**α, o A morde o próprio rabo logo de cara. Recursão à DIREITA (A → αA) é inofensiva: primeiro come α (consome tokens), depois chama.</string>
     <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β vem 'antes': é o começo da cadeia, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.</string>
     <string name="lessonspart1c_linha_while_disfarcado_enquanto_aparecer">**O A-linha é um while disfarçado**: enquanto aparecer α, repete; quando não, ε e sai do laço.</string>
-    <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">📍 **Palácio da memória**: na cabeceira da **Ponte da Transformação**, um cachorro corre atrás do rabo (A → Aα). O guarda da ponte só deixa passar quem mostra o β primeiro. No meio da ponte, um carrossel (A') gira α, α, α… até alguém gritar ε.</string>
+    <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">**Palácio da memória**: na cabeceira da **Ponte da Transformação**, um cachorro corre atrás do rabo (A → Aα). O guarda da ponte só deixa passar quem mostra o β primeiro. No meio da ponte, um carrossel (A') gira α, α, α… até alguém gritar ε.</string>
     <string name="lessonspart1c_elimine_recursao_l_l_id">Elimine a recursão de `L -&gt; L , id | id`.</string>
     <string name="lessonspart1c_id_comeca_id_repete_encerra">β = `id` começa; α = `, id` repete; ε encerra. (A terceira até gera a mesma linguagem, mas precisaria de fatoração para ser LL(1).)</string>
     <string name="lessonspart1c_lista_identificadores_separados_por_virgula">Lista de identificadores separados por vírgula.</string>
@@ -896,7 +896,7 @@
     <string name="lessonspart1c_ab_ac_b_c_fatoracao">**ab + ac = a(b + c)**: fatoração à esquerda é o 'colocar em evidência' do ensino fundamental, com o prefixo comum no papel do a.</string>
     <string name="lessonspart1c_primeiro_que_igual_depois_que">**Primeiro o que é igual, depois o que difere.** A → (parte igual) A'; A' → (as diferenças).</string>
     <string name="lessonspart1c_recursao_rabo_fatoracao_gemeos_na">**Recursão = rabo; fatoração = gêmeos.** Na recursão à esquerda, o NT aparece no início do próprio lado direito. Na fatoração, duas alternativas nascem com a mesma cara.</string>
-    <string name="lessonspart1c_palacio_memoria_outro_lado_ponte">📍 **Palácio da memória**: do outro lado da **Ponte da Transformação**, longe do cachorro, há uma bifurcação com duas placas idênticas 'if E then S…'. O engenheiro junta as duas estradas num trecho único e só coloca a bifurcação depois (S'), onde as placas ficam diferentes.</string>
+    <string name="lessonspart1c_palacio_memoria_outro_lado_ponte">**Palácio da memória**: do outro lado da **Ponte da Transformação**, longe do cachorro, há uma bifurcação com duas placas idênticas 'if E then S…'. O engenheiro junta as duas estradas num trecho único e só coloca a bifurcação depois (S'), onde as placas ficam diferentes.</string>
     <string name="lessonspart1c_qual_gramatica_precisa_fatoracao_nao">Qual gramática PRECISA de fatoração (e não de eliminar recursão à esquerda)?</string>
     <string name="lessonspart1c_duas_alternativas_comecam_com_id">As duas alternativas de S começam com id: gêmeos! A primeira opção é rabo (recursão); a terceira já está boa.</string>
     <string name="lessonspart1c_gemeos_separados_id_em_evidencia">Gêmeos separados: id em evidência.</string>
@@ -2936,12 +2936,12 @@
     <string name="lessonspart4a_afn_faz_diferente_ele_nao">Um **AFN** faz diferente: ele não escolhe. A turma se DIVIDE e cada um vai para uma possibilidade. E tem os corredores livres, sem catraca: quem está num ponto pode atravessar de graça. Esses são os trilhos **ε**.</string>
     <string name="lessonspart4a_agora_truque_em_vez_acompanhar">Agora o truque: em vez de acompanhar cada amigo, você só olha o **grupo do WhatsApp** e anota: 'neste momento a turma está em {1, 3, 4}'. Esse conjunto inteiro vira UM estado de um **AFD**.</string>
     <string name="lessonspart4a_rodoviaria_construcao_subconjuntos">Rodoviária → construção de subconjuntos</string>
-    <string name="lessonspart4a_cada_plataforma_estado_afn">🚏 Cada plataforma é um **estado do AFN**.</string>
-    <string name="lessonspart4a_corredor_livre_sem_ler_letra">🚶 Corredor livre (sem ler letra nenhuma) é uma **transição ε**. Juntar todo mundo que dá para alcançar a pé é o **ε-fecho**.</string>
-    <string name="lessonspart4a_usar_passagem_com_letra_move">🎫 Usar uma passagem com a letra 'a' é o **move(T, a)**: para onde cada amigo pode ir lendo 'a'.</string>
-    <string name="lessonspart4a_lista_grupo_estamos_em_0">📱 A lista do grupo ('estamos em {0, 1}') é um **estado do AFD**: um CONJUNTO de estados do AFN.</string>
-    <string name="lessonspart4a_se_ninguem_turma_tem_para">😵 Se ninguém da turma tem para onde ir, o grupo fica vazio: é o **estado morto ∅**.</string>
-    <string name="lessonspart4a_se_pelo_menos_amigo_chegou">🏁 Se pelo menos UM amigo chegou ao destino, a turma toda comemora: o conjunto é **final** se contém algum final do AFN.</string>
+    <string name="lessonspart4a_cada_plataforma_estado_afn">Cada plataforma é um **estado do AFN**.</string>
+    <string name="lessonspart4a_corredor_livre_sem_ler_letra">Corredor livre (sem ler letra nenhuma) é uma **transição ε**. Juntar todo mundo que dá para alcançar a pé é o **ε-fecho**.</string>
+    <string name="lessonspart4a_usar_passagem_com_letra_move">Usar uma passagem com a letra 'a' é o **move(T, a)**: para onde cada amigo pode ir lendo 'a'.</string>
+    <string name="lessonspart4a_lista_grupo_estamos_em_0">A lista do grupo ('estamos em {0, 1}') é um **estado do AFD**: um CONJUNTO de estados do AFN.</string>
+    <string name="lessonspart4a_se_ninguem_turma_tem_para">Se ninguém da turma tem para onde ir, o grupo fica vazio: é o **estado morto ∅**.</string>
+    <string name="lessonspart4a_se_pelo_menos_amigo_chegou">Se pelo menos UM amigo chegou ao destino, a turma toda comemora: o conjunto é **final** se contém algum final do AFN.</string>
     <string name="lessonspart4a_entao_afd_so_diario_grupo">Então o AFD é só o diário do grupo: 'estávamos aqui, lemos tal letra, fomos parar ali'?</string>
     <string name="lessonspart4a_exatamente_como_diario_anotado_antes">Exatamente. E como o diário é anotado ANTES da viagem, na hora de ler a entrada não existe mais dúvida: um passo por letra.</string>
     <string name="lessonspart4a_no_afn_b_ab_turma">No AFN de '(a|b)*ab' a turma começa em {0}. De 0, lendo 'a', dá para ficar em 0 ou ir para 1. Lendo 'a', onde a turma fica?</string>
@@ -3033,7 +3033,7 @@
     <string name="lessonspart4a_entao_por_que_analisadores_lexicos">Então por que os analisadores léxicos usam AFD mesmo assim?</string>
     <string name="lessonspart4a_porque_explosao_rara_com_padroes">Porque a explosão é rara com padrões de tokens reais, a conversão acontece UMA vez (ao gerar o léxico) e depois cada caractere custa um único passo. Pagar na fábrica para economizar na estrada.</string>
     <string name="lessonspart4a_construcao_subconjuntos_definicao_prova">Construção de subconjuntos: definição de prova</string>
-    <string name="lessonspart4a_afn_n_s0_f_com">**AFN**: N = (S, Σ, δ, s₀, F), com δ: S × (Σ ∪ {ε}) → 𝒫(S). **AFD**: caso particular sem transições ε e com exatamente um destino para cada par (estado, símbolo).</string>
+    <string name="lessonspart4a_afn_n_s0_f_com">**AFN**: N = (S, Σ, δ, s₀, F), com δ: S × (Σ ∪ {ε}) → P(S). **AFD**: caso particular sem transições ε e com exatamente um destino para cada par (estado, símbolo).</string>
     <string name="lessonspart4a_fecho_estados_alcancaveis_partir_usando">**ε-fecho(s)**: estados alcançáveis a partir de s usando apenas transições ε (inclui s). **ε-fecho(T)** = ∪ ε-fecho(s), s ∈ T. **move(T, a)**: estados alcançáveis a partir de algum s ∈ T por UMA transição rotulada a.</string>
     <string name="lessonspart4a_fecho_t_empilhe_todos_estados">ε-fecho(T):\n    empilhe todos os estados de T\n    fecho ← T\n    enquanto a pilha não estiver vazia:\n        desempilhe t\n        para cada u com t --ε--&gt; u:\n            se u ∉ fecho: fecho ← fecho ∪ {u}; empilhe u\n    devolva fecho</string>
     <string name="lessonspart4a_calculo_fecho_livro_dragao_fig">Cálculo do ε-fecho (Livro do Dragão, Fig. 3.33)</string>
@@ -3062,7 +3062,7 @@
     <string name="lessonspart4a_anda_fecha_porta">Anda e Fecha a Porta</string>
     <string name="lessonspart4a_anda_fecha_porta_primeiro_anda">**Anda e fecha a porta!** Primeiro ANDA com a letra (move), depois FECHA (ε-fecho). Como a sua mãe gritando da cozinha: entrou, fecha a porta!</string>
     <string name="lessonspart4a_cesto_frutas_cada_estado_afd">**Cesto de frutas**: cada estado do AFD é um cesto com estados do AFN dentro. O cesto é **final se tem UMA fruta premiada** (um final do AFN). O **cesto vazio ∅** é o estado morto.</string>
-    <string name="lessonspart4a_palacio_memoria_na_floresta_lexica">📍 **Palácio da memória**: na Floresta Léxica, logo depois do Trem do Autômato, fica a **Fábrica de Subconjuntos** 🧺. Os duendes de Thompson entregam trilhos bagunçados (AFN); os operários põem estados em cestos, carimbam A, B, C… e entregam ao trem um mapa sem dúvidas (AFD).</string>
+    <string name="lessonspart4a_palacio_memoria_na_floresta_lexica">**Palácio da memória**: na Floresta Léxica, logo depois do Trem do Autômato, fica a **Fábrica de Subconjuntos** . Os duendes de Thompson entregam trilhos bagunçados (AFN); os operários põem estados em cestos, carimbam A, B, C… e entregam ao trem um mapa sem dúvidas (AFD).</string>
     <string name="lessonspart4a_2n_interruptores_cada_estado_afn">**2ⁿ = interruptores**: cada estado do AFN é uma lâmpada que está acesa (no cesto) ou apagada. n lâmpadas → 2ⁿ combinações. É o TETO, não o normal.</string>
     <string name="lessonspart4a_qual_ordem_correta_dentro_cada">Qual a ordem correta dentro de cada passo da construção?</string>
     <string name="lessonspart4a_fecho_depois_move">ε-fecho, depois move</string>
@@ -3082,11 +3082,11 @@
     <string name="lessonspart4b_triagem_dos_correios">A triagem dos Correios</string>
     <string name="lessonspart4b_centro_triagem_dos_correios_madrugada">Centro de triagem dos Correios, madrugada. Uma esteira infinita de caracteres passa na frente de um robô. A Lexi segura uma folha plastificada cheia de regras.</string>
     <string name="lessonspart4b_eu_nao_separo_nada_na">Eu não separo nada na mão. Eu escrevo a FOLHA DE REGRAS, entrego para a fábrica, e a fábrica monta o robô que faz a triagem sozinho.</string>
-    <string name="lessonspart4b_folha_regras_pacote_assim_carimbo">📄 A folha de regras ('pacote assim → carimbo tal') é o **arquivo .l**: cada linha é um **padrão** (expressão regular) e uma **ação** em C.</string>
-    <string name="lessonspart4b_fabrica_que_le_folha_monta">🏭 A fábrica que lê a folha e monta o robô é o programa **lex** (ou **flex**): ele gera o arquivo **lex.yy.c**.</string>
-    <string name="lessonspart4b_robo_funcao_yylex_cada_vez">🤖 O robô é a função **yylex()**: cada vez que alguém chama, ela pega o próximo pacote e devolve o carimbo.</string>
-    <string name="lessonspart4b_pacote_que_robo_pegou_lexema">📦 O pacote que o robô pegou é o **lexema**: fica em **yytext**, e o tamanho dele em **yyleng**.</string>
-    <string name="lessonspart4b_carimbo_return_token_acao_acao">🏷️ O carimbo é o **return TOKEN;** da ação. Ação vazia **{ }** é a lixeira: espaço e comentário somem.</string>
+    <string name="lessonspart4b_folha_regras_pacote_assim_carimbo">A folha de regras ('pacote assim → carimbo tal') é o **arquivo .l**: cada linha é um **padrão** (expressão regular) e uma **ação** em C.</string>
+    <string name="lessonspart4b_fabrica_que_le_folha_monta">A fábrica que lê a folha e monta o robô é o programa **lex** (ou **flex**): ele gera o arquivo **lex.yy.c**.</string>
+    <string name="lessonspart4b_robo_funcao_yylex_cada_vez">O robô é a função **yylex()**: cada vez que alguém chama, ela pega o próximo pacote e devolve o carimbo.</string>
+    <string name="lessonspart4b_pacote_que_robo_pegou_lexema">O pacote que o robô pegou é o **lexema**: fica em **yytext**, e o tamanho dele em **yyleng**.</string>
+    <string name="lessonspart4b_carimbo_return_token_acao_acao">O carimbo é o **return TOKEN;** da ação. Ação vazia **{ }** é a lixeira: espaço e comentário somem.</string>
     <string name="lessonspart4b_robo_obedece_duas_regras_ouro">O robô obedece a DUAS regras de ouro. Primeira: ele é **guloso**: sempre pega o MAIOR pacote que alguma regra aceita. Segunda: se duas regras aceitam pacotes do mesmo tamanho, vence a que está **mais acima na folha**.</string>
     <string name="lessonspart4b_veja_qual_regra_carimbou_cada">Veja qual regra carimbou cada lexema. Edite a entrada e teste!</string>
     <string name="lessonspart4b_com_essa_folha_if_acima">Com essa folha ("if" acima da regra de identificador), o que vira 'iffy'?</string>
@@ -3209,7 +3209,7 @@
     <string name="lessonspart4b_d_r_c_d_efinicoes">**D-R-C**: **D**efinições %% **R**egras %% **C**ódigo. Igualzinho ao Bison: Declara, Regra, Código. Os dois %% são as duas paredes da sala das regras.</string>
     <string name="lessonspart4b_flex_guloso_mas_educado_guloso">O Flex é **guloso, mas educado**: GULOSO porque sempre come o maior pedaço; EDUCADO porque, no empate, respeita a fila, quem chegou primeiro no arquivo é atendido.</string>
     <string name="lessonspart4b_palavra_chave_vip_entra_antes">**Palavra-chave é VIP**: entra ANTES do ID na folha. Se o ID passar na frente, 'if' vira variável e o seu TP quebra.</string>
-    <string name="lessonspart4b_palacio_memoria_na_floresta_lexica">📍 **Palácio da memória**: na Floresta Léxica, na beira do rio, fica a **Oficina Flex** 🦎. Na porta está pregada a folha D-R-C. Lá dentro, a Lexi alimenta a máquina com expressões regulares e sai pelo outro lado um robô chamado lex.yy.c.</string>
+    <string name="lessonspart4b_palacio_memoria_na_floresta_lexica">**Palácio da memória**: na Floresta Léxica, na beira do rio, fica a **Oficina Flex** . Na porta está pregada a folha D-R-C. Lá dentro, a Lexi alimenta a máquina com expressões regulares e sai pelo outro lado um robô chamado lex.yy.c.</string>
     <string name="lessonspart4b_tudo_lex_comeca_com_yy">Tudo do lex começa com **yy**: **yytext** = o TEXTO do lexema; **yyleng** = o LENGth (tamanho); **yylval** = o VALor que vai para o Bison; **yylex** = o próprio LEXer; **yywrap** = 'embrulha' (acabou o arquivo?).</string>
     <string name="lessonspart4b_vazio_lixeira_sem_return_lexema">**{ } vazio = lixeira.** Sem return, o lexema vai para o lixo e o robô continua. É assim que espaços e comentários somem.</string>
     <string name="lessonspart4b_yytext_ou_yylval_onde_esta">yytext ou yylval: onde está o texto "42" logo depois de casar `[0-9]+`?</string>
@@ -3224,15 +3224,15 @@
     <string name="lessonspart4c_ai_ele_rasga_redacao_vai">Aí ele rasga a redação e vai embora?</string>
     <string name="lessonspart4c_claro_que_nao_ele_marca">Claro que não! Ele marca o erro, acha um ponto seguro para continuar, o próximo ponto final, e segue lendo. No fim, o aluno recebe TODOS os erros de uma vez. Um compilador bom faz igual.</string>
     <string name="lessonspart4c_tipos_erro_na_redacao_no">Os tipos de erro, na redação e no código</string>
-    <string name="lessonspart4c_caza_em_vez_casa_erro">✏️ 'Caza' em vez de 'casa' → **erro léxico**: um caractere ou palavra que não existe (em C, um `@` solto).</string>
-    <string name="lessonspart4c_frase_sem_verbo_parentese_sem">🧱 Frase sem verbo, parêntese sem fechar → **erro sintático**: a estrutura está quebrada (`x = (a + ;`).</string>
-    <string name="lessonspart4c_sol_congelou_feijoada_erro_semantico">🤯 'O sol congelou a feijoada' → **erro semântico**: estrutura ok, sentido não (somar string com int, variável não declarada).</string>
-    <string name="lessonspart4c_texto_perfeito_mas_fugiu_tema">🎯 Texto perfeito, mas fugiu do tema → **erro lógico**: compila e roda, mas faz a coisa errada (`if (x = 0)` no lugar de `==`).</string>
+    <string name="lessonspart4c_caza_em_vez_casa_erro">'Caza' em vez de 'casa' → **erro léxico**: um caractere ou palavra que não existe (em C, um `@` solto).</string>
+    <string name="lessonspart4c_frase_sem_verbo_parentese_sem">Frase sem verbo, parêntese sem fechar → **erro sintático**: a estrutura está quebrada (`x = (a + ;`).</string>
+    <string name="lessonspart4c_sol_congelou_feijoada_erro_semantico">'O sol congelou a feijoada' → **erro semântico**: estrutura ok, sentido não (somar string com int, variável não declarada).</string>
+    <string name="lessonspart4c_texto_perfeito_mas_fugiu_tema">Texto perfeito, mas fugiu do tema → **erro lógico**: compila e roda, mas faz a coisa errada (`if (x = 0)` no lugar de `==`).</string>
     <string name="lessonspart4c_quatro_estrategias_corretor">As quatro estratégias do corretor</string>
-    <string name="lessonspart4c_modo_panico_pula_tudo_ate">🏃 **Modo pânico**: pula tudo até o próximo ponto final e recomeça dali. Simples e nunca entra em laço; mas pode pular um trecho grande.</string>
-    <string name="lessonspart4c_nivel_frase_faz_remendo_local">🩹 **Nível de frase**: faz um remendo local, 'aqui faltou uma vírgula, finjo que ela está lá'. Cuidado: remendos mal escolhidos podem gerar laços infinitos.</string>
-    <string name="lessonspart4c_producoes_erro_gabarito_ja_preve">📋 **Produções de erro**: o gabarito já prevê os erros mais comuns ('mais melhor') e tem uma mensagem pronta para cada um.</string>
-    <string name="lessonspart4c_correcao_global_reescrever_redacao_com">🧠 **Correção global**: reescrever a redação com o MÍNIMO de mudanças até ela ficar certa. Lindo na teoria, caro demais na prática.</string>
+    <string name="lessonspart4c_modo_panico_pula_tudo_ate">**Modo pânico**: pula tudo até o próximo ponto final e recomeça dali. Simples e nunca entra em laço; mas pode pular um trecho grande.</string>
+    <string name="lessonspart4c_nivel_frase_faz_remendo_local">**Nível de frase**: faz um remendo local, 'aqui faltou uma vírgula, finjo que ela está lá'. Cuidado: remendos mal escolhidos podem gerar laços infinitos.</string>
+    <string name="lessonspart4c_producoes_erro_gabarito_ja_preve">**Produções de erro**: o gabarito já prevê os erros mais comuns ('mais melhor') e tem uma mensagem pronta para cada um.</string>
+    <string name="lessonspart4c_correcao_global_reescrever_redacao_com">**Correção global**: reescrever a redação com o MÍNIMO de mudanças até ela ficar certa. Lindo na teoria, caro demais na prática.</string>
     <string name="lessonspart4c_qual_dessas_estrategias_compiladores_verdade">Qual dessas estratégias os compiladores de verdade mais usam?</string>
     <string name="lessonspart4c_correcao_global">Correção global</string>
     <string name="lessonspart4c_modo_panico_vezes_com_remendos">Modo pânico (às vezes com remendos de frase)</string>
@@ -3270,7 +3270,7 @@
     <string name="lessonspart4c_vamos_rastrear_com_calma_modo">Vamos rastrear com calma o modo pânico em `id = ; id = num ;`: o programador esqueceu o valor da primeira atribuição.</string>
     <string name="lessonspart4c_first_p_id_first_id" translatable="false">FIRST(P) = {id, ε}   FIRST(S) = {id}   FIRST(E) = {id, num}\nFOLLOW(P) = {$}   FOLLOW(S) = {;}   FOLLOW(E) = {;}</string>
     <string name="lessonspart4c_resolvido_topo_pilha_direita">Resolvido (topo da pilha à direita)</string>
-    <string name="lessonspart4c_m_esta_vazia_erro_detectado">🚨 M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.</string>
+    <string name="lessonspart4c_m_esta_vazia_erro_detectado">M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.</string>
     <string name="lessonspart4c_panico_first_mas_follow_nada">Pânico: ';' ∉ FIRST(E), mas ';' ∈ FOLLOW(E). Nada a descartar: **desempilha E**.</string>
     <string name="lessonspart4c_pilha_p_casa_resto_id">Pilha `$ P ;`: casa `;`. O resto, `id = num ;`, é analisado normalmente.</string>
     <string name="lessonspart4c_no_fim_p_com_parser">No fim, P → ε com `$` e o parser chega ao fim: 1 erro relatado, análise completa.</string>
@@ -3347,7 +3347,7 @@
     <string name="lessonspart4c_first_fica_follow_foge">FIRST Fica, FOLLOW Foge</string>
     <string name="lessonspart4c_first_fica_follow_foge_achou">**FIRST Fica, FOLLOW Foge.** Achou um token de FIRST(A)? A FICA no topo e recomeça. Achou um de FOLLOW(A)? A FOGE (é desempilhado). Nenhum dos dois? Joga o token fora.</string>
     <string name="lessonspart4c_terminal_teimoso_finge_que_estava">**Terminal teimoso? Finge que estava lá.** Terminal no topo que não bate com a entrada é desempilhado, como pular uma vírgula esquecida.</string>
-    <string name="lessonspart4c_palacio_memoria_no_templo_top">📍 **Palácio da memória**: no Templo Top-Down, atrás do altar da tabela LL(1), há uma porta com luz vermelha: a **Sala do Pânico** 🚨. O Pilha corre por ela jogando tokens pela janela até ver uma placa de saída, `;` ou `}`: pintada com as cores do FOLLOW.</string>
+    <string name="lessonspart4c_palacio_memoria_no_templo_top">**Palácio da memória**: no Templo Top-Down, atrás do altar da tabela LL(1), há uma porta com luz vermelha: a **Sala do Pânico** . O Pilha corre por ela jogando tokens pela janela até ver uma placa de saída, `;` ou `}`: pintada com as cores do FOLLOW.</string>
     <string name="lessonspart4c_tipos_erro_em_zoom_crescente">Tipos de erro em zoom crescente: **Letra → Frase → Sentido → Resultado**. Léxico (palavra que não existe), sintático (frase mal montada), semântico (frase sem sentido), lógico (tudo compila, mas o resultado sai errado).</string>
     <string name="lessonspart4c_estrategias_mais_simples_mais_ambiciosa">Estratégias, da mais simples à mais ambiciosa: **P**ânico **P**ula, **F**rase **F**az remendo, **P**rodução **P**revê, **G**lobal é **G**ênio, mas ninguém paga o salário dele.</string>
     <string name="lessonspart4c_no_topo_token_x_na">E no topo, token 'x' na entrada, x ∉ FIRST(E) e x ∉ FOLLOW(E). O que fazer?</string>
@@ -3705,12 +3705,12 @@
     <string name="lessonspart6a_lanchonete_bairro_hora_almoco_dono">Lanchonete do bairro, hora do almoço. O dono olha a folha de pagamento e franze a testa: 'Cinco atendentes... será que preciso de todos?'</string>
     <string name="lessonspart6a_ue_demite_quem_trabalha_menos">Ué, demite quem trabalha menos?</string>
     <string name="lessonspart6a_nao_bem_isso_ele_faz">Não é bem isso. Ele faz um teste: dá a mesma sequência de pedidos para dois atendentes. Se, para QUALQUER sequência, os dois acabam do mesmo jeito (entregando o lanche ou não), eles são **intercambiáveis**. Dá para juntar os dois num cargo só.</string>
-    <string name="lessonspart6a_cada_atendente_estado_afd">🧑‍🍳 Cada atendente é um **estado** do AFD.</string>
-    <string name="lessonspart6a_cada_pedido_cliente_b_simbolo">📝 Cada pedido do cliente ('a', 'b') é um **símbolo** da entrada: o atendente repassa você para alguém.</string>
-    <string name="lessonspart6a_entregar_lanche_no_fim_fila">🍔 'Entregar o lanche' no fim da fila de pedidos é terminar num **estado final**.</string>
-    <string name="lessonspart6a_dois_atendentes_que_sempre_terminam">🤝 Dois atendentes que SEMPRE terminam igual são **equivalentes** (indistinguíveis).</string>
-    <string name="lessonspart6a_se_existe_sequencia_pedidos_em">🔎 Se existe UMA sequência de pedidos em que um entrega e o outro não, eles são **distinguíveis**.</string>
-    <string name="lessonspart6a_juntar_todos_equivalentes_afd_minimo">📉 Juntar todos os equivalentes dá o **AFD mínimo**: mesmo serviço, folha de pagamento menor.</string>
+    <string name="lessonspart6a_cada_atendente_estado_afd">Cada atendente é um **estado** do AFD.</string>
+    <string name="lessonspart6a_cada_pedido_cliente_b_simbolo">Cada pedido do cliente ('a', 'b') é um **símbolo** da entrada: o atendente repassa você para alguém.</string>
+    <string name="lessonspart6a_entregar_lanche_no_fim_fila">'Entregar o lanche' no fim da fila de pedidos é terminar num **estado final**.</string>
+    <string name="lessonspart6a_dois_atendentes_que_sempre_terminam">Dois atendentes que SEMPRE terminam igual são **equivalentes** (indistinguíveis).</string>
+    <string name="lessonspart6a_se_existe_sequencia_pedidos_em">Se existe UMA sequência de pedidos em que um entrega e o outro não, eles são **distinguíveis**.</string>
+    <string name="lessonspart6a_juntar_todos_equivalentes_afd_minimo">Juntar todos os equivalentes dá o **AFD mínimo**: mesmo serviço, folha de pagamento menor.</string>
     <string name="lessonspart6a_na_floresta_lexica_isso_importa">E na Floresta Léxica isso importa muito: meu analisador léxico é um AFD gigante. Menos estados = tabela menor = léxico mais leve.</string>
     <string name="lessonspart6a_sim_se_repassarem_pedidos_para">Sim, se repassarem os pedidos para as mesmas pessoas</string>
     <string name="lessonspart6a_nao_com_fila_vazia_entrega">Não: com a fila VAZIA um entrega e o outro não</string>
@@ -3828,7 +3828,7 @@
     <string name="lessonspart6a_p_q_sao_distinguiveis_se">p e q são distinguíveis se existe w com δ*(p, w) ∈ F e δ*(q, w) ∉ F (ou vice-versa). A rodada 1 marca todo par final × não-final, cuja testemunha é ε.</string>
     <string name="lessonspart6a_marca_propaga_junta">Marca, Propaga, Junta</string>
     <string name="lessonspart6a_mpj_marca_propaga_junta_marca">**MPJ: Marca, Propaga, Junta.** MARCA final × não-final. PROPAGA as marcas pelas setas, rodada após rodada. JUNTA quem sobrou sem marca. (Pense em 'MPJ = Ministério Público Julgando quem é igual'.)</string>
-    <string name="lessonspart6a_palacio_memoria_na_floresta_lexica">📍 **Palácio da memória**: na Floresta Léxica, logo depois da Fábrica de Subconjuntos, fica a **Tabela dos Pares** 🧮: uma escada de pedra. Cada degrau tem casinhas, uma para cada par de estados. O guarda pinta de vermelho as casinhas dos pares diferentes; as que ficam brancas viram uma casa só.</string>
+    <string name="lessonspart6a_palacio_memoria_na_floresta_lexica">**Palácio da memória**: na Floresta Léxica, logo depois da Fábrica de Subconjuntos, fica a **Tabela dos Pares** : uma escada de pedra. Cada degrau tem casinhas, uma para cada par de estados. O guarda pinta de vermelho as casinhas dos pares diferentes; as que ficam brancas viram uma casa só.</string>
     <string name="lessonspart6a_escadinha_nao_quadrado_p_q">**Escadinha, não quadrado.** {p,q} = {q,p} e {p,p} não interessa: desenhe só o triângulo de baixo. n estados → n(n−1)/2 casas. Com 5 estados: 10 casas.</string>
     <string name="lessonspart6a_final_nao_final_sao_agua">**Final e não-final são água e óleo**: não se misturam nunca. Por isso a rodada 1 é automática.</string>
     <string name="lessonspart6a_domino_se_filhos_sao_diferentes">**Dominó**: 'se os FILHOS são diferentes, os PAIS também são'. Se p e q, com a mesma letra, caem em casinha vermelha, pinte {p,q} de vermelho.</string>
@@ -3854,11 +3854,11 @@
     <string name="lessonspart6b_resumo_obvio_mas_nao_perde">O resumo, óbvio! Mas... não perde nada importante?</string>
     <string name="lessonspart6b_bom_resumo_nao_perde_nada">Um BOM resumo não perde nada que importa para a prova: personagens, quem fez o quê, em que ordem. Ele joga fora só o que servia para o livro ser LIDO: capítulos de transição, numeração, notas. A **árvore sintática abstrata (AST)** é o resumo; a **árvore de derivação** é o livro inteiro.</string>
     <string name="lessonspart6b_livro_resumo_arvore_derivacao_ast">Livro × resumo → árvore de derivação × AST</string>
-    <string name="lessonspart6b_livro_inteiro_arvore_derivacao_concreta">📖 Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.</string>
-    <string name="lessonspart6b_capitulos_transicao_vira_t_que">🔁 Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.</string>
-    <string name="lessonspart6b_numeracao_indice_parenteses_pontuacao_so">📑 Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.</string>
-    <string name="lessonspart6b_paginas_em_branco_producoes_somem">🗒️ Páginas em branco → produções **ε**: somem.</string>
-    <string name="lessonspart6b_personagens_acoes_operadores_operandos_viram">⭐ Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.</string>
+    <string name="lessonspart6b_livro_inteiro_arvore_derivacao_concreta">Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.</string>
+    <string name="lessonspart6b_capitulos_transicao_vira_t_que">Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.</string>
+    <string name="lessonspart6b_numeracao_indice_parenteses_pontuacao_so">Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.</string>
+    <string name="lessonspart6b_paginas_em_branco_producoes_somem">Páginas em branco → produções **ε**: somem.</string>
+    <string name="lessonspart6b_personagens_acoes_operadores_operandos_viram">Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.</string>
     <string name="lessonspart6b_para_b_c_arvore_derivacao">Para 'a + b * c', a árvore de derivação da gramática E/T/F tem 13 nós. Quantos tem a AST?</string>
     <string name="lessonspart6b_so_sobram_3_operandos_2">Só sobram os 3 operandos e os 2 operadores: BinOp('+') com Var(a) e BinOp('*') com Var(b) e Var(c). 13 → 5: um resumo de verdade!</string>
     <string name="lessonspart6b_lado_lado_livro_derivacao_resumo">Lado a lado: o livro (derivação) e o resumo (AST). Repare que o * continua mais FUNDO que o +: a precedência sobreviveu.</string>
@@ -3966,7 +3966,7 @@
     <string name="lessonspart6b_arvore_em_que_nos_internos">Árvore em que nós internos são operadores/construções e filhos são operandos com significado. Descarta: não-terminais de cadeia (E → T → F), parênteses/pontuação e produções ε (e, com elas, as palavras-chave que só marcavam a construção).</string>
     <string name="lessonspart6b_arvore_dieta">A árvore de dieta</string>
     <string name="lessonspart6b_ast_arvore_sem_tralha_tira">**AST = Árvore Sem Tralha.** Tira três tralhas: **C**orrentes (E → T → F), **P**arênteses (e pontuação) e **E**psilons. 'Corta o CPE.'</string>
-    <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">📍 **Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** 🪵, uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso.</string>
+    <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">**Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** , uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso.</string>
     <string name="lessonspart6b_parenteses_sao_andaimes_indispensaveis_enqua">**Parênteses são andaimes**: indispensáveis enquanto o prédio está sendo construído (parsing), retirados quando ele fica pronto. A forma do prédio (a árvore) já guarda o que eles seguravam.</string>
     <string name="lessonspart6b_corrente_whatsapp_t_f_como">**Corrente de WhatsApp**: E → T → F → a é como mensagem encaminhada cinco vezes. O conteúdo é o 'a'; os encaminhamentos não acrescentam nada. Na AST: Var(a), e só.</string>
     <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**Quem está mais fundo trabalha primeiro.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.</string>
@@ -3990,12 +3990,12 @@
     <string name="lessonspart6c_cozinha_aula_mips_bancada_registrador">É a cozinha da aula de MIPS! Bancada é registrador, despensa é memória.</string>
     <string name="lessonspart6c_isso_chef_novo_faz_burrice">Isso. E o chef novo faz uma burrice: termina o molho, LEVA para a despensa, e cinco minutos depois desce de novo para BUSCAR o mesmo molho. É o código ingênuo: `sw` seguido de `lw` do mesmo temporário.</string>
     <string name="lessonspart6c_chef_experiente_pensa_diferente_molho">O chef experiente pensa diferente: 'O molho vai ser usado logo, fica numa bancada. Quando o molho for usado pela última vez, a bancada fica LIVRE para outra preparação.'</string>
-    <string name="lessonspart6c_cada_preparacao_intermediaria_molho_massa">🍲 Cada preparação intermediária (molho, massa) é um **temporário** (t1, t2, ...).</string>
-    <string name="lessonspart6c_cada_bancada_registrador_so_ha">🪵 Cada bancada é um **registrador**. Só há k bancadas.</string>
-    <string name="lessonspart6c_momento_em_que_preparacao_fica">⏳ Do momento em que a preparação fica pronta até seu ÚLTIMO uso, ela está **viva** e ocupa uma bancada: esse é o seu **intervalo de vida**.</string>
-    <string name="lessonspart6c_duas_preparacoes_vivas_ao_mesmo">🚫 Duas preparações vivas AO MESMO TEMPO não podem dividir bancada: elas **interferem**.</string>
-    <string name="lessonspart6c_dar_bancada_cada_preparacao_sem">🎨 Dar uma bancada a cada preparação, sem que vizinhas briguem, é **colorir um grafo**: cada cor é um registrador.</string>
-    <string name="lessonspart6c_se_nao_houver_bancadas_suficientes">🪣 Se não houver bancadas suficientes, alguma preparação desce para a despensa e é buscada de novo quando precisar: é o **spill** (derramamento).</string>
+    <string name="lessonspart6c_cada_preparacao_intermediaria_molho_massa">Cada preparação intermediária (molho, massa) é um **temporário** (t1, t2, ...).</string>
+    <string name="lessonspart6c_cada_bancada_registrador_so_ha">Cada bancada é um **registrador**. Só há k bancadas.</string>
+    <string name="lessonspart6c_momento_em_que_preparacao_fica">Do momento em que a preparação fica pronta até seu ÚLTIMO uso, ela está **viva** e ocupa uma bancada: esse é o seu **intervalo de vida**.</string>
+    <string name="lessonspart6c_duas_preparacoes_vivas_ao_mesmo">Duas preparações vivas AO MESMO TEMPO não podem dividir bancada: elas **interferem**.</string>
+    <string name="lessonspart6c_dar_bancada_cada_preparacao_sem">Dar uma bancada a cada preparação, sem que vizinhas briguem, é **colorir um grafo**: cada cor é um registrador.</string>
+    <string name="lessonspart6c_se_nao_houver_bancadas_suficientes">Se não houver bancadas suficientes, alguma preparação desce para a despensa e é buscada de novo quando precisar: é o **spill** (derramamento).</string>
     <string name="lessonspart6c_mesmo_problema_pintar_mapa_brasil">É o mesmo problema de pintar o mapa do Brasil: estados que fazem fronteira não podem ter a mesma cor. Na alocação, a 'fronteira' é estar vivo ao mesmo tempo. Quatro cores bastam para qualquer mapa plano, mas o grafo de um programa não é um mapa: às vezes precisa de mais.</string>
     <string name="lessonspart6c_em_r_b_c_d">Em r = a * b + c * d: t1 = a * b fica pronto; depois t2 = c * d; depois t3 = t1 + t2. Quais temporários precisam de bancadas diferentes?</string>
     <string name="lessonspart6c_t1_t2">t1 e t2</string>
@@ -4099,7 +4099,7 @@
     <string name="lessonspart6c_in_i_use_i_out">in[i] = use[i] ∪ (out[i] − def[i]); out[i] = ∪ in dos sucessores. x e y interferem se x é definido numa instrução em que y está vivo na saída (y ∈ out[i]).</string>
     <string name="lessonspart6c_pinte_mapa_cozinha">Pinte o mapa da cozinha</string>
     <string name="lessonspart6c_vigor_vi_vacidade_g_rafo">**VIGOR**: **VI**vacidade → **G**rafo → c**O**lorir → **R**egistradores. (E se faltar cor? Spill: 'derrama no chão'.)</string>
-    <string name="lessonspart6c_palacio_memoria_na_forja_codigo">📍 **Palácio da memória**: na Forja do Código, ao lado da Montadora MIPS, fica o **Ateliê de Coloração** 🎨. Na parede, um mapa com bolinhas (os temporários). O pintor tem só k latas de tinta (registradores). Bolinhas ligadas por fio não podem ter a mesma cor. A que sobrar sem tinta vai para o porão (a memória).</string>
+    <string name="lessonspart6c_palacio_memoria_na_forja_codigo">**Palácio da memória**: na Forja do Código, ao lado da Montadora MIPS, fica o **Ateliê de Coloração** . Na parede, um mapa com bolinhas (os temporários). O pintor tem só k latas de tinta (registradores). Bolinhas ligadas por fio não podem ter a mesma cor. A que sobrar sem tinta vai para o porão (a memória).</string>
     <string name="lessonspart6c_vivacidade_se_faz_como_desfazer">**Vivacidade se faz como desfazer a mala: de trás para frente.** O último item que entrou é o primeiro que sai. Comece no fim do código com out = { }.</string>
     <string name="lessonspart6c_in_use_out_def_se">**in = use ∪ (out − def)** se lê: 'está vivo antes quem eu USO agora, mais quem estava vivo depois e eu NÃO matei'. Def mata, use ressuscita.</string>
     <string name="lessonspart6c_interferencia_nasceu_enquanto_outro_estava">**Interferência = 'nasceu enquanto o outro estava vivo'.** Quem é definido ganha aresta com todo mundo do out daquela instrução.</string>

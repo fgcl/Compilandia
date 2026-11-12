@@ -322,7 +322,10 @@ fun FeedbackBanner(ok: Boolean, text: String) {
         Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(c.copy(alpha = 0.15f)).border(2.dp, c, RoundedCornerShape(12.dp)).padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(if (ok) "✅" else "🤔", fontSize = 20.sp)
+        Box(Modifier.size(26.dp).clip(RoundedCornerShape(50)).background(if (ok) Palette.green else Palette.yellow), contentAlignment = Alignment.Center) {
+            if (ok) IconeDesenhado(Icone.CERTO, Palette.onAccent, tamanho = 18.dp)
+            else Text("?", color = Palette.inkOnLight, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+        }
         Spacer(Modifier.width(8.dp))
         RichText(text, style = MaterialTheme.typography.bodyMedium)
     }
@@ -331,19 +334,20 @@ fun FeedbackBanner(ok: Boolean, text: String) {
 @Composable
 fun SpeechBubble(emoji: String, name: String, text: String, color: Color = Palette.white, rightSide: Boolean = false) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top, horizontalArrangement = if (rightSide) Arrangement.End else Arrangement.Start) {
-        if (!rightSide) Avatar(emoji)
+        if (!rightSide) Avatar(emoji, inicial = name.take(1))
         Column(Modifier.weight(1f, fill = false).padding(horizontal = 8.dp)) {
             Text(name, style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
             Box(
                 Modifier.clip(RoundedCornerShape(16.dp)).background(color).border(2.dp, Palette.ink, RoundedCornerShape(16.dp)).padding(12.dp)
             ) { RichText(text) }
         }
-        if (rightSide) Avatar(emoji)
+        if (rightSide) Avatar(emoji, inicial = name.take(1))
     }
 }
 
 @Composable
-fun Avatar(emoji: String, size: Dp = 44.dp) {
+/** [emoji] só escolhe o desenho do personagem; sem desenho, aparece a [inicial] do nome. */
+fun Avatar(emoji: String, size: Dp = 44.dp, inicial: String = "") {
     val art = characterArt(emoji)
     val cast = emoji == "🤖" || emoji == "🦉"
     Box(
@@ -354,7 +358,7 @@ fun Avatar(emoji: String, size: Dp = 44.dp) {
             emoji == "🤖" -> com.compilandia.ui.cast.ByteFigure(Modifier.height(size * 0.86f), animate = false)
             emoji == "🦉" -> com.compilandia.ui.cast.ProfFigure(Modifier.size(size * 0.86f), animate = false)
             art != null -> androidx.compose.foundation.Image(org.jetbrains.compose.resources.painterResource(art), emoji, Modifier.size(size * 0.82f))
-            else -> Text(emoji, fontSize = (size.value * 0.5f).sp)
+            else -> Text(inicial, fontSize = (size.value * 0.45f).sp, fontWeight = FontWeight.Bold, color = Palette.inkOnLight)
         }
     }
 }
@@ -377,9 +381,9 @@ fun VSpace(h: Int) = Spacer(Modifier.height(h.dp))
 fun BotaoVoltar(fg: Color, aoVoltar: (() -> Unit)? = null) {
     val app = AppState.current
     Box(
-        Modifier.size(40.dp).clip(RoundedCornerShape(8.dp)).background(fg.copy(alpha = 0.18f))
+        Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).background(fg.copy(alpha = 0.14f))
             .clickable { Sound.play(Sfx.CLICK); if (aoVoltar != null) aoVoltar() else app.back() }
             .semantics { contentDescription = tx("comum_voltar") }.testTag("voltar"),
         contentAlignment = Alignment.Center,
-    ) { Text("←", color = fg, fontSize = 22.sp, fontWeight = FontWeight.Bold) }
+    ) { IconeDesenhado(Icone.VOLTAR, fg, tamanho = 22.dp) }
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -81,7 +82,7 @@ import com.compilandia.textos.tx
 @Composable
 fun VisualBeat(v: Beat.Visual) {
     PaperCard(color = Palette.white, border = Palette.purple) {
-        if (v.caption.isNotBlank()) RichText("🎬 " + v.caption, style = MaterialTheme.typography.titleSmall)
+        if (v.caption.isNotBlank()) RichText(v.caption, style = MaterialTheme.typography.titleSmall)
         val error = remember(v) {
             try {
                 when (v.kind) {
@@ -101,7 +102,7 @@ fun VisualBeat(v: Beat.Visual) {
                 null
             } catch (e: Exception) { e.message ?: "erro" }
         }
-        if (error != null) { Text("⚠️ $error", color = Palette.red); return@PaperCard }
+        if (error != null) { Text(error, color = Palette.red); return@PaperCard }
         when (v.kind) {
             VisualKind.PIPELINE -> PipelineView()
             VisualKind.TOKENIZE -> TokenizeView(v.input)
@@ -146,23 +147,23 @@ fun Stepper(count: Int, start: Int = 0, content: @Composable (Int) -> Unit) {
         BigButton("◀", small = true, color = Palette.white, textColor = Palette.ink, enabled = i > 0) { i-- }
         Text(tx("comum_passo_1_2", i + 1, count), style = MaterialTheme.typography.labelMedium, modifier = Modifier.weight(1f))
         BigButton("▶", small = true, color = Palette.teal, enabled = i < count - 1) { i++ }
-        BigButton("⏭", small = true, color = Palette.white, textColor = Palette.ink, enabled = i < count - 1) { i = count - 1 }
+        BigButton("▶|", small = true, color = Palette.white, textColor = Palette.ink, enabled = i < count - 1) { i = count - 1 }
     }
     content(i)
 }
 
 // ------------------------------------------------------------------ Pipeline
 
-data class Phase(val emoji: String, val name: String, val output: String, val example: String)
+data class Phase(val name: String, val output: String, val example: String)
 
 val phases = listOf(
-    Phase("📄", tx("visuals_codigo_fonte"), "texto", tx("visuals_posicao_inicial_taxa_60")),
-    Phase("🔪", tx("visuals_analise_lexica_scanner"), "tokens", tx("visuals_id_1_id_2_id")),
-    Phase("🌳", tx("visuals_analise_sintatica_parser"), tx("visuals_arvore_sintatica"), "=(id1, +(id2, *(id3, 60)))"),
-    Phase("🔍", tx("comum_analise_semantica"), tx("visuals_arvore_anotada_tipos"), "=(id1, +(id2, *(id3, inttofloat(60))))"),
-    Phase("🧩", tx("visuals_geracao_codigo_intermediario"), tx("visuals_codigo_3_enderecos"), "t1 = inttofloat(60)\nt2 = id3 * t1\nt3 = id2 + t2\nid1 = t3"),
-    Phase("⚡", tx("comum_otimizacao_2"), tx("visuals_codigo_melhor"), "t1 = id3 * 60.0\nid1 = id2 + t1"),
-    Phase("🖥️", tx("comum_geracao_codigo"), tx("visuals_codigo_maquina"), "LDF R2, id3\nMULF R2, R2, #60.0\nLDF R1, id2\nADDF R1, R1, R2\nSTF id1, R1"),
+    Phase(tx("visuals_codigo_fonte"), "texto", tx("visuals_posicao_inicial_taxa_60")),
+    Phase(tx("visuals_analise_lexica_scanner"), "tokens", tx("visuals_id_1_id_2_id")),
+    Phase(tx("visuals_analise_sintatica_parser"), tx("visuals_arvore_sintatica"), "=(id1, +(id2, *(id3, 60)))"),
+    Phase(tx("comum_analise_semantica"), tx("visuals_arvore_anotada_tipos"), "=(id1, +(id2, *(id3, inttofloat(60))))"),
+    Phase(tx("visuals_geracao_codigo_intermediario"), tx("visuals_codigo_3_enderecos"), "t1 = inttofloat(60)\nt2 = id3 * t1\nt3 = id2 + t2\nid1 = t3"),
+    Phase(tx("comum_otimizacao_2"), tx("visuals_codigo_melhor"), "t1 = id3 * 60.0\nid1 = id2 + t1"),
+    Phase(tx("comum_geracao_codigo"), tx("visuals_codigo_maquina"), "LDF R2, id3\nMULF R2, R2, #60.0\nLDF R1, id2\nADDF R1, R1, R2\nSTF id1, R1"),
 )
 
 @Composable
@@ -178,7 +179,9 @@ fun PipelineView() {
                         .padding(8.dp),
                     verticalAlignment = Alignment.Top,
                 ) {
-                    Text(p.emoji, fontSize = 22.sp)
+                    Box(Modifier.size(28.dp).clip(RoundedCornerShape(8.dp)).background(if (current) Palette.hazard else Palette.paperDark), contentAlignment = Alignment.Center) {
+                        Text("${k + 1}", fontWeight = FontWeight.Bold, color = if (current) Palette.on(Palette.hazard) else Palette.ink)
+                    }
                     Spacer(Modifier.width(8.dp))
                     Column {
                         Text(p.name, style = MaterialTheme.typography.titleSmall)
@@ -302,7 +305,7 @@ fun ParseTreesView(g: Grammar, input: String) {
 fun BeforeAfter(before: Grammar, after: Grammar, what: String) {
     Text(tx("comum_antes"), style = MaterialTheme.typography.titleSmall)
     GrammarText(before)
-    Text("⬇ $what", color = Palette.purple, fontWeight = FontWeight.Bold)
+    Text("↓ $what", color = Palette.purple, fontWeight = FontWeight.Bold)
     Text(tx("comum_depois"), style = MaterialTheme.typography.titleSmall)
     GrammarText(after)
     val ll = remember(after) { LL1Table(after).isLL1 }
@@ -497,8 +500,8 @@ fun LRTraceView(g: Grammar, input: String) {
             when (val a = s.action) {
                 is LRAction.Shift -> "SHIFT: ${s.note}"
                 is LRAction.Reduce -> "REDUCE: ${s.note}"
-                LRAction.Accept -> "ACCEPT ✅"
-                null -> "ERRO ❌ ${s.note}"
+                LRAction.Accept -> "ACCEPT"
+                null -> "ERRO: ${s.note}"
             }, style = MaterialTheme.typography.bodyMedium,
         )
         if (i == r.steps.lastIndex && r.tree != null) TreeView(r.tree.toUi(t.grammar))
@@ -580,7 +583,7 @@ fun BisonView(spec: String, input: String) {
         Text(tx("visuals_reducoes_cada_executa_acao"), style = MaterialTheme.typography.labelMedium)
         for (line in r.reductions) Mono(line, size = 12)
         r.tree?.let { TreeView(it.toUi(null)) }
-    } else Text("❌ ${r.error}", color = Palette.red)
+    } else Text("${r.error}", color = Palette.red)
 }
 
 @Suppress("unused")
