@@ -77,5 +77,10 @@ class AulaExtrasTest {
         onNodeWithTag("cola").assertExists()
         // O diálogo é uma segunda raiz: a foto é a da cola.
         ImageIO.write(onAllNodes(isRoot(), useUnmergedTree = false).fetchSemanticsNodes().let { onAllNodes(isRoot(), useUnmergedTree = false)[it.lastIndex] }.captureToImage().toAwtImage(), "png", File(saida, "trilha_cola.png"))
+        // Rodada 15: da trilha, a cola leva direto a um jogo do assunto.
+        onNodeWithTag("cola-praticar").performClick()
+        mainClock.advanceTimeBy(1500)
+        assertTrue(app.stack.last() is Screen.Play, "Praticar na cola abre um jogo, mas a tela é ${app.stack.last()}")
+        assertTrue((app.stack.last() as Screen.Play).skill == Skill.FIRST)
     }
 }

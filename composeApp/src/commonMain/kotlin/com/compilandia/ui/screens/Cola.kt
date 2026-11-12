@@ -64,9 +64,12 @@ object Cola {
     }
 }
 
-/** O cartão da cola por cima da tela. [onAula] abre a aula animada; nulo esconde o botão. */
+/**
+ * O cartão da cola por cima da tela. [onAula] abre a aula animada; nulo esconde o botão.
+ * [onPraticar] leva a um jogo do assunto (mural, rodada 15): só a trilha passa, dentro do jogo fica nulo.
+ */
 @Composable
-fun ColaDialog(s: Skill, onFechar: () -> Unit, onAula: (() -> Unit)?) {
+fun ColaDialog(s: Skill, onFechar: () -> Unit, onAula: (() -> Unit)?, onPraticar: (() -> Unit)? = null) {
     val receita = remember(s) { Cola.receita(s) }
     val exemplo = remember(s) { Cola.exemplo(s) }
     Dialog(onDismissRequest = onFechar) {
@@ -85,6 +88,7 @@ fun ColaDialog(s: Skill, onFechar: () -> Unit, onAula: (() -> Unit)?) {
                         MotionStage(exemplo, Modifier.fillMaxSize().padding(4.dp))
                     }
                 }
+                if (onPraticar != null) BigButton(tx("cola_praticar"), Modifier.fillMaxWidth().testTag("cola-praticar"), color = Palette.action) { onPraticar() }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     if (onAula != null) BigButton(tx("cola_ver_aula"), Modifier.weight(1f), color = Palette.drawerLo, small = true) { onAula() }
                     BigButton(tx("cola_fechar"), Modifier.weight(1f), color = Palette.hazard, textColor = Palette.hazardDark, small = true) { onFechar() }

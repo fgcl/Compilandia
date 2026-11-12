@@ -137,9 +137,9 @@ fun PlayScreen(app: AppState, s: Screen.Play) {
             Phase.PLAYING -> {
                 if (useArena) GameArena(defeated = ending && score >= 0.6, escaped = ending && score < 0.6)
                 val barra = remember { BarraDoJogo() }
-                if (colaAberta) com.compilandia.ui.screens.ColaDialog(s.skill, onFechar = { colaAberta = false }) {
+                if (colaAberta) com.compilandia.ui.screens.ColaDialog(s.skill, onFechar = { colaAberta = false }, onAula = {
                     colaAberta = false; app.go(Screen.Episode(s.skill, returnToGame = true))
-                }
+                })
                 Box(Modifier.weight(1f)) {
                     val ctx = GameCtx(s.skill, s.level, rnd, hints) { sc ->
                         if (!ending) {

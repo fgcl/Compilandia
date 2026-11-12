@@ -241,7 +241,10 @@ private fun EtapaLinha(app: AppState, s: Skill, p: PassoTrilha, ultima: Boolean,
                         tx("trilha_cola"), color = Palette.teal, style = MaterialTheme.typography.labelMedium,
                         modifier = Modifier.clickable { cola = true }.padding(vertical = 4.dp).testTag("abre-cola"),
                     )
-                    if (cola) ColaDialog(s, onFechar = { cola = false }, onAula = { cola = false; app.go(Screen.Episode(s)) })
+                    if (cola) ColaDialog(
+                        s, onFechar = { cola = false }, onAula = { cola = false; app.go(Screen.Episode(s)) },
+                        onPraticar = { cola = false; app.go(Screen.Play(s, l.chooseGame(s), l.chooseLevel(s, nowMs()), seed = nowMs())) },
+                    )
                     Trilha.outroJeito(s)?.let { e ->
                         Text(
                             tx("trilha_outro_jeito", e.title), color = Palette.teal, style = MaterialTheme.typography.labelMedium,
