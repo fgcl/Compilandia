@@ -161,4 +161,9 @@
     <string name="bison_l_13_dica">Agora junta pela esquerda: cinco menos dois, depois menos um.</string>
     <string name="bison_l_13_ok">E o Bison não avisa mais nenhum conflito.</string>
     <string name="bison_l_14">Saída limpa e conta certa. A calculadora está pronta.</string>
+    <string name="bison_l_15">Agora a potência. Na matemática, dois elevado a três elevado a dois junta pela direita. Para isso existe o right. Em C, a potência é a função pow.</string>
+    <string name="bison_l_16">Com o right, quanto dá dois elevado a três elevado a dois? Toque.</string>
+    <string name="bison_l_16_dica">Pela direita: três ao quadrado primeiro, que dá nove. Depois, dois elevado a nove.</string>
+    <string name="bison_l_16_ok">Quinhentos e doze. Com left, seria oito ao quadrado, sessenta e quatro.</string>
+    <string name="bison_l_17">Left manda reduzir, e right manda empilhar. Na potência, empilhar é o certo.</string>
 </resources>

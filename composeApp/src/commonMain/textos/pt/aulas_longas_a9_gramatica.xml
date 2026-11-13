@@ -127,6 +127,20 @@
     <string name="rec_l_11_dica">Primeiro, L vai para id e L linha. Depois, vírgula, id e épsilon.</string>
     <string name="rec_l_11_ok">Exato. A linguagem continua a mesma.</string>
     <string name="rec_l_12">Agora a função de L lê um id antes de chamar outra função. A cada chamada a entrada anda, e o parser termina.</string>
+    <string name="rec_p_titulo">Conserte E, T e F</string>
+    <string name="rec_p_01">Esta é a gramática de contas que volta no resto do jogo. E e T têm recursão à esquerda, então a receita roda uma vez em cada um.</string>
+    <string name="rec_p_02">Comece pelo E. O alfa é mais T, e o beta é o T sozinho. Como fica a regra nova de E? Toque.</string>
+    <string name="rec_p_02_dica">A parte sem laço vem primeiro. O E linha vai no fim.</string>
+    <string name="rec_p_02_ok">T E linha. E o E linha fica com mais T E linha, ou épsilon.</string>
+    <string name="rec_p_03">Agora a segunda rodada, no T. Como fica a regra do T linha? Toque.</string>
+    <string name="rec_p_03_dica">O alfa de T é vezes F. E o épsilon fecha a regra.</string>
+    <string name="rec_p_03_ok">Vezes F T linha, ou épsilon. Sem o épsilon, a derivação nunca terminaria.</string>
+    <string name="rec_p_04">A gramática inteira. O F não tem laço e fica igual. Nenhuma regra começa com o próprio lado esquerdo.</string>
+    <string name="rec_p_05">Sua vez. Derive id mais id vezes id na gramática nova. A cada passo, troque o não-terminal mais à esquerda.</string>
+    <string name="rec_p_05_dica">Olhe a frase lá em cima. Se o próximo símbolo dela não cabe, o linha vira épsilon.</string>
+    <string name="rec_p_05_ok">Chegou. A gramática nova gera a mesma frase, e a derivação termina.</string>
+    <string name="rec_p_meta">Chegue em id + id * id</string>
+    <string name="rec_p_06">Duas regras com laço, duas rodadas da receita. Na prova, essa gramática cai desse jeito.</string>
 
     <string name="fat_l_01">Um comando pode ser atribuição ou chamada. Os dois começam com id.</string>
     <string name="fat_l_nao_da">não dá para saber</string>

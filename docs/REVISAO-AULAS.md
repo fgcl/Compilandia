@@ -91,6 +91,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 13/11 (décima segunda rodada)
+
+1. **E/T/F na prática de recursão.** A prática "Rode a versão consertada" usava pilha e `$`, que só chegam no Templo. Agora ela parte de `E → E + T | T`, `T → T * F | F`, `F → id`: o aluno escolhe a regra nova de E e a de T' (com os dois erros de prova como alternativas: sem ε e com o alfa da outra regra) e deriva `id + id * id` na gramática nova. O motor confere que a receita dá a gramática da tela e que a linguagem é a mesma.
+2. **Recursão indireta até o fim.** A pegadinha parava em "a receita de sempre resolve". Agora o aluno escolhe os dois betas de `S → S c a | d a | b` e a regra do S', vê o A sair da gramática e a outra ordem (abrir S dentro de A, a ordem do livro), com a mesma linguagem. O teste compara as três gramáticas em todas as frases de até 7 tokens.
+3. **`%right` com `2^3^2` no Bison.** Três cenas no fim da Sua vez com `pot.y`: o aluno calcula 512 e vê que com `%left` daria 64; left manda reduzir, right manda empilhar. A ação usa `pow($1, $3)`, como em C (o `^` do C é ou exclusivo), e o MiniBison passou a entender `pow`. No relatório do `bison -v`, "com qualquer token, ele reduz" agora diz que é a redução padrão.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

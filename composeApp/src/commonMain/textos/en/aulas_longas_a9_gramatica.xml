@@ -127,6 +127,20 @@
     <string name="rec_l_11_dica">First, L goes to id and L prime. Then comma, id and epsilon.</string>
     <string name="rec_l_11_ok">Exactly. The language stays the same.</string>
     <string name="rec_l_12">Now the function for L reads an id before calling another function. With each call the input moves on, and the parser terminates.</string>
+    <string name="rec_p_titulo">Fix E, T and F</string>
+    <string name="rec_p_01">This is the arithmetic grammar that comes back in the rest of the game. E and T have left recursion, so the recipe runs once on each.</string>
+    <string name="rec_p_02">Start with E. The alpha is plus T, and the beta is T alone. What does the new rule for E look like? Tap it.</string>
+    <string name="rec_p_02_dica">The part without the loop comes first. E prime goes at the end.</string>
+    <string name="rec_p_02_ok">T E prime. And E prime gets plus T E prime, or epsilon.</string>
+    <string name="rec_p_03">Now the second round, on T. What does the rule for T prime look like? Tap it.</string>
+    <string name="rec_p_03_dica">The alpha of T is times F. And epsilon closes the rule.</string>
+    <string name="rec_p_03_ok">Times F T prime, or epsilon. Without epsilon, the derivation would never end.</string>
+    <string name="rec_p_04">The whole grammar. F has no loop and stays the same. No rule starts with its own left side.</string>
+    <string name="rec_p_05">Your turn. Derive id plus id times id in the new grammar. At each step, replace the leftmost nonterminal.</string>
+    <string name="rec_p_05_dica">Look at the sentence at the top. If its next symbol does not fit, the prime becomes epsilon.</string>
+    <string name="rec_p_05_ok">You got there. The new grammar makes the same sentence, and the derivation ends.</string>
+    <string name="rec_p_meta">Reach id + id * id</string>
+    <string name="rec_p_06">Two rules with a loop, two rounds of the recipe. On the exam, this grammar shows up just like this.</string>
 
     <string name="fat_l_01">A command can be an assignment or a call. Both start with id.</string>
     <string name="fat_l_nao_da">can't tell</string>

@@ -62,7 +62,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] FIRST: caso `S → B d`, `B → C | b`, `C → c | ε` (anulável sem ε escrito; a primeira rodada deixa S só com o d)
 - [x] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
 - [x] Recursão à esquerda: `E → E + T | E − T | T`
-- [ ] Recursão à esquerda: E/T/F numa prática
+- [x] Recursão à esquerda: E/T/F numa prática
 - [x] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)
 - [x] Gramáticas não LL(1) no sorteio do "Fazer com ajuda"
 
@@ -80,7 +80,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Derivação mais à direita praticada em 3 cenas
 - [x] ε como produção, "forma sentencial" e "sentença" ditas na aula
 - [ ] Abrir a Ponte apresentando o parser descendente
-- [ ] Recursão indireta até o fim
+- [x] Recursão indireta até o fim
 - [x] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
 
 **Templo Top-Down**
@@ -93,7 +93,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] SLR: a tabela nasce das caixas de itens
 - [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
-- [ ] Bison: precedência da regra × do token, `%right` com `2^3^2`, `%prec`; dizer que "reduz com qualquer token" é a redução padrão
+- [x] Bison: `%right` com `2^3^2`; "reduz com qualquer token" é a redução padrão
+- [ ] Bison: precedência da regra × do token, `%prec` no menos unário
 
 **Cidade e Forja**
 - [ ] Ambientes de execução depois de Geração de código MIPS

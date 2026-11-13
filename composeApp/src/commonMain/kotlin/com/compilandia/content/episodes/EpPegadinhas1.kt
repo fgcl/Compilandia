@@ -18,6 +18,11 @@ import com.compilandia.content.titulo
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
 
+/** A recursão indireta S -> A a | b, A -> S c | d, consertada abrindo A dentro de S, e abrindo S dentro de A. Conferidas em AulasConsertadasTest. */
+val INDIRETA_ANTES = listOf("S -> A a | b", "A -> S c | d")
+val INDIRETA_DEPOIS = listOf("S  -> d a S' | b S'", "S' -> c a S' | ε")
+val INDIRETA_OUTRA = listOf("S  -> A a | b", "A  -> b c A' | d A'", "A' -> a c A' | ε")
+
 /** Pegadinhas de prova: da fase léxica à ponte da transformação. */
 val pegadinhasFrente by lazy {
     listOf(
@@ -206,7 +211,7 @@ val pegadinhasFrente by lazy {
         episodio(Skill.LEFT_RECURSION, tx("eppegadinhas1_recursao_escondida"), PEGADINHA) {
             cena(tx("eppegadinhas1_nenhuma_regra_aqui_comeca_com")) {
                 add(titulo(tx("eppegadinhas1_sem_recursao")))
-                add(codigo("g", listOf("S -> A a | b", "A -> S c | d"), 80f, x = 104f, passo = 30f, size = 17f))
+                add(codigo("g", INDIRETA_ANTES, 80f, x = 104f, passo = 30f, size = 17f))
             }
             cena(tx("eppegadinhas1_siga_primeira_opcao_vira")) {
                 add(fileira("f", listOf("A" to Tint.ORANGE, "a" to Tint.TEAL), 210f, w = 56f))
@@ -225,7 +230,33 @@ val pegadinhasFrente by lazy {
                 add(Box("n", "S -> S c a | d a | b", 180f, 230f, 280f, 46f, Look.CELL, Tint.YELLOW, size = 17f))
                 hot("n")
             }
-            cena(tx("eppegadinhas1_agora_recursao_direta_receita_sempre"), who = PROF, mood = EpMood.HAPPY) { hot() }
+            // Até o fim (professor do bloco 2): a receita de sempre no S, o A que sobra e a outra ordem.
+            cena(tx("eppegadinhas1_agora_recursao_direta_receita_sempre")) { hot() }
+            pergunta(tx("pind_01"), setOf("b1", "b2"), setOf("b0"), tx("pind_01_dica"), tx("pind_01_ok")) {
+                add(Box("b0", "S c a", 80f, 300f, 76f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("b1", "d a", 180f, 300f, 76f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("b2", "b", 280f, 300f, 76f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+            }
+            pergunta(tx("pind_02"), setOf("s1"), setOf("s2", "s3"), tx("pind_02_dica"), tx("pind_02_ok")) {
+                drop("n", "b0", "b1", "b2")
+                add(codigo("r", INDIRETA_DEPOIS.take(1), 160f, x = 70f, size = 16f))
+                add(Box("s2", "S' -> d a S' | b S' | ε", 180f, 222f, 280f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("s1", INDIRETA_DEPOIS[1].replace("  ", " "), 180f, 272f, 280f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("s3", "S' -> c a S'", 180f, 322f, 280f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+            }
+            cena(tx("pind_03")) {
+                clear()
+                add(titulo(tx("comum_depois")))
+                add(codigo("g", INDIRETA_DEPOIS, 90f, x = 80f, passo = 32f, size = 17f))
+                add(codigo("x", listOf("A -> S c | d"), 190f, x = 80f, size = 17f))
+                tint("x0", Tint.RED)
+            }
+            cena(tx("pind_04"), mood = EpMood.THINK) {
+                drop("x0")
+                add(rotulo("o", tx("pind_outra_ordem"), 180f, 200f, Tint.YELLOW, 16f))
+                add(codigo("y", INDIRETA_OUTRA, 236f, x = 60f, passo = 30f, size = 15f))
+            }
+            cena(tx("pind_05"), who = PROF, mood = EpMood.HAPPY) { hot("o") }
         },
 
         episodio(Skill.LEFT_FACTORING, tx("eppegadinhas1_quando_fatorar_nao_basta"), PEGADINHA) {

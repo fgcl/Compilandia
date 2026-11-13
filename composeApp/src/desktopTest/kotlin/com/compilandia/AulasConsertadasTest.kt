@@ -242,4 +242,55 @@ class AulasConsertadasTest {
         assertEquals(1, ds.size)
         assertEquals(com.compilandia.content.episodes.ARVORE_ETF, com.compilandia.engine.DerivationHelper.treeOf(g, ds[0]))
     }
+
+    private fun regras(g: Grammar) = g.productions.map { it.lhs to it.rhs }.toSet()
+
+    /** Todas as frases de até [max] terminais: derivação mais à esquerda, cortando a forma que passou do tamanho. */
+    private fun frases(g: Grammar, max: Int): Set<List<String>> {
+        val out = mutableSetOf<List<String>>(); val vistos = mutableSetOf<List<String>>()
+        val fila = ArrayDeque(listOf(listOf(g.start)))
+        while (fila.isNotEmpty()) {
+            val f = fila.removeFirst()
+            if (!vistos.add(f) || f.count { !g.isNonTerminal(it) } > max) continue
+            val i = f.indexOfFirst { g.isNonTerminal(it) }
+            if (i < 0) { out += f; continue }
+            for (p in g.productionsOf(f[i])) fila += f.take(i) + p.rhs + f.drop(i + 1)
+        }
+        return out
+    }
+
+    /** E/T/F da prática: a receita do motor dá a gramática da tela, e id + id * id sai dela. */
+    @Test fun etfDaPratica() {
+        val antes = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_ETF_REC.joinToString("\n"))
+        val depois = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_ETF_DEPOIS.joinToString("\n"))
+        assertEquals(regras(depois), regras(GrammarTransform.eliminateImmediateLeftRecursion(antes)))
+        assertTrue(GrammarTransform.leftRecursiveNTs(depois).isEmpty())
+        val frase = listOf("id", "+", "id", "*", "id")
+        assertEquals(1, com.compilandia.engine.DerivationHelper.leftmostDerivations(depois, frase, limit = 10).size)
+        assertEquals(frases(antes, 5), frases(depois, 5))
+    }
+
+    /** Recursão indireta até o fim: a receita no S aberto, o A que sobra, a ordem do livro e a mesma linguagem nas três. */
+    @Test fun recursaoIndiretaAteOFim() {
+        val antes = Grammar.parse(com.compilandia.content.episodes.INDIRETA_ANTES.joinToString("\n"))
+        val depois = Grammar.parse(com.compilandia.content.episodes.INDIRETA_DEPOIS.joinToString("\n"))
+        val outra = Grammar.parse(com.compilandia.content.episodes.INDIRETA_OUTRA.joinToString("\n"))
+        assertEquals(regras(depois), regras(GrammarTransform.eliminateImmediateLeftRecursion(Grammar.parse("S -> S c a | d a | b"))))
+        // A ordem do livro (S, A): troca S dentro de A, e o A fica com recursão direta.
+        val aAberto = Grammar.parse("A -> A a c | b c | d")
+        assertEquals(regras(Grammar.parse(com.compilandia.content.episodes.INDIRETA_OUTRA.drop(1).joinToString("\n"))), regras(GrammarTransform.eliminateImmediateLeftRecursion(aAberto)))
+        assertTrue("A" !in depois.nonTerminals)
+        for (g in listOf(depois, outra)) assertTrue(GrammarTransform.leftRecursiveNTs(g).isEmpty())
+        val l = frases(antes, 7)
+        assertEquals(l, frases(depois, 7)); assertEquals(l, frases(outra, 7))
+    }
+
+    /** Bison: com %right, 2^3^2 dá 512 e sem conflito; com %left, 64. */
+    @Test fun potenciaComRight() {
+        val spec = com.compilandia.content.episodes.BISON_POT.joinToString("\n")
+        val right = com.compilandia.engine.MiniBison.compile(spec)
+        assertTrue(right.conflicts.isEmpty())
+        assertEquals(512L, right.run("2 ^ 3 ^ 2").value)
+        assertEquals(64L, com.compilandia.engine.MiniBison.compile(spec.replace("%right", "%left")).run("2 ^ 3 ^ 2").value)
+    }
 }

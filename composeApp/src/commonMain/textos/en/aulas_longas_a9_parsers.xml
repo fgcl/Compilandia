@@ -161,4 +161,9 @@
     <string name="bison_l_13_dica">Now it groups from the left: five minus two, then minus one.</string>
     <string name="bison_l_13_ok">And Bison reports no conflict anymore.</string>
     <string name="bison_l_14">Clean output and the right result. The calculator is ready.</string>
+    <string name="bison_l_15">Now the power operator. In math, two to the three to the two groups from the right. That is what right is for. In C, the power is the pow function.</string>
+    <string name="bison_l_16">With right, how much is two to the three to the two? Tap it.</string>
+    <string name="bison_l_16_dica">From the right: three squared first, which is nine. Then two to the ninth.</string>
+    <string name="bison_l_16_ok">Five hundred twelve. With left, it would be eight squared, sixty-four.</string>
+    <string name="bison_l_17">Left says reduce, and right says shift. For the power, shifting is right.</string>
 </resources>

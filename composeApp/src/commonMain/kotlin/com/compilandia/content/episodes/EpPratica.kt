@@ -26,6 +26,10 @@ import com.compilandia.learning.Skill
 import com.compilandia.tutor.Sims
 import com.compilandia.textos.tx
 
+/** A gramática de contas com recursão à esquerda, e ela depois das duas rodadas da receita. Conferidas em AulasConsertadasTest. */
+val GRAMATICA_ETF_REC = listOf("E -> E + T | T", "T -> T * F | F", "F -> id")
+val GRAMATICA_ETF_DEPOIS = listOf("E  -> T E'", "E' -> + T E' | ε", "T  -> F T'", "T' -> * F T' | ε", "F  -> id")
+
 /** Temporada Na prática: a pessoa pilota, e quem calcula é o motor. */
 val praticas by lazy {
     listOf(
@@ -154,19 +158,40 @@ val praticas by lazy {
             cena(tx("eppratica_quando_voce_escolhe_certo_sem"), mood = EpMood.HAPPY) {}
         },
 
-        episodio(Skill.LEFT_RECURSION, tx("eppratica_rode_versao_consertada"), PRATICA) {
-            cena(tx("eppratica_esta_gramatica_ja_esta_consertada")) {
-                add(titulo("n + n"))
-                add(codigo("g", listOf("E -> n X", "X -> + n X | ε"), 120f, x = 110f, passo = 34f, size = 18f))
+        // E/T/F numa prática (professor do bloco 2): a receita roda duas vezes, e a pessoa deriva na gramática nova.
+        // Sem pilha nem $, que só chegam no Templo.
+        episodio(Skill.LEFT_RECURSION, tx("rec_p_titulo"), PRATICA) {
+            cena(tx("rec_p_01")) {
+                add(titulo("E/T/F"))
+                add(codigo("g", GRAMATICA_ETF_REC, 80f, x = 110f, passo = 32f, size = 17f))
+                hot("g0", "g1")
             }
-            cena(tx("eppratica_topo_nao_terminal_troca_pela")) { hot("g0") }
-            cena(tx("eppratica_repare_no_x_direita_recursao"), who = PROF) { hot("g1") }
+            pergunta(tx("rec_p_02"), setOf("e1"), setOf("e2", "e3"), tx("rec_p_02_dica"), tx("rec_p_02_ok")) {
+                hot("g0")
+                add(Box("e2", "E -> + T E'", 180f, 220f, 200f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("e1", "E -> T E'", 180f, 272f, 200f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("e3", "E -> E' T", 180f, 324f, 200f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+            }
+            pergunta(tx("rec_p_03"), setOf("t1"), setOf("t2", "t3"), tx("rec_p_03_dica"), tx("rec_p_03_ok")) {
+                drop("e1", "e2", "e3"); hot("g1")
+                add(codigo("n", GRAMATICA_ETF_DEPOIS.take(2), 190f, x = 90f, passo = 28f, size = 15f))
+                // Os dois erros de prova: esquecer o ε e copiar o alfa da outra regra.
+                add(Box("t2", "T' -> * F T'", 180f, 270f, 220f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("t3", "T' -> + T T' | ε", 180f, 318f, 220f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("t1", "T' -> * F T' | ε", 180f, 366f, 220f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+            }
+            cena(tx("rec_p_04")) {
+                clear()
+                add(titulo(tx("comum_depois")))
+                add(codigo("n", GRAMATICA_ETF_DEPOIS, 80f, x = 100f, passo = 32f, size = 17f))
+                hot("n1", "n3")
+            }
             brinquedo(
-                tx("eppratica_opere_pilha_ate_aceitar"),
-                tx("eppratica_olhe_topo_ele_terminal_ou"),
-                tx("eppratica_aceitou_com_recursao_direita_parser"),
-            ) { ToyPilhaLL(Grammar.parse("E -> n X\nX -> + n X | ε"), tokensOf("n + n"), tx("eppratica_leve_pilha_ate_fim")) }
-            cena(tx("eppratica_linguagem_mesma_antes_so_forma"), mood = EpMood.HAPPY) {}
+                tx("rec_p_05"),
+                tx("rec_p_05_dica"),
+                tx("rec_p_05_ok"),
+            ) { ToyDerivacao(Grammar.parse(GRAMATICA_ETF_DEPOIS.joinToString("\n")), tokensOf("id + id * id"), tx("rec_p_meta")) }
+            cena(tx("rec_p_06"), who = PROF, mood = EpMood.HAPPY) {}
         },
 
         episodio(Skill.LL1_PARSING, tx("eppratica_opere_pilha"), PRATICA) {

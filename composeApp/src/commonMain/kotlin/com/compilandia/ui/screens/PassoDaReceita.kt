@@ -56,7 +56,7 @@ object PassoDaReceita {
         Skill.RECURSIVE_DESCENT to "024024",
         Skill.ERROR_RECOVERY to "012230",
         Skill.SHIFT_REDUCE to "0122123",
-        Skill.YACC_BISON to "0331100",
+        Skill.YACC_BISON to "0331100130",
         Skill.ATTRIBUTES_TYPES to "03344",
         Skill.SCOPE_SYMBOLS to "03343",
         Skill.TAC to "012340",

@@ -309,6 +309,12 @@ object ActionEval {
                     args[n - 1]
                 }
                 c.isDigit() -> { val s = i; while (i < src.length && src[i].isDigit()) i++; src.substring(s, i).toLong() }
+                // pow(a, b) como no math.h do C, para a potência das aulas (em C, ^ é ou exclusivo).
+                src.startsWith("pow(", i) -> {
+                    i += 4; val b = expr(); ws(); require(i < src.length && src[i] == ',') { tx("minibison_faltou") }; i++
+                    val e = expr(); ws(); require(i < src.length && src[i] == ')') { tx("minibison_faltou") }; i++
+                    var r = 1L; repeat(e.toInt().coerceIn(0, 62)) { r *= b }; r
+                }
                 else -> throw IllegalArgumentException(tx("solta_minibison_1", c))
             }
         }

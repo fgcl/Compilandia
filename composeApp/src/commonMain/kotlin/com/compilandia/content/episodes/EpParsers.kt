@@ -86,6 +86,9 @@ val BISON_CALC = listOf(
 val BISON_MENOS = listOf("%token NUM", "%%", "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | NUM ;")
 val BISON_MENOS_LEFT = listOf("%token NUM", "%left '-'", "%%", "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | NUM ;")
 
+/** A potência com %right: 2^3^2 junta pela direita e dá 512. Com %left daria 64. Conferidas em A9ParsersFactsTest. */
+val BISON_POT = listOf("%token NUM", "%right '^'", "%%", "expr: expr '^' expr { \$\$ = pow(\$1, \$3); }", "    | NUM ;")
+
 /** O aviso do bison 3 para a calculadora sem precedência (sem o [-Wconflicts-sr] do fim, que não cabe). */
 const val BISON_AVISO = "calc.y: warning: 1 shift/reduce conflict"
 
@@ -613,6 +616,22 @@ val bottomUp by lazy {
                 tint("v2", Tint.GREEN)
                 add(codigo("o", listOf("\$ bison calc.y"), 230f, x = 20f, passo = 26f, size = 12f))
                 hot("v2")
+            }
+            // %right com 2^3^2 (professor do bloco 4): o caso em que empilhar é o certo.
+            cena(tx("bison_l_15")) {
+                clear()
+                add(titulo("pot.y"))
+                add(codigo("s", BISON_POT, 70f, x = 20f, passo = 28f, size = 13f))
+                hot("s1")
+            }
+            pergunta(tx("bison_l_16"), setOf("p512"), setOf("p64", "p36"), tx("bison_l_16_dica"), tx("bison_l_16_ok")) {
+                add(Box("conta", "2 ^ 3 ^ 2", 180f, 250f, 160f, 40f, Look.TOKEN, Tint.TEAL, size = 16f))
+                add(botao("p64", "64", 100f, 310f, 64f), botao("p512", "512", 180f, 310f, 64f), botao("p36", "36", 260f, 310f, 64f))
+            }
+            cena(tx("bison_l_17"), mood = EpMood.HAPPY) {
+                drop("p64", "p36"); tint("p512", Tint.GREEN)
+                add(rotulo("lr", "%left: 64     %right: 512", 180f, 370f, Tint.YELLOW, 15f))
+                hot("s1")
             }
             fecho(Fecho(
                 tx("bison_f_af"), true, tx("bison_f_q"), tx("bison_f_dica"), tx("bison_f_ok"), tx("bison_f_af"),
