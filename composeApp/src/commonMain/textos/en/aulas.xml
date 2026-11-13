@@ -490,7 +490,7 @@
     <string name="epparsers_nao_fazer_nada_mesmo_que">Doing nothing is the same as vanishing from the sentence.</string>
     <string name="epparsers_isso_nao_fazer_nada_regra">Doing nothing is the epsilon rule: X vanished without consuming a token.</string>
     <string name="epparsers_ifs_usam_first_para_escolher">Each if tests the next token against FIRST of a rule. It is the same decision as the LL(1) table, now inside the code.</string>
-    <string name="epparsers_esse_parser_que_trabalho_pratico">This is the parser the course project asks for. It only works if the grammar is LL(1): no left recursion, and left-factored.</string>
+    <string name="epparsers_esse_parser_que_trabalho_pratico">This is the parser the course project asks for. It needs an LL(1) grammar. Removing recursion and factoring help, but they are not enough. The table cannot have a conflict.</string>
     <string name="epparsers_cair_levantar">Fall and get up</string>
     <string name="epparsers_erro_nao_pode_derrubar_compilador">The idea: the parser reports where it got stuck, throws away a piece of the input and resumes at a safe point.</string>
     <string name="epparsers_aqui_parser_trava_depois_igual">Here the parser gets stuck: after the equals sign the grammar wants a value, and a times arrived.</string>

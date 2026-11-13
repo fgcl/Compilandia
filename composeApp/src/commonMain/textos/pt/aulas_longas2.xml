@@ -137,8 +137,7 @@
     <string name="min_l_14">Rodada dois. Quais pares vão, com b, para um par com o E? Toque neles.</string>
     <string name="min_l_14_dica">Só o D vai para o E com b. Os outros vão para o C ou para o D.</string>
     <string name="min_l_14_ok">O D com o A, o B e o C. Com b, o D vai para o E, e os outros não.</string>
-    <string name="min_l_14b">Marquei os três com dois. Agora há pares marcados que não envolvem o E.</string>
-    <string name="min_l_15">Rodada três. Olhe as casas ainda em branco. Quais caem agora? Toque.</string>
+    <string name="min_l_15">Rodada três. Marquei a rodada dois com o número dois. Quais casas em branco caem agora? Toque.</string>
     <string name="min_l_15_dica">Com b, o A vai para o C, e o B vai para o D. O par C e D caiu na rodada dois.</string>
     <string name="min_l_15_ok">A com B e B com C. Os dois caem por causa de uma marca da rodada dois.</string>
     <string name="min_l_15b">Uma marca puxou a outra. Por isso a receita repete: parar na rodada dois deixaria esses pares em branco.</string>
@@ -146,6 +145,13 @@
     <string name="min_l_16_dica">Procure a casa sem número.</string>
     <string name="min_l_16_ok">A com C. Com a, os dois vão para o B. Com b, os dois vão para o C.</string>
     <string name="min_l_17">A e C viram um estado só. O AFD mínimo tem quatro estados, como no livro.</string>
+    <string name="min_l_18">Mais um: a estrela b estrela. Depois de b, ler a não tem volta. A seta vai para o estado morto M. Para minimizar, ele precisa aparecer.</string>
+    <string name="min_l_19">Rodada um: quais pares a primeira regra marca? Toque neles.</string>
+    <string name="min_l_19_dica">P e Q são finais. O estado morto não é.</string>
+    <string name="min_l_19_ok">P com M e Q com M. O estado morto é um estado não final como outro qualquer.</string>
+    <string name="min_l_20">E P com Q? Com a, P vai para P, e Q vai para M. Juntar ou separar?</string>
+    <string name="min_l_20_dica">O par P e M já está marcado.</string>
+    <string name="min_l_20_ok">Separar. P e M são diferentes, então P e Q também são. Sem o morto na tabela, os dois pareceriam iguais, e o AFD aceitaria b a.</string>
     <string name="min_l_juntar">juntar</string>
     <string name="min_l_separar">separar</string>
     <string name="min_l_r1">1. Marque todo par final com não final.</string>

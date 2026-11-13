@@ -68,7 +68,7 @@
     <string name="desc_f_fala2">Another mistake is trying to match epsilon. Epsilon is not a token. The epsilon rule is just returning without doing anything.</string>
     <string name="desc_f_z1">Each nonterminal is a function. A nonterminal in a rule is a call; a terminal is match.</string>
     <string name="desc_f_z2">The if looks at the next token and picks the rule by FIRST.</string>
-    <string name="desc_f_z3">Only for LL(1) grammars: no left recursion, left-factored.</string>
+    <string name="desc_f_z3">Only for LL(1) grammars. No left recursion and factored is not enough: the table cannot have a conflict.</string>
     <string name="desc_f_resumo">To sum up: recursive descent is the predictive parser as code. One function per nonterminal, one if per rule, and the call stack plays the role of the stack.</string>
     <string name="erro_f_af">In panic mode, the parser fixes the program and generates the code.</string>
     <string name="erro_f_q">What does recovery deliver in the end? A classmate said this. Right or wrong?</string>

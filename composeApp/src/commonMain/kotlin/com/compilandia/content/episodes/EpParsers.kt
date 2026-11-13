@@ -212,6 +212,7 @@ val topDown by lazy {
         },
 
         // ─────────────────────────────── DESCIDA RECURSIVA ───────────────────────────────
+        // DESC_CASA e DESC_MAIN ficam no fim do arquivo.
         episodio(Skill.RECURSIVE_DESCENT, tx("epparsers_metodo_por_regra")) {
             val src = listOf(
                 "void E() { T(); X(); }",
@@ -259,6 +260,20 @@ val topDown by lazy {
             cena(tx("epparsers_ifs_usam_first_para_escolher")) {
                 drop("r0", "r1")
                 hot("c7", "c8", "g2")
+            }
+            // As duas peças que faltavam (professor do bloco 3): o corpo de casa() e o main que confere o fim.
+            cena(tx("desc_l_casa")) {
+                clear()
+                add(titulo(tx("desc_l_titulo_pecas"), size = 22f))
+                add(codigo("k", DESC_CASA, 70f, x = 40f, passo = 24f, size = 13f))
+                add(codigo("m", DESC_MAIN, 190f, x = 40f, passo = 24f, size = 13f))
+                hot("k1", "k2")
+            }
+            cena(tx("desc_l_main")) { hot("m1", "m2", "m3") }
+            pergunta(tx("desc_l_mainq"), setOf("e2"), setOf("e1", "e3"), tx("desc_l_mainq_dica"), tx("desc_l_mainq_ok")) {
+                add(fileira("ent", listOf("id" to Tint.TEAL, "id" to Tint.TEAL, "$" to Tint.NONE), 322f, w = 50f, h = 36f))
+                add(botao("e1", tx("sims_aceita"), 80f, 376f, 96f), botao("e2", tx("desc_l_erro"), 180f, 376f, 80f), botao("e3", tx("desc_l_chama_e"), 285f, 376f, 104f))
+                hot("m3")
             }
             cena(tx("epparsers_esse_parser_que_trabalho_pratico"), who = PROF, mood = EpMood.HAPPY) { hot() }
             // 3. A receita
@@ -607,3 +622,8 @@ val bottomUp by lazy {
         },
     )
 }
+
+/** O corpo de casa(): confere o token e lê o próximo. */
+internal val DESC_CASA = listOf("void casa(int t) {", "  if (tok == t) tok = proximo();", "  else erro();", "}")
+/** O main da descida recursiva: lê o primeiro token, chama E e confere que a entrada acabou. */
+internal val DESC_MAIN = listOf("int main() {", "  tok = proximo();", "  E();", "  if (tok != '$') erro();", "}")

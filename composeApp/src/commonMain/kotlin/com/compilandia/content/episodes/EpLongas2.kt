@@ -64,6 +64,9 @@ val AFD_LIVRO = com.compilandia.engine.DFA(
     ),
 )
 
+/** AFD de a*b* sem o estado morto: o Minimizer completa com ele (estado 2) antes de montar a tabela. */
+val AFD_ASBS = com.compilandia.engine.DFA(2, 0, setOf(0, 1), listOf('a', 'b'), mapOf((0 to 'a') to 0, (0 to 'b') to 1, (1 to 'b') to 1))
+
 /** Gramática do segundo exemplo de LR(0) e SLR. */
 val GRAMATICA_LR_2 = listOf("S -> ( S ) | id")
 
@@ -486,8 +489,7 @@ val aulasLongas2 by lazy {
             }
             cena(tx("min_l_13")) { marca(1); hot(*daRodada(1).toTypedArray()) }
             pergunta(tx("min_l_14"), daRodada(2), brancas - daRodada(1) - daRodada(2), tx("min_l_14_dica"), tx("min_l_14_ok")) { hot("q4") }
-            cena(tx("min_l_14b")) { marca(2); hot(*daRodada(2).toTypedArray()) }
-            pergunta(tx("min_l_15"), daRodada(3), brancas - daRodada(1) - daRodada(2) - daRodada(3), tx("min_l_15_dica"), tx("min_l_15_ok")) { hot() }
+            pergunta(tx("min_l_15"), daRodada(3), brancas - daRodada(1) - daRodada(2) - daRodada(3), tx("min_l_15_dica"), tx("min_l_15_ok")) { marca(2); hot() }
             cena(tx("min_l_15b"), mood = EpMood.SURPRISED) { marca(3); hot(*daRodada(3).toTypedArray()) }
             val sobra = brancas - rodada.keys.map { (p, q) -> casa(p, q) }.toSet()
             pergunta(tx("min_l_16"), sobra, brancas - sobra, tx("min_l_16_dica"), tx("min_l_16_ok")) { hot() }
@@ -495,6 +497,21 @@ val aulasLongas2 by lazy {
                 for (id in sobra) tint(id, Tint.GREEN)
                 tint("q0", Tint.GREEN); tint("q2", Tint.GREEN)
                 hot("q0", "q2", *sobra.toTypedArray())
+            }
+            // 6. O estado morto entra na tabela: a*b*, em que a depois de b não tem volta
+            cena(tx("min_l_18")) {
+                clear()
+                add(titulo("a*b*"))
+                add(estados(listOf(70f to 150f, 180f to 150f, 290f to 150f), finais = setOf(0, 1), nomes = listOf("P", "Q", "M")))
+                tint("q2", Tint.RED)
+                wire("q0", "q0", "a"); wire("q0", "q1", "b"); wire("q1", "q1", "b"); wire("q1", "q2", "a"); wire("q2", "q2", "a,b")
+                add(Box("pq", "P, Q", 90f, 280f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("pm", "P, M", 180f, 280f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("qm", "Q, M", 270f, 280f, 86f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                hot("q2")
+            }
+            pergunta(tx("min_l_19"), setOf("pm", "qm"), setOf("pq"), tx("min_l_19_dica"), tx("min_l_19_ok")) { hot("q2") }
+            pergunta(tx("min_l_20"), setOf("o2"), setOf("o1"), tx("min_l_20_dica"), tx("min_l_20_ok")) {
+                tint("pm", Tint.RED); tint("qm", Tint.RED); hot("q0", "q1")
+                add(Box("o1", tx("min_l_juntar"), 130f, 360f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o2", tx("min_l_separar"), 236f, 360f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
             }
             fecho(Fecho(
                 tx("min_f_af"), false, tx("min_f_q"), tx("min_f_dica"), tx("min_f_ok"), tx("min_f_certo"),

@@ -10,6 +10,8 @@ import com.compilandia.content.episodes.GRAMATICA_LL1_4
 import com.compilandia.content.episodes.GRAMATICA_PEG_FOLLOW
 import com.compilandia.content.episodes.AFN_3
 import com.compilandia.content.episodes.AFD_LIVRO
+import com.compilandia.content.episodes.AFD_ASBS
+import com.compilandia.learning.Skill
 import com.compilandia.engine.Minimizer
 import com.compilandia.content.episodes.tabelaLl1DaAula
 import com.compilandia.engine.GrammarTransform
@@ -139,5 +141,42 @@ class AulasConsertadasTest {
         val g = Grammar.parse("E -> E + T | T\nT -> T * F | F\nF -> id")
         assertTrue("*" !in FirstFollow(g).follow.getValue("E"))
         assertTrue(g.productions.none { p -> p.rhs.zipWithNext().any { it == "E" to "*" } }, "nenhuma regra tem E seguido de *")
+    }
+
+    /** a*b*: o Minimizer põe o estado morto na tabela; P e Q caem na rodada 2 por causa dele, e nada se junta. */
+    @Test fun minimizacaoComEstadoMorto() {
+        val r = Minimizer.run(AFD_ASBS)
+        assertEquals(2, r.deadState)
+        assertEquals(setOf(0 to 2, 1 to 2), r.marks.filter { it.round == 1 }.map { it.p to it.q }.toSet())
+        assertEquals(listOf(0 to 1), r.marks.filter { it.round == 2 }.map { it.p to it.q })
+        assertTrue(r.classes.all { it.size == 1 }, "nada se junta")
+        // Sem o morto, juntar P e Q daria um estado com a e b em laço: aceitaria b a.
+        val junto = com.compilandia.engine.DFA(1, 0, setOf(0), listOf('a', 'b'), mapOf((0 to 'a') to 0, (0 to 'b') to 0))
+        assertTrue(junto.accepts("ba") && !AFD_ASBS.accepts("ba"))
+    }
+
+    /**
+     * Descida recursiva: o código da aula (épsilon no else de X) volta de E com id ainda na entrada,
+     * e só o teste do $ no main pega o erro. O analisador por tabela para antes, na casa vazia M[X, id].
+     */
+    @Test fun descidaPrecisaDoTesteDoFim() {
+        val ent = listOf("id", "id", "$"); var i = 0
+        fun casa(t: String) { check(ent[i] == t) { "erro em casa($t)" }; i++ }
+        lateinit var e: () -> Unit
+        fun t() { if (ent[i] == "id") casa("id") else { casa("("); e(); casa(")") } }
+        fun x() { if (ent[i] == "+") { casa("+"); t(); x() } }
+        e = { t(); x() }
+        e()
+        assertEquals("id", ent[i], "E voltou e o token ainda é id: o main precisa do teste do $")
+        val tab = LL1Table(Grammar.parse(GRAMATICA_EXPR.joinToString("\n")))
+        assertTrue(tab.cell("X", "id").isEmpty())
+        assertTrue(com.compilandia.engine.LL1Parser.trace(tab, listOf("id", "id")).last().action is com.compilandia.engine.LLAction.Error)
+    }
+
+    /** Pré-requisitos da revisão: a Ponte antes da tabela LL(1), a ambiguidade antes da recursão, o preditivo antes da descida. */
+    @Test fun preRequisitosDaRevisao() {
+        assertTrue(Skill.AMBIGUITY in Skill.LEFT_RECURSION.prereqs)
+        assertTrue(Skill.LL1_TABLE.prereqs.containsAll(listOf(Skill.LEFT_RECURSION, Skill.LEFT_FACTORING)))
+        assertTrue(Skill.LL1_PARSING in Skill.RECURSIVE_DESCENT.prereqs)
     }
 }

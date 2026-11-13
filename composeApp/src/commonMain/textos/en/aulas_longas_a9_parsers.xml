@@ -41,6 +41,14 @@
     <string name="desc_l_01q_ok">Row X, column id. The cell is empty, so it's a syntax error.</string>
     <string name="desc_l_02">And when an error shows up, you want to know which rule the parser was in, to give a good message.</string>
     <string name="desc_l_03">In recursive descent, each nonterminal becomes a function. The parser's stack becomes the program's call stack.</string>
+    <string name="desc_l_titulo_pecas">casa and main</string>
+    <string name="desc_l_casa">Two pieces are missing. casa checks that the token is the expected one. If it is, it reads the next one. If not, it reports the error.</string>
+    <string name="desc_l_main">main reads the first token and calls E. When E returns, main checks that the input is over.</string>
+    <string name="desc_l_mainq">On the input id id, E matches the first id and returns. What does main do? Tap it.</string>
+    <string name="desc_l_mainq_dica">After E, the token is still id. It is not the dollar.</string>
+    <string name="desc_l_mainq_ok">It reports the error. Without that test, the parser would accept id id just because the start forms an E.</string>
+    <string name="desc_l_erro">error</string>
+    <string name="desc_l_chama_e">repeat E</string>
     <string name="desc_l_05">The recipe translates each rule into code, symbol by symbol.</string>
     <string name="desc_l_r1">1. Each nonterminal becomes a function.</string>
     <string name="desc_l_r2">2. Nonterminal in the rule: call its function.</string>

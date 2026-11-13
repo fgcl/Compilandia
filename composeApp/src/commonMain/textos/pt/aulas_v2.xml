@@ -68,7 +68,7 @@
     <string name="desc_f_fala2">Outro erro é tentar casar o épsilon. Épsilon não é token. A regra épsilon é só voltar sem fazer nada.</string>
     <string name="desc_f_z1">Cada não-terminal é uma função. Não-terminal na regra é chamada; terminal é casa.</string>
     <string name="desc_f_z2">O if olha o próximo token e escolhe a regra pelo FIRST.</string>
-    <string name="desc_f_z3">Só vale para gramática LL(1): sem recursão à esquerda e fatorada.</string>
+    <string name="desc_f_z3">Só vale para gramática LL(1). Sem recursão e fatorada não basta: a tabela não pode ter conflito.</string>
     <string name="desc_f_resumo">Resumindo: a descida recursiva é o preditivo em forma de código. Uma função por não-terminal, um if por regra, e a pilha de chamadas faz o papel da pilha.</string>
     <string name="erro_f_af">No modo pânico, o parser conserta o programa e gera o código.</string>
     <string name="erro_f_q">O que a recuperação entrega no fim? Um colega disse isto. Certo ou errado?</string>

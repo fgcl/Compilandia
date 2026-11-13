@@ -515,7 +515,7 @@
     <string name="epparsers_nao_fazer_nada_mesmo_que">Não fazer nada é o mesmo que sumir da frase.</string>
     <string name="epparsers_isso_nao_fazer_nada_regra">Não fazer nada é a regra épsilon: X sumiu sem consumir token.</string>
     <string name="epparsers_ifs_usam_first_para_escolher">Cada if testa o próximo token contra o FIRST de uma regra. É a mesma decisão da tabela LL(1), agora dentro do código.</string>
-    <string name="epparsers_esse_parser_que_trabalho_pratico">É esse o parser que o trabalho prático pede. Ele só funciona se a gramática for LL(1): sem recursão à esquerda e fatorada.</string>
+    <string name="epparsers_esse_parser_que_trabalho_pratico">É esse o parser que o trabalho prático pede. Ele exige gramática LL(1). Tirar a recursão e fatorar ajuda, mas não basta. A tabela não pode ter conflito.</string>
     <string name="epparsers_cair_levantar">Cair e levantar</string>
     <string name="epparsers_erro_nao_pode_derrubar_compilador">A ideia: o parser avisa onde travou, joga fora um pedaço da entrada e volta a analisar num ponto seguro.</string>
     <string name="epparsers_aqui_parser_trava_depois_igual">Aqui o parser trava: depois do igual a gramática pede um valor, e chegou um vezes.</string>

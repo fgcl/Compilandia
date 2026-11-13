@@ -19,6 +19,11 @@ enum class Region(val title: String, val emoji: String, val tagline: String) {
     FORJA_CODIGO(tx("skills_forja_codigo"), "⚒️", tx("skills_codigo_intermediario_otimizacao")),
 }
 
+/*
+ * Pré-requisitos (revisores do bloco 2 e 3): a recursão à esquerda usa E -> E + T | T, da aula de
+ * ambiguidade; a tabela LL(1) pede gramática sem recursão e fatorada; a descida recursiva abre com a
+ * tabela e é o mesmo analisador preditivo, escrito em funções.
+ */
 enum class Skill(val title: String, val region: Region, val prereqs: List<Skill> = emptyList()) {
     PHASES(tx("skills_fases_compilador"), Region.PORTO),
     TOKENS(tx("skills_tokens_lexemas_padroes"), Region.FLORESTA_LEXICA, listOf(PHASES)),
@@ -28,13 +33,13 @@ enum class Skill(val title: String, val region: Region, val prereqs: List<Skill>
     LEX_FLEX(tx("skills_lex_flex_arquivo_l"), Region.FLORESTA_LEXICA, listOf(TOKENS, REGEX_DFA)),
     CFG_DERIVATION(tx("skills_gramaticas_derivacoes"), Region.VALE_GRAMATICAS, listOf(PHASES)),
     AMBIGUITY(tx("skills_arvores_ambiguidade"), Region.VALE_GRAMATICAS, listOf(CFG_DERIVATION)),
-    LEFT_RECURSION(tx("skills_recursao_esquerda"), Region.PONTE_TRANSFORMACAO, listOf(CFG_DERIVATION)),
+    LEFT_RECURSION(tx("skills_recursao_esquerda"), Region.PONTE_TRANSFORMACAO, listOf(AMBIGUITY)),
     LEFT_FACTORING(tx("skills_fatoracao_esquerda"), Region.PONTE_TRANSFORMACAO, listOf(CFG_DERIVATION)),
     FIRST(tx("skills_conjunto_first"), Region.TEMPLO_TOPDOWN, listOf(CFG_DERIVATION)),
     FOLLOW(tx("skills_conjunto_follow"), Region.TEMPLO_TOPDOWN, listOf(FIRST)),
-    LL1_TABLE(tx("comum_tabela_ll_1_2"), Region.TEMPLO_TOPDOWN, listOf(FIRST, FOLLOW)),
+    LL1_TABLE(tx("comum_tabela_ll_1_2"), Region.TEMPLO_TOPDOWN, listOf(FIRST, FOLLOW, LEFT_RECURSION, LEFT_FACTORING)),
     LL1_PARSING(tx("skills_analisador_preditivo_pilha"), Region.TEMPLO_TOPDOWN, listOf(LL1_TABLE)),
-    RECURSIVE_DESCENT(tx("comum_descida_recursiva"), Region.TEMPLO_TOPDOWN, listOf(FIRST)),
+    RECURSIVE_DESCENT(tx("comum_descida_recursiva"), Region.TEMPLO_TOPDOWN, listOf(LL1_PARSING)),
     ERROR_RECOVERY(tx("skills_erros_sintaticos_recuperacao"), Region.TEMPLO_TOPDOWN, listOf(LL1_PARSING)),
     SHIFT_REDUCE(tx("skills_empilha_reduz_shift_reduce"), Region.FORTALEZA_BOTTOMUP, listOf(CFG_DERIVATION)),
     LR0_ITEMS(tx("skills_itens_lr_0_closure_goto"), Region.FORTALEZA_BOTTOMUP, listOf(SHIFT_REDUCE)),

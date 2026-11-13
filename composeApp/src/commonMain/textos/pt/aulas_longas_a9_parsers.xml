@@ -41,6 +41,14 @@
     <string name="desc_l_01q_ok">Linha X, coluna id. A casa está vazia, então é erro de sintaxe.</string>
     <string name="desc_l_02">E quando dá erro, você quer saber em que regra o parser estava, para dar uma mensagem boa.</string>
     <string name="desc_l_03">Na descida recursiva, cada não-terminal vira uma função. A pilha do analisador vira a pilha de chamadas do programa.</string>
+    <string name="desc_l_titulo_pecas">casa e main</string>
+    <string name="desc_l_casa">Faltam duas peças. A casa confere se o token é o esperado. Se for, lê o próximo. Se não for, avisa o erro.</string>
+    <string name="desc_l_main">O main lê o primeiro token e chama E. Quando E volta, o main confere que a entrada acabou.</string>
+    <string name="desc_l_mainq">Na entrada id id, E casa o primeiro id e volta. O que o main faz? Toque.</string>
+    <string name="desc_l_mainq_dica">Depois de E, o token ainda é id. Ele não é o cifrão.</string>
+    <string name="desc_l_mainq_ok">Avisa o erro. Sem esse teste, o parser aceitaria id id só porque o começo forma um E.</string>
+    <string name="desc_l_erro">erro</string>
+    <string name="desc_l_chama_e">repete E</string>
     <string name="desc_l_05">A receita traduz cada regra para código, símbolo por símbolo.</string>
     <string name="desc_l_r1">1. Cada não-terminal vira uma função.</string>
     <string name="desc_l_r2">2. Não-terminal na regra: chama a função dele.</string>

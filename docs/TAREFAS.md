@@ -56,7 +56,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 - [x] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
 - [x] Minimização: o AFD do livro (3 rodadas)
-- [ ] Minimização: `a*b*` com estado morto
+- [x] Minimização: `a*b*` com estado morto
 - [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
 - [x] FOLLOW: caso difícil `S → B C d` (C some, o d entra), conferido pelo motor
 - [x] FIRST: caso `S → B d`, `B → C | b`, `C → c | ε` (anulável sem ε escrito; a primeira rodada deixa S só com o d)
@@ -81,12 +81,12 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] ε como produção, "forma sentencial" e "sentença" ditas na aula
 - [ ] Abrir a Ponte apresentando o parser descendente
 - [ ] Recursão indireta até o fim
-- [ ] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
+- [x] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
 
 **Templo Top-Down**
 - [x] Pegadinha do FOLLOW com `S → A B c`
 - [ ] As três condições LL(1) na ficha; FIRST e FOLLOW visíveis na aula da tabela
-- [ ] Descida recursiva: pré-requisito, `casa()` e o `main` com o teste do `$`
+- [x] Descida recursiva: pré-requisito, `casa()` e o `main` com o teste do `$`
 
 **Fortaleza e Oficina**
 - [ ] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0

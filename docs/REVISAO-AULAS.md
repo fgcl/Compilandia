@@ -73,6 +73,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **Minimização com o AFD do livro.** Oito cenas com o AFD de `(a|b)*abb`. Cada casa da tabela mostra a rodada em que foi marcada: E com todos na 1, D com A, B e C na 2, A com B e B com C na 3. O aluno marca as rodadas 2 e 3 e vê que uma marca puxa outra; A e C ficam em branco e se juntam. As rodadas saem do `Minimizer`, e o teste confere as três. O `a*b*` com estado morto ficou para depois.
 3. **Pegadinha do handle.** Dizia que reduzir cedo "faz a conta na ordem errada". Em `E → E + T`, `T → T * F`, reduzir `E + T` com `*` na entrada deixa E na pilha e nenhuma regra continua E com vezes: o parser rejeita uma frase certa. Uma cena nova mostra a pilha com E e o aviso "nenhuma regra com E *". O teste confere que `*` não está no FOLLOW de E.
 
+## Feito em 13/11 (nona rodada)
+
+1. **Minimização com estado morto.** Quatro cenas depois do AFD do livro, com `a*b*`: o estado morto M aparece no desenho porque a tabela precisa dele. Na rodada 1, M cai com P e com Q; na 2, P com Q cai por causa de P com M. Nada se junta, e a aula diz por quê: sem o morto, P e Q pareceriam iguais, e o AFD aceitaria `b a`. O `Minimizer` confere as rodadas.
+2. **Pré-requisitos.** Recursão à esquerda pede ambiguidade (usa `E → E + T | T`); tabela LL(1) pede recursão e fatoração; descida recursiva pede o analisador preditivo, porque abre com a tabela.
+3. **Descida recursiva com `casa()` e `main`.** Três cenas mostram o corpo de `casa()` e o `main` que lê o primeiro token, chama E e testa o `$`. A pergunta: em `id id`, E volta depois do primeiro id; o `main` avisa o erro. O teste simula o código da aula e confere que E volta com id na entrada. A fala "LL(1): sem recursão à esquerda e fatorada" virou "isso ajuda, mas não basta: a tabela não pode ter conflito".
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

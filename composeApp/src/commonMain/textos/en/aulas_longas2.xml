@@ -137,8 +137,7 @@
     <string name="min_l_14">Round two. Which pairs go, on b, to a pair with E? Tap them.</string>
     <string name="min_l_14_dica">Only D goes to E on b. The others go to C or to D.</string>
     <string name="min_l_14_ok">D with A, B and C. On b, D goes to E, and the others do not.</string>
-    <string name="min_l_14b">I marked all three with two. Now there are marked pairs without E.</string>
-    <string name="min_l_15">Round three. Look at the cells still blank. Which ones fall now? Tap them.</string>
+    <string name="min_l_15">Round three. I marked round two with the number two. Which blank cells fall now? Tap them.</string>
     <string name="min_l_15_dica">On b, A goes to C, and B goes to D. The pair C and D fell in round two.</string>
     <string name="min_l_15_ok">A with B and B with C. Both fall because of a mark from round two.</string>
     <string name="min_l_15b">One mark pulled another. That is why the recipe repeats: stopping at round two would leave these pairs blank.</string>
@@ -146,6 +145,13 @@
     <string name="min_l_16_dica">Look for the cell with no number.</string>
     <string name="min_l_16_ok">A with C. On a, both go to B. On b, both go to C.</string>
     <string name="min_l_17">A and C become a single state. The minimal DFA has four states, as in the book.</string>
+    <string name="min_l_18">One more: a star b star. After b, reading a has no way back. The arrow goes to the dead state M. To minimize, it has to appear.</string>
+    <string name="min_l_19">Round one: which pairs does the first rule mark? Tap them.</string>
+    <string name="min_l_19_dica">P and Q are final. The dead state is not.</string>
+    <string name="min_l_19_ok">P with M and Q with M. The dead state is a non-final state like any other.</string>
+    <string name="min_l_20">And P with Q? On a, P goes to P, and Q goes to M. Merge or separate?</string>
+    <string name="min_l_20_dica">The pair P and M is already marked.</string>
+    <string name="min_l_20_ok">Separate. P and M are different, so P and Q are too. Without the dead state in the table, they would look equal, and the DFA would accept b a.</string>
     <string name="min_l_juntar">merge</string>
     <string name="min_l_separar">split</string>
     <string name="min_l_r1">1. Mark every final with non-final pair.</string>
