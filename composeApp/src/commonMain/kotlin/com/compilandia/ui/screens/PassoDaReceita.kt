@@ -36,7 +36,7 @@ object PassoDaReceita {
     val porAssunto: Map<Skill, String> = mapOf(
         Skill.PHASES to "01240",
         Skill.FIRST to "01310",
-        Skill.FOLLOW to "02330",
+        Skill.FOLLOW to "02330022",
         Skill.LL1_TABLE to "01123",
         Skill.LR0_ITEMS to "01223",
         Skill.SLR_TABLE to "0220",
