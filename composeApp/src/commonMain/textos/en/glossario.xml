@@ -5,7 +5,7 @@
     <string name="gl_fechar">Close</string>
     <string name="gl_token_nome">token</string>
     <string name="gl_token_formas">token|tokens</string>
-    <string name="gl_token_def">A piece with a name. In x = 10, the 10 is a token of type number.</string>
+    <string name="gl_token_def">What the scanner hands over per piece: the class and the text. x = 10 has three tokens.</string>
     <string name="gl_lexema_nome">lexeme</string>
     <string name="gl_lexema_formas">lexeme|lexemes</string>
     <string name="gl_lexema_def">The exact text of a token. For the token number, the lexeme can be 10.</string>
@@ -38,7 +38,7 @@
     <string name="gl_ambigua_def">A grammar where the same sentence has two different trees.</string>
     <string name="gl_recursao_nome">left recursion</string>
     <string name="gl_recursao_formas">left recursion</string>
-    <string name="gl_recursao_def">A rule where the symbol starts with itself, like E goes to E plus T.</string>
+    <string name="gl_recursao_def">A rule whose right side starts with its own left-side symbol, like E goes to E plus T.</string>
     <string name="gl_fatoracao_nome">factoring</string>
     <string name="gl_fatoracao_formas">factoring|factor</string>
     <string name="gl_fatoracao_def">Pulling out the common start of two rules to put off the choice.</string>
@@ -56,7 +56,7 @@
     <string name="gl_lookahead_def">The next token in the input, which the parser peeks at to decide.</string>
     <string name="gl_handle_nome">handle</string>
     <string name="gl_handle_formas">handle</string>
-    <string name="gl_handle_def">The piece on top of the stack that matches the right side of a rule.</string>
+    <string name="gl_handle_def">The right side on top that should be reduced now. Not every right side is a handle.</string>
     <string name="gl_shift_nome">shift</string>
     <string name="gl_shift_formas">shift</string>
     <string name="gl_shift_def">Shift: the parser takes the next token and puts it on the stack.</string>

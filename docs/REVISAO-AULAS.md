@@ -1,114 +1,128 @@
-# Revisão das aulas: o que foi feito, o que foi achado e como continuar
+# Revisão das aulas: o que foi achado e o que já foi feito
 
-Feita em 12 e 13 de novembro de 2026. A revisão parou na metade por limite de uso. Este arquivo serve para outra sessão (por exemplo, com o Opus) continuar sem refazer nada.
+Revisão feita em 12 e 13 de novembro de 2026 por revisores "professor" e "aluno" (IA), um par por bloco de regiões. Este arquivo junta os 10 relatórios num só lugar, sem repetir o mesmo achado. A lista para marcar está em [TAREFAS.md](TAREFAS.md). A pesquisa que embasa as decisões está em [PESQUISA.md](PESQUISA.md).
 
-## Situação
+Os relatórios são lista de suspeitas, não veredito: modelo fingindo ser aluno entende mais do que um aluno real (veja [PESQUISA.md](PESQUISA.md), seção 7). Por isso cada achado diz se foi **conferido** (alguém olhou a transcrição ou o código) ou se veio só do relatório.
+
+## Situação dos relatórios
 
 | Bloco | Professor | Aluno |
 |---|---|---|
-| 1. Porto e Floresta Léxica (regiões 1 e 2) | pronto, lido | pronto, lido |
-| 2. Vale e Ponte (regiões 3 e 4) | gravado, não lido | gravado, não lido |
-| 3. Templo Top-Down (região 5) | pronto, lido | pronto, lido |
-| 4. Bottom-Up e Bison (regiões 6 e 7) | pronto, lido | gravado, não lido |
-| 5. Semântica e Forja (regiões 8 e 9) | **falta** | gravado, não lido |
-| 6. Seu compilador (série em C e Guia do TP) | **falta** | gravado, não lido |
+| 1. Porto e Floresta Léxica (regiões 1 e 2) | lido | lido |
+| 2. Vale e Ponte (regiões 3 e 4) | lido | lido |
+| 3. Templo Top-Down (região 5) | lido | lido |
+| 4. Bottom-Up e Bison (regiões 6 e 7) | lido | lido |
+| 5. Semântica e Forja (regiões 8 e 9) | **falta** | lido |
+| 6. Seu compilador (série em C e Guia do TP) | **falta** | lido |
 
-"Gravado, não lido": o revisor gravou o arquivo antes de o limite cair, mas eu não li nem conferi. Pode estar incompleto; veja se tem a seção final "As 5 coisas que eu mudaria primeiro". Os achados deste documento vêm só dos 5 relatórios lidos. Faltam de fato só os dois professores dos blocos 5 e 6.
-
-Nada do jogo foi alterado. Só existem arquivos novos em `docs/`.
+Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 coisas/melhorias"). Faltam só os professores dos blocos 5 e 6.
 
 ## Onde está cada coisa
 
-- `docs/revisao/relatorios/`: os 10 relatórios gravados, com trecho citado e conserto proposto para cada achado.
-- `docs/revisao/roteiro_professor.md` e `roteiro_aluno.md`: as instruções que cada revisor recebeu. Reaproveite sem mudar.
-- `docs/revisao/transcricoes/`: tudo o que o aluno lê, em texto, por região (21 arquivos, 875 KB). `*_A_trilha.md` tem abertura, aula animada, práticas, pegadinhas, clipes, Bugs e ficha. `*_B_texto.md` tem as aulas "Ler com calma".
-- `docs/revisao/medidas.py`: script que conta cenas, perguntas e posição da resposta certa nas transcrições.
+- `docs/revisao/relatorios/`: os 10 relatórios, com o trecho citado e o conserto proposto para cada achado.
+- `docs/revisao/roteiro_professor.md` e `roteiro_aluno.md`: as instruções de cada revisor. Os roteiros citam o caminho antigo das transcrições (`/tmp/.../scratchpad/dump/`); hoje elas estão em `docs/revisao/transcricoes/`.
+- `docs/revisao/transcricoes/`: tudo o que o aluno lê, em texto, por região. `*_A_trilha.md` traz abertura, aula animada, práticas, pegadinhas, clipes, Bugs e ficha. `*_B_texto.md` traz as aulas "Ler com calma". **Foram geradas antes das correções de 13/11**: os trechos consertados abaixo ainda aparecem lá na versão antiga.
+- `docs/revisao/medidas.py`: conta cenas, perguntas e posição da resposta certa nas transcrições.
 
-As transcrições foram geradas por um teste temporário (já apagado) que percorria `Episodes`, `Library`, `Aberturas`, `Album` e `Glossario` e escrevia em Markdown, rodado com `cd verify && ../gradlew test`. Se as aulas mudarem, é preciso gerar de novo.
+## Feito em 13/11 (segunda sessão)
+
+1. **Recuperação de erros sem contradição.** As quatro entradas que sincronizavam no `;` com um token do FIRST de `Val` antes dele foram trocadas: aula (`x = * ; y = 2 ;`), pegadinha "Parar ou seguir" (`id = = ; id =`), clipe (`= * = ;`) e abertura (`x = = ;  y = 3;`). Agora o `;` é mesmo onde o parser se segura pelas regras 1 e 3 da receita.
+2. **Handle no glossário** diz o que a aula ensina: "o lado direito no topo da pilha que é certo reduzir agora", com o aviso de que nem todo lado direito no topo é handle.
+3. **Itens LR(0), aula de tabelas, cena 7**: a pergunta diz que o item `E' → E •` aceita, não reduz. Antes ela pedia "caixas com o ponto no fim" e marcava I1 como errado.
+4. **Token tem um sentido só**: o token é o que o scanner entrega, a classe com o lexema junto (como no Dragão, par nome e atributo). Aula, ficha, Bug, clipe e glossário dizem o mesmo. Em `x = 10` há três tokens.
+5. **"Parser" apresentado** na cena 1 de Tokens: "A fase seguinte é o analisador sintático, que todo mundo chama de parser."
+6. **Correções menores conferidas**: ambiguidade não depende de as contas darem resultados diferentes (cena 10); folhas podem ser ε; "duas derivações pela esquerda **da mesma frase**"; glossário de recursão à esquerda ("o lado direito começa com o próprio símbolo da esquerda"); fatoração com uma regra só ("maior prefixo comum a todas do grupo") e a nota sobre a ordem do livro; "a pilha cresce para cima" só no desenho, e desce na memória do MIPS.
+7. **Alternativas embaralhadas na tela** (`learning/OrdemDasOpcoes.kt`): "Preveja", abertura com o Bug e pergunta do Caça-Conflitos. Números ficam em ordem crescente, e "nenhuma", "as duas" ou "depende" ficam no fim. Com o embaralho, a certa cai em cada uma das 4 posições perto de 1/4 das vezes; antes caía na última 0 vezes em 139.
+8. **O colega acerta em 13 das 29 aulas.** Na parte Erros, "Um colega disse isto" agora tem afirmação certa em LL(1), preditivo, LALR, Bison, fases, AFN→AFD, Flex, fatoração, escopo, três endereços, registro de ativação, alocação e AST. O teste `OrdemDasOpcoesTest` falha se a proporção sair de 35% a 65%.
+
+## Erros que ensinam errado
+
+Conferidos, com o estado de cada um:
+
+| # | Assunto | Achado | Estado |
+|---|---|---|---|
+| E1 | Recuperação de erros | Quatro entradas sincronizavam no `;` contra a regra 2 da própria receita | feito |
+| E2 | Glossário | Handle definido com o erro que o Bug combate | feito |
+| E3 | Itens LR(0), tabelas, cena 7 | I1 tem `E' → E •` e era marcado errado | feito |
+| E4 | Tokens | "Token" como pedaço, como classe e como "tipo" | feito |
+| E5 | Tokens, cena 1 | "parser" usado antes de ser apresentado | feito |
+| E6 | Fatoração, cena 11 × ficha × WORKED | Regra do "maior prefixo" diferente em cada lugar | feito (ficha e FORMAL); conferir o WORKED |
+| E7 | SLR, cena 4 | Tabela "SLR(1)" mostra 3 de 5 estados; `s3` aponta para estado ausente (aluno 4) | **a conferir** |
+| E8 | Escopo, cena 4 | `x = 2;` fora de função, que não compila em C (aluno 5) | **a conferir** |
+| E9 | Alocação, cenas 14 e 15 | Vivacidade percorrida de cima para baixo, contra o que a cena 19 chama de erro (aluno 5) | **a conferir** |
+| E10 | TAC, texto WORKED | `ifFalse a < b goto L1` não bate com a prática nem com o FORMAL (aluno 5) | **a conferir** |
+| E11 | MIPS, cena 5 | `$t1` e `t1` na mesma tela sem aviso (aluno 5) | **a conferir** |
+| E12 | Série em C 5 | `e: e '+' e` sem `%left`, e `2+3*4 = 14` mostrando só a regra do `+` (aluno 6) | **a conferir** |
+| E13 | Guia do TP, cap. 8 | A cola diz "só isto" basta, mas o gerador usa `move`; pseudo-instruções fora da lista (aluno 6) | **a conferir** |
+
+## Padrões que valem para o jogo inteiro
+
+1. **A resposta certa quase nunca era a última opção.** Feito (item 7 acima).
+2. **"Erros comuns" tinha sempre a resposta "errado"**: 29 de 29. Feito (item 8 acima).
+3. **92 das 192 perguntas das aulas animadas têm duas opções.** Pendente.
+4. **234 das 239 falas de acerto começam com "Isso".** Pendente. O lugar mais barato é `LessonScreen.kt`, que escreve "**Isso!**" no código, e as chaves `*_ok` dos textos.
+5. **Personagens sem vida**: nas trilhas o Byte tem 870 falas, a professora 63 e o Bug nenhuma. As aulas animadas soam secas; as de texto, engraçadas. Pendente.
+6. **Trechos longos só ouvindo**: até 6 cenas seguidas sem interação. Em FIRST, FOLLOW, tabela LL(1), descida recursiva, itens LR(0) e tabela SLR, a primeira interação vem na cena 6 ou 7. Pendente.
+7. **Termos usados antes de serem ensinados** (os quatro alunos acharam): LL(1), pilha e `$`, "empilhar", FOLLOW, LR e "ambiguidade" aparecem nas regiões 3 e 4 antes da 5 e da 6; Thompson, estado morto, `yytext`, front-end e back-end, prefixo viável, `error`, `yyerrok`, Chaitin e blocos básicos aparecem na ficha ou nos Bugs sem estar na aula animada. Pendente.
+8. **Nomes demais para a mesma coisa**: `casa`, `casaToken` e `match`; `X`, `E'` e `A'`; closure, fecho e fechamento; goto e desvio; ok, acc e aceita; cadeia, palavra, frase e sentença; regra, produção, alternativa e opção; "else solto" e "else pendurado"; "núcleo" para kernel e para core; cinco nomes para o parser descendente. Pendente.
+
+## O achado mais importante: o aluno reconhece, mas não produz
+
+Os três professores refizeram as contas e **não acharam nenhum conjunto, tabela, autômato ou traço de pilha errado**. Os problemas são de desenho:
+
+1. **A trilha nunca pede a questão de prova inteira**: gramática → FIRST → FOLLOW → tabela → veredito; itens LR(0) → tabela SLR → conflito; tabela de subconjuntos; tabela de pares da minimização; mostrar que é ambígua e dar uma gramática equivalente; tornar uma gramática LL(1). Os exemplos resolvidos existem, mas só nas aulas de texto, que são opcionais.
+2. **O segundo exemplo ("Sua vez") evita o caso difícil.** O ε-fecho depois do move nunca acrescenta estado; não aparece estado morto; no FOLLOW nunca há dois símbolos depois do não-terminal; a regra anulável é sempre o ε escrito; o ponto fixo nunca muda nada na segunda rodada; todas as gramáticas do "Fazer com ajuda" são LL(1); na recursão à esquerda o segundo exemplo só troca as letras; a fatoração nunca mostra o resto vazio (ε). Na "prova de bolso", o revisor aluno errou o FOLLOW de `S → A B d` usando só a receita da aula.
+3. **Sem "Fazer com ajuda" nem prática** em AFN→AFD, minimização, itens LR(0), ambiguidade, recursão e fatoração.
+
+## Achados por região (vindos dos relatórios)
+
+Só o essencial; o trecho exato e a frase nova proposta estão no relatório indicado.
+
+**Porto e Floresta** (`professor_1`, `aluno_1`)
+- Minimização: cena 8 contradiz a cena 18; justificar o segundo X; mostrar um par que só cai na rodada seguinte; estado morto; desenhar o AFD mínimo.
+- AFN→AFD: segundo exemplo com fecho que muda o conjunto e com conjunto vazio, como `(ab|a)c`; dizer de onde vem o AFN.
+- Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`; Thompson com exemplo, ou tirar da ficha.
+- Contradições: "só a semântica consulta a tabela de símbolos" × ficha; AFD "no máximo uma" × "exatamente uma" seta; "três de análise, três de síntese".
+- Ponte entre "AFD aceita a cadeia inteira" e "o scanner fica com o último final".
+
+**Vale e Ponte** (`professor_2`, `aluno_2`)
+- **Associatividade**: o Vale manda pôr recursão à esquerda para o menos associar à esquerda, e a Ponte manda tirar. Falta dizer que a linguagem é a mesma, a árvore muda, e o código do parser (laço) recupera a conta. Os dois revisores acharam.
+- A gramática E/T/F (um nível por precedência) nunca é montada na aula animada, e é a gramática do resto do jogo.
+- Derivação mais à direita não é praticada (é a base do LR); ε como produção não é ensinado; "forma sentencial" e "sentença" são cobradas sem ter sido ditas; a receita não diz como escolher a regra.
+- A Ponte conserta gramáticas para um parser que só é apresentado na região 5: abrir com "No Templo você vai programar um parser que lê um token por vez, de cima para baixo, sem voltar atrás."
+- Recursão indireta tratada pela metade e de dois jeitos; α e β sem explicação; prática "Rode a versão consertada" usa pilha e `$` antes da hora.
+- Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING.
+
+**Templo Top-Down** (`professor_3`, `aluno_3`)
+- Receita do FOLLOW com α e β: reescrever em palavras ("Ache B do lado direito e olhe o que vem logo depois...") e incluir `S → A B d`.
+- Pegadinha do FOLLOW por `S → A B c`, mostrando todas as ocorrências do não-terminal.
+- Tabela: exemplo com produção anulável não vazia (`S → A B`) e conflito FIRST×FIRST; as três condições LL(1) na ficha; deixar FIRST e FOLLOW visíveis.
+- Descida recursiva: corrigir pré-requisito; mostrar `casa()` e o `main` com o teste do `$`; reescrever "LL(1): sem recursão à esquerda e fatorada", que soa como definição.
+
+**Fortaleza e Oficina** (`professor_4`, `aluno_4`)
+- Itens LR(0): terminar o autômato de `S → ( S ) | id` (6 estados, com laço), `S' → S` como passo 0 na tela, "conjunto repetido não é estado novo".
+- SLR: a tabela nasce das caixas de itens, com as regras numeradas e um exemplo em que o número do `s` difere do `r`.
+- LALR: abrir com o conflito de `S → L = R`; de onde vem o lookahead; fusão desenhada com estados completos, não itens soltos; separar kernel (itens de base) de core (núcleo).
+- Pegadinha do handle explicada por "ordem da conta" numa gramática em que o problema é beco sem saída.
+- Bison: precedência da regra × do token, `%right` com `2^3^2`, `%prec` no menos unário; "com qualquer token, ele reduz" precisa dizer que é a redução padrão.
+
+**Cidade e Forja** (`aluno_5`; professor falta)
+- A ficha cobra o que só está no texto: blocos básicos e líderes, quádruplas e triplas, `in = use ∪ (out − def)`, Chaitin, `$ra`/`jal`, vínculo de controle. Marcar na ficha o que vem da aula de texto, ou dar segunda aula animada a Otimização, MIPS e Alocação.
+- Pôr Ambientes de execução depois de Geração de código MIPS, e apresentar `$ra`, `$sp`, `jal` e `4($sp)` um por cena antes do `fat.asm`.
+- Abrir a região 8 com uma cena de transição ("o que o parser aceita e não devia") e avisar que a árvore agora é a enxuta.
+- AST, texto STORY, diz "compilador em Java"; o guia se chama "seu compilador em C".
+
+**Seu compilador** (`aluno_6`; professor falta)
+- Dizer por que há duas linguagens (Byteiro no guia, C na série) e dar a tabela de equivalência de nomes.
+- Fechar cada capítulo com "Na sua linguagem" (três perguntas) e "Teste desta etapa" com o comando e a saída esperada.
+- Algo rodando já no capítulo 1; cronograma de 3 semanas ao lado do de 8.
+- Capítulo 4: tabela FIRST/FOLLOW da Byteiro inteira, com a regra para `{ }` e `[ ]`.
+
+O que funciona, segundo os revisores: a aula de Tokens, a pegadinha do `ifa`, a abertura do FOLLOW, o experimento `5 - 2 - 1` no Bison, `9 - 5 - 2` na árvore, a função em C que chama `E();` antes de ler, os textos "Exemplo resolvido", o Guia do TP com arquivos inteiros e o checklist de véspera, e a correção técnica em geral.
 
 ## Como continuar gastando pouco
 
-1. Rode **um revisor por vez**, e não doze em paralelo. Cada um gasta cerca de 200 mil tokens.
-2. Prompt para cada um (troque papel, arquivos e nome do relatório):
-
-   > Leia `docs/revisao/roteiro_professor.md` e siga à risca. Seu bloco são os arquivos `docs/revisao/transcricoes/regiao3_*` e `regiao4_*`. Leia em pedaços grandes, sem reler. Grave o relatório em `docs/revisao/relatorios/professor_2_vale_ponte.md`.
-
-   Os roteiros citam o caminho antigo das transcrições (`/tmp/.../scratchpad/dump/`). Diga no prompt que agora elas estão em `docs/revisao/transcricoes/`.
-3. O que falta rodar: professor do bloco 5 e professor do bloco 6.
-4. Antes disso, o passo mais barato: peça para ler os 5 relatórios "gravados, não lidos" e acrescentar os achados deles a este documento.
-
-## Achados conferidos (eu verifiquei cada um na transcrição ou no código)
-
-### Erros que ensinam errado
-
-1. **Recuperação de erros se contradiz.** Na aula, cena 6, com `x = * 3 ;` a resposta certa é `;` e o `3` é errado. Pela receita da própria aula (cena 10, regra 2), o parser pararia no `3`, que está no FIRST de `Val`. A pegadinha "Parar ou seguir" usa `id = = num ; id` e marca `;` como certo; a cena 15 usa a mesma entrada e marca `num`. A abertura e o clipe repetem o problema. Conserto: trocar as quatro entradas por uma sem token do FIRST antes do `;`, como `x = * ; y = 2 ;`.
-2. **Glossário define handle com o erro que a aula combate**: "O pedaço do topo da pilha que casa com o lado direito de uma regra". O Bug do álbum marca essa ideia como falsa.
-3. **Itens LR(0), aula de tabelas, cena 7**: pede as caixas "com item com o ponto no fim" e marca I1 como errado, mas I1 tem `E' → E •`.
-4. **Tokens**: "token" é usado como o pedaço cortado (cena 5), como a classe (cenas 10 e 20) e, no glossário, como "o 10 é um token do tipo número". O aluno sai sem saber quantos tokens tem `x = y`.
-5. **Tokens, cena 1**: "O parser trabalha com palavras". A palavra "parser" não foi apresentada antes.
-
-### Padrões que valem para o jogo inteiro
-
-1. **A resposta certa quase nunca é a última opção.** Nas 137 perguntas "Preveja" com 4 opções, a última é a certa 0 vezes e a segunda 84 vezes. Nas 29 aberturas, a terceira opção é a certa 1 vez. As opções não são embaralhadas (`ui/screens/LessonScreen.kt:169` e `ui/screens/EpisodeScreen.kt:543`). Conserto barato: embaralhar na hora de mostrar.
-2. **"Erros comuns" tem sempre a resposta "errado"**: 29 de 29 aulas.
-3. **92 das 192 perguntas das aulas animadas têm duas opções.**
-4. **234 das 239 falas de acerto começam com "Isso".**
-5. **Personagens**: nas trilhas o Byte tem 870 falas, a professora 63 e o Bug nenhuma. Os revisores acharam as aulas animadas secas e as de texto engraçadas.
-6. **Trecho só ouvindo**: até 6 cenas seguidas sem interação. Em FIRST, FOLLOW, tabela LL(1), descida recursiva, itens LR(0) e tabela SLR, a primeira interação só vem na cena 6 ou 7.
-
-## Achados dos revisores (não conferi um a um; os relatórios trazem o trecho)
-
-Os três professores refizeram todas as contas e **não acharam nenhum conjunto, tabela, autômato ou traço de pilha errado**. Os problemas são de desenho:
-
-1. **O aluno reconhece, mas não produz.** A trilha animada nunca pede a questão de prova inteira: gramática → FIRST → FOLLOW → tabela → veredito; ou itens LR(0) → tabela SLR → conflito; ou a tabela de subconjuntos; ou a tabela de pares da minimização. Os exemplos resolvidos existem, mas só nas aulas de texto, que são opcionais. Este é o achado mais importante.
-2. **Os exemplos da aula animada evitam o caso difícil.** O ε-fecho depois do move nunca acrescenta estado; não aparece estado morto; no FOLLOW nunca há dois símbolos depois do não-terminal; a regra anulável é sempre o ε escrito; o ponto fixo nunca muda nada na segunda rodada; todas as gramáticas do "Fazer com ajuda" são LL(1). Na "prova de bolso", o revisor aluno errou o FOLLOW de `S → A B d` usando só a receita da aula.
-3. **Ficha e Bugs cobram o que a aula animada não ensinou**: Thompson, estado morto, `yytext`, front-end e back-end, tabela de símbolos, prefixo viável, `error` e `yyerrok`.
-4. **A receita do FOLLOW usa α e β sem explicar.** As frases faladas são melhores que a fórmula da tela.
-5. **Nomes demais para a mesma coisa**: `casa`, `casaToken` e `match`; `X`, `E'` e `A'`; closure, fecho e fechamento; cadeia, palavra e frase; "núcleo" para kernel e para core.
-6. **Sem prática de produção** em AFN→AFD, minimização e itens LR(0): não têm "Fazer com ajuda".
-7. **Outras contradições**: "só a semântica consulta a tabela de símbolos" contra a ficha; minimização, cena 8 contra cena 18; "LL(1): sem recursão à esquerda e fatorada" lido como definição; LALR mostrado como fusão de itens soltos, e não de estados; pegadinha do handle explicada por "ordem da conta" numa gramática em que o problema é beco sem saída.
-
-O que funciona, segundo os revisores: a aula de Tokens, a pegadinha do `ifa`, a abertura do FOLLOW, o experimento `5 - 2 - 1` no Bison, os textos "exemplo resolvido" e a correção técnica em geral.
-
-## As 6 mudanças que eu faria primeiro
-
-1. Corrigir os 5 erros da seção "Erros que ensinam errado".
-2. Embaralhar as opções e fazer o "colega" acertar em parte das aulas.
-3. Criar a etapa "Questão de prova" em cada assunto procedimental, com apoio que diminui: um exemplo resolvido, um para completar, um sozinho. Os exemplos já estão escritos nas aulas de texto.
-4. Trocar o segundo exemplo ("Sua vez") de cada aula por um que tenha o caso difícil. Os relatórios dizem qual usar em cada assunto.
-5. Alinhar ficha e Bugs com a aula animada, e escolher um nome por conceito.
-6. Dar falas à professora e ao Bug nas aulas animadas e variar o "Isso".
-
-## Pesquisa
-
-Resumos obtidos por busca na web, sem leitura do artigo inteiro. Confira antes de citar. O que já estava em `PESQUISA-DIVERSAO.md` e `PESQUISA-LAB-IA.md` não está repetido.
-
-### Como desenhar a aula
-
-| Ideia | Evidência | Uso aqui |
-|---|---|---|
-| Rótulos de subobjetivo: a receita diz para que serve cada passo | Margulieux e Morrison, [IJ STEM Education 2020](https://doaj.org/article/9a2c85d66fd54ec9ab019e9a510bbf17): melhor desempenho inicial, menos desistência, efeito pequeno | Reescrever as receitas (FOLLOW, itens LR(0)) com o propósito de cada passo |
-| Exemplo resolvido → para completar → sozinho | [Efeito do exemplo resolvido](https://en.wikipedia.org/wiki/Worked-example_effect) e [reversão por experiência](https://en.wikipedia.org/wiki/Expertise_reversal_effect); um estudo de 2019 achou o exemplo completo melhor que o parcial | Base da "Questão de prova" |
-| Explicar com as próprias palavras | [Bisra et al. 2018](https://doi.org/10.1007/s10648-018-9434-x): g = 0,55 em 64 estudos; múltipla escolha rende menos | Um "diga por quê" depois de cada "Sua vez" |
-| Exemplo errado | Resultado misto; só ajuda [com a correção junto](https://par.nsf.gov/servlets/purl/10155531) | A parte "Erros" já faz isso |
-| Segmentar, sinalizar e apresentar os nomes antes | Sinalização [d = 0,38](https://rex.libraries.wsu.edu/esploro/outputs/journalArticle/A-meta-analysis-of-signaling-principle-in/99900601052901842); segmentação [pequeno a médio em 56 estudos](https://www.doi.org/10.1007/S10648-018-9456-4) | Termo novo explicado na primeira vez |
-| Do concreto ao abstrato | [Revisão de Fyfe 2014](https://pc.cogs.indiana.edu/?p=885); em ciências a evidência é fraca | Manter exemplo antes do termo, sem tratar como regra |
-| Passos pequenos com prática depois de cada um | Rosenshine, [10 princípios](https://my.chartered.college/?p=5331) | Reduzir os trechos de 6 cenas só ouvindo |
-| Reaprender em dias diferentes até acertar | [Rawson e Dunlosky 2013](https://springerlink.bibliotecabuap.elogim.com/doi/10.1007/s10648-013-9240-4): nota subiu de C para B; sem agenda imposta o ganho some | O jogo já espaça; exigir acerto antes de dar o assunto por revisado |
-| Gamificação | [Resultados mistos](https://cacm.acm.org/news/the-games-people-play); ranking desanima quem está embaixo | Sem ranking |
-
-### Ensino de compiladores
-
-- Não achei estudo que meça quais conceitos de LL e LR os alunos erram. A lista de erros do roteiro do professor veio de notas de aula: [Washington CSE 401](https://courses.cs.washington.edu/courses/cse401/19au/sections/04-LL-worksheet.pdf), [Illinois](https://courses.engr.illinois.edu/cs421/sp2010/lectures/lecture8addendum.pdf), [Lund](https://fileadmin.cs.lth.se/cs/Education/EDAN65/2023/exercises/E05.pdf) e [Cambridge](https://www.cl.cam.ac.uk/teaching/1920/CompConstr/CC_2020_ParsingII.pdf).
-- Prova típica em disciplinas brasileiras: reescrever a gramática para LL(1), calcular FIRST e FOLLOW e montar a tabela ([UFRJ](https://fabiomascarenhas.github.io/comp/09LL1.pdf), [PUC-Rio](https://hisham.hm/puc-rio/comp/aula5.pdf)). Não achei levantamento de POSCOMP ou ENADE.
-- Construir o compilador aos poucos, com algo rodando a cada passo: [Ghuloum](https://notes.billmill.org/programming/compilers/An_Incremental_Approach_to_Compiler_Construction.html), [Siek](https://penguinrandomhouse.com/books/744514/essentials-of-compilation-by-jeremy-g-siek) e [Crafting Interpreters](https://eli.thegreenplace.net/2022/book-review-crafting-interpreters-by-robert-nystrom/). São argumentos de autor, sem estudo controlado. Vale conferir se o Guia do TP roda algo cedo (bloco 6, ainda não revisado).
-- O Bison mostra uma frase que prova o conflito com [`-Wcounterexamples`](https://www.gnu.org/software/bison/manual/html_node/Counterexamples.html), baseado em [Isradisaikul e Myers, 2015](https://www.cs.cornell.edu/andru/papers/cupex). Boa ideia para o Caça-Conflitos.
-- Em compiladores, um estudo com alunos achou o ANTLR melhor que Lex/Yacc em quase todas as medidas ([PLOS ONE 2022](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8893623/)).
-- Não achei jogo de compiladores publicado nos anais da SBC.
-
-### Usar IA como revisor "aluno" e para estudar
-
-- Modelo fingindo ser aluno sai coerente demais e superestima o que um aluno entende ([Borchers et al., 2026](https://arxiv.org/abs/2602.01015v1)); abandona o erro simulado assim que é corrigido ([Do e Sonkar, 2026](https://arxiv.org/html/2605.12748v1)). O que ajuda é dizer o que o aluno sabe e não sabe ([Yuan et al., 2026](https://arxiv.org/abs/2601.05473v1)). Por isso o roteiro do aluno manda relatar o que o texto entrega, citar o trecho e fazer a "prova de bolso". Mesmo assim, não substitui aluno de verdade: o botão "Não entendi" do jogo é o sensor melhor.
-- Nota de rubrica dada por modelo e opinião de professor podem divergir ([Wang et al., 2025](https://arxiv.org/pdf/2508.16659v1)). Use os relatórios como lista de suspeitas a conferir.
-- Para você estudar com IA: peça dicas e não a resposta, peça para ser testado, e explique o conceito com suas palavras para a IA corrigir ([Mollick, "Assigning AI"](https://arxiv.org/abs/2306.10052)). Não achei estudo independente sobre os "modos de estudo" do ChatGPT, do Claude e do Gemini.
-- Para escrever prompt de tarefa: diga o objetivo, o que ler, o que não fazer, o formato da saída e quando a tarefa termina ([Anthropic, sistema multiagente](https://www.anthropic.com/engineering/multi-agent-research-system)). Vários agentes gastam de 3 a 15 vezes mais que um só, segundo fontes secundárias.
+1. Rode **um revisor por vez**. Cada um gasta perto de 200 mil tokens.
+2. Use o prompt de [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md), seção "Revisor", trocando papel, arquivos e nome do relatório.
+3. Faltam os professores dos blocos 5 e 6.
+4. Depois de mudar aulas, gere as transcrições de novo (o teste que as gerava foi apagado; o formato está descrito em `docs/revisao/transcricoes/00_indice.md`).

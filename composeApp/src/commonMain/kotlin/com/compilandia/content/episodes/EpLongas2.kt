@@ -103,7 +103,7 @@ val aulasLongas2 by lazy {
                 hot("ml1c1", "ml2c2", "ml2c3")
             }
             fecho(Fecho(
-                tx("ll_f_af"), false, tx("ll_f_q"), tx("ll_f_dica"), tx("ll_f_ok"), tx("ll_f_certo"),
+                tx("ll_f_af"), true, tx("ll_f_q"), tx("ll_f_dica"), tx("ll_f_ok"), tx("ll_f_af"),
                 tx("ll_f_erro2"), tx("ll_f_certo2"), tx("ll_f_fala2"),
                 listOf(tx("ll_f_z1"), tx("ll_f_z2"), tx("ll_f_z3")), tx("ll_f_resumo"),
             ))
@@ -306,7 +306,7 @@ val aulasLongas2 by lazy {
                 move("o1", 180f, 160f); tint("o1", Tint.GREEN); hot("o1")
             }
             fecho(Fecho(
-                tx("lalr_f_af"), false, tx("lalr_f_q"), tx("lalr_f_dica"), tx("lalr_f_ok"), tx("lalr_f_certo"),
+                tx("lalr_f_af"), true, tx("lalr_f_q"), tx("lalr_f_dica"), tx("lalr_f_ok"), tx("lalr_f_af"),
                 tx("lalr_f_erro2"), tx("lalr_f_certo2"), tx("lalr_f_fala2"),
                 listOf(tx("lalr_f_z1"), tx("lalr_f_z2"), tx("lalr_f_z3")), tx("lalr_f_resumo"),
             ))
@@ -454,7 +454,7 @@ val aulasLongas2 by lazy {
                 hot("n0", "n2")
             }
             fecho(Fecho(
-                tx("ast_f_af"), false, tx("ast_f_q"), tx("ast_f_dica"), tx("ast_f_ok"), tx("ast_f_certo"),
+                tx("ast_f_af"), true, tx("ast_f_q"), tx("ast_f_dica"), tx("ast_f_ok"), tx("ast_f_af"),
                 tx("ast_f_erro2"), tx("ast_f_certo2"), tx("ast_f_fala2"),
                 listOf(tx("ast_f_z1"), tx("ast_f_z2"), tx("ast_f_z3")), tx("ast_f_resumo"),
             ))

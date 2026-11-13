@@ -540,7 +540,8 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
         val r = resposta
         if (r == null) {
             Row(Modifier.widthIn(max = com.compilandia.ui.LISTA_MAX), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                a.opcoes.forEachIndexed { i, o ->
+                val ordem = remember(a) { com.compilandia.learning.OrdemDasOpcoes.de(a.opcoes, a.desafio + a.skill.name) }
+                ordem.forEach { i -> val o = a.opcoes[i]
                     BigButton(o, Modifier.weight(1f), color = Palette.drawer) {
                         resposta = i
                         if (i == a.certa) { Juice.correct(); hurt++ } else Juice.wrong()

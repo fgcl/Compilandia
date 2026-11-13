@@ -166,7 +166,9 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             Text(tx("lessonscreen_preveja_antes_ver"), style = MaterialTheme.typography.labelMedium, color = Palette.orange)
             RichText(b.question, style = MaterialTheme.typography.titleSmall)
             val chosen = answered[index]
-            b.options.forEachIndexed { k, opt ->
+            // A tela embaralha; o índice guardado continua o do texto.
+            val ordem = remember(b) { com.compilandia.learning.OrdemDasOpcoes.de(b.options, b.question) }
+            ordem.forEach { k -> val opt = b.options[k]
                 val bg = when {
                     chosen == null -> Palette.white
                     k == b.correct -> Palette.green.copy(alpha = 0.25f)

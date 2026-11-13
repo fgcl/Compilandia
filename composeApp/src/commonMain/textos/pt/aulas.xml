@@ -87,7 +87,7 @@
     <string name="epclipes_cada_vez">Uma de cada vez</string>
     <string name="epclipes_lexema_texto_que_esta_no">Lexema é o texto que está no código, como conta.</string>
     <string name="epclipes_lexema">Lexema</string>
-    <string name="epclipes_token_classe_dele_como_identificador">Token é a classe dele, como identificador.</string>
+    <string name="epclipes_token_classe_dele_como_identificador">O token leva a classe dele, como identificador.</string>
     <string name="epclipes_scanner_fica_com_pedaco_mais">O scanner fica com o pedaço mais comprido que puder.</string>
     <string name="epclipes_maior_ou_igual_token_so">Maior ou igual é um token só, e não dois.</string>
     <string name="epclipes_if_casa_com_regra_nome">If casa com a regra de nome e com a palavra reservada.</string>
@@ -319,7 +319,7 @@
     <string name="eplexico_isso_tres_tokens_x_maior">Isso. Três tokens: x, maior ou igual, e dez.</string>
     <string name="eplexico_onde_corta">Onde corta?</string>
     <string name="eplexico_essa_regra_maior_casamento_por">Essa é a regra do maior casamento: o scanner sempre pega o pedaço mais longo possível. Por isso conta2 é um nome só.</string>
-    <string name="eplexico_texto_exato_lexema_classe_dele">O texto exato do pedaço é o lexema. A classe dele é o token. Vários lexemas diferentes têm o mesmo token.</string>
+    <string name="eplexico_texto_exato_lexema_classe_dele">O texto exato do pedaço é o lexema. O token é o que o scanner entrega: a classe, como ID, com o lexema junto. Lexemas diferentes podem ter a mesma classe.</string>
     <string name="eplexico_lexema_token">Lexema e token</string>
     <string name="eplexico_entram_letras_saem_tokens_agora">Entram letras, saem tokens. Agora quem corta é você.</string>
     <string name="eplexico_trem_automato">O trem do autômato</string>
@@ -953,8 +953,8 @@
     <string name="eptabelas_desses_itens_tem_ponto_antes">Um desses itens tem o ponto antes do T. Então entram as regras do T.</string>
     <string name="eptabelas_nao_entra_mais_nada_essa">Não entra mais nada. Essa caixa completa se chama fecho, ou closure.</string>
     <string name="eptabelas_agora_goto_pulando_cada_simbolo">Agora o goto. Pulando cada símbolo, nasce outra caixa. O fio sai da linha dele.</string>
-    <string name="eptabelas_algumas_caixas_tem_item_com">Algumas caixas têm item com o ponto no fim. Essas mandam reduzir. Toque nelas.</string>
-    <string name="eptabelas_procure_ponto_na_ultima_posicao">Procure o ponto na última posição, sem nada depois dele.</string>
+    <string name="eptabelas_algumas_caixas_tem_item_com">Item com o ponto no fim manda reduzir. Só o E linha vai para E, ponto, não reduz: ele aceita a entrada. Toque nas caixas que reduzem.</string>
+    <string name="eptabelas_procure_ponto_na_ultima_posicao">Procure o ponto na última posição. O item do E linha aceita, não reduz.</string>
     <string name="eptabelas_isso_com_ponto_no_fim">Isso. Com o ponto no fim, a regra inteira já está na pilha.</string>
     <string name="eptabelas_bison_desenha_estados_assim_com">O bison desenha os estados assim, com a opção graph.</string>
     <string name="eptabelas_agora_monte_fecho_outra_gramatica">Agora monte o fecho de outra gramática. Toque nos itens que entram.</string>
@@ -982,7 +982,7 @@
     <string name="eptabelas_main_chama_fat_tres_nasce">O main chama fat de três. Nasce uma caixa com n igual a três.</string>
     <string name="eptabelas_dentro_dela_fica_tambem_endereco">Dentro dela fica também o endereço de volta: para onde o resultado vai.</string>
     <string name="eptabelas_fat_tres_chama_fat_dois">fat de três chama fat de dois. Outra caixa entra por cima.</string>
-    <string name="eptabelas_fat_dois_chama_fat_pilha">E fat de dois chama fat de um. A pilha cresce para cima.</string>
+    <string name="eptabelas_fat_dois_chama_fat_pilha">E fat de dois chama fat de um. No desenho a pilha cresce para cima; na memória do MIPS ela desce, para endereços menores.</string>
     <string name="eptabelas_quando_fat_terminar_qual_caixa">Quando fat de um terminar, qual caixa sai primeiro? Toque nela.</string>
     <string name="eptabelas_pilha_so_tira_pelo_topo">A pilha só tira pelo topo.</string>
     <string name="eptabelas_isso_sai_sempre_cima_ultima">Isso. Sai sempre a de cima, a última que entrou.</string>

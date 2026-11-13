@@ -435,7 +435,7 @@ val gramaticas by lazy {
                 drop("k1", "k2"); hot()
             }
             fecho(Fecho(
-                tx("fat_f_af"), false, tx("fat_f_q"), tx("fat_f_dica"), tx("fat_f_ok"), tx("fat_f_certo"),
+                tx("fat_f_af"), true, tx("fat_f_q"), tx("fat_f_dica"), tx("fat_f_ok"), tx("fat_f_af"),
                 tx("fat_f_erro2"), tx("fat_f_certo2"), tx("fat_f_fala2"),
                 listOf(tx("fat_f_z1"), tx("fat_f_z2"), tx("fat_f_z3")), tx("fat_f_resumo"),
             ))

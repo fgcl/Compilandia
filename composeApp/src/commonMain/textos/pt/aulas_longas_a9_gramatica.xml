@@ -53,7 +53,7 @@
     <string name="amb_l_09">Com nove, cinco e dois, quanto dá esta árvore? Toque no número.</string>
     <string name="amb_l_09_dica">Faça cinco menos dois antes. Depois tire o resultado de nove.</string>
     <string name="amb_l_09_ok">Isso. Seis. A outra árvore dava dois.</string>
-    <string name="amb_l_10">As duas árvores dão contas diferentes. Pela receita, a gramática é ambígua.</string>
+    <string name="amb_l_10">Duas árvores para a mesma frase: pela receita, a gramática é ambígua. Aqui, ainda por cima, as contas dão resultados diferentes.</string>
     <string name="amb_l_11">Conserto: à direita do menos, a regra nova só aceita um n. A recursão fica só à esquerda, e o menos associa à esquerda.</string>
     <string name="amb_l_12">Com a regra nova, quantas árvores tem n menos n menos n?</string>
     <string name="amb_l_12_dica">À direita do menos só cabe um n.</string>

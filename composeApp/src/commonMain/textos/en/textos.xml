@@ -141,7 +141,7 @@
     <string name="lessonspart1_para_que_serve_fatoracao_esquerda">What is left factoring for?</string>
     <string name="lessonspart1_adiar_escolha_producao_ate_ver">Putting off the choice of production until enough input is seen</string>
     <string name="lessonspart1_qual_prefixo_usar">Which prefix to use?</string>
-    <string name="lessonspart1_maior_prefixo_comum_duas_ou">The longest prefix common to two or more alternatives</string>
+    <string name="lessonspart1_maior_prefixo_comum_duas_ou">The longest prefix common to every alternative in the group (those that start with the same symbol)</string>
     <string name="lessonspart1_fatore_x_y_z_x">Factor A → x y z | x y</string>
     <string name="lessonspart1_else_pendurado_fatorado">Factored dangling else?</string>
     <string name="lessonspart1_fatorar_resolve_ambiguidade">Does factoring fix ambiguity?</string>
@@ -821,7 +821,7 @@
     <string name="lessonspart1c_quando_proximo_token_nao_quando">When the next token is NOT ';': when it's in FOLLOW(L'), like the end of the input.</string>
     <string name="lessonspart1c_sem_conflitos_agora_ll_1">No conflicts: now it's LL(1).</string>
     <string name="lessonspart1c_fatorando_passo_passo">Factoring step by step</string>
-    <string name="lessonspart1c_receita_para_cada_ache_maior">Recipe: for each A, find the LONGEST prefix α common to two or more alternatives. If α ≠ ε: A → αβ₁ | … | αβₙ | γ becomes A → αA' | γ and A' → β₁ | … | βₙ.</string>
+    <string name="lessonspart1c_receita_para_cada_ache_maior">Recipe: for each A, find the LONGEST prefix α common to two or more alternatives. If α ≠ ε: A → αβ₁ | … | αβₙ | γ becomes A → αA' | γ and A' → β₁ | … | βₙ. The animated lesson first factors out the prefix common to the whole group: the order of the rounds changes, but the final grammar is the same.</string>
     <string name="lessonspart1c_1_alternativas_que_comecam_com">1. Alternatives that start with `a`: a b c, a b d, a e. (f stays out: it's the γ.)</string>
     <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Longest prefix common to ALL THREE: just `a` (a e doesn't have b).</string>
     <string name="lessonspart1c_4_repita_em_b_c">4. Repeat! In A', `b c` and `b d` share `b`.</string>

@@ -144,7 +144,7 @@
     <string name="lessonspart1_para_que_serve_fatoracao_esquerda">Para que serve a fatoração à esquerda?</string>
     <string name="lessonspart1_adiar_escolha_producao_ate_ver">Adiar a escolha da produção até ver entrada suficiente</string>
     <string name="lessonspart1_qual_prefixo_usar">Qual prefixo usar?</string>
-    <string name="lessonspart1_maior_prefixo_comum_duas_ou">O maior prefixo comum a duas ou mais alternativas</string>
+    <string name="lessonspart1_maior_prefixo_comum_duas_ou">O maior prefixo comum a todas as alternativas do grupo (as que começam com o mesmo símbolo)</string>
     <string name="lessonspart1_fatore_x_y_z_x">Fatore A → x y z | x y</string>
     <string name="lessonspart1_else_pendurado_fatorado">Else pendurado fatorado?</string>
     <string name="lessonspart1_fatorar_resolve_ambiguidade">Fatorar resolve ambiguidade?</string>
@@ -846,7 +846,7 @@
     <string name="lessonspart1c_quando_proximo_token_nao_quando">Quando o próximo token NÃO é ';', quando ele está em FOLLOW(L'), como o fim da entrada.</string>
     <string name="lessonspart1c_sem_conflitos_agora_ll_1">Sem conflitos: agora é LL(1).</string>
     <string name="lessonspart1c_fatorando_passo_passo">Fatorando passo a passo</string>
-    <string name="lessonspart1c_receita_para_cada_ache_maior">Receita: para cada A, ache o MAIOR prefixo α comum a duas ou mais alternativas. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ.</string>
+    <string name="lessonspart1c_receita_para_cada_ache_maior">Receita: para cada A, ache o MAIOR prefixo α comum a duas ou mais alternativas. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ. A aula animada põe em evidência primeiro o prefixo comum a todas do grupo: a ordem das rodadas muda, mas a gramática do fim é a mesma.</string>
     <string name="lessonspart1c_1_alternativas_que_comecam_com">1. Alternativas que começam com `a`: a b c, a b d, a e. (f fica de fora: é o γ.)</string>
     <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Maior prefixo comum às TRÊS: só `a` (a e não tem b).</string>
     <string name="lessonspart1c_4_repita_em_b_c">4. Repita! Em A', `b c` e `b d` compartilham `b`.</string>

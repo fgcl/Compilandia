@@ -327,7 +327,8 @@ private fun ConflictResolution(ctx: GameCtx, gid: String, g: Grammar, conflicts:
     var pick by remember { mutableStateOf<Int?>(null) }
     PaperCard(border = Palette.purple) {
         RichText(q.text, style = MaterialTheme.typography.titleSmall)
-        q.options.forEachIndexed { i, o ->
+        val ordem = remember(q) { com.compilandia.learning.OrdemDasOpcoes.de(q.options, q.text) }
+        ordem.forEach { i -> val o = q.options[i]
             BigButton(o, Modifier.fillMaxWidth(), small = true, enabled = pick == null || i == pick || i == q.right,
                 color = when { pick == null -> Palette.white; i == q.right -> Palette.green; else -> Palette.red }) {
                 if (pick == null) { pick = i; if (i == q.right) Juice.correct() else Juice.wrong() }

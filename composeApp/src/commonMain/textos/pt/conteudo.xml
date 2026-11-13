@@ -20,7 +20,7 @@
     <string name="bugs_scanner_pega_nenhum_token_comeca">O scanner pega: nenhum token começa com @.</string>
     <string name="bugs_bug_lexema_gemeo">Bug do Lexema Gêmeo</string>
     <string name="bugs_token_lexema_sao_mesma_coisa">Token e lexema são a mesma coisa.</string>
-    <string name="bugs_lexema_texto_token_classe_id">Lexema é o texto. Token é a classe: id, num, if.</string>
+    <string name="bugs_lexema_texto_token_classe_id">Lexema é o texto. O token leva a classe (id, num, if) e o lexema.</string>
     <string name="bugs_em_conta_10_conta_lexema">Em conta = 10, conta é lexema e id é token.</string>
     <string name="bugs_dois_lexemas_diferentes_podem_ter">Dois lexemas diferentes podem ter o mesmo token.</string>
     <string name="bugs_cada_lexema_tem_token_so">Cada lexema tem um token só dele.</string>
@@ -71,7 +71,7 @@
     <string name="bugs_bug_terminal_trocado">Bug do Terminal Trocado</string>
     <string name="bugs_terminal_que_ainda_vai_virar">Terminal é o que ainda vai virar outra coisa.</string>
     <string name="bugs_nao_terminal_que_se_troca">Não terminal é o que se troca. Terminal fica até o fim.</string>
-    <string name="bugs_folhas_arvore_frase_sao_terminais">As folhas da árvore de uma frase são terminais.</string>
+    <string name="bugs_folhas_arvore_frase_sao_terminais">As folhas da árvore de uma frase são terminais, ou ε quando uma regra some.</string>
     <string name="bugs_frase_so_tem_terminais">Uma frase só tem terminais.</string>
     <string name="bugs_forma_sentencial_nunca_tem_nao">Forma sentencial nunca tem não terminal.</string>
     <string name="bugs_ela_pode_ter_dois_tipos">Ela pode ter os dois tipos de símbolo.</string>
@@ -86,7 +86,7 @@
     <string name="bugs_ambiguidade_so_detalhe_desenho">Ambiguidade é só detalhe de desenho.</string>
     <string name="bugs_duas_arvores_dao_dois_resultados">Duas árvores dão dois resultados: 2 + 3 * 4 vira 14 ou 20.</string>
     <string name="bugs_gramatica_ambigua_tem_frase_com">Gramática ambígua tem uma frase com duas árvores.</string>
-    <string name="bugs_duas_derivacoes_pela_esquerda_diferentes">Duas derivações pela esquerda diferentes provam ambiguidade.</string>
+    <string name="bugs_duas_derivacoes_pela_esquerda_diferentes">Duas derivações pela esquerda diferentes da mesma frase provam ambiguidade.</string>
     <string name="bugs_toda_gramatica_expressoes_ambigua">Toda gramática de expressões é ambígua.</string>
     <string name="bugs_com_niveis_t_f_ela">Com níveis E, T e F ela deixa de ser.</string>
     <string name="bugs_bug_laco_eterno">Bug do Laço Eterno</string>

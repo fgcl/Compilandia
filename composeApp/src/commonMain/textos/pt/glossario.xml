@@ -5,7 +5,7 @@
     <string name="gl_fechar">Fechar</string>
     <string name="gl_token_nome">token</string>
     <string name="gl_token_formas">token|tokens</string>
-    <string name="gl_token_def">Um pedaço com nome. Em x = 10, o 10 é um token do tipo número.</string>
+    <string name="gl_token_def">O que o scanner entrega por pedaço: classe e texto. Em x = 10 há três tokens.</string>
     <string name="gl_lexema_nome">lexema</string>
     <string name="gl_lexema_formas">lexema|lexemas</string>
     <string name="gl_lexema_def">O texto exato de um token. No token número, o lexema pode ser 10.</string>
@@ -38,7 +38,7 @@
     <string name="gl_ambigua_def">Gramática em que a mesma frase tem duas árvores diferentes.</string>
     <string name="gl_recursao_nome">recursão à esquerda</string>
     <string name="gl_recursao_formas">recursão à esquerda</string>
-    <string name="gl_recursao_def">Regra em que o símbolo começa com ele mesmo, como E vai para E mais T.</string>
+    <string name="gl_recursao_def">Regra cujo lado direito começa com o próprio símbolo da esquerda, como E vai para E mais T.</string>
     <string name="gl_fatoracao_nome">fatoração</string>
     <string name="gl_fatoracao_formas">fatoração|fatorar</string>
     <string name="gl_fatoracao_def">Pôr em evidência o começo comum de duas regras para adiar a escolha.</string>
@@ -56,7 +56,7 @@
     <string name="gl_lookahead_def">O próximo token da entrada, que o parser espia para decidir.</string>
     <string name="gl_handle_nome">handle</string>
     <string name="gl_handle_formas">handle</string>
-    <string name="gl_handle_def">O pedaço do topo da pilha que casa com o lado direito de uma regra.</string>
+    <string name="gl_handle_def">O lado direito no topo que é certo reduzir agora. Nem todo lado direito no topo é handle.</string>
     <string name="gl_shift_nome">shift</string>
     <string name="gl_shift_formas">shift</string>
     <string name="gl_shift_def">Empilhar: o parser pega o próximo token e põe na pilha.</string>

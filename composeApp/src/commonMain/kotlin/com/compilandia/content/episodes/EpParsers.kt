@@ -205,7 +205,7 @@ val topDown by lazy {
                 hot("p0", "i3")
             }
             fecho(Fecho(
-                tx("pred_f_af"), false, tx("pred_f_q"), tx("pred_f_dica"), tx("pred_f_ok"), tx("pred_f_certo"),
+                tx("pred_f_af"), true, tx("pred_f_q"), tx("pred_f_dica"), tx("pred_f_ok"), tx("pred_f_af"),
                 tx("pred_f_erro2"), tx("pred_f_certo2"), tx("pred_f_fala2"),
                 listOf(tx("pred_f_z1"), tx("pred_f_z2"), tx("pred_f_z3")), tx("pred_f_resumo"),
             ))
@@ -311,11 +311,12 @@ val topDown by lazy {
 
         // ─────────────────────────────── RECUPERAÇÃO DE ERROS ───────────────────────────────
         episodio(Skill.ERROR_RECOVERY, tx("epparsers_cair_levantar")) {
-            val itens = listOf("x", "=", "*", "3", ";", "y", "=", "2", ";")
+            // Sem token do FIRST de Val antes do ";": assim o ";" é mesmo onde ele se segura (regras 1 e 3 da receita).
+            val itens = listOf("x", "=", "*", ";", "y", "=", "2", ";")
             // 1. Por que existe
             cena(tx("erro_l_01"), mood = EpMood.THINK) {
                 add(titulo(tx("erro_l_titulo")))
-                add(codigo("c", listOf("x = * 3;", "y = 2;", "z = ;"), 130f, x = 110f, passo = 40f, size = 18f))
+                add(codigo("c", listOf("x = * ;", "y = 2;", "z = ;"), 130f, x = 110f, passo = 40f, size = 18f))
                 hot("c0", "c2")
             }
             cena(tx("erro_l_02")) { hot("c2") }
@@ -336,14 +337,14 @@ val topDown by lazy {
             }
             pergunta(
                 tx("epparsers_no_modo_panico_ele_descarta"),
-                setOf("k4"), setOf("k3", "k5", "k7"),
+                setOf("k3"), setOf("k4", "k6", "k7"),
                 tx("epparsers_procure_token_que_encerra_comando"),
                 tx("epparsers_isso_ponto_virgula_sincronizador"),
             ) { hot() }
             cena(tx("epparsers_tudo_ate_ali_vai_fora")) {
-                drop("k2", "k3", "e")
-                tint("k4", Tint.GREEN)
-                hot("k5", "g1")
+                drop("k2", "e")
+                tint("k3", Tint.GREEN)
+                hot("k4", "g1")
             }
             cena(tx("epparsers_bons_sincronizadores_saem_follow_cada"), who = PROF) { hot() }
             cena(tx("epparsers_assim_compilacao_so_aponta_varios"), mood = EpMood.HAPPY) {}
@@ -597,7 +598,7 @@ val bottomUp by lazy {
                 hot("v2")
             }
             fecho(Fecho(
-                tx("bison_f_af"), false, tx("bison_f_q"), tx("bison_f_dica"), tx("bison_f_ok"), tx("bison_f_certo"),
+                tx("bison_f_af"), true, tx("bison_f_q"), tx("bison_f_dica"), tx("bison_f_ok"), tx("bison_f_af"),
                 tx("bison_f_erro2"), tx("bison_f_certo2"), tx("bison_f_fala2"),
                 listOf(tx("bison_f_z1"), tx("bison_f_z2"), tx("bison_f_z3")), tx("bison_f_resumo"),
             ))

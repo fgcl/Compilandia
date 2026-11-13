@@ -188,7 +188,7 @@ val clipesTodos by lazy {
         episodio(Skill.ERROR_RECOVERY, tx("comum_modo_panico"), CLIPE) {
             cena(tx("epclipes_achou_erro_parser_joga_tokens")) {
                 add(titulo(tx("comum_modo_panico")))
-                add(fileira("f", listOf("=" to Tint.RED, "=" to Tint.RED, "2" to Tint.DARK, ";" to Tint.YELLOW), 200f, w = 62f, h = 56f, size = 20f))
+                add(fileira("f", listOf("=" to Tint.DARK, "*" to Tint.RED, "=" to Tint.RED, ";" to Tint.YELLOW), 200f, w = 62f, h = 56f, size = 20f))
             }
             cena(tx("epclipes_ponto_virgula_mais_comum_dai")) { hot("f3") }
         },

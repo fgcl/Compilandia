@@ -1,0 +1,112 @@
+# Tarefas
+
+Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](REVISAO-AULAS.md) (código E1, E2... ou o bloco) e nos relatórios em `docs/revisao/relatorios/`. A ordem dentro de cada seção é a de prioridade.
+
+## 1. Erros que ensinam errado
+
+- [x] E1. Recuperação de erros: as quatro entradas que sincronizavam no `;` contra a receita
+- [x] E2. Glossário: handle
+- [x] E3. Itens LR(0), aula de tabelas, cena 7: `E' → E •` aceita, não reduz
+- [x] E4. Token com um sentido só (aula, ficha, Bug, clipe, glossário)
+- [x] E5. Tokens, cena 1: apresentar "parser"
+- [x] Ambiguidade, cena 10: não depende de as contas darem resultados diferentes
+- [x] Bugs: folhas podem ser ε; "duas derivações da mesma frase"
+- [x] Glossário: recursão à esquerda
+- [x] Fatoração: uma regra só para o "maior prefixo" na ficha e no FORMAL
+- [ ] Fatoração: conferir o texto WORKED ("comum às TRÊS") com a regra nova
+- [x] Ambientes de execução: "a pilha cresce para cima" só no desenho
+- [ ] E7. SLR, cena 4: tabela com 3 de 5 estados e `s3` sem estado
+- [ ] E8. Escopo, cena 4: `x = 2;` fora de função
+- [ ] E9. Alocação, cenas 14 e 15: vivacidade de baixo para cima
+- [ ] E10. TAC, texto WORKED: forma do `ifFalse` igual à da prática
+- [ ] E11. MIPS, cena 5: `$t1` × `t1` na mesma tela
+- [ ] E12. Série em C 5: `e: e '+' e` sem `%left`
+- [ ] E13. Guia do TP, cap. 8: `move` e pseudo-instruções na cola
+- [ ] AST, texto STORY: "compilador em Java" × "seu compilador em C"
+- [ ] "Só a semântica consulta a tabela de símbolos" × ficha
+- [ ] AFD com "no máximo uma" × "exatamente uma" seta
+
+## 2. Padrões do jogo inteiro
+
+- [x] Embaralhar as alternativas na tela (`OrdemDasOpcoes`)
+- [x] O colega da parte Erros acerta em parte das aulas (13 de 29)
+- [ ] Variar a fala de acerto: 234 de 239 começam com "Isso" (o "**Isso!**" do `LessonScreen.kt` é o primeiro)
+- [ ] Menos perguntas de duas opções (92 de 192)
+- [ ] Primeira interação antes da cena 4 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
+- [ ] Nenhum trecho com mais de 4 cenas só ouvindo
+- [ ] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
+- [ ] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
+- [ ] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto"
+- [ ] Dar falas à professora e ao Bug nas aulas animadas
+
+## 3. O aluno produz a resposta
+
+- [ ] Etapa "Questão de prova" em LL1_TABLE (exemplo resolvido → para completar → sozinho, com conflito no terceiro)
+- [ ] "Questão de prova" em SLR_TABLE: `E → E + n | n`, depois `S → ( S ) | id`, depois `S → L = R | R`
+- [ ] "Questão de prova" em NFA_TO_DFA e DFA_MINIMIZATION (tabela Dtran e escadinha de pares)
+- [ ] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
+- [ ] Exercício integrado "torne LL(1)": tirar a recursão, depois fatorar
+- [ ] Um "diga por quê" depois de cada "Sua vez" (autoexplicação)
+- [ ] Revisão espaçada exige acerto antes de dar o assunto por revisado
+
+## 4. O segundo exemplo traz o caso difícil
+
+- [ ] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
+- [ ] Minimização: o AFD do livro (3 rodadas) e `a*b*` com estado morto
+- [ ] FOLLOW: `S → A B d`, com dois símbolos depois do não-terminal; receita sem α e β
+- [ ] FIRST: uma rodada que muda algo e uma regra `B → C`
+- [ ] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
+- [ ] Recursão à esquerda: `E → E + T | E − T | T`, e E/T/F numa prática
+- [ ] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)
+- [ ] Gramáticas não LL(1) no sorteio do "Fazer com ajuda"
+
+## 5. Por região
+
+**Porto e Floresta**
+- [ ] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
+- [ ] Thompson com um exemplo desenhado, ou tirar da ficha
+- [ ] Minimização: cena 8 × cena 18; justificar o segundo X
+- [ ] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
+
+**Vale e Ponte**
+- [ ] Associatividade: a árvore muda depois de tirar a recursão, e o laço do parser recupera a conta
+- [ ] Montar E/T/F na aula de ambiguidade
+- [ ] Derivação mais à direita praticada em 3 cenas
+- [ ] ε como produção, "forma sentencial" e "sentença" ditas na aula
+- [ ] Abrir a Ponte apresentando o parser descendente
+- [ ] Recursão indireta até o fim
+- [ ] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
+
+**Templo Top-Down**
+- [ ] Pegadinha do FOLLOW com `S → A B c`
+- [ ] As três condições LL(1) na ficha; FIRST e FOLLOW visíveis na aula da tabela
+- [ ] Descida recursiva: pré-requisito, `casa()` e o `main` com o teste do `$`
+
+**Fortaleza e Oficina**
+- [ ] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
+- [ ] SLR: a tabela nasce das caixas de itens
+- [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
+- [ ] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
+- [ ] Bison: precedência da regra × do token, `%right` com `2^3^2`, `%prec`; dizer que "reduz com qualquer token" é a redução padrão
+
+**Cidade e Forja**
+- [ ] Ambientes de execução depois de Geração de código MIPS
+- [ ] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
+- [ ] Cena de transição na abertura da região 8
+- [ ] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto
+
+**Seu compilador**
+- [ ] Por que há duas linguagens, com tabela de equivalência de nomes
+- [ ] "Na sua linguagem" e "Teste desta etapa" no fim de cada capítulo
+- [ ] Algo rodando no capítulo 1; cronograma de 3 semanas
+- [ ] Capítulo 4: FIRST/FOLLOW da Byteiro inteira
+
+## 6. Revisão e documentação
+
+- [x] Juntar as três pesquisas em [PESQUISA.md](PESQUISA.md)
+- [x] Ler os 5 relatórios que faltavam e juntar os achados em REVISAO-AULAS.md
+- [x] Prompt de trabalho para o Opus 5.5 em [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md)
+- [ ] Revisor professor do bloco 5 (Semântica e Forja)
+- [ ] Revisor professor do bloco 6 (Seu compilador)
+- [ ] Gerar as transcrições de novo depois das correções
+- [ ] Teste com aluno de verdade: olhar o que o botão "Não entendi" guardou

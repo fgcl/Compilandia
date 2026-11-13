@@ -83,7 +83,7 @@
     <string name="epclipes_cada_vez">One at a time</string>
     <string name="epclipes_lexema_texto_que_esta_no">The lexeme is the text in the code, like total.</string>
     <string name="epclipes_lexema">Lexeme</string>
-    <string name="epclipes_token_classe_dele_como_identificador">The token is its class, like identifier.</string>
+    <string name="epclipes_token_classe_dele_como_identificador">The token carries its class, like identifier.</string>
     <string name="epclipes_scanner_fica_com_pedaco_mais">The scanner keeps the longest piece it can.</string>
     <string name="epclipes_maior_ou_igual_token_so">Greater-or-equal is a single token, not two.</string>
     <string name="epclipes_if_casa_com_regra_nome">If matches both the name rule and the reserved word.</string>
@@ -300,7 +300,7 @@
     <string name="eplexico_isso_tres_tokens_x_maior">Right. Three tokens: x, greater-or-equal, and ten.</string>
     <string name="eplexico_onde_corta">Where does it cut?</string>
     <string name="eplexico_essa_regra_maior_casamento_por">That is the longest match rule: the scanner always takes the longest possible piece. That is why total2 is a single name.</string>
-    <string name="eplexico_texto_exato_lexema_classe_dele">The exact text of the piece is the lexeme. Its class is the token. Many different lexemes share the same token.</string>
+    <string name="eplexico_texto_exato_lexema_classe_dele">The exact text of the piece is the lexeme. The token is what the scanner hands over: the class, such as ID, with the lexeme attached. Different lexemes can share the same class.</string>
     <string name="eplexico_lexema_token">Lexeme and token</string>
     <string name="eplexico_entram_letras_saem_tokens_agora">Letters go in, tokens come out. Now you do the cutting.</string>
     <string name="eplexico_trem_automato">The automaton train</string>
@@ -916,8 +916,8 @@
     <string name="eptabelas_desses_itens_tem_ponto_antes">One of these items has the dot before the T. So the rules of T go in.</string>
     <string name="eptabelas_nao_entra_mais_nada_essa">Nothing else goes in. This complete box is called the closure.</string>
     <string name="eptabelas_agora_goto_pulando_cada_simbolo">Now the goto. Jumping over each symbol, another box is born. The wire leaves its line.</string>
-    <string name="eptabelas_algumas_caixas_tem_item_com">Some boxes have an item with the dot at the end. Those say reduce. Tap them.</string>
-    <string name="eptabelas_procure_ponto_na_ultima_posicao">Look for the dot in the last position, with nothing after it.</string>
+    <string name="eptabelas_algumas_caixas_tem_item_com">An item with the dot at the end says reduce. Only E prime goes to E, dot, doesn't reduce: it accepts the input. Tap the boxes that reduce.</string>
+    <string name="eptabelas_procure_ponto_na_ultima_posicao">Look for the dot in the last position. The E prime item accepts, it doesn't reduce.</string>
     <string name="eptabelas_isso_com_ponto_no_fim">Right. With the dot at the end, the whole rule is already on the stack.</string>
     <string name="eptabelas_bison_desenha_estados_assim_com">Bison draws the states like this, with the graph option.</string>
     <string name="eptabelas_agora_monte_fecho_outra_gramatica">Now build the closure of another grammar. Tap the items that go in.</string>
@@ -945,7 +945,7 @@
     <string name="eptabelas_main_chama_fat_tres_nasce">main calls fat of three. A box is born with n equal to three.</string>
     <string name="eptabelas_dentro_dela_fica_tambem_endereco">Inside it is also the return address: where the result goes.</string>
     <string name="eptabelas_fat_tres_chama_fat_dois">fat of three calls fat of two. Another box goes on top.</string>
-    <string name="eptabelas_fat_dois_chama_fat_pilha">And fat of two calls fat of one. The stack grows upward.</string>
+    <string name="eptabelas_fat_dois_chama_fat_pilha">And fat of two calls fat of one. In the drawing the stack grows upward; in MIPS memory it grows down, toward lower addresses.</string>
     <string name="eptabelas_quando_fat_terminar_qual_caixa">When fat of one finishes, which box leaves first? Tap it.</string>
     <string name="eptabelas_pilha_so_tira_pelo_topo">The stack only takes things off the top.</string>
     <string name="eptabelas_isso_sai_sempre_cima_ultima">Right. The top one always leaves, the last one that went in.</string>

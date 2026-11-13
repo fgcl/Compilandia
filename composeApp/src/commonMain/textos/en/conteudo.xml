@@ -19,7 +19,7 @@
     <string name="bugs_scanner_pega_nenhum_token_comeca">The scanner catches it: no token starts with @.</string>
     <string name="bugs_bug_lexema_gemeo">Twin Lexeme Bug</string>
     <string name="bugs_token_lexema_sao_mesma_coisa">Token and lexeme are the same thing.</string>
-    <string name="bugs_lexema_texto_token_classe_id">The lexeme is the text. The token is the class: id, num, if.</string>
+    <string name="bugs_lexema_texto_token_classe_id">The lexeme is the text. The token carries the class (id, num, if) and the lexeme.</string>
     <string name="bugs_em_conta_10_conta_lexema">In total = 10, total is the lexeme and id is the token.</string>
     <string name="bugs_dois_lexemas_diferentes_podem_ter">Two different lexemes can have the same token.</string>
     <string name="bugs_cada_lexema_tem_token_so">Each lexeme has a token all its own.</string>
@@ -70,7 +70,7 @@
     <string name="bugs_bug_terminal_trocado">Swapped Terminal Bug</string>
     <string name="bugs_terminal_que_ainda_vai_virar">A terminal is what will still turn into something else.</string>
     <string name="bugs_nao_terminal_que_se_troca">A nonterminal is what gets replaced. A terminal stays until the end.</string>
-    <string name="bugs_folhas_arvore_frase_sao_terminais">The leaves of a sentence's tree are terminals.</string>
+    <string name="bugs_folhas_arvore_frase_sao_terminais">The leaves of a sentence's tree are terminals, or ε when a rule vanishes.</string>
     <string name="bugs_frase_so_tem_terminais">A sentence has only terminals.</string>
     <string name="bugs_forma_sentencial_nunca_tem_nao">A sentential form never has a nonterminal.</string>
     <string name="bugs_ela_pode_ter_dois_tipos">It can have both kinds of symbol.</string>
@@ -85,7 +85,7 @@
     <string name="bugs_ambiguidade_so_detalhe_desenho">Ambiguity is just a drawing detail.</string>
     <string name="bugs_duas_arvores_dao_dois_resultados">Two trees give two results: 2 + 3 * 4 becomes 14 or 20.</string>
     <string name="bugs_gramatica_ambigua_tem_frase_com">An ambiguous grammar has a sentence with two trees.</string>
-    <string name="bugs_duas_derivacoes_pela_esquerda_diferentes">Two different leftmost derivations prove ambiguity.</string>
+    <string name="bugs_duas_derivacoes_pela_esquerda_diferentes">Two different leftmost derivations of the same sentence prove ambiguity.</string>
     <string name="bugs_toda_gramatica_expressoes_ambigua">Every expression grammar is ambiguous.</string>
     <string name="bugs_com_niveis_t_f_ela">With levels E, T and F it stops being ambiguous.</string>
     <string name="bugs_bug_laco_eterno">Endless Loop Bug</string>

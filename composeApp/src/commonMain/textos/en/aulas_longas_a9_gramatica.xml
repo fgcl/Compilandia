@@ -53,7 +53,7 @@
     <string name="amb_l_09">With nine, five and two, what does this tree give? Tap the number.</string>
     <string name="amb_l_09_dica">Do five minus two first. Then subtract the result from nine.</string>
     <string name="amb_l_09_ok">Right. Six. The other tree gave two.</string>
-    <string name="amb_l_10">The two trees give different results. By the recipe, the grammar is ambiguous.</string>
+    <string name="amb_l_10">Two trees for the same sentence: by the recipe, the grammar is ambiguous. Here, on top of that, the results differ.</string>
     <string name="amb_l_11">The fix: to the right of minus, the new rule accepts only an n. The recursion stays on the left only, and minus is left-associative.</string>
     <string name="amb_l_12">With the new rule, how many trees does n minus n minus n have?</string>
     <string name="amb_l_12_dica">To the right of the minus, only an n fits.</string>

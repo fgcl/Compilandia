@@ -266,7 +266,7 @@ val semantica by lazy {
                 hot("c${ex.depois}", "pf")
             }
             fecho(Fecho(
-                tx("esc_f_af"), false, tx("esc_f_q"), tx("esc_f_dica"), tx("esc_f_ok"), tx("esc_f_certo"),
+                tx("esc_f_af"), true, tx("esc_f_q"), tx("esc_f_dica"), tx("esc_f_ok"), tx("esc_f_af"),
                 tx("esc_f_erro2"), tx("esc_f_certo2"), tx("esc_f_fala2"),
                 listOf(tx("esc_f_z1"), tx("esc_f_z2"), tx("esc_f_z3")), tx("esc_f_resumo"),
             ))
@@ -369,7 +369,7 @@ val backend by lazy {
                 hot("l00", "l10", "l20", "l30")
             }
             fecho(Fecho(
-                tx("tac_f_af"), false, tx("tac_f_q"), tx("tac_f_dica"), tx("tac_f_ok"), tx("tac_f_certo"),
+                tx("tac_f_af"), true, tx("tac_f_q"), tx("tac_f_dica"), tx("tac_f_ok"), tx("tac_f_af"),
                 tx("tac_f_erro2"), tx("tac_f_certo2"), tx("tac_f_fala2"),
                 listOf(tx("tac_f_z1"), tx("tac_f_z2"), tx("tac_f_z3")), tx("tac_f_resumo"),
             ))
@@ -563,7 +563,7 @@ val backend by lazy {
                 hot("k0", "res")
             }
             fecho(Fecho(
-                tx("rt_f_af"), false, tx("rt_f_q"), tx("rt_f_dica"), tx("rt_f_ok"), tx("rt_f_certo"),
+                tx("rt_f_af"), true, tx("rt_f_q"), tx("rt_f_dica"), tx("rt_f_ok"), tx("rt_f_af"),
                 tx("rt_f_erro2"), tx("rt_f_certo2"), tx("rt_f_fala2"),
                 listOf(tx("rt_f_z1"), tx("rt_f_z2"), tx("rt_f_z3")), tx("rt_f_resumo"),
             ))
@@ -655,7 +655,7 @@ val backend by lazy {
                 }
             }
             fecho(Fecho(
-                tx("reg_f_af"), false, tx("reg_f_q"), tx("reg_f_dica"), tx("reg_f_ok"), tx("reg_f_certo"),
+                tx("reg_f_af"), true, tx("reg_f_q"), tx("reg_f_dica"), tx("reg_f_ok"), tx("reg_f_af"),
                 tx("reg_f_erro2"), tx("reg_f_certo2"), tx("reg_f_fala2"),
                 listOf(tx("reg_f_z1"), tx("reg_f_z2"), tx("reg_f_z3")), tx("reg_f_resumo"),
             ))

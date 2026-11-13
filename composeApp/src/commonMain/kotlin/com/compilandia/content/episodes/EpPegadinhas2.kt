@@ -101,12 +101,13 @@ val pegadinhasMeio by lazy {
         episodio(Skill.ERROR_RECOVERY, tx("eppegadinhas2_parar_ou_seguir"), PEGADINHA) {
             cena(tx("eppegadinhas2_compilador_que_para_no_primeiro")) {
                 add(titulo(tx("eppegadinhas2_dez_erros_dez_compilacoes")))
-                add(fileira("t", listOf("id" to Tint.TEAL, "=" to Tint.ORANGE, "=" to Tint.RED, "num" to Tint.TEAL, ";" to Tint.BLUE, "id" to Tint.TEAL), 150f, w = 50f))
+                add(fileira("t", listOf("id" to Tint.TEAL, "=" to Tint.ORANGE, "=" to Tint.RED, ";" to Tint.BLUE, "id" to Tint.TEAL, "=" to Tint.ORANGE), 150f, w = 50f))
             }
-            cena(tx("eppegadinhas2_no_modo_panico_ele_joga")) { hot("t2", "t3") }
+            // Nada do FIRST de Val antes do ";". Com um num ali, o parser recomeçaria no num, e não no ";".
+            cena(tx("eppegadinhas2_no_modo_panico_ele_joga")) { hot("t2") }
             pergunta(
                 tx("eppegadinhas2_qual_token_bom_ponto_recomeco"),
-                setOf("t4"), setOf("t0", "t3"),
+                setOf("t3"), setOf("t0", "t4"),
                 tx("eppegadinhas2_procure_token_que_costuma_fechar"),
                 tx("eppegadinhas2_isso_ponto_virgula_marca_fim"),
             ) { hot() }

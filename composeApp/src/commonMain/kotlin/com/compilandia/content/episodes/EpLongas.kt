@@ -159,7 +159,7 @@ val aulasLongas by lazy {
                 hot()
             }
             fecho(Fecho(
-                tx("fases_f_af"), false, tx("fases_f_q"), tx("fases_f_dica"), tx("fases_f_ok"), tx("fases_f_certo"),
+                tx("fases_f_af"), true, tx("fases_f_q"), tx("fases_f_dica"), tx("fases_f_ok"), tx("fases_f_af"),
                 tx("fases_f_erro2"), tx("fases_f_certo2"), tx("fases_f_fala2"),
                 listOf(tx("fases_f_z1"), tx("fases_f_z2"), tx("fases_f_z3")), tx("fases_f_resumo"),
             ))

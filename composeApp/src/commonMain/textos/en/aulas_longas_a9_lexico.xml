@@ -3,7 +3,7 @@
 <resources>
     <!-- Tokens -->
     <string name="tok_l_titulo_porque">Too many letters</string>
-    <string name="tok_l_01">The parser works with words, such as names and operators. But the file arrives character by character.</string>
+    <string name="tok_l_01">The next phase is the syntax analyzer, which everyone calls the parser. It works with words, such as names and operators. But the file arrives character by character.</string>
     <string name="tok_l_02">How many words does the parser want to see in this line? Tap the number.</string>
     <string name="tok_l_02_dica">Names, numbers, signs and parentheses count. Spaces do not.</string>
     <string name="tok_l_02_ok">Right. Six words instead of thirteen characters.</string>

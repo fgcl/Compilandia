@@ -435,7 +435,7 @@ val lexicos by lazy {
                 hot(*finaisD.toTypedArray())
             }
             fecho(Fecho(
-                tx("afn_f_af"), false, tx("afn_f_q"), tx("afn_f_dica"), tx("afn_f_ok"), tx("afn_f_certo"),
+                tx("afn_f_af"), true, tx("afn_f_q"), tx("afn_f_dica"), tx("afn_f_ok"), tx("afn_f_af"),
                 tx("afn_f_erro2"), tx("afn_f_certo2"), tx("afn_f_fala2"),
                 listOf(tx("afn_f_z1"), tx("afn_f_z2"), tx("afn_f_z3")), tx("afn_f_resumo"),
             ))
@@ -521,7 +521,7 @@ val lexicos by lazy {
                 hot("r1")
             }
             fecho(Fecho(
-                tx("flex_f_af"), false, tx("flex_f_q"), tx("flex_f_dica"), tx("flex_f_ok"), tx("flex_f_certo"),
+                tx("flex_f_af"), true, tx("flex_f_q"), tx("flex_f_dica"), tx("flex_f_ok"), tx("flex_f_af"),
                 tx("flex_f_erro2"), tx("flex_f_certo2"), tx("flex_f_fala2"),
                 listOf(tx("flex_f_z1"), tx("flex_f_z2"), tx("flex_f_z3")), tx("flex_f_resumo"),
             ))

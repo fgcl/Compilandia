@@ -3,7 +3,7 @@
 <resources>
     <!-- Tokens -->
     <string name="tok_l_titulo_porque">Letras demais</string>
-    <string name="tok_l_01">O parser trabalha com palavras, como nomes e operadores. Mas o arquivo chega caractere por caractere.</string>
+    <string name="tok_l_01">A fase seguinte é o analisador sintático, que todo mundo chama de parser. Ele trabalha com palavras, como nomes e operadores. Mas o arquivo chega caractere por caractere.</string>
     <string name="tok_l_02">Quantas palavras o parser quer ver nesta linha? Toque no número.</string>
     <string name="tok_l_02_dica">Nome, número, sinal e parêntese contam. Espaço não conta.</string>
     <string name="tok_l_02_ok">Isso. Seis palavras no lugar de treze caracteres.</string>

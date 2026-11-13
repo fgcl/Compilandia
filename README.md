@@ -62,6 +62,7 @@ Jogar rende engrenagens, e cada engrenagem compra uma peça que entra na sala co
 Cada um dos 29 assuntos tem uma aula animada: o algoritmo roda no palco e o Byte narra, com a boca sincronizada com a fala.
 Toda aula segue o mesmo caminho. Primeiro vem por que o assunto existe, depois um exemplo, a receita à vista e um segundo exemplo em que você responde. O motor gera os exemplos, e um teste confere cada resposta contra ele.
 A aula fecha com uma quinta parte, **Erros**: você julga uma afirmação que costuma cair em prova (certo ou errado), vê a versão certa ao lado de um segundo erro comum, e termina num resumo de três linhas.
+O colega da afirmação acerta em quase metade das aulas, então "errado" não é resposta decorada. Nas perguntas de alternativas, a ordem é embaralhada na hora de mostrar (`learning/OrdemDasOpcoes.kt`): a posição da certa não dá pista.
 As falas usam os termos da disciplina (anulável, handle, núcleo, lookahead, closure e goto, ACTION e GOTO, coerção, registro de ativação), sempre explicados na primeira vez em que aparecem.
 FIRST e FOLLOW ensinam o cálculo até o ponto fixo ("repita até uma rodada não mudar nada").
 - Uma ideia por cena, e quem controla o ritmo é você. O play ao lado do Continuar deixa a aula seguir sozinha até a próxima pergunta.
@@ -288,7 +289,7 @@ scripts/
 verify/      build auxiliar para testar o Kotlin puro sem Android SDK
 ```
 
-Por que o jogo é assim: [docs/PESQUISA-DIVERSAO.md](docs/PESQUISA-DIVERSAO.md) e [docs/PESQUISA-LAB-IA.md](docs/PESQUISA-LAB-IA.md).
+Por que o jogo é assim: [docs/PESQUISA.md](docs/PESQUISA.md). Índice da documentação: [docs/README.md](docs/README.md).
 
 Testes: `./gradlew :composeApp:desktopTest` (ou `cd verify && ../gradlew test`).
 
