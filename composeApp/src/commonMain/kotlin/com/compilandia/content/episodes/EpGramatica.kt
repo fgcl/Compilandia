@@ -32,11 +32,18 @@ val FRASE_CFG_2 = listOf("float", "*", "id", ";")
 val ARVORE_CFG_2 = no("Decl", no("Tipo", no("float")), no("Var", no("*"), no("id")), no(";"))
 /** A frase que fica de fora da linguagem. */
 val FRASE_CFG_FORA = listOf("int", "id", "id", ";")
+/** As formas da derivação mais à esquerda e da mais à direita de float * id ;. Conferidas em AulasConsertadasTest. */
+val DERIV_ESQ_CFG_2 = listOf("Decl", "Tipo Var ;", "float Var ;", "float * id ;")
+val DERIV_DIR_CFG_2 = listOf("Decl", "Tipo Var ;", "Tipo * id ;", "float * id ;")
 
 /** Segundo exemplo da ambiguidade: só o menos. */
 val GRAMATICA_AMB_2 = listOf("E -> E - E | n")
 /** A mesma gramática, consertada: à direita do menos, só um n. */
 val GRAMATICA_AMB_CONSERTO = listOf("E -> E - n | n")
+/** O conserto de n + n * n em dois níveis (professor do bloco 2): E junta somas de T, T junta produtos de n. */
+val GRAMATICA_ETF = listOf("E -> E + T | T", "T -> T * n | n")
+/** A única árvore de n + n * n em GRAMATICA_ETF: o vezes fica dentro do T da direita. */
+val ARVORE_ETF = no("E", no("E", no("T", no("n"))), no("+"), no("T", no("T", no("n")), no("*"), no("n")))
 /** As duas árvores de n - n - n: o menos da esquerda primeiro, e o da direita primeiro. */
 val ARVORE_AMB_ESQ = no("E", no("E", no("E", no("n")), no("-"), no("E", no("n"))), no("-"), no("E", no("n")))
 val ARVORE_AMB_DIR = no("E", no("E", no("n")), no("-"), no("E", no("E", no("n")), no("-"), no("E", no("n"))))
@@ -169,6 +176,26 @@ val gramaticas by lazy {
             cena(tx("cfg_l_13"), who = PROF) {
                 drop("sim", "nao"); tint("f", Tint.RED)
             }
+            // Derivação mais à direita (professor do bloco 2): é a que o parser de baixo para cima refaz.
+            cena(tx("cfg_l_dir1")) {
+                clear()
+                add(titulo(tx("cfg_l_titulo_dir")))
+                add(codigo("g", GRAMATICA_CFG_2, 70f, x = 90f, passo = 28f, size = 15f))
+                add(fileira("w", listOf("Tipo" to Tint.ORANGE, "Var" to Tint.ORANGE, ";" to Tint.TEAL), 190f, w = 64f))
+            }
+            pergunta(tx("cfg_l_dir2"), setOf("w1"), setOf("w0", "w2"), tx("cfg_l_dir2_dica"), tx("cfg_l_dir2_ok")) { hot() }
+            pergunta(tx("cfg_l_dir3"), setOf("d1"), setOf("d2", "d3"), tx("cfg_l_dir3_dica"), tx("cfg_l_dir3_ok")) {
+                dropAll("w")
+                add(bloco("d2", DERIV_ESQ_CFG_2[2], 180f, 200f, w = 200f, size = 15f))
+                add(bloco("d1", DERIV_DIR_CFG_2[2], 180f, 252f, w = 200f, size = 15f))
+                add(bloco("d3", FRASE_CFG_2.joinToString(" "), 180f, 304f, w = 200f, size = 15f))
+            }
+            cena(tx("cfg_l_dir4"), mood = EpMood.HAPPY) {
+                drop("d1", "d2", "d3")
+                add(codigo("esq", DERIV_ESQ_CFG_2, 190f, x = 30f, passo = 26f, size = 13f))
+                add(codigo("dir", DERIV_DIR_CFG_2, 190f, x = 200f, passo = 26f, size = 13f))
+                hot("esq2", "dir2")
+            }
             fecho(Fecho(
                 tx("cfg_f_af"), false, tx("cfg_f_q"), tx("cfg_f_dica"), tx("cfg_f_ok"), tx("cfg_f_certo"),
                 tx("cfg_f_erro2"), tx("cfg_f_certo2"), tx("cfg_f_fala2"),
@@ -270,6 +297,22 @@ val gramaticas by lazy {
                 val (b, w) = arvore(ARVORE_AMB_CONSERTO, 120f, passoY = 52f, largura = 300f)
                 add(b); for (x in w) wire(x)
             }
+            // 5. E/T/F: o conserto do primeiro exemplo, n + n * n, com um nível para cada precedência
+            cena(tx("amb_l_14")) {
+                clear()
+                add(titulo("n + n * n"))
+                add(codigo("h", GRAMATICA_ETF, 66f, x = 100f, passo = 28f, size = 16f))
+                val (b, w) = arvore(ARVORE_ETF, 140f, passoY = 50f, largura = 300f, prefix = "e")
+                add(b); for (x in w) wire(x)
+                hot("h1")
+            }
+            pergunta(tx("amb_l_15"), setOf("p1"), setOf("p2", "p3"), tx("amb_l_15_dica"), tx("amb_l_15_ok")) {
+                dropAll("e"); clearWires(); hot()
+                add(Box("p2", tx("amb_l_15_o2"), 180f, 180f, 320f, 40f, Look.TOKEN, Tint.YELLOW, size = 13f))
+                add(Box("p1", tx("amb_l_15_o1"), 180f, 232f, 320f, 40f, Look.TOKEN, Tint.YELLOW, size = 13f))
+                add(Box("p3", tx("amb_l_15_o3"), 180f, 284f, 320f, 40f, Look.TOKEN, Tint.YELLOW, size = 13f))
+            }
+            cena(tx("amb_l_16"), mood = EpMood.HAPPY) { drop("p1", "p2", "p3"); hot("h0", "h1") }
             fecho(Fecho(
                 tx("amb_f_af"), false, tx("amb_f_q"), tx("amb_f_dica"), tx("amb_f_ok"), tx("amb_f_certo"),
                 tx("amb_f_erro2"), tx("amb_f_certo2"), tx("amb_f_fala2"),

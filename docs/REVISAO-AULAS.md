@@ -85,6 +85,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **O autômato LR(0) inteiro.** A aula terminava dizendo "os estados estão prontos" com três estados na tela. Agora quatro cenas desenham os seis estados de `S → ( S ) | id` a partir do `LRAutomaton`, com os itens do estado do `(` embaixo. O aluno toca no destino do goto por `(` nesse estado (ele mesmo: conjunto igual é o mesmo estado, e por isso a construção termina) e no estado que aceita, o de `S' → S •`.
 3. **ε como produção, forma sentencial e sentença.** Duas cenas com `S → a S b | ε`: a regra vazia apaga o S, e o aluno escolhe a sentença `a b` entre `a S b` (forma sentencial) e `b a`. O primeiro exemplo passa a dizer "forma sentencial" para `E + E` e "sentença" para a forma só com terminais.
 
+## Feito em 13/11 (décima primeira rodada)
+
+1. **Derivação mais à direita.** Quatro passos no fim da Sua vez da derivação, com a mesma declaração `float * id ;`. O aluno toca no não-terminal que a mais à direita troca primeiro (Var, porque `;` é terminal) e na forma que só aparece nela (`Tipo * id ;`). A última cena põe as duas derivações lado a lado: mesma sentença, mesma árvore, outra ordem. Nessas cenas a faixa da receita não acende passo, porque o passo 2 diz "mais à esquerda".
+2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
+3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

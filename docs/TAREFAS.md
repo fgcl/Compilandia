@@ -76,8 +76,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 **Vale e Ponte**
 - [x] Associatividade: a árvore de `9 - 5 - 2` nas duas gramáticas, e a pergunta "o menos passou a ser da direita?"
-- [ ] Montar E/T/F na aula de ambiguidade
-- [ ] Derivação mais à direita praticada em 3 cenas
+- [x] Montar E/T/F na aula de ambiguidade
+- [x] Derivação mais à direita praticada em 3 cenas
 - [x] ε como produção, "forma sentencial" e "sentença" ditas na aula
 - [ ] Abrir a Ponte apresentando o parser descendente
 - [ ] Recursão indireta até o fim
@@ -90,7 +90,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 **Fortaleza e Oficina**
 - [x] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
-- [ ] SLR: a tabela nasce das caixas de itens
+- [x] SLR: a tabela nasce das caixas de itens
 - [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [ ] Bison: precedência da regra × do token, `%right` com `2^3^2`, `%prec`; dizer que "reduz com qualquer token" é a redução padrão

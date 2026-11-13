@@ -204,4 +204,42 @@ class AulasConsertadasTest {
         val perguntas = ficha.flashcards.map { it.first }
         for (k in listOf("ll1_cond1_q", "ll1_cond2_q", "ll1_cond3_q")) assertTrue(com.compilandia.textos.tx(k) in perguntas, k)
     }
+
+    /** Derivação mais à direita de float * id ;: as formas da tela batem com a troca do não-terminal mais à direita. */
+    @Test fun derivacaoMaisADireita() {
+        val g = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_CFG_2.joinToString("\n"))
+        fun anda(forma: List<String>, direita: Boolean, alvo: List<String>): List<String> {
+            val i = if (direita) forma.indexOfLast { g.isNonTerminal(it) } else forma.indexOfFirst { g.isNonTerminal(it) }
+            val nt = forma[i]
+            // A regra cujos terminais estão todos na frase; entre Var -> id e Var -> * id, a mais longa.
+            val p = g.productionsOf(nt).filter { p -> alvo.containsAll(p.rhs.filter { !g.isNonTerminal(it) }) }.maxBy { it.rhs.size }
+            return forma.take(i) + p.rhs + forma.drop(i + 1)
+        }
+        for ((direita, esperado) in listOf(false to com.compilandia.content.episodes.DERIV_ESQ_CFG_2, true to com.compilandia.content.episodes.DERIV_DIR_CFG_2)) {
+            var forma = listOf("Decl"); val formas = mutableListOf(forma.joinToString(" "))
+            while (forma.any { g.isNonTerminal(it) }) { forma = anda(forma, direita, com.compilandia.content.episodes.FRASE_CFG_2); formas += forma.joinToString(" ") }
+            assertEquals(esperado, formas)
+        }
+    }
+
+    /** Tabela SLR inteira de S -> ( S ) | id: s no estado do ( com id, r1 no estado do ) em ) e $, sem conflito. */
+    @Test fun tabelaSlrInteiraDosParenteses() {
+        val gram = com.compilandia.content.episodes.GRAMATICA_LR_2
+        val t = com.compilandia.engine.LRTable(Grammar.parse(gram.joinToString("\n")), com.compilandia.engine.LRKind.SLR1)
+        assertTrue(t.conflicts.isEmpty())
+        val aut = t.automaton
+        val par = aut.transitions.getValue(0 to "("); val id = aut.transitions.getValue(0 to "id")
+        val fecha = aut.transitions.getValue(aut.transitions.getValue(par to "S") to ")")
+        val m = com.compilandia.content.episodes.tabelaSlr(gram, listOf("id", "(", ")", "$"), listOf("S"))
+        assertEquals("s$id", m[par + 1][1])
+        assertEquals(listOf("", "", "r1", "r1", ""), m[fecha + 1].drop(1))
+    }
+
+    /** E -> E + T | T, T -> T * n | n: n + n * n tem uma árvore só, com o vezes dentro do T. */
+    @Test fun etfDaUmaArvoreSo() {
+        val g = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_ETF.joinToString("\n"))
+        val ds = com.compilandia.engine.DerivationHelper.leftmostDerivations(g, listOf("n", "+", "n", "*", "n"), limit = 10)
+        assertEquals(1, ds.size)
+        assertEquals(com.compilandia.content.episodes.ARVORE_ETF, com.compilandia.engine.DerivationHelper.treeOf(g, ds[0]))
+    }
 }

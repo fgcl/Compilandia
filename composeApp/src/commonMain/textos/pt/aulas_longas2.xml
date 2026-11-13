@@ -91,6 +91,16 @@
     <string name="slr_l_10_dica">A casa do abre parêntese ficou vazia.</string>
     <string name="slr_l_10_ok">Casa vazia é erro de sintaxe.</string>
     <string name="slr_l_11">Com o FOLLOW, a tabela reduz só onde a regra pode terminar. Na etapa de prática, você roda uma entrada com essa tabela.</string>
+    <string name="slr_l_titulo_inteira">A tabela inteira</string>
+    <string name="slr_l_depois_de">depois de</string>
+    <string name="slr_l_12">Agora a tabela inteira de parênteses em volta de id. Ela sai dos seis estados da aula de itens, e cada estado vira uma linha.</string>
+    <string name="slr_l_13">O estado do abre parêntese, lendo id, vai para o estado do id. Em que casa entra esse empilhar? Toque.</string>
+    <string name="slr_l_13_dica">Linha do estado do abre parêntese, coluna do id.</string>
+    <string name="slr_l_13_ok">Nessa casa entra s com o número do estado do id. Regra um: goto por terminal vira empilhar.</string>
+    <string name="slr_l_14">O estado do fecha parêntese tem o item completo da regra um. Toque nas casas do reduzir.</string>
+    <string name="slr_l_14_dica">Regra dois: as colunas do FOLLOW de S, que tem fecha parêntese e cifrão.</string>
+    <string name="slr_l_14_ok">Fecha parêntese e cifrão, com r1. Nas outras colunas, a casa fica vazia.</string>
+    <string name="slr_l_15">Pronto: a tabela inteira saiu das caixas de itens. Nenhuma casa tem duas ações, então a gramática é SLR.</string>
     <string name="slr_l_r1">1. Goto por terminal t: s na coluna t.</string>
     <string name="slr_l_r2">2. A → α •: r nas colunas do FOLLOW(A).</string>
     <string name="slr_l_r3">3. S' → S •: ok (aceita) na coluna do $.</string>

@@ -91,6 +91,16 @@
     <string name="slr_l_10_dica">The opening parenthesis cell stayed empty.</string>
     <string name="slr_l_10_ok">An empty cell is a syntax error.</string>
     <string name="slr_l_11">With FOLLOW, the table reduces only where the rule can end. In the practice step, you run an input with this table.</string>
+    <string name="slr_l_titulo_inteira">The whole table</string>
+    <string name="slr_l_depois_de">after</string>
+    <string name="slr_l_12">Now the whole table for parentheses around id. It comes from the six states of the items lesson, and each state becomes a row.</string>
+    <string name="slr_l_13">The open parenthesis state, reading id, goes to the id state. Which cell gets that shift? Tap it.</string>
+    <string name="slr_l_13_dica">Row of the open parenthesis state, column id.</string>
+    <string name="slr_l_13_ok">That cell gets s with the number of the id state. Rule one: goto on a terminal becomes a shift.</string>
+    <string name="slr_l_14">The close parenthesis state has the complete item of rule one. Tap the reduce cells.</string>
+    <string name="slr_l_14_dica">Rule two: the columns of FOLLOW of S, which has close parenthesis and dollar.</string>
+    <string name="slr_l_14_ok">Close parenthesis and dollar, with r1. In the other columns, the cell stays empty.</string>
+    <string name="slr_l_15">Done: the whole table came out of the item boxes. No cell has two actions, so the grammar is SLR.</string>
     <string name="slr_l_r1">1. Goto on terminal t: s in column t.</string>
     <string name="slr_l_r2">2. A → α •: r in the columns of FOLLOW(A).</string>
     <string name="slr_l_r3">3. S' → S •: ok (accept) in the $ column.</string>

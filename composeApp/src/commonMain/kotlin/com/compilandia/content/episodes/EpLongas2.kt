@@ -349,6 +349,27 @@ val aulasLongas2 by lazy {
                 drop("o1", "o2", "o3")
                 hot("ml1c3", "ml1c4")
             }
+            // 5. A tabela inteira nasce das caixas de itens (professor do bloco 4), com os estados do autômato da aula LR(0)
+            val autS = LRAutomaton.lr0(Grammar.parse(GRAMATICA_LR_2.joinToString("\n")))
+            val sPar = autS.transitions.getValue(0 to "("); val sId = autS.transitions.getValue(0 to "id")
+            val sFecha = autS.transitions.getValue(autS.transitions.getValue(sPar to "S") to ")")
+            val cheiaS = tabelaSlr(GRAMATICA_LR_2, listOf("id", "(", ")", "$"), listOf("S"))
+            fun casaS(st: Int, col: Int) = "tl${st + 1}c$col"
+            cena(tx("slr_l_12")) {
+                clear()
+                add(titulo(tx("slr_l_titulo_inteira"), size = 22f))
+                add(rotulo("rg", "1: S -> ( S )    2: S -> id", 180f, 66f, size = 17f))
+                add(rotulo("lg", tx("slr_l_depois_de") + ":  ( I$sPar   id I$sId   ) I$sFecha", 180f, 94f, Tint.YELLOW, 17f))
+                add(tabela("t", cheiaS.mapIndexed { l, row -> if (l == 0) row else row.mapIndexed { c, x -> if (c == 0) x else "" } }, 128f, cw = 54f, ch = 34f, size = 14f))
+            }
+            pergunta(tx("slr_l_13"), setOf(casaS(sPar, 1)), (2..5).map { casaS(sPar, it) }.toSet(), tx("slr_l_13_dica"), tx("slr_l_13_ok")) { hot("tl${sPar + 1}c0") }
+            pergunta(tx("slr_l_14"), setOf(casaS(sFecha, 3), casaS(sFecha, 4)), setOf(casaS(sFecha, 1), casaS(sFecha, 2), casaS(sFecha, 5)), tx("slr_l_14_dica"), tx("slr_l_14_ok")) {
+                text(casaS(sPar, 1), cheiaS[sPar + 1][1]); hot("tl${sFecha + 1}c0")
+            }
+            cena(tx("slr_l_15"), mood = EpMood.HAPPY) {
+                for (l in 1 until cheiaS.size) for (c in 1..5) text("tl${l}c$c", cheiaS[l][c])
+                hot(casaS(sPar, 1), casaS(sFecha, 3), casaS(sFecha, 4))
+            }
             fecho(Fecho(
                 tx("slr_f_af"), false, tx("slr_f_q"), tx("slr_f_dica"), tx("slr_f_ok"), tx("slr_f_certo"),
                 tx("slr_f_erro2"), tx("slr_f_certo2"), tx("slr_f_fala2"),
@@ -695,6 +716,14 @@ val aulasLongas2 by lazy {
  * A tabela SLR de E -> E + n | n, inteira e tirada do motor: ACTION de n, + e $, e GOTO de E.
  * As falas citam "o estado 2" como o de E -> n •, então a numeração do motor precisa bater.
  */
+/** Tabela SLR de qualquer gramática da aula, tirada do motor: uma linha por estado, terminais e depois os GOTO. */
+internal fun tabelaSlr(gram: List<String>, ts: List<String>, nts: List<String>): List<List<String>> {
+    val t = LRTable(Grammar.parse(gram.joinToString("\n")), LRKind.SLR1)
+    return listOf(listOf("") + ts + nts) + t.automaton.states.indices.map { s ->
+        listOf("$s") + ts.map { a -> t.action[s to a]?.let { if (it is LRAction.Accept) "ok" else it.short() } ?: "" } + nts.map { t.gotoTable[s to it]?.toString() ?: "" }
+    }
+}
+
 internal fun tabelaSlrDaAula(): List<List<String>> {
     val t = LRTable(Grammar.parse("E -> E + n | n"), LRKind.SLR1)
     val g = t.grammar
