@@ -54,8 +54,9 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 ## 4. O segundo exemplo traz o caso difícil
 
-- [ ] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
-- [ ] Minimização: o AFD do livro (3 rodadas) e `a*b*` com estado morto
+- [x] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
+- [x] Minimização: o AFD do livro (3 rodadas)
+- [ ] Minimização: `a*b*` com estado morto
 - [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
 - [x] FOLLOW: caso difícil `S → B C d` (C some, o d entra), conferido pelo motor
 - [x] FIRST: caso `S → B d`, `B → C | b`, `C → c | ε` (anulável sem ε escrito; a primeira rodada deixa S só com o d)
@@ -91,7 +92,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
 - [ ] SLR: a tabela nasce das caixas de itens
 - [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
-- [ ] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
+- [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [ ] Bison: precedência da regra × do token, `%right` com `2^3^2`, `%prec`; dizer que "reduz com qualquer token" é a redução padrão
 
 **Cidade e Forja**

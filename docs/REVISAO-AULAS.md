@@ -67,6 +67,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **Fatoração com resto vazio.** Quatro cenas no fim da Sua vez com `S → if S | if S else S | x`: o maior começo comum é `if S`, a primeira regra não deixa sobra, e a sobra vazia vira ε em S'. A professora avisa que a gramática fatorada ainda não é LL(1): com else na entrada, S' tem duas regras (o else solto). `A9GramaticaFactsTest` confere a fatoração, o conflito e que, sem o ε, o if sem else some.
 3. **Gramáticas sem LL(1) no "Fazer com ajuda".** Três gramáticas com conflito (`S → A b`, `A → b | ε`; `S → A a`, `A → a A | ε`; `S → id = E | id`) entram no sorteio de FIRST e FOLLOW. Na tabela LL(1), o quarto problema, que a pessoa faz sozinha, é sempre uma delas. A casa com conflito agora sempre vira pergunta, e a resposta certa são as duas regras, como a casa mostra (antes era só a primeira).
 
+## Feito em 13/11 (oitava rodada)
+
+1. **AFN→AFD com o caso difícil.** Quatro cenas no fim da Sua vez com o AFN de `(ab|a)c`. De {0,1,4}, lendo a, o move dá {2,5} e o ε-fecho acrescenta o 6; lendo b, o move é vazio, e a aula diz que essa seta vai para o estado morto. O motor calcula os conjuntos da tela, e `AulasConsertadasTest` confere cada um.
+2. **Minimização com o AFD do livro.** Oito cenas com o AFD de `(a|b)*abb`. Cada casa da tabela mostra a rodada em que foi marcada: E com todos na 1, D com A, B e C na 2, A com B e B com C na 3. O aluno marca as rodadas 2 e 3 e vê que uma marca puxa outra; A e C ficam em branco e se juntam. As rodadas saem do `Minimizer`, e o teste confere as três. O `a*b*` com estado morto ficou para depois.
+3. **Pegadinha do handle.** Dizia que reduzir cedo "faz a conta na ordem errada". Em `E → E + T`, `T → T * F`, reduzir `E + T` com `*` na entrada deixa E na pilha e nenhuma regra continua E com vezes: o parser rejeita uma frase certa. Uma cena nova mostra a pilha com E e o aviso "nenhuma regra com E *". O teste confere que `*` não está no FOLLOW de E.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

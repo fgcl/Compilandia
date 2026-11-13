@@ -54,6 +54,18 @@ val AFN_2 = SmallNFA(
     listOf(Triple(0, null, 1), Triple(0, null, 3), Triple(1, 'a', 2), Triple(2, 'b', 2), Triple(3, 'c', 4)),
 )
 
+/**
+ * Caso difícil da aula de subconjuntos: (ab|a)c. Lendo a, o move dá {2,5}, e o ε-fecho
+ * acrescenta o 6; lendo b no começo, o move é vazio.
+ */
+val AFN_3 = SmallNFA(
+    "a9c", "", 8, 0, setOf(7),
+    listOf(
+        Triple(0, null, 1), Triple(0, null, 4), Triple(1, 'a', 2), Triple(2, 'b', 3),
+        Triple(4, 'a', 5), Triple(3, null, 6), Triple(5, null, 6), Triple(6, 'c', 7),
+    ),
+)
+
 /** Arquivo .l do segundo exemplo da aula do Flex, com a regra do while no lugar errado. */
 val FLEX_2 = listOf(
     "[a-z]+    return ID;",
@@ -433,6 +445,40 @@ val lexicos by lazy {
                 for (d in finaisD) { change(d) { it.copy(look = Look.ACCEPT) }; tint(d, Tint.GREEN) }
                 wire("d1", "d1", "b")
                 hot(*finaisD.toTypedArray())
+            }
+            // 5. O caso difícil: o ε-fecho depois do move acrescenta estado, e um move dá vazio
+            val pos3 = listOf(30f to 175f, 90f to 115f, 155f to 115f, 220f to 115f, 90f to 235f, 155f to 235f, 255f to 175f, 325f to 175f)
+            val ini3 = AFN_3.epsClosure(setOf(0))
+            val moveA = AFN_3.move(ini3, 'a')
+            val comA3 = AFN_3.epsClosure(moveA)
+            cena(tx("afn_l_12")) {
+                clear()
+                add(titulo("AFN: (ab|a)c"))
+                add(estados(pos3, finais = AFN_3.accepting, nomes = (0 until AFN_3.stateCount).map { "$it" }))
+                for ((de, c, para) in AFN_3.edges) wire("q$de", "q$para", c?.toString() ?: "ε")
+                add(Box("d0", conj(ini3), 90f, 320f, 96f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                hot("d0")
+            }
+            pergunta(
+                tx("afn_l_13"), comA3.map { "q$it" }.toSet(), (0 until AFN_3.stateCount).filter { it !in comA3 }.map { "q$it" }.toSet(),
+                tx("afn_l_13_dica"), tx("afn_l_13_ok"),
+            ) {
+                add(Box("mv", "move = " + conj(moveA), 250f, 320f, 130f, 44f, Look.CELL, size = 15f))
+                hot("q2", "q5", "mv")
+            }
+            pergunta(tx("afn_l_14"), setOf("v1"), setOf("v2", "v3"), tx("afn_l_14_dica"), tx("afn_l_14_ok")) {
+                drop("mv")
+                for (i in comA3) tint("q$i", Tint.TEAL)
+                hot("d0")
+                add(opcao("v2", "{3}", 112f, 380f), opcao("v1", tx("afn_l_vazio"), 190f, 380f), opcao("v3", "{2,5}", 268f, 380f))
+                for (o in listOf("v1", "v2", "v3")) change(o) { it.copy(w = 66f) }
+            }
+            cena(tx("afn_l_15"), mood = EpMood.HAPPY) {
+                drop("v1", "v2", "v3")
+                for (i in comA3) tint("q$i", Tint.NONE)
+                add(Box("d1", conj(comA3), 250f, 320f, 100f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                wire("d0", "d1", "a")
+                hot("q6", "d1")
             }
             fecho(Fecho(
                 tx("afn_f_af"), true, tx("afn_f_q"), tx("afn_f_dica"), tx("afn_f_ok"), tx("afn_f_af"),

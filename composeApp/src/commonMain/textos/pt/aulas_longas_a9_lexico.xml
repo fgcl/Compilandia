@@ -70,6 +70,15 @@
     <string name="afn_l_02_ok">Volta para o conjunto zero e um, que já existe.</string>
     <string name="afn_l_03">As transições que faltam caem em conjuntos que já existem. Quando não surge conjunto novo, a construção acabou.</string>
     <string name="afn_l_04">Esse método é a construção de subconjuntos. Ela tem quatro passos.</string>
+    <string name="afn_l_vazio">vazio</string>
+    <string name="afn_l_12">Agora um caso que cai em prova: a b c, ou a c. O fecho do zero já está pronto: zero, um e quatro.</string>
+    <string name="afn_l_13">Lendo a, o move dá dois e cinco. Agora aplique o fecho épsilon. Toque nos estados que entram.</string>
+    <string name="afn_l_13_dica">Do dois e do cinco, siga só as setas épsilon. Uma delas sai do cinco.</string>
+    <string name="afn_l_13_ok">Dois, cinco e seis. O fecho trouxe o seis, que não estava no move.</string>
+    <string name="afn_l_14">E do conjunto zero, um e quatro, lendo b? Toque no resultado.</string>
+    <string name="afn_l_14_dica">Procure uma seta b que saia do zero, do um ou do quatro.</string>
+    <string name="afn_l_14_ok">Vazio. Nenhum deles tem seta b. No AFD, essa seta vai para o estado morto, que o desenho esconde.</string>
+    <string name="afn_l_15">Sem o fecho depois do move, o seis ficava de fora. Aí o AFD não leria o c depois do a. Por isso o passo três vem sempre.</string>
     <string name="afn_l_r1">1. Comece pelo ε-fecho do estado inicial.</string>
     <string name="afn_l_r2">2. Para cada símbolo, junte os destinos (move).</string>
     <string name="afn_l_r3">3. Aplique o ε-fecho. Conjunto novo vira estado.</string>

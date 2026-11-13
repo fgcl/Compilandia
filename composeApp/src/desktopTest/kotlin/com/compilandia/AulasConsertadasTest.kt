@@ -8,6 +8,9 @@ import com.compilandia.content.episodes.GRAMATICA_FOLLOW_3
 import com.compilandia.content.episodes.GRAMATICA_LL1_3
 import com.compilandia.content.episodes.GRAMATICA_LL1_4
 import com.compilandia.content.episodes.GRAMATICA_PEG_FOLLOW
+import com.compilandia.content.episodes.AFN_3
+import com.compilandia.content.episodes.AFD_LIVRO
+import com.compilandia.engine.Minimizer
 import com.compilandia.content.episodes.tabelaLl1DaAula
 import com.compilandia.engine.GrammarTransform
 import com.compilandia.engine.LL1Table
@@ -105,5 +108,36 @@ class AulasConsertadasTest {
     @Test fun pegadinhaDoFollowComVizinhoQueSome() {
         val f = FirstFollow(Grammar.parse(GRAMATICA_PEG_FOLLOW.joinToString("\n")))
         assertEquals(setOf("d", "c"), f.follow["A"])
+    }
+
+    /** AFN de (ab|a)c: o ε-fecho depois do move acrescenta o 6, e o move por b no começo é vazio. */
+    @Test fun subconjuntosComFechoQueMudaEMoveVazio() {
+        val ini = AFN_3.epsClosure(setOf(0))
+        assertEquals(setOf(0, 1, 4), ini)
+        assertEquals(setOf(2, 5), AFN_3.move(ini, 'a'))
+        assertEquals(setOf(2, 5, 6), AFN_3.epsClosure(AFN_3.move(ini, 'a')))
+        assertTrue(AFN_3.move(ini, 'b').isEmpty())
+        for (w in listOf("abc", "ac")) assertTrue(AFN_3.accepts(w), w)
+        for (w in listOf("a", "bc", "abbc", "c")) assertTrue(!AFN_3.accepts(w), w)
+    }
+
+    /** Minimização do AFD do livro: três rodadas de marcas, e só A com C fica em branco. */
+    @Test fun minimizacaoDoAfdDoLivro() {
+        val r = Minimizer.run(AFD_LIVRO)
+        assertEquals(null, r.deadState, "o AFD do livro já é completo")
+        val porRodada = r.marks.groupBy({ it.round }, { it.p to it.q })
+        assertEquals(setOf(0 to 4, 1 to 4, 2 to 4, 3 to 4), porRodada[1]!!.toSet())
+        assertEquals(setOf(0 to 3, 1 to 3, 2 to 3), porRodada[2]!!.toSet())
+        assertEquals(setOf(0 to 1, 1 to 2), porRodada[3]!!.toSet())
+        assertEquals(3, r.rounds)
+        assertTrue(setOf(0, 2) in r.classes)
+        assertEquals(4, r.minimized.stateCount)
+    }
+
+    /** Pegadinha do handle: reduzir E + T com * na entrada é beco sem saída, porque * não está no FOLLOW de E. */
+    @Test fun handleReduzirCedoEBecoSemSaida() {
+        val g = Grammar.parse("E -> E + T | T\nT -> T * F | F\nF -> id")
+        assertTrue("*" !in FirstFollow(g).follow.getValue("E"))
+        assertTrue(g.productions.none { p -> p.rhs.zipWithNext().any { it == "E" to "*" } }, "nenhuma regra tem E seguido de *")
     }
 }

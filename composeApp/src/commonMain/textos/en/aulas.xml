@@ -692,11 +692,13 @@
     <string name="eppegadinhas2_na_pilha_temos_mais_t">On the stack we have E plus T, and a times comes in. The top already forms a rule.</string>
     <string name="eppegadinhas2_t_vem">E + T   * comes</string>
     <string name="eppegadinhas2_maquina_reduz_mais_t_ou">Does the machine reduce E plus T, or shift the times? Tap the drawing.</string>
-    <string name="eppegadinhas2_se_reduzir_agora_soma_roda">If it reduces now, the sum runs before the times.</string>
-    <string name="eppegadinhas2_isso_empilha_porque_vezes_liga">Shift, because the times binds tighter.</string>
+    <string name="peg_handle_dica">If you reduce now, E stays on the stack, and a times comes. Does any rule continue E with times?</string>
+    <string name="peg_handle_ok">Shift. That T will still become T times F.</string>
+    <string name="peg_handle_beco">See what would happen. After reducing, E is left on the stack with times in the input. No rule has E followed by times.</string>
+    <string name="peg_handle_nenhuma">no rule with E *</string>
+    <string name="peg_handle_fim">Reducing too early leads to a dead end. The parser rejects a sentence that is correct.</string>
     <string name="eppegadinhas2_quem_decide_que_vem_na">What comes in the input decides. Seeing a right side on top isn't enough.</string>
     <string name="eppegadinhas2_handle_pedaco_certo_reduzir_agora">The handle is the right piece to reduce now. Not every right side is a handle.</string>
-    <string name="eppegadinhas2_reduzir_antes_hora_faz_conta">Reducing too soon does the math in the wrong order.</string>
     <string name="eppegadinhas2_fecho_que_puxa_regras">The closure that pulls in rules</string>
     <string name="eppegadinhas2_ponto_marca_ate_onde_regra">The dot marks how far the rule was read. Here, nothing yet.</string>
     <string name="eppegadinhas2_ponto_esta_antes_entao_posso">The dot is before E. So I may be about to read a whole E.</string>

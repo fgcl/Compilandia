@@ -70,6 +70,15 @@
     <string name="afn_l_02_ok">Back to the set zero and one, which already exists.</string>
     <string name="afn_l_03">The missing transitions land on sets that already exist. When no new set appears, the construction is over.</string>
     <string name="afn_l_04">This method is the subset construction. It has four steps.</string>
+    <string name="afn_l_vazio">empty</string>
+    <string name="afn_l_12">Now a case that shows up on exams: a b c, or a c. The closure of zero is ready: zero, one and four.</string>
+    <string name="afn_l_13">Reading a, the move gives two and five. Now apply the epsilon closure. Tap the states that go in.</string>
+    <string name="afn_l_13_dica">From two and five, follow only epsilon arrows. One of them leaves five.</string>
+    <string name="afn_l_13_ok">Two, five and six. The closure brought in six, which was not in the move.</string>
+    <string name="afn_l_14">And from the set zero, one and four, reading b? Tap the result.</string>
+    <string name="afn_l_14_dica">Look for a b arrow leaving zero, one or four.</string>
+    <string name="afn_l_14_ok">Empty. None of them has a b arrow. In the DFA, that arrow goes to the dead state, which the drawing hides.</string>
+    <string name="afn_l_15">Without the closure after the move, six would be left out. Then the DFA would not read the c after the a. That is why step three always comes.</string>
     <string name="afn_l_r1">1. Start with the ε-closure of the initial state.</string>
     <string name="afn_l_r2">2. For each symbol, collect the targets (move).</string>
     <string name="afn_l_r3">3. Apply the ε-closure. A new set becomes a state.</string>

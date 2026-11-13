@@ -724,11 +724,13 @@
     <string name="eppegadinhas2_na_pilha_temos_mais_t">Na pilha temos E mais T, e vem um vezes. O topo já forma uma regra.</string>
     <string name="eppegadinhas2_t_vem">E + T   vem *</string>
     <string name="eppegadinhas2_maquina_reduz_mais_t_ou">A máquina reduz E mais T, ou empilha o vezes? Toque no desenho.</string>
-    <string name="eppegadinhas2_se_reduzir_agora_soma_roda">Se reduzir agora, a soma roda antes do vezes.</string>
-    <string name="eppegadinhas2_isso_empilha_porque_vezes_liga">Empilha, porque o vezes liga mais forte.</string>
+    <string name="peg_handle_dica">Se reduzir agora, fica E na pilha, e vem um vezes. Alguma regra continua E com vezes?</string>
+    <string name="peg_handle_ok">Empilha. Esse T ainda vai virar T vezes F.</string>
+    <string name="peg_handle_beco">Veja o que aconteceria. Reduzindo, sobra E na pilha com o vezes na entrada. Nenhuma regra tem E seguido de vezes.</string>
+    <string name="peg_handle_nenhuma">nenhuma regra com E *</string>
+    <string name="peg_handle_fim">Reduzir antes da hora leva a um beco sem saída. O parser rejeita uma frase que está certa.</string>
     <string name="eppegadinhas2_quem_decide_que_vem_na">Quem decide é o que vem na entrada. Ver um lado direito no topo não basta.</string>
     <string name="eppegadinhas2_handle_pedaco_certo_reduzir_agora">Handle é o pedaço certo de reduzir agora. Nem todo lado direito é handle.</string>
-    <string name="eppegadinhas2_reduzir_antes_hora_faz_conta">Reduzir antes da hora faz a conta na ordem errada.</string>
     <string name="eppegadinhas2_fecho_que_puxa_regras">O fecho que puxa regras</string>
     <string name="eppegadinhas2_ponto_marca_ate_onde_regra">O ponto marca até onde a regra foi lida. Aqui, nada ainda.</string>
     <string name="eppegadinhas2_ponto_esta_antes_entao_posso">O ponto está antes de E. Então posso estar prestes a ler um E inteiro.</string>

@@ -127,18 +127,25 @@ val pegadinhasMeio by lazy {
             pergunta(
                 tx("eppegadinhas2_maquina_reduz_mais_t_ou"),
                 setOf("sobe"), setOf("red"),
-                tx("eppegadinhas2_se_reduzir_agora_soma_roda"),
-                tx("eppegadinhas2_isso_empilha_porque_vezes_liga"),
+                tx("peg_handle_dica"),
+                tx("peg_handle_ok"),
             ) {
                 add(alvo("sobe", 240f, 174f, 92f, 40f, "*"))
                 add(Box("red", tx("palco_reduzir"), 90f, 320f, 110f, 44f, Look.TOKEN, Tint.ORANGE, size = 15f))
             }
+            // Reduzir cedo não troca a ordem da conta: deixa E com * na entrada, e nenhuma regra continua (professor do bloco 4).
+            cena(tx("peg_handle_beco"), mood = EpMood.SURPRISED) {
+                drop("sobe", "red"); dropAll("p")
+                add(pilha("p", listOf("E"), 240f, 300f, w = 92f, h = 40f))
+                add(Box("x", tx("peg_handle_nenhuma"), 180f, 370f, 230f, 40f, Look.TOKEN, Tint.RED, size = 14f))
+                hot("in", "g0")
+            }
             cena(tx("eppegadinhas2_quem_decide_que_vem_na")) {
-                drop("sobe", "red", "in")
+                drop("in", "x")
                 add(pilha("p", listOf("E", "+", "T", "*"), 240f, 300f, w = 92f, h = 40f))
             }
             palavra("HANDLE", tx("eppegadinhas2_handle_pedaco_certo_reduzir_agora"), who = PROF, mood = EpMood.HAPPY)
-            cena(tx("eppegadinhas2_reduzir_antes_hora_faz_conta"), mood = EpMood.HAPPY) {}
+            cena(tx("peg_handle_fim"), mood = EpMood.HAPPY) {}
         },
 
         episodio(Skill.LR0_ITEMS, tx("eppegadinhas2_fecho_que_puxa_regras"), PEGADINHA) {

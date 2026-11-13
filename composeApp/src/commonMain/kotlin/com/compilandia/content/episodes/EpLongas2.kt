@@ -52,6 +52,18 @@ internal fun tabelaLl1DaAula(gram: List<String>): List<List<String>> {
     }
 }
 
+/**
+ * AFD do livro para (a|b)*abb, estados A a E (0 a 4), só E final. A minimização leva três rodadas:
+ * E com todos; depois D com A, B e C; depois A com B e B com C. A e C nunca caem.
+ */
+val AFD_LIVRO = com.compilandia.engine.DFA(
+    5, 0, setOf(4), listOf('a', 'b'),
+    mapOf(
+        (0 to 'a') to 1, (0 to 'b') to 2, (1 to 'a') to 1, (1 to 'b') to 3, (2 to 'a') to 1, (2 to 'b') to 2,
+        (3 to 'a') to 1, (3 to 'b') to 4, (4 to 'a') to 1, (4 to 'b') to 2,
+    ),
+)
+
 /** Gramática do segundo exemplo de LR(0) e SLR. */
 val GRAMATICA_LR_2 = listOf("S -> ( S ) | id")
 
@@ -452,6 +464,37 @@ val aulasLongas2 by lazy {
             cena(tx("min_l_11"), mood = EpMood.HAPPY) {
                 drop("o1", "o2")
                 tint("pq", Tint.GREEN); hot("pq")
+            }
+            // 5. O caso difícil: o AFD do livro, em que um par só cai duas rodadas depois
+            val nomes = listOf("A", "B", "C", "D", "E")
+            val rodada = com.compilandia.engine.Minimizer.run(AFD_LIVRO).marks.associate { (it.p to it.q) to it.round }
+            // Casa da tabela de um par: linha do estado maior, coluna do menor (B..E nas linhas, A..D nas colunas).
+            fun casa(p: Int, q: Int) = "tl${maxOf(p, q)}c${minOf(p, q) + 1}"
+            fun daRodada(r: Int) = rodada.filterValues { it == r }.keys.map { (p, q) -> casa(p, q) }.toSet()
+            fun marca(r: Int) { for (id in daRodada(r)) { text(id, "$r"); tint(id, Tint.ORANGE) } }
+            val brancas = (1..4).flatMap { l -> (1..l).map { c -> "tl${l}c$c" } }.toSet()
+            cena(tx("min_l_12")) {
+                clear()
+                add(titulo(tx("min_l_titulo_livro"), size = 20f))
+                add(estados(listOf(40f to 160f, 130f to 112f, 130f to 214f, 230f to 112f, 320f to 160f), finais = setOf(4), nomes = nomes))
+                for ((k, para) in AFD_LIVRO.delta) {
+                    val (de, c) = k
+                    wire("q$de", "q$para", c.toString(), bend = if (de == 4 && para == 2) 30f else if (de == 3 && para == 1) -44f else 0f)
+                }
+                add(tabela("t", listOf(listOf("", "A", "B", "C", "D")) + (1..4).map { l -> listOf(nomes[l]) + List(l) { "" } }, 264f, cw = 50f, ch = 32f, size = 15f))
+                hot("q4")
+            }
+            cena(tx("min_l_13")) { marca(1); hot(*daRodada(1).toTypedArray()) }
+            pergunta(tx("min_l_14"), daRodada(2), brancas - daRodada(1) - daRodada(2), tx("min_l_14_dica"), tx("min_l_14_ok")) { hot("q4") }
+            cena(tx("min_l_14b")) { marca(2); hot(*daRodada(2).toTypedArray()) }
+            pergunta(tx("min_l_15"), daRodada(3), brancas - daRodada(1) - daRodada(2) - daRodada(3), tx("min_l_15_dica"), tx("min_l_15_ok")) { hot() }
+            cena(tx("min_l_15b"), mood = EpMood.SURPRISED) { marca(3); hot(*daRodada(3).toTypedArray()) }
+            val sobra = brancas - rodada.keys.map { (p, q) -> casa(p, q) }.toSet()
+            pergunta(tx("min_l_16"), sobra, brancas - sobra, tx("min_l_16_dica"), tx("min_l_16_ok")) { hot() }
+            cena(tx("min_l_17"), mood = EpMood.HAPPY) {
+                for (id in sobra) tint(id, Tint.GREEN)
+                tint("q0", Tint.GREEN); tint("q2", Tint.GREEN)
+                hot("q0", "q2", *sobra.toTypedArray())
             }
             fecho(Fecho(
                 tx("min_f_af"), false, tx("min_f_q"), tx("min_f_dica"), tx("min_f_ok"), tx("min_f_certo"),
