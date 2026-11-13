@@ -68,7 +68,7 @@
     <string name="comum_geracao_codigo">Code generation</string>
     <string name="comum_gramatica_em_30_segundos">Grammar in 30 seconds</string>
     <string name="comum_intermediario">Intermediate</string>
-    <string name="comum_isso_ultimo_entrar_primeiro_sair">Right. The last one in is the first one out.</string>
+    <string name="comum_isso_ultimo_entrar_primeiro_sair">The last one in is the first one out.</string>
     <string name="comum_laboratorio">Lab</string>
     <string name="comum_laboratorio_bison">Bison Lab</string>
     <string name="comum_lexica">Lexical</string>

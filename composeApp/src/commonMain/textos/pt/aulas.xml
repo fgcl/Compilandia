@@ -8,7 +8,7 @@
     <string name="epbackend_comeco_pelas_folhas_inteiro_x">Começo pelas folhas. O tipo de a e de x vem da declaração. O dois, sem ponto, é inteiro.</string>
     <string name="epbackend_real_vezes_inteiro_que_toque">Real vezes inteiro dá o quê? Toque no tipo.</string>
     <string name="epbackend_tipo_maior_ganha_para_nao">O tipo maior ganha, para não perder a parte quebrada.</string>
-    <string name="epbackend_isso_real_com_inteiro_real">Isso. Inteiro com real dá real.</string>
+    <string name="epbackend_isso_real_com_inteiro_real">Inteiro com real dá real.</string>
     <string name="epbackend_dois_convertido_para_real_resultado">O dois é convertido para real antes da conta. Essa conversão automática se chama coerção. O tipo real sobe para o nó do vezes.</string>
     <string name="epbackend_na_raiz_inteiro_mais_real">Na raiz, inteiro mais real também dá real. Atributo que o nó calcula a partir dos filhos é um atributo sintetizado.</string>
     <string name="epbackend_se_tipos_nao_combinam_compilador">Se os tipos não combinam e não há coerção possível, o compilador acusa erro semântico.</string>
@@ -18,7 +18,7 @@
     <string name="epbackend_entrou_num_bloco_empilha_tabela">Para escopos aninhados, o compilador usa uma pilha de tabelas. Entrou num bloco, empilha uma tabela nova.</string>
     <string name="epbackend_na_linha_x_igual_meio">Na linha x igual a um e meio, qual x vale? Toque na tabela certa.</string>
     <string name="epbackend_busca_comeca_na_tabela_topo">A busca começa na tabela do topo.</string>
-    <string name="epbackend_isso_x_dentro_esconde_fora">Isso. O x de dentro esconde o de fora.</string>
+    <string name="epbackend_isso_x_dentro_esconde_fora">O x de dentro esconde o de fora.</string>
     <string name="epbackend_busca_comeca_no_topo_desce">A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico.</string>
     <string name="epbackend_quando_bloco_acaba_tabela_sai">Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir.</string>
     <string name="epbackend_por_isso_x_igual_dois">No main, x igual a dois. A tabela do main não tem x, então a busca desce e acha o x global.</string>
@@ -28,7 +28,7 @@
     <string name="epbackend_b" translatable="false">a + ( b )</string>
     <string name="epbackend_tem_no_sobrando_aqui_toque">Tem nó sobrando aqui. Toque nos dois parênteses: eles não mudam a conta.</string>
     <string name="epbackend_arvore_ja_mostra_ordem_parentese">A árvore já mostra a ordem. O parêntese fez o trabalho dele.</string>
-    <string name="epbackend_isso_pontuacao_some_arvore_abstrata">Isso. Pontuação some da árvore abstrata.</string>
+    <string name="epbackend_isso_pontuacao_some_arvore_abstrata">Pontuação some da árvore abstrata.</string>
     <string name="epbackend_arvore_abstrata_guarda_so_que">A AST guarda só o que tem significado: o operador no nó, e os operandos como filhos.</string>
     <string name="epbackend_no_codigo_java_cada_no">No código, cada nó da AST é um objeto, criado pelo parser na hora em que reconhece a regra.</string>
     <string name="epbackend_new_binop_b" translatable="false">new BinOp('+', a, b)</string>
@@ -36,7 +36,7 @@
     <string name="epbackend_maquina_nao_entende_conta_comprida">O código de três endereços é um código intermediário: cada linha faz uma conta só, com no máximo três nomes.</string>
     <string name="epbackend_qual_conta_tem_que_sair">Qual conta tem que sair primeiro? Toque no operador.</string>
     <string name="epbackend_arvore_manda_quem_esta_mais">A árvore manda: quem está mais fundo vem antes.</string>
-    <string name="epbackend_isso_vezes_esta_mais_fundo">Isso. O vezes está mais fundo.</string>
+    <string name="epbackend_isso_vezes_esta_mais_fundo">É isso. O vezes está mais fundo.</string>
     <string name="epbackend_guardo_resultado_num_temporario_t1">O resultado do vezes não tem nome no programa. O compilador cria um temporário para ele, o t1.</string>
     <string name="epbackend_na_linha_seguinte_arvore_ja">Na linha seguinte, a árvore já pode usar o t1 no lugar do vezes.</string>
     <string name="epbackend_cada_linha_tem_no_maximo">Cada linha tem no máximo três endereços: dois operandos e um resultado. É daí que vem o nome.</string>
@@ -45,7 +45,7 @@
     <string name="epbackend_se_para_fazer_conta_agora">A otimização mais simples: se a conta só tem constantes, o compilador faz agora. O programa nem precisa calcular. É a dobra de constantes.</string>
     <string name="epbackend_toque_na_parte_que_compilador">Toque na parte que o compilador já consegue resolver.</string>
     <string name="epbackend_procure_conta_so_com_numeros">Procure uma conta só com números.</string>
-    <string name="epbackend_isso_dois_vezes_tres_nao">Isso. Dois vezes três não depende de nada.</string>
+    <string name="epbackend_isso_dois_vezes_tres_nao">Dois vezes três não depende de nada.</string>
     <string name="epbackend_dois_vezes_tres_vira_seis">Dois vezes três vira seis, ainda na compilação.</string>
     <string name="epbackend_y_fica_valor_dele_so">O y fica. O valor dele só existe em tempo de execução, quando o programa roda.</string>
     <string name="epbackend_otimizar_nunca_pode_mudar_resultado">Regra de ouro: otimizar nunca pode mudar o resultado do programa. Só o caminho até ele.</string>
@@ -63,7 +63,7 @@
     <string name="epbackend_por_isso_toda_conta_tem">Por isso toda conta tem três tempos: carrega os operandos, opera, e guarda o resultado.</string>
     <string name="epbackend_qual_linha_faz_multiplicacao_toque">Qual linha faz a multiplicação? Toque nela.</string>
     <string name="epbackend_procure_instrucao_mul">Procure a instrução mul.</string>
-    <string name="epbackend_isso_antes_dela_dois_lw">Isso. Antes dela, os dois lw, de load word, trazem os valores da memória.</string>
+    <string name="epbackend_isso_antes_dela_dois_lw">Antes dela, os dois lw, de load word, trazem os valores da memória.</string>
     <string name="epbackend_sw_leva_resultado_volta_para">O sw, de store word, leva o resultado do registrador de volta para a memória.</string>
     <string name="epbackend_colorir_grafo">Colorir o grafo</string>
     <string name="epbackend_registrador_pouco_variavel_muita_vamos">Os registradores são poucos, e os temporários são muitos. O compilador precisa dividir.</string>
@@ -72,7 +72,7 @@
     <string name="epbackend_liguei_quem_convive_esse_grafo">Cada variável vira um nó. Ligo com uma aresta as que estão vivas ao mesmo tempo. Esse é o grafo de interferência.</string>
     <string name="epbackend_quais_duas_podem_dividir_registrador">Quais duas podem dividir um registrador? Toque nelas.</string>
     <string name="epbackend_procure_duas_que_nao_tem">Procure as duas que não têm fio entre elas.</string>
-    <string name="epbackend_isso_sem_fio_entre_elas">Isso. Sem aresta entre elas, nunca estão vivas juntas.</string>
+    <string name="epbackend_isso_sem_fio_entre_elas">É isso. Sem aresta entre elas, nunca estão vivas juntas.</string>
     <string name="epbackend_pinto_grafo_vizinhos_nunca_tem">Agora é colorir o grafo: vizinhos nunca recebem a mesma cor. Cada cor é um registrador.</string>
     <string name="epbackend_faltou_cor_variavel_vai_para">Se faltar cor, uma variável vai morar na memória. Isso é o spill, o derramamento.</string>
     <!-- EpClipes.kt -->
@@ -173,7 +173,7 @@
     <string name="epemc_le_2_quatro_vezes_dez">Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois.</string>
     <string name="epemc_agora_chegou_mais_qual_linha">Agora chegou o mais. Qual linha roda logo depois? Toque nela.</string>
     <string name="epemc_mais_nao_digito_while_para">O mais não é dígito. O while para.</string>
-    <string name="epemc_isso_laco_para_ungetc_devolve">Isso. O laço para e o ungetc devolve o mais.</string>
+    <string name="epemc_isso_laco_para_ungetc_devolve">O laço para e o ungetc devolve o mais.</string>
     <string name="epemc_mais_foi_lido_mais_ungetc">O mais foi lido a mais. O ungetc devolve ele para a entrada.</string>
     <string name="epemc_sai_token_ele_struct_com">E sai o token. Ele é um struct com o tipo e o valor.</string>
     <string name="epemc_tipo_num" translatable="false">tipo: NUM</string>
@@ -191,7 +191,7 @@
     <string name="epemc_fator_casa_2_volta_depois">fator casa o 2 e volta. Depois termo volta também.</string>
     <string name="epemc_agora_vem_mais_qual_funcao">Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque.</string>
     <string name="epemc_quem_tem_while_mais">Quem tem o while do mais?</string>
-    <string name="epemc_isso_while_mais_mora_dentro">Isso. O while do mais mora dentro de expr.</string>
+    <string name="epemc_isso_while_mais_mora_dentro">O while do mais mora dentro de expr.</string>
     <string name="epemc_no_vezes_quem_casa_termo">No vezes, quem casa é termo. Cada função cuida do seu operador.</string>
     <string name="epemc_agora_voce_processador_chame_case">Agora você é o processador. Chame, case e volte, na ordem certa.</string>
     <string name="epemc_chame_quando_topo_precisa_outra">Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou.</string>
@@ -206,7 +206,7 @@
     <string name="epemc_por_ultimo_mais_que_vira">Por último o mais, que vira a raiz da árvore.</string>
     <string name="epemc_para_qual_no_aponta_ponteiro">Para qual nó aponta o ponteiro dir da raiz? Toque nele.</string>
     <string name="epemc_siga_fio_que_sai_linha">Siga o fio que sai da linha dir.</string>
-    <string name="epemc_isso_dir_raiz_aponta_para">Isso. O dir da raiz aponta para o vezes.</string>
+    <string name="epemc_isso_dir_raiz_aponta_para">O dir da raiz aponta para o vezes.</string>
     <string name="epemc_arvore_isso_structs_ligados_por">A árvore é isso: structs ligados por ponteiros.</string>
     <string name="epemc_em_c_4_arvore_ao">Em C 4: da árvore ao MIPS</string>
     <string name="epemc_gerador_anda_na_arvore_escreve">O gerador anda na árvore e escreve MIPS, uma linha por vez.</string>
@@ -214,7 +214,7 @@
     <string name="epemc_vezes_vira_quatro_linhas_carrega">O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda.</string>
     <string name="epemc_qual_no_gerador_visita_agora">Qual nó o gerador visita agora? Toque nele.</string>
     <string name="epemc_dois_filhos_raiz_ja_estao">Os dois filhos da raiz já estão prontos.</string>
-    <string name="epemc_isso_agora_vez_raiz">Isso. Agora é a vez da raiz.</string>
+    <string name="epemc_isso_agora_vez_raiz">Agora é a vez da raiz.</string>
     <string name="epemc_mais_usa_resultado_vezes_que">O mais usa o resultado do vezes, que já está guardado na memória.</string>
     <string name="epemc_em_c_funcao_recursiva_gera">Em C, é uma função recursiva: gera os filhos e depois o pai.</string>
     <string name="epemc_agora_monte_mips_na_ordem">Agora monte o MIPS na ordem certa, instrução por instrução.</string>
@@ -231,7 +231,7 @@
     <string name="epemc_yylex_devolve_tipo_valor_vai">O yylex devolve o tipo. O valor vai junto, em yylval.</string>
     <string name="epemc_quem_chama_yylex_toque_no">Quem chama o yylex? Toque no arquivo.</string>
     <string name="epemc_quem_pede_tokens_parser">Quem pede tokens é o parser.</string>
-    <string name="epemc_isso_parser_pede_token_por">Isso. O parser pede um token por vez.</string>
+    <string name="epemc_isso_parser_pede_token_por">O parser pede um token por vez.</string>
     <string name="epemc_bison_flex_escrevem_arquivos_c">O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa.</string>
     <string name="epemc_bison_d_calc_y" translatable="false">bison -d calc.y</string>
     <string name="epemc_flex_calc_l" translatable="false">flex calc.l</string>
@@ -264,7 +264,7 @@
     <string name="epgramatica_parser_cima_para_baixo_procura">Um parser de cima para baixo procura E. Para isso, procura E. Para isso, procura E.</string>
     <string name="epgramatica_qual_destas_regras_tem_recursao">Qual destas regras tem recursão à esquerda? Toque nela.</string>
     <string name="epgramatica_procure_regra_cujo_lado_direito">Procure a regra cujo lado direito começa com o próprio lado esquerdo.</string>
-    <string name="epgramatica_isso_comeca_com_entao_parser">Isso. A começa com A, então o parser não sai do lugar.</string>
+    <string name="epgramatica_isso_comeca_com_entao_parser">É isso. A começa com A, então o parser não sai do lugar.</string>
     <string name="epgramatica_qual_trava">Qual trava?</string>
     <string name="epgramatica_conserto_parte_sem_recursao_vem">O conserto: a alternativa sem recursão vem primeiro. O que se repetia vai para um não-terminal novo, com recursão à direita.</string>
     <string name="epgramatica_linguagem_mesma_n_depois_zero">A linguagem é a mesma: um n, depois zero ou mais vezes mais n. Só mudou o lado da recursão, e com ele a forma da árvore.</string>
@@ -273,7 +273,7 @@
     <string name="epgramatica_qual_das_duas">Qual das duas?</string>
     <string name="epgramatica_toque_na_parte_que_duas">Toque na parte que as duas regras têm em comum.</string>
     <string name="epgramatica_compare_comeco_das_duas_linhas">Compare o começo das duas linhas.</string>
-    <string name="epgramatica_isso_prefixo_comum">Isso. O a é o prefixo comum das duas.</string>
+    <string name="epgramatica_isso_prefixo_comum">Boa. O a é o prefixo comum das duas.</string>
     <string name="epgramatica_faco_como_na_matematica_ponho">Faço como na matemática: ponho o prefixo comum em evidência. Isso é a fatoração à esquerda.</string>
     <string name="epgramatica_escolha_fica_para_depois_ai">A escolha fica para depois do a, num não-terminal novo. Aí basta olhar o próximo token.</string>
     <string name="epgramatica_fatorada">Fatorada</string>
@@ -282,7 +282,7 @@
     <string name="epgramatica_comece_pelo_facil_t_comeca">Comece por T. As duas regras dele começam com terminal: id e abre parêntese. Os dois entram direto.</string>
     <string name="epgramatica_x_ele_tem_duas_regras">Agora X. Uma regra começa com mais, a outra é só épsilon. Toque nos dois itens do FIRST de X.</string>
     <string name="epgramatica_regra_comeca_com_mais_outra">O mais entra direto. E quando a regra é épsilon, o próprio épsilon entra.</string>
-    <string name="epgramatica_isso_mais_epsilon">Isso. Mais e épsilon. Épsilon no FIRST quer dizer que X pode sumir. Um símbolo assim é anulável.</string>
+    <string name="epgramatica_isso_mais_epsilon">Mais e épsilon. Épsilon no FIRST quer dizer que X pode sumir. Um símbolo assim é anulável.</string>
     <string name="epgramatica_agora_ele_comeca_com_t">Agora E, que vai para T X. A regra começa com um não-terminal, então o FIRST de T entra no de E.</string>
     <string name="epgramatica_se_primeiro_simbolo_pudesse_sumir">T não é anulável, então paramos nele. Se fosse, o FIRST de X entraria também.</string>
     <string name="epgramatica_que_vem_depois">O que vem depois?</string>
@@ -291,7 +291,7 @@
     <string name="epgramatica_x_ultimo_que_segue_segue">X é o último símbolo da regra de E. Então o que vem depois de E também vem depois de X.</string>
     <string name="epgramatica_depois_t_vem_x_x">Em E vai para T X, depois de T vem X. Com que token X pode começar? Toque nele.</string>
     <string name="epgramatica_olhe_first_x_sem_epsilon">Olhe o FIRST de X, sem o épsilon.</string>
-    <string name="epgramatica_isso_first_x_sem_epsilon">Isso. O FIRST de X, sem o épsilon, entra no FOLLOW de T. Épsilon nunca entra em FOLLOW.</string>
+    <string name="epgramatica_isso_first_x_sem_epsilon">O FIRST de X, sem o épsilon, entra no FOLLOW de T. Épsilon nunca entra em FOLLOW.</string>
     <string name="epgramatica_como_x_pode_sumir_que">E como X é anulável, T pode ficar no fim da regra. O FOLLOW de E entra no de T: mais, cifrão e fecha parêntese.</string>
     <!-- EpLexico.kt -->
     <string name="eplexico_linha_montagem">A linha de montagem</string>
@@ -305,7 +305,7 @@
     <string name="eplexico_arvore_com_tipos">árvore com tipos</string>
     <string name="eplexico_em_int_x_igual_oi">Em int x igual a oi, entre aspas, o texto não cabe num inteiro. Qual fase reclama? Toque nela.</string>
     <string name="eplexico_escrita_esta_certa_frase_tem">A escrita está certa e a frase tem forma de comando. O problema é o sentido.</string>
-    <string name="eplexico_isso_tipo_errado_assunto_semantica">Isso. A frase está bem formada, mas o tipo não combina. É erro semântico.</string>
+    <string name="eplexico_isso_tipo_errado_assunto_semantica">Certo. A frase está bem formada, mas o tipo não combina. É erro semântico.</string>
     <string name="eplexico_cortar_linha">Cortar a linha</string>
     <string name="eplexico_para_computador_esta_linha_so">Para o computador, esta linha é só uma fila de caracteres.</string>
     <string name="eplexico_scanner">Scanner</string>
@@ -316,7 +316,7 @@
     <string name="eplexico_espacos_caem_fora_aqui_nenhuma">Espaços, quebras de linha e comentários são descartados aqui. Nenhuma fase depois os vê.</string>
     <string name="eplexico_sua_vez_toque_nos_dois">Sua vez. Toque nos dois cortes desta linha.</string>
     <string name="eplexico_maior_ou_igual_fica_inteiro">O maior ou igual fica inteiro, e o número também.</string>
-    <string name="eplexico_isso_tres_tokens_x_maior">Isso. Três tokens: x, maior ou igual, e dez.</string>
+    <string name="eplexico_isso_tres_tokens_x_maior">Certo. Três tokens: x, maior ou igual, e dez.</string>
     <string name="eplexico_onde_corta">Onde corta?</string>
     <string name="eplexico_essa_regra_maior_casamento_por">Essa é a regra do maior casamento: o scanner sempre pega o pedaço mais longo possível. Por isso conta2 é um nome só.</string>
     <string name="eplexico_texto_exato_lexema_classe_dele">O texto exato do pedaço é o lexema. O token é o que o scanner entrega: a classe, como ID, com o lexema junto. Lexemas diferentes podem ter a mesma classe.</string>
@@ -326,7 +326,7 @@
     <string name="eplexico_expressao_regular_descreve_formato_esta">Uma expressão regular descreve um formato de cadeia. Esta diz: um a, seguido de quantos b quiser, até nenhum.</string>
     <string name="eplexico_b" translatable="false">a b*</string>
     <string name="eplexico_automato_maquina_que_confere_esse">O autômato finito é a máquina que confere esse formato. Cada círculo é um estado, e cada seta é uma transição.</string>
-    <string name="eplexico_trem_comeca_no_primeiro_estado">O trem começa no estado inicial e lê um símbolo por vez. É um AFD: de cada estado sai no máximo uma seta por símbolo.</string>
+    <string name="eplexico_trem_comeca_no_primeiro_estado">O trem começa no estado inicial e lê um símbolo por vez. É um AFD: de cada estado sai uma seta por símbolo. Seta que não aparece vai para um estado morto, que o desenho esconde.</string>
     <string name="eplexico_leu_trem_anda_para_outro">Leu a. O trem segue a seta do a até o outro estado.</string>
     <string name="eplexico_leu_b_volta_no_laco">Leu b. Dá a volta no laço e fica no mesmo estado.</string>
     <string name="eplexico_acabou_cadeia_num_circulo_duplo">A cadeia acabou num estado final, o de círculo duplo. A cadeia foi aceita.</string>
@@ -343,7 +343,7 @@
     <string name="eplexico_conjunto_zero_lendo_posso_estar">Começo no conjunto que só tem o zero. Lendo a, o AFN pode estar em zero ou em um. Nasce o conjunto zero e um.</string>
     <string name="eplexico_conjunto_zero_lendo_b_para">Do conjunto zero e um, lendo b, para onde vamos? Toque no conjunto certo.</string>
     <string name="eplexico_veja_cada_estado_conjunto_com">Veja cada estado do conjunto. Com b, o zero fica no zero e o um vai para o dois.</string>
-    <string name="eplexico_isso_juntando_dois_caminhos_zero">Isso. Juntando os dois caminhos, dá zero e dois.</string>
+    <string name="eplexico_isso_juntando_dois_caminhos_zero">É isso. Juntando os dois caminhos, dá zero e dois.</string>
     <string name="eplexico_cada_conjunto_novo_vira_estado">Cada conjunto novo vira um estado do AFD. Se o conjunto contém algum estado final do AFN, ele é final no AFD.</string>
     <string name="eplexico_quando_afn_tem_seta_epsilon">Quando o AFN tem transição épsilon, ele passa por ela sem ler nada. O épsilon fecho de um conjunto junta tudo que se alcança assim.</string>
     <string name="eplexico_pronto_nenhum_chute_caminho_so">Pronto. O AFD aceita as mesmas cadeias do AFN, sem chute: uma transição só para cada símbolo.</string>
@@ -356,14 +356,14 @@
     <string name="eplexico_se_destinos_sao_diferentes_origem">O par C e D já está marcado. Se os destinos são diferentes, as origens também são. Marco A com B.</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">Sobrou uma casa em branco. Toque nela: esses dois são gêmeos.</string>
     <string name="eplexico_procure_casa_sem_x_na">Procure a casa sem X na tabela.</string>
-    <string name="eplexico_isso_b_c_vao_sempre">Isso. B e C vão sempre para o mesmo lugar.</string>
+    <string name="eplexico_isso_b_c_vao_sempre">É isso. B e C vão sempre para o mesmo lugar.</string>
     <string name="eplexico_casa_em_branco_no_fim">Casa em branco no fim quer dizer estados equivalentes. B e C viram um estado só.</string>
     <string name="eplexico_flex_escreve_scanner">O Flex escreve o scanner</string>
     <string name="eplexico_fazer_automato_na_mao_cansa">Fazer isso à mão cansa e dá erro. O Flex é um gerador: você escreve as regras, e ele gera o scanner em C.</string>
     <string name="eplexico_cada_linha_tem_padrao_acao">No arquivo ponto l, cada linha tem um padrão, que é uma expressão regular, e uma ação em C. Casou o padrão, roda a ação.</string>
     <string name="eplexico_texto_if_casa_com_primeira">O texto if casa com a primeira e com a segunda regra, do mesmo tamanho. Quem ganha? Toque na regra.</string>
     <string name="eplexico_com_tamanhos_iguais_ordem_arquivo">Com tamanhos iguais, a ordem do arquivo decide.</string>
-    <string name="eplexico_isso_no_empate_vence_regra">Isso. No empate, vence a regra de cima.</string>
+    <string name="eplexico_isso_no_empate_vence_regra">Boa. No empate, vence a regra de cima.</string>
     <string name="eplexico_texto_ifa_agora_segunda_regra">E o texto ifa? A primeira regra casa só duas letras. A segunda casa as três. O casamento mais longo vence.</string>
     <string name="eplexico_guarde_duas_regras_primeiro_maior">Guarde duas regras: primeiro o maior casamento. Empatou, vale a de cima.</string>
     <string name="eplexico_1_maior_casamento">1. maior casamento</string>
@@ -492,7 +492,7 @@
     <string name="epparsers_regra_x_que_comeca_com">X vai para mais T X. O FIRST desse lado direito é só o mais. A regra entra na coluna do mais.</string>
     <string name="epparsers_x_tambem_pode_sumir_essa">X também vai para épsilon. Regra que some vai nas colunas do FOLLOW de X. Toque nas duas casas.</string>
     <string name="epparsers_follow_x_fecha_parentese_cifrao">O FOLLOW de X é fecha parêntese e cifrão.</string>
-    <string name="epparsers_isso_epsilon_vai_nas_colunas">Isso. Com fecha parêntese ou cifrão na entrada, o parser apaga X.</string>
+    <string name="epparsers_isso_epsilon_vai_nas_colunas">Com fecha parêntese ou cifrão na entrada, o parser apaga X.</string>
     <string name="epparsers_falta_t_id_na_coluna">Faltam as regras de T. A regra id vai na coluna do id. A dos parênteses vai na coluna do abre parêntese.</string>
     <string name="epparsers_se_casa_receber_duas_regras">Passo três: se uma casa recebe duas regras, o parser não sabe escolher. Isso é um conflito, e a gramática não é LL(1).</string>
     <string name="epparsers_pilha_decide">A pilha decide</string>
@@ -502,7 +502,7 @@
     <string name="epparsers_agora_t_esta_no_topo">Assim T fica no topo, e X espera embaixo. Com id na entrada, a tabela manda trocar T por id.</string>
     <string name="epparsers_topo_id_token_id_que">Topo é id e o token é id. O que eu faço? Toque na ação.</string>
     <string name="epparsers_terminal_no_topo_igual_ao">Terminal no topo igual ao token da entrada: é par.</string>
-    <string name="epparsers_isso_casou_dois_saem">Isso. Casou: o id sai da pilha e a entrada avança um token.</string>
+    <string name="epparsers_isso_casou_dois_saem">Certo. Casou: o id sai da pilha e a entrada avança um token.</string>
     <string name="epparsers_topo_id_token_id">topo: id, token: id</string>
     <string name="epparsers_jogo_segue_igual_expande_nao">O resto segue igual. Não-terminal no topo, troca pela tabela. Terminal no topo, casa com a entrada.</string>
     <string name="epparsers_casou_id">casou id</string>
@@ -513,7 +513,7 @@
     <string name="epparsers_terminal_vira_casa_ele_confere">Terminal vira uma chamada de casa. Ela confere se o token é o esperado e avança. Se não for, é erro de sintaxe.</string>
     <string name="epparsers_se_token_nao_for_mais">Na função X, se o token não é mais, ela não faz nada e volta. Que regra é essa? Toque nela.</string>
     <string name="epparsers_nao_fazer_nada_mesmo_que">Não fazer nada é o mesmo que sumir da frase.</string>
-    <string name="epparsers_isso_nao_fazer_nada_regra">Isso. Não fazer nada é a regra épsilon: X sumiu sem consumir token.</string>
+    <string name="epparsers_isso_nao_fazer_nada_regra">Não fazer nada é a regra épsilon: X sumiu sem consumir token.</string>
     <string name="epparsers_ifs_usam_first_para_escolher">Cada if testa o próximo token contra o FIRST de uma regra. É a mesma decisão da tabela LL(1), agora dentro do código.</string>
     <string name="epparsers_esse_parser_que_trabalho_pratico">É esse o parser que o trabalho prático pede. Ele só funciona se a gramática for LL(1): sem recursão à esquerda e fatorada.</string>
     <string name="epparsers_cair_levantar">Cair e levantar</string>
@@ -522,7 +522,7 @@
     <string name="epparsers_erro_aqui">erro aqui</string>
     <string name="epparsers_no_modo_panico_ele_descarta">No modo pânico, ele descarta tokens até achar um token de sincronização. Toque onde ele se segura.</string>
     <string name="epparsers_procure_token_que_encerra_comando">Procure o token que encerra o comando.</string>
-    <string name="epparsers_isso_ponto_virgula_sincronizador">Isso. O ponto e vírgula fecha o comando. Ele é o token de sincronização.</string>
+    <string name="epparsers_isso_ponto_virgula_sincronizador">O ponto e vírgula fecha o comando. Ele é o token de sincronização.</string>
     <string name="epparsers_tudo_ate_ali_vai_fora">Tudo até ali vai fora, sem analisar. A análise recomeça no comando seguinte, e o resto do arquivo é conferido.</string>
     <string name="epparsers_bons_sincronizadores_saem_follow_cada">Bons tokens de sincronização saem do FOLLOW do não-terminal que estava no topo: é o que pode vir depois dele.</string>
     <string name="epparsers_assim_compilacao_so_aponta_varios">Assim uma compilação só aponta vários erros. O programa não é gerado, mas você corrige tudo de uma vez.</string>
@@ -533,7 +533,7 @@
     <string name="epparsers_empilho_mais_duas_vezes">Agora não há handle no topo. Empilho o mais e depois o n.</string>
     <string name="epparsers_pilha_tem_mais_n_empilho">A pilha tem E mais n. Empilho ou reduzo? Toque na resposta.</string>
     <string name="epparsers_olhe_topo_mais_n_lado">Olhe o topo. E mais n é o lado direito de uma regra?</string>
-    <string name="epparsers_isso_handle_no_topo_entao">Isso. E mais n é o handle. Reduzir, ou reduce, troca os três por E.</string>
+    <string name="epparsers_isso_handle_no_topo_entao">Exato. E mais n é o handle. Reduzir, ou reduce, troca os três por E.</string>
     <string name="epparsers_sobrou_so_entrada_acabou_frase">Sobrou só o símbolo inicial na pilha, e a entrada acabou. A frase foi aceita.</string>
     <string name="epparsers_lidas_tras_para_frente_reducoes">Lidas de trás para a frente, as reduções formam uma derivação mais à direita. É esse o R do nome LR.</string>
     <string name="epparsers_ponto_que_anda">O ponto que anda</string>
@@ -542,7 +542,7 @@
     <string name="epparsers_se_ponto_esta_antes_posso">Se o ponto está antes de um não-terminal, como E, o parser pode estar começando qualquer regra de E. Juntar essas regras é o fechamento, o closure.</string>
     <string name="epparsers_neste_estado_chega_n_qual">Neste estado chega um n. Qual item sobrevive? Toque nele.</string>
     <string name="epparsers_ponto_so_anda_sobre_simbolo">O ponto só anda sobre o símbolo que vem logo depois dele.</string>
-    <string name="epparsers_isso_ponto_passa_por_cima">Isso. O ponto passa por cima do n. O outro item esperava E, não n, e fica para trás.</string>
+    <string name="epparsers_isso_ponto_passa_por_cima">O ponto passa por cima do n. O outro item esperava E, não n, e fica para trás.</string>
     <string name="epparsers_andar_ponto_por_simbolo_goto">Andar o ponto por cima de um símbolo é o goto. O resultado, depois do fechamento, é um novo estado.</string>
     <string name="epparsers_estado_novo">estado novo</string>
     <string name="epparsers_ponto_no_fim_quer_dizer">Ponto no fim é um item completo: o lado direito inteiro está na pilha, e a regra pode ser reduzida.</string>
@@ -554,14 +554,14 @@
     <string name="epparsers_mas_reduzir_quando_slr_so">Empilhar sai direto dos gotos do autômato. Reduzir é a parte delicada: o SLR só reduz se o próximo token está no FOLLOW.</string>
     <string name="epparsers_estado_2_terminou_regra_em">O estado 2 terminou a regra de E. Em qual coluna não posso reduzir? Toque nela.</string>
     <string name="epparsers_procure_simbolo_que_nao_esta">Procure o símbolo que não está no FOLLOW de E.</string>
-    <string name="epparsers_isso_n_nao_esta_no">Isso. O n não está no FOLLOW de E. A casa fica vazia, e casa vazia é erro de sintaxe.</string>
+    <string name="epparsers_isso_n_nao_esta_no">O n não está no FOLLOW de E. A casa fica vazia, e casa vazia é erro de sintaxe.</string>
     <string name="epparsers_se_casa_pede_empilhar_reduzir">Se a mesma casa pede empilhar e reduzir, há um conflito shift-reduce. Com duas reduções, um conflito reduce-reduce.</string>
     <string name="epparsers_shift_ou_reduce">shift ou reduce?</string>
     <string name="epparsers_gramatica_sem_conflito_na_tabela">Gramática que enche a tabela sem nenhum conflito é SLR(1).</string>
     <string name="epparsers_mais_precisao_mesma_tabela">Mais precisão, mesma tabela</string>
     <string name="epparsers_miolo_item_sem_token_virgula">O núcleo é o item sem o lookahead: a regra e o ponto. Toque no item com o mesmo núcleo do destacado.</string>
     <string name="epparsers_compare_regra_ponto_ignore_que">Compare a regra e o ponto. Ignore o que vem depois da vírgula.</string>
-    <string name="epparsers_isso_regra_ponto_sao_iguais">Isso. A regra e o ponto são iguais, só muda o token.</string>
+    <string name="epparsers_isso_regra_ponto_sao_iguais">A regra e o ponto são iguais, só muda o token.</string>
     <string name="epparsers_lalr_junta_estados_miolo_igual">O LR(1) completo tem estados demais. O LALR junta os estados de núcleo igual e une os lookaheads.</string>
     <string name="epparsers_fica_quase_tao_forte_quanto">Fica quase tão forte quanto o LR(1), com o mesmo número de estados da SLR. Por isso o Bison usa LALR(1).</string>
     <string name="epparsers_bison_usa_lalr_1">Bison usa LALR(1)</string>
@@ -574,7 +574,7 @@
     <string name="epparsers_essa_gramatica_ambigua_quem_resolve">Essa gramática é ambígua, e a tabela teria conflitos. Quem desempata são as linhas de precedência, lá em cima.</string>
     <string name="epparsers_quanto_mais_abaixo_no_arquivo">Quanto mais abaixo no arquivo, maior a precedência. Quem ganha? Toque na linha.</string>
     <string name="epparsers_procure_linha_mais_perto_das">Procure a linha mais perto das regras.</string>
-    <string name="epparsers_isso_vezes_esta_mais_abaixo">Isso. O vezes está mais abaixo, então ele vem antes do mais.</string>
+    <string name="epparsers_isso_vezes_esta_mais_abaixo">Acertou. O vezes está mais abaixo, então ele vem antes do mais.</string>
     <string name="epparsers_left_diz_que_contas_iguais">O left diz que o operador associa à esquerda: contas iguais em fila juntam da esquerda para a direita.</string>
     <string name="epparsers_sem_nenhuma_linha_conflito_na">Se o Bison não avisa nenhum conflito, toda casa da tabela ficou com uma ação só.</string>
     <!-- EpPegadinhas1.kt -->
@@ -586,20 +586,20 @@
     <string name="eppegadinhas1_quem_pega">Quem pega?</string>
     <string name="eppegadinhas1_primeiro_int_x_arroba_igual">Primeiro: int x arroba igual a dois. Esse caractere não existe na linguagem. Quem reclama?</string>
     <string name="eppegadinhas1_nenhum_token_comeca_com_arroba">Nenhum token começa com arroba. Quem monta os tokens?</string>
-    <string name="eppegadinhas1_isso_scanner_para_antes_qualquer">Isso. O scanner para antes de qualquer outra fase.</string>
+    <string name="eppegadinhas1_isso_scanner_para_antes_qualquer">O scanner para antes de qualquer outra fase.</string>
     <string name="eppegadinhas1_agora_falta_ponto_virgula_tokens">Agora falta o ponto e vírgula. Os tokens estão certos. Quem reclama?</string>
     <string name="eppegadinhas1_toda_palavra_existe_que_falta">Toda palavra existe. O que falta é uma peça na frase.</string>
     <string name="eppegadinhas1_sintatica_forma_comando_esta_errada">Sintática. A forma do comando está errada.</string>
     <string name="eppegadinhas1_por_ultimo_y_mais_com">Por último, y mais um, com y nunca declarado. A frase tem forma certa. Quem reclama?</string>
     <string name="eppegadinhas1_problema_nao_forma_nome_y">O problema não é a forma. É o nome y, que não existe.</string>
-    <string name="eppegadinhas1_semantica_so_ela_consulta_tabela">Semântica. Só ela consulta a tabela de símbolos.</string>
+    <string name="eppegadinhas1_semantica_so_ela_consulta_tabela">Semântica. É ela que procura o y na tabela de símbolos. Sem declaração, o y não está lá.</string>
     <string name="eppegadinhas1_na_prova_pergunte_primeiro">Na prova, pergunte primeiro: o erro está na letra, na forma ou no sentido?</string>
     <string name="eppegadinhas1_por_que_ifa_nao_if">Por que ifa não é if</string>
     <string name="eppegadinhas1_olhe_esta_linha_ifa_igual">Olhe esta linha: ifa igual a um. O scanner começa pelo i.</string>
     <string name="eppegadinhas1_depois_i_vem_f_pedaco">Depois do i vem o f. O pedaço agora é if, que é palavra reservada.</string>
     <string name="eppegadinhas1_ele_fecha_token_agora_toque">Ele fecha o token agora? Toque na última letra desse token.</string>
     <string name="eppegadinhas1_scanner_estica_enquanto_der_ainda">O scanner estica enquanto der. O a ainda cabe num nome.</string>
-    <string name="eppegadinhas1_isso_ainda_cabe_entao_token">Isso. O a ainda cabe, então o token é ifa.</string>
+    <string name="eppegadinhas1_isso_ainda_cabe_entao_token">O a ainda cabe, então o token é ifa.</string>
     <string name="eppegadinhas1_maior_casamento_fica_pedaco_mais">Maior casamento: fica o pedaço mais comprido. Por isso ifa é um nome comum.</string>
     <string name="eppegadinhas1_palavra_reservada_so_ganha_no">A palavra reservada só ganha no empate. If sozinho tem o mesmo tamanho nas duas regras.</string>
     <string name="eppegadinhas1_ordem_decisao_primeiro_tamanho_depois">Ordem de decisão: primeiro o tamanho, depois a reservada.</string>
@@ -609,7 +609,7 @@
     <string name="eppegadinhas1_estrela_aceita_zero_ou_mais">A estrela aceita zero ou mais. Vale vazio, um a e dois a.</string>
     <string name="eppegadinhas1_mais_exige_pelo_menos_toque">O mais exige pelo menos um. Toque na casa em que a mais recusa a cadeia.</string>
     <string name="eppegadinhas1_pelo_menos_qual_cadeia_nao">Pelo menos um a. Qual cadeia não tem nenhum?</string>
-    <string name="eppegadinhas1_isso_cadeia_vazia_fica_fora">Isso. A cadeia vazia fica de fora.</string>
+    <string name="eppegadinhas1_isso_cadeia_vazia_fica_fora">A cadeia vazia fica de fora.</string>
     <string name="eppegadinhas1_interrogacao_zero_ou_vale_vazio">A interrogação é zero ou um. Vale vazio, vale um a, e dois a passa do limite.</string>
     <string name="eppegadinhas1_estrela_zero_ou_mais_mais">Estrela é zero ou mais. Mais é um ou mais. Interrogação é zero ou um.</string>
     <string name="eppegadinhas1_fecho_esquecido">O fecho esquecido</string>
@@ -617,7 +617,7 @@
     <string name="eppegadinhas1_comeco_afd">Começo do AFD</string>
     <string name="eppegadinhas1_qual_estado_inicial_afd_toque">Qual é o estado inicial do AFD? Toque em todos os estados do AFN que entram nele.</string>
     <string name="eppegadinhas1_comece_em_q0_ande_pelas">Comece em q0 e ande pelas setas de épsilon. Sem ler letra nenhuma.</string>
-    <string name="eppegadinhas1_isso_inicial_q0_mais_tudo">Isso. Inicial é q0 mais tudo que se alcança sem ler.</string>
+    <string name="eppegadinhas1_isso_inicial_q0_mais_tudo">Inicial é q0 mais tudo que se alcança sem ler.</string>
     <string name="eppegadinhas1_erro_comum_escrever_so_q0">O erro comum é escrever só q0. Sem o fecho, a seta com a some, e o AFD aceita menos.</string>
     <string name="eppegadinhas1_estado_inicial_afd">estado inicial do AFD</string>
     <string name="eppegadinhas1_receita_tem_dois_passos_anda">A receita tem dois passos: anda com a letra, depois fecha com épsilon.</string>
@@ -628,7 +628,7 @@
     <string name="eppegadinhas1_chega_palavra_if_duas_regras">Chega a palavra if. As duas regras casam duas letras. Deu empate.</string>
     <string name="eppegadinhas1_no_empate_flex_fica_com">No empate, o Flex fica com a primeira regra do arquivo. Qual regra ganha aqui?</string>
     <string name="eppegadinhas1_olhe_qual_linha_vem_primeiro">Olhe qual linha vem primeiro.</string>
-    <string name="eppegadinhas1_isso_if_vira_id_regra">Isso. O if vira ID, e a regra de baixo nunca roda.</string>
+    <string name="eppegadinhas1_isso_if_vira_id_regra">O if vira ID, e a regra de baixo nunca roda.</string>
     <string name="eppegadinhas1_flex_ate_avisa_que_regra">O Flex até avisa que a regra de baixo nunca casa. Quem lê o aviso acha o erro.</string>
     <string name="eppegadinhas1_if_vira_id">if vira ID</string>
     <string name="eppegadinhas1_conserto_subir_palavra_reservada_reservada">O conserto é subir a palavra reservada. Reservada em cima, nome embaixo.</string>
@@ -640,7 +640,7 @@
     <string name="eppegadinhas1_outra_liga_else_ao_if">A outra liga o else ao if de fora. Duas árvores, a gramática é ambígua.</string>
     <string name="eppegadinhas1_regra_das_linguagens_else_fica">A regra das linguagens: o else fica com o if mais perto. Toque nesse if.</string>
     <string name="eppegadinhas1_ande_para_tras_partir_else">Ande para trás a partir do else. Qual if aparece primeiro?</string>
-    <string name="eppegadinhas1_isso_else_fica_com_if">Isso. O else fica com o if de dentro.</string>
+    <string name="eppegadinhas1_isso_else_fica_com_if">O else fica com o if de dentro.</string>
     <string name="eppegadinhas1_bison_resolve_empilhando_else_assim">O Bison resolve empilhando o else. Assim ele gruda no if de dentro.</string>
     <string name="eppegadinhas1_se_quiser_if_fora_use">Se quiser o if de fora, use chaves. Elas fecham o if de dentro.</string>
     <string name="eppegadinhas1_duas_derivacoes_arvore">Duas derivações, uma árvore</string>
@@ -651,7 +651,7 @@
     <string name="eppegadinhas1_b_b_b_2" translatable="false">S  A B  A b  a b</string>
     <string name="eppegadinhas1_sao_duas_derivacoes_diferentes_isso">São duas derivações diferentes. Isso é ambiguidade?</string>
     <string name="eppegadinhas1_ambiguidade_pede_duas_arvores_ou">Ambiguidade pede duas árvores, ou duas derivações do mesmo lado.</string>
-    <string name="eppegadinhas1_isso_duas_montam_mesma_arvore">Isso. As duas montam a mesma árvore. Só muda a ordem.</string>
+    <string name="eppegadinhas1_isso_duas_montam_mesma_arvore">As duas montam a mesma árvore. Só muda a ordem.</string>
     <string name="eppegadinhas1_ambigua">é ambígua</string>
     <string name="eppegadinhas1_nao">não é</string>
     <string name="eppegadinhas1_para_provar_ambiguidade_compare_duas">Para provar ambiguidade, compare duas derivações pela esquerda, ou duas pela direita.</string>
@@ -661,7 +661,7 @@
     <string name="eppegadinhas1_siga_primeira_opcao_vira">Siga a primeira opção. S vira A a.</string>
     <string name="eppegadinhas1_agora_troque_por_c_quem">Agora troque o A por S c. Quem reaparece no começo? Toque nele.</string>
     <string name="eppegadinhas1_olhe_primeiro_simbolo_frase">Olhe o primeiro símbolo da frase.</string>
-    <string name="eppegadinhas1_isso_chegou_em_sem_ler">Isso. S chegou em S sem ler nada. É recursão indireta.</string>
+    <string name="eppegadinhas1_isso_chegou_em_sem_ler">S chegou em S sem ler nada. É recursão indireta.</string>
     <string name="eppegadinhas1_conserto_comeca_colocando_opcoes_dentro">O conserto começa colocando as opções de A dentro de S. Assim a recursão aparece.</string>
     <string name="eppegadinhas1_agora_recursao_direta_receita_sempre">Agora é recursão direta, e a receita de sempre resolve.</string>
     <string name="eppegadinhas1_quando_fatorar_nao_basta">Quando fatorar não basta</string>
@@ -670,7 +670,7 @@
     <string name="eppegadinhas1_mas_b_tambem_comeca_com">Mas B também começa com a. O começo igual está escondido uma regra abaixo.</string>
     <string name="eppegadinhas1_com_na_entrada_quantas_opcoes">Com a na entrada, quantas opções de A valem? Toque no número.</string>
     <string name="eppegadinhas1_primeira_opcao_comeca_com_b">A primeira opção começa com a. E o B começa com o quê?</string>
-    <string name="eppegadinhas1_isso_duas_opcoes_conflito_mesmo">Isso. Duas opções: é conflito, mesmo sem prefixo à vista.</string>
+    <string name="eppegadinhas1_isso_duas_opcoes_conflito_mesmo">Duas opções: é conflito, mesmo sem prefixo à vista.</string>
     <string name="eppegadinhas1_primeiro_coloque_b_dentro_depois">Primeiro coloque B dentro de A. Depois fatore.</string>
     <string name="eppegadinhas1_fatorar_so_enxerga_que_esta">Fatorar só enxerga o que está escrito. Às vezes é preciso abrir a regra antes.</string>
     <!-- EpPegadinhas2.kt -->
@@ -680,7 +680,7 @@
     <string name="eppegadinhas2_se_nao_sumir_abre_frase">Se A não sumir, o a abre a frase. Primeiro candidato.</string>
     <string name="eppegadinhas2_toque_em_todos_simbolos_que">Toque em todos os símbolos que entram no FIRST de S.</string>
     <string name="eppegadinhas2_b_podem_sumir_mas_c">A e B podem sumir, mas o c fica. Então a frase nunca é vazia.</string>
-    <string name="eppegadinhas2_isso_b_c_epsilon_fica">Isso: a, b e c. O épsilon fica de fora, porque o c nunca some.</string>
+    <string name="eppegadinhas2_isso_b_c_epsilon_fica">Boa. a, b e c. O épsilon fica de fora, porque o c nunca some.</string>
     <string name="eppegadinhas2_erro_comum_parar_no_primeiro">O erro comum é parar no primeiro símbolo. Quem pode sumir manda olhar o próximo.</string>
     <string name="eppegadinhas2_so_entra_epsilon_se_tudo">Só entra épsilon se tudo à direita puder sumir.</string>
     <string name="eppegadinhas2_epsilon_que_muda_follow">O épsilon que muda o FOLLOW</string>
@@ -691,7 +691,7 @@
     <string name="eppegadinhas2_depois_vem_b_olhando_primeira">E depois de A vem b, olhando a primeira regra.</string>
     <string name="eppegadinhas2_entao_que_entra_no_follow">Então, o que entra no FOLLOW de B? Toque.</string>
     <string name="eppegadinhas2_nao_olhe_para_dentro_b">Não olhe para dentro de B. Olhe o que vem depois dele.</string>
-    <string name="eppegadinhas2_isso_b_nada_epsilon_follow">Isso. O b. E nada de épsilon: FOLLOW nunca tem épsilon.</string>
+    <string name="eppegadinhas2_isso_b_nada_epsilon_follow">O b. E nada de épsilon: FOLLOW nunca tem épsilon.</string>
     <string name="eppegadinhas2_first_olha_para_dentro_follow">FIRST olha para dentro. FOLLOW olha para fora.</string>
     <string name="eppegadinhas2_duas_regras_casa_so">Duas regras, uma casa só</string>
     <string name="eppegadinhas2_esta_gramatica_parece_inocente_vamos">Esta gramática parece inocente. Vamos montar a tabela.</string>
@@ -699,7 +699,7 @@
     <string name="eppegadinhas2_tambem_pode_sumir_vai_nas">A também pode sumir. Vai nas colunas do FOLLOW de A, e depois de A vem b.</string>
     <string name="eppegadinhas2_toque_na_casa_que_recebeu">Toque na casa que recebeu duas regras.</string>
     <string name="eppegadinhas2_first_primeira_opcao_follow_tem">O FIRST da primeira opção e o FOLLOW de A têm o mesmo símbolo.</string>
-    <string name="eppegadinhas2_isso_com_b_na_entrada">Isso. Com b na entrada, o parser não sabe qual escolher.</string>
+    <string name="eppegadinhas2_isso_com_b_na_entrada">Com b na entrada, o parser não sabe qual escolher.</string>
     <string name="eppegadinhas2_duas_regras_na_casa_gramatica">Duas regras na casa: a gramática não é LL(1). E ela nem tem recursão à esquerda.</string>
     <string name="eppegadinhas2_b" translatable="false">b / ε</string>
     <string name="eppegadinhas2_na_prova_confira_sempre_first">Na prova, confira sempre: FIRST da opção não pode bater com o FOLLOW de quem some.</string>
@@ -708,7 +708,7 @@
     <string name="eppegadinhas2_funcao_so_olha_token_atual">A função só olha o token atual para decidir. Olhar não gasta nada.</string>
     <string name="eppegadinhas2_em_qual_linha_entrada_anda">Em qual linha a entrada anda de verdade? Toque na primeira.</string>
     <string name="eppegadinhas2_procure_funcao_que_confere_token">Procure a função que confere o token e passa para o próximo.</string>
-    <string name="eppegadinhas2_isso_quem_avanca_casa">Isso. Quem avança é o casa.</string>
+    <string name="eppegadinhas2_isso_quem_avanca_casa">Quem avança é o casa.</string>
     <string name="eppegadinhas2_chamar_nao_avanca_nada_por">Chamar E não avança nada por conta própria. Quem avança lá dentro é outro casa.</string>
     <string name="eppegadinhas2_se_ninguem_chamar_casa_programa">Se ninguém chamar casa, o programa fica parado no mesmo token, para sempre.</string>
     <string name="eppegadinhas2_parar_ou_seguir">Parar ou seguir</string>
@@ -717,7 +717,7 @@
     <string name="eppegadinhas2_no_modo_panico_ele_joga">No modo pânico, ele joga tokens fora até achar um bom ponto de recomeço.</string>
     <string name="eppegadinhas2_qual_token_bom_ponto_recomeco">Qual token é um bom ponto de recomeço nesta linha? Toque nele.</string>
     <string name="eppegadinhas2_procure_token_que_costuma_fechar">Procure o token que costuma fechar um comando.</string>
-    <string name="eppegadinhas2_isso_ponto_virgula_marca_fim">Isso. O ponto e vírgula marca o fim do comando.</string>
+    <string name="eppegadinhas2_isso_ponto_virgula_marca_fim">O ponto e vírgula marca o fim do comando.</string>
     <string name="eppegadinhas2_recuperar_nao_conserta_programa_so">Recuperar não conserta o programa. Só deixa o compilador achar os próximos erros.</string>
     <string name="eppegadinhas2_depois_erro_compilador_nao_gera">Depois do erro, o compilador não gera o programa. Ele só lista tudo de uma vez.</string>
     <string name="eppegadinhas2_reduzir_cedo_demais">Reduzir cedo demais</string>
@@ -725,7 +725,7 @@
     <string name="eppegadinhas2_t_vem">E + T   vem *</string>
     <string name="eppegadinhas2_maquina_reduz_mais_t_ou">A máquina reduz E mais T, ou empilha o vezes? Toque no desenho.</string>
     <string name="eppegadinhas2_se_reduzir_agora_soma_roda">Se reduzir agora, a soma roda antes do vezes.</string>
-    <string name="eppegadinhas2_isso_empilha_porque_vezes_liga">Isso. Empilha, porque o vezes liga mais forte.</string>
+    <string name="eppegadinhas2_isso_empilha_porque_vezes_liga">Empilha, porque o vezes liga mais forte.</string>
     <string name="eppegadinhas2_quem_decide_que_vem_na">Quem decide é o que vem na entrada. Ver um lado direito no topo não basta.</string>
     <string name="eppegadinhas2_handle_pedaco_certo_reduzir_agora">Handle é o pedaço certo de reduzir agora. Nem todo lado direito é handle.</string>
     <string name="eppegadinhas2_reduzir_antes_hora_faz_conta">Reduzir antes da hora faz a conta na ordem errada.</string>
@@ -734,7 +734,7 @@
     <string name="eppegadinhas2_ponto_esta_antes_entao_posso">O ponto está antes de E. Então posso estar prestes a ler um E inteiro.</string>
     <string name="eppegadinhas2_quem_entra_no_fecho_toque">Quem entra no fecho? Toque nos itens certos.</string>
     <string name="eppegadinhas2_entram_regras_todas_com_ponto">Entram as regras de E, todas com o ponto no começo.</string>
-    <string name="eppegadinhas2_isso_fecho_puxa_regras_com">Isso. O fecho puxa as regras, com o ponto no começo.</string>
+    <string name="eppegadinhas2_isso_fecho_puxa_regras_com">O fecho puxa as regras, com o ponto no começo.</string>
     <string name="eppegadinhas2_item_com_ponto_no_fim">Item com o ponto no fim é outra coisa: é o momento de reduzir.</string>
     <string name="eppegadinhas2_ponto_antes_nao_terminal_puxa">Ponto antes de não terminal, puxa. Ponto no fim, reduz.</string>
     <string name="eppegadinhas2_conflito_nao_ambiguidade">Conflito não é ambiguidade</string>
@@ -743,7 +743,7 @@
     <string name="eppegadinhas2_depois_ler_l_esse_estado">Depois de ler L, esse estado tem duas opções. Seguir com o igual, ou reduzir para R.</string>
     <string name="eppegadinhas2_igual_esta_no_follow_r">O igual está no FOLLOW de R. Com igual na entrada, que conflito aparece? Toque.</string>
     <string name="eppegadinhas2_ideia_empilha_igual_outra_reduz">Uma ideia empilha o igual. A outra reduz.</string>
-    <string name="eppegadinhas2_isso_empilhar_ou_reduzir_conflito">Isso. Empilhar ou reduzir: conflito shift reduce.</string>
+    <string name="eppegadinhas2_isso_empilhar_ou_reduzir_conflito">Empilhar ou reduzir: conflito shift reduce.</string>
     <string name="eppegadinhas2_slr_olha_so_follow_que">O SLR olha só o FOLLOW, que é um conjunto grosso. O LALR olha mais fino e resolve.</string>
     <string name="eppegadinhas2_conflito_diz_que_tecnica_nao">Conflito diz que a técnica não deu conta. Não prova que a gramática é ambígua.</string>
     <string name="eppegadinhas2_juntar_estados_tem_preco">Juntar estados tem preço</string>
@@ -753,14 +753,14 @@
     <string name="eppegadinhas2_miolo_igual_entao_lalr_junta">O núcleo é igual, então o LALR junta tudo num estado só.</string>
     <string name="eppegadinhas2_depois_juntar_com_d_na">Depois de juntar, com d na entrada, quem pode reduzir? Toque nas duas regras.</string>
     <string name="eppegadinhas2_junte_listas_duas_regras_ficaram">Junte as listas: as duas regras ficaram com d e com e.</string>
-    <string name="eppegadinhas2_isso_duas_reducoes_com_mesmo">Isso. Duas reduções com o mesmo token: conflito reduce reduce.</string>
+    <string name="eppegadinhas2_isso_duas_reducoes_com_mesmo">Duas reduções com o mesmo token: conflito reduce reduce.</string>
     <string name="eppegadinhas2_essa_unica_briga_que_lalr">Essa é a única briga que o LALR pode criar. Shift reduce novo ele não cria.</string>
     <string name="eppegadinhas2_quem_fica_embaixo_manda">Quem fica embaixo manda</string>
     <string name="eppegadinhas2_esta_especificacao_tem_dois_left">Esta especificação tem dois left. A ordem deles decide a conta.</string>
     <string name="eppegadinhas2_quanto_mais_embaixo_no_arquivo">Quanto mais embaixo no arquivo, mais forte. Aqui o mais ficou embaixo.</string>
     <string name="eppegadinhas2_com_essa_ordem_quanto_dois">Com essa ordem, quanto dá dois mais três vezes quatro? Toque.</string>
     <string name="eppegadinhas2_quem_liga_mais_forte_roda">Quem liga mais forte roda primeiro. Quem ficou embaixo?</string>
-    <string name="eppegadinhas2_isso_vinte_mais_rodou_primeiro">Isso: vinte. O mais rodou primeiro, e a conta saiu errada.</string>
+    <string name="eppegadinhas2_isso_vinte_mais_rodou_primeiro">Acertou. vinte. O mais rodou primeiro, e a conta saiu errada.</string>
     <string name="eppegadinhas2_troque_linhas_mais_em_cima">Troque as linhas: mais em cima, vezes embaixo. Agora dá catorze.</string>
     <string name="eppegadinhas2_precedencia">PRECEDÊNCIA</string>
     <string name="eppegadinhas2_pegadinha_achar_que_primeiro_manda">A pegadinha é achar que o primeiro manda. Quem manda é o último.</string>
@@ -770,7 +770,7 @@
     <string name="eppegadinhas3_em_mais_b_tipo_sobe">Em a mais b, o tipo sobe dos filhos para o pai. Isso é sintetizado.</string>
     <string name="eppegadinhas3_aqui_diferente_para_saber_tipo">Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque.</string>
     <string name="eppegadinhas3_int_esta_no_galho_lado">O int está no galho do lado. Ele precisa atravessar.</string>
-    <string name="eppegadinhas3_isso_int_passa_pelo_pai">Isso. O int passa pelo pai e desce até a. Isso é herdado.</string>
+    <string name="eppegadinhas3_isso_int_passa_pelo_pai">O int passa pelo pai e desce até a. Isso é herdado.</string>
     <string name="eppegadinhas3_herdado_vem_pai_ou_irmao">Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado.</string>
     <string name="eppegadinhas3_atribuida_usa_so_sintetizado_l">S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita.</string>
     <string name="eppegadinhas3_sombra_variavel">A sombra da variável</string>
@@ -778,17 +778,17 @@
     <string name="eppegadinhas3_dois_x">Dois x</string>
     <string name="eppegadinhas3_print_dentro_enxerga_qual_x">O print de dentro enxerga qual x? Toque na declaração.</string>
     <string name="eppegadinhas3_busca_comeca_no_bloco_mais">A busca começa no bloco mais interno.</string>
-    <string name="eppegadinhas3_isso_ele_acha_x_dentro">Isso. Ele acha o x de dentro e para ali.</string>
+    <string name="eppegadinhas3_isso_ele_acha_x_dentro">Ele acha o x de dentro e para ali.</string>
     <string name="eppegadinhas3_bloco_fechou_print_fora_enxerga">O bloco fechou. O print de fora enxerga qual x?</string>
     <string name="eppegadinhas3_quando_bloco_fecha_nomes_dele">Quando o bloco fecha, os nomes dele somem.</string>
-    <string name="eppegadinhas3_isso_sobrou_so_fora_que">Isso. Sobrou só o de fora, que nunca mudou.</string>
+    <string name="eppegadinhas3_isso_sobrou_so_fora_que">É isso. Sobrou só o de fora, que nunca mudou.</string>
     <string name="eppegadinhas3_pegadinha_achar_que_x_igual">A pegadinha é achar que x igual a dois mudou o x de fora. É outra variável.</string>
     <string name="eppegadinhas3_saida_programa_dois_depois">Saída do programa: dois, depois um.</string>
     <string name="eppegadinhas3_ordem_dos_temporarios">A ordem dos temporários</string>
     <string name="eppegadinhas3_tres_enderecos_no_maximo_conta">Três endereços: no máximo uma conta por linha.</string>
     <string name="eppegadinhas3_qual_conta_vira_primeira_linha">Qual conta vira a primeira linha? Toque no operador.</string>
     <string name="eppegadinhas3_quem_esta_mais_fundo_na">Quem está mais fundo na árvore roda antes.</string>
-    <string name="eppegadinhas3_isso_vezes_vai_primeiro_guarda">Isso. O vezes vai primeiro e guarda em t1.</string>
+    <string name="eppegadinhas3_isso_vezes_vai_primeiro_guarda">O vezes vai primeiro e guarda em t1.</string>
     <string name="eppegadinhas3_primeira_linha_t1_recebe_b">Primeira linha: t1 recebe b vezes c.</string>
     <string name="eppegadinhas3_segunda_linha_t2_recebe_mais">Segunda linha: t2 recebe a mais t1.</string>
     <string name="eppegadinhas3_se_inverter_linhas_t1_lido">Se inverter as linhas, o t1 é lido antes de existir.</string>
@@ -800,7 +800,7 @@
     <string name="eppegadinhas3_x_1_vira_x">x * 1   vira   x</string>
     <string name="eppegadinhas3_destas_trocas_nao_vale_toque">Uma destas trocas não vale. Toque nela.</string>
     <string name="eppegadinhas3_pense_em_x_valendo_zero">Pense em x valendo zero.</string>
-    <string name="eppegadinhas3_isso_com_x_zero_programa">Isso. Com x zero, o programa dava erro, e a troca sumiria com ele.</string>
+    <string name="eppegadinhas3_isso_com_x_zero_programa">Com x zero, o programa dava erro, e a troca sumiria com ele.</string>
     <string name="eppegadinhas3_x_0_vira_x">x + 0   vira   x</string>
     <string name="eppegadinhas3_x_x_vira_1">x / x   vira   1</string>
     <string name="eppegadinhas3_otimizacao_nao_pode_mudar_que">Otimização não pode mudar o que o programa faz, nem nos casos raros.</string>
@@ -817,7 +817,7 @@
     <string name="eppegadinhas3_aqui_esta_truque_if_pede">Aqui está o truque. O if pede a menor que b, e o desvio testa a maior ou igual.</string>
     <string name="eppegadinhas3_se_for_maior_ou_igual">Se a for maior ou igual a b, para onde o programa pula? Toque.</string>
     <string name="eppegadinhas3_com_condicao_falsa_corpo_if">Com a condição falsa, o corpo do if não pode rodar.</string>
-    <string name="eppegadinhas3_isso_ele_pula_corpo_cai">Isso. Ele pula o corpo e cai em fim.</string>
+    <string name="eppegadinhas3_isso_ele_pula_corpo_cai">Ele pula o corpo e cai em fim.</string>
     <string name="eppegadinhas3_teste_invertido_desvio_descreve_quando">Teste invertido: o desvio descreve quando pular o corpo.</string>
     <string name="eppegadinhas3_quem_vive_junto_briga">Quem vive junto briga</string>
     <string name="eppegadinhas3_dois_valores_vivos_ao_mesmo">Dois valores vivos ao mesmo tempo não podem dividir um registrador.</string>
@@ -825,7 +825,7 @@
     <string name="eppegadinhas3_t1_nasce_na_primeira_linha">t1 nasce na primeira linha, e a terceira lê esse valor. Fica vivo o tempo todo.</string>
     <string name="eppegadinhas3_quem_esta_vivo_junto_com">Quem está vivo junto com t1 na segunda linha? Toque no nó.</string>
     <string name="eppegadinhas3_veja_quem_ja_nasceu_ainda">Veja quem já nasceu e ainda tem uso pela frente.</string>
-    <string name="eppegadinhas3_isso_t1_t2_sao_vizinhos">Isso. t1 e t2 são vizinhos no grafo. Registradores diferentes.</string>
+    <string name="eppegadinhas3_isso_t1_t2_sao_vizinhos">Certo. t1 e t2 são vizinhos no grafo. Registradores diferentes.</string>
     <string name="eppegadinhas3_t3_nasce_quando_t1_t2">t3 nasce quando t1 e t2 morrem. Ele pode reaproveitar um dos registradores.</string>
     <string name="eppegadinhas3_interferencia">INTERFERÊNCIA</string>
     <string name="eppegadinhas3_dois_registradores_bastam_colorir_grafo">Dois registradores bastam. Colorir o grafo é só isso.</string>
@@ -835,7 +835,7 @@
     <string name="eppratica_dentro_fase_lexica_linha_chega">Dentro da fase léxica, a linha chega letra por letra.</string>
     <string name="eppratica_dois_destes_caracteres_formam_token">Dois destes caracteres formam um token só. Toque nos dois.</string>
     <string name="eppratica_procure_operador_comparacao">Procure o operador de comparação.</string>
-    <string name="eppratica_isso_maior_ou_igual_token">Isso. Maior ou igual é um token só.</string>
+    <string name="eppratica_isso_maior_ou_igual_token">Maior ou igual é um token só.</string>
     <string name="eppratica_tokens_saem_daqui_seguem_para">Os tokens saem daqui e seguem para a próxima máquina.</string>
     <string name="eppratica_dentro_sintatica_mesmos_tokens_viram">Dentro da sintática, os mesmos tokens viram uma árvore.</string>
     <string name="eppratica_cada_maquina_recebe_trabalho_anterior">Cada máquina recebe o trabalho da anterior e entrega para a próxima.</string>
@@ -846,7 +846,7 @@
     <string name="eppratica_chegou_agora_mesmos_simbolos_seguem">Chegou. Agora os mesmos símbolos seguem de T para E.</string>
     <string name="eppratica_quem_chega_no_first_toque">Quem chega no FIRST de E? Toque nos dois.</string>
     <string name="eppratica_so_correm_pelo_fio_simbolos">Só correm pelo fio os símbolos que já estão em T.</string>
-    <string name="eppratica_isso_first_escorre_quem_esta">Isso. FIRST escorre de quem está no começo da regra.</string>
+    <string name="eppratica_isso_first_escorre_quem_esta">FIRST escorre de quem está no começo da regra.</string>
     <string name="eppratica_quando_nada_mais_corre_acabou">Quando nada mais corre, acabou. É assim que o algoritmo sabe parar.</string>
     <string name="eppratica_corte_voce_mesmo">Corte você mesmo</string>
     <string name="eppratica_agora_voce_scanner_linha_x">Agora você é o scanner. A linha é x maior ou igual a dez.</string>
@@ -934,7 +934,7 @@
     <string name="eptabelas_fio_sai_linha_certa_linha">O fio sai da linha certa. A linha b do q1 leva ao q2.</string>
     <string name="eptabelas_estou_no_q2_chegou_b">Estou no q2 e chegou um b. Toque no estado de destino.</string>
     <string name="eptabelas_procure_linha_b_dentro_caixa">Procure a linha do b dentro da caixa do q2.</string>
-    <string name="eptabelas_isso_b_q2_leva_ao">Isso. O b do q2 leva ao q3, que é o estado final.</string>
+    <string name="eptabelas_isso_b_q2_leva_ao">O b do q2 leva ao q3, que é o estado final.</string>
     <string name="eptabelas_junte_caixas_cada_vira_linha">Junte as caixas e cada uma vira uma linha. A seta marca o início, e o asterisco, o final.</string>
     <string name="eptabelas_tabela_transicao">Tabela de transição</string>
     <string name="eptabelas_vamos_ler_abb_comeca_na">Vamos ler abb. Começa na linha do q0 e lê o a.</string>
@@ -955,7 +955,7 @@
     <string name="eptabelas_agora_goto_pulando_cada_simbolo">Agora o goto. Pulando cada símbolo, nasce outra caixa. O fio sai da linha dele.</string>
     <string name="eptabelas_algumas_caixas_tem_item_com">Item com o ponto no fim manda reduzir. Só o E linha vai para E, ponto, não reduz: ele aceita a entrada. Toque nas caixas que reduzem.</string>
     <string name="eptabelas_procure_ponto_na_ultima_posicao">Procure o ponto na última posição. O item do E linha aceita, não reduz.</string>
-    <string name="eptabelas_isso_com_ponto_no_fim">Isso. Com o ponto no fim, a regra inteira já está na pilha.</string>
+    <string name="eptabelas_isso_com_ponto_no_fim">Com o ponto no fim, a regra inteira já está na pilha.</string>
     <string name="eptabelas_bison_desenha_estados_assim_com">O bison desenha os estados assim, com a opção graph.</string>
     <string name="eptabelas_agora_monte_fecho_outra_gramatica">Agora monte o fecho de outra gramática. Toque nos itens que entram.</string>
     <string name="eptabelas_so_entra_item_com_ponto">Só entra item com o ponto no começo, de quem aparece logo depois de um ponto.</string>
@@ -969,7 +969,7 @@
     <string name="eptabelas_nesse_estado_item_ja_terminou">Nesse estado o item já terminou. Com qualquer token, ele reduz.</string>
     <string name="eptabelas_depois_reduzir_pilha_volta_ao">Depois de reduzir, a pilha volta ao estado zero com um e. Toque no destino.</string>
     <string name="eptabelas_procure_linha_dentro_estado_zero">Procure a linha do e dentro do estado zero.</string>
-    <string name="eptabelas_isso_linha_no_estado_zero">Isso. A linha do e no estado zero aponta para essa caixa.</string>
+    <string name="eptabelas_isso_linha_no_estado_zero">A linha do e no estado zero aponta para essa caixa.</string>
     <string name="eptabelas_vai">e vai</string>
     <string name="eptabelas_agora_estado_conflito_mais_ja">Agora o estado do conflito. O mais já leu os dois lados e chegou um vezes.</string>
     <string name="eptabelas_conflito_resolvido_vezes_empilha">conflito resolvido: vezes empilha</string>
@@ -985,7 +985,7 @@
     <string name="eptabelas_fat_dois_chama_fat_pilha">E fat de dois chama fat de um. No desenho a pilha cresce para cima; na memória do MIPS ela desce, para endereços menores.</string>
     <string name="eptabelas_quando_fat_terminar_qual_caixa">Quando fat de um terminar, qual caixa sai primeiro? Toque nela.</string>
     <string name="eptabelas_pilha_so_tira_pelo_topo">A pilha só tira pelo topo.</string>
-    <string name="eptabelas_isso_sai_sempre_cima_ultima">Isso. Sai sempre a de cima, a última que entrou.</string>
+    <string name="eptabelas_isso_sai_sempre_cima_ultima">Sai sempre a de cima, a última que entrou.</string>
     <string name="eptabelas_fat_devolve_caixa_dele_sai">fat de um devolve um. A caixa dele sai, e o valor desce.</string>
     <string name="eptabelas_devolveu_1">devolveu %1$s</string>
     <string name="eptabelas_cada_caixa_que_sai_leva">Cada caixa que sai leva o valor para a de baixo. No fim, sobra o main com %1$s.</string>

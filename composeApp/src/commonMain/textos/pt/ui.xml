@@ -608,6 +608,10 @@
     <string name="lessonscreen_rodar_no_mars_bolso">▶ Rodar no MARS de bolso</string>
     <string name="lessonscreen_preveja_antes_ver">Preveja antes de ver</string>
     <string name="lessonscreen_boa_tentativa_errar_aqui_ajuda">**Boa tentativa: e errar aqui AJUDA a lembrar.** </string>
+    <string name="lessonscreen_acerto_certo">**Certo!** </string>
+    <string name="lessonscreen_acerto_exato">**Exato!** </string>
+    <string name="lessonscreen_acerto_boa">**Boa!** </string>
+    <string name="lessonscreen_acerto_isso">**Isso!** </string>
     <string name="lessonscreen_pense_primeiro_depois_toque">Pense primeiro, depois toque</string>
     <string name="lessonscreen_pensei_mostrar_resposta">Pensei! Mostrar resposta</string>
     <string name="lessonscreen_proximo_passo">próximo passo</string>

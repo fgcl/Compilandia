@@ -13,7 +13,7 @@
     <string name="first_f_af">FIRST(S) = { a, ε, c }, because A starts with a or vanishes.</string>
     <string name="first_f_q">A classmate computed FIRST of S like this. Is it right or wrong? Tap.</string>
     <string name="first_f_dica">A is nullable, but after it comes b, which never vanishes.</string>
-    <string name="first_f_ok">Right. Epsilon goes in only if the whole rule can vanish. Here b always stays, so b is what goes in.</string>
+    <string name="first_f_ok">Epsilon goes in only if the whole rule can vanish. Here b always stays, so b is what goes in.</string>
     <string name="first_f_certo">FIRST(S) = { a, b, c }. The ε from A does not carry over to S.</string>
     <string name="first_f_erro2">Stopping at the first nonterminal even when it is nullable.</string>
     <string name="first_f_certo2">If it is nullable, also add FIRST of the next symbol.</string>
@@ -27,7 +27,7 @@
     <string name="follow_f_af">FOLLOW(F) = { *, ε }, because Y comes after F.</string>
     <string name="follow_f_q">A classmate copied all of FIRST of Y into FOLLOW of F. Right or wrong? Tap.</string>
     <string name="follow_f_dica">FOLLOW holds only terminals and the dollar sign.</string>
-    <string name="follow_f_ok">Right. Epsilon never goes into FOLLOW. When Y vanishes, what goes in is FOLLOW of T.</string>
+    <string name="follow_f_ok">Correct. Epsilon never goes into FOLLOW. When Y vanishes, what goes in is FOLLOW of T.</string>
     <string name="follow_f_certo">FOLLOW(F) = { *, +, ), $ }. There is never ε in FOLLOW.</string>
     <string name="follow_f_erro2">Forgetting $ in FOLLOW of the start symbol.</string>
     <string name="follow_f_certo2">The start symbol always has $ in its FOLLOW.</string>
@@ -39,7 +39,7 @@
     <string name="ll_f_af">The rule R → ε goes into the FOLLOW(R) columns of the LL(1) table.</string>
     <string name="ll_f_q">A classmate said where the vanishing rule goes. Right or wrong? Tap.</string>
     <string name="ll_f_dica">Nobody reads epsilon. The vanishing rule is used when the next token may come after R.</string>
-    <string name="ll_f_ok">Right. R vanishes when the next token may come after it, and those tokens are the FOLLOW of R. There is no epsilon column.</string>
+    <string name="ll_f_ok">R vanishes when the next token may come after it, and those tokens are the FOLLOW of R. There is no epsilon column.</string>
     <string name="ll_f_erro2">Checking only FIRST to say the grammar is LL(1).</string>
     <string name="ll_f_certo2">A nullable rule takes the FOLLOW and may clash with FIRST of another.</string>
     <string name="ll_f_fala2">A common mistake is checking FIRST only. A nullable rule takes the FOLLOW columns, and there it may clash with another rule.</string>
@@ -50,7 +50,7 @@
     <string name="pred_f_af">To replace E with T X, I push X first and then T.</string>
     <string name="pred_f_q">In what order does the right-hand side go onto the stack? A classmate did this. Right or wrong?</string>
     <string name="pred_f_dica">Whatever must be read first has to end up on top. Which of the two is it?</string>
-    <string name="pred_f_ok">Right. Push back to front: first X, then T. That way T is on top and is handled first.</string>
+    <string name="pred_f_ok">Push back to front: first X, then T. That way T is on top and is handled first.</string>
     <string name="pred_f_erro2">Advancing the input when using X → ε.</string>
     <string name="pred_f_certo2">Only X leaves the stack. The token stays in the input.</string>
     <string name="pred_f_fala2">A common mistake: advancing the input when applying a rule. Only matching a terminal consumes a token. Replacing by epsilon just pops the top.</string>
@@ -61,7 +61,7 @@
     <string name="desc_f_af">E → E + T becomes: void E() { E(); match('+'); T(); }</string>
     <string name="desc_f_q">A classmate translated a left-recursive rule straight into code. Right or wrong?</string>
     <string name="desc_f_dica">Look at the first thing function E does, before reading any token.</string>
-    <string name="desc_f_ok">Right. E calls E without consuming anything, and the recursion never ends. Before descending, remove the left recursion.</string>
+    <string name="desc_f_ok">E calls E without consuming anything, and the recursion never ends. Before descending, remove the left recursion.</string>
     <string name="desc_f_certo">Left recursion hangs the descent. Remove it first: E → T X.</string>
     <string name="desc_f_erro2">Handling the ε rule with a call match(ε).</string>
     <string name="desc_f_certo2">The ε rule is the empty else: the function returns without consuming a token.</string>
@@ -73,7 +73,7 @@
     <string name="erro_f_af">In panic mode, the parser fixes the program and generates the code.</string>
     <string name="erro_f_q">What does recovery deliver in the end? A classmate said this. Right or wrong?</string>
     <string name="erro_f_dica">It threw tokens away. What is left is no longer your program.</string>
-    <string name="erro_f_ok">Right. Recovery is there to find more errors. With a syntax error, the compiler generates no code.</string>
+    <string name="erro_f_ok">Recovery is there to find more errors. With a syntax error, the compiler generates no code.</string>
     <string name="erro_f_certo">Recovery only serves to report more errors in the same compilation.</string>
     <string name="erro_f_erro2">Synchronizing on whatever token shows up.</string>
     <string name="erro_f_certo2">Synchronize on FIRST or FOLLOW of the top, like the ; that closes the statement.</string>
@@ -85,7 +85,7 @@
     <string name="sr_f_af">Every rule right-hand side on top of the stack is a handle.</string>
     <string name="sr_f_q">Whenever the top matches a right-hand side, do I reduce? Right or wrong? Tap.</string>
     <string name="sr_f_dica">Think of id plus id times id. With E plus T on top and times in the input, reducing ruins the computation.</string>
-    <string name="sr_f_ok">Right. It is a handle only if the reduction leads back to the start symbol. Sometimes shifting more is right, and the table decides.</string>
+    <string name="sr_f_ok">It is a handle only if the reduction leads back to the start symbol. Sometimes shifting more is right, and the table decides.</string>
     <string name="sr_f_certo">A handle is the right-hand side whose reduction is part of the rightmost derivation.</string>
     <string name="sr_f_erro2">Looking for a handle in the middle of the stack.</string>
     <string name="sr_f_certo2">The handle always shows up on top. The parser never touches the middle.</string>
@@ -97,7 +97,7 @@
     <string name="lr_f_af">In the closure, the rules of every symbol after the dot go in, terminal or not.</string>
     <string name="lr_f_q">When does the closure pull in new rules? A classmate said this. Right or wrong?</string>
     <string name="lr_f_dica">A terminal has no rules. Only a nonterminal does.</string>
-    <string name="lr_f_ok">Right. The closure only acts when the dot is right before a nonterminal. And only the symbol right after the dot counts.</string>
+    <string name="lr_f_ok">The closure only acts when the dot is right before a nonterminal. And only the symbol right after the dot counts.</string>
     <string name="lr_f_certo">Closure: only for the nonterminal right after the dot.</string>
     <string name="lr_f_erro2">Moving the dot in the goto and forgetting the closure.</string>
     <string name="lr_f_certo2">Every goto ends with a closure. Without it, the state is missing items.</string>
@@ -109,7 +109,7 @@
     <string name="slr_f_af">State with A → α •: I write r in every column.</string>
     <string name="slr_f_q">Where does the reduction go in the SLR table? A classmate filled it in like this. Right or wrong?</string>
     <string name="slr_f_dica">That is what LR(0) does. SLR checks a set first.</string>
-    <string name="slr_f_ok">Right. In SLR, the reduction goes only into the columns of FOLLOW of A. Filling the whole row creates conflicts that are not there.</string>
+    <string name="slr_f_ok">Exactly. In SLR, the reduction goes only into the columns of FOLLOW of A. Filling the whole row creates conflicts that are not there.</string>
     <string name="slr_f_certo">In SLR, r goes only into the columns of FOLLOW(A).</string>
     <string name="slr_f_erro2">Writing s (shift) in a nonterminal's column.</string>
     <string name="slr_f_certo2">A nonterminal's column is the GOTO part: just the state number.</string>
@@ -121,7 +121,7 @@
     <string name="lalr_f_af">Every LALR(1) grammar is LR(1), but not every LR(1) grammar is LALR(1).</string>
     <string name="lalr_f_q">Are LALR and LR(1) equally strong? A classmate said this. Right or wrong?</string>
     <string name="lalr_f_dica">Merging states with the same core can mix lookaheads that LR(1) kept apart.</string>
-    <string name="lalr_f_ok">Right. The merge can create a reduce-reduce conflict that LR(1) did not have. That is why LALR sits between SLR and LR(1).</string>
+    <string name="lalr_f_ok">You got it. The merge can create a reduce-reduce conflict that LR(1) did not have. That is why LALR sits between SLR and LR(1).</string>
     <string name="lalr_f_erro2">Using FOLLOW to fill in the reductions of the LALR table.</string>
     <string name="lalr_f_certo2">In LALR, the reduction goes into the columns of the item's lookaheads.</string>
     <string name="lalr_f_fala2">A common mistake: using FOLLOW in LALR. FOLLOW belongs to SLR. In LALR and LR(1), the item's lookahead decides the column.</string>
@@ -132,7 +132,7 @@
     <string name="bison_f_af">In Bison, the precedence line that comes last binds tightest.</string>
     <string name="bison_f_q">The order of the precedence lines matters. A classmate said this. Right or wrong?</string>
     <string name="bison_f_dica">In the calculator, times was declared after plus, and times binds tighter.</string>
-    <string name="bison_f_ok">Right. The last line has the highest precedence. That is why times comes after plus.</string>
+    <string name="bison_f_ok">The last line has the highest precedence. That is why times comes after plus.</string>
     <string name="bison_f_erro2">Ignoring the conflict warning because the parser was generated.</string>
     <string name="bison_f_certo2">An unhandled conflict is Bison choosing for you. Use %left or rewrite the rule.</string>
     <string name="bison_f_fala2">A common mistake: ignoring the conflict warning. The parser comes out, but Bison's default choice may build the wrong tree.</string>
@@ -143,7 +143,7 @@
     <string name="fases_f_af">A variable used without being declared is a semantic error: the sentence has the right form.</string>
     <string name="fases_f_q">Which phase catches this error? A classmate answered this. Right or wrong?</string>
     <string name="fases_f_dica">The grammar accepts the statement even without the declaration. Who checks what the name means?</string>
-    <string name="fases_f_ok">Right. Syntax analysis only looks at the form. Knowing whether the name was declared is the job of semantic analysis.</string>
+    <string name="fases_f_ok">Syntax analysis only looks at the form. Knowing whether the name was declared is the job of semantic analysis.</string>
     <string name="fases_f_erro2">The compiler runs the program.</string>
     <string name="fases_f_certo2">The compiler only translates. The processor runs it, or an interpreter does.</string>
     <string name="fases_f_fala2">A common mistake: thinking the compiler runs the program. It only translates. An interpreter is what runs it directly, without generating the file.</string>
@@ -154,7 +154,7 @@
     <string name="tok_f_af">For x&gt;=10, the scanner produces the tokens x, &gt;, = and 10.</string>
     <string name="tok_f_q">How does the scanner cut this piece? A classmate cut it like this. Right or wrong?</string>
     <string name="tok_f_dica">The scanner always takes the longest piece that forms a token.</string>
-    <string name="tok_f_ok">Right. By longest match, greater-or-equal is a single token. That makes three tokens, not four.</string>
+    <string name="tok_f_ok">By longest match, greater-or-equal is a single token. That makes three tokens, not four.</string>
     <string name="tok_f_certo">x&gt;=10 gives three tokens: x, &gt;= and 10. That is longest match.</string>
     <string name="tok_f_erro2">Token and lexeme are the same thing.</string>
     <string name="tok_f_certo2">The lexeme is the text (total2). The token carries the class (ID) and the lexeme.</string>
@@ -166,19 +166,19 @@
     <string name="regex_f_af">The string went through a final state along the way, so it was accepted.</string>
     <string name="regex_f_q">When does the automaton accept? A classmate said this. Right or wrong?</string>
     <string name="regex_f_dica">What matters is where the train is when the string ends.</string>
-    <string name="regex_f_ok">Right. Only the state where reading ends counts. Passing through a final state midway accepts nothing.</string>
+    <string name="regex_f_ok">Only the state where reading ends counts. Passing through a final state midway accepts nothing.</string>
     <string name="regex_f_certo">Accept only if the whole string was read and it stopped in a final state.</string>
     <string name="regex_f_erro2">The expression a* requires at least one a.</string>
     <string name="regex_f_certo2">The star accepts zero times. For one or more, use a a* (or a+).</string>
     <string name="regex_f_fala2">Another mistake: thinking the star requires at least one repetition. Star means zero or more. The empty string matches too.</string>
     <string name="regex_f_z1">The regular expression describes the format; the automaton checks it.</string>
-    <string name="regex_f_z2">DFA: one initial state, one transition per symbol, final states.</string>
+    <string name="regex_f_z2">DFA: one initial state, one arrow per symbol in each state, final states.</string>
     <string name="regex_f_z3">Accept if it read everything and stopped in a final state. No transition: reject.</string>
     <string name="regex_f_resumo">To sum up: the regular expression describes a token's format, and the finite automaton checks string by string. Accepting means finishing the reading in a final state.</string>
     <string name="afn_f_af">The set {0, 2} is final in the DFA if 0 or 2 is final in the NFA.</string>
     <string name="afn_f_q">When is a set final in the DFA? A classmate said this. Right or wrong?</string>
     <string name="afn_f_dica">The NFA accepts if some path reaches a final state. Does it have to be all of them?</string>
-    <string name="afn_f_ok">Right. One final state inside the set is enough. The NFA accepts when at least one path works out.</string>
+    <string name="afn_f_ok">One final state inside the set is enough. The NFA accepts when at least one path works out.</string>
     <string name="afn_f_erro2">Computing move and forgetting the ε-closure of the result.</string>
     <string name="afn_f_certo2">After each move, apply the ε-closure. Otherwise states are missing.</string>
     <string name="afn_f_fala2">A common mistake: forgetting the epsilon closure after reading the symbol. The states reached by epsilon are part of the set too.</string>
@@ -189,7 +189,7 @@
     <string name="min_f_af">A and B go to different states with b. So A and B are different.</string>
     <string name="min_f_q">Is it enough for the targets to be different states to mark the pair? Right or wrong?</string>
     <string name="min_f_dica">What if the two targets are equivalent to each other?</string>
-    <string name="min_f_ok">Right. I mark the pair only if the targets form an already marked pair. Targets that differ but are equivalent separate nobody.</string>
+    <string name="min_f_ok">I mark the pair only if the targets form an already marked pair. Targets that differ but are equivalent separate nobody.</string>
     <string name="min_f_certo">Mark the pair only when the targets form an already marked pair.</string>
     <string name="min_f_erro2">Stopping after the first round of targets.</string>
     <string name="min_f_certo2">Repeat until a whole round marks no pair.</string>
@@ -201,7 +201,7 @@
     <string name="flex_f_af">In Flex, the longest match wins. The order of the rules only breaks ties.</string>
     <string name="flex_f_q">Which one wins when two rules match? A classmate said this. Right or wrong?</string>
     <string name="flex_f_dica">Remember ifa: which rule won, the upper one or the longer one?</string>
-    <string name="flex_f_ok">Right. ifa matches whole as a name, which is longer than if. Only on a tie in length does the upper rule win.</string>
+    <string name="flex_f_ok">That's it. ifa matches whole as a name, which is longer than if. Only on a tie in length does the upper rule win.</string>
     <string name="flex_f_erro2">Putting the identifier rule before the reserved words.</string>
     <string name="flex_f_certo2">Reserved words first. Otherwise while and if become ID.</string>
     <string name="flex_f_fala2">A common mistake: putting the identifier rule on top. Then if and while tie on length, lose on order and become ordinary names.</string>
@@ -212,7 +212,7 @@
     <string name="cfg_f_af">In a leftmost derivation, I may replace any nonterminal at each step.</string>
     <string name="cfg_f_q">A classmate described the leftmost derivation like this. Right or wrong? Tap.</string>
     <string name="cfg_f_dica">The name says which nonterminal gets replaced.</string>
-    <string name="cfg_f_ok">Right. At each step, the leftmost nonterminal is always the one replaced. In a rightmost derivation, always the rightmost.</string>
+    <string name="cfg_f_ok">At each step, the leftmost nonterminal is always the one replaced. In a rightmost derivation, always the rightmost.</string>
     <string name="cfg_f_certo">Leftmost: always replace the first nonterminal of the form.</string>
     <string name="cfg_f_erro2">Replacing a terminal by a rule.</string>
     <string name="cfg_f_certo2">Only a nonterminal goes on the left-hand side. A terminal is a token and does not change.</string>
@@ -224,7 +224,7 @@
     <string name="amb_f_af">I found two different derivations for the sentence. So the grammar is ambiguous.</string>
     <string name="amb_f_q">Do two different derivations of the same sentence prove ambiguity? Right or wrong?</string>
     <string name="amb_f_dica">The leftmost and the rightmost derivations can draw the same tree.</string>
-    <string name="amb_f_ok">Right. What counts is two different trees, or two leftmost derivations. Just changing the order of the replacements proves nothing.</string>
+    <string name="amb_f_ok">What counts is two different trees, or two leftmost derivations. Just changing the order of the replacements proves nothing.</string>
     <string name="amb_f_certo">Ambiguous: one sentence with two trees, or two leftmost derivations.</string>
     <string name="amb_f_erro2">I tested three sentences, each gave one tree. So it is not ambiguous.</string>
     <string name="amb_f_certo2">Examples do not prove there is no ambiguity. One counterexample proves there is.</string>
@@ -236,7 +236,7 @@
     <string name="rec_f_af">To remove the recursion from A → A α | β, just write A → α A | β.</string>
     <string name="rec_f_q">A classmate fixed the left recursion like this. Right or wrong? Tap.</string>
     <string name="rec_f_dica">Generate a sentence with both versions. Does beta end up at the start or at the end?</string>
-    <string name="rec_f_ok">Right. The original generates beta followed by several alphas. The classmate's generates the alphas before beta. The language changed.</string>
+    <string name="rec_f_ok">The original generates beta followed by several alphas. The classmate's generates the alphas before beta. The language changed.</string>
     <string name="rec_f_certo">A → β A' and A' → α A' | ε. The β stays at the start.</string>
     <string name="rec_f_erro2">Forgetting ε in the new rule A'.</string>
     <string name="rec_f_certo2">Without A' → ε the repetition never ends, and no sentence is generated.</string>
@@ -248,7 +248,7 @@
     <string name="fat_f_af">Factoring A → a b | a c does not change the sentences the grammar generates.</string>
     <string name="fat_f_q">Does left factoring change the language? A classmate said this. Right or wrong?</string>
     <string name="fat_f_dica">Derive a b and a c with the factored grammar. Does any new sentence come out?</string>
-    <string name="fat_f_ok">Right. A → a A' and A' → b | c generate a b and a c, the same sentences. Factoring only changes when the choice is made.</string>
+    <string name="fat_f_ok">That's it. A → a A' and A' → b | c generate a b and a c, the same sentences. Factoring only changes when the choice is made.</string>
     <string name="fat_f_erro2">Factoring out only part of the common prefix.</string>
     <string name="fat_f_certo2">Use the longest common prefix, and repeat if equal starts remain.</string>
     <string name="fat_f_fala2">A common mistake: factoring halfway. If the new alternatives still start the same, the conflict remains. Repeat until no common prefix is left.</string>
@@ -259,7 +259,7 @@
     <string name="attr_f_af">A synthesized attribute is the one a node receives from its parent.</string>
     <string name="attr_f_q">Where does a synthesized attribute come from? A classmate said this. Right or wrong?</string>
     <string name="attr_f_dica">In this lesson, did the types go up or down the tree?</string>
-    <string name="attr_f_ok">Right. Synthesized goes up: the node computes it from its children. What comes from the parent or the siblings is an inherited attribute.</string>
+    <string name="attr_f_ok">Synthesized goes up: the node computes it from its children. What comes from the parent or the siblings is an inherited attribute.</string>
     <string name="attr_f_certo">Synthesized: computed from the children. Inherited: comes from the parent or the siblings.</string>
     <string name="attr_f_erro2">int + float is a type error.</string>
     <string name="attr_f_certo2">There is coercion: the int becomes float. Mixing bool with a number is the error.</string>
@@ -271,7 +271,7 @@
     <string name="esc_f_af">With an x outside, I may declare another x in an inner block: the inner one hides the outer one.</string>
     <string name="esc_f_q">There is already an x outside. May I declare another x inside the block? A classmate said this. Right or wrong?</string>
     <string name="esc_f_dica">The new declaration goes into the top table, which has no x yet.</string>
-    <string name="esc_f_ok">Right. In another scope it is fine. The inner x hides the outer one. Declaring twice in the same block is the error.</string>
+    <string name="esc_f_ok">In another scope it is fine. The inner x hides the outer one. Declaring twice in the same block is the error.</string>
     <string name="esc_f_erro2">Looking the name up only in the top table.</string>
     <string name="esc_f_certo2">The lookup goes from the top down to the global table. An error only if none has it.</string>
     <string name="esc_f_fala2">A common mistake: searching only the current block. The lookup goes through every table on the stack, from the innermost block to the global one.</string>
@@ -282,7 +282,7 @@
     <string name="ast_f_af">The AST of a * (b - 2) has no node for the parentheses.</string>
     <string name="ast_f_q">Do parentheses appear in the AST? A classmate drew it without them. Right or wrong?</string>
     <string name="ast_f_dica">The parenthesis changes the shape of the tree. After that, is it still useful?</string>
-    <string name="ast_f_ok">Right. The parenthesis only groups. In the AST, the grouping is already in the shape: minus sits below times.</string>
+    <string name="ast_f_ok">Nice. The parenthesis only groups. In the AST, the grouping is already in the shape: minus sits below times.</string>
     <string name="ast_f_erro2">Putting at the root the first operator that appears in the expression.</string>
     <string name="ast_f_certo2">The root holds the last operation to be computed.</string>
     <string name="ast_f_fala2">A common mistake: putting the first operator of the line at the root. The root is the last operation. The first operation sits at the bottom of the tree.</string>
@@ -293,7 +293,7 @@
     <string name="tac_f_af">x = a + b * c needs two three-address lines.</string>
     <string name="tac_f_q">How many three-address lines does this assignment need? A classmate said this. Right or wrong?</string>
     <string name="tac_f_dica">Count the operators. Each line takes at most one.</string>
-    <string name="tac_f_ok">Right. There are two operations: t1 = b * c, then x = a + t1. Each line takes one operator and at most three addresses.</string>
+    <string name="tac_f_ok">Exactly. There are two operations: t1 = b * c, then x = a + t1. Each line takes one operator and at most three addresses.</string>
     <string name="tac_f_erro2">Reusing the same temporary for two different operations.</string>
     <string name="tac_f_certo2">Each operator gets a new temporary: t1, t2, t3...</string>
     <string name="tac_f_fala2">A common mistake: reusing t1 in the second operation. If the old value is still needed, it gets lost. Each result gets a new temporary.</string>
@@ -304,7 +304,7 @@
     <string name="otim_f_af">With x read from the keyboard, the compiler folds x * 2 into a number.</string>
     <string name="otim_f_q">Can this operation be folded? A classmate said yes. Right or wrong?</string>
     <string name="otim_f_dica">Does the value of x exist yet at compile time?</string>
-    <string name="otim_f_ok">Right. The value of x only shows up when the program runs. Constant folding only applies to what is known at compile time.</string>
+    <string name="otim_f_ok">The value of x only shows up when the program runs. Constant folding only applies to what the compiler already knows.</string>
     <string name="otim_f_certo">Only operations on constants known at compile time are folded.</string>
     <string name="otim_f_erro2">Accepting an optimization that changes the result in some case.</string>
     <string name="otim_f_certo2">A valid optimization gives the same result for every input.</string>
@@ -316,7 +316,7 @@
     <string name="rt_f_af">In a recursion, each call has its own n, in its own activation record.</string>
     <string name="rt_f_q">Where does the n of each call to fat live? A classmate said this. Right or wrong?</string>
     <string name="rt_f_dica">How many activation records were on the stack while fat of one was running?</string>
-    <string name="rt_f_ok">Right. Each call pushes a record with its own n. If there were only one, recursion would destroy the values.</string>
+    <string name="rt_f_ok">You got it. Each call pushes a record with its own n. If there were only one, recursion would destroy the values.</string>
     <string name="rt_f_erro2">Functions return in the order they were called.</string>
     <string name="rt_f_certo2">It is a stack: the last call is the first to return.</string>
     <string name="rt_f_fala2">A common mistake: thinking whoever was called first returns first. It is the opposite. The stack returns in the reverse order of the calls.</string>
@@ -327,7 +327,7 @@
     <string name="mips_f_af">To add a and b, just write: add a, b straight in memory.</string>
     <string name="mips_f_q">In MIPS, can you add two variables straight in memory? A classmate wrote this. Right or wrong?</string>
     <string name="mips_f_dica">The MIPS add only takes registers.</string>
-    <string name="mips_f_ok">Right. First lw loads each variable into a register. Only then does add do the operation.</string>
+    <string name="mips_f_ok">That's it. First lw loads each variable into a register. Only then does add do the operation.</string>
     <string name="mips_f_certo">lw, lw, add, sw: the operation happens between registers only.</string>
     <string name="mips_f_erro2">Ending at the add and forgetting the sw.</string>
     <string name="mips_f_certo2">Without sw, the variable in memory keeps its old value.</string>
@@ -339,7 +339,7 @@
     <string name="reg_f_af">Four temporaries may fit into fewer than four registers.</string>
     <string name="reg_f_q">How many registers does this code need? A classmate counted the temporaries. Right or wrong?</string>
     <string name="reg_f_dica">In the example, four temporaries fit into how many registers?</string>
-    <string name="reg_f_ok">Right. What counts is how many are live at the same time. Those that never coexist can share a register.</string>
+    <string name="reg_f_ok">What counts is how many are live at the same time. Those that never coexist can share a register.</string>
     <string name="reg_f_erro2">Computing liveness from top to bottom.</string>
     <string name="reg_f_certo2">Liveness runs from bottom to top: live means still to be read.</string>
     <string name="reg_f_fala2">A common mistake: computing liveness from top to bottom. Live means it will still be read later, so the analysis starts at the end.</string>
@@ -356,15 +356,15 @@
     <string name="lrp_02">The parser keeps a stack of states, which starts with state zero. The action comes from the cell of the top state and the next token.</string>
     <string name="lrp_03">Top zero, token n. The cell says s2. What does the parser do? Tap.</string>
     <string name="lrp_03_dica">The letter s comes from shift.</string>
-    <string name="lrp_03_ok">Right. The n leaves the input, and state two goes onto the stack.</string>
+    <string name="lrp_03_ok">The n leaves the input, and state two goes onto the stack.</string>
     <string name="lrp_04">Now the top is two and the token is plus. The cell says r2: reduce by rule two, E goes to n. The right-hand side has one symbol, so one state is popped.</string>
     <string name="lrp_05">Zero is on top, and the reduction produced an E. Which cell gives the next state? Tap it.</string>
     <string name="lrp_05_dica">Row of the state left on top, column of the reduced nonterminal.</string>
-    <string name="lrp_05_ok">Right. GOTO of zero with E is one, and state one goes onto the stack. Every reduction ends with a goto.</string>
+    <string name="lrp_05_ok">Exactly. GOTO of zero with E is one, and state one goes onto the stack. Every reduction ends with a goto.</string>
     <string name="lrp_06">Top one, token plus: s3. Top three, token n: s4. The stack is now zero, one, three, four, and dollar is left in the input.</string>
     <string name="lrp_07">Top four, token dollar: r1, the rule E goes to E plus n. How many states are popped? Tap.</string>
     <string name="lrp_07_dica">Count the symbols on the right-hand side of rule one.</string>
-    <string name="lrp_07_ok">Right. Three symbols on the right-hand side, three states out. Zero is left, and GOTO of zero with E gives one again.</string>
+    <string name="lrp_07_ok">Three symbols on the right-hand side, three states out. Zero is left, and GOTO of zero with E gives one again.</string>
     <string name="lrp_08">Top one, token dollar: the cell says ok. The input is accepted.</string>
     <string name="lrp_09">Shift pushes a state. Reduce pops one state per rule symbol and looks up GOTO.</string>
     <string name="desv_titulo">if and while become jumps</string>
@@ -376,15 +376,15 @@
     <string name="desv_03">First the condition becomes an operation, stored in t1. Then comes the conditional jump: if t1 is false, jump to L1.</string>
     <string name="desv_04">If the condition is true, execution goes on to the next line. Which statement goes there? Tap.</string>
     <string name="desv_04_dica">It is the statement that runs when a is less than b.</string>
-    <string name="desv_04_ok">Right. The if block comes right after the conditional jump.</string>
+    <string name="desv_04_ok">The if block comes right after the conditional jump.</string>
     <string name="desv_05">After x equals one, what keeps execution from falling into the else? Tap.</string>
     <string name="desv_05_dica">With nothing there, the next line is the else.</string>
-    <string name="desv_05_ok">Right. An unconditional jump skips the else and goes to the end, at label L2.</string>
+    <string name="desv_05_ok">Nice. An unconditional jump skips the else and goes to the end, at label L2.</string>
     <string name="desv_06">Label L1 marks the start of the else. L2 marks the end of the whole if.</string>
     <string name="desv_07">The while uses the same pieces. The label goes before the condition, and at the end of the body a goto goes back to it.</string>
     <string name="desv_08">In the while, where does the goto at the end of the body go? Tap the line.</string>
     <string name="desv_08_dica">The loop has to test the condition again.</string>
-    <string name="desv_08_ok">Right. It goes back to the condition, which is tested on every pass.</string>
+    <string name="desv_08_ok">It goes back to the condition, which is tested on every pass.</string>
     <string name="desv_09">if and while become three pieces: label, conditional jump and unconditional jump. That is how your loop reaches MIPS.</string>
     <string name="her_titulo">The type that goes down</string>
     <string name="her_op_sobe">goes up</string>
@@ -397,15 +397,15 @@
     <string name="her_02">The type is born at node T, from the token int. That attribute is synthesized: it goes up from the child to T.</string>
     <string name="her_03">The a and the b are below L, which is a sibling of T. To reach them, does the type go up or down the tree? Tap.</string>
     <string name="her_03_dica">The ids are leaves, down at the bottom. The type is up above.</string>
-    <string name="her_03_ok">Right. It passes from T to its sibling L and goes down. An attribute that comes from the parent or a sibling is an inherited attribute.</string>
+    <string name="her_03_ok">It passes from T to its sibling L and goes down. An attribute that comes from the parent or a sibling is an inherited attribute.</string>
     <string name="her_04">The semantic rule says: the inherited attribute of L gets the type of T. At each lower L, the inherited value is copied from the L above.</string>
     <string name="her_05">When the inherited value reaches an id leaf, what does the compiler do with it? Tap.</string>
     <string name="her_05_dica">It is a declaration: the compiler must remember the type of each name.</string>
-    <string name="her_05_ok">Right. Each id goes into the symbol table with the type that came down.</string>
+    <string name="her_05_ok">You got it. Each id goes into the symbol table with the type that came down.</string>
     <string name="her_06">The result: a and b go into the table as int, even though the type was written only once.</string>
     <string name="her_07">A definition with synthesized attributes only is S-attributed. A bottom-up parser computes it all at reductions.</string>
     <string name="her_08">This definition has an inherited attribute, which comes from the left sibling. Which kind is it? Tap.</string>
     <string name="her_08_dica">If it has an inherited attribute, it cannot be the S one.</string>
-    <string name="her_08_ok">Right. L-attributed: the inherited value depends only on the parent and the left siblings. It can be computed in one pass, from left to right.</string>
+    <string name="her_08_ok">L-attributed: the inherited value depends only on the parent and the left siblings. It can be computed in one pass, from left to right.</string>
     <string name="her_09">Synthesized goes up, inherited goes down. Every S-attributed definition is also L-attributed, but not the other way around.</string>
 </resources>

@@ -562,6 +562,10 @@
     <string name="lessonscreen_rodar_no_mars_bolso">▶ Run on pocket MARS</string>
     <string name="lessonscreen_preveja_antes_ver">Predict before you see</string>
     <string name="lessonscreen_boa_tentativa_errar_aqui_ajuda">**Nice try: and getting it wrong here HELPS you remember.** </string>
+    <string name="lessonscreen_acerto_certo">**Correct!** </string>
+    <string name="lessonscreen_acerto_exato">**Exactly!** </string>
+    <string name="lessonscreen_acerto_boa">**Nice!** </string>
+    <string name="lessonscreen_acerto_isso">**Right!** </string>
     <string name="lessonscreen_pense_primeiro_depois_toque">Think first, then tap</string>
     <string name="lessonscreen_pensei_mostrar_resposta">I thought! Show the answer</string>
     <string name="lessonscreen_proximo_passo">next step</string>

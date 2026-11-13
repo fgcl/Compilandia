@@ -42,6 +42,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 3. **Receita do FOLLOW sem α e β.** Cada passo diz para que serve: "Fim da entrada", "Depois de B: FIRST sem ε. Se some, o próximo", "Fim da regra: herde o FOLLOW da esquerda", "Repita".
 4. **Fita da aula**: nome de parte que não cabe ganha reticências e um respiro, em vez de encostar no seguinte ("ReceitSua vez").
 
+## Feito em 13/11 (quarta rodada)
+
+1. **Fim dos erros da seção 1.** O WORKED da fatoração e a dica de prova usam a regra da ficha ("maior prefixo comum a todas do grupo") e dizem que começar pelo prefixo de só duas, como faz o livro, chega à mesma gramática. A pegadinha das fases não diz mais que "só a semântica consulta a tabela de símbolos" (o scanner também consulta). A definição de AFD ficou uma só: uma seta por símbolo em cada estado; a que não aparece vai para o estado morto, que o desenho esconde.
+2. **Fala de acerto variada.** 240 das 259 falas de acerto começavam com "Isso". A tela já comemora o acerto (som, Byte pulando), então a maioria agora começa direto pela explicação, e uma em cada três abre com "Certo", "Exato", "Boa", "Acertou" ou "É isso", em rodízio. Nas aulas de texto, o "**Isso!**" fixo virou um de quatro elogios. O `FalaDeAcertoTest` falha se duas falas seguidas abrirem igual ou se "Isso" passar de 20%.
+3. **FOLLOW com o caso difícil.** Três cenas novas com `S → B C d`, `C → c | ε`: o aluno toca em tudo que entra no FOLLOW de B (c e d). É o caso em que o revisor aluno errou. O motor confere a resposta em `AulasConsertadasTest`.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:
@@ -53,7 +59,7 @@ Conferidos, com o estado de cada um:
 | E3 | Itens LR(0), tabelas, cena 7 | I1 tem `E' → E •` e era marcado errado | feito |
 | E4 | Tokens | "Token" como pedaço, como classe e como "tipo" | feito |
 | E5 | Tokens, cena 1 | "parser" usado antes de ser apresentado | feito |
-| E6 | Fatoração, cena 11 × ficha × WORKED | Regra do "maior prefixo" diferente em cada lugar | feito (ficha e FORMAL); conferir o WORKED |
+| E6 | Fatoração, cena 11 × ficha × WORKED | Regra do "maior prefixo" diferente em cada lugar | feito |
 | E7 | SLR, cena 4 | Tabela "SLR(1)" mostra 3 de 5 estados; `s3` aponta para estado ausente (aluno 4) | feito |
 | E8 | Escopo, cena 4 | `x = 2;` fora de função, que não compila em C (aluno 5) | feito |
 | E9 | Alocação, cenas 14 e 15 | Vivacidade percorrida de cima para baixo, contra o que a cena 19 chama de erro (aluno 5) | feito |

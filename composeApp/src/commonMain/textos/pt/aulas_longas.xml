@@ -9,7 +9,7 @@
     <string name="fases_l_01">Você escreve conta igual a preço mais dois. O processador não entende isso: ele só executa instruções simples.</string>
     <string name="fases_l_02">Qual dos dois o processador entende? Toque nele.</string>
     <string name="fases_l_02_dica">Ele só lê instruções curtas, como carregar, somar e guardar.</string>
-    <string name="fases_l_02_ok">Isso. Código de máquina. O compilador é o programa que traduz o seu código para aquilo.</string>
+    <string name="fases_l_02_ok">Código de máquina. O compilador é o programa que traduz o seu código para aquilo.</string>
     <string name="fases_l_03">Traduzir tudo de uma vez seria difícil de fazer e de conferir. Então o trabalho é dividido.</string>
     <string name="fases_l_04">O compilador trabalha em seis fases, uma depois da outra. O que sai de uma fase é a entrada da seguinte.</string>
     <string name="fases_l_05">As três primeiras fases são a análise. Agora começa a síntese. O código intermediário escreve uma conta por linha, sem depender da máquina.</string>
@@ -28,13 +28,13 @@
     <string name="fases_l_10">Agora este while passa pelas mesmas fases.</string>
     <string name="fases_l_11">Quem corta o while em tokens? Toque na fase.</string>
     <string name="fases_l_11_dica">É a primeira fase. Ela só olha as letras.</string>
-    <string name="fases_l_11_ok">Isso. A léxica corta e dá nome a cada pedaço.</string>
+    <string name="fases_l_11_ok">A léxica corta e dá nome a cada pedaço.</string>
     <string name="fases_l_12">Se faltar o fecha parêntese, qual fase reclama?</string>
     <string name="fases_l_12_dica">As letras estão certas. O que falta é a forma do comando.</string>
-    <string name="fases_l_12_ok">Isso. Parêntese sem par quebra a árvore. É a sintática.</string>
+    <string name="fases_l_12_ok">Parêntese sem par quebra a árvore. É a sintática.</string>
     <string name="fases_l_13">Em qual fase o laço vira desvios, com uma conta por linha?</string>
     <string name="fases_l_13_dica">Vem depois da semântica e antes da otimização.</string>
-    <string name="fases_l_13_ok">Isso. O código intermediário escreve o laço com desvios.</string>
+    <string name="fases_l_13_ok">Exato. O código intermediário escreve o laço com desvios.</string>
     <string name="fases_l_14">Seis fases em ordem: três de análise, três de síntese. O mapa do jogo segue esse mesmo caminho.</string>
 
     <!-- FIRST -->
@@ -50,18 +50,18 @@
     <string name="first_l_06">Passo um: a regra começa com terminal. Ele entra no FIRST, e essa regra está resolvida.</string>
     <string name="first_l_07">Em E vai para T X, qual passo da receita você usa? Toque nele.</string>
     <string name="first_l_07_dica">E começa com T, e T é um não-terminal com regras próprias.</string>
-    <string name="first_l_07_ok">Isso. Passo dois: o FIRST de T entra no de E, menos o épsilon.</string>
+    <string name="first_l_07_ok">Boa. Passo dois: o FIRST de T entra no de E, menos o épsilon.</string>
     <string name="first_l_08">Passo três: se esse não-terminal é anulável, ele pode sumir. Então o símbolo seguinte também pode começar a regra.</string>
     <string name="first_l_09">Outra gramática. Agora quem calcula é você. Comece por A, porque S depende dele.</string>
     <string name="first_l_10">A tem duas regras: a seguido de A, e épsilon. Toque no que entra no FIRST de A.</string>
     <string name="first_l_10_dica">Uma regra começa com o terminal a. A outra é épsilon.</string>
-    <string name="first_l_10_ok">Isso. O a entra pelo passo um. O épsilon entra porque A é anulável.</string>
+    <string name="first_l_10_ok">O a entra pelo passo um. O épsilon entra porque A é anulável.</string>
     <string name="first_l_11">S vai para A b. O a de A já entra no FIRST de S. Mas A é anulável. Que outro token pode começar S?</string>
     <string name="first_l_11_dica">Se A sumir, quem fica no começo é o b.</string>
-    <string name="first_l_11_ok">Isso. Pelo passo três, o b entra. O épsilon de A fica de fora, porque o b nunca some.</string>
+    <string name="first_l_11_ok">Pelo passo três, o b entra. O épsilon de A fica de fora, porque o b nunca some.</string>
     <string name="first_l_12">Falta a outra regra de S. Toque no que entra por ela.</string>
     <string name="first_l_12_dica">A segunda regra de S começa com um terminal.</string>
-    <string name="first_l_12_ok">Isso. A letra c entra pelo passo um.</string>
+    <string name="first_l_12_ok">Acertou. A letra c entra pelo passo um.</string>
     <string name="first_l_13">FIRST de S: a, b e c. Mais uma rodada não muda nada, então o cálculo acabou.</string>
 
     <!-- FOLLOW -->
@@ -77,15 +77,20 @@
     <string name="follow_l_06">Passo um: o símbolo inicial ganha o cifrão, que marca o fim da entrada.</string>
     <string name="follow_l_07">O mais, que está no FIRST de X, entrou no FOLLOW de T. Qual passo fez isso? Toque.</string>
     <string name="follow_l_07_dica">X vem logo depois de T. É o FIRST do que vem depois.</string>
-    <string name="follow_l_07_ok">Isso. Passo dois: o FIRST do que vem depois, sem o épsilon.</string>
+    <string name="follow_l_07_ok">É isso. Passo dois: o FIRST do que vem depois, sem o épsilon.</string>
     <string name="follow_l_08">Passo três: tudo depois de B pode sumir, ou nada vem depois? Então você chegou ao fim da regra. Aí B herda o FOLLOW de quem está à esquerda da seta.</string>
     <string name="follow_l_09">Agora uma gramática maior, com soma e multiplicação. A meta é o FOLLOW de F.</string>
     <string name="follow_l_10">Em T vai para F Y, depois de F vem Y. Com que token Y pode começar? Toque.</string>
     <string name="follow_l_10_dica">Olhe as regras de Y. Uma delas começa com um terminal.</string>
-    <string name="follow_l_10_ok">Isso. O vezes entra pelo passo dois.</string>
+    <string name="follow_l_10_ok">O vezes entra pelo passo dois.</string>
     <string name="follow_l_11">Y é anulável. Então F pode ficar no fim da regra de T. De quem F herda o FOLLOW? Toque.</string>
     <string name="follow_l_11_dica">F está no lado direito da regra de T.</string>
-    <string name="follow_l_11_ok">Isso. Pelo passo três, tudo que segue T também segue F.</string>
+    <string name="follow_l_11_ok">Pelo passo três, tudo que segue T também segue F.</string>
     <string name="follow_l_12">O FOLLOW de T tem mais, fecha parêntese e cifrão. Os três entram no FOLLOW de F.</string>
     <string name="follow_l_13">FOLLOW de F: vezes, mais, fecha parêntese e cifrão. Outra rodada não muda nada.</string>
+    <string name="follow_l_14">Agora o caso que mais derruba na prova. Depois de B vêm dois símbolos: C e d.</string>
+    <string name="follow_l_15">C pode sumir. Toque em tudo que entra no FOLLOW de B.</string>
+    <string name="follow_l_15_dica">C pode virar c. E se C sumir, quem fica logo depois de B?</string>
+    <string name="follow_l_15_ok">Dois tokens. O c vem do FIRST de C. Como C some, o d também entra.</string>
+    <string name="follow_l_16">É o fim do passo dois: se o vizinho some, olhe o próximo. Quem para no C esquece o d.</string>
 </resources>

@@ -2,7 +2,9 @@ package com.compilandia
 
 import com.compilandia.content.episodes.ARVORE_MENOS_NOVA
 import com.compilandia.content.episodes.ARVORE_MENOS_VELHA
+import com.compilandia.content.episodes.GRAMATICA_FOLLOW_3
 import com.compilandia.content.episodes.tabelaSlrDaAula
+import com.compilandia.engine.FirstFollow
 import com.compilandia.engine.Grammar
 import com.compilandia.engine.ParseNode
 import kotlin.test.Test
@@ -43,5 +45,12 @@ class AulasConsertadasTest {
         assertEquals(listOf("2", "", "r2", "r2", ""), t[3])
         assertEquals("1", t[1][4], "GOTO de E no estado 0")
         assertTrue(t.drop(1).any { "ok" in it }, "a linha que aceita")
+    }
+
+    /** O caso difícil do FOLLOW: C some, então o d também entra no FOLLOW de B (a aula pede c e d, e não $ nem a). */
+    @Test fun followComVizinhoQueSome() {
+        val f = FirstFollow(Grammar.parse(GRAMATICA_FOLLOW_3.joinToString("\n")))
+        assertEquals(setOf("c", "d"), f.follow["B"])
+        assertTrue("ε" in f.firstOfSymbol("C"), "C precisa ser anulável, senão o d não entra")
     }
 }

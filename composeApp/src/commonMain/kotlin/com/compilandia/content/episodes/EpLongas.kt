@@ -26,6 +26,8 @@ val GRAMATICA_FIRST_2 = listOf("S -> A b | c", "A -> a A | ε")
 
 /** Gramática do segundo exemplo do FOLLOW. */
 val GRAMATICA_FOLLOW_2 = listOf("E -> T R", "R -> + T R | ε", "T -> F Y", "Y -> * F Y | ε", "F -> ( E ) | id")
+/** O caso que derruba na prova: dois símbolos depois de B, e o primeiro pode sumir. */
+val GRAMATICA_FOLLOW_3 = listOf("S -> B C d", "B -> a", "C -> c | ε")
 
 /** Assuntos que já ganharam a aula longa. Os outros seguem com a aula curta até serem refeitos. */
 val ASSUNTOS_COM_AULA_LONGA = setOf(
@@ -323,6 +325,24 @@ val aulasLongas by lazy {
             cena(tx("follow_l_13"), mood = EpMood.HAPPY) {
                 add(ficha("f2", "+", 248f, 310f, 22f), ficha("f3", ")", 272f, 310f, 22f), ficha("f4", "$", 296f, 310f, 22f))
                 hot("f1", "f2", "f3", "f4")
+            }
+            // 5. O caso difícil: o vizinho some e o próximo também entra
+            cena(tx("follow_l_14")) {
+                clear()
+                add(titulo("FOLLOW"))
+                add(codigo("g", GRAMATICA_FOLLOW_3, 70f, x = 110f, passo = 30f, size = 16f))
+                add(saco("sB", "FOLLOW(B)", 180f, 330f))
+                hot("g0")
+            }
+            pergunta(tx("follow_l_15"), setOf("o1", "o2"), setOf("o3", "o4"), tx("follow_l_15_dica"), tx("follow_l_15_ok")) {
+                hot("g0", "g2")
+                add(opcao("o1", "c", 90f, 222f), opcao("o2", "d", 150f, 222f), opcao("o3", "$", 210f, 222f), opcao("o4", "a", 270f, 222f))
+            }
+            cena(tx("follow_l_16")) {
+                drop("o1", "o2", "o3", "o4")
+                add(regra("r2", tx("follow_l_r2"), 230f))
+                add(ficha("a1", "c", 160f, 310f, 26f), ficha("a2", "d", 200f, 310f, 26f))
+                hot("r2", "a1", "a2")
             }
             fecho(Fecho(
                 tx("follow_f_af"), false, tx("follow_f_q"), tx("follow_f_dica"), tx("follow_f_ok"), tx("follow_f_certo"),

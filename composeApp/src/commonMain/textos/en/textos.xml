@@ -821,9 +821,9 @@
     <string name="lessonspart1c_quando_proximo_token_nao_quando">When the next token is NOT ';': when it's in FOLLOW(L'), like the end of the input.</string>
     <string name="lessonspart1c_sem_conflitos_agora_ll_1">No conflicts: now it's LL(1).</string>
     <string name="lessonspart1c_fatorando_passo_passo">Factoring step by step</string>
-    <string name="lessonspart1c_receita_para_cada_ache_maior">Recipe: for each A, find the LONGEST prefix α common to two or more alternatives. If α ≠ ε: A → αβ₁ | … | αβₙ | γ becomes A → αA' | γ and A' → β₁ | … | βₙ. The animated lesson first factors out the prefix common to the whole group: the order of the rounds changes, but the final grammar is the same.</string>
+    <string name="lessonspart1c_receita_para_cada_ache_maior">Recipe: for each A, group the alternatives that start with the same symbol and find the LONGEST prefix α common to the whole group. If α ≠ ε: A → αβ₁ | … | αβₙ | γ becomes A → αA' | γ and A' → β₁ | … | βₙ. The textbook starts with the longest prefix common to two or more alternatives: the order of the rounds changes, but the final grammar is the same.</string>
     <string name="lessonspart1c_1_alternativas_que_comecam_com">1. Alternatives that start with `a`: a b c, a b d, a e. (f stays out: it's the γ.)</string>
-    <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Longest prefix common to ALL THREE: just `a` (a e doesn't have b).</string>
+    <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Longest prefix common to ALL THREE in the group: just `a` (a e doesn't have b). The `a b` waits for the next round.</string>
     <string name="lessonspart1c_4_repita_em_b_c">4. Repeat! In A', `b c` and `b d` share `b`.</string>
     <string name="lessonspart1c_6_fim_nenhum_par_alternativas">6. Done: no pair of alternatives of the same nonterminal starts the same way.</string>
     <string name="lessonspart1c_motor_repete_rodadas_ate_estabilizar">The engine repeats the rounds until it stabilizes.</string>
@@ -832,7 +832,7 @@
     <string name="lessonspart1c_so_id_segundo_simbolo_numa">Just `id` (the second symbol is `=` in one and `(` in the others). C → id C'; C' → = E | ( ) | ( E ).</string>
     <string name="lessonspart1c_segunda_rodada_em_c">Second round, in C'?</string>
     <string name="lessonspart1c_nao_pare_na_primeira_rodada">Don't stop at the first round! After factoring, look at the new nonterminal again.</string>
-    <string name="lessonspart1c_use_maior_prefixo_comum_pelo">Use the LONGEST prefix common to at least two alternatives. A shorter prefix isn't wrong, it just takes more rounds; a prefix that isn't common to all in the group, that IS wrong.</string>
+    <string name="lessonspart1c_use_maior_prefixo_comum_pelo">Use the LONGEST prefix common to the whole group. Starting with a prefix shared by only two, as the textbook does, also works, with a different order of rounds. The mistake is factoring out a prefix that some alternative in the group doesn't have.</string>
     <string name="lessonspart1c_por_que_adiar_decisao">Why put off the decision?</string>
     <string name="lessonspart1c_analisador_preditivo_com_1_token">A predictive parser with 1 token of lookahead sees 'a'. Which production does it pick?</string>
     <string name="lessonspart1c_ainda_nao_para_saber">There's no way to know yet</string>

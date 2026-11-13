@@ -186,7 +186,7 @@ fun BeatView(b: Beat, index: Int, answered: MutableMap<Int, Int>, revealed: Muta
             }
             if (chosen != null) FeedbackBanner(
                 chosen == b.correct,
-                (if (chosen == b.correct) "**Isso!** " else tx("lessonscreen_boa_tentativa_errar_aqui_ajuda")) + b.explanation,
+                (if (chosen == b.correct) elogio(b.explanation) else tx("lessonscreen_boa_tentativa_errar_aqui_ajuda")) + b.explanation,
             )
         }
         is Beat.Reveal -> PaperCard(border = Palette.teal) {
@@ -254,3 +254,8 @@ private fun PalcoDaAula(skill: com.compilandia.learning.Skill) {
     }
 }
 
+/** O elogio do acerto varia com a explicação, para não abrir toda resposta certa com a mesma palavra. */
+private fun elogio(explicacao: String): String {
+    val opcoes = listOf(tx("lessonscreen_acerto_certo"), tx("lessonscreen_acerto_exato"), tx("lessonscreen_acerto_boa"), tx("lessonscreen_acerto_isso"))
+    return opcoes[(explicacao.hashCode() and Int.MAX_VALUE) % opcoes.size]
+}

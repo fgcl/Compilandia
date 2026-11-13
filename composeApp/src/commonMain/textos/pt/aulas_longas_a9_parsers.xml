@@ -5,7 +5,7 @@
     <string name="pred_l_01">O parser leu abre parêntese e depois id. A frase ainda não acabou, e ele precisa lembrar o que falta.</string>
     <string name="pred_l_02">O que ele ainda precisa ler, cedo ou tarde? Toque.</string>
     <string name="pred_l_02_dica">Todo parêntese aberto precisa fechar.</string>
-    <string name="pred_l_02_ok">Isso. Ele precisa guardar essa pendência até o parêntese chegar.</string>
+    <string name="pred_l_02_ok">Ele precisa guardar essa pendência até o parêntese chegar.</string>
     <string name="pred_l_palavra">PREDITIVO</string>
     <string name="pred_l_03">Ele guarda numa pilha o que ainda espera ler. Esse é o analisador preditivo: a pilha e a tabela LL(1) decidem tudo.</string>
     <string name="pred_l_05">O analisador repete três casos até a entrada acabar. O topo da pilha diz qual caso vale.</string>
@@ -15,7 +15,7 @@
     <string name="pred_l_q">topo: X, token: )</string>
     <string name="pred_l_06">No topo está X, e o token é fecha parêntese. Qual caso vale? Toque.</string>
     <string name="pred_l_06_dica">O X do topo não é token. Ele é um não-terminal.</string>
-    <string name="pred_l_06_ok">Isso. Caso dois. A tabela manda trocar X por épsilon, ou seja, só tirar X da pilha.</string>
+    <string name="pred_l_06_ok">Caso dois. A tabela manda trocar X por épsilon: o parser só tira o X da pilha.</string>
     <string name="pred_l_07">Se a casa da tabela está vazia, ou o terminal do topo é diferente do token, a frase tem erro de sintaxe.</string>
     <string name="pred_l_08">Agora uma lista: id, vírgula, id. A tabela é a da aula passada, e você decide cada passo.</string>
     <string name="pred_l_ra_l">topo: L, token: id</string>
@@ -23,15 +23,15 @@
     <string name="pred_l_ra_fim">topo: R, token: $</string>
     <string name="pred_l_09">A tabela troca L por id R. Qual dos dois fica no topo? Toque.</string>
     <string name="pred_l_09_dica">O lado direito entra na pilha de trás para a frente.</string>
-    <string name="pred_l_09_ok">Isso. O id fica em cima, pronto para casar.</string>
+    <string name="pred_l_09_ok">O id fica em cima, pronto para casar.</string>
     <string name="pred_l_10">O id do topo casa com o id da entrada. Os dois saem, e sobra R no topo.</string>
     <string name="pred_l_11">Topo R, token vírgula. Qual regra a tabela manda usar? Toque.</string>
     <string name="pred_l_11_dica">Qual das duas regras começa com a vírgula?</string>
-    <string name="pred_l_11_ok">Isso. É a regra que começa com vírgula.</string>
+    <string name="pred_l_11_ok">Exato. É a regra que começa com vírgula.</string>
     <string name="pred_l_12">Casa a vírgula, casa o id. De novo, R fica sozinho no topo.</string>
     <string name="pred_l_13">Agora a entrada acabou. Qual regra de R vale? Toque.</string>
     <string name="pred_l_13_dica">O cifrão está no FOLLOW de R.</string>
-    <string name="pred_l_13_ok">Isso. R vai para épsilon: R sai da pilha e nada entra.</string>
+    <string name="pred_l_13_ok">R vai para épsilon: R sai da pilha e nada entra.</string>
     <string name="pred_l_14">Cifrão com cifrão: aceita. As regras usadas, na ordem, formam a derivação mais à esquerda da lista.</string>
 
     <!-- Descida recursiva -->
@@ -45,19 +45,19 @@
     <string name="desc_l_r4">4. Várias regras: if no FIRST, épsilon no else.</string>
     <string name="desc_l_06">Na regra dos parênteses, o símbolo do meio vira o quê? Toque na regra.</string>
     <string name="desc_l_06_dica">O símbolo do meio é um não-terminal, não um token.</string>
-    <string name="desc_l_06_ok">Isso. O E vira a chamada da função dele.</string>
+    <string name="desc_l_06_ok">Boa. O E vira a chamada da função dele.</string>
     <string name="desc_l_07">Se o não-terminal não é anulável, o último else não pode ficar vazio. Ele avisa o erro de sintaxe.</string>
     <string name="desc_l_08">A lista de ids de novo. Agora quem escreve o código é você.</string>
     <string name="desc_l_09">L pede id e depois R. O que completa a função L? Toque.</string>
     <string name="desc_l_09_dica">Não-terminal na regra vira chamada de função.</string>
-    <string name="desc_l_09_ok">Isso. Depois de casar o id, L chama R.</string>
+    <string name="desc_l_09_ok">Depois de casar o id, L chama R.</string>
     <string name="desc_l_10">Que token faz R escolher a regra da vírgula? Toque.</string>
     <string name="desc_l_10_dica">Olhe com que token essa regra começa.</string>
-    <string name="desc_l_10_ok">Isso. A vírgula é o FIRST dessa regra.</string>
+    <string name="desc_l_10_ok">A vírgula é o FIRST dessa regra.</string>
     <string name="desc_l_11">Agora rode o código na entrada id, vírgula, id.</string>
     <string name="desc_l_12">Nessa entrada, quantas vezes o parser chama a função R? Toque.</string>
     <string name="desc_l_12_dica">Uma chamada vem de L. Outra vem de dentro do if.</string>
-    <string name="desc_l_12_ok">Isso. Duas vezes. Na segunda, a entrada já acabou.</string>
+    <string name="desc_l_12_ok">Acertou. Duas vezes. Na segunda, a entrada já acabou.</string>
     <string name="desc_l_13">Na segunda chamada o token é cifrão, e o if falha. R usa a regra épsilon: não casa nada e volta.</string>
 
     <!-- Erros sintáticos e recuperação -->
@@ -73,19 +73,19 @@
     <string name="erro_l_r4">4. Terminal no topo errado: tira o terminal.</string>
     <string name="erro_l_06">Ele parou num token que pode vir depois do topo. Qual regra vale? Toque.</string>
     <string name="erro_l_06_dica">O que pode vir depois está no FOLLOW.</string>
-    <string name="erro_l_06_ok">Isso. O topo sai da pilha e a análise segue.</string>
+    <string name="erro_l_06_ok">É isso. O topo sai da pilha e a análise segue.</string>
     <string name="erro_l_07">Regra quatro: terminal no topo diferente do token. O parser tira o terminal da pilha, como se ele tivesse vindo, e avisa.</string>
     <string name="erro_l_08">Outra gramática: comandos de atribuição. A entrada tem dois erros.</string>
     <string name="erro_l_09">O parser lê da esquerda para a direita. Onde ele trava primeiro? Toque.</string>
     <string name="erro_l_09_dica">Depois do igual vem um valor. O que veio?</string>
-    <string name="erro_l_09_ok">Isso. Val está no topo, e chegou outro igual.</string>
+    <string name="erro_l_09_ok">Val está no topo, e chegou outro igual.</string>
     <string name="erro_l_10">Ele descarta tokens até achar um seguro para Val. Onde ele para? Toque.</string>
     <string name="erro_l_10_dica">Procure um token que pode começar um Val.</string>
-    <string name="erro_l_10_ok">Isso. O num está no FIRST de Val.</string>
+    <string name="erro_l_10_ok">O num está no FIRST de Val.</string>
     <string name="erro_l_11">O igual sobrando vai fora. Val fica na pilha e casa com o num.</string>
     <string name="erro_l_12">Segundo erro: topo Val, e veio ponto e vírgula. O que acontece? Toque.</string>
     <string name="erro_l_12_dica">Ponto e vírgula pode vir depois de Val. Ele está no FOLLOW.</string>
-    <string name="erro_l_12_ok">Isso. Val sai da pilha, e o ponto e vírgula casa.</string>
+    <string name="erro_l_12_ok">Certo. Val sai da pilha, e o ponto e vírgula casa.</string>
     <string name="erro_l_13">Dois erros avisados numa leitura só, e o parser chegou ao fim.</string>
     <string name="erro_l_tira">tira Val</string>
     <string name="erro_l_descarta">descarta ;</string>
@@ -94,7 +94,7 @@
     <string name="sr_l_01">A gramática E vai para E mais n tem recursão à esquerda. O preditivo troca E por E mais n, e o E volta ao topo.</string>
     <string name="sr_l_02">Quantas trocas ele faz até ler o primeiro n? Toque.</string>
     <string name="sr_l_02_dica">Depois de cada troca, o E continua na frente.</string>
-    <string name="sr_l_02_ok">Isso. Ele troca para sempre e nunca lê nada. O preditivo decide a regra cedo demais.</string>
+    <string name="sr_l_02_ok">Ele troca para sempre e nunca lê nada. O preditivo decide a regra cedo demais.</string>
     <string name="sr_l_sem_fim">sem fim</string>
     <string name="sr_l_03">A saída é ler primeiro e escolher a regra depois, quando o lado direito inteiro já está na pilha. É o empilha-reduz.</string>
     <string name="sr_l_05">A cada passo, o parser escolhe entre três ações, olhando o topo da pilha.</string>
@@ -103,20 +103,20 @@
     <string name="sr_l_r3">3. Só o símbolo inicial e $: aceita.</string>
     <string name="sr_l_06">Pilha só com E, entrada no cifrão. Qual ação vale? Toque.</string>
     <string name="sr_l_06_dica">Olhe o que sobrou na pilha e na entrada.</string>
-    <string name="sr_l_06_ok">Isso. Aceita, e a frase está certa.</string>
+    <string name="sr_l_06_ok">Aceita, e a frase está certa.</string>
     <string name="sr_l_07">Reduzir tira da pilha o lado direito inteiro e põe no lugar o não-terminal do lado esquerdo.</string>
     <string name="sr_l_08">Agora parênteses em volta de id. Você decide cada passo.</string>
     <string name="sr_l_09">Nada para reduzir ainda. Empilho o abre parêntese e depois o id.</string>
     <string name="sr_l_10">Na pilha, abre parêntese e id. Empilho ou reduzo? Toque.</string>
     <string name="sr_l_10_dica">O id sozinho é o lado direito de uma regra?</string>
-    <string name="sr_l_10_ok">Isso. O id é um handle e vira S.</string>
+    <string name="sr_l_10_ok">O id é um handle e vira S.</string>
     <string name="sr_l_11">Reduzo: o id vira S. No topo ficam abre parêntese e S.</string>
     <string name="sr_l_12">E agora, com abre parêntese e S? Empilho ou reduzo? Toque.</string>
     <string name="sr_l_12_dica">Alguma regra termina em S sem o fecha parêntese?</string>
-    <string name="sr_l_12_ok">Isso. Falta o fecha parêntese, então empilha.</string>
+    <string name="sr_l_12_ok">Boa. Falta o fecha parêntese, então empilha.</string>
     <string name="sr_l_13">Toque nas peças que a redução troca por S.</string>
     <string name="sr_l_13_dica">O lado direito inteiro sai junto.</string>
-    <string name="sr_l_13_ok">Isso. As três saem, e entra um S.</string>
+    <string name="sr_l_13_ok">As três saem, e entra um S.</string>
     <string name="sr_l_14">Sobrou só o símbolo inicial, com o cifrão na entrada: aceita. Saber onde está o handle é o trabalho da tabela LR.</string>
 
     <!-- Yacc/Bison -->
@@ -124,7 +124,7 @@
     <string name="bison_l_estados">14 estados × 8 tokens</string>
     <string name="bison_l_02">Cada estado tem 8 colunas de token. Quantas casas você confere à mão? Toque.</string>
     <string name="bison_l_02_dica">Multiplique os estados pelas colunas.</string>
-    <string name="bison_l_02_ok">Isso. E cada regra nova muda muitas delas.</string>
+    <string name="bison_l_02_ok">E cada regra nova muda muitas delas.</string>
     <string name="bison_l_03">O Bison monta essa tabela sozinho, a partir da gramática. Ele é a versão livre do Yacc e gera um parser LALR(1) em C.</string>
     <string name="bison_l_05">A receita do arquivo .y tem três passos.</string>
     <string name="bison_l_r1">1. Antes do %%: %token e a precedência.</string>
@@ -132,19 +132,19 @@
     <string name="bison_l_r3">3. Rode bison calc.y e leia os avisos.</string>
     <string name="bison_l_06">Onde vai a linha do left com o menos? Toque na parte certa.</string>
     <string name="bison_l_06_dica">Precedência é declaração. Ela não é regra.</string>
-    <string name="bison_l_06_ok">Isso. Precedência fica nas declarações, lá em cima.</string>
+    <string name="bison_l_06_ok">Precedência fica nas declarações, lá em cima.</string>
     <string name="bison_l_07">Conflito avisado não trava o Bison. No shift-reduce ele empilha; no reduce-reduce, usa a regra que vem primeiro. E pode errar a sua conta.</string>
     <string name="bison_l_08">Uma calculadora só de menos, sem nenhuma linha de precedência.</string>
     <string name="bison_l_09">Rodo o Bison neste arquivo. Quantos conflitos ele avisa? Toque.</string>
     <string name="bison_l_09_dica">Em cinco menos dois menos um, quem junta primeiro?</string>
-    <string name="bison_l_09_ok">Isso. Um conflito de empilha-reduz, no menos.</string>
+    <string name="bison_l_09_ok">Um conflito de empilha-reduz, no menos.</string>
     <string name="bison_l_10">O aviso confirma. Sem precedência, o Bison prefere empilhar.</string>
     <string name="bison_l_11">Empilhar primeiro junta pela direita. Quanto dá cinco menos dois menos um? Toque.</string>
     <string name="bison_l_11_dica">Faça dois menos um primeiro. Depois, cinco menos o resultado.</string>
-    <string name="bison_l_11_ok">Isso. Dá quatro, mas a conta certa seria dois.</string>
+    <string name="bison_l_11_ok">É isso. Dá quatro, mas a conta certa seria dois.</string>
     <string name="bison_l_12">Uma linha resolve: left no menos. Agora o Bison reduz primeiro.</string>
     <string name="bison_l_13">Com essa linha, quanto dá cinco menos dois menos um? Toque.</string>
     <string name="bison_l_13_dica">Agora junta pela esquerda: cinco menos dois, depois menos um.</string>
-    <string name="bison_l_13_ok">Isso. E o Bison não avisa mais nenhum conflito.</string>
+    <string name="bison_l_13_ok">E o Bison não avisa mais nenhum conflito.</string>
     <string name="bison_l_14">Saída limpa e conta certa. A calculadora está pronta.</string>
 </resources>

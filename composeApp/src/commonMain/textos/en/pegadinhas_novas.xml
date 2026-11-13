@@ -6,7 +6,7 @@
     <string name="peg4_min_02">The trick: a final state and a non-final one are never twins.</string>
     <string name="peg4_min_03">Which pair can you split right away? Tap it.</string>
     <string name="peg4_min_03_dica">One of them accepts the word and the other doesn't.</string>
-    <string name="peg4_min_03_ok">Right. Final against non-final is already different.</string>
+    <string name="peg4_min_03_ok">Final against non-final is already different.</string>
     <string name="peg4_min_04">Then look at where each one goes with the same letter.</string>
     <string name="peg4_min_05">If one goes to a pair already split, these two split too.</string>
     <string name="peg4_min_06">Only merge what no word can tell apart.</string>
@@ -16,7 +16,7 @@
     <string name="peg4_ll_03">With a terminal on top, the table stays out. It only checks against the input.</string>
     <string name="peg4_ll_04">The top is plus and the input is plus. What does the parser do? Tap.</string>
     <string name="peg4_ll_04_dica">Plus is a terminal. A terminal on top never goes to the table.</string>
-    <string name="peg4_ll_04_ok">Right. It matches, pops the top and moves ahead in the input.</string>
+    <string name="peg4_ll_04_ok">It matches, pops the top and moves ahead in the input.</string>
     <string name="peg4_ll_05">If the terminal on top differs from the input, it's an error right away.</string>
     <string name="peg4_ll_06">The table is only for nonterminals. A terminal just gets checked.</string>
     <string name="peg4_ll_op_casar">match and move on</string>
@@ -28,7 +28,7 @@
     <string name="peg4_ast_03">In the AST they vanish. The shape of the tree already keeps the order.</string>
     <string name="peg4_ast_04">Which of these become nodes in the tree? Tap all of them.</string>
     <string name="peg4_ast_04_dica">The AST keeps operations and values. A grouping sign doesn't become a node.</string>
-    <string name="peg4_ast_04_ok">Right. Times and plus become nodes. The parentheses vanish.</string>
+    <string name="peg4_ast_04_ok">Times and plus become nodes. The parentheses vanish.</string>
     <string name="peg4_ast_05">The plus sits under the times. That's how the AST remembers the parenthesis.</string>
     <string name="peg4_ast_06">The AST keeps what the program does, not how it was written.</string>
 </resources>

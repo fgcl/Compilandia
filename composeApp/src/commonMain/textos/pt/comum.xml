@@ -84,7 +84,7 @@
     <string name="comum_geracao_codigo">Geração de código</string>
     <string name="comum_gramatica_em_30_segundos">Gramática em 30 segundos</string>
     <string name="comum_intermediario">Intermediário</string>
-    <string name="comum_isso_ultimo_entrar_primeiro_sair">Isso. O último a entrar é o primeiro a sair.</string>
+    <string name="comum_isso_ultimo_entrar_primeiro_sair">O último a entrar é o primeiro a sair.</string>
     <string name="comum_laboratorio">Laboratório</string>
     <string name="comum_laboratorio_bison">Laboratório Bison</string>
     <string name="comum_lexica">Léxica</string>

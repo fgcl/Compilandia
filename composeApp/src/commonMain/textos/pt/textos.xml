@@ -846,9 +846,9 @@
     <string name="lessonspart1c_quando_proximo_token_nao_quando">Quando o próximo token NÃO é ';', quando ele está em FOLLOW(L'), como o fim da entrada.</string>
     <string name="lessonspart1c_sem_conflitos_agora_ll_1">Sem conflitos: agora é LL(1).</string>
     <string name="lessonspart1c_fatorando_passo_passo">Fatorando passo a passo</string>
-    <string name="lessonspart1c_receita_para_cada_ache_maior">Receita: para cada A, ache o MAIOR prefixo α comum a duas ou mais alternativas. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ. A aula animada põe em evidência primeiro o prefixo comum a todas do grupo: a ordem das rodadas muda, mas a gramática do fim é a mesma.</string>
+    <string name="lessonspart1c_receita_para_cada_ache_maior">Receita: para cada A, junte num grupo as alternativas que começam com o mesmo símbolo e ache o MAIOR prefixo α comum a todas do grupo. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ. O livro começa pelo maior prefixo comum a duas ou mais alternativas: a ordem das rodadas muda, mas a gramática do fim é a mesma.</string>
     <string name="lessonspart1c_1_alternativas_que_comecam_com">1. Alternativas que começam com `a`: a b c, a b d, a e. (f fica de fora: é o γ.)</string>
-    <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Maior prefixo comum às TRÊS: só `a` (a e não tem b).</string>
+    <string name="lessonspart1c_2_maior_prefixo_comum_tres">2. Maior prefixo comum às TRÊS do grupo: só `a` (a e não tem b). O `a b` fica para a rodada seguinte.</string>
     <string name="lessonspart1c_4_repita_em_b_c">4. Repita! Em A', `b c` e `b d` compartilham `b`.</string>
     <string name="lessonspart1c_6_fim_nenhum_par_alternativas">6. Fim: nenhum par de alternativas do mesmo NT começa igual.</string>
     <string name="lessonspart1c_motor_repete_rodadas_ate_estabilizar">O motor repete as rodadas até estabilizar.</string>
@@ -857,7 +857,7 @@
     <string name="lessonspart1c_so_id_segundo_simbolo_numa">Só `id` (o segundo símbolo é `=` numa e `(` nas outras). C → id C'; C' → = E | ( ) | ( E ).</string>
     <string name="lessonspart1c_segunda_rodada_em_c">Segunda rodada, em C'?</string>
     <string name="lessonspart1c_nao_pare_na_primeira_rodada">Não pare na primeira rodada! Depois de fatorar, olhe de novo o novo não-terminal.</string>
-    <string name="lessonspart1c_use_maior_prefixo_comum_pelo">Use o MAIOR prefixo comum a pelo menos duas alternativas. Prefixo menor não é erro, só dá mais rodadas; prefixo que não é comum a todas do grupo, aí sim é erro.</string>
+    <string name="lessonspart1c_use_maior_prefixo_comum_pelo">Use o MAIOR prefixo comum a todas do grupo. Começar pelo prefixo de só duas, como faz o livro, também dá certo, com outra ordem de rodadas. Erro é pôr em evidência um prefixo que alguma alternativa do grupo não tem.</string>
     <string name="lessonspart1c_por_que_adiar_decisao">Por que adiar a decisão?</string>
     <string name="lessonspart1c_analisador_preditivo_com_1_token">Um analisador preditivo com 1 token de lookahead vê 'a'. Qual produção ele escolhe?</string>
     <string name="lessonspart1c_ainda_nao_para_saber">Ainda não dá para saber</string>

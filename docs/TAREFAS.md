@@ -13,7 +13,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Bugs: folhas podem ser ε; "duas derivações da mesma frase"
 - [x] Glossário: recursão à esquerda
 - [x] Fatoração: uma regra só para o "maior prefixo" na ficha e no FORMAL
-- [ ] Fatoração: conferir o texto WORKED ("comum às TRÊS") com a regra nova
+- [x] Fatoração: o WORKED e a dica de prova usam a mesma regra ("comum a todas do grupo") e citam a ordem do livro
 - [x] Ambientes de execução: "a pilha cresce para cima" só no desenho
 - [x] E7. SLR, cena 4: tabela inteira, tirada do motor, com GOTO e as regras numeradas
 - [x] E8. Escopo, cena 4: `x = 2;` agora dentro do `main`, com a tabela vazia do `main` na pilha
@@ -23,14 +23,15 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] E12. Série em C 5: o `calc.y` da tela é o que o motor roda, com os `%left`
 - [x] E13. Guia do TP, cap. 8: `move` na cola; `li`, `la`, `move` e rótulo na lista de pseudo-instruções
 - [x] AST, texto STORY: "compilador em Java" está certo (o Guia do TP é em Java); a confusão é a falta de explicar as duas linguagens, item da seção 5
-- [ ] "Só a semântica consulta a tabela de símbolos" × ficha
-- [ ] AFD com "no máximo uma" × "exatamente uma" seta
+- [x] "Só a semântica consulta a tabela de símbolos": agora diz que a semântica procura o y na tabela
+- [x] AFD: uma seta por símbolo em cada estado; a que não aparece vai para o estado morto
+- [ ] Fases: "três de análise, três de síntese" × o livro, que põe o código intermediário no front-end
 
 ## 2. Padrões do jogo inteiro
 
 - [x] Embaralhar as alternativas na tela (`OrdemDasOpcoes`)
 - [x] O colega da parte Erros acerta em parte das aulas (13 de 29)
-- [ ] Variar a fala de acerto: 234 de 239 começam com "Isso" (o "**Isso!**" do `LessonScreen.kt` é o primeiro)
+- [x] Variar a fala de acerto: 240 de 259 começavam com "Isso"; agora nenhuma, e o `FalaDeAcertoTest` barra a volta
 - [ ] Menos perguntas de duas opções (92 de 192)
 - [ ] Primeira interação antes da cena 4 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
 - [ ] Nenhum trecho com mais de 4 cenas só ouvindo
@@ -55,7 +56,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
 - [ ] Minimização: o AFD do livro (3 rodadas) e `a*b*` com estado morto
 - [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
-- [ ] FOLLOW: segundo exemplo `S → A B d`, com dois símbolos depois do não-terminal
+- [x] FOLLOW: caso difícil `S → B C d` (C some, o d entra), conferido pelo motor
 - [ ] FIRST: uma rodada que muda algo e uma regra `B → C`
 - [ ] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
 - [ ] Recursão à esquerda: `E → E + T | E − T | T`, e E/T/F numa prática
