@@ -1,0 +1,1581 @@
+######## REGIAO FORJA_CODIGO: Forja do Código (Código intermediário e otimização)
+
+################ ASSUNTO TAC: Código de três endereços  prereqs=[ATTRIBUTES_TYPES]
+FICHA: Código de três endereços é uma linguagem intermediária com no máximo um operador por instrução (x = y op z), gerada em pós-ordem com temporários, e representada como quádruplas ou triplas.
+  gancho: Dois entram, um sai. QUAdrupla = QUAtro campos; a TRIpla mora no endereço (posição).
+  termos: [temporário, três endereços, quádrupla, tripla, pós-ordem, rótulo]
+  erros comuns: [Colocar dois operadores numa instrução (t = a + b * c), Gerar o pai antes dos filhos (a ordem é pós-ordem), Em triplas, dar nome ao resultado em vez de usar a posição, Esquecer o goto para pular o else num if-else]
+  FLASH: Forma geral da instrução? -> x = y op z
+  FLASH: Quantos operadores por instrução? -> No máximo um
+  FLASH: TAC de a + b * c? -> t1 = b * c; t2 = a + t1
+  FLASH: Campos da quádrupla? -> op, arg1, arg2, resultado
+  FLASH: Campos da tripla? -> op, arg1, arg2 (resultado = posição)
+  FLASH: Por que triplas indiretas? -> Para reordenar sem quebrar referências
+  FLASH: Ordem de geração numa expressão? -> Pós-ordem da árvore
+  FLASH: Como vira um if em TAC? -> Desvios condicionais, goto e rótulos
+
+=== AULA ANIMADA [BASICO] Uma conta por linha  (id=TAC, ~146s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] O processador faz uma conta por vez, sempre com dois valores.
+     palco: TAC | a + b * c | processador | uma conta por vez
+2. [BYTE] Quantas contas há nessa linha? Toque no número.
+     palco: TAC | *a + b * c | processador | uma conta por vez | 1 | 2 | 3
+     PERGUNTA(toque): certas=[2] erradas=[1, 3]
+       dica: Conte os operadores. Cada um é uma conta.
+       acerto: Isso. Duas contas, então duas linhas.
+3. [BYTE] O código de três endereços é um código intermediário: cada linha faz uma conta só, com no máximo três nomes.
+     palco: TAC
+4. [BYTE] Primeiro a árvore sintática. Ela já diz qual conta vem antes.
+     palco: a + b * c | + | a | * | b | c
+5. [BYTE] Qual conta tem que sair primeiro? Toque no operador.
+     palco: a + b * c | + | a | * | b | c
+     PERGUNTA(toque): certas=[*] erradas=[+]
+       dica: A árvore manda: quem está mais fundo vem antes.
+       acerto: Isso. O vezes está mais fundo.
+6. [BYTE] O resultado do vezes não tem nome no programa. O compilador cria um temporário para ele, o t1.
+     palco: a + b * c | + | a | ** | b | c | *t1 = b * c
+7. [BYTE] Na linha seguinte, a árvore já pode usar o t1 no lugar do vezes.
+     palco: a + b * c | *+ | a | * | b | c | t1 = b * c | *t2 = a + t1
+8. [PROF] Cada linha tem no máximo três endereços: dois operandos e um resultado. É daí que vem o nome.
+     palco: a + b * c | + | a | * | b | c | t1 = b * c | t2 = a + t1
+9. [BYTE] A ordem das linhas saiu da árvore. E esse código ainda não depende de nenhum processador.
+     palco: a + b * c | + | a | * | b | c | t1 = b * c | t2 = a + t1
+10. [BYTE] Para gerar as linhas, ande pela árvore de baixo para cima.
+     palco: Receita | 1. Gere os filhos antes do pai. | 2. Cada operador ganha um temporário novo. | 3. O pai usa o temporário do filho. | 4. Atribuição: copie o último temporário.
+11. [BYTE] Por que o vezes saiu antes do mais? Toque na regra.
+     palco: Receita | 1. Gere os filhos antes do pai. | 2. Cada operador ganha um temporário novo. | 3. O pai usa o temporário do filho. | 4. Atribuição: copie o último temporário.
+     PERGUNTA(toque): certas=[1. Gere os filhos antes do pai.] erradas=[2. Cada operador ganha um temporário novo., 3. O pai usa o temporário do filho., 4. Atribuição: copie o último temporário.]
+       dica: Na árvore, o vezes é filho do mais.
+       acerto: Isso. Filho antes do pai.
+12. [BYTE] Regra três: na segunda linha, o t1 ocupa o lugar do vezes.
+     palco: Receita | 1. Gere os filhos antes do pai. | 2. Cada operador ganha um temporário novo. | *3. O pai usa o temporário do filho. | 4. Atribuição: copie o último temporário.
+13. [BYTE] Agora quem gera é você. No fim, o resultado vai para o x.
+     palco: x = ( a + b ) * ( c - d ) | * | + | a | b | - | c | d
+14. [BYTE] Qual operador vira o t1? Toque nele.
+     palco: x = ( a + b ) * ( c - d ) | * | + | a | b | - | c | d
+     PERGUNTA(toque): certas=[+] erradas=[-, *]
+       dica: O vezes espera os dois filhos. Comece pelo filho da esquerda.
+       acerto: Isso. A soma vira o t1.
+15. [BYTE] A soma virou t1. Qual operador vira o t2? Toque.
+     palco: x = ( a + b ) * ( c - d ) | * | t1 | - | c | d | t1 = a + b
+     PERGUNTA(toque): certas=[-] erradas=[*]
+       dica: O vezes ainda espera o filho da direita.
+       acerto: Isso. A subtração vira o t2.
+16. [BYTE] Agora a raiz. Toque na linha que o vezes gera.
+     palco: x = ( a + b ) * ( c - d ) | ** | t1 | t2 | t1 = a + b | t2 = c - d | t3 = a * d | t3 = t1 * t2 | t3 = t1 * c - d
+     PERGUNTA(toque): certas=[t3 = t1 * t2] erradas=[t3 = a * d, t3 = t1 * c - d]
+       dica: Regra três: use os temporários dos filhos.
+       acerto: Isso. Três endereços: t3, t1 e t2.
+17. [BYTE] Falta guardar no x. Qual temporário vai para ele? Toque.
+     palco: x = ( a + b ) * ( c - d ) | t3 | t1 = a + b | t2 = c - d | t3 = t1 * t2 | t3 | t2 | t1
+     PERGUNTA(toque): certas=[t3] erradas=[t2, t1]
+       dica: Regra quatro: o último temporário, o da raiz.
+       acerto: Isso. A última linha só copia o valor.
+18. [BYTE] Quatro linhas, e nenhuma faz mais de uma conta. Na etapa de prática, o if e o while também viram linhas, com rótulos e desvios.
+     palco: x = ( a + b ) * ( c - d ) | t3 | *t1 = a + b | *t2 = c - d | *t3 = t1 * t2 | *x = t3
+19. [BYTE] Esta atribuição cabe numa linha de três endereços? Um colega disse que sim. Certo ou errado?
+     palco: Erros comuns | x = a + b * c cabe numa linha só de três endereços. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Conte os nomes: x, a, b e c. Quantos cabem numa linha?
+       acerto: Isso. São duas contas e quatro nomes. Cada linha leva um operador e no máximo três endereços.
+20. [BYTE] Outro erro: reaproveitar o t1 na segunda conta. Se o valor antigo ainda for usado, ele se perde. Cada resultado ganha um temporário novo.
+     palco: Erros comuns | Certo: São duas linhas: t1 = b * c, depois x = a + t1. | *Errado: Reusar o mesmo temporário para duas contas diferentes. | *Certo: Cada operador ganha um temporário novo: t1, t2, t3...
+21. [BYTE] Resumindo: o código de três endereços quebra a expressão em contas simples. A árvore dá a ordem, e cada resultado parcial ganha um temporário.
+     palco: Resumo | Três endereços: resultado = operando operador operando. | Gere os filhos antes do pai; cada conta guarda num temporário novo. | É código intermediário: não depende do processador.
+
+=== AULA ANIMADA [PEGADINHA] A ordem dos temporários  (id=TAC/aordemdostemporários, ~23s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Três endereços: no máximo uma conta por linha.
+     palco: a + b * c | a | + | b | * | c
+2. [BYTE] Qual conta vira a primeira linha? Toque no operador.
+     palco: a + b * c | a | + | b | * | c
+     PERGUNTA(toque): certas=[*] erradas=[+]
+       dica: Quem está mais fundo na árvore roda antes.
+       acerto: Isso. O vezes vai primeiro e guarda em t1.
+3. [BYTE] Primeira linha: t1 recebe b vezes c.
+     palco: a + b * c | a | + | b | * | c | *t1 = b * c
+4. [BYTE] Segunda linha: t2 recebe a mais t1.
+     palco: a + b * c | a | + | b | * | c | t1 = b * c | *t2 = a + t1
+5. [PROF] Se inverter as linhas, o t1 é lido antes de existir.
+     palco: a + b * c | a | + | b | * | c | t1 = b * c | t2 = a + t1
+
+=== AULA ANIMADA [PRATICA] if e while viram desvios  (id=TAC/ifewhileviramdesvios, ~74s, 9 passos, exemplo começa no passo null)
+1. [BYTE] Até aqui, o código de três endereços só fez contas. Mas programa tem if e while, e a máquina não tem nenhum dos dois.
+     palco: if / while | if (a < b) x = 1; | else x = 2;
+2. [BYTE] A máquina só sabe seguir para a próxima linha ou desviar para uma linha marcada com um rótulo.
+     palco: if / while | if (a < b) x = 1; | else x = 2; | rótulo:  L1: | desvio:  goto L1
+3. [BYTE] Primeiro a condição vira uma conta, guardada em t1. Depois vem o desvio condicional: se t1 for falso, pule para L1.
+     palco: if / while | if (a < b) x = 1; | else x = 2; | *    t1 = a < b | *    ifFalse t1 goto L1
+4. [BYTE] Se a condição é verdadeira, a execução segue para a próxima linha. Que comando vem ali? Toque.
+     palco: if / while | if (a < b) x = 1; | else x = 2; |     t1 = a < b | *    ifFalse t1 goto L1 | x = 1 | x = 2
+     PERGUNTA(toque): certas=[x = 1] erradas=[x = 2]
+       dica: É o comando que roda quando a é menor que b.
+       acerto: Isso. O bloco do if vem logo depois do desvio condicional.
+5. [BYTE] Depois de x igual a um, o que impede a execução de cair no else? Toque.
+     palco: if / while | if (a < b) x = 1; | else x = 2; |     t1 = a < b |     ifFalse t1 goto L1 | *    x = 1 | goto L2 | L1: | nada
+     PERGUNTA(toque): certas=[goto L2] erradas=[L1:, nada]
+       dica: Sem nada ali, a próxima linha é a do else.
+       acerto: Isso. Um desvio incondicional pula o else e vai para o fim, no rótulo L2.
+6. [BYTE] O rótulo L1 marca o começo do else. O L2 marca o fim do if inteiro.
+     palco: if / while | if (a < b) x = 1; | else x = 2; |     t1 = a < b |     ifFalse t1 goto L1 |     x = 1 |     goto L2 | *L1: x = 2 | *L2:
+7. [BYTE] O while usa as mesmas peças. O rótulo fica antes da condição, e no fim do corpo um goto volta para ele.
+     palco: while | while (i < n) i = i + 1; | *L1: t1 = i < n |     ifFalse t1 goto L2 |     i = i + 1 |     goto L1 | L2:
+8. [BYTE] No while, para onde vai o goto do fim do corpo? Toque na linha.
+     palco: while | while (i < n) i = i + 1; | L1: t1 = i < n |     ifFalse t1 goto L2 |     i = i + 1 | *    goto L1 | L2:
+     PERGUNTA(toque): certas=[L1: t1 = i < n] erradas=[    ifFalse t1 goto L2, L2:]
+       dica: O laço precisa testar a condição de novo.
+       acerto: Isso. Ele volta para a condição, que é testada a cada volta.
+9. [BYTE] O if e o while viram três peças: rótulo, desvio condicional e desvio incondicional. É assim que o seu laço chega ao MIPS.
+     palco: while | while (i < n) i = i + 1; | L1: t1 = i < n |     ifFalse t1 goto L2 |     i = i + 1 |     goto L1 | L2:
+
+=== AULA ANIMADA [CLIPE] Três endereços  (id=TAC/trêsendereços, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Cada linha tem no máximo uma conta.
+     palco: a + b * c | t1 = b * c
+2. [BYTE] Conta maior quebra em temporários: t1, t2, t3.
+     palco: a + b * c | t1 = b * c | *t2 = a + t1
+
+=== AULA DE LEITURA [STORY] A receita para o ajudante que só faz uma coisa por vez
+[NARRADOR] Forja do Código. A árvore anotada chega numa esteira; do outro lado, sai uma lista de instruções.
+[BYTE] Por que não transformar a árvore direto em Assembly?
+[PROF] Porque existem dezenas de processadores. É mais esperto traduzir para uma linguagem intermediária simples, e só no fim para cada máquina.
+TEXTO: Imagine uma receita para um ajudante de cozinha que só sabe fazer **uma operação por vez**, com **no máximo dois ingredientes**, e sempre coloca o resultado **numa tigela com etiqueta**.
+CODIGO ('Junte b com c (multiplicando) na tigela t1; depois junte a com t1 na tigela t2.' — a + b * c):
+    t1 = b * c
+    t2 = a + t1
+PASSOS O mapa da analogia:
+    1. Uma operação por vez, dois ingredientes → **instrução de três endereços**: x = y op z
+    2. Tigelas com etiqueta t1, t2... → **temporários** gerados pelo compilador
+    3. Ordem da receita → **pós-ordem** da árvore: filhos antes do pai
+    4. Ficha com 4 campos (operação, ingr. 1, ingr. 2, tigela) → **quádrupla**
+    5. Ficha sem tigela: 'use o resultado do passo 0' → **tripla**
+PREVEJA: Quantas instruções (sem contar a atribuição final) para a + b * c - a?
+    (     ) 2
+    (certa) 3
+    (     ) 4
+    EXPLICACAO: Três operadores → três instruções: t1 = b * c; t2 = a + t1; t3 = t2 - a.
+WIDGET TAC gramatica= entrada=a + b * c legenda=A máquina de receitas: a multiplicação vem primeiro porque está mais embaixo na árvore.
+[PILHA] Tigelas... são como eu. Guardam... resultados no meio do caminho.
+REVELAR: Por que 'três endereços'?
+    RESPOSTA: Porque cada instrução menciona no máximo três nomes: dois operandos e um destino (x = y op z).
+DESTAQUE REAL_WORLD: O LLVM IR é uma linguagem intermediária no espírito do TAC (em forma SSA): Clang, Rust e Swift geram LLVM IR, e o LLVM o traduz para x86, ARM, RISC-V...
+
+=== AULA DE LEITURA [VISUAL] Da árvore à lista, em pós-ordem
+[PROF] Vamos ver a árvore e o código lado a lado.
+WIDGET ATTR_TREE gramatica= entrada=a + b * c legenda=A árvore: '*' está embaixo, '+' na raiz.
+WIDGET TAC gramatica= entrada=a + b * c legenda=Pós-ordem: b * c gera t1; depois a + t1 gera t2.
+PASSOS A regra do gerador:
+    1. Folha (variável ou número): o 'endereço' é o próprio nome
+    2. Nó operador: gera o código do filho esquerdo, depois o do direito
+    3. Cria um temporário novo tN e emite: tN = esq op dir
+    4. O endereço do nó passa a ser tN
+WIDGET TAC gramatica= entrada=(a + b) * (a + b) legenda=Repare: a + b é calculado DUAS vezes (t1 e t2). O gerador ingênuo não percebe, a otimização vai.
+[BYTE] E com comparação e lógica? Funciona igual?
+WIDGET TAC gramatica= entrada=a < b && ok legenda=Aqui, como valores: t1 = a < b; t2 = t1 && ok. (Compiladores reais costumam usar desvios — curto-circuito.)
+PREVEJA: Para a + x * 2 (a int, x float), um compilador real gera...
+    (     ) t1 = x * 2; t2 = a + t1
+    (certa) t1 = x * 2; t2 = inttofloat(a); t3 = t2 + t1
+    (     ) t1 = a + x; t2 = t1 * 2
+    EXPLICACAO: A verificação de tipos manda converter a. O widget do jogo esconde a conversão, mas no Livro do Dragão ela aparece como instrução própria (e o 2 vira 2.0 na própria constante).
+WIDGET TAC gramatica= entrada=a + x * 2 legenda=Versão simplificada do jogo (sem a instrução de conversão).
+CODIGO (As mesmas instruções de a + b * c como quádruplas):
+         op    arg1   arg2   resultado
+    (0)  *     b      c      t1
+    (1)  +     a      t1     t2
+DESTAQUE BRAIN_POWER: Número de temporários no gerador ingênuo = número de operadores. Dá para economizar reaproveitando tigelas que não serão mais usadas, isso é trabalho da alocação de registradores.
+
+=== AULA DE LEITURA [WORKED] Expressões, quádruplas, triplas e um if
+[PROF] Exercício 1: gere TAC para x = (a + b) * (a - c).
+PASSOS Pós-ordem, com calma:
+    1. Subárvore esquerda a + b → t1 = a + b
+    2. Subárvore direita a - c → t2 = a - c
+    3. Raiz * → t3 = t1 * t2
+    4. Atribuição → x = t3
+CODIGO (Duas representações das mesmas instruções):
+    quádruplas                      triplas
+         op  arg1  arg2  res             op  arg1  arg2
+    (0)  +   a     b     t1        (0)   +   a     b
+    (1)  -   a     c     t2        (1)   -   a     c
+    (2)  *   t1    t2    t3        (2)   *   (0)   (1)
+    (3)  =   t3          x         (3)   =   x     (2)
+[PROF] Exercício 2: comandos com desvio. if (a < b) x = 1; else x = 2;
+CODIGO (Rótulos e desvios: o if vira 'pule se for falso'):
+        ifFalse a < b goto L1
+        x = 1
+        goto L2
+    L1: x = 2
+    L2: ...
+[BYTE] Agora eu faço!
+REVELAR: TAC de y = a * b + a * b.
+    RESPOSTA: t1 = a * b; t2 = a * b; t3 = t1 + t2; y = t3. (Sim, a * b duas vezes, o gerador ingênuo não otimiza.)
+REVELAR: As triplas de y = a * b + a * b.
+    RESPOSTA: (0) * a b; (1) * a b; (2) + (0) (1); (3) = y (2).
+REVELAR: TAC de while (a < b) a = a + 1;
+    RESPOSTA: L1: ifFalse a < b goto L2;  t1 = a + 1;  a = t1;  goto L1;  L2: ...
+WIDGET TAC gramatica= entrada=a * b + a * b legenda=Confira a primeira resposta.
+DESTAQUE EXAM_TIP: Em triplas, o resultado é referenciado pela POSIÇÃO: (2) * (0) (1). Na prova, numere as linhas desde o começo, senão as referências viram bagunça.
+
+=== AULA DE LEITURA [SOCRATIC] Por que uma linguagem no meio do caminho?
+[PROF] Pergunta 1: se eu tenho 5 linguagens-fonte e 4 processadores, quantos compiladores completos eu escrevo sem código intermediário?
+REVELAR: E com uma representação intermediária comum?
+    RESPOSTA: Sem: 5 × 4 = 20 compiladores. Com: 5 front-ends + 4 back-ends = 9 peças. A IR é o 'adaptador universal'.
+REVELAR: Por que limitar a no máximo um operador por instrução?
+    RESPOSTA: Porque se parece com instruções de máquina (um op por vez), torna a ordem de avaliação explícita e facilita otimizar e alocar registradores.
+REVELAR: Em que ordem as instruções de uma expressão aparecem?
+    RESPOSTA: Na pós-ordem da árvore: cada operador só pode ser calculado depois dos seus operandos.
+[BYTE] E de onde saem os nomes t1, t2...?
+REVELAR: Quem cria os temporários?
+    RESPOSTA: O próprio compilador (new Temp()), um por nó operador. Eles não existem no programa-fonte.
+PREVEJA: Por que quádruplas são mais fáceis de reordenar do que triplas?
+    (     ) Porque ocupam menos memória
+    (certa) Porque nas triplas os resultados são referenciados pela posição; mover uma instrução quebra as referências
+    (     ) Porque triplas não aceitam desvios
+    EXPLICACAO: Na quádrupla o resultado tem nome (t1); na tripla ele é '(0)'. Mudou a posição, mudou o nome. Por isso existem as triplas INDIRETAS (uma lista de ponteiros que se reordena).
+REVELAR: Como representar um if em TAC, se não há chaves nem blocos?
+    RESPOSTA: Com rótulos e desvios: ifFalse cond goto L1, goto L2, L1: ... A estrutura vira um grafo de saltos.
+WIDGET TAC gramatica= entrada=(a + b) * c legenda=Teste: preveja as instruções antes de olhar.
+DESTAQUE BRAIN_POWER: O TAC é baixo nível o bastante para ficar perto da máquina e alto o bastante para não depender dela. Esse equilíbrio é o que torna a otimização portátil.
+
+=== AULA DE LEITURA [FORMAL] Instruções de três endereços e representações
+TEXTO: **Código de três endereços:** sequência de instruções com, no máximo, um operador no lado direito. Um 'endereço' pode ser um nome do programa, uma constante ou um temporário gerado pelo compilador.
+CODIGO (Formas de instrução (Livro do Dragão, seção 6.2)):
+    x = y op z          atribuição binária
+    x = op y            atribuição unária (menos, not, conversão)
+    x = y               cópia
+    goto L              desvio incondicional
+    if x goto L         desvio condicional
+    ifFalse x goto L
+    if x relop y goto L
+    param x;  call p, n;  y = call p, n;  return y
+    x = y[i];  x[i] = y         acesso indexado
+    x = &y;  x = *y;  *x = y    endereços e ponteiros
+CODIGO (SDD de tradução de expressões para TAC (|| = concatenação)):
+    S → id = E ;   S.code := E.code || gen(top.get(id.lexeme) '=' E.addr)
+    E → E1 + E2    E.addr := new Temp()
+                   E.code := E1.code || E2.code || gen(E.addr '=' E1.addr '+' E2.addr)
+    E → - E1       E.addr := new Temp()
+                   E.code := E1.code || gen(E.addr '=' 'minus' E1.addr)
+    E → ( E1 )     E.addr := E1.addr;  E.code := E1.code
+    E → id         E.addr := top.get(id.lexeme);  E.code := ''
+PASSOS Representações:
+    1. **Quádruplas:** (op, arg1, arg2, resultado), resultado nomeado; fácil de reordenar
+    2. **Triplas:** (op, arg1, arg2), o resultado é a posição da instrução; economiza espaço
+    3. **Triplas indiretas:** lista de ponteiros para triplas; reordena-se a lista
+    4. **SSA:** cada variável é atribuída uma única vez (x1, x2...), com funções φ nas junções
+PREVEJA: Qual NÃO é uma instrução de três endereços válida?
+    (     ) t1 = a + b
+    (certa) t2 = a + b * c
+    (     ) if t1 goto L3
+    EXPLICACAO: t2 = a + b * c tem dois operadores. Precisa virar t1 = b * c; t2 = a + t1.
+WIDGET TAC gramatica= entrada=a + b - c legenda=Associatividade à esquerda: (a + b) primeiro, depois - c.
+DESTAQUE EXAM_TIP: Questão comum: 'traduza para quádruplas E triplas'. Faça primeiro o TAC em texto, numere as linhas, e só então preencha as duas tabelas.
+DESTAQUE WATCH_OUT: Não confunda o 'três' do nome com 'três instruções'. É no máximo três ENDEREÇOS por instrução.
+
+=== AULA DE LEITURA [MNEMONIC] Dois entram, um sai
+[NARRADOR] Palácio da Memória: Forja do Código, oitava parada. Uma bigorna com três encaixes: dois para entrar, um para sair.
+DESTAQUE MNEMONIC: **'Dois entram, um sai.'** x = y op z: y e z entram, x sai. Três endereços.
+DESTAQUE MNEMONIC: **QUAdrupla = QUAtro campos** (op, arg1, arg2, resultado). **TRIpla = TRÊS campos**: ela não tem casa própria, mora no endereço (a posição).
+DESTAQUE MNEMONIC: **t de tigela.** t1, t2, t3 são tigelas temporárias na bancada do compilador.
+DESTAQUE MNEMONIC: **Pós-ordem = 'filhos primeiro, pai depois'.** Igual a jantar de família: as crianças se servem antes.
+[BYTE] E a ordem das tigelas é sempre crescente, né? t1 antes de t2?
+[PROF] No gerador do jogo, sim: cada operador visitado em pós-ordem ganha o próximo número.
+PREVEJA: Na tripla (2) + (0) (1), o que significa '(0)'?
+    (     ) O número zero
+    (certa) O resultado da instrução da posição 0
+    (     ) O temporário t0
+    EXPLICACAO: Triplas apontam pela posição. '(0)' = 'o que a instrução 0 calculou'.
+WIDGET TAC gramatica= entrada=a * b + c * a legenda=Dois entram, um sai, três vezes.
+REVELAR: Recite as três representações e o que as diferencia.
+    RESPOSTA: Quádruplas (resultado com nome), triplas (resultado = posição) e triplas indiretas (lista de ponteiros para reordenar).
+DESTAQUE FIRESIDE: Quádrupla: 'Eu tenho nome e endereço próprio, pode me mudar de lugar.' Tripla: 'Eu sou mais econômica... só não me tire do lugar, senão ninguém me acha.'
+
+################ ASSUNTO OPTIMIZATION: Otimização (dobra de constantes)  prereqs=[TAC]
+FICHA: Otimizar é melhorar o código sem mudar seu comportamento: dobra e propagação de constantes, eliminação de subexpressões comuns e de código morto, normalmente dentro de blocos básicos.
+  gancho: DOPA SUMO: DObra, PropagA, SUbexpressão comum, MOrto. Líderes = PAD: Primeira, Alvo, Depois de desvio.
+  termos: [dobra de constantes, propagação, subexpressão comum, código morto, bloco básico, líder]
+  erros comuns: [Reaproveitar a + b depois de a ter sido redefinido, Dobrar operações que dependem de variáveis, Achar que o desvio é líder (líder é a instrução APÓS o desvio), Remover instrução cujo resultado ainda está vivo, Esquecer que otimização não pode mudar o resultado do programa]
+  FLASH: Dobra de constantes? -> Calcular em compilação: 2 * 3 → 6
+  FLASH: Propagação de constantes? -> Após x = 6, usar 6 no lugar de x
+  FLASH: Subexpressão comum exige... -> Operandos não redefinidos entre as ocorrências
+  FLASH: Código morto? -> Instrução cujo resultado nunca é usado
+  FLASH: Bloco básico? -> Sequência sem desvios no meio: entra no início, sai no fim
+  FLASH: Três regras de líder? -> Primeira instrução, alvo de desvio, instrução após desvio
+  FLASH: Otimização local trabalha onde? -> Dentro de um bloco básico
+  FLASH: x * 2 → x + x é... -> Redução de força
+
+=== AULA ANIMADA [BASICO] Conta feita antes  (id=OPTIMIZATION, ~137s, 19 passos, exemplo começa no passo 3)
+1. [BYTE] Esta linha roda mil vezes dentro de um laço.
+     palco: Otimização | for (i = 0; i < 1000; i++) | *  x = 2 * 3 + y;
+2. [BYTE] Cada conta feita antes poupa mil contas quando o programa roda.
+     palco: Otimização | for (i = 0; i < 1000; i++) | *  x = 2 * 3 + y; | *× 1000
+3. [BYTE] Otimizar é trocar o código por outro mais rápido ou menor, que dá exatamente o mesmo resultado.
+     palco: OTIMIZAR
+4. [BYTE] A otimização mais simples: se a conta só tem constantes, o compilador faz agora. O programa nem precisa calcular. É a dobra de constantes.
+     palco: Dobra de constantes | x | = | 2 | * | 3 | + | y
+5. [BYTE] Toque na parte que o compilador já consegue resolver.
+     palco: Dobra de constantes | x | = | 2 | * | 3 | + | y
+     PERGUNTA(toque): certas=[*] erradas=[+, x]
+       dica: Procure uma conta só com números.
+       acerto: Isso. Dois vezes três não depende de nada.
+6. [BYTE] Dois vezes três vira seis, ainda na compilação.
+     palco: Dobra de constantes | x | = | *6 | + | y
+7. [BYTE] O y fica. O valor dele só existe em tempo de execução, quando o programa roda.
+     palco: Dobra de constantes | x | = | 6 | + | *y
+8. [PROF] Regra de ouro: otimizar nunca pode mudar o resultado do programa. Só o caminho até ele.
+     palco: Dobra de constantes | x | = | 6 | + | y
+9. [BYTE] A dobra anda pela árvore, das folhas até a raiz.
+     palco: Receita | 1. Só números: troque a conta pelo resultado. | 2. Suba: o resultado pode fechar outra conta. | 3. Com variável, a conta fica para a execução.
+10. [BYTE] No primeiro exemplo, a soma com y ficou. Que regra manda? Toque.
+     palco: Receita | 1. Só números: troque a conta pelo resultado. | 2. Suba: o resultado pode fechar outra conta. | 3. Com variável, a conta fica para a execução.
+     PERGUNTA(toque): certas=[3. Com variável, a conta fica para a execução.] erradas=[1. Só números: troque a conta pelo resultado., 2. Suba: o resultado pode fechar outra conta.]
+       dica: O y só tem valor quando o programa roda.
+       acerto: Isso. A variável segura a conta para depois.
+11. [BYTE] O passo dois faz uma dobra puxar a outra: o resultado vira uma constante nova.
+     palco: Receita | 1. Só números: troque a conta pelo resultado. | *2. Suba: o resultado pode fechar outra conta. | 3. Com variável, a conta fica para a execução.
+12. [BYTE] Sem otimizar, esta conta vira três linhas. Vamos dobrar.
+     palco: ( 10 - 2 * 3 ) * x | * | - | 10 | * | 2 | 3 | x | t1 = 2 * 3 | t2 = 10 - t1 | t3 = t2 * x
+13. [BYTE] Qual conta o compilador dobra primeiro? Toque no operador.
+     palco: ( 10 - 2 * 3 ) * x | * | - | 10 | * | 2 | 3 | x | t1 = 2 * 3 | t2 = 10 - t1 | t3 = t2 * x
+     PERGUNTA(toque): certas=[*] erradas=[*, -]
+       dica: Procure um operador com dois números embaixo.
+       acerto: Isso. Dois vezes três vira seis.
+14. [BYTE] O seis subiu. Qual conta ficou só com números? Toque.
+     palco: ( 10 - 2 * 3 ) * x | * | - | 10 | 6 | x | t1 = 2 * 3 | t2 = 10 - t1 | t3 = t2 * x
+     PERGUNTA(toque): certas=[-] erradas=[*]
+       dica: Regra dois: olhe o pai do seis.
+       acerto: Isso. Dez menos seis vira quatro.
+15. [BYTE] Sobrou quatro vezes x. Toque na única linha que o programa roda.
+     palco: ( 10 - 2 * 3 ) * x | ** | 4 | x | t1 = 2 * 3 | t1 = 4 * x | t2 = 10 - t1
+     PERGUNTA(toque): certas=[t1 = 4 * x] erradas=[t1 = 2 * 3, t2 = 10 - t1]
+       dica: O x só existe quando o programa roda. Essa conta fica.
+       acerto: Isso. Uma linha no lugar de três.
+16. [BYTE] O resultado é o mesmo para qualquer x. Só o caminho encurtou. Outras otimizações clássicas: propagar cópias e eliminar código morto.
+     palco: ( 10 - 2 * 3 ) * x | * | 4 | x | *t1 = 4 * x
+17. [BYTE] Dá para dobrar esta conta? Um colega disse que sim. Certo ou errado?
+     palco: Erros comuns | Com x lido do teclado, o compilador dobra x * 2 para um número. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O valor de x já existe na hora de compilar?
+       acerto: Isso. O valor de x só aparece quando o programa roda. Dobra de constantes só vale para o que é conhecido na compilação.
+18. [BYTE] Outro erro: achar que vale ganhar velocidade mudando o resultado em algum caso raro. Não vale. A otimização tem que preservar o resultado sempre.
+     palco: Erros comuns | Certo: Só se dobra conta com constantes conhecidas na compilação. | *Errado: Aceitar uma otimização que muda o resultado em algum caso. | *Certo: Otimização válida dá o mesmo resultado para toda entrada.
+19. [BYTE] Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável.
+     palco: Resumo | Otimizar: código mais rápido ou menor, com o mesmo resultado. | Dobra de constantes: conta só com constantes é feita na compilação. | Com variável, a conta fica para o tempo de execução.
+
+=== AULA ANIMADA [PEGADINHA] Otimizar sem mudar o resultado  (id=OPTIMIZATION/otimizarsemmudaroresultado, ~26s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Otimizar é trocar código por outro mais rápido, com o mesmo resultado.
+     palco: Pode trocar? | 2 * 3   vira   6
+2. [BYTE] Multiplicar por um não muda nada. Dá para tirar.
+     palco: Pode trocar? | 2 * 3   vira   6 | x * 1   vira   x
+3. [BYTE] Uma destas trocas não vale. Toque nela.
+     palco: Pode trocar? | 2 * 3   vira   6 | x * 1   vira   x | x + 0   vira   x | x / x   vira   1
+     PERGUNTA(toque): certas=[x / x   vira   1] erradas=[x + 0   vira   x]
+       dica: Pense em x valendo zero.
+       acerto: Isso. Com x zero, o programa dava erro, e a troca sumiria com ele.
+4. [PROF] Otimização não pode mudar o que o programa faz, nem nos casos raros.
+     palco: Pode trocar? | 2 * 3   vira   6 | x * 1   vira   x | x + 0   vira   x | *x / x   vira   1
+5. [BYTE] Na dúvida, o compilador deixa como está.
+     palco: Pode trocar? | 2 * 3   vira   6 | x * 1   vira   x | x + 0   vira   x | x / x   vira   1
+
+=== AULA ANIMADA [CLIPE] Dobra de constantes  (id=OPTIMIZATION/dobradeconstantes, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Dois vezes três não precisa esperar o programa rodar.
+     palco: x = 2 * 3 | 2 * 3
+2. [BYTE] O compilador faz a conta e escreve seis.
+     palco: x = 2 * 3 | 6
+
+=== AULA DE LEITURA [STORY] A lista de compras inteligente
+[NARRADOR] Forja do Código, sala de polimento. O TAC chega meio bruto; aqui ele sai brilhando.
+[BYTE] Otimizar é deixar o código ÓTIMO?
+[PROF] O nome engana: é **melhorar**, sem mudar o resultado do programa. 'Ótimo' de verdade é impossível de garantir. Vamos pensar numa lista de compras.
+TEXTO: Sua lista diz: 'comprar 2 × 6 ovos'. Você faz a conta **em casa**, não no caixa: 12 ovos. Isso é **dobra de constantes**: calcular em tempo de compilação.
+TEXTO: A lista diz 'comprar leite' duas vezes, e nada mudou entre uma e outra. Você compra uma vez só e usa as duas. Isso é eliminar **subexpressão comum**.
+TEXTO: A lista tem 'comprar fermento', mas nenhuma receita usa. Corta! Isso é eliminar **código morto**.
+PASSOS O mapa da analogia:
+    1. Fazer a conta em casa → **dobra de constantes** (2 * 6 vira 12)
+    2. Anotar 'ovos = 12' e usar 12 dali em diante → **propagação de constantes**
+    3. Comprar leite uma vez só → **eliminação de subexpressões comuns**
+    4. Riscar o fermento que ninguém usa → **eliminação de código morto**
+    5. Trecho do mercado sem desvios, entra e sai por um lugar só → **bloco básico**
+PREVEJA: Qual linha pode ser calculada inteiramente pelo compilador?
+    (     ) t1 = a * 2
+    (certa) t1 = 2 * 3
+    (     ) t1 = x * y
+    EXPLICACAO: Só 2 * 3 depende apenas de constantes. Vira t1 = 6 antes do programa rodar.
+WIDGET TAC gramatica= entrada=2 * 3 + a legenda=O gerador produz t1 = 2 * 3; com dobra de constantes, sobra só uma instrução: 6 + a.
+DESTAQUE WATCH_OUT: Regra de ouro: otimização NUNCA pode mudar o que o programa faz. Na dúvida (efeitos colaterais, divisão por zero...), o compilador não otimiza.
+REVELAR: Na analogia, por que 'comprar leite' duas vezes só pode virar uma se 'nada mudou entre uma e outra'?
+    RESPOSTA: Se alguém tivesse bebido o leite no meio (uma variável redefinida), a segunda compra seria necessária. Subexpressão comum só vale sem redefinição dos operandos.
+
+=== AULA DE LEITURA [VISUAL] Antes e depois do polimento
+[PROF] Vamos ver o TAC antes e depois de cada otimização.
+WIDGET TAC gramatica= entrada=x * 2 + 3 * 4 legenda=Antes: t2 = 3 * 4. Com dobra: o 3 * 4 vira 12 e some uma instrução.
+WIDGET TAC gramatica= entrada=a * 4 + 2 * 3 legenda=Mesmo truque: 2 * 3 vira 6. O a * 4 fica: a só é conhecido em execução.
+WIDGET TAC gramatica= entrada=(a + b) * (a + b) legenda=Subexpressão comum: t1 = a + b e t2 = a + b.
+CODIGO (Eliminação de subexpressão comum):
+    antes:            depois:
+    t1 = a + b        t1 = a + b
+    t2 = a + b        t3 = t1 * t1
+    t3 = t1 * t2
+[BYTE] E o código morto, como a gente vê?
+CODIGO (Eliminação de código morto (t1 não está vivo)):
+    antes:            depois:
+    t1 = a + b        t2 = a * c
+    t2 = a * c        x = t2
+    x = t2
+    // t1 nunca é usado
+CODIGO (Blocos básicos: B1 = (1); B2 = (2); B3 = (3)-(6); B4 = (7)):
+    (1) i = 0                ← líder (primeira instrução)
+    (2) L1: if i >= n goto L2  ← líder (alvo de desvio)
+    (3) t1 = i * 4
+    (4) s = s + t1
+    (5) i = i + 1
+    (6) goto L1
+    (7) L2: return s         ← líder (alvo, e vem depois de desvio)
+PREVEJA: A instrução (3) é líder?
+    (certa) Sim: vem logo depois de um desvio condicional
+    (     ) Não: não é alvo de nenhum goto
+    (     ) Só se i for constante
+    EXPLICACAO: (2) é um desvio (if ... goto). A instrução seguinte a qualquer desvio é líder. Por isso (2) sozinha forma um bloco.
+DESTAQUE BRAIN_POWER: Otimização local trabalha dentro de UM bloco básico, onde a execução é linear, sem surpresas. A global olha o grafo de fluxo inteiro.
+
+=== AULA DE LEITURA [WORKED] Polindo um trecho, uma otimização de cada vez
+[PROF] Vamos otimizar este bloco básico. Suponha que, depois dele, só x e y são usados.
+CODIGO (Bloco original):
+    (1) t1 = 4 * 2
+    (2) t2 = a + t1
+    (3) t3 = a + t1
+    (4) x = t2 * t3
+    (5) y = 0
+    (6) y = x
+PASSOS Uma passada de cada vez:
+    1. **Dobra:** (1) t1 = 4 * 2 → t1 = 8
+    2. **Propagação de constantes:** t1 vale 8 → (2) t2 = a + 8 e (3) t3 = a + 8
+    3. **Subexpressão comum:** (3) calcula o mesmo que (2), sem redefinir a no meio → t3 = t2 (cópia)
+    4. **Propagação de cópias:** (4) x = t2 * t2
+    5. **Código morto:** t1 e t3 não são mais usados → remove (1) e (3)
+    6. **Código morto:** (5) y = 0 é sobrescrito em (6) sem uso → remove (5)
+CODIGO (Resultado: de 6 instruções para 3):
+    t2 = a + 8
+    x = t2 * t2
+    y = x
+[BYTE] Ordem importa? Posso fazer código morto primeiro?
+[PROF] Pode, mas uma otimização costuma abrir espaço para outra. Compiladores repetem as passadas até nada mudar.
+REVELAR: Otimize: t1 = 3 + 2; t2 = t1 * b; t3 = t1 * b; z = t2 + t3.
+    RESPOSTA: t1 = 5 (dobra) → t2 = 5 * b; t3 = 5 * b (propagação) → t3 = t2 (subexpr. comum) → z = t2 + t2. Final: t2 = 5 * b; z = t2 + t2.
+REVELAR: Em t1 = a + b; a = 7; t2 = a + b; dá para trocar t2 por t1?
+    RESPOSTA: NÃO! a foi redefinido entre as duas. a + b não é mais a mesma expressão.
+WIDGET TAC gramatica= entrada=a * 4 + 2 * 3 legenda=Pratique: o que a dobra de constantes faz aqui?
+DESTAQUE EXAM_TIP: Escreva o nome de cada otimização ao aplicar ('dobra', 'propagação', 'subexpressão comum', 'código morto'). Muitas questões pontuam o nome tanto quanto o resultado.
+
+=== AULA DE LEITURA [SOCRATIC] Quando é seguro otimizar?
+[PROF] A otimização tem um juramento: não mudar o comportamento. Vamos testar esse juramento com perguntas.
+REVELAR: x = 10 / 0 pode ser 'dobrado' pelo compilador?
+    RESPOSTA: Não como valor: a divisão por zero precisa acontecer (ou ser reportada). O dobrador do jogo, inclusive, se recusa a dobrar isso.
+REVELAR: E t = 0.1 + 0.2 com float?
+    RESPOSTA: Pode, desde que o compilador use exatamente a mesma aritmética da máquina-alvo. Senão o resultado mudaria.
+REVELAR: Quando duas ocorrências de a + b são a 'mesma' subexpressão?
+    RESPOSTA: Quando nem a nem b foram redefinidos entre elas (e não há efeito colateral, como chamada de função que altera a ou b).
+[BYTE] E código morto: como o compilador sabe que ninguém usa?
+REVELAR: O que significa uma variável estar 'viva' num ponto?
+    RESPOSTA: Que o valor dela pode ser usado depois, num caminho de execução, antes de ser redefinido. Atribuição a variável não viva é código morto.
+PREVEJA: if (false) { print(1); }, o que a otimização pode fazer?
+    (     ) Nada
+    (certa) Remover o bloco inteiro: é código inalcançável
+    (     ) Trocar por print(0)
+    EXPLICACAO: Com a condição constante, o desvio sempre pula o bloco. Inalcançável = pode sair.
+REVELAR: Por que dividir o código em blocos básicos antes de otimizar?
+    RESPOSTA: Dentro de um bloco não há desvios para dentro nem para fora no meio: as instruções executam todas, em ordem. Fica fácil raciocinar sobre valores.
+REVELAR: x * 2 → x + x ou x << 1: que otimização é essa?
+    RESPOSTA: Redução de força: trocar uma operação cara por uma equivalente mais barata.
+WIDGET TAC gramatica= entrada=2 * 3 + a legenda=Preveja o código depois da dobra antes de olhar.
+DESTAQUE BRAIN_POWER: Pense numa expressão com chamada de função: f() + f(). É subexpressão comum? Só se f não tiver efeitos colaterais, e o compilador quase nunca consegue provar isso sozinho.
+
+=== AULA DE LEITURA [FORMAL] Blocos básicos e transformações que preservam a semântica
+TEXTO: **Bloco básico:** sequência maximal de instruções consecutivas em que o fluxo só entra pela primeira e só sai pela última, sem desvios no meio. **Grafo de fluxo:** blocos como nós; arestas para os sucessores possíveis.
+CODIGO (Particionamento em blocos básicos (Livro do Dragão, Alg. 8.5)):
+    LÍDERES:
+      1. a primeira instrução do código é líder
+      2. toda instrução que é ALVO de um desvio (condicional ou não) é líder
+      3. toda instrução que vem IMEDIATAMENTE APÓS um desvio é líder
+    BLOCOS:
+      cada líder inicia um bloco, que vai até a instrução
+      anterior ao próximo líder (ou até o fim)
+PASSOS Transformações clássicas:
+    1. **Dobra de constantes:** avaliar em compilação operações com operandos constantes (2 * 3 → 6)
+    2. **Propagação de constantes:** após x = 6, substituir usos de x por 6 enquanto x não for redefinido
+    3. **Subexpressões comuns:** E já calculada e operandos não redefinidos desde então → reutilizar o valor
+    4. **Propagação de cópias:** após x = y, usar y no lugar de x
+    5. **Código morto:** remover instruções cujo resultado não está vivo (nunca usado depois)
+    6. **Redução de força / movimentação de código invariante de laço:** trocar ops caras; tirar do laço o que não muda nele
+TEXTO: **Local** = dentro de um bloco básico (ex.: via DAG do bloco). **Global** = sobre o grafo de fluxo, com análise de fluxo de dados (variáveis vivas, definições que alcançam, expressões disponíveis).
+PREVEJA: Qual transformação exige saber quais variáveis estão VIVAS?
+    (     ) Dobra de constantes
+    (certa) Eliminação de código morto
+    (     ) Redução de força
+    EXPLICACAO: Só é seguro apagar x = ... se o valor de x não for usado depois. 'Vivo' é exatamente isso.
+WIDGET TAC gramatica= entrada=x * 2 + 3 * 4 legenda=Dobra de constantes local: 3 * 4 → 12.
+DESTAQUE EXAM_TIP: Questão clássica: 'identifique os líderes e os blocos básicos'. Marque líderes com as 3 regras, numerando as instruções; depois desenhe o grafo de fluxo com as arestas de desvio E de queda (fall-through).
+DESTAQUE WATCH_OUT: A instrução APÓS um desvio é líder, e não a do desvio. O goto/if fecha o bloco; ele é a ÚLTIMA instrução do bloco.
+
+=== AULA DE LEITURA [MNEMONIC] DOPA SUMO e o PAD dos blocos
+[NARRADOR] Palácio da Memória: última parada, sala de polimento da Forja. Na parede, um lutador de sumô dopado de café: DOPA SUMO.
+DESTAQUE MNEMONIC: **DOPA SUMO**: **DO**bra, **P**ropag**A**, **SU**bexpressão comum, **MO**rto. As quatro otimizações que mais caem.
+DESTAQUE MNEMONIC: Líderes: **PAD**: **P**rimeira instrução, **A**lvo de desvio, **D**epois de desvio.
+DESTAQUE MNEMONIC: **'Faz a conta em casa, não no caixa.'** Dobra de constantes = calcular em compilação o que só depende de literais.
+DESTAQUE MNEMONIC: Código morto: **'se ninguém lê a carta, não precisa escrever'**. Valor não vivo = instrução descartável.
+[BYTE] E o juramento?
+[PROF] **'Mais rápido, nunca diferente.'** O programa otimizado tem que dar exatamente o mesmo resultado.
+PREVEJA: t1 = 2 * 5; x = t1 + a — aplique DO e PA.
+    (certa) x = 10 + a
+    (     ) x = 2 * 5 + a
+    (     ) x = t1 + 10
+    EXPLICACAO: DObra: t1 = 10. PropagA: x = 10 + a. E aí o MOrto leva o t1 = 10, se t1 não for usado de novo.
+WIDGET TAC gramatica= entrada=a * 4 + 2 * 3 legenda=DOPA SUMO em ação: o 2 * 3 vira 6.
+REVELAR: Recite DOPA SUMO e PAD.
+    RESPOSTA: Dobra, Propagação, Subexpressão comum, Morto. Líderes: Primeira, Alvo de desvio, Depois de desvio.
+DESTAQUE FIRESIDE: Dobra de constantes: 'Eu faço as contas antes do show começar.' Código morto: 'E eu tiro do palco quem não tem fala.' Subexpressão comum: 'E eu não deixo ninguém repetir a mesma piada.'
+
+################ ASSUNTO RUNTIME: Ambientes de execução (registros de ativação)  prereqs=[SCOPE_SYMBOLS]
+FICHA: Em tempo de execução, cada chamada de função ganha um registro de ativação (quadro) na pilha, parâmetros, valor e endereço de retorno, vínculos, locais e temporários, empilhado na chamada e desempilhado no retorno; o que precisa sobreviver à chamada vai para o heap.
+  gancho: Pilha de pratos: prato novo em cima, prato pronto sai de cima. Controle Chama, Acesso Aninha.
+  termos: [pilha, ativa, retorno, chamad, local, recurs]
+  erros comuns: [Achar que cada função tem UM lugar fixo para as suas variáveis (isso é alocação estática, que não suporta recursão), Esquecer o quadro de main ao contar a altura máxima da pilha, Confundir vínculo de controle (quem chamou) com vínculo de acesso (onde a função foi declarada no texto), Confundir endereço de retorno (uma instrução) com vínculo de controle (um quadro), Não salvar $ra na pilha antes de um jal dentro de uma função que chama outra, Devolver ponteiro para variável local, que morre junto com o quadro]
+  FLASH: O que é um registro de ativação? -> O bloco de memória de UMA chamada: parâmetros, valor e endereço de retorno, vínculos, locais e temporários
+  FLASH: Por que pilha e não alocação estática? -> Recursão: cada chamada precisa da sua cópia das locais, criadas e destruídas em ordem LIFO
+  FLASH: O vínculo de controle aponta para... -> O quadro do chamador (cadeia dinâmica)
+  FLASH: O vínculo de acesso aponta para... -> O quadro do escopo que envolve a função no texto (cadeia estática)
+  FLASH: Altura máxima da pilha em fat(3), contando main? -> 4 quadros: main, fat(3), fat(2), fat(1)
+  FLASH: O que jal faz? -> Guarda PC + 4 em $ra e desvia para a função
+  FLASH: Quem aloca as locais: chamador ou chamado? -> O chamado (só ele sabe quantas são)
+  FLASH: Onde vivem dados que sobrevivem ao retorno? -> No heap (new/malloc)
+  FLASH: Para que lado a pilha cresce no MIPS? -> Para endereços menores: addi $sp, $sp, -8 abre espaço
+
+=== AULA ANIMADA [BASICO] A pilha de chamadas  (id=RUNTIME, ~153s, 23 passos, exemplo começa no passo 3)
+1. [BYTE] A função fat chama a si mesma, com um n menor.
+     palco: fat(2) | int fat(int n) { |   if (n <= 1) return 1; | *  return n * fat(n - 1); | } | n = 2
+2. [BYTE] Se o n morasse num lugar só, qual valor seria perdido? Toque.
+     palco: fat(2) | int fat(int n) { |   if (n <= 1) return 1; |   return n * fat(n - 1); | } | n = 2 | n = 1
+     PERGUNTA(toque): certas=[n = 2] erradas=[n = 1]
+       dica: A chamada nova escreve por cima da antiga.
+       acerto: Isso. O fat de dois perderia o seu n.
+3. [BYTE] Cada chamada de função ganha um bloco próprio na pilha de execução: o registro de ativação.
+     palco: REGISTRO
+4. [BYTE] Quando o main chama fat de dois, um registro de ativação é empilhado para essa chamada.
+     palco: fat(2) | fat  n = 2  volta: main
+5. [BYTE] No registro ficam os parâmetros, as variáveis locais e o endereço de retorno: o ponto para onde voltar quando a função acabar.
+     palco: fat(2) | *fat  n = 2  volta: main
+6. [BYTE] O fat de dois chama o fat de um. Outro registro sobe, com outro n.
+     palco: fat(2) | fat  n = 2  volta: main | *fat  n = 1  volta: fat
+7. [BYTE] O fat de um não chama ninguém. Ele devolve um na hora.
+     palco: fat(2) | fat  n = 2  volta: main | *fat  n = 1  volta: fat
+8. [BYTE] Quem retorna primeiro? Toque no registro.
+     palco: fat(2) | fat  n = 2  volta: main | fat  n = 1  volta: fat
+     PERGUNTA(toque): certas=[fat  n = 1  volta: fat] erradas=[fat  n = 2  volta: main]
+       dica: Só o topo da pilha está rodando.
+       acerto: Isso. O último a entrar é o primeiro a sair.
+9. [BYTE] Retornou: o registro sai da pilha, e a execução continua no endereço de retorno de quem chamou.
+     palco: fat(2) | *fat  n = 2  volta: main
+10. [BYTE] Por isso a recursão funciona: cada chamada tem o seu próprio n.
+     palco: fat(2) | fat  n = 2  volta: main
+11. [BYTE] Chamar e retornar seguem sempre a mesma receita.
+     palco: Receita | 1. Chamou: empilhe o registro (parâmetros, retorno). | 2. Só o registro do topo está rodando. | 3. Retornou: desempilhe e vá para o retorno.
+12. [BYTE] O fat de um voltou para o fat de dois. Qual regra? Toque.
+     palco: Receita | 1. Chamou: empilhe o registro (parâmetros, retorno). | 2. Só o registro do topo está rodando. | 3. Retornou: desempilhe e vá para o retorno.
+     PERGUNTA(toque): certas=[3. Retornou: desempilhe e vá para o retorno.] erradas=[1. Chamou: empilhe o registro (parâmetros, retorno)., 2. Só o registro do topo está rodando.]
+       dica: O registro saiu, e o controle voltou.
+       acerto: Isso. Regra três: desempilha e volta.
+13. [BYTE] Regra um: o endereço de retorno entra no registro, junto com o n. É por ele que a função sabe para onde voltar.
+     palco: Receita | *1. Chamou: empilhe o registro (parâmetros, retorno). | 2. Só o registro do topo está rodando. | 3. Retornou: desempilhe e vá para o retorno.
+14. [BYTE] Outro programa. O main chamou f com c igual a um.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { |   return g(c) + h(c); | } | main | *f  c = 1
+15. [BYTE] Quem o f chama primeiro? Toque na função.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { | *  return g(c) + h(c); | } | main | f  c = 1 | g | h
+     PERGUNTA(toque): certas=[g] erradas=[h]
+       dica: Leia a linha do f da esquerda para a direita.
+       acerto: Isso. O g ganha um registro em cima do f.
+16. [BYTE] O g chama h com b vezes dois. Quanto vale o a? Toque.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { | *  return h(b * 2); | } | int f(int c) { |   return g(c) + h(c); | } | main | f  c = 1 | g  b = 1 | a = 1 | a = 2 | a = 3
+     PERGUNTA(toque): certas=[a = 2] erradas=[a = 1, a = 3]
+       dica: O b vale um. Um vezes dois dá quanto?
+       acerto: Isso. O registro do h guarda a igual a dois.
+17. [BYTE] Quantos registros a pilha tem agora, contando o main? Toque.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { |   return g(c) + h(c); | } | main | f  c = 1 | g  b = 1 | h  a = 2 | 3 | 4 | 5
+     PERGUNTA(toque): certas=[4] erradas=[3, 5]
+       dica: Conte as caixas, do main até o topo.
+       acerto: Isso. Um registro por chamada que ainda não voltou.
+18. [BYTE] O h e o g já retornaram. Qual registro roda agora? Toque.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { |   return g(c) + h(c); | } | main | f  c = 1
+     PERGUNTA(toque): certas=[f  c = 1] erradas=[main]
+       dica: Regra dois: só o topo roda.
+       acerto: Isso. O f volta a rodar de onde parou.
+19. [BYTE] O f chama o h de novo. Registro novo, com a igual a um.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { | *  return g(c) + h(c); | } | main | f  c = 1 | *h  a = 1
+20. [BYTE] No fim, o f devolve cinco para o main.
+     palco: f(1) | int h(int a) { |   return a + 1; | } | int g(int b) { |   return h(b * 2); | } | int f(int c) { |   return g(c) + h(c); | } | *main | *f(1) = 5
+21. [BYTE] Onde mora o n de cada chamada do fat? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | Numa recursão, todas as chamadas dividem a mesma variável local n. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Quantos registros de ativação havia na pilha quando o fat de um rodava?
+       acerto: Isso. Cada chamada tem o seu registro, com o seu n. Se fosse um só, a recursão destruiria os valores.
+22. [BYTE] Outro erro: achar que quem foi chamado primeiro retorna primeiro. É o contrário. A pilha devolve na ordem inversa das chamadas.
+     palco: Erros comuns | Certo: Cada chamada tem um registro de ativação próprio, com o seu n. | *Errado: As funções retornam na ordem em que foram chamadas. | *Certo: É uma pilha: a última chamada é a primeira a retornar.
+23. [BYTE] Resumindo: cada chamada ganha um registro de ativação na pilha, com seus parâmetros, suas locais e o endereço de retorno. A última chamada é a primeira a voltar.
+     palco: Resumo | Registro de ativação: parâmetros, variáveis locais e endereço de retorno. | Chamada empilha um registro; retorno desempilha. | Só o registro do topo está executando.
+
+=== AULA ANIMADA [PEGADINHA] Cada chamada, um registro  (id=RUNTIME/cadachamadaumregistro, ~29s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Função recursiva não reaproveita o mesmo espaço. Cada chamada empilha um registro.
+     palco: fat(3) | fat(3)
+2. [BYTE] fat de três chama fat de dois. Sobe outro registro, com o n dele.
+     palco: fat(3) | fat(3) | fat(2)
+3. [BYTE] fat de dois chama fat de um. Três registros vivos ao mesmo tempo.
+     palco: fat(3) | fat(3) | fat(2) | fat(1)
+4. [BYTE] Quem retorna primeiro? Toque no registro.
+     palco: fat(3) | fat(3) | fat(2) | fat(1)
+     PERGUNTA(toque): certas=[fat(1)] erradas=[fat(3), fat(2)]
+       dica: A pilha só tira do topo.
+       acerto: Isso. O último a entrar é o primeiro a sair.
+5. [PROF] Ao retornar, o registro some, com as variáveis locais dele.
+     palco: fat(3) | fat(3) | fat(2)
+
+=== AULA ANIMADA [TABELAS] Uma caixa por chamada  (id=RUNTIME/umacaixaporchamada, ~51s, 8 passos, exemplo começa no passo null)
+1. [BYTE] Cada chamada de função ganha uma caixa na pilha. É o registro de ativação.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | main{volta: SO}
+2. [BYTE] O main chama fat de três. Nasce uma caixa com n igual a três.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | *6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6}
+3. [BYTE] Dentro dela fica também o endereço de volta: para onde o resultado vai.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | *6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6}
+4. [BYTE] fat de três chama fat de dois. Outra caixa entra por cima.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | *3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6} | fat{n = 2;volta: fat, linha 3}
+5. [BYTE] E fat de dois chama fat de um. A pilha cresce para cima.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | *3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6} | fat{n = 2;volta: fat, linha 3} | fat{n = 1;volta: fat, linha 3}
+6. [BYTE] Quando fat de um terminar, qual caixa sai primeiro? Toque nela.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6} | fat{n = 2;volta: fat, linha 3} | fat{n = 1;volta: fat, linha 3}
+     PERGUNTA(toque): certas=[fat] erradas=[main, fat, fat]
+       dica: A pilha só tira pelo topo.
+       acerto: Isso. Sai sempre a de cima, a última que entrou.
+7. [BYTE] fat de um devolve um. A caixa dele sai, e o valor desce.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | main{volta: SO} | fat{n = 3;volta: main, linha 6} | fat{n = 2;volta: fat, linha 3} | devolveu 1
+8. [PROF] Cada caixa que sai leva o valor para a de baixo. No fim, sobra o main com 6.
+     palco: fat(3) | 1 int fat(int n) { | 2   if (n <= 1) return 1; | 3   return n * fat(n - 1); | 4 } | 5 int main() { | 6   return fat(3); | 7 } | fat(3) = 6 | main{volta: SO}
+
+=== AULA ANIMADA [CLIPE] Registro de ativação  (id=RUNTIME/registrodeativação, ~11s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Cada chamada de função ganha um bloco na pilha.
+     palco: Pilha de chamadas | main | f
+2. [BYTE] Nele ficam os parâmetros, as variáveis locais e o endereço de volta.
+     palco: Pilha de chamadas | main | *f
+
+=== AULA DE LEITURA [STORY] A pilha de pratos da cozinha
+[NARRADOR] Forja do Código, fim de expediente. O código já foi gerado... mas, quando ele RODA, onde moram as variáveis de cada função?
+[BYTE] Na memória, ué. Cada variável tem o seu lugarzinho fixo, não tem?
+[PROF] Quase! Pense na cozinha de um restaurante em dia de movimento. Cada pedido que começa vira um prato na pilha da bancada, com um bilhete grudado.
+TEXTO: O bilhete diz: **quais ingredientes** vieram no pedido, **para qual mesa** devolver o prato pronto e tem um espaço para os **rascunhos** do cozinheiro. E ele só mexe no prato do **topo**.
+TEXTO: Se, no meio de um prato, ele precisa de um molho que é outra receita, põe um **prato novo em cima**, faz o molho, tira esse prato e volta para o de baixo exatamente de onde parou.
+PASSOS O mapa da analogia:
+    1. Cada pedido em preparo → uma **ativação** (uma chamada de função em andamento)
+    2. Prato com bilhete → **registro de ativação** (ou **quadro**, *frame*)
+    3. Ingredientes do pedido → **parâmetros**
+    4. Para qual mesa devolver → **endereço de retorno** (no MIPS, o registrador `$ra`)
+    5. Rascunhos do cozinheiro → **variáveis locais** e **temporários**
+    6. Pilha de pratos na bancada → **pilha de execução**: só o topo trabalha
+    7. Molho que precisa de outro molho da MESMA receita → **recursão**: vários pratos iguais empilhados
+[PILHA] Prato novo... vai em cima. Prato pronto... sai de cima. Eu nunca... tiro do meio.
+CODIGO (O fatorial recursivo: uma receita que pede a si mesma):
+    1 int fat(int n) {
+    2   if (n <= 1) return 1;
+    3   return n * fat(n - 1);
+    4 }
+    5 int main() {
+    6   return fat(3);
+    7 }
+PREVEJA: Rodando fat(3), quantos pratos (registros de ativação) ficam empilhados no momento MAIS alto, contando o de main?
+    (     ) 2
+    (     ) 3
+    (certa) 4
+    (     ) 6
+    EXPLICACAO: main → fat(3) → fat(2) → fat(1): quatro quadros ao mesmo tempo. Só quando fat(1) devolve 1 a pilha começa a baixar. Se você chutou 3, esqueceu do prato do main, erro supercomum!
+WIDGET CALL_STACK gramatica= entrada=fat3 legenda=Empilhe e desempilhe: cada fat(n) tem o SEU próprio n no bilhete.
+DESTAQUE NO_DUMB_QUESTIONS: 'Se todos os quadros são da mesma função fat, por que o n não se mistura?' Porque cada chamada ganha um prato NOVO, com o seu próprio n. O n=3 fica guardadinho embaixo enquanto o n=1 trabalha no topo.
+TEXTO: E o resto da cozinha? O **cardápio** pregado na parede é o **código**; as **placas fixas** (nome da casa, horário) são a **área estática** (variáveis globais); o **depósito**, de onde se pega e devolve caixa a qualquer hora, é o **heap** (`new`, `malloc`).
+REVELAR: Por que o depósito (heap) existe, se a pilha já funciona tão bem?
+    RESPOSTA: Porque o prato da pilha é jogado fora quando a função termina. Se você precisa de algo que viva DEPOIS do retorno, um objeto criado com `new`, uma lista que cresce, ele vai para o heap.
+DESTAQUE REAL_WORLD: Recursão sem caso base = pratos empilhados até o teto. Em Java isso é o famoso `StackOverflowError`; em C, geralmente um *segmentation fault*. É o prato batendo no lustre.
+
+=== AULA DE LEITURA [VISUAL] A pilha de chamadas, quadro a quadro
+[PROF] Hoje a gente assiste à memória durante a execução. Primeiro, um programa sem recursão: main chama f, que chama g, que chama h.
+CODIGO (f chama g, g chama h... e f ainda chama h de novo):
+    1 int h(int a) {
+    2   return a + 1;
+    3 }
+    4 int g(int b) {
+    5   return h(b * 2);
+    6 }
+    7 int f(int c) {
+    8   return g(c) + h(c);
+    9 }
+    10 int main() {
+    11  return f(1);
+    12 }
+WIDGET CALL_STACK gramatica= entrada=chain1 legenda=Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA.
+PASSOS O que você acabou de ver:
+    1. main chama f(1): pilha [main, f]
+    2. f chama g(1): [main, f, g]
+    3. g chama h(2): [main, f, g, h], o ponto mais alto, 4 quadros
+    4. h devolve 3 e sai; g devolve 3 e sai: [main, f]
+    5. f chama h(1) DE NOVO: [main, f, h], o mesmo h, um quadro novinho
+    6. h devolve 2; f devolve 3 + 2 = 5; main devolve 5
+[BYTE] O h apareceu duas vezes, em alturas diferentes da pilha!
+[PROF] Exato. O quadro depende de QUEM chamou e QUANDO, não só do nome da função. Por isso cada quadro guarda o seu próprio endereço de retorno.
+PREVEJA: Agora fat(4). Qual a altura máxima da pilha, contando main?
+    (     ) 4
+    (certa) 5
+    (     ) 8
+    EXPLICACAO: main + fat(4) + fat(3) + fat(2) + fat(1) = 5. Regra prática: profundidade da recursão + 1 (o main).
+WIDGET CALL_STACK gramatica= entrada=fat4 legenda=Confira: a pilha sobe até fat(1) e depois desce devolvendo 1, 2, 6, 24.
+TEXTO: Agora uma recursão que **ramifica**: fib(3) chama fib(2) e fib(1). O desenho de TODAS as chamadas forma a **árvore de ativação**.
+CODIGO (Árvore de ativação de fib(3): 6 ativações no total (com main)):
+              main
+               |
+             fib(3)
+            /      \
+        fib(2)    fib(1)
+        /    \
+    fib(1)  fib(0)
+WIDGET CALL_STACK gramatica= entrada=fib3 legenda=Repare: em cada instante, a pilha é o CAMINHO da raiz até o nó que está executando.
+PREVEJA: Em fib(3), no instante em que fib(0) executa, quem está na pilha?
+    (     ) main, fib(3), fib(2), fib(1), fib(0)
+    (certa) main, fib(3), fib(2), fib(0)
+    (     ) Só fib(0)
+    EXPLICACAO: O fib(1) da esquerda já terminou e saiu. A pilha guarda só os ancestrais vivos: main → fib(3) → fib(2) → fib(0). Altura máxima de fib3: 4.
+DESTAQUE BRAIN_POWER: A árvore de ativação conta a história inteira; a pilha mostra só o 'agora'. Percorrer a árvore em profundidade (desce = chama, sobe = retorna) é exatamente o que a pilha faz.
+
+=== AULA DE LEITURA [WORKED] fat(3) na mão: e em MIPS
+[PROF] Exercício clássico: rode fat(3) à mão, mostrando a pilha de registros de ativação e os valores devolvidos.
+CODIGO (O programa):
+    1 int fat(int n) {
+    2   if (n <= 1) return 1;
+    3   return n * fat(n - 1);
+    4 }
+    5 int main() {
+    6   return fat(3);
+    7 }
+PASSOS Resolvido, chamada por chamada:
+    1. 1. main chama fat(3): quadro {n=3, volta para: main, linha 6}
+    2. 2. 3 > 1, então fat(3) precisa de fat(2): quadro {n=2, volta para: fat, linha 3}
+    3. 3. fat(2) chama fat(1): quadro {n=1, volta para: fat, linha 3}. Pilha: main, fat(3), fat(2), fat(1) — 4 quadros
+    4. 4. fat(1) cai no caso base, devolve 1 e o seu quadro é desempilhado
+    5. 5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai
+    6. 6. fat(3) retoma: 3 * 2 = 6; devolve 6 e sai
+    7. 7. main recebe 6
+TEXTO: Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.
+CODIGO (fat.asm: prólogo abre o quadro, epílogo fecha):
+            .text
+    main:   li   $a0, 3            # argumento: n = 3
+            jal  fat               # chama fat; $ra = endereço da linha de baixo
+            move $a0, $v0          # o resultado chega em $v0
+            li   $v0, 1            # syscall 1: imprimir inteiro
+            syscall                # imprime 6
+            li   $v0, 10           # syscall 10: encerrar
+            syscall
+    
+    fat:    addi $sp, $sp, -8      # PRÓLOGO: abre o quadro (2 palavras)
+            sw   $ra, 4($sp)       # guarda o endereço de retorno
+            sw   $a0, 0($sp)       # guarda n
+            slti $t0, $a0, 2       # $t0 = (n < 2)
+            beq  $t0, $zero, REC   # n >= 2? vai para a recursão
+            li   $v0, 1            # caso base: devolve 1
+            addi $sp, $sp, 8       # fecha o quadro
+            jr   $ra
+    REC:    addi $a0, $a0, -1      # argumento n - 1
+            jal  fat               # $v0 = fat(n - 1)
+            lw   $a0, 0($sp)       # recupera o SEU n
+            lw   $ra, 4($sp)       # recupera o SEU endereço de retorno
+            addi $sp, $sp, 8       # EPÍLOGO: fecha o quadro
+            mul  $v0, $a0, $v0     # n * fat(n - 1)
+            jr   $ra               # volta para quem chamou
+PASSOS Quem faz o quê na chamada:
+    1. **Chamador:** põe o argumento em `$a0` e executa `jal fat` (que guarda o endereço de volta em `$ra`)
+    2. **Chamado, na entrada (prólogo):** `addi $sp, $sp, -8` abre o quadro; salva `$ra` e `$a0` nele
+    3. **Chamado, na saída (epílogo):** põe o resultado em `$v0`, restaura `$ra`, `addi $sp, $sp, 8` fecha o quadro e `jr $ra` volta
+    4. **Chamador, depois:** usa o valor que chegou em `$v0`
+[BYTE] Deixa eu tentar um sozinho? Acho que eu consigo.
+CODIGO (Sua vez: main chama f(2)):
+    1 int h(int a) {
+    2   return a + 1;
+    3 }
+    4 int g(int b) {
+    5   return h(b * 2);
+    6 }
+    7 int f(int c) {
+    8   return g(c) + h(c);
+    9 }
+    10 int main() {
+    11  return f(2);
+    12 }
+REVELAR: Qual a pilha no ponto mais alto?
+    RESPOSTA: [main, f(c=2), g(b=2), h(a=4)], 4 quadros. h recebeu 4 porque g passou b * 2.
+REVELAR: Que valor cada chamada devolve?
+    RESPOSTA: h(4) = 5; g(2) = 5; depois f chama h(2) = 3; f devolve 5 + 3 = 8; main devolve 8.
+REVELAR: Para onde volta o SEGUNDO h, o h(2)?
+    RESPOSTA: Para f, na linha 8 (a soma). Esse endereço de retorno está no quadro dele, não é o do primeiro h, que voltava para g, linha 5.
+WIDGET CALL_STACK gramatica= entrada=chain2 legenda=Confira as suas três respostas.
+DESTAQUE WATCH_OUT: Esqueceu de salvar `$ra` antes do `jal` interno? A chamada recursiva sobrescreve `$ra`, e o `jr $ra` final volta para o lugar errado — o programa entra em laço. Função que chama outra SEMPRE salva `$ra` na pilha.
+DESTAQUE EXAM_TIP: Na prova, desenhe a pilha como uma coluna de caixas, uma por chamada, com os parâmetros e o 'volta para'. Risque (não apague) as caixas que saem: o professor quer ver a ordem.
+
+=== AULA DE LEITURA [SOCRATIC] Por que uma PILHA?
+[PROF] Vamos reinventar o ambiente de execução só com perguntas. Responda de cabeça antes de tocar, errar aqui é parte do método.
+REVELAR: Ideia mais simples: cada variável de cada função ganha um endereço fixo (alocação estática). O que dá errado com fat(3)?
+    RESPOSTA: Só existe UM n para a função fat. Quando fat(2) escreve n=2, destrói o n=3 que fat(3) ainda vai usar na volta. Alocação estática não suporta recursão (o FORTRAN antigo nem permitia recursão por isso).
+REVELAR: Então cada CHAMADA precisa da sua própria cópia de n. Em que ordem essas cópias nascem e morrem?
+    RESPOSTA: A última chamada a começar é a primeira a terminar (LIFO): fat(1) nasce por último e morre primeiro. Esse é exatamente o comportamento de uma pilha.
+[BYTE] Tá, mas além do n, o que mais o quadro precisa guardar?
+REVELAR: Quando fat(1) termina, como a máquina sabe para onde voltar?
+    RESPOSTA: Ela guardou o **endereço de retorno** na hora da chamada. No MIPS, `jal` coloca esse endereço em `$ra`; como a próxima chamada sobrescreveria `$ra`, ele é salvo no quadro.
+REVELAR: E como devolver o resultado e voltar a usar o quadro de quem chamou?
+    RESPOSTA: O resultado vai num lugar combinado (no MIPS, `$v0`). Para reencontrar o quadro anterior, guarda-se o **vínculo de controle** (link dinâmico), um ponteiro para o quadro do chamador — ou, no MIPS simples, basta desfazer o `$sp`.
+PREVEJA: Quem deve ABRIR o espaço das variáveis LOCAIS de uma função?
+    (     ) O chamador, porque ele sabe quantos parâmetros passa
+    (certa) O chamado, porque só ele sabe quantas locais e temporários tem
+    (     ) O sistema operacional
+    EXPLICACAO: O tamanho das locais é 'segredo' do chamado (o chamador pode até ter sido compilado antes). Regra geral: o chamador cuida do que conhece (parâmetros, endereço de retorno); o chamado cuida do resto.
+REVELAR: Uma função cria uma lista e a devolve para quem chamou. A lista pode morar no quadro dela?
+    RESPOSTA: Não! O quadro é desempilhado no retorno, e quem chamou ficaria com um ponteiro para lixo (ponteiro pendente). Coisas que precisam sobreviver à chamada vão para o **heap**.
+REVELAR: Recursão infinita: o que acontece com a pilha?
+    RESPOSTA: Cada chamada empilha um quadro e nenhuma sai. A pilha cresce até invadir uma área proibida: **estouro de pilha** (stack overflow).
+[BYTE] E passar parâmetro por referência? Muda alguma coisa no quadro?
+REVELAR: Em swap(x, y) por VALOR, o que vai para o quadro? E por REFERÊNCIA?
+    RESPOSTA: Por valor: CÓPIAS de x e y, trocar as cópias não muda nada lá fora. Por referência: os ENDEREÇOS de x e y, o chamado escreve direto nas variáveis do chamador, e a troca acontece de verdade.
+WIDGET CALL_STACK gramatica= entrada=fib3 legenda=Teste: antes de cada passo, preveja se a pilha sobe ou desce.
+DESTAQUE BRAIN_POWER: Repare no que você acabou de deduzir: pilha (por causa do LIFO), endereço de retorno, vínculo de controle, heap e passagem de parâmetros. É isso que o capítulo 7 do Livro do Dragão formaliza. Você não é 'burro': você acabou de reinventar um ambiente de execução.
+
+=== AULA DE LEITURA [FORMAL] Organização da memória e registros de ativação
+TEXTO: **Ambiente de execução** (*run-time environment*): o conjunto de estruturas que o código gerado usa para rodar, organização da memória, registros de ativação, sequências de chamada e passagem de parâmetros.
+CODIGO (Subdivisão típica da memória em tempo de execução (Livro do Dragão, seção 7.1)):
+    endereços altos
+    +----------------------+
+    |        PILHA         |  topo em $sp; cresce para BAIXO
+    |          v           |
+    |                      |
+    |          ^           |
+    |         HEAP         |  cresce para CIMA (new, malloc)
+    +----------------------+
+    |  ESTÁTICO  (.data)   |  globais e constantes; tamanho fixo
+    +----------------------+
+    |  CÓDIGO    (.text)   |  as instruções do programa
+    +----------------------+
+    endereços baixos
+CODIGO (Registro de ativação (quadro): campos típicos (seção 7.2.2)):
+    +--------------------------------+
+    | parâmetros reais               |  preenchidos pelo CHAMADOR
+    | valor de retorno               |
+    | vínculo de controle (dinâmico) |  -> quadro do chamador
+    | vínculo de acesso (estático)   |  -> quadro do escopo envolvente
+    | estado salvo da máquina        |  endereço de retorno, registradores
+    | dados locais                   |  preenchidos pelo CHAMADO
+    | temporários                    |
+    +--------------------------------+
+PASSOS Sequência de chamada e de retorno:
+    1. **Chamador:** avalia os parâmetros reais e os coloca onde o chamado espera (no quadro, ou em `$a0`–`$a3`)
+    2. **Chamador:** registra o endereço de retorno e o vínculo de controle; desvia para o chamado (`jal`)
+    3. **Chamado (prólogo):** aloca o quadro (`$sp` -= tamanho), salva registradores (incluindo `$ra`) e inicializa as locais
+    4. **Chamado (retorno):** põe o valor de retorno no lugar combinado (`$v0`), restaura registradores e `$sp`, desvia para o endereço de retorno (`jr $ra`)
+    5. **Chamador:** recupera o valor devolvido e continua
+TEXTO: **Árvore de ativação:** cada nó é uma ativação; os filhos de um nó são as ativações que ele chamou, da esquerda para a direita, na ordem das chamadas. **Propriedade:** a pilha de controle, num dado instante, contém exatamente o caminho da raiz até o nó em execução.
+PASSOS Três estratégias de alocação:
+    1. **Estática:** endereço fixo em tempo de compilação; não permite recursão nem tamanho dinâmico (globais; FORTRAN 77)
+    2. **Em pilha:** um quadro por ativação, LIFO; permite recursão; o quadro morre no retorno (locais em C e Java)
+    3. **Em heap:** blocos com tempo de vida arbitrário; liberação manual (`free`) ou por coleta de lixo
+CODIGO (Convenção de chamada do MIPS):
+    $a0–$a3   argumentos           $v0–$v1  valores de retorno
+    $ra       endereço de retorno  $sp      topo da pilha
+    $fp       base do quadro atual (opcional)
+    $t0–$t9   temporários: o CHAMADOR salva se precisar deles depois
+    $s0–$s7   salvos: o CHAMADO salva antes de usar
+    
+    jal f     # $ra := PC + 4;  PC := f
+    jr  $ra   # PC := $ra
+PREVEJA: Qual vínculo aponta para o quadro de QUEM CHAMOU a função?
+    (     ) Vínculo de acesso (estático)
+    (certa) Vínculo de controle (dinâmico)
+    (     ) Endereço de retorno
+    EXPLICACAO: Controle/dinâmico = cadeia de CHAMADAS. Acesso/estático = cadeia de ANINHAMENTO no texto (útil em linguagens com funções aninhadas, como Pascal). O endereço de retorno aponta para uma INSTRUÇÃO, não para um quadro.
+WIDGET CALL_STACK gramatica= entrada=fat3 legenda=A definição em ação: 4 ativações simultâneas no pico (main + 3 de fat).
+DESTAQUE EXAM_TIP: Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. Liste de cima para baixo nessa ordem.
+DESTAQUE WATCH_OUT: Endereço de retorno ≠ vínculo de controle. O primeiro diz para qual INSTRUÇÃO voltar; o segundo, qual QUADRO volta a ser o atual.
+
+=== AULA DE LEITURA [MNEMONIC] O prédio da memória e o café da manhã do quadro
+[NARRADOR] Palácio da Memória: Forja do Código, penúltima sala. Um prédio de quatro andares; do telhado, uma pilha de caixas desce sozinha.
+DESTAQUE MNEMONIC: **O prédio, de baixo para cima: C-E-H-P (leia 'CEP', o endereço de tudo).** **C**ódigo no térreo, **E**stático no 1º andar, **H**eap subindo do 2º, **P**ilha descendo do telhado.
+DESTAQUE MNEMONIC: **'Heap sobe, pilha desce; se os dois se encontram, o prédio cai.'** É o estouro de memória.
+DESTAQUE MNEMONIC: **Controle Chama, Acesso Aninha.** Vínculo de **c**ontrole → quem me **c**hamou (cadeia dinâmica). Vínculo de **a**cesso → onde estou **a**ninhado no texto (cadeia estática).
+DESTAQUE MNEMONIC: **O café da manhã do quadro: Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada** → **P**arâmetros, **V**alor de retorno, vínculo de **C**ontrole, vínculo de **A**cesso, **E**stado salvo (endereço de retorno), **L**ocais, **T**emporários.
+DESTAQUE MNEMONIC: **jal = Jump And Link**: pula e deixa um bilhete de volta em `$ra` (**r**eturn **a**ddress). **jr $ra = Jump Register**: volta seguindo o bilhete.
+[BYTE] E pra lembrar quem faz o quê na chamada? Eu sempre troco.
+[PROF] Recepção de hotel! O **hóspede** (chamador) chega com a bagagem e diz quando volta para casa: parâmetros e endereço de retorno. O **hotel** (chamado) arruma o quarto e o frigobar: locais e registradores salvos. Na saída, o hotel entrega a conta (valor de retorno) e libera o quarto.
+PREVEJA: Em main → f → g → h (h chamado por g), pelo gancho 'Controle Chama', o vínculo de controle de h aponta para o quadro de...
+    (     ) main
+    (     ) f
+    (certa) g
+    (     ) h
+    EXPLICACAO: Controle = quem CHAMOU. Quem chamou h foi g. (E quando f chama h direto, o vínculo de controle desse OUTRO quadro de h aponta para f.)
+WIDGET CALL_STACK gramatica= entrada=chain1 legenda=Suba e desça o prédio: cada andar da pilha é um quadro.
+REVELAR: Recite os 7 campos do quadro pelo café da manhã.
+    RESPOSTA: Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada → parâmetros, valor de retorno, vínculo de controle, vínculo de acesso, estado salvo (endereço de retorno), locais, temporários.
+DESTAQUE FIRESIDE: Pilha: 'Eu sou rápida e organizada: entrou, saiu, tudo limpinho.' Heap: 'E eu sou flexível: guardo o que você quiser pelo tempo que quiser.' Pilha: 'E esquece de devolver...' Heap: 'Por isso inventaram o coletor de lixo!'
+
+################ ASSUNTO CODEGEN_MIPS: Geração de código MIPS  prereqs=[TAC]
+FICHA: O gerador traduz cada instrução TAC para MIPS, no estilo simples, busca os operandos na .data com lw/li, opera em registradores e guarda com sw, e transforma if/while em comparações (slt/sgt), desvios (beq/bne/j) e rótulos novos.
+  gancho: Busca, busca, mistura, guarda. Falso? beq pula. Fim do then? j por cima do else.
+  termos: [registrador, lw, sw, data, text, desvi, syscall]
+  erros comuns: [Usar uma variável da memória direto no add (no MIPS só lw/sw tocam a memória), Esquecer o j L1 no fim do then, fazendo a execução 'escorregar' para o else, Reaproveitar o mesmo rótulo em dois ifs (erro de montagem), Esquecer de declarar os temporários na .data ou de encerrar com li $v0, 10 + syscall, Confundir t1 (variável na memória) com $t1 (registrador)]
+  FLASH: TAC t = a + b no estilo do trabalho vira... -> lw $t1, a / lw $t2, b / add $t3, $t1, $t2 / sw $t3, t
+  FLASH: Como carregar uma constante? -> li $t2, 5
+  FLASH: Para que serve $zero? -> Vale sempre 0 (comparar com falso, copiar)
+  FLASH: Esqueleto do if/else? -> cond; beq $t3, $zero, Lelse; then; j Lfim; Lelse: else; Lfim:
+  FLASH: Esqueleto do while? -> Lini: cond; beq $t3, $zero, Lfim; corpo; j Lini; Lfim:
+  FLASH: Imprimir um inteiro x? -> li $v0, 1 / lw $a0, x / syscall
+  FLASH: Imprimir uma string msg? -> li $v0, 4 / la $a0, msg / syscall
+  FLASH: Encerrar o programa? -> li $v0, 10 / syscall
+  FLASH: Ideia da alocação de registradores? -> Manter valores em registradores para cortar lw/sw, que são caros
+
+=== AULA ANIMADA [BASICO] Carrega, opera, guarda  (id=CODEGEN_MIPS, ~124s, 17 passos, exemplo começa no passo null)
+1. [BYTE] O processador não conhece variáveis. Ele só conhece registradores, que são poucos e rápidos, e posições de memória.
+     palco: MIPS | total | $t0
+2. [BYTE] Contas só acontecem entre registradores, dentro do processador.
+     palco: MIPS | total | *$t0
+3. [BYTE] A geração de código traduz cada linha de três endereços para instruções da máquina. Aqui a máquina é o MIPS.
+     palco: MIPS
+4. [BYTE] No MIPS, as contas só usam registradores. As variáveis moram na memória.
+     palco: t1 = b * c | memória | registradores
+5. [BYTE] Por isso toda conta tem três tempos: carrega os operandos, opera, e guarda o resultado.
+     palco: t1 = b * c | memória | registradores | *lw $t1, b | *lw $t2, c | mul $t3, $t1, $t2 | sw $t3, t1
+6. [BYTE] Qual linha faz a multiplicação? Toque nela.
+     palco: t1 = b * c | memória | registradores | lw $t1, b | lw $t2, c | mul $t3, $t1, $t2 | sw $t3, t1
+     PERGUNTA(toque): certas=[mul $t3, $t1, $t2] erradas=[lw $t1, b, lw $t2, c, sw $t3, t1]
+       dica: Procure a instrução mul.
+       acerto: Isso. Antes dela, os dois lw, de load word, trazem os valores da memória.
+7. [BYTE] O sw, de store word, leva o resultado do registrador de volta para a memória.
+     palco: t1 = b * c | memória | registradores | lw $t1, b | lw $t2, c | mul $t3, $t1, $t2 | *sw $t3, t1
+8. [BYTE] A receita para cada linha de três endereços tem três passos.
+     palco: Receita | 1. lw: carregue cada operando num registrador. | 2. Conta entre registradores: add, sub, mul. | 3. sw: guarde o resultado na memória.
+9. [BYTE] Qual passo traz os valores da memória? Toque.
+     palco: Receita | 1. lw: carregue cada operando num registrador. | 2. Conta entre registradores: add, sub, mul. | 3. sw: guarde o resultado na memória.
+     PERGUNTA(toque): certas=[1. lw: carregue cada operando num registrador.] erradas=[2. Conta entre registradores: add, sub, mul., 3. sw: guarde o resultado na memória.]
+       dica: O processador só soma o que já está num registrador.
+       acerto: Isso. O lw vem primeiro.
+10. [BYTE] Passo três: sem o sw, o resultado fica só no registrador e se perde quando ele for reusado.
+     palco: Receita | 1. lw: carregue cada operando num registrador. | 2. Conta entre registradores: add, sub, mul. | *3. sw: guarde o resultado na memória.
+11. [BYTE] Agora preço mais taxa. As linhas estão fora de ordem.
+     palco: preco + taxa | add $t3, $t1, $t2 | lw $t1, preco | sw $t3, t1 | lw $t2, taxa
+12. [BYTE] Toque nas duas linhas que vêm primeiro.
+     palco: preco + taxa | add $t3, $t1, $t2 | lw $t1, preco | sw $t3, t1 | lw $t2, taxa
+     PERGUNTA(toque): certas=[lw $t1, preco, lw $t2, taxa] erradas=[add $t3, $t1, $t2, sw $t3, t1]
+       dica: Antes de somar, os valores precisam estar nos registradores.
+       acerto: Isso. Os dois lw abrem o trio.
+13. [BYTE] E qual linha fecha o trio? Toque nela.
+     palco: preco + taxa | add $t3, $t1, $t2 | lw $t1, preco | sw $t3, t1 | lw $t2, taxa
+     PERGUNTA(toque): certas=[sw $t3, t1] erradas=[add $t3, $t1, $t2]
+       dica: O resultado precisa voltar para a memória.
+       acerto: Isso. O sw guarda o resultado.
+14. [BYTE] Agora você traduz qualquer linha de três endereços para MIPS: dois lw, a conta e um sw.
+     palco: preco + taxa | add $t3, $t1, $t2 | lw $t1, preco | sw $t3, t1 | lw $t2, taxa
+15. [BYTE] No MIPS, dá para somar duas variáveis direto na memória? Um colega escreveu assim. Certo ou errado?
+     palco: Erros comuns | Para somar a e b, basta: add a, b direto na memória. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O add do MIPS só aceita registradores.
+       acerto: Isso. Primeiro o lw carrega cada variável num registrador. Só então o add faz a conta.
+16. [BYTE] Outro erro: parar na conta. O resultado está no registrador, mas a variável mora na memória. Sem o sw, ela não muda.
+     palco: Erros comuns | Certo: lw, lw, add, sw: a conta acontece só entre registradores. | *Errado: Terminar no add e esquecer o sw. | *Certo: Sem sw, a variável na memória continua com o valor antigo.
+17. [BYTE] Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw.
+     palco: Resumo | lw: da memória para o registrador. sw: do registrador para a memória. | add, sub e mul operam só entre registradores. | Cada linha de três endereços vira: carrega, opera, guarda.
+
+=== AULA ANIMADA [PEGADINHA] O if vira desvio  (id=CODEGEN_MIPS/oifviradesvio, ~28s, 5 passos, exemplo começa no passo null)
+1. [BYTE] MIPS não tem if. Tem pulo. O teste sai ao contrário.
+     palco: if (a < b) x = 1; | lw  $t0, a | lw  $t1, b | bge $t0, $t1, fim | li  $t2, 1 | sw  $t2, x | fim:
+2. [BYTE] Carrega a e b nos registradores.
+     palco: if (a < b) x = 1; | *lw  $t0, a | *lw  $t1, b | bge $t0, $t1, fim | li  $t2, 1 | sw  $t2, x | fim:
+3. [BYTE] Aqui está o truque. O if pede a menor que b, e o desvio testa a maior ou igual.
+     palco: if (a < b) x = 1; | lw  $t0, a | lw  $t1, b | *bge $t0, $t1, fim | li  $t2, 1 | sw  $t2, x | fim:
+4. [BYTE] Se a for maior ou igual a b, para onde o programa pula? Toque.
+     palco: if (a < b) x = 1; | lw  $t0, a | lw  $t1, b | bge $t0, $t1, fim | li  $t2, 1 | sw  $t2, x | fim:
+     PERGUNTA(toque): certas=[fim:] erradas=[li  $t2, 1, sw  $t2, x]
+       dica: Com a condição falsa, o corpo do if não pode rodar.
+       acerto: Isso. Ele pula o corpo e cai em fim.
+5. [PROF] Teste invertido: o desvio descreve quando pular o corpo.
+     palco: if (a < b) x = 1; | lw  $t0, a | lw  $t1, b | *bge $t0, $t1, fim | li  $t2, 1 | sw  $t2, x | *fim:
+
+=== AULA ANIMADA [PRATICA] Monte o MIPS  (id=CODEGEN_MIPS/monteomips, ~27s, 5 passos, exemplo começa no passo null)
+1. [BYTE] MIPS só faz conta em registrador. Toda soma tem três tempos.
+     palco: a + b | lw | add | sw
+2. [BYTE] Lw traz da memória. Add faz a conta. Sw guarda o resultado.
+     palco: a + b | *lw | *add | *sw
+3. [PROF] Esqueceu o lw, a conta usa lixo. Esqueceu o sw, o resultado some.
+     palco: a + b | lw | add | sw
+4. [BYTE] Monte as instruções na ordem.
+     palco: a + b | próxima instrução
+     BRINQUEDO: meta=Escolha a próxima instrução teclas=[lw, add, sw]
+       dica: Ordem errada. Primeiro carrega, depois calcula, depois guarda.
+       acerto: Programa pronto. Foi assim que o gerador de código fez.
+5. [BYTE] Cada linha de três endereços vira esse mesmo trio.
+     palco: a + b | lw | add | sw
+
+=== AULA ANIMADA [CLIPE] Registrador e memória  (id=CODEGEN_MIPS/registradorememória, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Registrador é rápido, mas são poucos.
+     palco: t0  t1  t2 | t0 | t1 | t2
+2. [BYTE] Em MIPS, lw traz da memória, e sw guarda de volta.
+     palco: t0  t1  t2 | t0 | t1 | t2 | lw  $t0, x | sw  $t0, y
+
+=== AULA DE LEITURA [STORY] A bancada pequena e a despensa enorme
+[NARRADOR] Última estação da Forja do Código. O TAC chega em fichinhas; do outro lado da esteira sai um arquivo .asm que o MARS vai rodar.
+[BYTE] MIPS... Eu fico com medo só de ver tanto cifrão.
+[PROF] Fica tranquilo: é uma cozinha. O processador é um cozinheiro com uma **bancada pequenininha** e uma **despensa enorme** no fim do corredor.
+TEXTO: Na bancada cabem só 32 potinhos com etiqueta (`$t0`, `$t1`, ...). Ele **só cozinha o que está na bancada**: para usar a farinha, vai à despensa buscar (**lw**) e, quando termina, leva o resultado de volta (**sw**).
+PASSOS O mapa da analogia:
+    1. Potinhos da bancada → **registradores** (`$t0`–`$t9`, `$s0`–`$s7`, ...): rápidos e poucos
+    2. Prateleiras da despensa → **memória**, declarada na seção **.data** (`x: .word 0`)
+    3. Buscar na despensa → **lw** (*load word*); guardar de volta → **sw** (*store word*)
+    4. 'Use 2 ovos' (não precisa buscar nada) → **li** (*load immediate*: uma constante)
+    5. Misturar dois potinhos num terceiro → **add / sub / mul / div**
+    6. O caderno de passos → seção **.text**, começando no rótulo **main:**
+    7. Post-it 'se faltou ovo, pule para L0' → **desvios** (beq, bne, j) e **rótulos**
+CODIGO (A receita traduzida, uma ficha TAC por bloco):
+    # x = a + b * 2     (TAC: t1 = b * 2 ; t2 = a + t1 ; x = t2)
+    lw   $t1, b         # busca b na despensa
+    li   $t2, 2         # pega a constante 2
+    mul  $t3, $t1, $t2  # mistura
+    sw   $t3, t1        # guarda na prateleira t1
+    lw   $t1, a
+    lw   $t2, t1
+    add  $t3, $t1, $t2
+    sw   $t3, t2
+    lw   $t0, t2
+    sw   $t0, x
+PREVEJA: Cada instrução TAC do tipo t = a op b virou quantas instruções MIPS no código acima?
+    (     ) 1
+    (     ) 2
+    (certa) 4
+    (     ) 10
+    EXPLICACAO: Busca (lw ou li), busca (lw ou li), mistura (op), guarda (sw): quatro. A cópia final x = t2 vira só lw + sw.
+WIDGET MIPS gramatica= entrada=a + b * 2 legenda=Rode o 'MARS de bolso' (a=4, b=2) e acompanhe a bancada e a despensa mudando.
+DESTAQUE WATCH_OUT: `t1` (sem cifrão) é uma **prateleira** da despensa: uma variável na .data que o gerador criou para o temporário. `$t1` (com cifrão) é um **potinho** da bancada. Nomes parecidos, lugares diferentes! No seu trabalho, chamar os temporários de `_t1` evita confusão.
+[BYTE] Mas ir à despensa toda hora não é lento?
+[PROF] Muito! Um cozinheiro esperto deixa na bancada o que vai usar de novo. Isso tem nome: **alocação de registradores**. Primeiro a gente faz funcionar; depois deixa rápido.
+REVELAR: Na analogia, o que é uma 'syscall'?
+    RESPOSTA: É tocar a campainha do salão: o cozinheiro pede ao gerente (o sistema / o MARS) algo que ele não faz sozinho, como mostrar o prato ao cliente (imprimir) ou fechar a cozinha (encerrar). O pedido vai em `$v0`: 1 = imprimir inteiro, 4 = imprimir texto, 10 = encerrar.
+DESTAQUE REAL_WORLD: MIPS é a arquitetura didática do livro de Patterson & Hennessy, e o PlayStation 1 e o Nintendo 64 rodavam processadores MIPS. No trabalho prático você usa o MARS: escreve o .asm, monta (F3) e roda (F5).
+
+=== AULA DE LEITURA [VISUAL] Da árvore ao MARS, instrução por instrução
+[PROF] Vamos ver a mesma expressão em três línguas: árvore, TAC e MIPS.
+WIDGET ATTR_TREE gramatica= entrada=(a + b) * c legenda=A árvore: + embaixo, * na raiz.
+WIDGET TAC gramatica= entrada=(a + b) * c legenda=Pós-ordem: t1 = a + b; t2 = t1 * c.
+WIDGET MIPS gramatica= entrada=(a + b) * c legenda=Cada linha TAC vira um bloquinho. Avance e veja $t1, $t2, $t3 e a memória.
+PASSOS Lendo o que aconteceu (a=4, b=2, c=3):
+    1. lw $t1, a → $t1 = 4;  lw $t2, b → $t2 = 2
+    2. add $t3, $t1, $t2 → $t3 = 6;  sw $t3, t1 → memória t1 = 6
+    3. lw $t1, t1 → 6;  lw $t2, c → 3;  mul → $t3 = 18;  sw → memória t2 = 18
+    4. Cópia final: lw $t0, t2;  sw $t0, r → o resultado r = 18
+PREVEJA: Para a * b + c * d (a=4, b=2, c=3, d=5), qual valor fica no resultado r?
+    (certa) 23
+    (     ) 70
+    (     ) 34
+    EXPLICACAO: t1 = 4 * 2 = 8; t2 = 3 * 5 = 15; t3 = 8 + 15 = 23. A precedência já veio resolvida da árvore: os dois * antes do +.
+WIDGET MIPS gramatica= entrada=a * b + c * d legenda=Confira: três blocos de operação e uma cópia final.
+TEXTO: Agora, desvios. Um `if` vira **comparação + desvio + rótulos**. Veja o máximo entre a e b:
+CODIGO (if/else em MIPS: a bifurcação e a ponte):
+    # if (a > b) x = a; else x = b;
+            lw   $t1, a
+            lw   $t2, b
+            sgt  $t3, $t1, $t2     # $t3 = 1 se a > b, senão 0
+            beq  $t3, $zero, L0    # condição falsa? pula para o else
+            sw   $t1, x            # then:  x = a
+            j    L1                # pula por cima do else
+    L0:     sw   $t2, x            # else:  x = b
+    L1:                            # as duas pistas se encontram aqui
+PASSOS O caminho da execução com a=4, b=2:
+    1. sgt: 4 > 2 → $t3 = 1
+    2. beq $t3, $zero, L0: 1 ≠ 0, então NÃO pula
+    3. sw $t1, x → x = 4 (o then)
+    4. j L1 → salta por cima do else
+    5. Com a=1, b=2: $t3 = 0, o beq pula para L0 e x = b
+PREVEJA: Se você esquecer o `j L1`, o que acontece com a=4, b=2?
+    (     ) Nada muda
+    (certa) Executa o then e DEPOIS cai no else: x termina valendo b
+    (     ) Erro de montagem no MARS
+    EXPLICACAO: O processador não conhece chaves: ele segue linha a linha. Sem o j, ele 'escorrega' do then para dentro de L0 e sobrescreve x com 2. O MARS monta numa boa, o erro é de lógica.
+WIDGET MIPS gramatica= entrada=(a + b) / 2 legenda=Bônus: média inteira. O div de três registradores é pseudoinstrução no MARS (por baixo: div + mflo).
+DESTAQUE BRAIN_POWER: Repare que o gerador ingênuo faz `sw $t3, t1` e logo depois `lw $t1, t1`: guarda e busca a mesma coisa. Dá para cortar isso? (Spoiler: é a primeira coisa que a alocação de registradores elimina.)
+
+=== AULA DE LEITURA [WORKED] Programas .asm completos: expressão, if/else e while
+[PROF] Exercício 1, com cara de trabalho prático: gere o programa MIPS completo para `x = a + b * 2; print(x);`, com a = 4 e b = 2.
+PASSOS A receita da tradução:
+    1. 1. TAC: t1 = b * 2;  t2 = a + t1;  x = t2
+    2. 2. .data: uma `.word` para cada variável E cada temporário
+    3. 3. .text: cada instrução TAC vira lw/li, lw/li, operação, sw
+    4. 4. print: `li $v0, 1`, `lw $a0, x`, `syscall`
+    5. 5. fim: `li $v0, 10`, `syscall`
+CODIGO (expr.asm: rode no MARS: o console mostra 8):
+    # x = a + b * 2;  print(x);
+    # TAC:  t1 = b * 2 ;  t2 = a + t1 ;  x = t2
+            .data
+    a:      .word 4
+    b:      .word 2
+    t1:     .word 0            # temporários também moram na memória
+    t2:     .word 0
+    x:      .word 0
+            .text
+    main:
+            lw   $t1, b        # t1 = b * 2
+            li   $t2, 2
+            mul  $t3, $t1, $t2
+            sw   $t3, t1
+            lw   $t1, a        # t2 = a + t1
+            lw   $t2, t1
+            add  $t3, $t1, $t2
+            sw   $t3, t2
+            lw   $t0, t2       # x = t2
+            sw   $t0, x
+            li   $v0, 1        # print(x): syscall 1 = inteiro
+            lw   $a0, x
+            syscall
+            li   $v0, 10       # syscall 10 = encerrar
+            syscall
+WIDGET MIPS gramatica= entrada=a + b * 2 legenda=Confira no simulador: no fim, o resultado (aqui chamado r) vale 8.
+[PROF] Exercício 2: if/else completo, com texto na saída. `if (a > b) x = a - b; else x = b - a;` e depois imprime.
+CODIGO (dist.asm: saída no MARS: x = 2):
+    # if (a > b) x = a - b; else x = b - a;   print("x = ", x);
+            .data
+    a:      .word 4
+    b:      .word 2
+    x:      .word 0
+    msg:    .asciiz "x = "
+            .text
+    main:
+            lw   $t1, a
+            lw   $t2, b
+            sgt  $t3, $t1, $t2     # cond = (a > b)
+            beq  $t3, $zero, L0    # falso → else
+            sub  $t3, $t1, $t2     # then: x = a - b
+            sw   $t3, x
+            j    L1
+    L0:     sub  $t3, $t2, $t1     # else: x = b - a
+            sw   $t3, x
+    L1:     li   $v0, 4            # imprime o texto
+            la   $a0, msg
+            syscall
+            li   $v0, 1            # imprime o inteiro x
+            lw   $a0, x
+            syscall
+            li   $v0, 10           # encerra
+            syscall
+DESTAQUE WATCH_OUT: Cada if do programa precisa de rótulos NOVOS (L0, L1, depois L2, L3...). No gerador, use um contador: `novoRotulo()` devolve L0, L1, L2... Rótulo repetido = erro de montagem no MARS.
+[BYTE] Deixa o while comigo! Eu consigo.
+CODIGO (Complete as lacunas (A), (B) e (C)):
+    # s = 0; i = 1; while (i <= 3) { s = s + i; i = i + 1; }  print(s);
+            li   $t0, 0
+            sw   $t0, s
+            li   $t0, 1
+            sw   $t0, i
+    L0:     lw   $t1, i            # teste do laço
+            li   $t2, 3
+            sgt  $t3, $t1, $t2     # $t3 = 1 quando i > 3 (hora de sair)
+            ____ $t3, $zero, L1    # (A)
+            lw   $t1, s            # s = s + i
+            lw   $t2, i
+            add  $t3, $t1, $t2
+            sw   $t3, ____         # (B)
+            lw   $t1, i            # i = i + 1
+            addi $t3, $t1, 1
+            sw   $t3, i
+            ____ ____              # (C)
+    L1:     ...                    # print(s)
+REVELAR: (A): qual desvio?
+    RESPOSTA: `bne $t3, $zero, L1`: se a condição de SAÍDA (i > 3) é verdadeira (≠ 0), pula para fora do laço. (Equivalente: calcular i <= 3 com `sle` e usar `beq $t3, $zero, L1`.)
+REVELAR: (B) e (C)?
+    RESPOSTA: (B) `s`: o resultado da soma volta para s. (C) `j L0`: o laço volta para o TESTE, não para o corpo. Esse salto para trás é o que faz o while repetir.
+REVELAR: Quanto vale s na hora do print? Quantas vezes o teste em L0 roda?
+    RESPOSTA: s = 1 + 2 + 3 = 6. O teste roda 4 vezes: com i = 1, 2, 3 (entra) e i = 4 (sai).
+REVELAR: Agora sem ajuda: o MIPS (estilo do gerador) de x = (a + b) * c.
+    RESPOSTA: lw $t1, a / lw $t2, b / add $t3, $t1, $t2 / sw $t3, t1 / lw $t1, t1 / lw $t2, c / mul $t3, $t1, $t2 / sw $t3, t2 / lw $t0, t2 / sw $t0, x. Com a=4, b=2, c=3: x = 18.
+WIDGET MIPS gramatica= entrada=(a + b) * c legenda=Confira o último exercício.
+DESTAQUE EXAM_TIP: Para testar no MARS: Assemble (F3), depois Go (F5), e olhe o painel Run I/O. Deu diferente? Use Step (F7) e acompanhe a aba Registers e o Data Segment, comparando com o que você calculou à mão.
+
+=== AULA DE LEITURA [SOCRATIC] Por que tanto lw e sw?
+[PROF] Vou só fazer perguntas. Você vai descobrir sozinho como se gera código MIPS.
+REVELAR: No MIPS, `add` só aceita registradores. Então como somar duas variáveis que estão na memória?
+    RESPOSTA: Primeiro trazê-las para registradores (lw), somar, e devolver o resultado à memória (sw). O MIPS é uma arquitetura **load/store**: só lw/sw tocam a memória; todo o resto trabalha em registradores.
+REVELAR: E se um operando é uma constante, como em b * 2?
+    RESPOSTA: Não há o que buscar na memória: usa-se `li $t2, 2` (carrega imediato). Para somar uma constante existe até atalho: `addi $t3, $t1, 2`.
+REVELAR: Onde as variáveis e os temporários 'moram' no estilo do trabalho prático?
+    RESPOSTA: Na seção .data, uma `.word` para cada um: `x: .word 0`. É simples e sempre funciona, o preço é acessar a memória o tempo todo.
+[BYTE] Mas e o if? MIPS não tem chaves...
+REVELAR: Como fazer 'se a > b, faça X; senão, faça Y' tendo só 'pule para tal linha'?
+    RESPOSTA: Calcule a condição num registrador (sgt/slt deixam 1 ou 0). Se ela for 0, pule para o rótulo do else (`beq $t3, $zero, L0`). No fim do then, um `j L1` pula o else.
+REVELAR: E o while? Que desvio faz ele repetir?
+    RESPOSTA: Um `j` para TRÁS, de volta ao rótulo do teste. O teste fica no começo: se falhar, um desvio para FRENTE sai do laço.
+PREVEJA: Para que serve o registrador `$zero`?
+    (     ) Guarda o último resultado que deu zero
+    (certa) Vale sempre 0 — ótimo para comparar com 'falso' (beq $t3, $zero, L0) e para copiar
+    (     ) Conta quantas instruções já rodaram
+    EXPLICACAO: Escrever nele não adianta: ele é fixo em 0. `beq $t3, $zero, L0` se lê 'se $t3 é falso, pule'. E `move $t0, $t1` é, por baixo, uma soma com `$zero`.
+REVELAR: Como o programa imprime algo, se o processador nem sabe o que é tela?
+    RESPOSTA: Pede ao sistema: põe o código do serviço em `$v0` (1 = inteiro, 4 = string, 10 = sair), o argumento em `$a0` (o número, ou o endereço da string, obtido com `la`) e executa `syscall`.
+[BYTE] E dá pra gastar menos lw e sw?
+REVELAR: Em x = a + b * 2, o gerador ingênuo faz 7 acessos à memória. Quantos são realmente necessários?
+    RESPOSTA: Três: buscar a, buscar b e guardar x. Os temporários podem viver em registradores: `lw $t0, a / lw $t1, b / li $t2, 2 / mul $t1, $t1, $t2 / add $t0, $t0, $t1 / sw $t0, x`. Decidir quem fica em qual registrador é a **alocação de registradores**.
+WIDGET MIPS gramatica= entrada=a + b * 2 legenda=Conte os lw e sw do gerador ingênuo e compare com a versão de 3 acessos.
+DESTAQUE BRAIN_POWER: Por que não pôr TUDO em registradores? Porque são só 32 (e vários reservados). Quando faltam, alguém volta para a memória, o famoso **spill**. Escolher bem quem fica é um problema difícil (vira coloração de grafos!).
+
+=== AULA DE LEITURA [FORMAL] Esquemas de tradução TAC → MIPS
+TEXTO: **Gerador de código:** fase final, que mapeia a representação intermediária (TAC) em instruções da máquina-alvo. Problemas centrais: **seleção de instruções**, **alocação de registradores** e **ordem de avaliação** (Livro do Dragão, cap. 8).
+CODIGO (Registradores MIPS (32 bits) usados no trabalho):
+    $zero         constante 0
+    $v0–$v1       valores de retorno / código da syscall
+    $a0–$a3       argumentos
+    $t0–$t9       temporários (não preservados na chamada)
+    $s0–$s7       salvos (preservados na chamada)
+    $sp $fp $ra   topo da pilha, base do quadro, endereço de retorno
+CODIGO (O subconjunto do MIPS que um gerador simples precisa):
+    lw   rd, rot       rd := Mem[rot]
+    sw   rs, rot       Mem[rot] := rs
+    li   rd, k         rd := k                    (pseudo)
+    la   rd, rot       rd := endereço de rot      (pseudo)
+    add  rd, rs, rt    rd := rs + rt     (sub, mul, div análogos)
+    addi rd, rs, k     rd := rs + k
+    slt  rd, rs, rt    rd := (rs < rt) ? 1 : 0    (sgt, seq: pseudo)
+    beq  rs, rt, L     se rs = rt, desvia para L  (bne: se ≠)
+    j    L             desvia para L
+    syscall            serviço em $v0: 1 int, 4 string, 10 sair
+CODIGO (Esquema TAC → MIPS no estilo 'tudo na memória' (o do jogo e do trabalho)):
+    gera(x = y op z):
+        carrega("$t1", y);  carrega("$t2", z)
+        emite(opMips(op) + " $t3, $t1, $t2")
+        emite("sw $t3, " + x)
+    
+    gera(x = y):
+        carrega("$t0", y);  emite("sw $t0, " + x)
+    
+    carrega(r, v):
+        se v é constante: emite("li " + r + ", " + v)
+        senão:            emite("lw " + r + ", " + v)
+CODIGO (Esquemas para comandos (rótulos novos a cada uso)):
+    if (E) S1 else S2              while (E) S
+        <E em $t3>                 Linicio:
+        beq $t3, $zero, Lelse          <E em $t3>
+        <código de S1>                 beq $t3, $zero, Lfim
+        j Lfim                         <código de S>
+    Lelse:                             j Linicio
+        <código de S2>             Lfim:
+    Lfim:
+PREVEJA: Pelo esquema 'tudo na memória', quantas instruções MIPS gera x = a + b * c?
+    (     ) 6
+    (     ) 8
+    (certa) 10
+    EXPLICACAO: Dois operadores × 4 instruções (lw, lw, op, sw) = 8, mais 2 da cópia x = t2 (lw, sw) = 10.
+WIDGET MIPS gramatica= entrada=a + b * c legenda=Conte as instruções: 10.
+TEXTO: **Custo:** num processador real, acessar a memória é bem mais caro que usar um registrador. O critério clássico de qualidade é **minimizar lw/sw**: manter valores vivos em registradores, reaproveitar resultados e eliminar pares `sw t1` / `lw t1` consecutivos.
+DESTAQUE EXAM_TIP: Em 'gere o código MIPS', escreva SEMPRE as duas seções (.data com variáveis e temporários; .text começando em main:), comente cada bloco com a instrução TAC correspondente e termine com `li $v0, 10` + `syscall`. Sem isso o MARS até para ('dropped off bottom'), mas o professor desconta.
+DESTAQUE WATCH_OUT: Em `lw` e `sw` o REGISTRADOR vem primeiro nos dois, mas a direção muda: `lw $t1, a` leva a → $t1; `sw $t1, a` leva $t1 → a. E o `div` de três operandos é pseudo: o real é `div $t1, $t2` seguido de `mflo $t3` (quociente; o resto fica em hi, lido com `mfhi`).
+
+=== AULA DE LEITURA [MNEMONIC] Busca, busca, mistura, guarda
+[NARRADOR] Palácio da Memória: Forja do Código, última sala, a Montadora MIPS. Na parede, um relógio de cozinha marca quatro tempos.
+DESTAQUE MNEMONIC: **'Busca, busca, mistura, guarda.'** Toda instrução TAC x = y op z vira: lw (busca y), lw (busca z), op (mistura), sw (guarda em x). Ritmo de samba: 1, 2, 3, 4.
+DESTAQUE MNEMONIC: **Load = Leva para a bancada; Store = Salva na despensa.** Nos dois, o registrador vem PRIMEIRO: `lw $t1, a` e `sw $t1, a` — só muda a direção da seta.
+DESTAQUE MNEMONIC: **Família de registradores pela inicial:** `$t` = **t**emporário (pode sujar), `$s` = **s**alvo (guarde antes de usar), `$a` = **a**rgumento, `$v` = **v**alor de retorno, `$ra` = **r**eturn **a**ddress, `$sp` = **s**tack **p**ointer.
+DESTAQUE MNEMONIC: **beq = Branch if EQual (pula se igual); bne = Branch if Not Equal.** O if testa AO CONTRÁRIO: 'se a condição é falsa (igual a $zero), pula o then'.
+DESTAQUE MNEMONIC: **syscall 1, 4, 10: 'um número, uma fila de letras e dez-liga'.** 1 imprime inteiro; 4 imprime string ('fila' tem 4 letras; use `la $a0, msg`); 10 encerra (dez... desliga!).
+[BYTE] E o if com rótulos? Eu sempre me perco.
+[PROF] Pense numa estrada com **bifurcação**. O `beq` é a placa 'falso? vire para L0'. O then é a pista reta; o `j L1` no fim dele é a **ponte** que passa por cima do else. L1 é onde as duas pistas se encontram.
+PREVEJA: No esqueleto do while, para onde vai o `j` do fim do corpo?
+    (     ) Para o rótulo do fim do laço
+    (certa) Para o rótulo do TESTE, no começo
+    (     ) Para main
+    EXPLICACAO: while = 'volta e testa de novo'. O único salto para trás é esse j; o desvio para FRENTE (beq/bne) é a porta de saída.
+WIDGET MIPS gramatica= entrada=d * (a - c) legenda=Bata o ritmo: busca, busca, mistura, guarda, duas vezes, e a cópia final. (d=5, a=4, c=3 → 5)
+REVELAR: Recite: as duas seções de um .asm e o que vai em cada uma.
+    RESPOSTA: .data: as variáveis (`x: .word 0`) e as strings (`msg: .asciiz "..."`). .text: as instruções, começando em `main:` e terminando com `li $v0, 10` + `syscall`.
+DESTAQUE FIRESIDE: Memória: 'Eu guardo tudo, sou enorme!' Registrador: 'E eu sou muito mais rápido.' Memória: 'Mas só cabem 32 de vocês...' Alocador de registradores: 'Calma, gente, é para isso que eu existo.'
+
+################ ASSUNTO REG_ALLOC: Alocação de registradores  prereqs=[CODEGEN_MIPS]
+FICHA: Alocar registradores é manter os temporários em registradores em vez da memória: calcula-se a vivacidade de trás para frente (in = use ∪ (out − def)), liga-se no grafo de interferência quem está vivo ao mesmo tempo e colore-se o grafo com k cores (k registradores); se não der, algum temporário é derramado (spill) para a memória.
+  gancho: VIGOR: VIvacidade, Grafo, cOlorir, Registradores. Def mata, use ressuscita. $t = tchau, $s = sagrado.
+  termos: [registrador, viv, interferen, color, spill, memoria]
+  erros comuns: [Fazer a análise de vivacidade de cima para baixo, Achar que 'vivo' é 'já foi definido' (vivo é 'ainda vai ser lido'), Ligar no grafo temporários que nunca estão vivos ao mesmo tempo, Confundir o número cromático com o número de temporários, Inverter a convenção: $s é salvo pelo CHAMADO, $t pelo CHAMADOR]
+  FLASH: Por que alocar registradores? -> lw/sw são lentos; registradores são rápidos e poucos
+  FLASH: Equação da vivacidade? -> in = use ∪ (out − def), de trás para frente
+  FLASH: Quando x e y interferem? -> Quando um é definido enquanto o outro está vivo (ambos vivos juntos)
+  FLASH: k registradores equivalem a... -> colorir o grafo de interferência com k cores
+  FLASH: Passos de Chaitin? -> Simplificar nós de grau < k (empilhando), depois desempilhar e colorir
+  FLASH: O que é spill? -> Derramar um temporário para a memória: sw após definir, lw antes de cada uso
+  FLASH: lw + sw em a * b + c * d: ingênuo × alocado? -> 11 × 5
+  FLASH: $s0–$s7 são salvos por quem? -> Pelo chamado (callee-saved)
+  FLASH: $t0–$t9 são salvos por quem? -> Pelo chamador (caller-saved)
+
+=== AULA ANIMADA [BASICO] Colorir o grafo  (id=REG_ALLOC, ~145s, 20 passos, exemplo começa no passo 3)
+1. [BYTE] Ler a memória é lento. Registrador é rápido, mas são poucos.
+     palco: Alocação | memória | registradores
+2. [BYTE] Onde a conta roda mais rápido? Toque.
+     palco: Alocação | memória | registradores
+     PERGUNTA(toque): certas=[registradores] erradas=[memória]
+       dica: O registrador fica dentro do processador.
+       acerto: Isso. Por isso cada valor quer um registrador.
+3. [BYTE] Decidir qual valor fica em qual registrador é a alocação de registradores.
+     palco: ALOCAÇÃO
+4. [BYTE] Os registradores são poucos, e os temporários são muitos. O compilador precisa dividir.
+     palco: Alocação | a | b | c
+5. [BYTE] Uma variável está viva enquanto o valor dela ainda vai ser usado. Duas vivas ao mesmo tempo não podem usar o mesmo registrador.
+     palco: Alocação | a | b | c
+6. [PROF] Cada variável vira um nó. Ligo com uma aresta as que estão vivas ao mesmo tempo. Esse é o grafo de interferência.
+     palco: Alocação | a | b | c
+7. [BYTE] Quais duas podem dividir um registrador? Toque nelas.
+     palco: Alocação | a | b | c
+     PERGUNTA(toque): certas=[a, c] erradas=[b]
+       dica: Procure as duas que não têm fio entre elas.
+       acerto: Isso. Sem aresta entre elas, nunca estão vivas juntas.
+8. [BYTE] Agora é colorir o grafo: vizinhos nunca recebem a mesma cor. Cada cor é um registrador.
+     palco: Alocação | a | b | c | $s0 | $s1 | $s0
+9. [BYTE] Se faltar cor, uma variável vai morar na memória. Isso é o spill, o derramamento.
+     palco: Alocação | a | b | c | $s0 | $s1 | $s0
+10. [BYTE] A receita começa no código e termina nas cores.
+     palco: Receita | 1. Vivacidade: quem ainda será lido abaixo? | 2. Interferência: ligue quem vive junto. | 3. Cores: vizinhos diferentes. Sem cor, spill.
+11. [BYTE] O fio entre as duas primeiras variáveis veio de qual passo? Toque.
+     palco: Receita | 1. Vivacidade: quem ainda será lido abaixo? | 2. Interferência: ligue quem vive junto. | 3. Cores: vizinhos diferentes. Sem cor, spill.
+     PERGUNTA(toque): certas=[2. Interferência: ligue quem vive junto.] erradas=[1. Vivacidade: quem ainda será lido abaixo?, 3. Cores: vizinhos diferentes. Sem cor, spill.]
+       dica: O fio liga quem vive ao mesmo tempo.
+       acerto: Isso. Interferência vira fio no grafo.
+12. [BYTE] A análise de vivacidade anda de trás para a frente, da última linha até a primeira.
+     palco: Receita | *1. Vivacidade: quem ainda será lido abaixo? | 2. Interferência: ligue quem vive junto. | 3. Cores: vizinhos diferentes. Sem cor, spill.
+13. [BYTE] Agora com temporários de verdade. Quatro linhas, quatro temporários.
+     palco: a * b + ( c - d ) * e | t1 = a * b | t2 = c - d | t3 = t2 * e | t4 = t1 + t3 | t1 | t2 | t3 | t4
+14. [BYTE] Logo depois da linha acesa, quem ainda está vivo? Toque nos temporários.
+     palco: a * b + ( c - d ) * e | t1 = a * b | *t2 = c - d | t3 = t2 * e | t4 = t1 + t3 | t1 | t2 | t3 | t4
+     PERGUNTA(toque): certas=[t2, t1] erradas=[t3, t4]
+       dica: Vivo é quem ainda vai ser lido mais abaixo.
+       acerto: Isso. Os dois convivem, então ganham um fio.
+15. [BYTE] E depois desta linha acesa? Toque em quem está vivo.
+     palco: a * b + ( c - d ) * e | t1 = a * b | t2 = c - d | *t3 = t2 * e | t4 = t1 + t3 | t1 | t2 | t3 | t4
+     PERGUNTA(toque): certas=[t1, t3] erradas=[t2, t4]
+       dica: O t2 já foi lido. Quem ainda espera?
+       acerto: Isso. Mais um fio, do t1 até o t3.
+16. [BYTE] Quantos registradores bastam para este grafo? Toque no número.
+     palco: a * b + ( c - d ) * e | t1 = a * b | t2 = c - d | t3 = t2 * e | t4 = t1 + t3 | t1 | t2 | t3 | t4 | 1 | 2 | 3
+     PERGUNTA(toque): certas=[2] erradas=[1, 3]
+       dica: O t2 e o t3 não têm fio entre eles.
+       acerto: Isso. Dois bastam, sem spill.
+17. [BYTE] Quatro temporários em dois registradores. Ninguém foi para a memória.
+     palco: a * b + ( c - d ) * e | t1 = a * b | t2 = c - d | t3 = t2 * e | t4 = t1 + t3 | t1 | t2 | t3 | t4 | $s0 | $s1 | $s0 | $s0
+18. [BYTE] Quantos registradores este código precisa? Um colega contou os temporários. Certo ou errado?
+     palco: Erros comuns | Quatro temporários precisam de quatro registradores. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: No exemplo, quatro temporários couberam em quantos registradores?
+       acerto: Isso. O que conta é quantos estão vivos ao mesmo tempo. Quem nunca convive pode dividir o registrador.
+19. [BYTE] Outro erro: calcular a vivacidade de cima para baixo. Vivo é quem ainda vai ser lido adiante, então a análise começa no fim.
+     palco: Erros comuns | Certo: Bastam tantos registradores quantas cores o grafo de interferência pede. | *Errado: Calcular a vivacidade de cima para baixo. | *Certo: A vivacidade anda de baixo para cima: vivo é quem ainda será lido.
+20. [BYTE] Resumindo: a alocação decide quem fica em registrador. A vivacidade mostra quem convive, o grafo liga os que convivem, e a coloração distribui os registradores.
+     palco: Resumo | Vivo: o valor ainda será lido mais abaixo. | Grafo de interferência: aresta entre quem está vivo ao mesmo tempo. | Colorir: vizinhos com cores diferentes. Faltou cor, spill para a memória.
+
+=== AULA ANIMADA [PEGADINHA] Quem vive junto briga  (id=REG_ALLOC/quemvivejuntobriga, ~31s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Dois valores vivos ao mesmo tempo não podem dividir um registrador.
+     palco: Vivos juntos | t1 = a + b | t2 = c + d | t3 = t1 * t2
+2. [BYTE] t1 nasce na primeira linha, e a terceira lê esse valor. Fica vivo o tempo todo.
+     palco: Vivos juntos | *t1 = a + b | t2 = c + d | *t3 = t1 * t2
+3. [BYTE] Quem está vivo junto com t1 na segunda linha? Toque no nó.
+     palco: Vivos juntos | t1 = a + b | t2 = c + d | t3 = t1 * t2 | t1 | t2 | t3
+     PERGUNTA(toque): certas=[t2] erradas=[t3]
+       dica: Veja quem já nasceu e ainda tem uso pela frente.
+       acerto: Isso. t1 e t2 são vizinhos no grafo. Registradores diferentes.
+4. [BYTE] t3 nasce quando t1 e t2 morrem. Ele pode reaproveitar um dos registradores.
+     palco: Vivos juntos | t1 = a + b | t2 = c + d | t3 = t1 * t2 | t1 | t2 | t3
+5. [PROF] Dois registradores bastam. Colorir o grafo é só isso.
+     palco: INTERFERÊNCIA
+
+=== AULA ANIMADA [CLIPE] O que é spill  (id=REG_ALLOC/oqueéspill, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Faltou registrador? Um valor vai para a memória.
+     palco: Spill | t1 | t2 | t3
+2. [BYTE] Isso é spill. Funciona, mas fica mais lento.
+     palco: Spill | t1 | t2 | *memória
+
+=== AULA DE LEITURA [STORY] Poucas bancadas na cozinha
+[NARRADOR] Cozinha de restaurante em dia de casamento. A despensa no subsolo guarda tudo, mas cada viagem de escada leva uma eternidade. Lá em cima há só três bancadas.
+[BYTE] É a cozinha da aula de MIPS! Bancada é registrador, despensa é memória.
+[PROF] Isso. E o chef novo faz uma burrice: termina o molho, LEVA para a despensa, e cinco minutos depois desce de novo para BUSCAR o mesmo molho. É o código ingênuo: `sw` seguido de `lw` do mesmo temporário.
+[PROF] O chef experiente pensa diferente: 'O molho vai ser usado logo, fica numa bancada. Quando o molho for usado pela última vez, a bancada fica LIVRE para outra preparação.'
+PASSOS Cozinha → alocação de registradores:
+    1. Cada preparação intermediária (molho, massa) é um **temporário** (t1, t2, ...).
+    2. Cada bancada é um **registrador**. Só há k bancadas.
+    3. Do momento em que a preparação fica pronta até seu ÚLTIMO uso, ela está **viva** e ocupa uma bancada: esse é o seu **intervalo de vida**.
+    4. Duas preparações vivas AO MESMO TEMPO não podem dividir bancada: elas **interferem**.
+    5. Dar uma bancada a cada preparação, sem que vizinhas briguem, é **colorir um grafo**: cada cor é um registrador.
+    6. Se não houver bancadas suficientes, alguma preparação desce para a despensa e é buscada de novo quando precisar: é o **spill** (derramamento).
+DESTAQUE REAL_WORLD: É o mesmo problema de pintar o mapa do Brasil: estados que fazem fronteira não podem ter a mesma cor. Na alocação, a 'fronteira' é estar vivo ao mesmo tempo. Quatro cores bastam para qualquer mapa plano, mas o grafo de um programa não é um mapa: às vezes precisa de mais.
+PREVEJA: Em r = a * b + c * d: t1 = a * b fica pronto; depois t2 = c * d; depois t3 = t1 + t2. Quais temporários precisam de bancadas diferentes?
+    (certa) t1 e t2
+    (     ) t1 e t3
+    (     ) t2 e t3
+    (     ) Todos os três
+    EXPLICACAO: Quando t2 fica pronto, t1 ainda espera para ser usado: os dois estão vivos juntos. Já t3 nasce exatamente quando t1 e t2 morrem (são usados pela última vez), então t3 pode reaproveitar a bancada de qualquer um deles.
+WIDGET REGALLOC gramatica= entrada=a * b + c * d legenda=Veja os vivos, o grafo (só uma aresta: t1—t2) e a coloração com 2 registradores.
+REVELAR: Quantas viagens à despensa (lw + sw) o código ingênuo faz nesse cálculo, e quantas depois da alocação?
+    RESPOSTA: Ingênuo: 11 (7 lw + 4 sw). Com 2 registradores: 5 (4 lw das variáveis a, b, c, d + 1 sw do resultado r). Menos da metade!
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que não usar logo um registrador diferente para cada temporário? R: Porque um programa de verdade tem milhares de temporários e o MIPS tem 32 registradores (e vários reservados). Reaproveitar bancadas é obrigatório.
+REVELAR: Na analogia, quem é: bancada, preparação, preparações que brigam, descer para a despensa?
+    RESPOSTA: Registrador, temporário, temporários que interferem (vivos ao mesmo tempo, aresta no grafo), spill para a memória.
+
+=== AULA DE LEITURA [VISUAL] Antes e depois, no MARS de bolso
+[PROF] Vamos ver os quatro passos da alocação em widgets: vivacidade, grafo, coloração e o MIPS final.
+WIDGET REGALLOC gramatica= entrada=a * b + c * d legenda=Siga a coluna dos vivos de BAIXO para CIMA: é assim que a análise anda.
+TEXTO: Primeiro, o código ingênuo, do jeito que o gerador da aula de MIPS faz. Rode e conte os `lw` e `sw`.
+WIDGET MIPS_RUN gramatica=# r = a * b + c * d    (TAC: t1 = a * b ; t2 = c * d ; t3 = t1 + t2 ; r = t3) ; # versão INGÊNUA: 11 acessos à memória (7 lw + 4 sw) no cálculo ;         .data ; a:      .word 4 ; b:      .word 2 ; c:      .word 3 ; d:      .word 5 ; t1:     .word 0 ; t2:     .word 0 ; t3:     .word 0 ; r:      .word 0 ;         .text ; main: ;         lw   $t1, a ;         lw   $t2, b ;         mul  $t3, $t1, $t2 ;         sw   $t3, t1          # guarda t1 na memória... ;         lw   $t1, c ;         lw   $t2, d ;         mul  $t3, $t1, $t2 ;         sw   $t3, t2 ;         lw   $t1, t1          # ...e busca de volta logo depois ;         lw   $t2, t2 ;         add  $t3, $t1, $t2 ;         sw   $t3, t3 ;         lw   $t0, t3 ;         sw   $t0, r ;         li   $v0, 1           # imprime r ;         lw   $a0, r ;         syscall ;         li   $v0, 10 ;         syscall entrada= legenda=Ingênuo: 11 acessos à memória no cálculo. Imprime 23.
+WIDGET MIPS_RUN gramatica=# r = a * b + c * d    com alocação de registradores (k = 2) ; # t1 → $s1   t2 → $s0   t3 → $s0   (t2 morre quando t3 nasce: dividem a cor) ; # 5 acessos à memória (4 lw + 1 sw) no cálculo ;         .data ; a:      .word 4 ; b:      .word 2 ; c:      .word 3 ; d:      .word 5 ; r:      .word 0 ;         .text ; main: ;         lw   $t8, a           # $t8 e $t9: rascunho para operandos da memória ;         lw   $t9, b ;         mul  $s1, $t8, $t9    # t1 = a * b ;         lw   $t8, c ;         lw   $t9, d ;         mul  $s0, $t8, $t9    # t2 = c * d ;         add  $s0, $s1, $s0    # t3 = t1 + t2 ;         sw   $s0, r           # r = t3 ;         li   $v0, 1           # imprime r ;         lw   $a0, r ;         syscall ;         li   $v0, 10 ;         syscall entrada= legenda=Alocado: 5 acessos. Mesmo resultado, 23.
+PREVEJA: No código alocado, por que t2 e t3 podem ficar os dois em $s0?
+    (     ) Sorte
+    (certa) Porque t2 é usado pela última vez exatamente na instrução que define t3: eles nunca estão vivos ao mesmo tempo
+    (     ) Porque são do mesmo tipo
+    (     ) Porque $s0 é especial
+    EXPLICACAO: t2 morre em 't3 = t1 + t2' e t3 nasce ali mesmo. Sem sobreposição, sem aresta no grafo, mesma cor.
+WIDGET REGALLOC gramatica= entrada=a + b + c + d legenda=Cadeia: cada temporário morre quando o próximo nasce. Grafo sem arestas: 1 registrador basta!
+WIDGET REGALLOC gramatica= entrada=a * b + ( c * d + a * c ) legenda=Agora há 3 temporários vivos ao mesmo tempo. Procure o triângulo no grafo.
+PREVEJA: Com o triângulo t1—t2—t3, qual o menor número de registradores sem spill?
+    (     ) 1
+    (     ) 2
+    (certa) 3
+    (     ) 5
+    EXPLICACAO: Num triângulo, cada vértice é vizinho dos outros dois: três cores diferentes são obrigatórias. χ = 3.
+WIDGET MIPS_RUN gramatica=# r = a * b + ( c * d + a * c )   com k = 2: t1 vai para a memória (spill) ; # t2 → $s1   t3, t4, t5 → $s0   t1 → memória ; # 9 acessos (7 lw + 2 sw); com k = 3 seriam 7; no ingênuo, 17 ;         .data ; a:      .word 4 ; b:      .word 2 ; c:      .word 3 ; d:      .word 5 ; t1:     .word 0           # o derramado precisa de lugar na memória ; r:      .word 0 ;         .text ; main: ;         lw   $t8, a ;         lw   $t9, b ;         mul  $t8, $t8, $t9    # t1 = a * b ... ;         sw   $t8, t1          # ... e derrama: guarda na memória ;         lw   $t8, c ;         lw   $t9, d ;         mul  $s1, $t8, $t9    # t2 = c * d ;         lw   $t8, a ;         lw   $t9, c ;         mul  $s0, $t8, $t9    # t3 = a * c ;         add  $s0, $s1, $s0    # t4 = t2 + t3 ;         lw   $t8, t1          # recarrega o derramado na hora do uso ;         add  $s0, $t8, $s0    # t5 = t1 + t4 ;         sw   $s0, r ;         li   $v0, 1           # imprime r (35) ;         lw   $a0, r ;         syscall ;         li   $v0, 10 ;         syscall entrada= legenda=E se só houver 2 registradores? t1 é derramado: sw depois de calculado, lw na hora do uso. 9 acessos (com 3 registradores seriam 7; o ingênuo faz 17). Imprime 35.
+DESTAQUE BRAIN_POWER: Repare que o derramado escolhido foi t1, o que vive MAIS tempo e tem mais vizinhos. Por que essa é uma boa escolha para mandar para a despensa?
+REVELAR: Resposta
+    RESPOSTA: Tirar t1 do grafo remove 3 arestas de uma vez e quebra o triângulo; o resto passa a caber em 2 cores. E, como t1 é usado só uma vez depois de definido, o custo é um único sw + um único lw.
+
+=== AULA DE LEITURA [WORKED] Vivacidade, grafo e cores, à mão
+[PROF] Exercício completo: r = a * b + ( c * d + a * c ). Primeiro o TAC, depois a vivacidade de trás para frente, depois o grafo e a coloração.
+CODIGO (Vivacidade de baixo para cima e o grafo de interferência):
+    r = a * b + ( c * d + a * c )        (só os temporários disputam registradores)
+    
+     i  instrução          use       def   out (vivos depois)   in = use ∪ (out − def)
+     5  r  = t5            {t5}      –     { }                  {t5}
+     4  t5 = t1 + t4       {t1,t4}   t5    {t5}                 {t1,t4}
+     3  t4 = t2 + t3       {t2,t3}   t4    {t1,t4}              {t1,t2,t3}
+     2  t3 = a * c         { }       t3    {t1,t2,t3}           {t1,t2}
+     1  t2 = c * d         { }       t2    {t1,t2}              {t1}
+     0  t1 = a * b         { }       t1    {t1}                 { }
+    
+    Arestas (quem é definido × quem está vivo DEPOIS):
+     i=1: t2—t1    i=2: t3—t1, t3—t2    i=3: t4—t1
+    
+            t2
+           /  \
+         t1 —— t3        t5 (sozinho)
+          |
+         t4
+    
+    Triângulo t1-t2-t3 ⇒ precisa de 3 cores (χ = 3)
+PASSOS Como a tabela foi preenchida:
+    1. Comece no FIM: depois da última instrução, nada está vivo (out = { }). As variáveis a..d e r ficam na memória, então só contamos temporários.
+    2. i=5 (r = t5): usa t5 → in = {t5}.
+    3. i=4 (t5 = t1 + t4): out = {t5}; tira o def t5 e põe os usos t1, t4 → in = {t1, t4}.
+    4. i=3 (t4 = t2 + t3): out = {t1, t4}; tira t4, põe t2, t3 → in = {t1, t2, t3}.
+    5. i=2 (t3 = a * c): out = {t1, t2, t3}; tira t3 → in = {t1, t2}. Aqui há 3 vivos juntos: o pico.
+    6. Arestas: em cada instrução, o temporário DEFINIDO liga-se a todos os outros do out. Isso dá t2—t1, t3—t1, t3—t2, t4—t1.
+PASSOS Chaitin com k = 3 (simplificar, empilhar, colorir):
+    1. Graus: t1 = 3, t2 = 2, t3 = 2, t4 = 1, t5 = 0. Só tira quem tem grau < 3.
+    2. Tira t2 (grau 2) → empilha. Agora t1 tem grau 2: tira t1. Depois t3, t4, t5 (graus 0).
+    3. Pilha (topo primeiro): t5, t4, t3, t1, t2.
+    4. Desempilha e dá a menor cor livre: t5 → 0, t4 → 0, t3 → 0, t1 → 1 (vizinhos t3, t4 têm 0), t2 → 2 (vizinhos t1 = 1, t3 = 0).
+    5. Resultado: $s0 = {t3, t4, t5}, $s1 = t1, $s2 = t2. Nenhum spill.
+WIDGET REGALLOC gramatica= entrada=a * b + ( c * d + a * c ) legenda=Confira os vivos, o grafo, χ = 3 e o MIPS. Acessos à memória: 17 no ingênuo, 7 alocado.
+DESTAQUE WATCH_OUT: Erro clássico: fazer a vivacidade de CIMA para BAIXO. Não dá: para saber se t1 está vivo agora, você precisa saber se ele será usado DEPOIS. A informação vem do futuro, então a análise anda para trás.
+TEXTO: Agora é com você (exemplo esmaecido): **r = ( a + b ) * ( c - d )**. TAC: t1 = a + b; t2 = c - d; t3 = t1 * t2; r = t3.
+REVELAR: Calcule out e in de cada instrução, de baixo para cima.
+    RESPOSTA: i=3 r = t3: out { }, in {t3}. i=2 t3 = t1 * t2: out {t3}, in {t1, t2}. i=1 t2 = c - d: out {t1, t2}, in {t1}. i=0 t1 = a + b: out {t1}, in { }.
+REVELAR: Quais as arestas e quantos registradores são necessários?
+    RESPOSTA: Só t2—t1 (em i=1, t2 é definido com t1 vivo). t3 fica sozinho. χ = 2: por exemplo, t1 → $s1, t2 e t3 → $s0.
+REVELAR: Quantos lw + sw antes e depois?
+    RESPOSTA: Ingênuo: 11. Alocado com 2 registradores: 5 (lw de a, b, c, d e sw de r).
+WIDGET REGALLOC gramatica= entrada=( a + b ) * ( c - d ) legenda=Confira suas respostas.
+DESTAQUE EXAM_TIP: Na prova, monte SEMPRE a tabela com colunas use | def | out | in, preenchendo de baixo para cima. Depois desenhe o grafo e só então colora. A tabela bem feita já vale boa parte da questão.
+
+=== AULA DE LEITURA [SOCRATIC] Quando dois valores podem dividir um registrador?
+[PROF] Hoje você vai reinventar a alocação por coloração. Primeira pergunta, a mais básica de todas.
+PREVEJA: Por que o compilador se esforça para manter valores em registradores?
+    (     ) Porque a memória pode apagar dados
+    (certa) Porque acessar a memória (lw/sw) é muito mais lento que usar um registrador
+    (     ) Porque o MIPS proíbe lw
+    (     ) Para economizar espaço na .data
+    EXPLICACAO: Operação entre registradores leva um ciclo; uma ida à memória pode custar dezenas ou centenas de ciclos se o dado não estiver na cache. Cortar lw/sw é cortar tempo.
+[BYTE] Mas registrador é pouco. Então dois valores vão ter que dividir um?
+PREVEJA: Quando dois temporários x e y podem usar o MESMO registrador?
+    (     ) Quando têm nomes parecidos
+    (certa) Quando nunca estão vivos ao mesmo tempo
+    (     ) Quando são usados na mesma instrução
+    (     ) Nunca
+    EXPLICACAO: Se y só passa a existir depois do último uso de x, x não precisa mais do registrador. É a ideia toda.
+PREVEJA: O que quer dizer 'x está vivo no ponto P'?
+    (     ) x já foi definido antes de P
+    (certa) Existe um caminho de P até um USO de x sem passar por uma nova definição de x
+    (     ) x está num registrador
+    (     ) x vai ser impresso
+    EXPLICACAO: Vivo = 'o valor atual ainda vai ser lido'. Se x vai ser redefinido antes de ser lido, o valor atual está morto: pode descartar.
+REVELAR: Dessa definição sai a fórmula in = use ∪ (out − def). Explique cada pedaço.
+    RESPOSTA: Antes da instrução, está vivo o que ela USA (use) e o que estava vivo depois dela (out), menos o que ela própria redefine (def), porque esse valor antigo nunca seria lido.
+PREVEJA: Se a fórmula calcula 'in' a partir de 'out', em que direção percorremos o código?
+    (     ) De cima para baixo
+    (certa) De baixo para cima
+    (     ) Tanto faz
+    EXPLICACAO: Para calcular o in da instrução i, preciso do out, que é o in da i + 1. Então começo no fim, com out = { }.
+[PROF] Agora monte um grafo: um nó por temporário e uma aresta entre quem está vivo junto. Dar registradores é dar cores sem que vizinhos repitam.
+WIDGET REGALLOC gramatica= entrada=( a + b ) * ( c - d ) legenda=Duas cores bastam. Repare qual temporário ficou sem vizinhos.
+REVELAR: E se o grafo precisar de mais cores do que há registradores?
+    RESPOSTA: Algum temporário é derramado (spill): mora na memória, com sw depois de calculado e lw antes de cada uso. Escolhe-se, de preferência, um com muitos vizinhos e poucos usos.
+REVELAR: Por que $t e $s existem separados no MIPS?
+    RESPOSTA: Por causa das chamadas de função. Quem chama não sabe quais registradores a função vai usar. A convenção divide a responsabilidade: $t0–$t9 podem ser destruídos pela função (se o chamador precisa deles, ele salva); $s0–$s7 devem ser devolvidos intactos (se a função usa, ela salva e restaura).
+DESTAQUE FIRESIDE: t1: 'Eu cheguei primeiro nesse registrador!' t3: 'Mas você já morreu, ninguém vai te ler de novo.' t1: '...' Alocador: 'Próximo! $s0 está livre.'
+
+=== AULA DE LEITURA [FORMAL] Alocação por coloração: definição de prova
+TEXTO: Para cada instrução i: **use[i]** = variáveis lidas por i; **def[i]** = variáveis escritas por i. Uma variável x está **viva** num ponto P se existe um caminho de P até um uso de x que não passa por definição de x.
+CODIGO (Equações de vivacidade):
+    Vivacidade (análise de fluxo de dados PARA TRÁS):
+        out[i] = ∪ in[s]   para cada sucessor s de i     (no fim: out = ∅)
+        in[i]  = use[i] ∪ (out[i] − def[i])
+    Num bloco básico (sem desvios), o único sucessor de i é i + 1:
+        percorra de i = n−1 até 0, com out[n−1] = ∅.
+    Com laços: repita até nenhum in/out mudar (ponto fixo).
+TEXTO: **Intervalo de vida** de x: os pontos do programa em que x está viva. **Grafo de interferência** G = (V, E): V = temporários; {x, y} ∈ E se x é definido numa instrução em que y ∈ out (y ≠ x). (Refinamento clássico: numa cópia x = y, não se liga x a y, para permitir que dividam o registrador.)
+TEXTO: **Alocação com k registradores** = **k-coloração** de G. Decidir se G é k-colorível é NP-completo para k ≥ 3, por isso usamos heurísticas.
+CODIGO (Simplificar, empilhar, colorir):
+    Chaitin(G, k):
+        pilha ← vazia
+        enquanto G não vazio:
+            se existe n com grau(n) < k:          // SIMPLIFICAR
+                remova n de G; empilhe n
+            senão:                                // candidato a SPILL
+                escolha n (ex.: maior grau, menor custo); remova; empilhe
+        enquanto pilha não vazia:                 // SELECIONAR
+            n ← desempilha
+            se sobra cor não usada pelos vizinhos já coloridos: dê a menor
+            senão: n é DERRAMADO (sw após def, lw antes de cada uso)
+TEXTO: **Por que funciona**: se grau(n) < k, então, por pior que seja a coloração dos vizinhos, sobra uma cor para n. Remover n não atrapalha; colorimos na volta. Spill só acontece quando todo nó restante tem grau ≥ k.
+PREVEJA: Um grafo tem um nó n de grau 5 e k = 4. O que é VERDADE?
+    (     ) n certamente será derramado
+    (certa) n não pode ser simplificado agora, mas pode acabar colorido se dois vizinhos receberem a mesma cor
+    (     ) O grafo não é 4-colorível
+    EXPLICACAO: Grau ≥ k só torna n um CANDIDATO. Na seleção, se os vizinhos repetirem cores, sobra cor para n. Por isso o spill de Chaitin é 'otimista' na versão de Briggs.
+WIDGET MIPS_RUN gramatica=# Convenção: $s0..$s7 são SALVOS PELO CHAMADO; $t0..$t9 não (o chamador que se cuide) ;         .data ; x:      .word 0 ;         .text ; main: ;         li   $s0, 7           # main guarda um valor importante em $s0 ;         li   $a0, 5 ;         jal  dobro            # chama dobro(5) ;         add  $s0, $s0, $v0    # 7 + 10: $s0 ainda vale 7! ;         sw   $s0, x ;         li   $v0, 1 ;         move $a0, $s0         # imprime 17 ;         syscall ;         li   $v0, 10 ;         syscall ; dobro: ;         addi $sp, $sp, -4 ;         sw   $s0, 0($sp)      # vai usar $s0? então SALVA antes... ;         add  $s0, $a0, $a0 ;         move $v0, $s0 ;         lw   $s0, 0($sp)      # ... e RESTAURA antes de voltar ;         addi $sp, $sp, 4 ;         jr   $ra entrada= legenda=Convenção do MIPS: $s0 é salvo pelo CHAMADO. dobro usa $s0, mas salva e restaura; main encontra o 7 intacto e imprime 17.
+TEXTO: **Convenção MIPS**: $t0–$t9 são **salvos pelo chamador** (caller-saved): uma função pode sobrescrevê-los à vontade. $s0–$s7 são **salvos pelo chamado** (callee-saved): quem os usa salva na pilha e restaura antes do `jr $ra`. Regra prática: valor que atravessa uma chamada → $s; valor de vida curta → $t.
+DESTAQUE EXAM_TIP: Roteiro de prova: (1) TAC; (2) tabela use/def/out/in DE BAIXO PARA CIMA; (3) arestas: def × out; (4) Chaitin com a pilha escrita; (5) mapa temporário → registrador; (6) se pedir, o MIPS e a contagem de lw/sw antes × depois.
+REVELAR: Escreva a equação de vivacidade e a regra de interferência.
+    RESPOSTA: in[i] = use[i] ∪ (out[i] − def[i]); out[i] = ∪ in dos sucessores. x e y interferem se x é definido numa instrução em que y está vivo na saída (y ∈ out[i]).
+
+=== AULA DE LEITURA [MNEMONIC] Pinte o mapa da cozinha
+DESTAQUE MNEMONIC: **VIGOR**: **VI**vacidade → **G**rafo → c**O**lorir → **R**egistradores. (E se faltar cor? Spill: 'derrama no chão'.)
+TEXTO: **Palácio da memória**: na Forja do Código, ao lado da Montadora MIPS, fica o **Ateliê de Coloração** . Na parede, um mapa com bolinhas (os temporários). O pintor tem só k latas de tinta (registradores). Bolinhas ligadas por fio não podem ter a mesma cor. A que sobrar sem tinta vai para o porão (a memória).
+DESTAQUE MNEMONIC: **Vivacidade se faz como desfazer a mala: de trás para frente.** O último item que entrou é o primeiro que sai. Comece no fim do código com out = { }.
+DESTAQUE MNEMONIC: **in = use ∪ (out − def)** se lê: 'está vivo antes quem eu USO agora, mais quem estava vivo depois e eu NÃO matei'. Def mata, use ressuscita.
+DESTAQUE MNEMONIC: **Interferência = 'nasceu enquanto o outro estava vivo'.** Quem é definido ganha aresta com todo mundo do out daquela instrução.
+PREVEJA: Na fase de simplificação com k = 3, qual nó pode ser removido com segurança?
+    (     ) Qualquer um
+    (certa) Um com grau 2 (menor que k)
+    (     ) Só o de maior grau
+    (     ) Um com grau 3
+    EXPLICACAO: 'Menos vizinhos que latas, sempre sobra lata.' Grau < k garante cor na volta.
+DESTAQUE MNEMONIC: **$t = tchau** (a função pode estragar: se precisar, o CHAMADOR salva). **$s = sagrado** (a função devolve como achou: o CHAMADO salva).
+DESTAQUE WATCH_OUT: Contrastes: **vivo** ≠ 'já definido' (vivo = ainda vai ser LIDO). **χ (número cromático)** = menor k sem spill; não é o número de temporários. **Spill** não é erro: é custo (mais lw/sw).
+WIDGET REGALLOC gramatica= entrada=a * b + ( c * d + a * c ) legenda=Recite VIGOR enquanto olha: vivos, grafo (triângulo!), 3 cores, MIPS com $s0, $s1, $s2.
+REVELAR: Os números para guardar: quantos lw + sw em a * b + c * d, antes e depois?
+    RESPOSTA: 11 no ingênuo, 5 com alocação (2 registradores). Em a * b + ( c * d + a * c ): 17 → 7 com 3 registradores, ou 9 com 2 (t1 derramado).
+REVELAR: Sem olhar: os 4 passos, a fórmula e a convenção.
+    RESPOSTA: VIGOR: vivacidade (de trás para frente), grafo de interferência, colorir com k cores (Chaitin: simplifica grau < k, empilha, colore), registradores. in = use ∪ (out − def). $t: salvos pelo chamador; $s: salvos pelo chamado.
+

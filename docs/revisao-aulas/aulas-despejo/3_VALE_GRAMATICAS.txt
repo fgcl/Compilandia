@@ -1,0 +1,550 @@
+######## REGIAO VALE_GRAMATICAS: Vale das Gramáticas (Regras que geram linguagens)
+
+################ ASSUNTO CFG_DERIVATION: Gramáticas e derivações  prereqs=[PHASES]
+FICHA: Uma gramática livre de contexto (N, T, P, S) gera sentenças trocando não-terminais pelos lados direitos das produções; a árvore de derivação resume essas trocas.
+  gancho: G = (N, T, P, S): Nunca Tire Prova Sem estudar.
+  termos: [terminal, não-terminal, produção, símbolo inicial, derivação, árvore]
+  erros comuns: [Numa derivação mais à esquerda, trocar um NT que não é o mais à esquerda., Achar que as derivações ⇒lm e ⇒rm geram árvores diferentes., Confundir forma sentencial (pode ter NTs) com sentença (só terminais)., Achar que ε não pode ser folha da árvore.]
+  FLASH: Os 4 componentes de uma GLC? -> Não-terminais, terminais, produções, símbolo inicial
+  FLASH: O que é uma forma sentencial? -> Qualquer α tal que S ⇒* α
+  FLASH: O que é uma sentença? -> Uma forma sentencial só com terminais
+  FLASH: Derivação mais à esquerda? -> Sempre substitui o NT mais à esquerda
+  FLASH: Quantas derivações ⇒lm tem uma árvore? -> Exatamente uma
+  FLASH: Folhas da árvore lidas da esquerda para a direita? -> O produto da árvore: a sentença
+  FLASH: Linguagem de S → a S b | ε? -> { aⁿbⁿ | n ≥ 0 }
+  FLASH: Por que 'livre de contexto'? -> O lado esquerdo é um único NT, trocado sem olhar o que está em volta
+
+=== AULA ANIMADA [BASICO] Regras de troca  (id=CFG_DERIVATION, ~170s, 22 passos, exemplo começa no passo 4)
+1. [BYTE] O parser recebe os tokens do scanner. Ele precisa saber quais sequências de tokens são frases válidas.
+     palco: Frase certa ou errada? | n + n | n + +
+2. [BYTE] Uma destas frases está mal escrita. Toque nela.
+     palco: Frase certa ou errada? | n + n | n + +
+     PERGUNTA(toque): certas=[n + +] erradas=[n + n]
+       dica: Depois de um mais, precisa vir um número.
+       acerto: Isso. Falta um número depois do mais.
+3. [BYTE] Listar todas as frases certas não dá: elas são infinitas. E expressão regular não basta, porque não sabe casar parênteses.
+     palco: Frase certa ou errada? | n + n | n + + | ...
+4. [BYTE] Uma gramática livre de contexto é uma lista curta de regras de troca que gera todas as frases válidas.
+     palco: GRAMÁTICA
+5. [BYTE] Cada regra, ou produção, diz que o símbolo da esquerda pode ser trocado pelo lado direito. Aqui, E pode virar E mais E, ou pode virar n.
+     palco: Gramática | E -> E + E | E -> n
+6. [BYTE] E é um não-terminal: ainda vai ser trocado. O mais e o n são terminais: são os tokens, e ficam na frase.
+     palco: Gramática | E -> E + E | E -> n | *E
+7. [BYTE] Começo pelo símbolo inicial, E, e aplico a primeira regra. Cada troca é um passo de derivação.
+     palco: Gramática | *E -> E + E | E -> n | E | + | E
+8. [BYTE] Numa derivação mais à esquerda, qual E eu troco agora? Toque nele.
+     palco: Gramática | E -> E + E | E -> n | E | + | E
+     PERGUNTA(toque): certas=[E] erradas=[E]
+       dica: O nome já conta: mais à esquerda.
+       acerto: Esse mesmo. Sempre o não-terminal mais à esquerda.
+9. [BYTE] Ele vira n. Depois troco o outro, e sobra a frase n mais n.
+     palco: Gramática | E -> E + E | *E -> n | n | + | n
+10. [BYTE] Só sobraram terminais, então a frase pertence à linguagem da gramática. O desenho dessas trocas é a árvore de derivação.
+     palco: Gramática | E -> E + E | E -> n | E | E | n | + | E | n
+11. [BYTE] Derivar uma frase tem três passos. Eles ficam aqui na tela.
+     palco: Receita | 1. Comece pelo símbolo inicial. | 2. Troque o não-terminal mais à esquerda. | 3. Repita até sobrar só terminal.
+12. [BYTE] Na forma E mais E, qual passo escolhe o E da esquerda? Toque.
+     palco: Receita | 1. Comece pelo símbolo inicial. | 2. Troque o não-terminal mais à esquerda. | 3. Repita até sobrar só terminal. | E + E
+     PERGUNTA(toque): certas=[2. Troque o não-terminal mais à esquerda.] erradas=[1. Comece pelo símbolo inicial., 3. Repita até sobrar só terminal.]
+       dica: Um dos passos diz qual não-terminal trocar.
+       acerto: Isso. Passo dois: sempre o mais à esquerda.
+13. [BYTE] Agora quem deriva é você. A meta é a declaração lá em cima.
+     palco: float * id ; | Decl -> Tipo Var ; | Tipo -> int | float | Var -> id | * id | Decl
+14. [BYTE] Decl virou Tipo, Var e ponto e vírgula. Qual você troca agora?
+     palco: float * id ; | *Decl -> Tipo Var ; | Tipo -> int | float | Var -> id | * id | Tipo | Var | ;
+     PERGUNTA(toque): certas=[Tipo] erradas=[Var, ;]
+       dica: Passo dois: o não-terminal mais à esquerda.
+       acerto: Isso. Tipo vem primeiro.
+15. [BYTE] Qual regra de Tipo leva até a meta? Toque nela.
+     palco: float * id ; | Decl -> Tipo Var ; | *Tipo -> int | float | Var -> id | * id | *Tipo | Var | ; | Tipo -> int | Tipo -> float
+     PERGUNTA(toque): certas=[Tipo -> float] erradas=[Tipo -> int]
+       dica: Olhe a primeira palavra da meta.
+       acerto: Isso. Tipo vira float.
+16. [BYTE] Falta Var. Na meta, um asterisco vem antes do id. Toque na regra.
+     palco: float * id ; | Decl -> Tipo Var ; | Tipo -> int | float | *Var -> id | * id | Var -> id | Var -> * id | float | *Var | ;
+     PERGUNTA(toque): certas=[Var -> * id] erradas=[Var -> id]
+       dica: Só uma regra de Var começa com asterisco.
+       acerto: Isso. Sobrou só terminal, e é a meta.
+17. [BYTE] Três trocas, uma por vez. Esta é a árvore da declaração.
+     palco: float * id ; | Decl -> Tipo Var ; | Tipo -> int | float | Var -> id | * id | Decl | Tipo | float | Var | * | id | ;
+18. [BYTE] E a frase int id id ponto e vírgula? Ela está na linguagem?
+     palco: float * id ; | Decl -> Tipo Var ; | Tipo -> int | float | Var -> id | * id | int id id ; | Sim | Não
+     PERGUNTA(toque): certas=[Não] erradas=[Sim]
+       dica: Procure uma regra que ponha dois id seguidos.
+       acerto: Isso. Nenhuma regra põe dois id seguidos.
+19. [PROF] Sem derivação que chegue nela, a frase fica fora da linguagem. É assim que o parser acusa erro de sintaxe.
+     palco: float * id ; | Decl -> Tipo Var ; | Tipo -> int | float | Var -> id | * id | int id id ;
+20. [BYTE] Um colega descreveu assim a derivação mais à esquerda. Certo ou errado? Toque.
+     palco: Erros comuns | Na derivação mais à esquerda, posso trocar qualquer não-terminal em cada passo. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O nome diz qual não-terminal é trocado.
+       acerto: Isso. Em cada passo, troca-se sempre o não-terminal mais à esquerda. Na mais à direita, sempre o da direita.
+21. [BYTE] Outro erro: tentar trocar um terminal. Terminal é token, não tem regra. Só não-terminal fica do lado esquerdo de uma produção.
+     palco: Erros comuns | Certo: Mais à esquerda: troque sempre o primeiro não-terminal da forma. | *Errado: Trocar um terminal por uma regra. | *Certo: Só não-terminal fica do lado esquerdo. Terminal é token e não muda.
+22. [BYTE] Resumindo: a gramática livre de contexto gera as frases por trocas. Derivar é aplicar produções a partir do símbolo inicial, e a árvore registra essas trocas.
+     palco: Resumo | Gramática: terminais, não-terminais, produções e um símbolo inicial. | Derivar: começar no inicial e trocar não-terminais até sobrar só terminal. | A frase está na linguagem se existe uma derivação para ela.
+
+=== AULA ANIMADA [PEGADINHA] Duas derivações, uma árvore  (id=CFG_DERIVATION/duasderivaçõesumaárvore, ~28s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Olhe esta gramática pequena. A frase é a b.
+     palco: a b | S -> A B | A -> a | B -> b
+2. [BYTE] Pela esquerda: S vira A B, depois a B, depois a b.
+     palco: a b | S -> A B | A -> a | B -> b | S  A B  a B  a b
+3. [BYTE] Pela direita: S vira A B, depois A b, depois a b.
+     palco: a b | S -> A B | A -> a | B -> b | S  A B  a B  a b | S  A B  A b  a b
+4. [BYTE] São duas derivações diferentes. Isso é ambiguidade?
+     palco: a b | S -> A B | A -> a | B -> b | S  A B  a B  a b | S  A B  A b  a b | é ambígua | não é
+     PERGUNTA(toque): certas=[não é] erradas=[é ambígua]
+       dica: Ambiguidade pede duas árvores, ou duas derivações do mesmo lado.
+       acerto: Isso. As duas montam a mesma árvore. Só muda a ordem.
+5. [PROF] Para provar ambiguidade, compare duas derivações pela esquerda, ou duas pela direita.
+     palco: a b | S -> A B | A -> a | B -> b | S  A B  a B  a b | S  A B  A b  a b
+
+=== AULA ANIMADA [PRATICA] Derive até chegar  (id=CFG_DERIVATION/deriveatéchegar, ~29s, 5 passos, exemplo começa no passo null)
+1. [BYTE] A frase alvo é id mais id. As regras estão aqui.
+     palco: id + id | E -> T X | X -> + T X | ε | T -> id
+2. [BYTE] Troque sempre o não terminal mais à esquerda.
+     palco: id + id | *E -> T X | X -> + T X | ε | T -> id
+3. [PROF] O X decide se a frase continua. Mais uma soma, ou épsilon para acabar.
+     palco: id + id | E -> T X | *X -> + T X | ε | T -> id
+4. [BYTE] Sua vez. Escolha as regras até chegar na frase.
+     palco: chegue nesta frase | id | + | id | *E
+     BRINQUEDO: meta=Chegue em id + id teclas=[E → T X]
+       dica: Essa escolha saiu da frase. Comece de novo.
+       acerto: Chegou. Isso é uma derivação mais à esquerda.
+5. [BYTE] Quando você escolhe certo sem pensar, a tabela LL(1) já está na sua cabeça.
+     palco: id + id | E -> T X | *X -> + T X | ε | T -> id
+
+=== AULA ANIMADA [CLIPE] Gramática em 30 segundos  (id=CFG_DERIVATION/gramáticaem30segundos, ~12s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Uma gramática é uma lista de trocas.
+     palco: S -> a S b | c | S
+2. [BYTE] Comece no símbolo inicial e troque até sobrar só terminal. O que sobrar é uma frase.
+     palco: S -> a S b | c | a | c | b
+
+=== AULA ANIMADA [CLIPE] Terminal e não terminal  (id=CFG_DERIVATION/terminalenãoterminal, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Terminal é peça final, como id. Ele fica na frase.
+     palco: Terminal | id
+2. [BYTE] Não terminal ainda vai virar outra coisa, como E.
+     palco: Não terminal | id | E
+
+=== AULA DE LEITURA [STORY] Análise sintática você já fez na escola
+[PROF] Lembra da aula de português? Sujeito, predicado, objeto direto… Aquilo se chamava **análise sintática**. Literalmente o mesmo nome!
+[BYTE] Sério?! Eu odiava aquilo.
+[PROF] Então vamos odiar juntos, mas entendendo. Uma frase é feita de partes, e cada parte tem uma regra de montagem.
+CODIGO (Uma minigramática do português):
+    Frase -> SN SV
+    SN -> Art Sub
+    SV -> Ver SN
+    Art -> o | a
+    Sub -> gato | menina | peixe
+    Ver -> come | ama
+TEXTO: Cada linha é uma **produção**: 'uma Frase é um sintagma nominal (SN) seguido de um sintagma verbal (SV)'. Quem aparece à esquerda da seta é **não-terminal** (uma categoria). As palavras de verdade, o, gato, come, são **terminais**.
+WIDGET DERIVATION gramatica=Frase -> SN SV ; SN -> Art Sub ; SV -> Ver SN ; Art -> o | a ; Sub -> gato | menina | peixe ; Ver -> come | ama entrada=o gato come o peixe legenda=Veja a frase nascer, trocando sempre o não-terminal mais à esquerda.
+[PROF] Cada passo troca UM não-terminal pelo lado direito de uma de suas produções. Isso é uma **derivação**. Quando sempre trocamos o mais à esquerda, é uma **derivação mais à esquerda**.
+PREVEJA: Essa gramática gera 'a menina ama o gato'?
+    (certa) Sim
+    (     ) Não
+    EXPLICACAO: Frase ⇒ SN SV ⇒ Art Sub SV ⇒ a Sub SV ⇒ a menina SV ⇒ a menina Ver SN ⇒ … ⇒ a menina ama o gato. (Ela não liga para concordância de gênero: 'a gato' também sai. Gramática de brinquedo!)
+PREVEJA: E 'gato o come peixe o'?
+    (     ) Sim
+    (certa) Não
+    EXPLICACAO: Todas as palavras existem (léxico ok!), mas a ordem não segue as regras: erro sintático.
+TEXTO: Troque palavras por tokens e é igualzinho: `E -> E + T` diz 'uma expressão pode ser uma expressão, um +, e um termo'. O compilador faz análise sintática como você fazia na escola, só que sem preguiça.
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que 'livre de contexto'? R: Porque o lado esquerdo é UM não-terminal sozinho: você pode trocar SN por 'Art Sub' em qualquer lugar, não importa o que esteja em volta (o contexto).
+DESTAQUE FIRESIDE: Expressão regular: 'Eu descrevo palavras.' Gramática: 'Eu descrevo frases, e sei aninhar coisas, como parênteses dentro de parênteses, coisa que você não consegue!'
+REVELAR: Nessa gramática, quem são os terminais e os não-terminais?
+    RESPOSTA: Não-terminais: Frase, SN, SV, Art, Sub, Ver. Terminais: o, a, gato, menina, peixe, come, ama. Símbolo inicial: Frase (o da primeira linha).
+
+=== AULA DE LEITURA [VISUAL] Derivação em câmera lenta
+[PROF] Vamos ver a gramática de expressões do Livro do Dragão gerando `id + id * id`.
+CODIGO (E = expressão, T = termo, F = fator):
+    E -> E + T | T
+    T -> T * F | F
+    F -> ( E ) | id
+WIDGET DERIVATION gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id + id * id legenda=Avance passo a passo e veja a árvore crescer a cada troca.
+TEXTO: Em cada linha, o não-terminal trocado é o MAIS À ESQUERDA. As formas intermediárias, como `id + T * F`, se chamam **formas sentenciais**. A última, só com terminais, é uma **sentença**.
+PREVEJA: Na derivação mais à esquerda, depois de `id + T`, qual é o próximo passo?
+    (certa) id + T * F
+    (     ) id + F
+    (     ) id + id
+    EXPLICACAO: Ainda precisamos gerar `id * id` depois do +. Se T virasse F direto, o `*` nunca apareceria! Então T → T * F.
+[BYTE] E a árvore? É a mesma coisa que a derivação?
+[PROF] A árvore é o 'resumo' da derivação: mostra QUAL produção foi usada em cada nó, mas esquece a ORDEM das trocas.
+WIDGET PARSE_TREE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id + id * id legenda=Leia as folhas da esquerda para a direita: dá a sentença.
+WIDGET DERIVATION gramatica=S -> a S b | ε entrada=a a a b b b legenda=S -> a S b | ε: cada passo põe um a na frente e um b atrás. Nenhuma ER faz isso!
+REVELAR: Quantos passos teve a derivação de `a a a b b b`? Por quê?
+    RESPOSTA: 4 passos: três vezes S → a S b e uma vez S → ε. Cada a ganha o seu b casado.
+WIDGET DERIVATION gramatica=S -> ( S ) S | ε entrada=( ( ) ) ( ) legenda=Parênteses balanceados. Repare como o ε faz S sumir.
+REVELAR: Diferença entre forma sentencial e sentença?
+    RESPOSTA: Forma sentencial: qualquer coisa derivável do símbolo inicial (pode ter não-terminais). Sentença: forma sentencial só com terminais.
+
+=== AULA DE LEITURA [WORKED] Derivando à esquerda e à direita
+[PROF] Exercício: derivação mais à esquerda E mais à direita de `id + id * id`.
+CODIGO ():
+    E -> E + T | T
+    T -> T * F | F
+    F -> ( E ) | id
+PASSOS Mais à esquerda (⇒lm): troque sempre o NT mais à esquerda:
+    1. E ⇒ E + T
+    2. ⇒ T + T
+    3. ⇒ F + T
+    4. ⇒ id + T
+    5. ⇒ id + T * F
+    6. ⇒ id + F * F
+    7. ⇒ id + id * F
+    8. ⇒ id + id * id ✔ (8 passos)
+TEXTO: Agora mais à direita (⇒rm): troque sempre o NT mais à DIREITA. Eu começo:
+CODIGO ():
+    E ⇒ E + T
+      ⇒ E + T * F
+      ⇒ E + T * id
+REVELAR: Próximos dois passos?
+    RESPOSTA: ⇒ E + F * id ⇒ E + id * id
+REVELAR: E os três passos finais?
+    RESPOSTA: ⇒ T + id * id ⇒ F + id * id ⇒ id + id * id
+DESTAQUE NO_DUMB_QUESTIONS: P: As duas derivações dão árvores diferentes? R: Não! Mesmas produções, mesma árvore, só muda a ordem das trocas. Cada árvore tem exatamente UMA derivação mais à esquerda e UMA mais à direita.
+WIDGET PARSE_TREE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id + id * id legenda=A árvore comum às duas derivações.
+TEXTO: Mais um, esmaecido: gramática `S -> a S b | ε`, cadeia `a a b b`.
+REVELAR: Derivação completa?
+    RESPOSTA: S ⇒ a S b ⇒ a a S b b ⇒ a a b b (S → ε no último passo). Com um só NT em cada forma sentencial, mais à esquerda = mais à direita!
+WIDGET DERIVATION gramatica=S -> a S b | ε entrada=a a b b legenda=Confira.
+DESTAQUE EXAM_TIP: Em prova, escreva um passo por linha, marque o NT trocado e indique ⇒lm ou ⇒rm. Conferência rápida: nº de passos = nº de nós internos da árvore.
+
+=== AULA DE LEITURA [SOCRATIC] O que uma gramática gera?
+[PROF] Pergunta 1: tente sem medo.
+CODIGO ():
+    S -> a S b | ε
+PREVEJA: Essa gramática gera `a a b`?
+    (     ) Sim
+    (certa) Não
+    EXPLICACAO: Toda vez que S vira a S b, entram um a E um b. A quantidade de a's e b's é sempre igual.
+PREVEJA: Qual é a menor cadeia que ela gera?
+    (     ) ab
+    (     ) a
+    (certa) a cadeia vazia ε
+    (     ) b
+    EXPLICACAO: S → ε direto: zero passos de 'a S b'.
+REVELAR: Descreva a linguagem inteira em uma frase.
+    RESPOSTA: { aⁿbⁿ | n ≥ 0 }: n a's seguidos de n b's.
+PREVEJA: Uma expressão regular consegue descrever aⁿbⁿ?
+    (     ) Sim: a*b*
+    (certa) Não
+    EXPLICACAO: a*b* aceita aab, com contagens diferentes. Nenhuma ER consegue: seria preciso memória ilimitada. Gramáticas livres de contexto são mais poderosas.
+[BYTE] Então gramática é tipo uma ER turbinada?
+[PROF] Pode pensar assim: toda linguagem regular é livre de contexto, mas não o contrário. Pergunta 2:
+CODIGO ():
+    E -> E + T | T
+    T -> T * F | F
+    F -> ( E ) | id
+PREVEJA: Quantos não-terminais essa gramática tem?
+    (certa) 3
+    (     ) 5
+    (     ) 8
+    EXPLICACAO: E, T e F: os que aparecem do lado esquerdo.
+PREVEJA: E quantos terminais?
+    (     ) 3
+    (certa) 5
+    (     ) 8
+    EXPLICACAO: +, *, (, ) e id.
+REVELAR: Por que numa derivação precisamos escolher QUAL não-terminal trocar?
+    RESPOSTA: Porque uma forma sentencial pode ter vários NTs. Fixar uma ordem (sempre o mais à esquerda, ou sempre o mais à direita) deixa a derivação única para cada árvore. Os analisadores LL constroem a mais à esquerda; os LR, a mais à direita ao contrário.
+WIDGET DERIVATION gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=( id ) * id legenda=Derive você mesmo antes de avançar.
+
+=== AULA DE LEITURA [FORMAL] GLC e derivações: definição formal
+TEXTO: **Gramática livre de contexto** G = (N, T, P, S): N, conjunto de não-terminais (variáveis sintáticas); T, conjunto de terminais (os tokens); P, conjunto de produções A → α, com A ∈ N e α ∈ (N ∪ T)*; S ∈ N, o símbolo inicial.
+TEXTO: **Derivação em um passo**: se A → γ ∈ P, então αAβ ⇒ αγβ. ⇒* significa 'zero ou mais passos'; ⇒⁺, 'um ou mais passos'.
+TEXTO: Se S ⇒* α, então α é uma **forma sentencial** de G; se α só tem terminais, é uma **sentença**. A **linguagem gerada** é L(G) = { w ∈ T* | S ⇒⁺ w }.
+TEXTO: **Derivação mais à esquerda** (⇒lm): sempre substitui o não-terminal mais à esquerda. **Mais à direita** (⇒rm, ou canônica): sempre o mais à direita.
+TEXTO: **Árvore de derivação**: raiz rotulada S; nós internos rotulados por NTs; se um nó A tem filhos X₁…Xₙ, então A → X₁…Xₙ ∈ P; folhas são terminais ou ε. As folhas lidas da esquerda para a direita formam o **produto** (fronteira) da árvore.
+CODIGO ():
+    Convenções (Livro do Dragão):
+      terminais:            a, b, c, +, *, (, ), id, if ...
+      não-terminais:        A, B, C, S, E, T, F ...
+      símbolos quaisquer:   X, Y, Z
+      cadeias de terminais: u, v, w, x, y, z
+      formas sentenciais:   α, β, γ
+      A → α₁ | α₂ | ... | αₖ   (alternativas de A)
+PREVEJA: Se S ⇒* `id + T`, então `id + T` é…
+    (     ) uma sentença
+    (certa) uma forma sentencial (não sentença)
+    (     ) uma produção
+    EXPLICACAO: Ainda tem o não-terminal T: é forma sentencial, mas não sentença.
+PREVEJA: Cada árvore de derivação corresponde a quantas derivações mais à esquerda?
+    (certa) Exatamente uma
+    (     ) Várias
+    (     ) Nenhuma
+    EXPLICACAO: A árvore fixa as produções; a regra 'sempre o mais à esquerda' fixa a ordem. Resultado: uma única derivação ⇒lm.
+DESTAQUE EXAM_TIP: Questão tradicional: 'dada G, mostre uma derivação mais à esquerda (ou à direita) de w e a árvore'. Erro que custa pontos: numa ⇒lm, trocar um NT que NÃO é o mais à esquerda.
+WIDGET DERIVATION gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id * ( id + id ) legenda=Pratique: derivação ⇒lm de id * ( id + id ).
+REVELAR: Escreva G = (N, T, P, S) para `S -> a S b | ε`.
+    RESPOSTA: N = {S}; T = {a, b}; P = {S → a S b, S → ε}; símbolo inicial S.
+
+=== AULA DE LEITURA [MNEMONIC] As quatro peças da gramática
+DESTAQUE MNEMONIC: **G = (N, T, P, S)** → '**N**unca **T**ire **P**rova **S**em estudar': Não-terminais, Terminais, Produções, Símbolo inicial.
+DESTAQUE MNEMONIC: **Terminal termina**: é folha, não se expande mais. O não-terminal ainda 'não terminou', vai ser trocado.
+DESTAQUE MNEMONIC: Derivação mais à esquerda = **ler um livro**: você resolve as coisas na ordem em que lê, da esquerda para a direita.
+TEXTO: **Palácio da memória**: o **Vale das Gramáticas**. As produções são sementes: um não-terminal plantado (S) brota galhos (o lado direito) até virar só folhas (terminais). A árvore de derivação é, literalmente, uma árvore que cresceu no vale.
+DESTAQUE MNEMONIC: Forma **sentencial** = prédio em obra (ainda tem andaime, os NTs). **Sentença** = prédio pronto, só terminais.
+PREVEJA: Numa árvore de derivação, os terminais ficam…
+    (     ) na raiz
+    (     ) nos nós internos
+    (certa) nas folhas
+    EXPLICACAO: Terminal termina: é sempre folha. Nós internos são não-terminais.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que a árvore muda entre ⇒lm e ⇒rm (não muda!); (2) confundir derivação (de S até w) com redução (o caminho inverso, usado no LR); (3) esquecer que ε é uma folha legítima.
+WIDGET PARSE_TREE gramatica=S -> a S b | ε entrada=a a b b legenda=Folhas da esquerda para a direita = a sentença.
+REVELAR: Recite: o que significam N, T, P, S, ⇒, ⇒* e ⇒lm?
+    RESPOSTA: Não-terminais, Terminais, Produções, Símbolo inicial; ⇒ é um passo; ⇒* é zero ou mais passos; ⇒lm é um passo trocando o NT mais à esquerda.
+
+################ ASSUNTO AMBIGUITY: Árvores e ambiguidade  prereqs=[CFG_DERIVATION]
+FICHA: Uma gramática é ambígua se alguma sentença tem duas árvores de derivação (duas derivações mais à esquerda); resolve-se com níveis de precedência ou regras de desambiguação.
+  gancho: Ambi = dois: duas árvores para a mesma frase. Mais precedência = mais fundo na árvore.
+  termos: [ambígua, duas árvores, mais à esquerda, precedência, associatividade]
+  erros comuns: [Tentar provar ambiguidade com uma derivação ⇒lm e outra ⇒rm., Achar que recursão à esquerda causa ambiguidade., Achar que ambiguidade é sempre propriedade da linguagem, e não da gramática., Achar que existe algoritmo geral para detectar ambiguidade (é indecidível).]
+  FLASH: Quando uma GLC é ambígua? -> Quando alguma sentença tem mais de uma árvore de derivação
+  FLASH: Como provar ambiguidade? -> Duas derivações ⇒lm (ou duas árvores) para a mesma sentença
+  FLASH: Sentença ambígua clássica? -> id + id * id em E → E + E | E * E | ( E ) | id
+  FLASH: Gramática de expressões não ambígua? -> E → E + T | T; T → T * F | F; F → ( E ) | id
+  FLASH: Onde fica o operador de maior precedência na árvore? -> Mais fundo (longe da raiz)
+  FLASH: Recursão à esquerda dá qual associatividade? -> À esquerda
+  FLASH: Else pendurado: com quem o else casa? -> Com o if mais próximo sem else
+  FLASH: Decidir se uma GLC é ambígua é decidível? -> Não, é indecidível
+
+=== AULA ANIMADA [BASICO] Duas árvores, uma frase  (id=AMBIGUITY, ~161s, 22 passos, exemplo começa no passo 3)
+1. [BYTE] Dois mais três vezes quatro dá catorze, porque o vezes vem antes.
+     palco: Qual conta vem primeiro? | 2 + 3 * 4
+2. [BYTE] Se alguém somar antes, o resultado muda. Toque no número que sai.
+     palco: Qual conta vem primeiro? | 2 + 3 * 4 | 14 | 20 | 24
+     PERGUNTA(toque): certas=[20] erradas=[14, 24]
+       dica: Some dois com três. Depois multiplique por quatro.
+       acerto: Isso. Vinte, e não catorze.
+3. [BYTE] No compilador, quem decide a ordem das contas é a forma da árvore que o parser monta.
+     palco: Qual conta vem primeiro? | 2 + 3 * 4 | 20
+4. [BYTE] Esta gramática aceita mais e vezes. Vou montar a árvore da frase n mais n vezes n.
+     palco: n + n * n | E -> E + E | E * E | n
+5. [BYTE] Nesta árvore o vezes fica mais fundo. Ele é calculado primeiro, como na matemática.
+     palco: n + n * n | E -> E + E | E * E | n | E | E | n | + | E | E | n | * | E | n
+6. [BYTE] Mas dá para montar outra árvore, com o mais embaixo.
+     palco: n + n * n | E -> E + E | E * E | n | E | E | E | n | + | E | n | * | E | n
+7. [PROF] Uma mesma frase com duas árvores de derivação diferentes: a gramática é ambígua.
+     palco: n + n * n | E -> E + E | E * E | n | *E | E | E | n | + | E | n | * | E | n
+8. [BYTE] Nesta árvore, o que roda primeiro? Toque na resposta.
+     palco: n + n * n | E -> E + E | E * E | n | E | E | E | n | + | E | n | * | E | n | o + | o *
+     PERGUNTA(toque): certas=[o +] erradas=[o *]
+       dica: Quem está mais fundo na árvore acontece antes.
+       acerto: Certo. Aqui o mais roda primeiro, e o resultado sai errado.
+9. [BYTE] Um compilador não pode ter duas interpretações. O conserto é reescrever a gramática, com um nível por precedência, ou declarar a precedência no Bison.
+     palco: n + n * n | E -> E + E | E * E | n | E | E | E | n | + | E | n | * | E | n
+10. [BYTE] Para mostrar que uma gramática é ambígua, a receita tem três passos.
+     palco: Receita | 1. Escolha uma frase da linguagem. | 2. Tente montar duas árvores diferentes para ela. | 3. Achou duas? A gramática é ambígua.
+11. [BYTE] Uma frase deu uma árvore só. Isso prova que a gramática não é ambígua?
+     palco: Receita | 1. Escolha uma frase da linguagem. | 2. Tente montar duas árvores diferentes para ela. | *3. Achou duas? A gramática é ambígua. | Sim | Não
+     PERGUNTA(toque): certas=[Não] erradas=[Sim]
+       dica: Outra frase ainda pode ter duas árvores.
+       acerto: Isso. Uma frase basta para provar a ambiguidade, mas não o contrário.
+12. [BYTE] Outra gramática, agora só com menos. A frase é n menos n menos n.
+     palco: n - n - n | E -> E - E | n
+13. [BYTE] Nesta árvore, qual menos acontece primeiro? Toque nele.
+     palco: n - n - n | E -> E - E | n | E | E | E | n | - | E | n | - | E | n
+     PERGUNTA(toque): certas=[-] erradas=[-]
+       dica: Quem está mais fundo na árvore acontece antes.
+       acerto: Isso. Primeiro o menos da esquerda, como na escola.
+14. [BYTE] Achei outra árvore para a mesma frase. Aqui, qual menos vem primeiro?
+     palco: n - n - n | E -> E - E | n | E | E | n | - | E | E | n | - | E | n
+     PERGUNTA(toque): certas=[-] erradas=[-]
+       dica: Quem está mais fundo na árvore acontece antes.
+       acerto: Isso. Aqui o menos da direita vem primeiro.
+15. [BYTE] Com nove, cinco e dois, quanto dá esta árvore? Toque no número.
+     palco: n - n - n | E -> E - E | n | E | E | n | - | E | E | n | *- | E | n | 9 - 5 - 2 | 2 | 6 | 16
+     PERGUNTA(toque): certas=[6] erradas=[2, 16]
+       dica: Faça cinco menos dois antes. Depois tire o resultado de nove.
+       acerto: Isso. Seis. A outra árvore dava dois.
+16. [PROF] As duas árvores dão contas diferentes. Pela receita, a gramática é ambígua.
+     palco: n - n - n | E -> E - E | n | E | E | n | - | E | E | n | - | E | n | 9 - 5 - 2 | *6
+17. [BYTE] Conserto: à direita do menos, a regra nova só aceita um n. A recursão fica só à esquerda, e o menos associa à esquerda.
+     palco: n - n - n | E -> E - E | n | Depois | *E -> E - n | n
+18. [BYTE] Com a regra nova, quantas árvores tem n menos n menos n?
+     palco: n - n - n | E -> E - E | n | Depois | *E -> E - n | n | 1 | 2
+     PERGUNTA(toque): certas=[1] erradas=[2]
+       dica: À direita do menos só cabe um n.
+       acerto: Isso. Agora só existe uma árvore.
+19. [BYTE] Esta é a única árvore. O menos associa à esquerda, como na matemática.
+     palco: n - n - n | E -> E - n | n | E | E | E | n | - | n | - | n
+20. [BYTE] Duas derivações diferentes da mesma frase provam ambiguidade? Certo ou errado?
+     palco: Erros comuns | Achei duas derivações diferentes para a frase. Então a gramática é ambígua. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: A mais à esquerda e a mais à direita podem desenhar a mesma árvore.
+       acerto: Isso. O que conta são duas árvores diferentes, ou duas derivações mais à esquerda. Mudar só a ordem das trocas não prova nada.
+21. [BYTE] Outro erro: concluir que a gramática não é ambígua porque algumas frases deram uma árvore só. Só o contraexemplo prova, e ele prova a ambiguidade.
+     palco: Erros comuns | Certo: Ambígua: uma frase com duas árvores, ou duas derivações mais à esquerda. | *Errado: Testei três frases, cada uma deu uma árvore. Logo, não é ambígua. | *Certo: Exemplos não provam que não há ambiguidade. Um contraexemplo prova que há.
+22. [BYTE] Resumindo: gramática ambígua dá duas árvores para a mesma frase, e duas árvores são duas contas. Conserta-se com níveis de precedência e com a recursão do lado certo.
+     palco: Resumo | Ambiguidade: alguma frase tem duas árvores de derivação. | Para provar, mostre uma frase e as duas árvores. | Conserto: um nível por precedência, e a recursão do lado da associatividade.
+
+=== AULA ANIMADA [PEGADINHA] O else solto  (id=AMBIGUITY/oelsesolto, ~35s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Dois ifs e um else só. De qual if é esse else?
+     palco: if a if b x else y | if 1 | if 2 | else
+2. [BYTE] Uma leitura liga o else ao if de dentro.
+     palco: if a if b x else y | if 1 | if 2 | else
+3. [BYTE] A outra liga o else ao if de fora. Duas árvores, a gramática é ambígua.
+     palco: if a if b x else y | if 1 | if 2 | else
+4. [BYTE] A regra das linguagens: o else fica com o if mais perto. Toque nesse if.
+     palco: if a if b x else y | if 1 | if 2 | else
+     PERGUNTA(toque): certas=[if 2] erradas=[if 1]
+       dica: Ande para trás a partir do else. Qual if aparece primeiro?
+       acerto: Isso. O else fica com o if de dentro.
+5. [PROF] O Bison resolve empilhando o else. Assim ele gruda no if de dentro.
+     palco: if a if b x else y | if 1 | if 2 | else
+6. [BYTE] Se quiser o if de fora, use chaves. Elas fecham o if de dentro.
+     palco: if a if b x else y | if 1 | if 2 | else
+
+=== AULA ANIMADA [CLIPE] O que é ambiguidade  (id=AMBIGUITY/oqueéambiguidade, ~12s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Uma gramática é ambígua quando a mesma frase tem duas árvores.
+     palco: 2 + 3 * 4 | (2 + 3) * 4 = 20
+2. [BYTE] Duas árvores dão dois sentidos, e o compilador precisa de um.
+     palco: 2 + 3 * 4 | (2 + 3) * 4 = 20 | 2 + (3 * 4) = 14
+
+=== AULA DE LEITURA [STORY] O policial e o binóculo
+[NARRADOR] Manchete do jornal: 'Policial vê ladrão com binóculo.'
+[BYTE] Peraí: quem estava com o binóculo? O policial ou o ladrão?
+[PROF] Exatamente! A frase tem DUAS árvores: [vê [ladrão com binóculo]] ou [[vê ladrão] com binóculo]. Mesmas palavras, estrutura diferente, sentido diferente. Isso é **ambiguidade**.
+TEXTO: Em português, a gente desempata pelo contexto. Um compilador não tem esse 'bom senso': se a gramática permite duas árvores, ele não sabe qual escolher, e cada árvore pode significar um programa diferente!
+PREVEJA: Quanto vale 2 + 3 * 4?
+    (     ) 14
+    (     ) 20
+    (certa) Depende da árvore
+    EXPLICACAO: Na matemática da escola, 14. Mas se a gramática permitir a árvore (2 + 3) * 4, dá 20. Quem decide o significado é a árvore!
+CODIGO (Curta e bonita… mas ambígua):
+    E -> E + E | E * E | ( E ) | id
+WIDGET PARSE_TREE gramatica=E -> E + E | E * E | ( E ) | id entrada=id + id * id legenda=Duas árvores para a mesma frase: gramática ambígua.
+[PROF] Na árvore em que o * fica mais embaixo, ele é calculado primeiro: 14. Na outra, o + fica embaixo: 20.
+DESTAQUE REAL_WORLD: Calculadora simples de camelô faz 2 + 3 × 4 = 20 (vai calculando conforme você digita). A científica dá 14. São 'gramáticas' diferentes!
+[BYTE] E como resolve?
+[PROF] Dois jeitos: reescrever a gramática com níveis de precedência (E, T, F) ou dizer ao gerador de analisadores quem tem prioridade (`%left` no Bison).
+WIDGET PARSE_TREE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id + id * id legenda=Gramática E/T/F: uma única árvore, com o * embaixo.
+REVELAR: Defina ambiguidade com suas palavras.
+    RESPOSTA: Uma gramática é ambígua se existe pelo menos UMA sentença com duas (ou mais) árvores de derivação diferentes.
+
+=== AULA DE LEITURA [VISUAL] Caçando árvores gêmeas
+[PROF] O widget procura todas as árvores para a entrada. Se achar duas, mostra as duas.
+WIDGET PARSE_TREE gramatica=E -> E + E | E * E | ( E ) | id entrada=id + id * id legenda=
+TEXTO: Olhe a RAIZ de cada árvore: numa, a primeira produção é E → E + E; na outra, E → E * E. Raízes diferentes = estruturas diferentes.
+PREVEJA: E `id + id + id`, nessa mesma gramática?
+    (     ) Uma árvore
+    (certa) Duas árvores
+    EXPLICACAO: (id + id) + id ou id + (id + id). Com + o valor coincide, mas com - não: (5 - 3) - 1 ≠ 5 - (3 - 1). É um problema de **associatividade**.
+WIDGET PARSE_TREE gramatica=E -> E + E | E * E | ( E ) | id entrada=id + id + id legenda=Associatividade: quem se junta primeiro?
+WIDGET PARSE_TREE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id + id + id legenda=Na gramática E/T/F a recursão à esquerda força (id + id) + id.
+[BYTE] E o famoso 'else pendurado'?
+CODIGO (i = 'if (cond) then', e = 'else', x = um comando qualquer):
+    S -> i S | i S e S | x
+WIDGET PARSE_TREE gramatica=S -> i S | i S e S | x entrada=i i x e x legenda=O else pertence ao primeiro if ou ao segundo?
+DESTAQUE REAL_WORLD: C, Java e companhia decidem: o else casa com o if **mais próximo** que ainda não tem else. O Yacc/Bison implementa isso preferindo shift no conflito.
+REVELAR: Por que ambiguidade é um problema para um compilador?
+    RESPOSTA: Porque cada árvore pode ter um significado diferente (14 ou 20; o else de um if ou do outro). O compilador precisa de UMA tradução determinística.
+
+=== AULA DE LEITURA [WORKED] Provando que uma gramática é ambígua
+[PROF] Para PROVAR ambiguidade, basta exibir UMA sentença com duas derivações mais à esquerda diferentes. Vamos lá.
+CODIGO ():
+    E -> E + E | E * E | ( E ) | id
+PASSOS Derivação mais à esquerda nº 1 (+ na raiz):
+    1. E ⇒ E + E
+    2. ⇒ id + E
+    3. ⇒ id + E * E
+    4. ⇒ id + id * E
+    5. ⇒ id + id * id
+PASSOS Derivação mais à esquerda nº 2 (* na raiz):
+    1. E ⇒ E * E
+    2. ⇒ E + E * E
+    3. ⇒ id + E * E
+    4. ⇒ id + id * E
+    5. ⇒ id + id * id
+TEXTO: Duas derivações mais à esquerda distintas para a mesma sentença ⇒ duas árvores ⇒ **gramática ambígua**. ∎
+DESTAQUE WATCH_OUT: Uma derivação ⇒lm e outra ⇒rm diferentes NÃO provam nada: a mesma árvore tem as duas! Compare sempre lm com lm (ou rm com rm), ou compare árvores.
+TEXTO: Sua vez, esmaecido: mostre que `id * id + id` também tem duas árvores.
+REVELAR: Primeira derivação ⇒lm (+ na raiz)?
+    RESPOSTA: E ⇒ E + E ⇒ E * E + E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id
+REVELAR: Segunda derivação ⇒lm (* na raiz)?
+    RESPOSTA: E ⇒ E * E ⇒ id * E ⇒ id * E + E ⇒ id * id + E ⇒ id * id + id
+WIDGET PARSE_TREE gramatica=E -> E + E | E * E | ( E ) | id entrada=id * id + id legenda=Confira: duas árvores.
+REVELAR: Qual das duas respeita a precedência usual?
+    RESPOSTA: A com + na raiz: (id * id) + id, o * fica embaixo e é calculado primeiro.
+DESTAQUE EXAM_TIP: Roteiro de resposta: (1) escolha a sentença; (2) mostre duas derivações MAIS À ESQUERDA (ou duas árvores); (3) conclua. Para desambiguar, apresente E → E + T | T, T → T * F | F, F → ( E ) | id e explique: um nível por precedência; recursão à esquerda = associatividade à esquerda.
+
+=== AULA DE LEITURA [SOCRATIC] A culpa é da gramática ou da linguagem?
+PREVEJA: Se UMA única sentença tem duas árvores, a gramática é ambígua?
+    (certa) Sim, basta uma
+    (     ) Não, precisa ser a maioria
+    (     ) Só se todas tiverem
+    EXPLICACAO: Basta um contraexemplo. Uma única sentença com duas árvores já torna a gramática ambígua.
+PREVEJA: `E -> E + E | E * E | ( E ) | id` e a gramática E/T/F geram a mesma linguagem?
+    (certa) Sim
+    (     ) Não
+    EXPLICACAO: Ambas geram todas as expressões com +, *, parênteses e id. Uma é ambígua; a outra, não.
+[PROF] Então…
+REVELAR: Ambiguidade é propriedade da gramática ou da linguagem?
+    RESPOSTA: Da GRAMÁTICA, em geral: a mesma linguagem pode ter gramáticas ambíguas e não ambíguas. (Existem linguagens 'inerentemente ambíguas', em que TODA gramática é ambígua, raras, e não aparecem em linguagens de programação.)
+PREVEJA: Na gramática E/T/F, por que o * sempre fica mais embaixo na árvore?
+    (certa) Porque * só aparece em T, um nível abaixo de E
+    (     ) Por sorte
+    (     ) Porque * é escrito primeiro
+    EXPLICACAO: Para chegar a um *, você precisa passar por T; e T só aparece abaixo de E. Cada nível da gramática é um nível de precedência.
+WIDGET PARSE_TREE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada=id * id + id legenda=
+PREVEJA: E por que `id + id + id` agrupa à esquerda em E → E + T?
+    (certa) Porque a recursão está à esquerda: só o E da esquerda pode conter outro +
+    (     ) Porque o analisador lê da esquerda
+    EXPLICACAO: O operando da direita é um T, que não contém + (sem parênteses). Então o + 'extra' só cabe na subárvore da esquerda.
+[BYTE] Existe algum programa que diz se QUALQUER gramática é ambígua?
+PREVEJA: Existe um algoritmo que decide, para qualquer GLC, se ela é ambígua?
+    (     ) Sim
+    (certa) Não: é um problema indecidível
+    EXPLICACAO: Indecidível! Por isso usamos condições suficientes: se a gramática é LL(1) ou LR(1), com certeza não é ambígua.
+REVELAR: Duas formas de lidar com uma gramática ambígua.
+    RESPOSTA: 1) Reescrever a gramática (níveis de precedência; else casando com o if mais próximo). 2) Manter a ambígua e dar regras de desambiguação ao gerador (no Bison: %left, %right, %nonassoc e preferência por shift).
+
+=== AULA DE LEITURA [FORMAL] Ambiguidade: definição e desambiguação
+TEXTO: **Definição.** Uma gramática G é **ambígua** se existe alguma sentença w ∈ L(G) com mais de uma árvore de derivação. Equivalentemente: w tem mais de uma derivação mais à esquerda, ou mais de uma derivação mais à direita.
+TEXTO: Uma linguagem é **inerentemente ambígua** se toda GLC que a gera é ambígua. Exemplo: { aⁱbʲcᵏ | i = j ou j = k }.
+TEXTO: **Fato.** Não existe algoritmo que decida se uma GLC arbitrária é ambígua (o problema é indecidível).
+CODIGO ():
+    Desambiguação de expressões (um nível por precedência):
+      E → E + T | T        (+ : menor precedência, assoc. à esquerda)
+      T → T * F | F        (* : maior precedência, assoc. à esquerda)
+      F → ( E ) | id       (átomos)
+    Regras:
+      operador de MENOR precedência fica mais perto da raiz;
+      recursão à ESQUERDA → associatividade à esquerda;
+      recursão à DIREITA  → associatividade à direita (ex.: ^).
+CODIGO (Else pendurado sem ambiguidade (Livro do Dragão, §4.3.2)):
+    stmt → matched_stmt | open_stmt
+    matched_stmt → if ( expr ) matched_stmt else matched_stmt | other
+    open_stmt → if ( expr ) stmt
+              | if ( expr ) matched_stmt else open_stmt
+PREVEJA: Para provar que G é ambígua, é suficiente mostrar…
+    (     ) uma derivação ⇒lm e outra ⇒rm diferentes para w
+    (certa) duas derivações ⇒lm diferentes para a mesma w
+    (     ) que G tem recursão à esquerda
+    EXPLICACAO: Duas ⇒lm distintas = duas árvores distintas. Uma ⇒lm e uma ⇒rm podem ser da mesma árvore; e recursão à esquerda não tem nada a ver com ambiguidade.
+PREVEJA: Toda gramática LL(1) ou LR(1) é…
+    (     ) ambígua
+    (certa) não ambígua
+    (     ) depende da entrada
+    EXPLICACAO: Um analisador determinístico constrói UMA árvore por entrada; se a tabela não tem conflitos, a gramática não é ambígua.
+DESTAQUE EXAM_TIP: Clássico: 'Mostre que a gramática do if-then-else é ambígua usando `if E1 then if E2 then S1 else S2`' e 'dê uma gramática equivalente não ambígua'. Decore a ideia matched/open: entre um then e um else só pode vir comando 'casado'.
+WIDGET PARSE_TREE gramatica=S -> i S | i S e S | x entrada=i i x e x legenda=O contraexemplo clássico, em miniatura.
+REVELAR: Por que recursão à esquerda dá associatividade à esquerda?
+    RESPOSTA: Em E → E + T, o operando que pode conter outros + é o da ESQUERDA. Em a + b + c, o a + b vira a subárvore da esquerda: (a + b) + c.
+
+=== AULA DE LEITURA [MNEMONIC] Duas árvores, um problema
+DESTAQUE MNEMONIC: **Ambi = dois.** Ambidestro usa as duas mãos; gramática ambígua tem DUAS árvores para a mesma frase.
+DESTAQUE MNEMONIC: Prova de ambiguidade = **'duas da mesma mão'**: duas mais à esquerda (ou duas mais à direita). Uma de cada mão não vale!
+DESTAQUE MNEMONIC: **Precedência = profundidade.** Quem tem MAIS precedência fica MAIS FUNDO na árvore (é calculado antes). O + fica perto da raiz; o * mais embaixo.
+DESTAQUE MNEMONIC: **A recursão aponta a associatividade.** E → **E** + T: recursão à esquerda → associa à esquerda. P → B ^ **P**: recursão à direita → associa à direita.
+TEXTO: **Palácio da memória**: no Vale das Gramáticas há duas árvores gêmeas plantadas lado a lado, com a mesma placa: `id + id * id`. É o minijogo **Duas Árvores**.
+DESTAQUE MNEMONIC: **Else pendurado casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.
+PREVEJA: Em `2 ^ 3 ^ 2` (potência, associativa à direita), qual o agrupamento correto?
+    (     ) (2 ^ 3) ^ 2 = 64
+    (certa) 2 ^ (3 ^ 2) = 512
+    EXPLICACAO: Associativa à direita: o de mais à direita se junta primeiro. 3² = 9, e 2⁹ = 512.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que ambiguidade é da linguagem, quase sempre é da gramática; (2) achar que recursão à esquerda causa ambiguidade, E → E + T é recursiva à esquerda e NÃO é ambígua; (3) achar que dá para testar ambiguidade automaticamente sempre (é indecidível).
+WIDGET PARSE_TREE gramatica=E -> E + E | E * E | ( E ) | id entrada=id + id * id legenda=As gêmeas: mesma placa, estruturas diferentes.
+REVELAR: Recite os ganchos: ambi, mesma mão, profundidade, vizinho.
+    RESPOSTA: Ambígua = duas árvores; prova com duas derivações da mesma mão (lm com lm); maior precedência = mais fundo; o else casa com o if vizinho.
+

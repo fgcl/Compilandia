@@ -1,0 +1,1735 @@
+######## REGIAO TEMPLO_TOPDOWN: Templo Top-Down (Prever de cima para baixo: LL(1))
+
+################ ASSUNTO FIRST: Conjunto FIRST  prereqs=[CFG_DERIVATION]
+FICHA: FIRST(α) é o conjunto de terminais que podem começar alguma cadeia derivada de α, mais ε, se α pode derivar a cadeia vazia.
+  gancho: FIRST = Fila: quem Inicia. Terminal na frente entra e pronto; variável na frente empresta o FIRST dela; se ela pode faltar, passa a vez pro vizinho.
+  termos: [terminal, começ, ε, anulável, não-terminal, ponto fixo]
+  erros comuns: [Continuar para o próximo símbolo mesmo quando o atual NÃO é anulável., Copiar o ε de FIRST(Y1) para FIRST(A) quando só Y1 (e não todo o lado direito) pode sumir., Colocar $ dentro de um FIRST ($ só existe no FOLLOW)., Colocar um não-terminal dentro do conjunto (FIRST só tem terminais e talvez ε)., Parar depois de uma única passada, sem repetir até o ponto fixo.]
+  FLASH: FIRST(a), se a é terminal? -> {a}
+  FLASH: Quando ε ∈ FIRST(A)? -> Quando A ⇒* ε (A é anulável).
+  FLASH: A → B c e B → b | ε. FIRST(A)? -> {b, c}
+  FLASH: A → B C, B → x | ε, C → y | ε. FIRST(A)? -> {x, y, ε}
+  FLASH: FIRST(E) na gramática E → T E' …? -> {(, id}
+  FLASH: $ pode estar em FIRST? -> Nunca.
+  FLASH: Por que o algoritmo repete as voltas? -> Conjuntos dependem uns dos outros; repete até nada mudar (ponto fixo).
+  FLASH: FIRST(A → A b | c)? -> {c}: o cálculo não trava com recursão à esquerda.
+
+=== AULA ANIMADA [BASICO] Com o que isso começa?  (id=FIRST, ~167s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] O parser tem T no topo da pilha e lê id. T tem duas regras, e ele só pode olhar um token.
+     palco: E -> T X | X -> + T X | ε | *T -> id | ( E ) | T | id | T -> id | T -> ( E )
+2. [BYTE] Para escolher sem voltar atrás, ele precisa saber com que token cada regra pode começar.
+     palco: E -> T X | X -> + T X | ε | *T -> id | ( E ) | T | id | *T -> id | *T -> ( E )
+3. [BYTE] FIRST de um símbolo é o conjunto dos terminais que podem aparecer no começo do que ele gera.
+     palco: FIRST
+4. [BYTE] Vamos calcular nesta gramática. Cada não-terminal ganha um saco, e o FIRST dele enche aos poucos.
+     palco: FIRST | E -> T X | X -> + T X | ε | T -> id | ( E ) | FIRST(T) | FIRST(X) | FIRST(E)
+5. [BYTE] Comece por T. As duas regras dele começam com terminal: id e abre parêntese. Os dois entram direto.
+     palco: FIRST | E -> T X | X -> + T X | ε | *T -> id | ( E ) | FIRST(T) | FIRST(X) | FIRST(E) | id | (
+6. [BYTE] Agora X. Uma regra começa com mais, a outra é só épsilon. Toque nos dois itens do FIRST de X.
+     palco: FIRST | E -> T X | *X -> + T X | ε | T -> id | ( E ) | FIRST(T) | FIRST(X) | FIRST(E) | id | ( | + | T | ε | id
+     PERGUNTA(toque): certas=[+, ε] erradas=[T, id]
+       dica: O mais entra direto. E quando a regra é épsilon, o próprio épsilon entra.
+       acerto: Isso. Mais e épsilon. Épsilon no FIRST quer dizer que X pode sumir. Um símbolo assim é anulável.
+7. [BYTE] Agora E, que vai para T X. A regra começa com um não-terminal, então o FIRST de T entra no de E.
+     palco: FIRST | *E -> T X | X -> + T X | ε | T -> id | ( E ) | FIRST(T) | FIRST(X) | FIRST(E) | id | ( | + | ε | *id | *(
+8. [PROF] T não é anulável, então paramos nele. Se fosse, o FIRST de X entraria também.
+     palco: FIRST | E -> T X | X -> + T X | ε | T -> id | ( E ) | FIRST(T) | FIRST(X) | FIRST(E) | id | ( | + | ε | id | (
+9. [BYTE] A receita do FIRST tem quatro passos. Você aplica em cada regra da gramática.
+     palco: Receita do FIRST | 1. Começa com terminal: ele entra. | 2. Começa com não-terminal: FIRST dele, sem ε. | 3. Se ele é anulável, olhe o próximo símbolo. | 4. Todos anuláveis: ε entra. Repita até parar.
+10. [BYTE] Passo um: a regra começa com terminal. Ele entra no FIRST, e essa regra está resolvida.
+     palco: Receita do FIRST | *1. Começa com terminal: ele entra. | 2. Começa com não-terminal: FIRST dele, sem ε. | 3. Se ele é anulável, olhe o próximo símbolo. | 4. Todos anuláveis: ε entra. Repita até parar.
+11. [BYTE] Em E vai para T X, qual passo da receita você usa? Toque nele.
+     palco: Receita do FIRST | 1. Começa com terminal: ele entra. | 2. Começa com não-terminal: FIRST dele, sem ε. | 3. Se ele é anulável, olhe o próximo símbolo. | 4. Todos anuláveis: ε entra. Repita até parar. | E -> T X
+     PERGUNTA(toque): certas=[2. Começa com não-terminal: FIRST dele, sem ε.] erradas=[1. Começa com terminal: ele entra., 3. Se ele é anulável, olhe o próximo símbolo.]
+       dica: E começa com T, e T é um não-terminal com regras próprias.
+       acerto: Isso. Passo dois: o FIRST de T entra no de E, menos o épsilon.
+12. [BYTE] Passo três: se esse não-terminal é anulável, ele pode sumir. Então o símbolo seguinte também pode começar a regra.
+     palco: Receita do FIRST | 1. Começa com terminal: ele entra. | 2. Começa com não-terminal: FIRST dele, sem ε. | *3. Se ele é anulável, olhe o próximo símbolo. | 4. Todos anuláveis: ε entra. Repita até parar. | E -> T X
+13. [BYTE] Passo quatro: se todos os símbolos da regra são anuláveis, entra o épsilon. Depois repita tudo, até uma rodada não mudar nada.
+     palco: Receita do FIRST | 1. Começa com terminal: ele entra. | 2. Começa com não-terminal: FIRST dele, sem ε. | 3. Se ele é anulável, olhe o próximo símbolo. | *4. Todos anuláveis: ε entra. Repita até parar. | E -> T X
+14. [BYTE] Outra gramática. Agora quem calcula é você. Comece por A, porque S depende dele.
+     palco: FIRST | S -> A b | c | A -> a A | ε | FIRST(A) | FIRST(S)
+15. [BYTE] A tem duas regras: a seguido de A, e épsilon. Toque no que entra no FIRST de A.
+     palco: FIRST | S -> A b | c | *A -> a A | ε | FIRST(A) | FIRST(S) | a | b | ε | c
+     PERGUNTA(toque): certas=[a, ε] erradas=[b, c]
+       dica: Uma regra começa com o terminal a. A outra é épsilon.
+       acerto: Isso. O a entra pelo passo um. O épsilon entra porque A é anulável.
+16. [BYTE] S vai para A b. O a de A já entra no FIRST de S. Mas A é anulável. Que outro token pode começar S?
+     palco: FIRST | *S -> A b | c | A -> a A | ε | FIRST(A) | FIRST(S) | a | ε | b | ε | A
+     PERGUNTA(toque): certas=[b] erradas=[ε, A]
+       dica: Se A sumir, quem fica no começo é o b.
+       acerto: Isso. Pelo passo três, o b entra. O épsilon de A fica de fora, porque o b nunca some.
+17. [BYTE] Falta a outra regra de S. Toque no que entra por ela.
+     palco: FIRST | *S -> A b | c | A -> a A | ε | FIRST(A) | FIRST(S) | a | ε | a | b | c | ε
+     PERGUNTA(toque): certas=[c] erradas=[ε]
+       dica: A segunda regra de S começa com um terminal.
+       acerto: Isso. A letra c entra pelo passo um.
+18. [BYTE] FIRST de S: a, b e c. Mais uma rodada não muda nada, então o cálculo acabou.
+     palco: FIRST | S -> A b | c | A -> a A | ε | FIRST(A) | FIRST(S) | a | ε | *a | *b | *c
+19. [BYTE] Um colega calculou assim o FIRST de S. Está certo ou errado? Toque.
+     palco: Erros comuns | FIRST(S) = { a, ε, c }, porque A começa com a ou some. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: A é anulável, mas depois dele vem o b, que nunca some.
+       acerto: Isso. O épsilon só entra se a regra inteira pode sumir. Aqui o b sempre fica, então quem entra é o b.
+20. [BYTE] Outro erro comum é parar cedo. Não-terminal anulável não fecha a conta: olhe o símbolo que vem depois dele.
+     palco: Erros comuns | Certo: FIRST(S) = { a, b, c }. O ε de A não passa para S. | *Errado: Parar no primeiro não-terminal, mesmo quando ele é anulável. | *Certo: Se ele é anulável, junte também o FIRST do símbolo seguinte.
+21. [BYTE] Resumindo: FIRST é o conjunto de começos possíveis. Épsilon só entra quando tudo pode sumir. E o cálculo repete até parar de mudar.
+     palco: Resumo | FIRST(α): os terminais que podem começar o que α gera. | O ε só entra quando tudo em α é anulável. | Repita os passos até uma rodada não mudar nada.
+
+=== AULA ANIMADA [PEGADINHA] FIRST de uma regra inteira  (id=FIRST/firstdeumaregrainteira, ~26s, 5 passos, exemplo começa no passo null)
+1. [BYTE] S começa com A. A pode sumir, e B também.
+     palco: FIRST de S | S -> A B c | A -> a | ε | B -> b | ε
+2. [BYTE] Se A não sumir, o a abre a frase. Primeiro candidato.
+     palco: FIRST de S | S -> A B c | *A -> a | ε | B -> b | ε | a | b | c | ε
+3. [BYTE] Toque em todos os símbolos que entram no FIRST de S.
+     palco: FIRST de S | S -> A B c | A -> a | ε | B -> b | ε | a | b | c | ε
+     PERGUNTA(toque): certas=[a, b, c] erradas=[ε]
+       dica: A e B podem sumir, mas o c fica. Então a frase nunca é vazia.
+       acerto: Isso: a, b e c. O épsilon fica de fora, porque o c nunca some.
+4. [PROF] O erro comum é parar no primeiro símbolo. Quem pode sumir manda olhar o próximo.
+     palco: FIRST de S | S -> A B c | A -> a | ε | B -> b | ε | a | b | c
+5. [BYTE] Só entra épsilon se tudo à direita puder sumir.
+     palco: FIRST de S | S -> A B c | A -> a | ε | B -> b | ε | a | b | c
+
+=== AULA ANIMADA [PRATICA] Símbolos correndo nos fios  (id=FIRST/símboloscorrendonosfios, ~33s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Três regras em cadeia. E começa com T, e T começa com F.
+     palco: F | T | E
+2. [BYTE] F abre com id, ou com abre parêntese. Eles entram primeiro.
+     palco: *F | T | E | *id   (
+3. [BYTE] T começa com F. Então tudo que abre F corre pelo fio até T.
+     palco: F | *T | E | id   (
+4. [BYTE] Chegou. Agora os mesmos símbolos seguem de T para E.
+     palco: F | T | *E | id   ( | id   (
+5. [BYTE] Quem chega no FIRST de E? Toque nos dois.
+     palco: F | T | *E | id   ( | id   ( | id | ( | +
+     PERGUNTA(toque): certas=[id, (] erradas=[+]
+       dica: Só correm pelo fio os símbolos que já estão em T.
+       acerto: Isso. FIRST escorre de quem está no começo da regra.
+6. [PROF] Quando nada mais corre, acabou. É assim que o algoritmo sabe parar.
+     palco: F | T | E | id   ( | id   ( | *id   (
+
+=== AULA ANIMADA [CLIPE] O que é FIRST  (id=FIRST/oqueéfirst, ~12s, 2 passos, exemplo começa no passo null)
+1. [BYTE] FIRST é o que pode aparecer primeiro ao expandir um símbolo.
+     palco: FIRST | *id | T | +
+2. [BYTE] Com ele, o parser decide qual regra seguir olhando um token.
+     palco: FIRST | *id | T | +
+
+=== AULA ANIMADA [CLIPE] Para que serve o épsilon  (id=FIRST/paraqueserveoépsilon, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Épsilon é a cadeia vazia: uma regra que não escreve nada.
+     palco: X -> + T X | ε | ε
+2. [BYTE] É assim que uma lista consegue terminar.
+     palco: X -> + T X | ε | + T + T + T  fim
+
+=== AULA DE LEITURA [STORY] A fila do bandejão: quem pode abrir a fila?
+[NARRADOR] Templo Top-Down, primeira sala. Na parede, um mural: a fila do bandejão do RU ao meio-dia, todo mundo com fome.
+[BYTE] Profª, por que tem fila de bandejão num templo de compiladores? Eu tô com fome e não entendi nada.
+[PROF] Porque FIRST é exatamente isso: **quem pode abrir a fila**. Cada não-terminal é uma turma que vai entrar na fila. FIRST(turma) = quem pode ser o primeiro a aparecer.
+TEXTO: Só um tiquinho mais formal: FIRST(A) é o conjunto de **terminais que podem aparecer no começo** de alguma cadeia derivada de A. Terminal é gente de verdade; não-terminal é uma turma que ainda vai mandar alguém.
+CODIGO (A fila de S: primeiro a turma A, depois a turma B, depois o c.):
+    S → A B c
+    A → a | ε
+    B → b | ε
+[PROF] Olha a regra S → A B c. Quem abre a fila de S? A turma A vai na frente. Se A manda o 'a', a fila começa com a.
+[BYTE] Então FIRST(S) = {a}. Fácil!
+[PROF] Calma, Byte! Repara em A → ε: a turma A pode **faltar**. Dizemos que A é **anulável**. Se ela falta, quem abre a fila?
+PREVEJA: A e B podem faltar (os dois têm produção ε). Quem pode abrir a fila de S → A B c?
+    (     ) Só a
+    (     ) a e b
+    (certa) a, b e c
+    (     ) a, b, c e ε
+    EXPLICACAO: Se A vem: a. Se A falta e B vem: b. Se os dois faltam: o c abre a fila. Mas c é terminal e NUNCA falta, então ε não entra. FIRST(S) = {a, b, c}.
+DESTAQUE MNEMONIC: Turma anulável = turma que pode faltar. Se ela falta, **passa a vez para o vizinho de trás**. Só se TODO mundo da regra puder faltar é que o ε entra no FIRST.
+WIDGET FIRST_FOLLOW gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=Veja o motor descobrindo FIRST(S) = {a, b, c}. Repare no passo em que ele 'pula' o A anulável.
+DESTAQUE NO_DUMB_QUESTIONS: P: Pra que eu quero saber quem abre a fila? R: O analisador LL(1) olha UM token e precisa escolher a produção. Se estou em S e chega um b, o FIRST me diz: 'pode ir de S → A B c, o b é bem-vindo aqui'.
+REVELAR: Sem olhar: quanto valem FIRST(A) e FIRST(B) nessa gramática?
+    RESPOSTA: FIRST(A) = {a, ε} e FIRST(B) = {b, ε}. O ε aparece porque cada uma tem uma produção vazia.
+[BYTE] Resumindo: FIRST é quem pode abrir a fila; turma que pode faltar passa a vez. Até que não sou tão burro assim.
+[PROF] Nunca foi! E se você errou o 'preveja', ótimo: o cérebro guarda melhor aquilo que o surpreendeu.
+
+=== AULA DE LEITURA [VISUAL] FIRST ao vivo: o ponto fixo trabalhando
+[PROF] Hoje você só vai olhar. O motor do jogo vai calcular FIRST na frente dos seus olhos, regra por regra.
+CODIGO (A gramática de expressões sem recursão à esquerda (a versão LL(1)).):
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+[BYTE] Por onde ele começa?
+TEXTO: Por todas as regras, em **voltas**. A cada volta, cada produção A → X1 X2 … tenta **acrescentar** coisas a FIRST(A). Quando uma volta inteira passa sem nada novo, paramos: é o **ponto fixo**.
+PREVEJA: Por que FIRST(E) precisa de mais voltas do que FIRST(F) para ficar pronto?
+    (     ) Porque E é o símbolo inicial
+    (certa) Porque depende de FIRST(T), que depende de FIRST(F)
+    (     ) Porque E tem ε
+    (     ) Porque E tem mais produções
+    EXPLICACAO: Os terminais ( e id nascem em F e 'sobem' a corrente: F → T → E. Enquanto FIRST(T) estiver vazio, E não tem o que copiar.
+WIDGET FIRST_FOLLOW gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada= legenda=Avance passo a passo olhando só a parte FIRST: veja ( e id subindo de F para T e de T para E.
+PASSOS O que olhar no widget:
+    1. Primeira volta: E' ganha {+, ε} e T' ganha {*, ε}. Terminal no começo da regra entra direto; produção ε dá ε.
+    2. Ainda na primeira volta: F ganha {(, id}.
+    3. Depois: T → F T' copia FIRST(F) para FIRST(T).
+    4. Depois: E → T E' copia FIRST(T) para FIRST(E).
+    5. Uma volta inteira sem novidade: ponto fixo, fim.
+[BYTE] Por que T não ganhou o ε de T'?
+[PROF] Porque em T → F T' o F vem primeiro e **não** é anulável. F sempre manda alguém, então o T' nem é consultado para o começo.
+DESTAQUE WATCH_OUT: Copie FIRST(Xi) **sem o ε**. O ε só entra em FIRST(A) se TODOS os símbolos do lado direito puderem sumir.
+REVELAR: FIRST(E), FIRST(T) e FIRST(F) são iguais. Qual é o conjunto?
+    RESPOSTA: { (, id }. Toda expressão começa com abre-parênteses ou com um identificador.
+DESTAQUE BRAIN_POWER: E se a regra fosse F → ( E ) | id | num? Quais conjuntos FIRST mudariam?
+REVELAR: Responda o Poder do Cérebro.
+    RESPOSTA: FIRST(F), FIRST(T) e FIRST(E) ganham num: a mudança sobe a corrente inteira. FIRST(E') e FIRST(T') não mudam.
+[PROF] Viu? Não tem mágica: é só repetir 'copia o que vem no começo' até parar de mudar.
+
+=== AULA DE LEITURA [WORKED] Exemplo resolvido: FIRST das declarações
+[PROF] Vamos resolver juntos, devagar, um exercício do tipo que cai em prova.
+CODIGO (Declarações estilo C: int a, b, c;  (vírgula e ponto e vírgula são terminais)):
+    D → T L ;
+    T → int | float
+    L → id R
+    R → , id R | ε
+PASSOS FIRST passo a passo:
+    1. 1) Terminais são o FIRST de si mesmos: FIRST(int) = {int}, FIRST(id) = {id}, FIRST(,) = {,}.
+    2. 2) T → int | float: as duas produções começam com terminal. FIRST(T) = {int, float}.
+    3. 3) L → id R: começa com o terminal id. FIRST(L) = {id}.
+    4. 4) R → , id R | ε: a primeira começa com ',' e a segunda é ε. FIRST(R) = {',', ε}.
+    5. 5) D → T L ;: começa com T, que NÃO é anulável. Copio FIRST(T) e paro. FIRST(D) = {int, float}.
+    6. 6) Mais uma volta conferindo tudo: nada muda. Ponto fixo!
+DESTAQUE WATCH_OUT: No passo 5, NÃO continue para o L só porque deu vontade. Só se avança para o próximo símbolo quando o atual é anulável.
+WIDGET FIRST_FOLLOW gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada= legenda=Confira com o motor: os mesmos conjuntos.
+[BYTE] Agora me deixa tentar um sozinho?
+[PROF] Exemplo 'desbotado': eu começo, você termina. Gramática de expressões LL(1).
+CODIGO ():
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+TEXTO: De presente: FIRST(E') = {+, ε} e FIRST(T') = {*, ε}.
+REVELAR: Sua vez: FIRST(F) = ?
+    RESPOSTA: {(, id}. As duas produções começam com terminal.
+REVELAR: E FIRST(T), sabendo que T → F T'?
+    RESPOSTA: {(, id}. F não é anulável, então FIRST(T) = FIRST(F) e o T' nem entra na conta.
+REVELAR: Por último, FIRST(E) para E → T E'?
+    RESPOSTA: {(, id}. Mesmo raciocínio: T não é anulável. Repare que ε NÃO entra em FIRST(E).
+[PROF] Acertou duas de três? Você já está no nível de prova. Errou? Releia o passo 5: é o erro nº 1 da turma, e você acabou de vacinar o cérebro contra ele.
+
+=== AULA DE LEITURA [SOCRATIC] Descubra a regra do FIRST sozinho
+[PROF] Hoje eu não vou te dar a regra. Só vou fazer perguntas. Quem descobre é você.
+PREVEJA: A → b C. Qual é FIRST(A)?
+    (certa) {b}
+    (     ) {b, C}
+    (     ) FIRST(C)
+    (     ) {C}
+    EXPLICACAO: Tudo que A gera começa com o terminal b. O que vem depois não interessa para o FIRST.
+PREVEJA: Agora A → B c, com B → x. FIRST(A)?
+    (     ) {c}
+    (certa) {x}
+    (     ) {x, c}
+    (     ) {B}
+    EXPLICACAO: A começa com B, e B começa com x. FIRST(A) herda FIRST(B) = {x}. Não-terminal nunca entra no conjunto: só terminais (e talvez ε).
+[BYTE] Então quando começa com variável, eu copio o FIRST dela. Saquei.
+PREVEJA: E se B → x | ε? Em A → B c, FIRST(A) = ?
+    (     ) {x}
+    (     ) {x, ε}
+    (certa) {x, c}
+    (     ) {x, c, ε}
+    EXPLICACAO: Se B sumir, a cadeia começa com c. Então entram x e c. O ε não entra, porque o c nunca some.
+PREVEJA: E se for A → B C, com B → x | ε e C → y | ε?
+    (     ) {x, y}
+    (certa) {x, y, ε}
+    (     ) {x}
+    (     ) {ε}
+    EXPLICACAO: x (B aparece), y (B some e C aparece) e ε (os dois somem: A pode gerar a cadeia vazia).
+REVELAR: Qual 'regra' você acabou de descobrir? Tente dizer com suas palavras antes de tocar.
+    RESPOSTA: Para A → X1 X2 … Xn: pegue FIRST(X1) sem ε. Se X1 é anulável, pegue também FIRST(X2) sem ε, e assim por diante. Se TODOS forem anuláveis, acrescente ε.
+[PROF] É exatamente o algoritmo do Livro do Dragão. Você o reinventou.
+PREVEJA: Última: A → A b | c (recursiva à esquerda). FIRST(A)?
+    (     ) Loop infinito, não dá pra calcular
+    (certa) {c}
+    (     ) {b, c}
+    (     ) {A, c}
+    EXPLICACAO: A primeira regra só diz 'FIRST(A) contém FIRST(A)': nada de novo. A segunda dá c. O ponto fixo para em {c}. O cálculo não trava; quem trava com recursão à esquerda é o analisador descendente!
+DESTAQUE BRAIN_POWER: Por que o cálculo precisa de várias 'voltas' (ponto fixo) em vez de uma passada só? Pense em A → B e B → A | x, visitadas nessa ordem.
+REVELAR: Responda o Poder do Cérebro.
+    RESPOSTA: Na 1ª passada, ao olhar A → B, FIRST(B) ainda está vazio. Só depois B ganha x, e precisamos voltar para A copiar. Repete-se até nada mudar.
+WIDGET FIRST_FOLLOW gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=Confirme suas descobertas: o motor aplica exatamente as regras que você deduziu.
+
+=== AULA DE LEITURA [FORMAL] FIRST: definição e algoritmo (versão prova)
+[PROF] Agora de terno e gravata. Esta é a versão que você escreve na prova.
+TEXTO: **Definição.** Para uma cadeia α de símbolos gramaticais, FIRST(α) = { a terminal | α ⇒* a β }. Se α ⇒* ε, então ε ∈ FIRST(α) também.
+PASSOS Regras para cada símbolo X:
+    1. 1. Se X é terminal, FIRST(X) = {X}.
+    2. 2. Se X → ε é uma produção, acrescente ε a FIRST(X).
+    3. 3. Se X → Y1 Y2 … Yk: acrescente FIRST(Y1) − {ε}; se ε ∈ FIRST(Y1), acrescente FIRST(Y2) − {ε}; e assim por diante. Se ε ∈ FIRST(Yi) para todo i, acrescente ε.
+    4. 4. Repita até nenhum conjunto mudar (ponto fixo).
+CODIGO (Ponto fixo: os conjuntos só crescem e o número de terminais é finito, então o laço termina. (Com k = 0, A → ε, o ε entra.)):
+    para cada não-terminal A: FIRST(A) := ∅
+    repita
+      para cada produção A → Y1 Y2 … Yk:
+        todosAnulaveis := verdadeiro
+        para i := 1 até k:
+          FIRST(A) := FIRST(A) ∪ (FIRST(Yi) − {ε})
+          se ε ∉ FIRST(Yi): todosAnulaveis := falso; pare
+        se todosAnulaveis: FIRST(A) := FIRST(A) ∪ {ε}
+    até nenhum FIRST mudar
+TEXTO: **FIRST de uma cadeia** α = X1 X2 … Xn: mesmo raciocínio. Some FIRST(X1) − {ε} e avance enquanto o símbolo atual for anulável; ε ∈ FIRST(α) só se todos os Xi forem anuláveis (ou se α = ε).
+[BYTE] Por que 'só crescem' garante que termina?
+[PROF] Porque há um número finito de terminais. Cada volta que muda algo acrescenta pelo menos um elemento; uma hora acaba o que acrescentar.
+PREVEJA: Em S → A B c, A → a | ε, B → b | ε, quanto vale FIRST(A B)?
+    (     ) {a}
+    (     ) {a, b}
+    (certa) {a, b, ε}
+    (     ) {a, b, c}
+    EXPLICACAO: A é anulável → olho B; B também é anulável → ε entra. FIRST(A B) = {a, b, ε}. O c não faz parte da cadeia A B!
+WIDGET FIRST_FOLLOW gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=Confira cada regra aplicada no passo a passo.
+DESTAQUE EXAM_TIP: Na prova: (1) liste os anuláveis primeiro; (2) comece pelos não-terminais cujas produções começam com terminal; (3) escreva os conjuntos com chaves e diga explicitamente se ε pertence. ε em FIRST: pode. $ em FIRST: nunca.
+DESTAQUE WATCH_OUT: FIRST contém apenas terminais e, possivelmente, ε. Nunca um não-terminal.
+REVELAR: Defina FIRST em uma frase, sem olhar.
+    RESPOSTA: FIRST(α) é o conjunto de terminais que podem iniciar alguma cadeia derivada de α, mais ε se α pode derivar a cadeia vazia.
+
+=== AULA DE LEITURA [MNEMONIC] Ganchos para nunca esquecer o FIRST
+[NARRADOR] Palácio da Memória: você entra no Templo Top-Down. A primeira sala tem uma porta giratória com uma placa: **FIRST, quem entra primeiro**.
+DESTAQUE MNEMONIC: **FIRST = Fila: quem Inicia.** Imagine a porta giratória: passa um de cada vez, e o FIRST é quem pode passar primeiro.
+DESTAQUE MNEMONIC: Rima: **'Terminal na frente? Entra e pronto, minha gente. Variável na frente? Empresta o FIRST dela. Pode sumir? Olha o vizinho da janela!'**
+[BYTE] E o ε? Quando ele entra?
+DESTAQUE MNEMONIC: **'Todos faltaram? Fila vazia: ε.'** Um único terminal (ou um não-terminal não anulável) no caminho já barra o ε.
+TEXTO: Contraste que salva nota: FIRST(A) olha o **começo do lado direito das regras DE A**. FOLLOW(A) (próxima sala) olha **onde A aparece** no lado direito das regras dos outros.
+PASSOS Confusões clássicas lado a lado:
+    1. FIRST pode ter ε; FOLLOW nunca tem ε.
+    2. FOLLOW do símbolo inicial sempre tem $; FIRST nunca tem $.
+    3. FIRST(A) olha as produções DE A; FOLLOW(A) olha as produções ONDE A aparece.
+    4. FIRST de um terminal é ele mesmo: FIRST(id) = {id}.
+PREVEJA: Qual destes conjuntos é IMPOSSÍVEL ser um FIRST?
+    (     ) {a, ε}
+    (     ) {id, (}
+    (certa) {+, $}
+    (     ) {ε}
+    EXPLICACAO: $ é o marcador de fim de entrada: mora no FOLLOW, nunca no FIRST. Já {ε} é possível, por exemplo com A → ε sozinho.
+WIDGET FIRST_FOLLOW gramatica=S → ( S ) S | ε entrada= legenda=Teste o gancho em S → ( S ) S | ε: quem abre a fila? '(': ou ninguém (ε).
+REVELAR: Diga a rima de cabeça e aplique em S → ( S ) S | ε.
+    RESPOSTA: 'Terminal na frente? Entra e pronto' → '(' entra. A produção ε: 'todos faltaram' → ε entra. FIRST(S) = {(, ε}.
+[PROF] Esqueceu? Volte a esta sala do palácio: porta giratória, fila, quem inicia. O resto sai daí.
+
+################ ASSUNTO FOLLOW: Conjunto FOLLOW  prereqs=[FIRST]
+FICHA: FOLLOW(A) é o conjunto de terminais que podem aparecer imediatamente à direita de A em alguma forma sentencial; $ entra se A pode terminar a frase.
+  gancho: Dólar, Vizinho, Herança: $ no inicial; o vizinho da direita empresta o FIRST (sem ε); quem fica no fim herda o FOLLOW do pai.
+  termos: [depois, $, first, herda, inicial, anulável]
+  erros comuns: [Colocar ε em FOLLOW (FOLLOW nunca tem ε)., Esquecer o $ no FOLLOW do símbolo inicial., Inverter a herança: é FOLLOW(A) ⊆ FOLLOW(B) para A → α B, não o contrário., Esquecer a herança quando o resto β é anulável (não só quando B está no fim)., Calcular FOLLOW antes de ter todos os FIRST prontos.]
+  FLASH: Regra 1 do FOLLOW? -> $ ∈ FOLLOW(símbolo inicial).
+  FLASH: Em A → α B β, o que entra em FOLLOW(B)? -> FIRST(β) − {ε}
+  FLASH: Quando FOLLOW(A) entra em FOLLOW(B)? -> Se A → α B, ou A → α B β com β ⇒* ε.
+  FLASH: FOLLOW pode conter ε? -> Nunca.
+  FLASH: S → a S b | ε. FOLLOW(S)? -> {b, $}
+  FLASH: S → ( S ) S | ε. FOLLOW(S)? -> {), $}
+  FLASH: Na gramática de expressões LL(1), FOLLOW(F)? -> {*, +, ), $}
+  FLASH: Para que serve o FOLLOW na tabela LL(1)? -> Decidir onde colocar as produções que derivam ε.
+
+=== AULA ANIMADA [BASICO] O que vem depois?  (id=FOLLOW, ~182s, 22 passos, exemplo começa no passo 3)
+1. [BYTE] O parser tem X no topo e lê fecha parêntese. X é anulável: pode sumir, ou pode virar mais T X.
+     palco: E -> T X | *X -> + T X | ε | T -> id | ( E ) | X | ) | X -> + T X | X -> ε
+2. [BYTE] Sumir só está certo se fecha parêntese puder aparecer logo depois de X. O FIRST não responde isso.
+     palco: E -> T X | *X -> + T X | ε | T -> id | ( E ) | X | *) | X -> + T X | *X -> ε
+3. [BYTE] FOLLOW de um não-terminal é o conjunto dos terminais que podem aparecer logo depois dele em alguma derivação.
+     palco: FOLLOW
+4. [BYTE] Mesma gramática, três sacos de novo. Agora cada saco guarda o que pode vir depois do não-terminal.
+     palco: FOLLOW | E -> T X | X -> + T X | ε | T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T)
+5. [BYTE] E é o símbolo inicial. Depois da frase inteira vem o fim da entrada, o cifrão. Ele entra no FOLLOW de E.
+     palco: FOLLOW | E -> T X | X -> + T X | ε | T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T) | *$
+6. [BYTE] Agora procuro E do lado direito das regras. Em abre parêntese, E, fecha parêntese, quem vem depois de E é o fecha parêntese.
+     palco: FOLLOW | E -> T X | X -> + T X | ε | *T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T) | $ | *)
+7. [BYTE] Em E vai para T X, depois de T vem X. Com que token X pode começar? Toque nele.
+     palco: FOLLOW | *E -> T X | X -> + T X | ε | T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T) | $ | ) | + | id | (
+     PERGUNTA(toque): certas=[+] erradas=[id, (]
+       dica: Olhe o FIRST de X, sem o épsilon.
+       acerto: Isso. O FIRST de X, sem o épsilon, entra no FOLLOW de T. Épsilon nunca entra em FOLLOW.
+8. [BYTE] X é o último símbolo da regra de E. Então o que vem depois de E também vem depois de X.
+     palco: FOLLOW | *E -> T X | X -> + T X | ε | T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T) | $ | ) | + | *$ | *)
+9. [BYTE] E como X é anulável, T pode ficar no fim da regra. O FOLLOW de E entra no de T: mais, cifrão e fecha parêntese.
+     palco: FOLLOW | E -> T X | X -> + T X | ε | T -> id | ( E ) | FOLLOW(E) | FOLLOW(X) | FOLLOW(T) | $ | ) | *+ | $ | ) | *$ | *)
+10. [BYTE] A receita do FOLLOW tem quatro passos. Para cada não-terminal B, procure onde ele aparece do lado direito.
+     palco: Receita do FOLLOW | 1. O símbolo inicial ganha o $. | 2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B). | 3. β anulável ou vazio: FOLLOW(A) entra também. | 4. Repita até uma rodada não mudar nada.
+11. [BYTE] Passo um: o símbolo inicial ganha o cifrão, que marca o fim da entrada.
+     palco: Receita do FOLLOW | *1. O símbolo inicial ganha o $. | 2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B). | 3. β anulável ou vazio: FOLLOW(A) entra também. | 4. Repita até uma rodada não mudar nada.
+12. [BYTE] O mais, que está no FIRST de X, entrou no FOLLOW de T. Qual passo fez isso? Toque.
+     palco: Receita do FOLLOW | 1. O símbolo inicial ganha o $. | 2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B). | 3. β anulável ou vazio: FOLLOW(A) entra também. | 4. Repita até uma rodada não mudar nada. | E -> T X
+     PERGUNTA(toque): certas=[2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B).] erradas=[1. O símbolo inicial ganha o $., 3. β anulável ou vazio: FOLLOW(A) entra também.]
+       dica: X vem logo depois de T. É o FIRST do que vem depois.
+       acerto: Isso. Passo dois: o FIRST do que vem depois, sem o épsilon.
+13. [BYTE] Passo três: se o resto da regra é anulável, ou não existe, B herda o FOLLOW do lado esquerdo da regra.
+     palco: Receita do FOLLOW | 1. O símbolo inicial ganha o $. | 2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B). | *3. β anulável ou vazio: FOLLOW(A) entra também. | 4. Repita até uma rodada não mudar nada. | E -> T X
+14. [BYTE] Passo quatro: um FOLLOW depende de outro. Repita os passos até uma rodada inteira não acrescentar nada.
+     palco: Receita do FOLLOW | 1. O símbolo inicial ganha o $. | 2. A → α B β: FIRST(β) sem ε entra em FOLLOW(B). | 3. β anulável ou vazio: FOLLOW(A) entra também. | *4. Repita até uma rodada não mudar nada. | E -> T X
+15. [BYTE] Agora uma gramática maior, com soma e multiplicação. A meta é o FOLLOW de F.
+     palco: FOLLOW | E -> T R | R -> + T R | ε | T -> F Y | Y -> * F Y | ε | F -> ( E ) | id | FOLLOW(T) | FOLLOW(F)
+16. [BYTE] Em T vai para F Y, depois de F vem Y. Com que token Y pode começar? Toque.
+     palco: FOLLOW | E -> T R | R -> + T R | ε | *T -> F Y | *Y -> * F Y | ε | F -> ( E ) | id | FOLLOW(T) | FOLLOW(F) | * | + | id
+     PERGUNTA(toque): certas=[*] erradas=[+, id]
+       dica: Olhe as regras de Y. Uma delas começa com um terminal.
+       acerto: Isso. O vezes entra pelo passo dois.
+17. [BYTE] Y é anulável. Então F pode ficar no fim da regra de T. De quem F herda o FOLLOW? Toque.
+     palco: FOLLOW | E -> T R | R -> + T R | ε | *T -> F Y | Y -> * F Y | ε | F -> ( E ) | id | FOLLOW(T) | FOLLOW(F) | * | T | E | Y
+     PERGUNTA(toque): certas=[T] erradas=[E, Y]
+       dica: F está no lado direito da regra de T.
+       acerto: Isso. Pelo passo três, tudo que segue T também segue F.
+18. [BYTE] O FOLLOW de T tem mais, fecha parêntese e cifrão. Os três entram no FOLLOW de F.
+     palco: FOLLOW | E -> T R | R -> + T R | ε | T -> F Y | Y -> * F Y | ε | F -> ( E ) | id | FOLLOW(T) | FOLLOW(F) | * | *+ | *) | *$
+19. [BYTE] FOLLOW de F: vezes, mais, fecha parêntese e cifrão. Outra rodada não muda nada.
+     palco: FOLLOW | E -> T R | R -> + T R | ε | T -> F Y | Y -> * F Y | ε | F -> ( E ) | id | FOLLOW(T) | FOLLOW(F) | ** | + | ) | $ | *+ | *) | *$
+20. [BYTE] Um colega copiou o FIRST de Y inteiro para o FOLLOW de F. Certo ou errado? Toque.
+     palco: Erros comuns | FOLLOW(F) = { *, ε }, porque depois de F vem Y. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: FOLLOW só tem terminais e o cifrão.
+       acerto: Isso. Épsilon nunca entra em FOLLOW. Quando Y some, o que entra é o FOLLOW de T.
+21. [BYTE] Outro erro é esquecer o cifrão. Sem ele, a regra que some no fim da entrada fica sem coluna na tabela.
+     palco: Erros comuns | Certo: FOLLOW(F) = { *, +, ), $ }. Nunca há ε em FOLLOW. | *Errado: Esquecer o $ no FOLLOW do símbolo inicial. | *Certo: O símbolo inicial sempre tem $ no FOLLOW.
+22. [BYTE] Resumindo: FOLLOW é o que pode vir depois. Ele sai do FIRST do vizinho e do FOLLOW de quem está à esquerda da seta. Épsilon nunca entra.
+     palco: Resumo | FOLLOW(B): os terminais que podem vir logo depois de B. | Vem do FIRST do que segue B. Se isso some, vem do FOLLOW do lado esquerdo. | Nunca tem ε. O símbolo inicial sempre tem $.
+
+=== AULA ANIMADA [PEGADINHA] O épsilon que muda o FOLLOW  (id=FOLLOW/oépsilonquemudaofollow, ~25s, 5 passos, exemplo começa no passo null)
+1. [BYTE] B pode sumir. Isso muda quem vem depois de A.
+     palco: FOLLOW de B | S -> A b | A -> a B | B -> d | ε
+2. [BYTE] B está no fim da regra de A. Depois de B vem o que vem depois de A.
+     palco: FOLLOW de B | S -> A b | *A -> a B | B -> d | ε | FOLLOW de A entra no FOLLOW de B
+3. [BYTE] E depois de A vem b, olhando a primeira regra.
+     palco: FOLLOW de B | *S -> A b | A -> a B | B -> d | ε | FOLLOW de A entra no FOLLOW de B
+4. [BYTE] Então, o que entra no FOLLOW de B? Toque.
+     palco: FOLLOW de B | S -> A b | A -> a B | B -> d | ε | FOLLOW de A entra no FOLLOW de B | b | d | ε
+     PERGUNTA(toque): certas=[b] erradas=[d, ε]
+       dica: Não olhe para dentro de B. Olhe o que vem depois dele.
+       acerto: Isso. O b. E nada de épsilon: FOLLOW nunca tem épsilon.
+5. [PROF] FIRST olha para dentro. FOLLOW olha para fora.
+     palco: FOLLOW
+
+=== AULA ANIMADA [CLIPE] O que é FOLLOW  (id=FOLLOW/oqueéfollow, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] FOLLOW é o que pode vir logo depois de um símbolo.
+     palco: FOLLOW | T | *+ | E
+2. [BYTE] Ele serve para decidir quando um símbolo pode sumir.
+     palco: FOLLOW | T | *+ | E
+
+=== AULA DE LEITURA [STORY] Quem vem logo depois de você na fila?
+[NARRADOR] Segunda sala do Templo Top-Down: um ponto de ônibus. A fila dá a volta no quarteirão.
+[PROF] Na sala do FIRST, perguntávamos quem **abre** a fila de uma turma. Aqui a pergunta muda: quem pode estar **logo atrás** da turma A, em alguma fila possível?
+TEXTO: FOLLOW(A) = conjunto de **terminais que podem aparecer imediatamente à direita de A** em alguma forma sentencial. Se A puder ser o último da fila inteira, entra o **$**: o motorista fechando a porta (fim da entrada).
+CODIGO (De novo a nossa gramática da fila.):
+    S → A B c
+    A → a | ε
+    B → b | ε
+[BYTE] Quem vem depois de B? Fácil: em S → A B c, depois do B vem c.
+[PROF] Isso! FOLLOW(B) = {c}. E depois de A?
+PREVEJA: Em S → A B c, com B → b | ε, quem pode vir logo depois de A?
+    (     ) Só b
+    (     ) Só c
+    (certa) b e c
+    (     ) b, c e ε
+    EXPLICACAO: Se B aparece, depois de A vem b. Se B falta, depois de A vem direto o c. FOLLOW(A) = {b, c}. ε nunca entra no FOLLOW: alguém sempre vem depois, nem que seja o $.
+[BYTE] E o S? Ninguém aparece depois dele em regra nenhuma!
+[PROF] S é o símbolo inicial: a frase inteira. Depois da frase inteira vem o fim da entrada. Então FOLLOW(S) = {$}. Sempre, sem exceção, o $ entra no FOLLOW do inicial.
+DESTAQUE MNEMONIC: Regra da herança: **se B é o último da turma A, quem vem depois de A também vem depois de B.** O último da fila herda o 'depois' do grupo inteiro.
+WIDGET FIRST_FOLLOW gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=Veja o motor: FOLLOW(S) = {$}, FOLLOW(A) = {b, c}, FOLLOW(B) = {c}.
+DESTAQUE NO_DUMB_QUESTIONS: P: Pra que saber quem vem depois? R: Para decidir quando usar A → ε! Se o próximo token é algo que pode vir DEPOIS de A, faz sentido A sumir. É assim que a tabela LL(1) usa o FOLLOW.
+REVELAR: Em S → ( S ) S | ε, o que pode vir depois de S?
+    RESPOSTA: ')' (pelo S de dentro dos parênteses) e $ (S é o inicial, e o último S herda FOLLOW(S)). FOLLOW(S) = {), $}.
+[PROF] FIRST: quem abre. FOLLOW: quem vem atrás. Duas perguntas sobre a mesma fila.
+
+=== AULA DE LEITURA [VISUAL] FOLLOW ao vivo nas expressões
+[PROF] Mesma gramática de expressões, agora com os olhos grudados no FOLLOW.
+CODIGO ():
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+TEXTO: O motor começa colocando $ em FOLLOW(E), porque E é o inicial. Depois percorre as produções procurando **onde cada não-terminal aparece no lado direito** e o que vem à direita dele.
+PREVEJA: Em F → ( E ), o que entra em FOLLOW(E)?
+    (     ) (
+    (certa) )
+    (     ) $
+    (     ) id
+    EXPLICACAO: Logo depois do E vem o ')'. Então ')' ∈ FOLLOW(E). Junto com o $, FOLLOW(E) = {), $}.
+WIDGET FIRST_FOLLOW gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada= legenda=Vá até a parte FOLLOW e leia a justificativa de cada passo.
+PASSOS O que observar:
+    1. E → T E': depois de T vem E', então FIRST(E') − {ε} = {+} entra em FOLLOW(T).
+    2. Como E' é anulável, FOLLOW(E) também entra em FOLLOW(T).
+    3. E' está no fim de E → T E': FOLLOW(E') herda FOLLOW(E) = {), $}.
+    4. T → F T': FOLLOW(F) ganha FIRST(T') − {ε} = {*} e, como T' pode sumir, herda FOLLOW(T).
+    5. Repete as voltas até nada mudar.
+[BYTE] Tá, mas quanto deu no fim?
+REVELAR: Tente antes de tocar: FOLLOW(T) = ?
+    RESPOSTA: {+, ), $}: o + vem de FIRST(E'), e ) e $ vêm herdados de FOLLOW(E).
+REVELAR: E FOLLOW(F) = ?
+    RESPOSTA: {*, +, ), $}: o * vem de FIRST(T'); o resto é herdado de FOLLOW(T).
+DESTAQUE BRAIN_POWER: Repare: FOLLOW(E') = FOLLOW(E) e FOLLOW(T') = FOLLOW(T). Por quê? Dica: onde E' e T' aparecem nas regras?
+REVELAR: Responda o Poder do Cérebro.
+    RESPOSTA: E' só aparece no FIM das produções de E e de E' (E → T E', E' → + T E'), então só recebe herança de FOLLOW(E) e de si mesmo. O mesmo vale para T' com T.
+WIDGET FIRST_FOLLOW gramatica=S → ( S ) S | ε entrada= legenda=Bônus: S → ( S ) S | ε. Veja o ')' e o $ chegando em FOLLOW(S).
+
+=== AULA DE LEITURA [WORKED] Exemplo resolvido: FOLLOW passo a passo
+[PROF] Calcular FOLLOW sem FIRST é como fazer bolo sem farinha. Então começamos com os FIRST prontos.
+CODIGO ():
+    D → T L ;
+    T → int | float
+    L → id R
+    R → , id R | ε
+TEXTO: Do exercício de FIRST: FIRST(D) = FIRST(T) = {int, float}, FIRST(L) = {id}, FIRST(R) = {',', ε}. R é o único anulável.
+PASSOS FOLLOW passo a passo:
+    1. 1) D é o inicial: FOLLOW(D) = {$}.
+    2. 2) Em D → T L ;, depois de T vem L. FIRST(L) = {id} entra em FOLLOW(T). FOLLOW(T) = {id}.
+    3. 3) Na mesma regra, depois de L vem ';'. FOLLOW(L) = {;}.
+    4. 4) Em L → id R, R está no fim: FOLLOW(R) herda FOLLOW(L) = {;}.
+    5. 5) Em R → , id R, R está no fim de novo: herda FOLLOW(R) de si mesmo. Nada novo.
+    6. 6) Mais uma volta: nada muda. Ponto fixo.
+[BYTE] Pera: no passo 2, por que o ';' não entra em FOLLOW(T) também?
+[PROF] Porque L **não é anulável**: ele sempre gera pelo menos um id. Então o ';' nunca encosta no T.
+WIDGET FIRST_FOLLOW gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada= legenda=Confira: FOLLOW(D) = {$}, FOLLOW(T) = {id}, FOLLOW(L) = FOLLOW(R) = {;}.
+[PROF] Agora o desbotado. Gramática S → A B c, A → a | ε, B → b | ε, com FIRST(A) = {a, ε} e FIRST(B) = {b, ε}.
+TEXTO: Eu faço o primeiro: S é o inicial, então FOLLOW(S) = {$}. S não aparece em nenhum lado direito, então acabou para ele.
+REVELAR: Sua vez: FOLLOW(B)?
+    RESPOSTA: {c}. Em S → A B c, depois de B vem o terminal c.
+REVELAR: E FOLLOW(A)? Cuidado com o B anulável.
+    RESPOSTA: {b, c}. Depois de A vem B: entra FIRST(B) − {ε} = {b}. Como B pode sumir, olho o próximo: c.
+DESTAQUE WATCH_OUT: Colocou ε em FOLLOW(A)? Normal, acontece com todo mundo! Mas ε NUNCA está em FOLLOW. O ε de FIRST(B) é só um sinal de 'olhe mais à direita'.
+
+=== AULA DE LEITURA [SOCRATIC] Perguntas que levam ao FOLLOW
+[PROF] Gramática pequenininha: S → a S b | ε. Ela gera a b, a a b b, a a a b b b… e a cadeia vazia.
+WIDGET DERIVATION gramatica=S → a S b | ε entrada=a a b b legenda=Olhe as formas sentenciais: a S b, a a S b b… O que aparece logo depois de S?
+PREVEJA: Olhando a derivação, que terminal aparece logo à direita de S nas formas sentenciais?
+    (     ) a
+    (certa) b
+    (     ) ε
+    (     ) nenhum
+    EXPLICACAO: Em a S b e a a S b b, o S está sempre colado num b. Então b ∈ FOLLOW(S).
+PREVEJA: E na forma sentencial inicial, que é só 'S'? O que vem depois?
+    (     ) Nada, então FOLLOW fica vazio
+    (certa) O fim da entrada, $
+    (     ) ε
+    (     ) a
+    EXPLICACAO: Depois da frase completa vem o fim da entrada. Por isso a regra: $ ∈ FOLLOW(símbolo inicial).
+[BYTE] Então FOLLOW(S) = {b, $}. Mas por que olhar as regras em vez de derivar tudo?
+[PROF] Porque as derivações são infinitas! As regras resumem tudo: onde S aparece num lado direito, olho o que está à direita dele.
+PREVEJA: Nova gramática: A → x B y. O que você conclui sobre FOLLOW(B)?
+    (certa) y ∈ FOLLOW(B)
+    (     ) x ∈ FOLLOW(B)
+    (     ) FOLLOW(B) ⊆ FOLLOW(A)
+    (     ) Nada
+    EXPLICACAO: B é seguido de y. O FIRST do que vem à direita (aqui, y) entra em FOLLOW(B).
+PREVEJA: E se for A → x B, com B no fim?
+    (     ) FOLLOW(B) fica vazio
+    (certa) FOLLOW(A) ⊆ FOLLOW(B)
+    (     ) FOLLOW(B) ⊆ FOLLOW(A)
+    (     ) x ∈ FOLLOW(B)
+    EXPLICACAO: Tudo que pode vir depois de A pode vir depois de B, porque B termina A. A herança vai do PAI (lado esquerdo) para o filho do fim.
+PREVEJA: E se for A → x B C, com C anulável?
+    (     ) Só FIRST(C) − {ε}
+    (     ) Só FOLLOW(A)
+    (certa) FIRST(C) − {ε} e também FOLLOW(A)
+    (     ) FIRST(C) com ε
+    EXPLICACAO: C pode aparecer (entra FIRST(C) sem ε) ou sumir (aí B fica no fim e herda FOLLOW(A)).
+REVELAR: Junte tudo: escreva as três regras do FOLLOW com suas palavras.
+    RESPOSTA: 1) $ no FOLLOW do inicial. 2) Em A → α B β, FIRST(β) − {ε} entra em FOLLOW(B). 3) Se β é vazio ou anulável, FOLLOW(A) entra em FOLLOW(B).
+WIDGET FIRST_FOLLOW gramatica=S → a S b | ε entrada= legenda=Confira: FOLLOW(S) = {b, $}.
+[PROF] Você acabou de reconstruir o algoritmo do Livro do Dragão. Se tropeçou no caminho, ótimo: foi o tropeço que fixou a regra.
+
+=== AULA DE LEITURA [FORMAL] FOLLOW: definição e algoritmo (versão prova)
+[PROF] Versão prova, com todas as letras.
+TEXTO: **Definição.** Para um não-terminal A, FOLLOW(A) é o conjunto de terminais a que podem aparecer imediatamente à direita de A em alguma forma sentencial, isto é, S ⇒* α A a β. Se A pode ser o símbolo mais à direita de uma forma sentencial, $ ∈ FOLLOW(A).
+PASSOS Regras (aplique até nada mudar):
+    1. 1. Coloque $ em FOLLOW(S), onde S é o símbolo inicial.
+    2. 2. Para cada produção A → α B β: tudo em FIRST(β), exceto ε, entra em FOLLOW(B).
+    3. 3. Para cada produção A → α B, ou A → α B β com ε ∈ FIRST(β): tudo em FOLLOW(A) entra em FOLLOW(B).
+CODIGO (Repare: FIRST(ε) = {ε}. Por isso, quando B está no fim (β vazio), a regra 3 dispara.):
+    para cada não-terminal A: FOLLOW(A) := ∅
+    FOLLOW(S) := { $ }
+    repita
+      para cada produção A → X1 X2 … Xn:
+        para i := 1 até n:
+          se Xi é um não-terminal B:
+            β := Xi+1 … Xn
+            FOLLOW(B) := FOLLOW(B) ∪ (FIRST(β) − {ε})
+            se ε ∈ FIRST(β):        // β vazio ou anulável
+              FOLLOW(B) := FOLLOW(B) ∪ FOLLOW(A)
+    até nenhum FOLLOW mudar
+PREVEJA: Qual afirmação é SEMPRE verdadeira?
+    (     ) ε pode estar em FOLLOW
+    (certa) $ ∈ FOLLOW(símbolo inicial)
+    (     ) FOLLOW(A) ⊆ FIRST(A)
+    (     ) FOLLOW de um terminal é ele mesmo
+    EXPLICACAO: É a regra 1. FOLLOW nunca contém ε, e não existe relação geral entre FOLLOW(A) e FIRST(A).
+WIDGET FIRST_FOLLOW gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada= legenda=Cada passo do widget cita a regra usada. Tente prever o próximo antes de avançar.
+DESTAQUE EXAM_TIP: Monte uma tabelinha Não-terminal | FIRST | FOLLOW. Faça TODOS os FIRST antes. No FOLLOW, para cada não-terminal, varra as regras procurando onde ele aparece do lado DIREITO e anote a regra usada (2 ou 3). Professor adora ver a justificativa.
+DESTAQUE WATCH_OUT: Direção da herança: a regra 3 é FOLLOW(A) ⊆ FOLLOW(B), do lado esquerdo para o símbolo do fim. Nunca o contrário.
+REVELAR: Para S → A a A b | B b B a, A → ε, B → ε: quanto valem FOLLOW(A) e FOLLOW(B)?
+    RESPOSTA: FOLLOW(A) = {a, b} e FOLLOW(B) = {a, b}. Depois do primeiro A vem a, depois do segundo vem b; o mesmo para B. (Exemplo clássico: a gramática é LL(1) mesmo com A e B anuláveis.)
+[BYTE] Então: $ no inicial, olho à direita, e se acabou ou pode sumir, herdo do pai.
+[PROF] Essa é a prova inteira numa frase só.
+
+=== AULA DE LEITURA [MNEMONIC] Dólar, Vizinho, Herança
+[NARRADOR] Segunda sala do Templo Top-Down: um ponto de ônibus com a placa **FOLLOW, quem vem atrás**. O ônibus se chama $ e sempre para no fim da linha.
+DESTAQUE MNEMONIC: **As 3 regras do FOLLOW = Dólar, Vizinho, Herança.** Dólar: $ no inicial. Vizinho: quem está à direita empresta o FIRST (sem ε). Herança: o filho do fim herda o FOLLOW do pai.
+DESTAQUE MNEMONIC: Rima: **'Ficou no fim, ou o resto pode sumir? Herda do pai o que vai vir!'**
+[BYTE] Eu sempre confundo a direção da herança…
+[PROF] Pensa em herança de verdade: desce do pai para o filho. FOLLOW(pai, o lado esquerdo) desce para FOLLOW(filho do fim). Filho não deixa herança pro pai.
+PASSOS FIRST × FOLLOW: o duelo:
+    1. FIRST: quem ABRE a fila. FOLLOW: quem vem ATRÁS.
+    2. FIRST pode ter ε. FOLLOW: jamais ε.
+    3. FOLLOW pode ter $. FIRST: jamais $.
+    4. FIRST(A): olho as regras DE A. FOLLOW(A): olho as regras ONDE A aparece à direita.
+    5. FOLLOW depende de FIRST; FIRST não depende de FOLLOW.
+PREVEJA: Byte calculou FOLLOW(X) = {a, ε, $}. Onde está o erro?
+    (     ) Falta o b
+    (     ) O $ não pode
+    (certa) O ε não pode
+    (     ) Está certo
+    EXPLICACAO: ε nunca entra em FOLLOW. Se apareceu, ele provavelmente copiou FIRST(β) sem tirar o ε, quando devia ter aplicado a Herança.
+WIDGET FIRST_FOLLOW gramatica=S → a S b | ε entrada= legenda=Teste o gancho em S → a S b | ε: Dólar dá $; Vizinho dá b. FOLLOW(S) = {b, $}.
+DESTAQUE FIRESIDE: FIRST e FOLLOW ao pé da lareira. FIRST: 'Eu sou o começo de tudo!' FOLLOW: 'E eu sou o que vem depois. Mas não vivo sem você: sempre que olho o vizinho, peço o FIRST dele emprestado.' FIRST: 'E quando o vizinho some?' FOLLOW: 'Aí peço ao meu pai. Família é pra isso.'
+REVELAR: Diga as 3 regras pelo gancho 'Dólar, Vizinho, Herança'.
+    RESPOSTA: Dólar: $ ∈ FOLLOW(inicial). Vizinho: em A → α B β, FIRST(β) − {ε} ⊆ FOLLOW(B). Herança: se β é vazio ou anulável, FOLLOW(A) ⊆ FOLLOW(B).
+
+################ ASSUNTO LL1_TABLE: Tabela LL(1)  prereqs=[FIRST, FOLLOW]
+FICHA: A tabela preditiva M[A, a] diz qual produção de A usar quando o próximo token é a; a gramática é LL(1) se nenhuma célula tem duas produções.
+  gancho: Linha é Variável, Coluna é Token. Primeiro o FIRST; se o ε aparecer, chama o FOLLOW. Sudoku LL(1): uma célula, uma produção.
+  termos: [first, follow, ε, célula, conflito, lookahead]
+  erros comuns: [Pôr A → ε em colunas de FIRST em vez das colunas de FOLLOW(A)., Esquecer a coluna $., Achar que produções ε impedem a gramática de ser LL(1)., Achar que eliminar recursão à esquerda e fatorar sempre garante LL(1)., Preencher célula por célula 'no olho' em vez de produção por produção.]
+  FLASH: Regra 1 da tabela? -> Para cada a ∈ FIRST(α), A → α em M[A, a].
+  FLASH: Regra 2 da tabela? -> Se ε ∈ FIRST(α), A → α em M[A, b] para cada b ∈ FOLLOW(A).
+  FLASH: Célula vazia significa? -> Erro de sintaxe.
+  FLASH: Célula com duas produções significa? -> Conflito: a gramática não é LL(1).
+  FLASH: O que significa LL(1)? -> Left-to-right, Leftmost derivation, 1 token de lookahead.
+  FLASH: Gramática com recursão à esquerda pode ser LL(1)? -> Não.
+  FLASH: Gramática ambígua pode ser LL(1)? -> Não.
+  FLASH: M[E', )] na gramática de expressões LL(1)? -> E' → ε
+
+=== AULA ANIMADA [BASICO] A tabela de decisões  (id=LL1_TABLE, ~156s, 19 passos, exemplo começa no passo null)
+1. [BYTE] O parser tem X no topo e lê mais. Qual regra de X ele usa? FIRST e FOLLOW já sabem a resposta.
+     palco: E -> T X | *X -> + T X | ε | T -> id | ( E ) | X | + | X -> + T X | X -> ε
+2. [BYTE] Mas calcular os conjuntos a cada token seria lento. O compilador calcula uma vez e anota as respostas.
+     palco: E -> T X | *X -> + T X | ε | T -> id | ( E ) | X | + | *X -> + T X | *X -> ε
+3. [BYTE] Essa folha de respostas é a tabela LL(1): uma casa para cada par de não-terminal e próximo token.
+     palco: LL(1)
+4. [BYTE] Cada linha é um não-terminal. Cada coluna é um terminal ou o cifrão. A casa guarda a regra a usar.
+     palco: Tabela preditiva | E -> T X | X -> + T X | ε | T -> id | ( E ) | id | + | ( | ) | $ | E | X | T
+5. [BYTE] E vai para T X. O FIRST de T X tem id e abre parêntese. A regra entra nessas duas colunas, na linha de E.
+     palco: Tabela preditiva | *E -> T X | X -> + T X | ε | T -> id | ( E ) | id | + | ( | ) | $ | E | *T X | *T X | X | T
+6. [BYTE] X vai para mais T X. O FIRST desse lado direito é só o mais. A regra entra na coluna do mais.
+     palco: Tabela preditiva | E -> T X | *X -> + T X | ε | T -> id | ( E ) | id | + | ( | ) | $ | E | T X | T X | X | *+ T X | T
+7. [BYTE] X também vai para épsilon. Regra que some vai nas colunas do FOLLOW de X. Toque nas duas casas.
+     palco: Tabela preditiva | E -> T X | *X -> + T X | ε | T -> id | ( E ) | id | + | ( | ) | $ | E | T X | T X | X | + T X | T
+     PERGUNTA(toque): certas=[, ] erradas=[, ]
+       dica: O FOLLOW de X é fecha parêntese e cifrão.
+       acerto: Isso. Com fecha parêntese ou cifrão na entrada, o parser apaga X.
+8. [BYTE] Faltam as regras de T. A regra id vai na coluna do id. A dos parênteses vai na coluna do abre parêntese.
+     palco: Tabela preditiva | E -> T X | X -> + T X | ε | T -> id | ( E ) | id | + | ( | ) | $ | E | T X | T X | X | + T X | ε | ε | T | *id | *( E )
+9. [BYTE] A receita da tabela tem três passos. Você aplica os dois primeiros em cada regra da gramática.
+     palco: Receita | 1. A → α vai nas colunas do FIRST(α). | 2. Se α é anulável, vai também nas do FOLLOW(A). | 3. Duas regras na casa: não é LL(1). Vazia: erro.
+10. [BYTE] X vai para épsilon entrou na coluna do parêntese que fecha. Toque na regra que fez isso.
+     palco: Receita | 1. A → α vai nas colunas do FIRST(α). | 2. Se α é anulável, vai também nas do FOLLOW(A). | 3. Duas regras na casa: não é LL(1). Vazia: erro. | X -> ε  vai em  M[X, )]
+     PERGUNTA(toque): certas=[2. Se α é anulável, vai também nas do FOLLOW(A).] erradas=[1. A → α vai nas colunas do FIRST(α)., 3. Duas regras na casa: não é LL(1). Vazia: erro.]
+       dica: Épsilon some. Aí quem manda é o que vem depois de X.
+       acerto: Isso. Passo dois: regra anulável vai nas colunas do FOLLOW.
+11. [PROF] Passo três: se uma casa recebe duas regras, o parser não sabe escolher. Isso é um conflito, e a gramática não é LL(1).
+     palco: Receita | 1. A → α vai nas colunas do FIRST(α). | 2. Se α é anulável, vai também nas do FOLLOW(A). | *3. Duas regras na casa: não é LL(1). Vazia: erro. | X -> ε  vai em  M[X, )]
+12. [BYTE] Outra gramática: uma lista de ids separados por vírgula. Agora quem preenche a tabela é você.
+     palco: LL(1) | L -> id R | R -> , id R | ε | id | , | $ | L | R
+13. [BYTE] L vai para id R. Em que casa essa regra entra? Toque.
+     palco: LL(1) | *L -> id R | R -> , id R | ε | id | , | $ | L | R
+     PERGUNTA(toque): certas=[] erradas=[, ]
+       dica: O lado direito começa com id. Use o passo um.
+       acerto: Isso. Linha L, coluna do id.
+14. [BYTE] R vai para vírgula, id, R. Toque na casa dela.
+     palco: LL(1) | L -> id R | *R -> , id R | ε | id | , | $ | L | id R | R
+     PERGUNTA(toque): certas=[] erradas=[, ]
+       dica: Ela começa com a vírgula.
+       acerto: Isso. O FIRST dela é a vírgula.
+15. [BYTE] R também vai para épsilon. O FOLLOW de R é só o cifrão. Toque na casa.
+     palco: LL(1) | L -> id R | *R -> , id R | ε | id | , | $ | L | id R | R | , id R
+     PERGUNTA(toque): certas=[] erradas=[]
+       dica: Passo dois: regra anulável vai nas colunas do FOLLOW.
+       acerto: Isso. R some quando a entrada acaba.
+16. [BYTE] Nenhuma casa ficou com duas regras. Esta gramática é LL(1), e as casas vazias são erros de sintaxe.
+     palco: LL(1) | L -> id R | R -> , id R | ε | id | , | $ | L | *id R | R | *, id R | *ε
+17. [BYTE] Um colega criou uma coluna só para o épsilon. Certo ou errado? Toque.
+     palco: Erros comuns | A regra R → ε vai na coluna ε da tabela. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: As colunas são os tokens que o parser pode ler. Ninguém lê épsilon.
+       acerto: Isso. Épsilon não é token e não tem coluna. A regra que some vai nas colunas do FOLLOW.
+18. [BYTE] Outro erro é conferir só o FIRST. Uma regra anulável ocupa as colunas do FOLLOW, e ali ela pode bater com outra regra.
+     palco: Erros comuns | Certo: R → ε vai nas colunas do FOLLOW(R). Não existe coluna ε. | *Errado: Olhar só o FIRST para dizer que a gramática é LL(1). | *Certo: Regra anulável ocupa o FOLLOW e pode bater com o FIRST de outra.
+19. [BYTE] Resumindo: a tabela guarda, para cada não-terminal e cada token, a regra a usar. O FIRST preenche quase tudo. O FOLLOW cuida das regras que somem.
+     palco: Resumo | Linha: não-terminal. Coluna: terminal ou $. | A → α entra no FIRST(α). Se α é anulável, também no FOLLOW(A). | Duas regras numa casa: conflito. Casa vazia: erro de sintaxe.
+
+=== AULA ANIMADA [PEGADINHA] Duas regras, uma casa só  (id=LL1_TABLE/duasregrasumacasasó, ~35s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Esta gramática parece inocente. Vamos montar a tabela.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A
+2. [BYTE] A pode virar b. Essa regra vai na coluna do b.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A | *b
+3. [BYTE] A também pode sumir. Vai nas colunas do FOLLOW de A, e depois de A vem b.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A | *b
+4. [BYTE] Toque na casa que recebeu duas regras.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A | b
+     PERGUNTA(toque): certas=[b] erradas=[, , ]
+       dica: O FIRST da primeira opção e o FOLLOW de A têm o mesmo símbolo.
+       acerto: Isso. Com b na entrada, o parser não sabe qual escolher.
+5. [PROF] Duas regras na casa: a gramática não é LL(1). E ela nem tem recursão à esquerda.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A | *b / ε
+6. [BYTE] Na prova, confira sempre: FIRST da opção não pode bater com o FOLLOW de quem some.
+     palco: S -> A b   A -> b | ε | a | b | $ | S | A | b / ε
+
+=== AULA ANIMADA [CLIPE] O que quer dizer LL(1)  (id=LL1_TABLE/oquequerdizerll1, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Lê da esquerda, deriva pela esquerda, e olha um token.
+     palco: L  L  (1) | esquerda | esquerda | um token
+2. [BYTE] Se uma casa da tabela tem duas regras, não é LL(1).
+     palco: L  L  (1) | duas regras
+
+=== AULA DE LEITURA [STORY] O caderninho do porteiro
+[NARRADOR] Terceira sala do Templo Top-Down: um porteiro de balada com um caderninho enorme na mão.
+[PROF] O porteiro sabe em que 'parte da festa' você está (o não-terminal A) e vê quem está chegando (o próximo token a). O caderninho diz qual porta abrir: **M[A, a] = qual produção usar**.
+[BYTE] E como ele preencheu esse caderninho?
+[PROF] Com duas regrinhas. **Regra 1:** se a pode abrir a fila de α (a ∈ FIRST(α)), anote A → α em M[A, a].
+[PROF] **Regra 2:** se α pode sumir (ε ∈ FIRST(α)), então para cada b que pode vir depois de A (b ∈ FOLLOW(A)), anote A → α em M[A, b]. Inclusive na coluna $.
+CODIGO (A gramática da fila de novo. FOLLOW(A) = {b, c}, FOLLOW(B) = {c}.):
+    S → A B c
+    A → a | ε
+    B → b | ε
+PREVEJA: Estou em A e chega um 'c'. O que diz o caderninho?
+    (     ) A → a
+    (certa) A → ε
+    (     ) Erro
+    (     ) As duas
+    EXPLICACAO: 'c' não abre A → a. Mas A pode sumir e c ∈ FOLLOW(A) = {b, c}. Então M[A, c] = A → ε: a turma A falta e o c é atendido mais adiante.
+WIDGET LL1_TABLE gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=O caderninho completo. Repare em A → ε nas colunas b e c.
+[BYTE] E se o porteiro tiver DUAS portas anotadas na mesma linha e coluna?
+[PROF] Aí ele trava: é um **conflito**, e a gramática **não é LL(1)**. Olha só:
+WIDGET LL1_TABLE gramatica=S → a b | a c entrada= legenda=S → a b | a c: as duas produções começam com a, e caem juntas em M[S, a]. O porteiro não sabe qual porta abrir.
+REVELAR: E uma célula VAZIA no caderninho, significa o quê?
+    RESPOSTA: Erro de sintaxe: nenhuma produção de A pode começar com aquele token, nem ele pode vir depois de um A que sumiu.
+DESTAQUE REAL_WORLD: O GCC e o Clang, compiladores de C/C++ usados no mundo todo, têm analisadores descendentes escritos à mão: o mesmo 'caderninho', só que embutido em ifs.
+[PROF] Resumo do porteiro: FIRST abre a porta; se a produção pode sumir, o FOLLOW abre também. Duas portas na mesma célula? Briga na entrada.
+
+=== AULA DE LEITURA [VISUAL] Vendo a tabela nascer (e quebrar)
+[PROF] Vamos ver a tabela da gramática de expressões nascer, e depois o que acontece com uma gramática 'proibida'.
+CODIGO ():
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+WIDGET LL1_TABLE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada= legenda=Toque nas células para ver por que cada produção foi parar ali.
+PASSOS O que olhar:
+    1. Linhas = não-terminais; colunas = terminais + $.
+    2. E → T E' aparece em ( e id: é FIRST(T E').
+    3. E' → ε aparece em ) e $: é FOLLOW(E').
+    4. T' → ε aparece em +, ) e $: é FOLLOW(T').
+    5. Nenhuma célula tem duas produções: a gramática é LL(1).
+PREVEJA: Em qual célula fica F → ( E )?
+    (certa) M[F, (]
+    (     ) M[F, )]
+    (     ) M[E, (]
+    (     ) M[F, id]
+    EXPLICACAO: FIRST(( E )) = {(}. Então M[F, (] = F → ( E ).
+[BYTE] E aquela gramática bonita, E → E + T | T, com recursão à esquerda?
+WIDGET LL1_TABLE gramatica=E → E + T | T ; T → T * F | F ; F → ( E ) | id entrada= legenda=A versão recursiva à esquerda: veja as células em conflito.
+TEXTO: M[E, id] ganhou **duas** produções, E → E + T e E → T, porque FIRST(E + T) = FIRST(T) = {(, id}. Recursão à esquerda sempre provoca esse tipo de conflito.
+DESTAQUE WATCH_OUT: Gramática com recursão à esquerda ou ambígua NUNCA é LL(1). Primeiro conserte (na Ponte da Transformação), depois monte a tabela.
+REVELAR: Quantas células preenchidas tem a tabela da versão LL(1)? Conte no widget antes de tocar.
+    RESPOSTA: 13: E (2), E' (3), T (2), T' (4) e F (2).
+WIDGET LEFT_RECURSION gramatica=E → E + T | T ; T → T * F | F ; F → ( E ) | id entrada= legenda=Lembrete da Ponte: eliminar a recursão à esquerda leva da gramática com conflitos à versão LL(1).
+
+=== AULA DE LEITURA [WORKED] Exemplo resolvido: tabela das declarações
+[PROF] Exercício de prova: construa a tabela LL(1) da gramática de declarações.
+CODIGO ():
+    D → T L ;
+    T → int | float
+    L → id R
+    R → , id R | ε
+TEXTO: Ingredientes já calculados: FIRST(T) = {int, float}, FIRST(L) = {id}, FIRST(R) = {',', ε}; FOLLOW(D) = {$}, FOLLOW(T) = {id}, FOLLOW(L) = FOLLOW(R) = {;}.
+PASSOS Produção por produção:
+    1. D → T L ; : FIRST(T L ;) = {int, float}. Anote em M[D, int] e M[D, float].
+    2. T → int : M[T, int].
+    3. T → float : M[T, float].
+    4. L → id R : M[L, id].
+    5. R → , id R : FIRST = {,}. M[R, ,].
+    6. R → ε : FIRST(ε) = {ε}, então use FOLLOW(R) = {;}. M[R, ;].
+    7. Nenhuma célula com duas produções → LL(1).
+WIDGET LL1_TABLE gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada= legenda=Confira as 7 células preenchidas. Todo o resto é erro.
+[BYTE] Por que R → ε não vai na coluna $?
+[PROF] Porque $ ∉ FOLLOW(R): depois de R sempre vem ';'. Se chegar $ com R no topo, é erro mesmo, faltou o ponto e vírgula!
+[PROF] Agora o desbotado: S → A B c, A → a | ε, B → b | ε, com FOLLOW(A) = {b, c} e FOLLOW(B) = {c}.
+TEXTO: Eu faço: S → A B c tem FIRST = {a, b, c}, então vai em M[S, a], M[S, b] e M[S, c]. A → a vai em M[A, a]. B → b vai em M[B, b].
+REVELAR: Sua vez: onde vai A → ε?
+    RESPOSTA: Em M[A, b] e M[A, c], porque FOLLOW(A) = {b, c}.
+REVELAR: E B → ε?
+    RESPOSTA: Em M[B, c], porque FOLLOW(B) = {c}.
+REVELAR: A gramática é LL(1)?
+    RESPOSTA: Sim: nenhuma célula ficou com duas produções.
+WIDGET LL1_TABLE gramatica=S → A B c ; A → a | ε ; B → b | ε entrada= legenda=Confira suas respostas.
+
+=== AULA DE LEITURA [SOCRATIC] Como escolher sem voltar atrás?
+[PROF] Pergunta-raiz: o analisador está em A e vê o token a. Como ele escolhe a produção sem nunca voltar atrás?
+PREVEJA: A → x y | z w. Chega o token z. Qual produção?
+    (     ) A → x y
+    (certa) A → z w
+    (     ) Precisa testar as duas
+    (     ) Nenhuma
+    EXPLICACAO: z ∈ FIRST(z w) e z ∉ FIRST(x y). Escolha única. É a regra do FIRST.
+PREVEJA: A → x y | x w. Chega x. E agora?
+    (     ) A → x y
+    (     ) A → x w
+    (certa) Não dá para decidir com 1 token
+    (     ) Erro
+    EXPLICACAO: As duas começam com x: conflito em M[A, x]. Com um só token de espiada não dá. (O remédio é a fatoração à esquerda.)
+PREVEJA: A → x y | ε, e FOLLOW(A) = {z}. Chega z. Qual?
+    (     ) A → x y
+    (certa) A → ε
+    (     ) Erro
+    (     ) As duas
+    EXPLICACAO: z não abre x y, mas pode vir DEPOIS de A. Então A some: A → ε. É a regra do FOLLOW.
+PREVEJA: A → x y | ε, mas agora FOLLOW(A) = {x, z}. Chega x. Qual?
+    (     ) A → x y
+    (     ) A → ε
+    (certa) Conflito: as duas
+    (     ) Erro
+    EXPLICACAO: x abre x y (FIRST) E x pode vir depois de A (FOLLOW). Duas produções na mesma célula: não é LL(1).
+REVELAR: Com base nessas 4 perguntas, quais são as condições para uma gramática ser LL(1)? Tente formular antes de tocar.
+    RESPOSTA: Para cada par A → α | β: (1) FIRST(α) e FIRST(β) disjuntos; (2) no máximo um deles deriva ε; (3) se β ⇒* ε, FIRST(α) e FOLLOW(A) disjuntos.
+[BYTE] Então a tabela é só um jeito de enxergar essas condições de uma vez?
+[PROF] Exatamente. Montou a tabela e nenhuma célula tem duas produções? É LL(1). Simples assim.
+WIDGET LL1_TABLE gramatica=S → S a | b entrada= legenda=Teste: S → S a | b. Antes de olhar, preveja se haverá conflito.
+REVELAR: Por que M[S, b] tem conflito?
+    RESPOSTA: FIRST(S a) = FIRST(S) = {b} e FIRST(b) = {b}: as duas produções disputam a coluna b. Recursão à esquerda gera conflito sempre.
+DESTAQUE BRAIN_POWER: Uma gramática ambígua pode ser LL(1)? Pense: se fosse, a tabela daria uma única produção a cada passo…
+REVELAR: Responda o Poder do Cérebro.
+    RESPOSTA: Não. O analisador LL(1) constrói uma única árvore de forma determinística; uma gramática ambígua tem duas árvores para alguma frase, então sua tabela terá conflito.
+
+=== AULA DE LEITURA [FORMAL] Construção da tabela preditiva (versão prova)
+[PROF] Algoritmo de construção da tabela de análise preditiva, como no Livro do Dragão.
+CODIGO (Percorra PRODUÇÃO por produção, não célula por célula.):
+    entrada: gramática G, com FIRST e FOLLOW calculados
+    saída:   tabela M[A, a]
+    
+    para cada produção A → α de G:
+      para cada terminal a ∈ FIRST(α):
+        adicione A → α a M[A, a]
+      se ε ∈ FIRST(α):
+        para cada b ∈ FOLLOW(A):      // b pode ser $
+          adicione A → α a M[A, b]
+    toda entrada vazia de M = erro
+TEXTO: **Definição.** G é **LL(1)** se e somente se M não tem nenhuma entrada com mais de uma produção. LL(1): lê a entrada da esquerda para a direita (**L**), produz uma derivação mais à esquerda (**L**), usando **1** símbolo de lookahead.
+PASSOS Condições equivalentes, para cada par A → α | β:
+    1. 1. FIRST(α) ∩ FIRST(β) = ∅.
+    2. 2. No máximo um entre α e β deriva ε.
+    3. 3. Se β ⇒* ε, então FIRST(α) ∩ FOLLOW(A) = ∅ (e vice-versa).
+PREVEJA: Qual destas NÃO é condição para LL(1)?
+    (     ) FIRST das alternativas disjuntos
+    (     ) No máximo uma alternativa anulável
+    (certa) A gramática não pode ter produções ε
+    (     ) FIRST(α) ∩ FOLLOW(A) = ∅ quando a outra alternativa é anulável
+    EXPLICACAO: Produções ε são permitidas em LL(1)! A gramática de expressões LL(1) tem E' → ε e T' → ε.
+WIDGET LL1_TABLE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada= legenda=Cada célula traz o motivo: 'a ∈ FIRST(α)' ou 'α pode virar ε e b ∈ FOLLOW(A)'.
+DESTAQUE EXAM_TIP: Na prova: (1) calcule FIRST e FOLLOW numa tabelinha; (2) percorra produção por produção; (3) não esqueça a coluna $; (4) se perguntarem 'é LL(1)?', aponte a célula com conflito e as duas produções que brigam nela.
+DESTAQUE WATCH_OUT: Recursão à esquerda, ambiguidade ou prefixos comuns não fatorados impedem LL(1). Mas a volta não vale: tirar tudo isso não garante LL(1) (ex.: S → A a, A → a | ε dá conflito em M[A, a]).
+REVELAR: Formule a definição de LL(1) em uma linha.
+    RESPOSTA: G é LL(1) se sua tabela preditiva não tem nenhuma entrada multiplamente definida.
+[BYTE] LL(1): Left-to-right, Leftmost, 1 token. Guardei!
+
+=== AULA DE LEITURA [MNEMONIC] Sudoku LL(1): uma célula, uma produção
+[NARRADOR] Terceira sala do Templo: um tabuleiro de Sudoku gigante pintado no chão. Linhas com letras maiúsculas, colunas com tokens.
+DESTAQUE MNEMONIC: **'Linha é Variável, Coluna é Token.'** M[A, a]: o maiúsculo vem primeiro, como num endereço 'rua, número'.
+DESTAQUE MNEMONIC: Rima de ouro: **'Primeiro o FIRST; se o ε aparecer, chama o FOLLOW pra resolver.'**
+DESTAQUE MNEMONIC: **Sudoku LL(1): uma célula, uma produção.** Dois números no mesmo quadradinho invalidam o Sudoku. Duas produções na mesma célula invalidam o LL(1).
+[BYTE] E o nome LL(1)? Sempre esqueço o que é cada L.
+DESTAQUE MNEMONIC: **L-L-1 = 'Lê da esquerda, Leva a derivação mais à esquerda, 1 espiadinha.'** Left-to-right, Leftmost derivation, 1 token de lookahead.
+PASSOS Confusões clássicas:
+    1. Pôr A → ε nas colunas do FIRST: errado. ε vai nas colunas de FOLLOW(A).
+    2. Esquecer a coluna $: ela existe e recebe produções ε quando $ ∈ FOLLOW(A).
+    3. Achar que célula vazia é 'tanto faz': é ERRO de sintaxe.
+    4. Achar que produção ε impede LL(1): não impede.
+PREVEJA: A → ε e FOLLOW(A) = {), $}. Em quais colunas vai A → ε?
+    (     ) Na coluna ε
+    (certa) Nas colunas ) e $
+    (     ) Só na coluna $
+    (     ) Em todas as colunas
+    EXPLICACAO: Não existe coluna ε! A produção vazia vai nas colunas dos terminais de FOLLOW(A): ) e $.
+WIDGET LL1_TABLE gramatica=S → ( S ) S | ε entrada= legenda=Teste a rima em S → ( S ) S | ε: o FIRST manda S → ( S ) S para '('; o ε chama o FOLLOW = {), $}.
+REVELAR: Recite a rima e aplique em E' → + T E' | ε, com FOLLOW(E') = {), $}.
+    RESPOSTA: 'Primeiro o FIRST': M[E', +] = E' → + T E'. 'Se o ε aparecer, chama o FOLLOW': M[E', )] = M[E', $] = E' → ε.
+
+################ ASSUNTO LL1_PARSING: Analisador preditivo (pilha)  prereqs=[LL1_TABLE]
+FICHA: O analisador preditivo não recursivo usa uma pilha (começando com $ S) e a tabela M: terminal no topo casa com a entrada; não-terminal no topo é trocado pelo lado direito, invertido.
+  gancho: Terminal no topo? Casa e anda. Variável no topo? Consulta e troca. $ com $? Festa! (E arrume a mochila: o que usa primeiro vai por último.)
+  termos: [pilha, topo, tabela, casa, invertid, $]
+  erros comuns: [Empilhar o lado direito na ordem normal (o primeiro símbolo tem que ficar no topo)., Avançar a entrada numa expansão (só casar consome token)., Empilhar ε (produção vazia só desempilha)., Esquecer de começar a pilha com $ S., Misturar o lado do topo da pilha no meio da simulação.]
+  FLASH: Configuração inicial? -> Pilha $ S; entrada w$.
+  FLASH: Topo terminal igual ao token? -> Desempilha e avança (casar).
+  FLASH: Topo não-terminal A, token a? -> Troca A pelo lado direito de M[A, a], invertido.
+  FLASH: Quando aceita? -> Topo $ e entrada $.
+  FLASH: M[A, a] vazia? -> Erro de sintaxe.
+  FLASH: Que derivação a saída forma? -> A derivação mais à esquerda.
+  FLASH: Expandir A → ε faz o quê na pilha? -> Só desempilha A.
+  FLASH: O analisador preditivo faz backtracking? -> Nunca.
+
+=== AULA ANIMADA [BASICO] A pilha decide  (id=LL1_PARSING, ~172s, 22 passos, exemplo começa no passo 3)
+1. [BYTE] O parser leu abre parêntese e depois id. A frase ainda não acabou, e ele precisa lembrar o que falta.
+     palco: ( id ) | ( | id | ?
+2. [BYTE] O que ele ainda precisa ler, cedo ou tarde? Toque.
+     palco: ( id ) | ( | id | ? | ) | ( | id
+     PERGUNTA(toque): certas=[)] erradas=[(, id]
+       dica: Todo parêntese aberto precisa fechar.
+       acerto: Isso. Ele precisa guardar essa pendência até o parêntese chegar.
+3. [BYTE] Ele guarda numa pilha o que ainda espera ler. Esse é o analisador preditivo: a pilha e a tabela LL(1) decidem tudo.
+     palco: PREDITIVO
+4. [BYTE] O analisador tem a pilha e a entrada. A pilha começa com cifrão e o símbolo inicial. Ele só olha o topo e o próximo token.
+     palco: id + id | E -> T X | X -> + T X | ε | T -> id | ( E ) | pilha | topo: E, token: id | $ | *E | *id | + | id | $
+5. [BYTE] O topo é um não-terminal. Olho a casa da tabela: linha E, coluna id. Troco E pelo lado direito, empilhado de trás para a frente.
+     palco: id + id | *E -> T X | X -> + T X | ε | T -> id | ( E ) | pilha | E -> T X | $ | X | T | id | + | id | $
+6. [BYTE] Assim T fica no topo, e X espera embaixo. Com id na entrada, a tabela manda trocar T por id.
+     palco: id + id | E -> T X | X -> + T X | ε | *T -> id | ( E ) | pilha | T -> id | $ | X | *id | *id | + | id | $
+7. [BYTE] Topo é id e o token é id. O que eu faço? Toque na ação.
+     palco: id + id | E -> T X | X -> + T X | ε | *T -> id | ( E ) | pilha | topo: id, token: id | $ | X | *id | *id | + | id | $ | Casar | Expandir
+     PERGUNTA(toque): certas=[Casar] erradas=[Expandir]
+       dica: Terminal no topo igual ao token da entrada: é par.
+       acerto: Isso. Casou: o id sai da pilha e a entrada avança um token.
+8. [BYTE] O resto segue igual. Não-terminal no topo, troca pela tabela. Terminal no topo, casa com a entrada.
+     palco: id + id | E -> T X | X -> + T X | ε | T -> id | ( E ) | pilha | casou id | $ | X | + | id | $
+9. [BYTE] No fim sobra cifrão na pilha e cifrão na entrada. A frase foi aceita.
+     palco: id + id | E -> T X | X -> + T X | ε | T -> id | ( E ) | pilha | aceita | *$ | *$
+10. [BYTE] O analisador repete três casos até a entrada acabar. O topo da pilha diz qual caso vale.
+     palco: Receita | 1. Topo terminal igual ao token: casa e avança. | 2. Topo não-terminal: troca pela regra da tabela. | 3. $ com $: aceita. Casa vazia: erro.
+11. [BYTE] No topo está X, e o token é fecha parêntese. Qual caso vale? Toque.
+     palco: Receita | 1. Topo terminal igual ao token: casa e avança. | 2. Topo não-terminal: troca pela regra da tabela. | 3. $ com $: aceita. Casa vazia: erro. | topo: X, token: )
+     PERGUNTA(toque): certas=[2. Topo não-terminal: troca pela regra da tabela.] erradas=[1. Topo terminal igual ao token: casa e avança., 3. $ com $: aceita. Casa vazia: erro.]
+       dica: O X do topo não é token. Ele é um não-terminal.
+       acerto: Isso. Caso dois. A tabela manda trocar X por épsilon, ou seja, só tirar X da pilha.
+12. [BYTE] Se a casa da tabela está vazia, ou o terminal do topo é diferente do token, a frase tem erro de sintaxe.
+     palco: Receita | 1. Topo terminal igual ao token: casa e avança. | 2. Topo não-terminal: troca pela regra da tabela. | *3. $ com $: aceita. Casa vazia: erro.
+13. [BYTE] Agora uma lista: id, vírgula, id. A tabela é a da aula passada, e você decide cada passo.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | topo: L, token: id | $ | *L | *id | , | id | $
+14. [BYTE] A tabela troca L por id R. Qual dos dois fica no topo? Toque.
+     palco: id , id | *L -> id R | R -> , id R | ε | pilha | topo: L, token: id | $ | L | id | , | id | $ | id | R
+     PERGUNTA(toque): certas=[id] erradas=[R]
+       dica: O lado direito entra na pilha de trás para a frente.
+       acerto: Isso. O id fica em cima, pronto para casar.
+15. [BYTE] O id do topo casa com o id da entrada. Os dois saem, e sobra R no topo.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | casou id | $ | *R | , | id | $
+16. [BYTE] Topo R, token vírgula. Qual regra a tabela manda usar? Toque.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | topo: R, token: , | $ | *R | *, | id | $ | R -> , id R | R -> ε
+     PERGUNTA(toque): certas=[R -> , id R] erradas=[R -> ε]
+       dica: Qual das duas regras começa com a vírgula?
+       acerto: Isso. É a regra que começa com vírgula.
+17. [BYTE] Casa a vírgula, casa o id. De novo, R fica sozinho no topo.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | topo: R, token: $ | $ | *R | *$
+18. [BYTE] Agora a entrada acabou. Qual regra de R vale? Toque.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | topo: R, token: $ | $ | *R | *$ | R -> , id R | R -> ε
+     PERGUNTA(toque): certas=[R -> ε] erradas=[R -> , id R]
+       dica: O cifrão está no FOLLOW de R.
+       acerto: Isso. R vai para épsilon: R sai da pilha e nada entra.
+19. [BYTE] Cifrão com cifrão: aceita. As regras usadas, na ordem, formam a derivação mais à esquerda da lista.
+     palco: id , id | L -> id R | R -> , id R | ε | pilha | aceita | *$ | *$
+20. [BYTE] Em que ordem o lado direito entra na pilha? Um colega fez assim. Certo ou errado?
+     palco: Erros comuns | Para trocar E por T X, empilho T e depois X. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Quem precisa ser lido primeiro tem que ficar no topo.
+       acerto: Isso. Empilha de trás para a frente: primeiro X, depois T. Assim T fica no topo e é tratado antes.
+21. [BYTE] Outro erro: avançar a entrada ao aplicar uma regra. Só o casamento de terminal consome token. Trocar por épsilon só tira o topo.
+     palco: Erros comuns | Certo: Empilho X e depois T. O primeiro símbolo da regra fica no topo. | *Errado: Ao usar X → ε, avançar a entrada. | *Certo: Só X sai da pilha. O token continua na entrada.
+22. [BYTE] Resumindo: o preditivo olha o topo e um token. A tabela escolhe a regra, o casamento consome a entrada, e cifrão com cifrão aceita.
+     palco: Resumo | A pilha começa com $ e o símbolo inicial. | Não-terminal no topo: troca pela tabela. Terminal no topo: casa com o token. | $ com $ aceita. Casa vazia ou terminal diferente é erro.
+
+=== AULA ANIMADA [PEGADINHA] Terminal não vai para a tabela  (id=LL1_PARSING/terminalnãovaiparaatabela, ~36s, 6 passos, exemplo começa no passo null)
+1. [BYTE] O topo da pilha pode ter dois tipos de símbolo.
+     palco: Terminal não vai para a tabela | $ | X | + | +  id  $
+2. [BYTE] Com não-terminal no topo, o parser consulta a tabela e troca pela regra.
+     palco: Terminal não vai para a tabela | $ | *X | + | +  id  $
+3. [BYTE] Com terminal no topo, a tabela não entra. Ele só confere com a entrada.
+     palco: Terminal não vai para a tabela | $ | X | *+ | *+  id  $
+4. [BYTE] O topo é mais e a entrada é mais. O que o parser faz? Toque.
+     palco: Terminal não vai para a tabela | $ | X | + | +  id  $ | casar e avançar | consultar a tabela | erro
+     PERGUNTA(toque): certas=[casar e avançar] erradas=[consultar a tabela, erro]
+       dica: Mais é terminal. Terminal no topo nunca vai para a tabela.
+       acerto: Isso. Casa, tira do topo e avança na entrada.
+5. [BYTE] Se o terminal do topo for diferente da entrada, é erro na hora.
+     palco: Terminal não vai para a tabela | $ | X | *) | *id  $
+6. [BYTE] Tabela só para não-terminal. Terminal só confere.
+     palco: Terminal não vai para a tabela | $ | X | + | +  id  $
+
+=== AULA ANIMADA [PRATICA] Opere a pilha  (id=LL1_PARSING/opereapilha, ~27s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Pilha, entrada e duas ações. Parece pouco, e é tudo que o parser faz.
+     palco: id + id | E -> T X | X -> + T X | ε | T -> id
+2. [BYTE] Topo não terminal: consulta a tabela e troca pela regra.
+     palco: id + id | *E -> T X | X -> + T X | ε | T -> id
+3. [BYTE] Topo terminal: precisa bater com a entrada, e os dois saem.
+     palco: id + id | E -> T X | X -> + T X | ε | *T -> id
+4. [BYTE] Opere até a pilha esvaziar.
+     palco: pilha | *id | + | id | $ | $ | E
+     BRINQUEDO: meta=Leve a pilha até o fim teclas=[Trocar pela regra, Casar]
+       dica: Olhe o topo. Ele é terminal ou não terminal?
+       acerto: Pilha vazia e entrada no fim. A frase vale.
+5. [PROF] Sem recursão, sem volta atrás. Por isso o LL(1) é tão rápido.
+     palco: id + id | E -> T X | X -> + T X | ε | *T -> id
+
+=== AULA DE LEITURA [STORY] Pilha, o golem das tarefas
+[NARRADOR] No altar do Templo Top-Down mora Pilha, um golem de pedra. Ele só enxerga o topo da própria cabeça.
+[PILHA] Eu… guardo… o que… ainda… falta… ver.
+[PROF] A pilha do analisador preditivo é uma **lista de tarefas**: o que ainda esperamos encontrar na entrada. Começa com S (a frase inteira) em cima do $ (o fim).
+[BYTE] E como o golem trabalha?
+PASSOS As regras do golem:
+    1. Topo é terminal e igual ao token da entrada? **Casa**: tira do topo e avança na entrada. Tarefa cumprida!
+    2. Topo é não-terminal A e o token é a? Consulta o caderninho M[A, a] e **troca A pelo lado direito**, empilhado de trás para frente.
+    3. Topo $ e entrada $? **Aceita**.
+    4. Qualquer outra situação? **Erro**.
+[PILHA] De… trás… pra… frente… porque… o primeiro… tem que… ficar… em cima.
+PREVEJA: Pilha $ E (topo à direita), entrada começando com id, e M[E, id] = E → T E'. Como fica a pilha?
+    (     ) $ T E'
+    (certa) $ E' T
+    (     ) $ E T E'
+    (     ) $ T
+    EXPLICACAO: Tira o E e empilha T E' ao contrário: primeiro E', depois T. O T fica no topo, pronto para ser atendido primeiro.
+WIDGET LL1_TRACE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=id + id legenda=Acompanhe o golem: pilha, entrada e ação a cada passo.
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que pilha e não fila? R: Porque a árvore é aninhada: ao expandir T, tudo que é de T precisa ser resolvido antes de voltar ao E'. Quem entrou por último sai primeiro: pilha!
+REVELAR: Quando o golem usa E' → ε, o que ele empilha?
+    RESPOSTA: Nada. Ele só tira o E' do topo: a tarefa 'ver um E'' foi cumprida com zero tokens.
+[PILHA] Pilha… vazia… entrada… vazia… festa.
+[PROF] E repare: a sequência de expansões é exatamente a **derivação mais à esquerda**. O golem é um derivador com bússola.
+
+=== AULA DE LEITURA [VISUAL] Analisador preditivo, passo a passo
+[PROF] Entrada clássica: id + id * id. São 17 passos até o 'aceitar'. Vamos assistir.
+CODIGO ():
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+WIDGET LL1_TRACE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=id + id * id legenda=Avance um passo por vez. Antes de cada clique, tente adivinhar a ação.
+PASSOS Pontos de atenção no trace:
+    1. Passos 1–3: E → T E', T → F T', F → id. Três expansões até aparecer um terminal no topo.
+    2. Passo 4: id casa com id.
+    3. Passo 5: T' no topo, entrada '+'. M[T', +] = T' → ε: o T' some.
+    4. Passo 6: E' → + T E'. O '+' foi previsto pela tabela, e no passo 7 ele casa.
+    5. No fim: T' → ε e E' → ε com $ na entrada; pilha $ e entrada $: aceita.
+PREVEJA: Topo = T', entrada = *. Qual ação?
+    (     ) T' → ε
+    (certa) T' → * F T'
+    (     ) Casar *
+    (     ) Erro
+    EXPLICACAO: * ∈ FIRST(* F T'), então M[T', *] = T' → * F T'. Só no passo seguinte o * vai casar.
+[BYTE] Por que no passo 5 o T' sumiu e nesse outro ele expandiu?
+[PROF] Por causa do token! Com '+' o T' não tem o que fazer (+ ∈ FOLLOW(T')), então some. Com '*' ele tem trabalho: expande.
+REVELAR: Quantas vezes 'id' foi casado nesse trace?
+    RESPOSTA: 3: uma para cada id da entrada. Cada terminal da entrada é casado exatamente uma vez.
+WIDGET DERIVATION gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=id + id * id legenda=Compare: a derivação mais à esquerda usa as mesmas produções, na mesma ordem das expansões do trace.
+DESTAQUE BRAIN_POWER: E se a entrada fosse 'id + * id'? Em que momento o golem travaria?
+REVELAR: Responda o Poder do Cérebro.
+    RESPOSTA: Depois de casar o '+', o topo é T e o token é '*'. M[T, *] está vazia → erro de sintaxe, detectado já no primeiro token impossível.
+
+=== AULA DE LEITURA [WORKED] Exemplo resolvido: int id , id ;
+[PROF] Vamos simular à mão, no formato que a prova pede: Pilha | Entrada | Ação. Topo da pilha à direita.
+CODIGO (Tabela: M[D,int] = D → T L ;   M[T,int] = T → int   M[L,id] = L → id R   M[R,,] = R → , id R   M[R,;] = R → ε):
+    D → T L ;
+    T → int | float
+    L → id R
+    R → , id R | ε
+PASSOS Simulação de int id , id ;:
+    1. $ D | int id , id ; $ | expandir D → T L ;
+    2. $ ; L T | int id , id ; $ | expandir T → int
+    3. $ ; L int | int id , id ; $ | casar int
+    4. $ ; L | id , id ; $ | expandir L → id R
+    5. $ ; R id | id , id ; $ | casar id
+    6. $ ; R | , id ; $ | expandir R → , id R
+    7. $ ; R id , | , id ; $ | casar ,
+[BYTE] Olha só: o ';' ficou lá embaixo esperando desde o primeiro passo!
+[PILHA] Paciência… é… meu… forte.
+TEXTO: Agora os passos finais são seus. Pense em cada um antes de revelar. Pilha atual: $ ; R id. Entrada: id ; $.
+REVELAR: Próxima ação?
+    RESPOSTA: Casar id. A pilha fica $ ; R e a entrada ; $.
+REVELAR: Topo R, entrada ';'. Ação?
+    RESPOSTA: Expandir R → ε (é M[R, ;]). A pilha fica $ ;.
+REVELAR: E depois?
+    RESPOSTA: Casar ';'. Pilha $ e entrada $ → aceitar!
+WIDGET LL1_TRACE gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada=int id , id ; legenda=Confira com o motor: 11 linhas, terminando em 'aceitar'.
+DESTAQUE EXAM_TIP: Escreva a pilha SEMPRE com o topo do mesmo lado (de preferência à direita) e o $ no fundo. Metade dos erros de simulação em prova é pilha 'virada' no meio do caminho.
+
+=== AULA DE LEITURA [SOCRATIC] Reinvente o analisador preditivo
+[PROF] Você vai redescobrir o analisador preditivo não recursivo. Ponto de partida: uma pilha contendo $ S.
+PREVEJA: Por que colocar $ no fundo da pilha?
+    (     ) Enfeite
+    (certa) Para saber quando a pilha 'acabou' e comparar com o fim da entrada
+    (     ) Porque $ é um não-terminal
+    (     ) Para guardar o resultado
+    EXPLICACAO: $ é a sentinela: quando o topo é $ e a entrada também acabou ($), aceitamos.
+PREVEJA: O topo é o terminal ')' e a entrada é 'id'. O que fazer?
+    (     ) Casar mesmo assim
+    (certa) Erro: esperava ')'
+    (     ) Consultar a tabela
+    (     ) Empilhar id
+    EXPLICACAO: Terminal no topo é uma promessa: 'o próximo token TEM que ser este'. Veio outro? Erro de sintaxe.
+PREVEJA: O topo é A e M[A, a] = A → X Y Z. Por que empilhar Z, depois Y, depois X?
+    (     ) Por tradição
+    (certa) Para X ficar no topo e ser tratado primeiro
+    (     ) Para Z casar primeiro
+    (     ) Tanto faz
+    EXPLICACAO: Derivamos sempre o símbolo mais à esquerda: X é o próximo a ser expandido ou casado, então precisa estar no topo.
+PREVEJA: O topo é A e M[A, a] está vazia. O que isso significa?
+    (     ) Aceitar
+    (     ) Empilhar a
+    (certa) Erro de sintaxe
+    (     ) Tentar outra produção (backtracking)
+    EXPLICACAO: O analisador preditivo NUNCA volta atrás. Célula vazia = nenhuma produção de A serve = erro.
+REVELAR: Monte o algoritmo com as suas respostas, em 4 casos (X = topo, a = token).
+    RESPOSTA: (1) X = a = $ → aceita. (2) X = a terminal → desempilha e avança. (3) X terminal ≠ a → erro. (4) X não-terminal → se M[X, a] = X → Y1…Yk, troca X por Yk…Y1 (Y1 no topo); se vazia, erro.
+[BYTE] E qual é a 'saída' do analisador?
+PREVEJA: Se eu imprimir cada produção usada nas expansões, o que obtenho?
+    (     ) Uma derivação mais à direita
+    (certa) Uma derivação mais à esquerda
+    (     ) A tabela LL(1)
+    (     ) Os conjuntos FOLLOW
+    EXPLICACAO: A expansão acontece sempre no não-terminal pendente mais à esquerda: é a derivação mais à esquerda, o segundo L de LL(1).
+WIDGET LL1_TRACE gramatica=S → ( S ) S | ε entrada=( ) ( ) legenda=Teste suas regras em S → ( S ) S | ε com a entrada ( ) ( ).
+REVELAR: Nesse trace, quantas vezes S → ε foi usada?
+    RESPOSTA: 3 vezes: dentro do primeiro par, dentro do segundo par e no final, com $ na entrada.
+[PROF] Você reinventou o algoritmo do Livro do Dragão. Isso não é coisa de 'burro', hein?
+
+=== AULA DE LEITURA [FORMAL] Analisador preditivo não recursivo (versão prova)
+[PROF] Analisador preditivo não recursivo, dirigido por tabela: a definição de prova.
+TEXTO: Componentes: um **buffer de entrada** terminado em $; uma **pilha** de símbolos gramaticais com $ no fundo; a **tabela** M[A, a]; e um **programa de controle**. Configuração inicial: pilha = $ S (S no topo), entrada = w$.
+CODIGO (O programa de controle. Para A → ε, nada é empilhado.):
+    empilhe $; empilhe S
+    a := primeiro símbolo de w$
+    X := topo da pilha
+    enquanto X ≠ $:
+      se X = a:                desempilhe; a := próximo símbolo
+      senão se X é terminal:   erro()
+      senão se M[X, a] vazia:  erro()
+      senão se M[X, a] = X → Y1 Y2 … Yk:
+        imprima X → Y1 Y2 … Yk
+        desempilhe
+        empilhe Yk, Yk-1, …, Y1      // Y1 fica no topo
+      X := topo da pilha
+    se a = $: aceite   senão: erro()
+TEXTO: **Invariante:** a parte da entrada já casada, seguida da pilha lida do topo para o fundo, é sempre uma forma sentencial mais à esquerda. Por isso a saída é uma derivação mais à esquerda.
+PREVEJA: Configuração: pilha $ E' T' (topo à direita), entrada $. O que acontece a seguir?
+    (     ) Erro
+    (certa) T' → ε, E' → ε, aceita
+    (     ) Casa $ com T'
+    (     ) E' → + T E'
+    EXPLICACAO: M[T', $] = T' → ε e M[E', $] = E' → ε, pois $ está em FOLLOW de ambos. Sobra pilha $ e entrada $: aceita.
+WIDGET LL1_TRACE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=( id ) legenda=Siga o pseudocódigo linha a linha nesta entrada curta.
+DESTAQUE EXAM_TIP: Formato esperado: colunas **Pilha | Entrada | Ação** (ou Saída), uma linha por passo. Ações escritas como 'E → T E'' ou 'casar id'. Termine com 'aceita' ou marque a linha do erro.
+DESTAQUE WATCH_OUT: Não confunda as pilhas: a do LL guarda o que ainda FALTA ver (previsão). A do LR, lá na Fortaleza Bottom-Up, guarda o que JÁ foi visto.
+REVELAR: Quais são as situações do programa de controle?
+    RESPOSTA: X = a = $: aceita. X = a: casa e avança. X terminal ≠ a, ou M[X, a] vazia: erro. X não-terminal com M[X, a] = produção: substitui X pelo lado direito, invertido.
+DESTAQUE REAL_WORLD: O ANTLR, gerador de analisadores muito usado, produz analisadores descendentes da família LL (no ANTLR 4, o ALL(*)), primos do que você está estudando.
+
+=== AULA DE LEITURA [MNEMONIC] As três frases na testa do golem
+[NARRADOR] No altar do Templo Top-Down, o golem Pilha tem três frases gravadas na testa.
+DESTAQUE MNEMONIC: **'Terminal no topo? Casa e anda. Variável no topo? Consulta e troca. $ com $? Festa!'**
+DESTAQUE MNEMONIC: **Empilhar ao contrário = arrumar a mochila.** O que você vai usar primeiro entra por último e fica em cima. Para A → X Y Z: guarda Z, depois Y, depois X.
+[BYTE] E qual a diferença entre a pilha daqui e a da Fortaleza Bottom-Up?
+DESTAQUE FIRESIDE: LL e LR ao pé da lareira. LL: 'Minha pilha é o FUTURO: tudo que eu prevejo que vai aparecer.' LR: 'A minha é o PASSADO: tudo que já li e ainda não consegui montar.' LL: 'Eu decido cedo, só com o primeiro token.' LR: 'Eu espero ver o lado direito inteiro antes de decidir. Por isso aceito mais gramáticas.'
+PASSOS Confusões clássicas:
+    1. Empilhar o lado direito na ordem normal (X no fundo): errado, X tem que ficar no topo.
+    2. Avançar a entrada numa expansão: não! Só avança quando CASA um terminal.
+    3. Empilhar ε: não existe. Produção ε só desempilha.
+    4. Esquecer de começar com $ S na pilha.
+PREVEJA: Qual ação faz a entrada avançar?
+    (     ) Expandir
+    (certa) Casar
+    (     ) Ambas
+    (     ) Nenhuma
+    EXPLICACAO: Só casar consome token. Expandir só reorganiza a pilha.
+WIDGET LL1_TRACE gramatica=S → a S b | ε entrada=a a b b legenda=Teste as frases do golem em S → a S b | ε.
+REVELAR: Recite as três frases do golem.
+    RESPOSTA: Terminal no topo? Casa e anda. Variável no topo? Consulta (a tabela) e troca (pelo lado direito, invertido). $ com $? Festa (aceita)!
+
+################ ASSUNTO RECURSIVE_DESCENT: Descida recursiva  prereqs=[FIRST]
+FICHA: Descida recursiva: uma função por não-terminal; o lookahead escolhe a produção, terminais viram match e não-terminais viram chamadas.
+  gancho: Uma variável, uma função; um terminal, um match. Recursão à esquerda = cachorro correndo atrás do rabo.
+  termos: [função, não-terminal, lookahead, match, recursão à esquerda, first]
+  erros comuns: [Usar gramática com recursão à esquerda (laço infinito)., Não fatorar à esquerda (um token não decide)., Esquecer de verificar $ no fim: S() pode retornar com tokens sobrando., Avançar o token dentro de uma chamada de não-terminal sem dar match., Achar que descida recursiva é bottom-up.]
+  FLASH: Quantas funções? -> Uma por não-terminal.
+  FLASH: Terminal no lado direito vira? -> match(terminal).
+  FLASH: Não-terminal no lado direito vira? -> Chamada da função dele.
+  FLASH: Como escolher a produção? -> Pelo lookahead: FIRST, ou FOLLOW para a alternativa ε.
+  FLASH: Onde fica a pilha? -> Na pilha de chamadas do programa.
+  FLASH: Por que recursão à esquerda quebra? -> A() chama A() sem consumir token: laço infinito.
+  FLASH: Recursão à direita é problema? -> Não: cada chamada consome token antes.
+  FLASH: Que classe de gramáticas a forma preditiva aceita? -> LL(1).
+
+=== AULA ANIMADA [BASICO] Um método por regra  (id=RECURSIVE_DESCENT, ~168s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] A tabela LL(1) funciona, mas é uma grade de casas. Ninguém gosta de preencher nem de depurar isso à mão.
+     palco: Tabela preditiva | id | + | ( | ) | $ | E | T X | T X | X | + T X | ε | ε | T | id | ( E )
+2. [BYTE] E quando dá erro, você quer saber em que regra o parser estava, para dar uma mensagem boa.
+     palco: Tabela preditiva | id | + | ( | ) | $ | E | T X | T X | X | + T X | ε | ε | T | id | ( E ) | M[X, id]
+3. [BYTE] Na descida recursiva, cada não-terminal vira uma função. A pilha do analisador vira a pilha de chamadas do programa.
+     palco: DESCIDA RECURSIVA
+4. [BYTE] É o mesmo analisador preditivo, escrito como código. Para cada não-terminal, uma função com o nome dele.
+     palco: Descida recursiva | E -> T X | X -> + T X | ε | T -> id | ( E ) | void E() { T(); X(); } | void X() { |   if (tok == '+') { |     casa('+'); T(); X(); |   } | } | void T() { |   if (tok == ID) casa(ID); |   else { casa('('); E(); casa(')'); } | }
+5. [BYTE] A regra de E pede T e depois X. A função E chama a função T e depois a função X, nessa ordem.
+     palco: Descida recursiva | *E -> T X | X -> + T X | ε | T -> id | ( E ) | *void E() { T(); X(); } | void X() { |   if (tok == '+') { |     casa('+'); T(); X(); |   } | } | void T() { |   if (tok == ID) casa(ID); |   else { casa('('); E(); casa(')'); } | }
+6. [BYTE] Terminal vira uma chamada de casa. Ela confere se o token é o esperado e avança. Se não for, é erro de sintaxe.
+     palco: Descida recursiva | E -> T X | *X -> + T X | ε | T -> id | ( E ) | void E() { T(); X(); } | void X() { |   if (tok == '+') { | *    casa('+'); T(); X(); |   } | } | void T() { |   if (tok == ID) casa(ID); |   else { casa('('); E(); casa(')'); } | }
+7. [BYTE] Na função X, se o token não é mais, ela não faz nada e volta. Que regra é essa? Toque nela.
+     palco: Descida recursiva | E -> T X | *X -> + T X | ε | T -> id | ( E ) | void E() { T(); X(); } | void X() { | *  if (tok == '+') { |     casa('+'); T(); X(); |   } | } | void T() { |   if (tok == ID) casa(ID); |   else { casa('('); E(); casa(')'); } | } | X -> + T X | X -> ε
+     PERGUNTA(toque): certas=[X -> ε] erradas=[X -> + T X]
+       dica: Não fazer nada é o mesmo que sumir da frase.
+       acerto: Isso. Não fazer nada é a regra épsilon: X sumiu sem consumir token.
+8. [BYTE] Cada if testa o próximo token contra o FIRST de uma regra. É a mesma decisão da tabela LL(1), agora dentro do código.
+     palco: Descida recursiva | E -> T X | X -> + T X | ε | *T -> id | ( E ) | void E() { T(); X(); } | void X() { |   if (tok == '+') { |     casa('+'); T(); X(); |   } | } | void T() { | *  if (tok == ID) casa(ID); | *  else { casa('('); E(); casa(')'); } | }
+9. [PROF] É esse o parser que o trabalho prático pede. Ele só funciona se a gramática for LL(1): sem recursão à esquerda e fatorada.
+     palco: Descida recursiva | E -> T X | X -> + T X | ε | T -> id | ( E ) | void E() { T(); X(); } | void X() { |   if (tok == '+') { |     casa('+'); T(); X(); |   } | } | void T() { |   if (tok == ID) casa(ID); |   else { casa('('); E(); casa(')'); } | }
+10. [BYTE] A receita traduz cada regra para código, símbolo por símbolo.
+     palco: Receita | 1. Cada não-terminal vira uma função. | 2. Não-terminal na regra: chama a função dele. | 3. Terminal na regra: casa confere e avança. | 4. Várias regras: if no FIRST, épsilon no else.
+11. [BYTE] Na regra dos parênteses, o símbolo do meio vira o quê? Toque na regra.
+     palco: Receita | 1. Cada não-terminal vira uma função. | 2. Não-terminal na regra: chama a função dele. | 3. Terminal na regra: casa confere e avança. | 4. Várias regras: if no FIRST, épsilon no else. | T -> ( E )
+     PERGUNTA(toque): certas=[2. Não-terminal na regra: chama a função dele.] erradas=[1. Cada não-terminal vira uma função., 3. Terminal na regra: casa confere e avança., 4. Várias regras: if no FIRST, épsilon no else.]
+       dica: O símbolo do meio é um não-terminal, não um token.
+       acerto: Isso. O E vira a chamada da função dele.
+12. [BYTE] Se o não-terminal não é anulável, o último else não pode ficar vazio. Ele avisa o erro de sintaxe.
+     palco: Receita | 1. Cada não-terminal vira uma função. | 2. Não-terminal na regra: chama a função dele. | 3. Terminal na regra: casa confere e avança. | *4. Várias regras: if no FIRST, épsilon no else.
+13. [BYTE] A lista de ids de novo. Agora quem escreve o código é você.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | void L() { casa(ID); ___ } | void R() { |   if (tok == ___) { |     casa(','); casa(ID); R(); |   } | }
+14. [BYTE] L pede id e depois R. O que completa a função L? Toque.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | *void L() { casa(ID); ___ } | void R() { |   if (tok == ___) { |     casa(','); casa(ID); R(); |   } | } | R(); | casa(R);
+     PERGUNTA(toque): certas=[R();] erradas=[casa(R);]
+       dica: Não-terminal na regra vira chamada de função.
+       acerto: Isso. Depois de casar o id, L chama R.
+15. [BYTE] Que token faz R escolher a regra da vírgula? Toque.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | void L() { casa(ID); R(); } | void R() { | *  if (tok == ___) { |     casa(','); casa(ID); R(); |   } | } | ',' | ID
+     PERGUNTA(toque): certas=[','] erradas=[ID]
+       dica: Olhe com que token essa regra começa.
+       acerto: Isso. A vírgula é o FIRST dessa regra.
+16. [BYTE] Agora rode o código na entrada id, vírgula, id.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | *void L() { casa(ID); R(); } | void R() { | *  if (tok == ',') { |     casa(','); casa(ID); R(); |   } | } | id | , | id | $
+17. [BYTE] Nessa entrada, quantas vezes o parser chama a função R? Toque.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | void L() { casa(ID); R(); } | void R() { |   if (tok == ',') { |     casa(','); casa(ID); R(); |   } | } | id | , | id | $ | 1 | 2 | 3
+     PERGUNTA(toque): certas=[2] erradas=[1, 3]
+       dica: Uma chamada vem de L. Outra vem de dentro do if.
+       acerto: Isso. Duas vezes. Na segunda, a entrada já acabou.
+18. [BYTE] Na segunda chamada o token é cifrão, e o if falha. R usa a regra épsilon: não casa nada e volta.
+     palco: Descida recursiva | L -> id R | R -> , id R | ε | void L() { casa(ID); R(); } | void R() { | *  if (tok == ',') { |     casa(','); casa(ID); R(); |   } | } | id | , | id | *$
+19. [BYTE] Um colega traduziu uma regra com recursão à esquerda direto para código. Certo ou errado?
+     palco: Erros comuns | E → E + T vira: void E() { E(); casa('+'); T(); } | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Veja a primeira coisa que a função E faz, antes de ler qualquer token.
+       acerto: Isso. E chama E sem consumir nada, e a recursão nunca termina. Antes de descer, elimine a recursão à esquerda.
+20. [BYTE] Outro erro é tentar casar o épsilon. Épsilon não é token. A regra épsilon é só voltar sem fazer nada.
+     palco: Erros comuns | Certo: Recursão à esquerda trava a descida. Elimine antes: E → T X. | *Errado: Tratar a regra ε com uma chamada casa(ε). | *Certo: Regra ε é o else vazio: a função volta sem consumir token.
+21. [BYTE] Resumindo: a descida recursiva é o preditivo em forma de código. Uma função por não-terminal, um if por regra, e a pilha de chamadas faz o papel da pilha.
+     palco: Resumo | Cada não-terminal é uma função. Não-terminal na regra é chamada; terminal é casa. | O if olha o próximo token e escolhe a regra pelo FIRST. | Só vale para gramática LL(1): sem recursão à esquerda e fatorada.
+
+=== AULA ANIMADA [PEGADINHA] Quem avança o token  (id=RECURSIVE_DESCENT/quemavançaotoken, ~32s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Na descida recursiva, cada regra vira uma função. Olhe a do F.
+     palco: void F() | if (tk == ID) casa(ID); | else if (tk == ABRE) { |   casa(ABRE); |   E(); |   casa(FECHA); | } else erro();
+2. [BYTE] A função só olha o token atual para decidir. Olhar não gasta nada.
+     palco: void F() | *if (tk == ID) casa(ID); | *else if (tk == ABRE) { |   casa(ABRE); |   E(); |   casa(FECHA); | } else erro();
+3. [BYTE] Em qual linha a entrada anda de verdade? Toque na primeira.
+     palco: void F() | if (tk == ID) casa(ID); | else if (tk == ABRE) { |   casa(ABRE); |   E(); |   casa(FECHA); | } else erro();
+     PERGUNTA(toque): certas=[if (tk == ID) casa(ID);] erradas=[else if (tk == ABRE) {, } else erro();]
+       dica: Procure a função que confere o token e passa para o próximo.
+       acerto: Isso. Quem avança é o casa.
+4. [BYTE] Chamar E não avança nada por conta própria. Quem avança lá dentro é outro casa.
+     palco: void F() | if (tk == ID) casa(ID); | else if (tk == ABRE) { |   casa(ABRE); | *  E(); |   casa(FECHA); | } else erro();
+5. [PROF] Se ninguém chamar casa, o programa fica parado no mesmo token, para sempre.
+     palco: void F() | if (tk == ID) casa(ID); | else if (tk == ABRE) { |   casa(ABRE); |   E(); |   casa(FECHA); | } else erro();
+
+=== AULA ANIMADA [CLIPE] Descida recursiva  (id=RECURSIVE_DESCENT/descidarecursiva, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Cada não terminal vira uma função.
+     palco: E -> T X | void E() { |   T(); |   X(); | }
+2. [BYTE] A função olha o token, escolhe a regra e chama as outras.
+     palco: E -> T X | void E() { | *  T(); | *  X(); | }
+
+=== AULA DE LEITURA [STORY] A repartição dos funcionários-função
+[NARRADOR] Corredor final do Templo Top-Down: uma repartição pública cheia de guichês. Cada guichê tem o nome de um não-terminal.
+[PROF] Na descida recursiva, **cada não-terminal vira uma função**: um funcionário. O funcionário S atende comandos; o L, listas; o E, expressões.
+CODIGO (A gramática dos comandos da repartição.):
+    S → if E then S | print E | begin L end
+    L → S L | ε
+    E → id
+[BYTE] E como o funcionário S sabe o que fazer?
+[PROF] Ele olha a **senha do próximo cliente**: o token de lookahead. Senha 'if'? Segue o roteiro de S → if E then S. Senha 'print'? Roteiro de S → print E.
+TEXTO: Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**match**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**).
+PREVEJA: S recebeu a senha 'begin'. Qual é a sequência de ações do funcionário S?
+    (certa) match(begin); L(); match(end)
+    (     ) L(); match(begin); match(end)
+    (     ) match(begin); S(); match(end)
+    (     ) Chama E()
+    EXPLICACAO: É o roteiro de S → begin L end: confere 'begin', manda para o L, confere 'end'.
+WIDGET PARSE_TREE gramatica=S → if E then S | print E | begin L end ; L → S L | ε ; E → id entrada=begin print id end legenda=A árvore sintática é o organograma das chamadas: cada nó interno é uma função que foi chamada.
+[BYTE] E o L, que pode ser ε? Como ele sabe que deve ficar quieto?
+[PROF] Se a senha for 'end' (que está em FOLLOW(L)), o L retorna sem fazer nada: a lista acabou. Se for if, print ou begin (FIRST(S)), ele chama S() e depois L() de novo.
+DESTAQUE WATCH_OUT: Funcionário que, como primeiro ato, chama a si mesmo sem atender ninguém (A → A α) entra em laço infinito. Recursão à esquerda mata a descida recursiva.
+REVELAR: Quem faz o papel da 'pilha' na descida recursiva, se não há pilha explícita?
+    RESPOSTA: A pilha de chamadas do próprio programa! Cada função chamada e ainda não terminada é um não-terminal pendente.
+DESTAQUE REAL_WORLD: GCC e Clang, compiladores de C/C++ usados no mundo inteiro, usam analisadores de descida recursiva escritos à mão: fáceis de ler e ótimos para mensagens de erro.
+
+=== AULA DE LEITURA [VISUAL] Vendo as funções se chamarem
+[PROF] Vamos ver a descida recursiva acontecendo: cada passo da derivação é uma chamada de função.
+CODIGO ():
+    E → T E'
+    E' → + T E' | ε
+    T → F T'
+    T' → * F T' | ε
+    F → ( E ) | id
+CODIGO (Uma função por não-terminal (E' virou Elinha, T' virou Tlinha).):
+    fun E() { T(); Elinha() }
+    fun Elinha() {
+      if (look == "+") { match("+"); T(); Elinha() }
+      // senão: ε (look deve estar em FOLLOW(E') = { ), $ })
+    }
+    fun T() { F(); Tlinha() }
+    fun Tlinha() {
+      if (look == "*") { match("*"); F(); Tlinha() }
+    }
+    fun F() {
+      when (look) {
+        "("  -> { match("("); E(); match(")") }
+        "id" -> match("id")
+        else -> erro("esperava ( ou id")
+      }
+    }
+WIDGET DERIVATION gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=id * id legenda=Cada expansão desta derivação mais à esquerda corresponde a uma chamada de função do código acima.
+PASSOS Chamadas para id * id:
+    1. E() chama T().
+    2. T() chama F(); F() vê 'id' e faz match(id).
+    3. T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.
+    4. Tlinha() vê $: não faz nada (ε) e retorna.
+    5. De volta em E(), que chama Elinha(); vê $: ε, retorna.
+    6. E() retorna com look = $: sucesso!
+PREVEJA: Ao analisar 'id * id', quantas vezes F() é chamada?
+    (     ) 1
+    (certa) 2
+    (     ) 3
+    (     ) 0
+    EXPLICACAO: Uma por id: T() chama F() para o primeiro e Tlinha() chama F() para o segundo.
+WIDGET PARSE_TREE gramatica=E → T E' ; E' → + T E' | ε ; T → F T' ; T' → * F T' | ε ; F → ( E ) | id entrada=id * id legenda=A árvore é o retrato das chamadas: os nós E, T, F, T' e E' são as funções.
+[BYTE] E por que não usar a gramática E → E + T direto?
+WIDGET LEFT_RECURSION gramatica=E → E + T | T ; T → T * F | F ; F → ( E ) | id entrada= legenda=Porque E() chamaria E() sem consumir nada: laço infinito. A transformação cria justamente as funções Elinha e Tlinha.
+REVELAR: Na árvore de 'id * id', quantos nós T' aparecem, e por quê?
+    RESPOSTA: Dois: o primeiro T' (filho de T) expande para * F T', e o T' de dentro vira ε. Cada chamada de Tlinha() é um nó T'.
+
+=== AULA DE LEITURA [WORKED] Exemplo resolvido: funções das declarações
+[PROF] Exercício de prova: escreva um analisador de descida recursiva para as declarações.
+CODIGO ():
+    D → T L ;
+    T → int | float
+    L → id R
+    R → , id R | ε
+TEXTO: Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `match(t)` que confere e avança.
+CODIGO (O 'conferir a senha'.):
+    fun match(t: String) {
+      if (look == t) look = proximoToken()
+      else erro("esperava " + t + ", veio " + look)
+    }
+CODIGO (D, T e L resolvidos. D e L têm uma produção só: nem precisam olhar o lookahead.):
+    fun D() { T(); L(); match(";") }      // produção única
+    
+    fun T() {
+      when (look) {
+        "int"   -> match("int")
+        "float" -> match("float")
+        else    -> erro("esperava um tipo")
+      }
+    }
+    
+    fun L() { match("id"); R() }          // L → id R
+[BYTE] E o R, que tem ε?
+[PROF] Esse fica para você. Pense: qual token faz R escolher R → , id R? E qual faz escolher R → ε?
+REVELAR: Qual token escolhe R → , id R?
+    RESPOSTA: ',': é FIRST(, id R).
+REVELAR: E qual escolhe R → ε?
+    RESPOSTA: ';': é FOLLOW(R). Qualquer outro token é erro.
+REVELAR: Escreva R() completo.
+    RESPOSTA: fun R() { when (look) { "," -> { match(","); match("id"); R() };  ";" -> { /* ε: não consome nada */ };  else -> erro("esperava , ou ;") } }
+WIDGET PARSE_TREE gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada=int id , id ; legenda=Cada nó interno = uma chamada. Repare no R chamando R: recursão à DIREITA, inofensiva.
+DESTAQUE EXAM_TIP: Nas produções com ε, deixe o teste explícito: 'se look ∈ FOLLOW(A), não faz nada; senão, erro'. Detectar o erro cedo (no else) costuma valer ponto.
+
+=== AULA DE LEITURA [SOCRATIC] Inventando a descida recursiva
+[PROF] Vamos inventar a descida recursiva do zero. Objetivo: uma função que reconheça 'tudo que S gera'.
+PREVEJA: S → a B c. Qual é o corpo mais natural de S()?
+    (certa) match(a); B(); match(c)
+    (     ) B(); match(a); match(c)
+    (     ) match(a); match(B); match(c)
+    (     ) S(); B()
+    EXPLICACAO: Siga o lado direito da esquerda para a direita: terminal vira match; não-terminal vira chamada da função dele.
+PREVEJA: S → a B | c D. Como S() escolhe?
+    (     ) Tenta a primeira e, se falhar, volta atrás
+    (certa) Olha o token: 'a' → primeira, 'c' → segunda
+    (     ) Sempre a primeira
+    (     ) Sorteia
+    EXPLICACAO: Com FIRST disjuntos, um token basta. É a descida recursiva PREDITIVA, sem backtracking.
+PREVEJA: E → E + T | T. O que acontece se E() começar chamando E()?
+    (     ) Funciona normal
+    (certa) Laço infinito / estouro de pilha
+    (     ) Erro de sintaxe
+    (     ) Lê o +
+    EXPLICACAO: E() chama E() sem consumir token nenhum: chama de novo, e de novo… estouro de pilha. Recursão à esquerda é proibida aqui.
+PREVEJA: A → b A | ε. Com que tokens A() deve escolher o ε?
+    (     ) Com b
+    (certa) Com os tokens de FOLLOW(A)
+    (     ) Com qualquer token
+    (     ) Nunca
+    EXPLICACAO: Se o token não abre b A mas pode vir depois de A, A some. É a mesma lógica da tabela LL(1).
+[BYTE] Então descida recursiva é a tabela LL(1) escrita em ifs?
+[PROF] Exatamente! Cada 'when (look)' é uma linha da tabela. E a pilha? É a pilha de chamadas.
+PREVEJA: A → x y | x z. A descida recursiva preditiva funciona direto?
+    (     ) Sim
+    (certa) Não: precisa fatorar à esquerda (A → x A', A' → y | z)
+    (     ) Sim, se usar FOLLOW
+    (     ) Não: precisa eliminar ε
+    EXPLICACAO: O mesmo token x abre as duas alternativas: sem fatorar, só com backtracking.
+WIDGET LEFT_FACTORING gramatica=S → a b | a c entrada= legenda=Veja a fatoração deixando a gramática pronta para virar funções.
+REVELAR: Resuma com suas palavras como construir uma descida recursiva.
+    RESPOSTA: Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, match para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).
+WIDGET PARSE_TREE gramatica=S → if E then S | print E | begin L end ; L → S L | ε ; E → id entrada=if id then print id legenda=Treino: imagine S() → match(if), E(), match(then), S()… e confira com a árvore.
+
+=== AULA DE LEITURA [FORMAL] Descida recursiva: definição de prova
+[PROF] Definição de prova, no estilo do Livro do Dragão.
+TEXTO: Um **analisador de descida recursiva** é um conjunto de procedimentos, um para cada não-terminal. A execução começa pelo procedimento do símbolo inicial e tem sucesso se ele termina tendo consumido toda a entrada.
+CODIGO (Procedimento típico para um não-terminal A.):
+    void A() {
+      escolha uma produção A → X1 X2 … Xk     // pelo lookahead
+      para i := 1 até k:
+        se Xi é não-terminal: chame Xi()
+        senão se Xi = símbolo de entrada atual: avance a entrada
+        senão: erro()
+    }
+TEXTO: Na forma geral, a escolha da produção pode exigir **retrocesso** (backtracking). Na forma **preditiva**, o lookahead decide: usa-se A → α se look ∈ FIRST(α), ou se α ⇒* ε e look ∈ FOLLOW(A). Isso exige uma gramática **LL(1)**.
+PASSOS Requisitos da descida recursiva preditiva:
+    1. Sem recursão à esquerda (direta ou indireta): senão, laço infinito.
+    2. Fatorada à esquerda: senão, um token não decide.
+    3. Condições LL(1) satisfeitas: alternativas com conjuntos de escolha disjuntos.
+    4. Se nenhuma alternativa serve para o lookahead: erro (a menos que haja alternativa ε e look ∈ FOLLOW(A)).
+PREVEJA: Qual a relação entre a descida recursiva preditiva e o analisador preditivo com tabela?
+    (     ) Reconhecem classes diferentes
+    (certa) Mesma classe (LL(1)); a pilha explícita vira a pilha de chamadas
+    (     ) A descida recursiva é bottom-up
+    (     ) O de tabela não precisa de FIRST
+    EXPLICACAO: São duas implementações da mesma ideia: a tabela vira os ifs e a pilha vira a recursão.
+CODIGO (Exercício típico: escreva S(), L() e E().):
+    S → if E then S | print E | begin L end
+    L → S L | ε
+    E → id
+REVELAR: Escreva L() para L → S L | ε.
+    RESPOSTA: L() { se look ∈ {if, print, begin}: S(); L()   senão se look = end: retorna (ε)   senão: erro() }
+WIDGET FIRST_FOLLOW gramatica=S → if E then S | print E | begin L end ; L → S L | ε ; E → id entrada= legenda=Os conjuntos que decidem cada if: FIRST(S) = {if, print, begin} e FOLLOW(L) = {end}.
+DESTAQUE EXAM_TIP: Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o match e a checagem final do $ (principal: S(); se look ≠ $, erro).
+REVELAR: Por que a recursão à DIREITA (L → S L) não causa problema?
+    RESPOSTA: Porque antes de chamar L() de novo, S() consome pelo menos um token. A entrada diminui a cada chamada, então a recursão termina.
+
+=== AULA DE LEITURA [MNEMONIC] Uma variável, uma função
+[NARRADOR] Último corredor do Templo Top-Down: uma fileira de portas, cada uma com o nome de um não-terminal. Atrás de cada porta, um funcionário que pode abrir outras portas.
+DESTAQUE MNEMONIC: **'Uma variável, uma função. Um terminal, um match.'**
+DESTAQUE MNEMONIC: **Recursão à esquerda = cachorro correndo atrás do rabo.** E() chama E() que chama E()… e nunca sai do lugar, porque não come nenhum token.
+DESTAQUE MNEMONIC: **'Olha a senha antes de atender.'** O lookahead é a senha do cliente: o FIRST escolhe o roteiro; o FOLLOW autoriza o 'não faço nada' (ε).
+[LEXI] Eu entrego os tokens já cortadinhos. A função só precisa espiar o próximo: nada de reler texto!
+[BYTE] E qual a diferença pra pilha do golem?
+DESTAQUE FIRESIDE: Golem Pilha e Descida Recursiva ao pé da lareira. Pilha: 'Eu guardo os não-terminais pendentes numa pilha de pedra.' Descida: 'E eu na pilha de chamadas. Somos gêmeos, só muda a roupa.' Pilha: 'Mas você dá mensagens de erro mais bonitas.' Descida: 'Por isso o Clang me contratou.'
+PASSOS Confusões clássicas:
+    1. Descida recursiva NÃO é bottom-up: é top-down, começa pela raiz (S()).
+    2. Recursão à DIREITA é ok; à ESQUERDA, não.
+    3. Esquecer de checar $ no final: S() pode retornar com tokens sobrando.
+    4. Escolher ε 'por padrão' sem checar FOLLOW: funciona, mas o erro é detectado mais tarde.
+PREVEJA: Qual gramática NÃO serve para descida recursiva preditiva sem transformar?
+    (     ) E → T E'
+    (     ) L → S L | ε
+    (certa) A → A b | c
+    (     ) R → , id R | ε
+    EXPLICACAO: A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada.
+WIDGET PARSE_TREE gramatica=D → T L ; ; T → int | float ; L → id R ; R → , id R | ε entrada=float id ; legenda=Cada nó interno = uma porta aberta (uma função chamada). Conte: D, T, L, R.
+REVELAR: Recite os dois ganchos principais.
+    RESPOSTA: 'Uma variável, uma função; um terminal, um match.' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'
+
+################ ASSUNTO ERROR_RECOVERY: Erros sintáticos e recuperação  prereqs=[LL1_PARSING]
+FICHA: O analisador detecta o erro no primeiro token que torna a entrada impossível (prefixo viável), relata linha e 'esperado × encontrado' e se recupera para achar mais erros; no LL(1), o modo pânico descarta tokens até um de FIRST(A) (continua) ou de FOLLOW(A) ∪ {$} (desempilha A).
+  gancho: FIRST Fica, FOLLOW Foge. Pânico Pula, Frase Faz remendo, Produção Prevê, Global é Gênio.
+  termos: [pânico, sincroniza, follow, descart, prefixo, erro]
+  erros comuns: [Achar que recuperar um erro é corrigir o programa, Usar FIRST(A) como conjunto para desempilhar A (é FOLLOW(A)), Esquecer o $ entre os tokens de sincronização, Achar que o erro é detectado depois do token problemático (é exatamente nele), Confiar em todas as mensagens seguintes sem considerar o erro em cascata]
+  FLASH: Quatro tipos de erro? -> Léxico, sintático, semântico e lógico
+  FLASH: Quatro estratégias de recuperação? -> Modo pânico, nível de frase, produções de erro e correção global
+  FLASH: O que é a propriedade do prefixo viável? -> LL e LR acusam o erro no primeiro token que não pode continuar um prefixo válido
+  FLASH: Modo pânico: token em FIRST(A)? -> Para de descartar e continua com A
+  FLASH: Modo pânico: token em FOLLOW(A) ∪ {$}? -> Desempilha A (sincronizou)
+  FLASH: Terminal no topo diferente da entrada? -> Desempilha o terminal (finge que estava lá)
+  FLASH: Tokens de sincronização típicos em C? -> ';' e '}'
+  FLASH: Token especial do Bison para recuperação? -> error (ex.: comando : error ';')
+  FLASH: Para que serve yyerrok? -> Sair do modo de recuperação e voltar a relatar erros na hora
+
+=== AULA ANIMADA [BASICO] Cair e levantar  (id=ERROR_RECOVERY, ~173s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] Este código tem dois erros de sintaxe. Um compilador simples para no primeiro e não diz mais nada.
+     palco: Dois erros | *x = * 3; | y = 2; | *z = ;
+2. [BYTE] Você corrige, compila de novo, e só então descobre o segundo. Com dez erros, são dez compilações.
+     palco: Dois erros | x = * 3; | y = 2; | *z = ;
+3. [BYTE] Avisar o erro, se ajeitar e continuar a análise se chama recuperação de erros.
+     palco: RECUPERAÇÃO
+4. [BYTE] A ideia: o parser avisa onde travou, joga fora um pedaço da entrada e volta a analisar num ponto seguro.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | x | = | * | 3 | ; | y | = | 2 | ;
+5. [BYTE] Aqui o parser trava: depois do igual a gramática pede um valor, e chegou um vezes.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | *Val -> id | num | x | = | ** | 3 | ; | y | = | 2 | ; | erro aqui
+6. [BYTE] No modo pânico, ele descarta tokens até achar um token de sincronização. Toque onde ele se segura.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | x | = | * | 3 | ; | y | = | 2 | ; | erro aqui
+     PERGUNTA(toque): certas=[;] erradas=[3, y, 2]
+       dica: Procure o token que encerra o comando.
+       acerto: Isso. O ponto e vírgula fecha o comando. Ele é o token de sincronização.
+7. [BYTE] Tudo até ali vai fora, sem analisar. A análise recomeça no comando seguinte, e o resto do arquivo é conferido.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | *Cmd -> id = Val ; | Val -> id | num | x | = | ; | *y | = | 2 | ;
+8. [PROF] Bons tokens de sincronização saem do FOLLOW do não-terminal que estava no topo: é o que pode vir depois dele.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | x | = | ; | y | = | 2 | ;
+9. [BYTE] Assim uma compilação só aponta vários erros. O programa não é gerado, mas você corrige tudo de uma vez.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | x | = | ; | y | = | 2 | ;
+10. [BYTE] No analisador preditivo, o modo pânico segue quatro regras. Elas dizem o que fazer quando a casa da tabela está vazia.
+     palco: Receita | 1. Casa vazia, não-terminal no topo: descarta. | 2. Achou um token do FIRST do topo: continua. | 3. Achou um do FOLLOW do topo: tira o topo. | 4. Terminal no topo errado: tira o terminal.
+11. [BYTE] Ele parou num token que pode vir depois do topo. Qual regra vale? Toque.
+     palco: Receita | 1. Casa vazia, não-terminal no topo: descarta. | 2. Achou um token do FIRST do topo: continua. | 3. Achou um do FOLLOW do topo: tira o topo. | 4. Terminal no topo errado: tira o terminal.
+     PERGUNTA(toque): certas=[3. Achou um do FOLLOW do topo: tira o topo.] erradas=[1. Casa vazia, não-terminal no topo: descarta., 2. Achou um token do FIRST do topo: continua., 4. Terminal no topo errado: tira o terminal.]
+       dica: O que pode vir depois está no FOLLOW.
+       acerto: Isso. O topo sai da pilha e a análise segue.
+12. [BYTE] Regra quatro: terminal no topo diferente do token. O parser tira o terminal da pilha, como se ele tivesse vindo, e avisa.
+     palco: Receita | 1. Casa vazia, não-terminal no topo: descarta. | 2. Achou um token do FIRST do topo: continua. | 3. Achou um do FOLLOW do topo: tira o topo. | *4. Terminal no topo errado: tira o terminal.
+13. [BYTE] Outra gramática: comandos de atribuição. A entrada tem dois erros.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | id | = | = | num | ; | id | = | ; | $
+14. [BYTE] O parser lê da esquerda para a direita. Onde ele trava primeiro? Toque.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | id | = | = | num | ; | id | = | ; | $
+     PERGUNTA(toque): certas=[=] erradas=[id, =, num, ;, id, =, ;, $]
+       dica: Depois do igual vem um valor. O que veio?
+       acerto: Isso. Val está no topo, e chegou outro igual.
+15. [BYTE] Ele descarta tokens até achar um seguro para Val. Onde ele para? Toque.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | *Val -> id | num | id | = | = | num | ; | id | = | ; | $ | erro aqui
+     PERGUNTA(toque): certas=[num] erradas=[;, id, =, ;, $]
+       dica: Procure um token que pode começar um Val.
+       acerto: Isso. O num está no FIRST de Val.
+16. [BYTE] O igual sobrando vai fora. Val fica na pilha e casa com o num.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | id | = | *num | ; | id | = | ; | $
+17. [BYTE] Segundo erro: topo Val, e veio ponto e vírgula. O que acontece? Toque.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | id | = | num | ; | id | = | *; | $ | tira Val | descarta ;
+     PERGUNTA(toque): certas=[tira Val] erradas=[descarta ;]
+       dica: Ponto e vírgula pode vir depois de Val. Ele está no FOLLOW.
+       acerto: Isso. Val sai da pilha, e o ponto e vírgula casa.
+18. [BYTE] Dois erros avisados numa leitura só, e o parser chegou ao fim.
+     palco: Modo pânico | Prog -> Cmd Prog | ε | Cmd -> id = Val ; | Val -> id | num | id | = | num | ; | id | = | ; | *$
+19. [BYTE] O que a recuperação entrega no fim? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | No modo pânico, o parser conserta o programa e gera o código. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Ele jogou tokens fora. O que sobrou não é mais o seu programa.
+       acerto: Isso. A recuperação serve para achar mais erros. Com erro de sintaxe, o compilador não gera código.
+20. [BYTE] Outro erro é parar de descartar cedo demais. Num token qualquer, o parser trava de novo e solta erros em cascata, que nem existem.
+     palco: Erros comuns | Certo: A recuperação só serve para avisar mais erros na mesma compilação. | *Errado: Sincronizar em qualquer token que aparecer. | *Certo: Sincronize no FIRST ou no FOLLOW do topo, como o ; que fecha o comando.
+21. [BYTE] Resumindo: no erro, o parser avisa, descarta até um token seguro e segue. O FOLLOW dá os tokens seguros. O objetivo é mostrar todos os erros numa compilação.
+     palco: Resumo | Erro: casa vazia na tabela, ou terminal do topo diferente do token. | Modo pânico: descarta até um token de sincronização (FIRST ou FOLLOW do topo). | Meta: avisar vários erros de uma vez, sem erros em cascata.
+
+=== AULA ANIMADA [PEGADINHA] Parar ou seguir  (id=ERROR_RECOVERY/pararouseguir, ~34s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Um compilador que para no primeiro erro faz você recompilar dez vezes.
+     palco: Dez erros, dez compilações | id | = | = | num | ; | id
+2. [BYTE] No modo pânico, ele joga tokens fora até achar um bom ponto de recomeço.
+     palco: Dez erros, dez compilações | id | = | *= | *num | ; | id
+3. [BYTE] Qual token é um bom ponto de recomeço nesta linha? Toque nele.
+     palco: Dez erros, dez compilações | id | = | = | num | ; | id
+     PERGUNTA(toque): certas=[;] erradas=[id, num]
+       dica: Procure o token que costuma fechar um comando.
+       acerto: Isso. O ponto e vírgula marca o fim do comando.
+4. [PROF] Recuperar não conserta o programa. Só deixa o compilador achar os próximos erros.
+     palco: Dez erros, dez compilações | ; | id
+5. [BYTE] Depois do erro, o compilador não gera o programa. Ele só lista tudo de uma vez.
+     palco: Dez erros, dez compilações | ; | id
+
+=== AULA ANIMADA [CLIPE] Modo pânico  (id=ERROR_RECOVERY/modopânico, ~12s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Achou erro? O parser joga tokens fora até achar um ponto seguro.
+     palco: Modo pânico | = | = | 2 | ;
+2. [BYTE] O ponto e vírgula é o mais comum. Daí ele continua procurando erros.
+     palco: Modo pânico | = | = | 2 | *;
+
+=== AULA DE LEITURA [STORY] O corretor de redação do ENEM
+[NARRADOR] Uma pilha de 300 redações e um café frio. Na linha 3 da primeira, o corretor acha um erro.
+[BYTE] Aí ele rasga a redação e vai embora?
+[PROF] Claro que não! Ele marca o erro, acha um ponto seguro para continuar, o próximo ponto final, e segue lendo. No fim, o aluno recebe TODOS os erros de uma vez. Um compilador bom faz igual.
+PASSOS Os tipos de erro, na redação e no código:
+    1. 'Caza' em vez de 'casa' → **erro léxico**: um caractere ou palavra que não existe (em C, um `@` solto).
+    2. Frase sem verbo, parêntese sem fechar → **erro sintático**: a estrutura está quebrada (`x = (a + ;`).
+    3. 'O sol congelou a feijoada' → **erro semântico**: estrutura ok, sentido não (somar string com int, variável não declarada).
+    4. Texto perfeito, mas fugiu do tema → **erro lógico**: compila e roda, mas faz a coisa errada (`if (x = 0)` no lugar de `==`).
+PASSOS As quatro estratégias do corretor:
+    1. **Modo pânico**: pula tudo até o próximo ponto final e recomeça dali. Simples e nunca entra em laço; mas pode pular um trecho grande.
+    2. **Nível de frase**: faz um remendo local, 'aqui faltou uma vírgula, finjo que ela está lá'. Cuidado: remendos mal escolhidos podem gerar laços infinitos.
+    3. **Produções de erro**: o gabarito já prevê os erros mais comuns ('mais melhor') e tem uma mensagem pronta para cada um.
+    4. **Correção global**: reescrever a redação com o MÍNIMO de mudanças até ela ficar certa. Lindo na teoria, caro demais na prática.
+PREVEJA: Qual dessas estratégias os compiladores de verdade mais usam?
+    (     ) Correção global
+    (certa) Modo pânico (às vezes com remendos de frase)
+    (     ) Nenhuma: param no primeiro erro
+    (     ) Produções de erro para todo erro possível
+    EXPLICACAO: Pânico é simples e seguro. A correção global é cara demais; produções de erro só para casos frequentes.
+[PILHA] No meu Templo, o 'ponto final' se chama **token de sincronização**. Em C, os favoritos são `;` e `}`.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = num id = num ; legenda=Faltou um ';' depois do primeiro comando. Veja em que token o erro aparece e como o parser segue em frente.
+REVELAR: O que o parser fez com o ';' que faltou?
+    RESPOSTA: Com o terminal ';' no topo da pilha e 'id' na entrada, ele finge que o ';' estava lá: desempilha o ';' e continua. É um remendo em nível de frase, exatamente o 'finjo que a vírgula está aqui' do corretor.
+DESTAQUE FIRESIDE: Corretor: 'Eu não conserto a redação, só aponto.' Compilador: 'Eu também! Recuperar não é corrigir o programa: é só voltar a um estado em que eu consiga achar o PRÓXIMO erro.'
+REVELAR: Na analogia, quem é: ponto final, remendo, gabarito de erros comuns e reescrita mínima?
+    RESPOSTA: Token de sincronização (modo pânico), recuperação em nível de frase, produções de erro e correção global.
+
+=== AULA DE LEITURA [VISUAL] Sala do Pânico ao vivo
+[PILHA] Bem-vindo à Sala do Pânico. O token vermelho é onde eu PERCEBO o erro. Depois, avance passo a passo e veja como eu me recupero.
+CODIGO (Gramática: uma lista de atribuições. FIRST(E) = {id, num}, FOLLOW(E) = {;}):
+    P -> S ; P | ε
+    S -> id = E
+    E -> id | num
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = = num ; id = num ; legenda=Um '=' a mais. Com E no topo e '=' na entrada, a célula M[E, =] está vazia.
+TEXTO: Regra do pânico: com o não-terminal A no topo e a célula vazia, **descarte tokens** até achar um que (1) está em **FIRST(A)**: aí A continua no topo, ou (2) está em **FOLLOW(A) ∪ {$}**: aí A é desempilhado.
+PREVEJA: No exemplo acima, o parser descarta o '=' e encontra 'num'. O que ele faz?
+    (     ) Desempilha E
+    (certa) Continua com E, porque num ∈ FIRST(E)
+    (     ) Desiste
+    (     ) Volta ao início do programa
+    EXPLICACAO: 'num' pode começar um E, então dá para seguir com E → num. Só um token foi jogado fora.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = ; id = num ; legenda=Agora a expressão SUMIU. O que acontece quando o próximo token já é um ';'?
+REVELAR: Por que aqui E foi desempilhado sem descartar nada?
+    RESPOSTA: O ';' não começa um E, mas está em FOLLOW(E): é o que viria logo DEPOIS de um E. O parser 'desiste' de E e sincroniza no ';'.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id num ; id = num ; legenda=Faltou o '='. Desta vez quem está no topo é um TERMINAL.
+TEXTO: Terminal no topo diferente da entrada: o parser finge que o terminal estava lá e o desempilha. É uma recuperação simples, de nível de frase (uma 'inserção').
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = num num ; id = id ; legenda=Um 'num' a mais. Conte quantas recuperações aparecem.
+DESTAQUE WATCH_OUT: UM erro de digitação gerou DUAS recuperações: primeiro o parser finge um ';' e depois descarta 'num ;'. É o **erro em cascata**: por isso, depois do primeiro erro, desconfie das mensagens seguintes.
+[BYTE] Funciona com expressões também?
+WIDGET PANIC gramatica=E -> T E' ; E' -> + T E' | ε ; T -> F T' ; T' -> * F T' | ε ; F -> ( E ) | id entrada=id + * id legenda=Na gramática de expressões: o '*' aparece onde deveria começar um termo T.
+REVELAR: Qual token é descartado em 'id + * id' e por quê?
+    RESPOSTA: O '*'. Com T no topo, M[T, *] está vazia; '*' não está em FIRST(T) = {(, id} nem em FOLLOW(T) = {+, ), $}. O próximo, 'id', está em FIRST(T): o parser segue com T.
+
+=== AULA DE LEITURA [WORKED] Rastreando o pânico na mão
+[PROF] Vamos rastrear com calma o modo pânico em `id = ; id = num ;`: o programador esqueceu o valor da primeira atribuição.
+CODIGO (FIRST(P) = {id, ε}   FIRST(S) = {id}   FIRST(E) = {id, num}
+FOLLOW(P) = {$}   FOLLOW(S) = {;}   FOLLOW(E) = {;}):
+    P -> S ; P | ε
+    S -> id = E
+    E -> id | num
+PASSOS Resolvido (topo da pilha à direita):
+    1. Pilha `$ P`, entrada `id = ; id = num ; $`: M[P, id] = P → S ; P. Pilha vira `$ P ; S`.
+    2. M[S, id] = S → id = E. Pilha `$ P ; E = id`.
+    3. Casa `id`, casa `=`. Pilha `$ P ; E`, entrada `; id = num ; $`.
+    4. M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.
+    5. Pânico: ';' ∉ FIRST(E), mas ';' ∈ FOLLOW(E). Nada a descartar: **desempilha E**.
+    6. Pilha `$ P ;`: casa `;`. O resto, `id = num ;`, é analisado normalmente.
+    7. No fim, P → ε com `$` e o parser chega ao fim: 1 erro relatado, análise completa.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = ; id = num ; legenda=Confira cada passo com o motor.
+DESTAQUE WATCH_OUT: Depois de um erro, o parser NÃO gera código: a recuperação serve só para continuar procurando erros. O programa só compila de verdade quando a lista de erros fica vazia.
+TEXTO: Sua vez (exemplo esmaecido): `id = = num ; id = num ;`.
+REVELAR: Em que token o erro é detectado e quem está no topo da pilha?
+    RESPOSTA: No 3º token, o segundo '='. No topo está E (já casamos id e =).
+REVELAR: O que o pânico faz?
+    RESPOSTA: '=' não está em FIRST(E) nem em FOLLOW(E): descarta '='. O próximo, 'num', está em FIRST(E): para de descartar e segue com E → num.
+REVELAR: E em `id num ; id = num ;`, o que muda?
+    RESPOSTA: O erro aparece com o TERMINAL '=' no topo e 'num' na entrada. O parser finge que o '=' estava lá (desempilha o '=') e continua com E → num.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id num ; id = num ; legenda=Confira a última resposta.
+[PROF] No Bison, você não escreve o pânico na mão: usa o token especial `error` numa produção.
+CODIGO (parser.y: 'error ;' descarta tudo até o próximo ';' e segue para o próximo comando):
+    %{
+    #include <stdio.h>
+    extern int yylineno;      /* %option yylineno no scanner.l */
+    int yylex(void);
+    void yyerror(const char *s);
+    %}
+    %define parse.error verbose
+    %token ID NUM
+    %%
+    programa : programa comando
+             | comando
+             ;
+    comando  : ID '=' expr ';'
+             | error ';'          { yyerrok; }
+             ;
+    expr     : ID
+             | NUM
+             ;
+    %%
+    void yyerror(const char *s) {
+        fprintf(stderr, "Erro sintatico na linha %d: %s\n", yylineno, s);
+    }
+DESTAQUE EXAM_TIP: Na prova, rastreie em tabela (pilha | entrada | ação) e escreva explicitamente: 'M[E, ;] vazia → erro; ; ∈ FOLLOW(E) → desempilha E'. Mostrar o conjunto de sincronização vale ponto.
+
+=== AULA DE LEITURA [SOCRATIC] Por que não parar no primeiro erro?
+[PROF] Perguntas, só perguntas. Você vai deduzir como um compilador deve reagir a erros.
+PREVEJA: Seu programa tem 5 erros de sintaxe. O compilador para no primeiro. Quantas vezes você compila até achar todos?
+    (     ) 1
+    (certa) Pelo menos 5
+    (     ) Nenhuma
+    (     ) Depende do processador
+    EXPLICACAO: Um erro por compilação = pelo menos 5 rodadas. Por isso o compilador tenta se recuperar e relatar o máximo de erros de uma vez.
+PREVEJA: Em `id = num num ; id = id ;`, em qual token o parser LL(1) PERCEBE o erro?
+    (     ) No 1º (id)
+    (     ) No 3º (o primeiro num)
+    (certa) No 4º (o segundo num)
+    (     ) Só no fim
+    EXPLICACAO: 'id = num' ainda pode virar um programa válido (basta vir um ';'). O 2º 'num' é o primeiro token que torna isso impossível.
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = num num ; id = id ; legenda=O vermelho marca o ponto de detecção.
+[BYTE] Ele grita exatamente no primeiro token impossível. Isso tem nome?
+[PROF] Tem: **propriedade do prefixo viável**. LL e LR detectam o erro assim que o que foi lido não pode mais ser o começo de nenhum programa válido.
+PREVEJA: Com E no topo e um token inesperado, por que usar FOLLOW(E) como sincronizador?
+    (     ) Porque é o menor conjunto
+    (certa) Porque se o próximo token é algo que vem DEPOIS de um E, dá para fingir que o E acabou e seguir
+    (     ) Porque FIRST é sempre vazio
+    (     ) Por tradição
+    EXPLICACAO: Desempilhar E e continuar com o que vem depois dele é a aposta mais segura: a pilha volta a combinar com a entrada.
+PREVEJA: E por que também parar num token de FIRST(E)?
+    (certa) Porque aí dá para recomeçar o próprio E, sem jogar fora o resto
+    (     ) Não deveria parar
+    (     ) Para gerar mais erros
+    (     ) Porque FIRST = FOLLOW
+    EXPLICACAO: Em `id = = num`, depois de descartar o '=' extra, 'num' começa um E: não há por que abandonar o E.
+REVELAR: Por que ';' e '}' são ótimos tokens de sincronização em C?
+    RESPOSTA: Porque marcam FINS claros de construções (comando e bloco). Pular até eles costuma descartar só o comando quebrado, e o resto do programa é analisado normalmente.
+REVELAR: Qual o risco de sincronizar no lugar errado?
+    RESPOSTA: Erros em cascata: o parser volta 'desalinhado' e acusa erros que não existem. Por isso compiladores esperam alguns tokens corretos antes de relatar o próximo erro (o Bison espera 3).
+WIDGET PANIC gramatica=E -> T E' ; E' -> + T E' | ε ; T -> F T' ; T' -> * F T' | ε ; F -> ( E ) | id entrada=( id + ) * id legenda=Desafio: antes de avançar, preveja se o ')' será descartado ou usado como sincronizador de T.
+REVELAR: Resposta do desafio
+    RESPOSTA: Sincronizador: ')' ∈ FOLLOW(T) = {+, ), $}. Nada é descartado, T é desempilhado e o ')' fecha o parêntese normalmente.
+
+=== AULA DE LEITURA [FORMAL] Tratamento de erros sintáticos: definição de prova
+TEXTO: **Objetivos do tratador de erros** (Dragão, 4.1.3): (1) relatar a presença de erros de forma clara e precisa; (2) recuperar-se de cada erro rápido o bastante para detectar erros subsequentes; (3) acrescentar custo mínimo ao processamento de programas corretos.
+TEXTO: **Propriedade do prefixo viável**: os métodos LL e LR detectam um erro assim que o prefixo da entrada já lido não pode ser completado para formar uma cadeia da linguagem. O erro é acusado no PRIMEIRO token que torna isso impossível.
+PASSOS Estratégias de recuperação:
+    1. **Modo pânico**: descartar símbolos da entrada, um a um, até encontrar um **token de sincronização** de um conjunto escolhido (ex.: `;`, `}`, FOLLOW(A)). Simples e livre de laços infinitos.
+    2. **Nível de frase**: correção local do restante da entrada, inserir, remover ou substituir um token (ex.: inserir `;` que falta). Risco de laço se sempre inserir antes do token atual.
+    3. **Produções de erro**: aumentar a gramática com produções que geram as construções erradas mais comuns, emitindo diagnósticos específicos.
+    4. **Correção global**: achar a cadeia correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.
+CODIGO (Modo pânico no analisador LL(1) (Dragão, 4.4.5)):
+    com A (não-terminal) no topo e a = próximo token:
+        se M[A, a] tem produção: expanda normalmente
+        senão:  // erro
+            relate o erro (linha, esperado × encontrado)
+            enquanto a ∉ FIRST(A) e a ∉ FOLLOW(A) ∪ {$}:
+                descarte a; a ← próximo token
+            se a ∈ FIRST(A): continue com A no topo
+            senão: desempilhe A   // sincronizou em FOLLOW(A)
+    com terminal t no topo e t ≠ a:
+        relate "esperava t"; desempilhe t  // finge que t estava lá
+WIDGET LL1_TABLE gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada= legenda=Toda célula vazia desta tabela é um ponto de erro. As colunas de FOLLOW(A) são as 'synch' de cada linha.
+PREVEJA: Na tabela do livro, uma célula M[A, a] marcada 'synch' significa:
+    (     ) Descartar a
+    (certa) Desempilhar A, pois a ∈ FOLLOW(A)
+    (     ) Aceitar a entrada
+    (     ) Expandir A → ε
+    EXPLICACAO: Célula em branco → descarta o token. 'synch' → desempilha A. Terminal no topo diferente do token → desempilha o terminal.
+TEXTO: **No Yacc/Bison**: o token reservado `error` pode aparecer em produções, como `comando : error ';'`. Ao detectar um erro, o parser chama **yyerror**, desempilha estados até um que tenha ação para `error`, empilha `error` e descarta tokens até um que possa segui-lo. Para não gerar cascata, só relata o próximo erro depois de 3 tokens empilhados com sucesso; **yyerrok** encerra esse modo imediatamente e **yyclearin** descarta o token atual.
+PREVEJA: Qual NÃO é objetivo do tratador de erros?
+    (     ) Relatar erros com clareza
+    (     ) Detectar erros subsequentes
+    (certa) Corrigir o programa automaticamente para que ele rode
+    (     ) Custo mínimo em programas corretos
+    EXPLICACAO: Recuperar ≠ corrigir. A recuperação serve para continuar a análise e achar mais erros; o código não é gerado.
+DESTAQUE EXAM_TIP: Cai muito: 'cite e explique as estratégias de recuperação de erros'. Escreva as quatro, com uma vantagem e uma desvantagem de cada, e diga que o modo pânico usa FOLLOW (e FIRST) como sincronizadores. Cite a propriedade do prefixo viável.
+REVELAR: Defina propriedade do prefixo viável em uma frase.
+    RESPOSTA: O analisador detecta o erro assim que o prefixo lido da entrada deixa de ser prefixo de alguma sentença da linguagem, nunca depois disso.
+
+=== AULA DE LEITURA [MNEMONIC] FIRST Fica, FOLLOW Foge
+DESTAQUE MNEMONIC: **FIRST Fica, FOLLOW Foge.** Achou um token de FIRST(A)? A FICA no topo e recomeça. Achou um de FOLLOW(A)? A FOGE (é desempilhado). Nenhum dos dois? Joga o token fora.
+DESTAQUE MNEMONIC: **Terminal teimoso? Finge que estava lá.** Terminal no topo que não bate com a entrada é desempilhado, como pular uma vírgula esquecida.
+TEXTO: **Palácio da memória**: no Templo Top-Down, atrás do altar da tabela LL(1), há uma porta com luz vermelha: a **Sala do Pânico** . O Pilha corre por ela jogando tokens pela janela até ver uma placa de saída, `;` ou `}`: pintada com as cores do FOLLOW.
+DESTAQUE MNEMONIC: Tipos de erro em zoom crescente: **Letra → Frase → Sentido → Resultado**. Léxico (palavra que não existe), sintático (frase mal montada), semântico (frase sem sentido), lógico (tudo compila, mas o resultado sai errado).
+DESTAQUE MNEMONIC: Estratégias, da mais simples à mais ambiciosa: **P**ânico **P**ula, **F**rase **F**az remendo, **P**rodução **P**revê, **G**lobal é **G**ênio, mas ninguém paga o salário dele.
+PREVEJA: E no topo, token 'x' na entrada, x ∉ FIRST(E) e x ∉ FOLLOW(E). O que fazer?
+    (     ) Desempilhar E
+    (certa) Descartar x e olhar o próximo token
+    (     ) Aceitar
+    (     ) Empilhar x
+    EXPLICACAO: Nem fica, nem foge: o token vai pela janela. Repita até achar alguém de FIRST (fica) ou de FOLLOW (foge).
+WIDGET PANIC gramatica=P -> S ; P | ε ; S -> id = E ; E -> id | num entrada=id = num ; = = ; id = id ; legenda=Recite enquanto avança: o lixo '= = ;' vai pela janela até aparecer 'id', que está em FIRST(P). P fica!
+DESTAQUE MNEMONIC: **Prefixo viável = grito imediato**: LL e LR gritam no PRIMEIRO token impossível, nunca depois. Se a mensagem aponta a linha 10, o erro real está na linha 10 ou ANTES.
+DESTAQUE MNEMONIC: Bison: **`error` é o coringa** que casa com o lixo; **yyerrok** é o 'tá ok, pode reclamar de novo'; **yyerror** é o megafone que imprime a mensagem.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que recuperar = corrigir o programa; (2) usar FIRST como conjunto de 'desempilhar' (é FOLLOW!); (3) esquecer o $ entre os sincronizadores; (4) confiar cegamente na 2ª, 3ª… mensagem, pode ser cascata.
+REVELAR: Recite: o que fazer com A no topo e célula vazia?
+    RESPOSTA: Descarta tokens até achar um de FIRST(A), A fica, ou de FOLLOW(A) ∪ {$}, A foge (desempilha). FIRST Fica, FOLLOW Foge.
+DESTAQUE REAL_WORLD: Mensagem boa de verdade tem linha e 'esperado × encontrado': 'Erro sintatico na linha 7: esperava ';' mas encontrou 'id''. É o que o professor quer ver no seu TP.
+
