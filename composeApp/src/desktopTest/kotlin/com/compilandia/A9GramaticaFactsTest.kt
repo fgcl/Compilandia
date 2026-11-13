@@ -14,6 +14,8 @@ import com.compilandia.content.episodes.GRAMATICA_FAT_2_DEPOIS
 import com.compilandia.content.episodes.GRAMATICA_FAT_2_RODADA1
 import com.compilandia.content.episodes.GRAMATICA_REC_2
 import com.compilandia.content.episodes.GRAMATICA_REC_2_DEPOIS
+import com.compilandia.content.episodes.GRAMATICA_REC_3
+import com.compilandia.content.episodes.GRAMATICA_REC_3_DEPOIS
 import com.compilandia.engine.DerivationHelper
 import com.compilandia.engine.Earley
 import com.compilandia.engine.Grammar
@@ -84,6 +86,19 @@ class A9GramaticaFactsTest {
         // Primeiro exemplo: E -> E + n | n.
         val e = GrammarTransform.eliminateImmediateLeftRecursion(Grammar.parse("E -> E + n | n"))
         assertEquals(texto(listOf("E  -> n E'", "E' -> + n E' | ε")), texto(e))
+    }
+
+    /** Caso difícil: dois alfas (mais T e menos T) viram duas alternativas de E', e o ε entra uma vez. */
+    @Test fun recursaoComDoisAlfas() {
+        val g = gram(GRAMATICA_REC_3)
+        val depois = GrammarTransform.eliminateImmediateLeftRecursion(g)
+        assertEquals(texto(GRAMATICA_REC_3_DEPOIS), texto(depois))
+        assertTrue(GrammarTransform.leftRecursiveNTs(depois).isEmpty())
+        val frase = listOf("T", "-", "T", "+", "T")
+        assertTrue(Earley(g).accepts(frase) && Earley(depois).accepts(frase))
+        // As duas opções erradas da pergunta perdem frases: sem o menos, e sem o ε.
+        assertFalse(Earley(gram(listOf("E -> T X", "X -> + T X | ε"))).accepts(frase), "sem o menos, perde a subtração")
+        assertFalse(Earley(gram(listOf("E -> T X", "X -> + T X | - T X"))).accepts(frase), "sem o ε, nenhuma frase termina")
     }
 
     @Test fun fatoracaoDosComandos() {

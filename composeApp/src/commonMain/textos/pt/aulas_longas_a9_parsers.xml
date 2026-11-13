@@ -66,6 +66,9 @@
     <!-- Erros sintáticos e recuperação -->
     <string name="erro_l_titulo">Dois erros</string>
     <string name="erro_l_01">Este código tem dois erros de sintaxe. Um compilador simples para no primeiro e não diz mais nada.</string>
+    <string name="erro_l_01q">Um compilador simples para no primeiro erro. Qual erro ele nunca chega a avisar? Toque.</string>
+    <string name="erro_l_01q_dica">O primeiro erro está na linha de cima. Procure o outro.</string>
+    <string name="erro_l_01q_ok">A linha z igual, sem valor. O compilador parou na primeira linha e não chegou até ela.</string>
     <string name="erro_l_02">Você corrige, compila de novo, e só então descobre o segundo. Com dez erros, são dez compilações.</string>
     <string name="erro_l_palavra">RECUPERAÇÃO</string>
     <string name="erro_l_03">Avisar o erro, se ajeitar e continuar a análise se chama recuperação de erros.</string>

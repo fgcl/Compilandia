@@ -34,7 +34,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Variar a fala de acerto: 240 de 259 começavam com "Isso"; agora nenhuma, e o `FalaDeAcertoTest` barra a volta
 - [ ] Menos perguntas de duas opções (92 de 192)
 - [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
-- [ ] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
+- [x] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
 - [ ] Nenhum trecho com mais de 4 cenas só ouvindo
 - [ ] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
 - [ ] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
@@ -59,8 +59,9 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
 - [x] FOLLOW: caso difícil `S → B C d` (C some, o d entra), conferido pelo motor
 - [x] FIRST: caso `S → B d`, `B → C | b`, `C → c | ε` (anulável sem ε escrito; a primeira rodada deixa S só com o d)
-- [ ] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
-- [ ] Recursão à esquerda: `E → E + T | E − T | T`, e E/T/F numa prática
+- [x] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
+- [x] Recursão à esquerda: `E → E + T | E − T | T`
+- [ ] Recursão à esquerda: E/T/F numa prática
 - [ ] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)
 - [ ] Gramáticas não LL(1) no sorteio do "Fazer com ajuda"
 

@@ -46,6 +46,9 @@ val ARVORE_AMB_CONSERTO = no("E", no("E", no("E", no("n")), no("-"), no("n")), n
 /** Segundo exemplo da recursão à esquerda: uma lista de ids, e ela consertada. */
 val GRAMATICA_REC_2 = listOf("L -> L , id | id")
 val GRAMATICA_REC_2_DEPOIS = listOf("L  -> id L'", "L' -> , id L' | ε")
+/** Caso difícil da recursão: duas alternativas com laço, cada uma vira uma alternativa de E'. */
+val GRAMATICA_REC_3 = listOf("E -> E + T | E - T | T")
+val GRAMATICA_REC_3_DEPOIS = listOf("E  -> T E'", "E' -> + T E' | - T E' | ε")
 
 /** Segundo exemplo da fatoração: atribuição e duas chamadas, todas começando com id. */
 val GRAMATICA_FAT_2 = listOf("C -> id = n | id ( ) | id ( n )")
@@ -366,6 +369,28 @@ val gramaticas by lazy {
             cena(tx("rec_l_12"), mood = EpMood.HAPPY) {
                 drop("sim", "nao"); tint("f", Tint.TEAL)
                 hot("r0")
+            }
+            // 5. O caso difícil: dois alfas na mesma regra
+            cena(tx("rec_l_13")) {
+                clear()
+                add(titulo(tx("rec_l_titulo_dois")))
+                add(codigo("g", GRAMATICA_REC_3, 74f, x = 70f, size = 17f))
+                add(bloco("a1", "E + T", 80f, 150f, w = 90f, size = 16f), bloco("a2", "E - T", 180f, 150f, w = 90f, size = 16f), bloco("a3", "T", 280f, 150f, w = 90f, size = 16f))
+                hot("g0")
+            }
+            pergunta(tx("rec_l_14"), setOf("a1", "a2"), setOf("a3"), tx("rec_l_14_dica"), tx("rec_l_14_ok")) { hot("g0") }
+            pergunta(tx("rec_l_15"), setOf("d1"), setOf("d2", "d3"), tx("rec_l_15_dica"), tx("rec_l_15_ok")) {
+                tint("a1", Tint.ORANGE); tint("a2", Tint.ORANGE); tint("a3", Tint.TEAL); hot()
+                add(codigo("r", GRAMATICA_REC_3_DEPOIS.take(1), 214f, x = 60f, size = 16f))
+                // Os dois erros de prova: esquecer o segundo alfa e esquecer o ε.
+                add(bloco("d2", "E' -> + T E' | ε", 180f, 262f, w = 280f, size = 15f))
+                add(bloco("d1", GRAMATICA_REC_3_DEPOIS[1].replace("  ", " "), 180f, 316f, w = 280f, size = 15f))
+                add(bloco("d3", "E' -> + T E' | - T E'", 180f, 370f, w = 280f, size = 15f))
+            }
+            cena(tx("rec_l_16"), mood = EpMood.HAPPY) {
+                drop("d1", "d2", "d3")
+                add(codigo("r", GRAMATICA_REC_3_DEPOIS, 214f, x = 60f, passo = 32f, size = 16f))
+                hot("r1")
             }
             fecho(Fecho(
                 tx("rec_f_af"), false, tx("rec_f_q"), tx("rec_f_dica"), tx("rec_f_ok"), tx("rec_f_certo"),

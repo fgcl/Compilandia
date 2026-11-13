@@ -64,6 +64,15 @@
     <string name="rec_l_02">Antes de ler qualquer token, o que a função E faz? Toque na linha.</string>
     <string name="rec_l_02_dica">Olhe a primeira linha dentro da função.</string>
     <string name="rec_l_02_ok">Ela chama a si mesma, sem ler nada.</string>
+    <string name="rec_l_titulo_dois">Dois laços</string>
+    <string name="rec_l_13">Na prova, a regra costuma ter mais de uma alternativa com laço. Aqui E vai para E mais T, para E menos T, ou para T.</string>
+    <string name="rec_l_14">Passo um: quais alternativas começam com o próprio E? Toque em todas.</string>
+    <string name="rec_l_14_dica">Olhe o primeiro símbolo de cada uma. Mais de uma pode começar com E.</string>
+    <string name="rec_l_14_ok">As duas primeiras. Então há dois alfas: mais T, e menos T. O T sozinho é o beta.</string>
+    <string name="rec_l_15">E vai para T E linha. E o E linha, como fica? Toque na regra certa.</string>
+    <string name="rec_l_15_dica">Cada alfa vira uma alternativa de E linha. E o épsilon fecha a regra.</string>
+    <string name="rec_l_15_ok">Mais T E linha, menos T E linha, ou épsilon. Sem o menos, a gramática perde as subtrações. Sem o épsilon, ela nunca termina.</string>
+    <string name="rec_l_16">Cada alfa ganhou sua alternativa, e o épsilon aparece uma vez só. Com três alfas, seriam três alternativas mais o épsilon.</string>
     <string name="rec_l_palavra">RECURSÃO À ESQUERDA</string>
     <string name="rec_l_03">Regra em que o lado direito começa com o próprio lado esquerdo tem recursão à esquerda. Nenhum parser descendente aceita isso.</string>
     <string name="rec_l_assoc_1">Agora troque o mais pelo menos. Na gramática velha, a árvore de nove menos cinco menos dois pende para a esquerda. O nove menos cinco fica embaixo e sai primeiro: dá dois.</string>

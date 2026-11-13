@@ -5,6 +5,11 @@ import com.compilandia.content.episodes.ARVORE_MENOS_VELHA
 import com.compilandia.content.episodes.GRAMATICA_EXPR
 import com.compilandia.content.episodes.GRAMATICA_FIRST_3
 import com.compilandia.content.episodes.GRAMATICA_FOLLOW_3
+import com.compilandia.content.episodes.GRAMATICA_LL1_3
+import com.compilandia.content.episodes.GRAMATICA_LL1_4
+import com.compilandia.content.episodes.tabelaLl1DaAula
+import com.compilandia.engine.GrammarTransform
+import com.compilandia.engine.LL1Table
 import com.compilandia.content.episodes.tabelaSlrDaAula
 import com.compilandia.engine.FirstFollow
 import com.compilandia.engine.Grammar
@@ -72,5 +77,26 @@ class AulasConsertadasTest {
         val g = FirstFollow(Grammar.parse(GRAMATICA_EXPR.joinToString("\n")))
         assertTrue("id" !in g.first.getValue("X") && "id" !in g.follow.getValue("X"), "M[X, id] tem de ser vazia")
         assertTrue("+" in g.first.getValue("X") && ")" in g.follow.getValue("X"))
+    }
+
+    /** Tabela LL(1), caso difícil: S -> A B não tem ε escrito, mas vai em a, b e também no $ (FOLLOW de S). */
+    @Test fun tabelaComRegraAnulavelSemEpsilon() {
+        val t = tabelaLl1DaAula(GRAMATICA_LL1_3)
+        assertEquals(listOf("", "a", "b", "$"), t[0])
+        assertEquals(listOf("S", "A B", "A B", "A B"), t[1])
+        val m = LL1Table(Grammar.parse(GRAMATICA_LL1_3.joinToString("\n")))
+        assertTrue(m.isLL1, "nenhuma casa com duas regras")
+        assertEquals(setOf("$"), m.ff.follow["S"])
+    }
+
+    /** Conflito FIRST × FIRST: as duas regras de S na casa (S, a); a fatoração da aula conserta. */
+    @Test fun tabelaComConflitoFirstFirst() {
+        val m = LL1Table(Grammar.parse(GRAMATICA_LL1_4.joinToString("\n")))
+        assertEquals(listOf("S" to "a"), m.conflicts)
+        assertEquals(2, m.cell("S", "a").size)
+        assertTrue(tabelaLl1DaAula(GRAMATICA_LL1_4)[1].drop(2).all { it.isEmpty() }, "as outras casas ficam vazias")
+        val fatorada = Grammar.parse("S -> a S'\nS' -> b | c")
+        assertTrue(LL1Table(fatorada).isLL1)
+        assertEquals(fatorada.toText(), GrammarTransform.leftFactor(Grammar.parse(GRAMATICA_LL1_4.joinToString("\n"))).toText())
     }
 }

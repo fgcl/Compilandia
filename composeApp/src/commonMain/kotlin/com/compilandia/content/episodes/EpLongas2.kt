@@ -17,6 +17,7 @@ import com.compilandia.content.tabela
 import com.compilandia.content.titulo
 import com.compilandia.engine.ExprParser
 import com.compilandia.engine.Grammar
+import com.compilandia.engine.LL1Table
 import com.compilandia.engine.LRAction
 import com.compilandia.engine.LRKind
 import com.compilandia.engine.LRTable
@@ -37,6 +38,19 @@ private fun no(s: String, vararg f: ParseNode) = ParseNode(s, f.toList())
 
 /** Gramática do segundo exemplo da tabela LL(1). */
 val GRAMATICA_LL1_2 = listOf("L -> id R", "R -> , id R | ε")
+
+/** Caso difícil da tabela: S -> A B não tem ε escrito, mas some inteira, então vai também no FOLLOW de S. */
+val GRAMATICA_LL1_3 = listOf("S -> A B", "A -> a | ε", "B -> b | ε")
+/** Conflito FIRST × FIRST: as duas regras de S começam com a. A fatoração da Ponte conserta. */
+val GRAMATICA_LL1_4 = listOf("S -> a b | a c")
+
+/** A tabela LL(1) tirada do motor: cabeçalho com os terminais e o $, depois uma linha por não-terminal. */
+internal fun tabelaLl1DaAula(gram: List<String>): List<List<String>> {
+    val t = LL1Table(Grammar.parse(gram.joinToString("\n")))
+    return listOf(listOf("") + t.columns) + t.grammar.nonTerminals.map { nt ->
+        listOf(nt) + t.columns.map { c -> t.cell(nt, c).joinToString(" | ") { it.rhsText() } }
+    }
+}
 
 /** Gramática do segundo exemplo de LR(0) e SLR. */
 val GRAMATICA_LR_2 = listOf("S -> ( S ) | id")
@@ -107,6 +121,37 @@ val aulasLongas2 by lazy {
             cena(tx("ll_l_12"), mood = EpMood.HAPPY) {
                 text("ml2c3", "ε")
                 hot("ml1c1", "ml2c2", "ml2c3")
+            }
+            // 5. O caso difícil: regra anulável sem ε escrito, e depois duas regras na mesma casa
+            val cheia3 = tabelaLl1DaAula(GRAMATICA_LL1_3)
+            cena(tx("ll_l_13")) {
+                clear()
+                add(titulo("LL(1)"))
+                add(codigo("g", GRAMATICA_LL1_3, 60f, x = 100f, passo = 26f, size = 15f))
+                add(rotulo("fs", "FOLLOW(S) = { $ }", 180f, 150f, Tint.YELLOW))
+                add(tabela("m", cheia3.map { l -> l.mapIndexed { j, s -> if (j == 0 || l === cheia3[0]) s else "" } }, 200f, cw = 76f, ch = 46f, size = 14f))
+                hot("g0")
+            }
+            pergunta(tx("ll_l_14"), setOf("ml1c1", "ml1c2", "ml1c3"), (2..3).flatMap { l -> (1..3).map { c -> "ml${l}c$c" } }.toSet(), tx("ll_l_14_dica"), tx("ll_l_14_ok")) {
+                hot("g0", "fs")
+            }
+            cena(tx("ll_l_15"), mood = EpMood.HAPPY) {
+                for (l in 1..3) for (c in 1..3) text("ml${l}c$c", cheia3[l][c])
+                hot("ml1c1", "ml1c2", "ml1c3")
+            }
+            val cheia4 = tabelaLl1DaAula(GRAMATICA_LL1_4)
+            cena(tx("ll_l_16")) {
+                clear()
+                add(titulo("LL(1)"))
+                add(codigo("g", GRAMATICA_LL1_4, 70f, x = 120f, size = 16f))
+                add(tabela("m", cheia4.map { l -> l.mapIndexed { j, s -> if (j == 0 || l === cheia4[0]) s else "" } }, 170f, cw = 70f, ch = 46f, size = 14f))
+                hot("g0")
+            }
+            pergunta(tx("ll_l_17"), setOf("ml1c1"), setOf("ml1c2", "ml1c3", "ml1c4"), tx("ll_l_17_dica"), tx("ll_l_17_ok")) { hot("g0") }
+            cena(tx("ll_l_18"), mood = EpMood.SURPRISED) {
+                change("ml1c1") { it.copy(text = cheia4[1][1], size = 11f, tint = Tint.RED) }
+                add(codigo("fat", listOf("S  -> a S'", "S' -> b | c"), 290f, x = 120f, passo = 28f, size = 15f))
+                hot("ml1c1", "fat0", "fat1")
             }
             fecho(Fecho(
                 tx("ll_f_af"), true, tx("ll_f_q"), tx("ll_f_dica"), tx("ll_f_ok"), tx("ll_f_af"),
@@ -272,7 +317,11 @@ val aulasLongas2 by lazy {
                 add(Box("fo", "FOLLOW(E) = { +, ), $ }", 180f, 210f, 250f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
                 add(Box("x", "r ?", 180f, 280f, 90f, 44f, Look.TOKEN, Tint.RED, size = 18f))
             }
-            cena(tx("lalr_l_02")) { hot("fo") }
+            pergunta(tx("lalr_l_01q"), setOf("o1", "o2", "o3"), setOf("o4"), tx("lalr_l_01q_dica"), tx("lalr_l_01q_ok")) {
+                add(opcao("o1", "+", 75f, 350f), opcao("o2", ")", 145f, 350f), opcao("o3", "$", 215f, 350f), opcao("o4", "n", 285f, 350f))
+                hot("it")
+            }
+            cena(tx("lalr_l_02")) { drop("o1", "o2", "o3", "o4"); hot("fo") }
             palavra("LR(1)", tx("lalr_l_03"))
             cena(tx("lalr_l_04")) {
                 clear()
@@ -418,7 +467,11 @@ val aulasLongas2 by lazy {
                 add(titulo("AST"))
                 add(Box("src", "a + ( b )", 180f, 170f, 200f, 52f, Look.CELL, size = 20f))
             }
-            cena(tx("ast_l_02")) { hot("src") }
+            pergunta(tx("ast_l_01q"), setOf("s0", "s1", "s3"), setOf("s2", "s4"), tx("ast_l_01q_dica"), tx("ast_l_01q_ok")) {
+                listOf("a", "+", "(", "b", ")").forEachIndexed { i, t -> add(Box("s$i", t, 80f + i * 50f, 270f, 40f, 46f, Look.TOKEN, Tint.YELLOW, size = 18f)) }
+                hot("src")
+            }
+            cena(tx("ast_l_02")) { drop("s2", "s4"); hot("s0", "s1", "s3") }
             palavra("AST", tx("ast_l_03"))
             cena(tx("epbackend_arvore_derivacao_guarda_tudo_ate")) {
                 clear()
@@ -488,7 +541,12 @@ val aulasLongas2 by lazy {
                 add(Box("var", "total", 90f, 170f, 110f, 46f, Look.TOKEN, Tint.BLUE, size = 16f), Box("reg", "\$t0", 270f, 170f, 100f, 46f, Look.TOKEN, Tint.ORANGE, size = 16f))
                 wire("var", "reg", "lw")
             }
-            cena(tx("mips_l_02")) { hot("reg") }
+            pergunta(tx("mips_l_01q"), setOf("reg", "r1"), setOf("var", "m1"), tx("mips_l_01q_dica"), tx("mips_l_01q_ok")) {
+                add(Box("m1", "preco", 90f, 260f, 110f, 46f, Look.TOKEN, Tint.BLUE, size = 16f), Box("r1", "\$t1", 270f, 260f, 100f, 46f, Look.TOKEN, Tint.ORANGE, size = 16f))
+                add(rotulo("lm", tx("comum_memoria"), 90f, 310f), rotulo("lr", tx("palco_registradores"), 270f, 310f))
+                hot()
+            }
+            cena(tx("mips_l_02")) { hot("reg", "r1") }
             palavra("MIPS", tx("mips_l_03"))
             cena(tx("epbackend_mips_so_faz_conta_com")) {
                 clear()

@@ -320,6 +320,7 @@ val topDown by lazy {
                 add(codigo("c", listOf("x = * ;", "y = 2;", "z = ;"), 130f, x = 110f, passo = 40f, size = 18f))
                 hot("c0", "c2")
             }
+            pergunta(tx("erro_l_01q"), setOf("c2"), setOf("c0", "c1"), tx("erro_l_01q_dica"), tx("erro_l_01q_ok")) { hot("c0") }
             cena(tx("erro_l_02")) { hot("c2") }
             palavra(tx("erro_l_palavra"), tx("erro_l_03"))
             // 2. Primeiro exemplo

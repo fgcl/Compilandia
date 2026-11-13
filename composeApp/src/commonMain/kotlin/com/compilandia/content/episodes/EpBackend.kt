@@ -99,7 +99,14 @@ val semantica by lazy {
                 add(Box("ii", "add", 100f, 220f, 120f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("ff", "add.s", 260f, 220f, 120f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
                 add(rotulo("li", "int + int", 100f, 262f), rotulo("lf", "float + float", 260f, 262f))
             }
-            cena(tx("attr_l_02")) { hot("src", "ii", "ff") }
+            pergunta(tx("attr_l_01q"), setOf("ff"), setOf("ii", "fs"), tx("attr_l_01q_dica"), tx("attr_l_01q_ok")) {
+                // Três instruções, para a resposta não sair no cara ou coroa.
+                move("ii", 70f, 220f); move("ff", 180f, 220f); move("li", 70f, 262f); move("lf", 180f, 262f)
+                change("ii") { it.copy(w = 90f) }; change("ff") { it.copy(w = 90f) }
+                add(Box("fs", "sub.s", 290f, 220f, 90f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f), rotulo("ls", "float - float", 290f, 262f))
+                hot("src")
+            }
+            cena(tx("attr_l_02")) { hot("src", "ii", "ff", "fs") }
             palavra(tx("attr_l_palavra"), tx("attr_l_03"))
             // 2. Primeiro exemplo
             comecaExemplo()
@@ -210,6 +217,7 @@ val semantica by lazy {
                 add(titulo(tx("epbackend_escopo")))
                 add(codigo("c", listOf("void f() {", "  int i;", "}", "void g() {", "  float i;", "}"), 80f, x = 90f, passo = 30f, size = 16f))
             }
+            pergunta(tx("esc_l_01q"), setOf("c4"), setOf("c1", "c3"), tx("esc_l_01q_dica"), tx("esc_l_01q_ok")) { hot("c3") }
             cena(tx("esc_l_02")) { hot("c1", "c4") }
             palavra(tx("epbackend_escopo").uppercase(), tx("esc_l_03"))
             // 2. Primeiro exemplo
@@ -387,7 +395,11 @@ val backend by lazy {
                 add(codigo("c", listOf("for (i = 0; i < 1000; i++)", "  x = 2 * 3 + y;"), 150f, x = 50f, passo = 32f, size = 16f))
                 hot("c1")
             }
+            pergunta(tx("otim_l_01q"), setOf("n2"), setOf("n1", "n3"), tx("otim_l_01q_dica"), tx("otim_l_01q_ok")) {
+                listOf("1", "1000", "6").forEachIndexed { i, t -> add(Box("n${i + 1}", t, 100f + i * 80f, 260f, 60f, 44f, Look.TOKEN, Tint.YELLOW, size = 17f)) }
+            }
             cena(tx("otim_l_02")) {
+                drop("n1", "n2", "n3")
                 add(rotulo("mil", "× 1000", 180f, 250f, Tint.ORANGE, 22f))
                 hot("c1", "mil")
             }

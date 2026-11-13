@@ -64,6 +64,15 @@
     <string name="rec_l_02">Before reading any token, what does the function E do? Tap the line.</string>
     <string name="rec_l_02_dica">Look at the first line inside the function.</string>
     <string name="rec_l_02_ok">It calls itself without reading anything.</string>
+    <string name="rec_l_titulo_dois">Two loops</string>
+    <string name="rec_l_13">On exams, the rule often has more than one alternative with a loop. Here E goes to E plus T, to E minus T, or to T.</string>
+    <string name="rec_l_14">Step one: which alternatives start with E itself? Tap all of them.</string>
+    <string name="rec_l_14_dica">Look at the first symbol of each one. More than one can start with E.</string>
+    <string name="rec_l_14_ok">The first two. So there are two alphas: plus T, and minus T. The T alone is the beta.</string>
+    <string name="rec_l_15">E goes to T E prime. And what does E prime look like? Tap the right rule.</string>
+    <string name="rec_l_15_dica">Each alpha becomes an alternative of E prime. And epsilon closes the rule.</string>
+    <string name="rec_l_15_ok">Plus T E prime, minus T E prime, or epsilon. Without the minus, the grammar loses subtraction. Without epsilon, it never ends.</string>
+    <string name="rec_l_16">Each alpha got its own alternative, and epsilon shows up only once. With three alphas, there would be three alternatives plus epsilon.</string>
     <string name="rec_l_palavra">LEFT RECURSION</string>
     <string name="rec_l_03">A rule whose right-hand side starts with its own left-hand side has left recursion. No top-down parser accepts that.</string>
     <string name="rec_l_assoc_1">Now swap the plus for a minus. In the old grammar, the tree of nine minus five minus two leans left. Nine minus five sits at the bottom and goes first: the result is two.</string>

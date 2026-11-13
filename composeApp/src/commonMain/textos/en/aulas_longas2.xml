@@ -22,6 +22,16 @@
     <string name="ll_l_11_dica">Step two: a nullable rule goes into the FOLLOW columns.</string>
     <string name="ll_l_11_ok">Nice. R vanishes when the input ends.</string>
     <string name="ll_l_12">No cell ended up with two rules. This grammar is LL(1), and the empty cells are syntax errors.</string>
+    <string name="ll_l_13">Now a case that shows up on exams. S goes to A B. There is no epsilon written, but A and B can both vanish.</string>
+    <string name="ll_l_14">Which columns does the rule S goes to A B go in? Tap all of them.</string>
+    <string name="ll_l_14_dica">Step one: FIRST of A B. Step two: can A B vanish entirely? Then look at FOLLOW of S.</string>
+    <string name="ll_l_14_ok">All three. The a and the b come from FIRST. A and B vanish together, so the rule also goes under dollar, the FOLLOW of S.</string>
+    <string name="ll_l_15">The rest comes out the same way. No cell has two rules, so it is LL(1). A rule with no epsilon written can still be nullable.</string>
+    <string name="ll_l_16">One more: S goes to a b, or to a c.</string>
+    <string name="ll_l_17">Which cell gets both rules of S? Tap it.</string>
+    <string name="ll_l_17_dica">Look at the first token of each rule.</string>
+    <string name="ll_l_17_ok">Row S, column a. Both rules start with a.</string>
+    <string name="ll_l_18">Two rules in one cell. Reading a, the parser cannot tell which to use, so it is not LL(1). Left factoring, from the Bridge, delays the choice until after the a.</string>
     <string name="ll_l_r1">1. A → α goes into the columns of FIRST(α).</string>
     <string name="ll_l_r2">2. If α is nullable, also into those of FOLLOW(A).</string>
     <string name="ll_l_r3">3. Two rules in a cell: not LL(1). Empty: error.</string>
@@ -79,6 +89,9 @@
     <string name="slr_l_empilha">shift</string>
     <string name="slr_l_erro">error</string>
     <string name="lalr_l_01">There are unambiguous grammars whose SLR table has a conflict. FOLLOW says reduce where it should not.</string>
+    <string name="lalr_l_01q">For the item E goes to n, which tokens get a reduce in the SLR table? Tap all of them.</string>
+    <string name="lalr_l_01q_dica">SLR looks at the FOLLOW of E, which is on the screen.</string>
+    <string name="lalr_l_01q_ok">Plus, close parenthesis and end of input. SLR reduces on every token in FOLLOW of E, and n is not there.</string>
     <string name="lalr_l_02">The problem: FOLLOW of A is a single set for the whole grammar. It does not know which state the parser is in.</string>
     <string name="lalr_l_03">The LR(1) item keeps, along with the rule and the dot, the token that can come next in that context: the lookahead.</string>
     <string name="lalr_l_04">Here are four LR(1) items. After the comma comes the lookahead. The reduction holds only if the next token is that one.</string>
@@ -124,6 +137,9 @@
     <string name="min_l_r2">2. Mark the pair that goes to a marked pair.</string>
     <string name="min_l_r3">3. Repeat until nothing changes. Blank: merge.</string>
     <string name="ast_l_01">The parser built the parse tree. It has a node for each rule used, and it gets huge.</string>
+    <string name="ast_l_01q">Of these five pieces, which ones change the result? Tap them.</string>
+    <string name="ast_l_01q_dica">Remove the parentheses. Does the result change?</string>
+    <string name="ast_l_01q_ok">The a, the plus and the b. The parentheses around b change nothing.</string>
     <string name="ast_l_02">The following phases only need to know which operation it is and which the operands are.</string>
     <string name="ast_l_03">The tree that keeps only that is the abstract syntax tree, the AST.</string>
     <string name="ast_l_05">The recipe for building the AST has three rules.</string>
@@ -143,6 +159,9 @@
     <string name="ast_l_r2">2. A value or a name becomes a leaf.</string>
     <string name="ast_l_r3">3. Parentheses and pass-through rules vanish.</string>
     <string name="mips_l_01">The processor knows nothing about variables. It only knows registers, which are few and fast, and memory locations.</string>
+    <string name="mips_l_01q">The operation total plus one is about to happen. Where can it be done? Tap all of them.</string>
+    <string name="mips_l_01q_dica">The operation happens inside the processor. The orange boxes live there.</string>
+    <string name="mips_l_01q_ok">In dollar t zero or dollar t one. That is why lw first brings total from memory into a register.</string>
     <string name="mips_l_02">Math only happens between registers, inside the processor.</string>
     <string name="mips_l_03">Code generation translates each three-address line into machine instructions. Here the machine is MIPS.</string>
     <string name="mips_l_05">The recipe for each three-address line has three steps.</string>

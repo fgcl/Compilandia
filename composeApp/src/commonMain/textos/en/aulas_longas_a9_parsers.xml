@@ -66,6 +66,9 @@
     <!-- Syntax errors and recovery -->
     <string name="erro_l_titulo">Two errors</string>
     <string name="erro_l_01">This code has two syntax errors. A simple compiler stops at the first and says nothing more.</string>
+    <string name="erro_l_01q">A simple compiler stops at the first error. Which error does it never get to report? Tap it.</string>
+    <string name="erro_l_01q_dica">The first error is on the top line. Look for the other one.</string>
+    <string name="erro_l_01q_ok">The line z equals, with no value. The compiler stopped at the first line and never reached it.</string>
     <string name="erro_l_02">You fix it, compile again, and only then find the second. With ten errors, that is ten compilations.</string>
     <string name="erro_l_palavra">RECOVERY</string>
     <string name="erro_l_03">Reporting the error, adjusting and carrying on with the analysis is called error recovery.</string>

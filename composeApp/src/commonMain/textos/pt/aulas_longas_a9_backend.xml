@@ -2,6 +2,9 @@
 <!-- Aulas básicas longas de semântica e back-end (A9): atributos, escopo, TAC, otimização, registros de ativação e alocação. -->
 <resources>
     <string name="attr_l_01">Na máquina, somar inteiros e somar reais são instruções diferentes.</string>
+    <string name="attr_l_01q">Se a e x forem float, qual instrução faz essa soma? Toque.</string>
+    <string name="attr_l_01q_dica">Leia o que está embaixo de cada instrução. Procure soma de float.</string>
+    <string name="attr_l_01q_ok">O add ponto s. A instrução muda com o tipo, então o compilador precisa conhecer o tipo antes.</string>
     <string name="attr_l_02">Para escolher a instrução certa, o compilador precisa saber o tipo de cada pedaço da expressão.</string>
     <string name="attr_l_palavra">ATRIBUTO</string>
     <string name="attr_l_03">Um atributo é uma informação associada a um nó da árvore, como o tipo ou o valor. As regras que o calculam vêm junto com a gramática.</string>
@@ -27,6 +30,9 @@
     <string name="attr_l_12">O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce.</string>
 
     <string name="esc_l_01">Duas funções declaram uma variável i. Cada uma quer a sua.</string>
+    <string name="esc_l_01q">Um uso de i dentro de g fala de qual declaração? Toque.</string>
+    <string name="esc_l_01q_dica">Procure a declaração que está entre as chaves de g.</string>
+    <string name="esc_l_01q_ok">O float i, declarado dentro de g. O int i de f não vale ali.</string>
     <string name="esc_l_02">Em cada uso do i, o compilador precisa achar a declaração certa.</string>
     <string name="esc_l_03">O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita.</string>
     <string name="esc_l_05">Cada bloco tem a sua tabela. A receita cuida da pilha delas.</string>
@@ -84,6 +90,9 @@
     <string name="tac_l_13">Quatro linhas, e nenhuma faz mais de uma conta. Na etapa de prática, o if e o while também viram linhas, com rótulos e desvios.</string>
 
     <string name="otim_l_01">Esta linha roda mil vezes dentro de um laço.</string>
+    <string name="otim_l_01q">Do jeito que está, quantas vezes o programa calcula dois vezes três? Toque.</string>
+    <string name="otim_l_01q_dica">A conta está dentro do laço. Quantas voltas o laço dá?</string>
+    <string name="otim_l_01q_ok">Mil vezes, uma em cada volta. E o resultado é sempre seis.</string>
     <string name="otim_l_02">Cada conta feita antes poupa mil contas quando o programa roda.</string>
     <string name="otim_l_palavra">OTIMIZAR</string>
     <string name="otim_l_03">Otimizar é trocar o código por outro mais rápido ou menor, que dá exatamente o mesmo resultado.</string>

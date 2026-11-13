@@ -55,6 +55,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 3. **Fases como no livro.** A análise vai até o código intermediário; a síntese parte dele (otimização e geração). Antes, a aula dizia "três de análise, três de síntese".
 4. **Série em C 5.** Os fios `yyparse()` e `NUM 42` saem do alto das caixas; o rótulo e as fichas ficam no vão, e não atrás de `calc.l`.
 
+## Feito em 13/11 (sexta rodada)
+
+1. **Pergunta na cena 2 em mais sete aulas.** Recuperação de erros, atributos, escopo, otimização, LALR, AST e MIPS abriam com três ou quatro passos só de ouvir. Agora cada uma pergunta logo depois da abertura: qual erro o compilador simples nunca avisa, qual instrução soma dois float, de qual declaração é o `i` dentro de `g`, quantas vezes o laço calcula `2 * 3`, em quais tokens o SLR reduz `E -> n •`, quais pedaços de `a + ( b )` mudam a conta, e onde a conta `total + 1` pode acontecer. Nenhuma tem só duas opções.
+2. **Tabela LL(1) com o caso difícil.** Seis cenas no fim da Sua vez. `S → A B`, `A → a | ε`, `B → b | ε`: a regra não tem ε escrito, mas some inteira, e o aluno toca nas três colunas (a e b pelo FIRST, $ pelo FOLLOW de S). Depois `S → a b | a c`: as duas regras caem em (S, a), o conflito FIRST × FIRST, e a fatoração da Ponte conserta. A tabela da tela sai do motor (`tabelaLl1DaAula`), e `AulasConsertadasTest` confere as casas, o conflito e a fatoração.
+3. **Recursão à esquerda com dois alfas.** `E → E + T | E − T | T`: o aluno toca nas duas alternativas com laço e escolhe o E' certo entre os dois erros de prova (esquecer o menos, esquecer o ε). `A9GramaticaFactsTest` confere com o motor que a conversão bate e que as duas opções erradas perdem frases.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

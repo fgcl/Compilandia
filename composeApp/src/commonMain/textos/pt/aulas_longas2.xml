@@ -22,6 +22,16 @@
     <string name="ll_l_11_dica">Passo dois: regra anulável vai nas colunas do FOLLOW.</string>
     <string name="ll_l_11_ok">Boa. R some quando a entrada acaba.</string>
     <string name="ll_l_12">Nenhuma casa ficou com duas regras. Esta gramática é LL(1), e as casas vazias são erros de sintaxe.</string>
+    <string name="ll_l_13">Agora um caso que cai em prova. S vai para A B. Não tem épsilon escrito, mas A e B podem sumir.</string>
+    <string name="ll_l_14">Em quais colunas a regra S vai para A B entra? Toque em todas.</string>
+    <string name="ll_l_14_dica">Passo um: o FIRST de A B. Passo dois: A B pode sumir inteira? Então olhe o FOLLOW de S.</string>
+    <string name="ll_l_14_ok">As três. O a e o b vêm do FIRST. A e B somem juntos, então a regra vai também no cifrão, o FOLLOW de S.</string>
+    <string name="ll_l_15">O resto sai do mesmo jeito. Nenhuma casa tem duas regras, então é LL(1). Uma regra sem épsilon escrito também pode ser anulável.</string>
+    <string name="ll_l_16">Mais uma: S vai para a b, ou para a c.</string>
+    <string name="ll_l_17">Em qual casa entram as duas regras de S? Toque.</string>
+    <string name="ll_l_17_dica">Olhe o primeiro token de cada regra.</string>
+    <string name="ll_l_17_ok">Na linha S, coluna do a. As duas começam com a.</string>
+    <string name="ll_l_18">Duas regras na mesma casa. Lendo a, o parser não sabe qual usar, então não é LL(1). A fatoração, da Ponte, adia a escolha para depois do a.</string>
     <string name="ll_l_r1">1. A → α vai nas colunas do FIRST(α).</string>
     <string name="ll_l_r2">2. Se α é anulável, vai também nas do FOLLOW(A).</string>
     <string name="ll_l_r3">3. Duas regras na casa: não é LL(1). Vazia: erro.</string>
@@ -79,6 +89,9 @@
     <string name="slr_l_empilha">empilha</string>
     <string name="slr_l_erro">erro</string>
     <string name="lalr_l_01">Há gramáticas sem ambiguidade em que a tabela SLR tem conflito. O FOLLOW manda reduzir onde não devia.</string>
+    <string name="lalr_l_01q">O SLR põe a redução de E vai para n em quais tokens? Toque em todos.</string>
+    <string name="lalr_l_01q_dica">O SLR olha o FOLLOW de E, que está na tela.</string>
+    <string name="lalr_l_01q_ok">Mais, fecha parêntese e fim de entrada. O SLR reduz em todo token do FOLLOW de E, e o n não está lá.</string>
     <string name="lalr_l_02">O problema: o FOLLOW de A é um só, para a gramática toda. Ele não sabe em que estado o parser está.</string>
     <string name="lalr_l_03">O item LR(1) guarda, junto com a regra e o ponto, o token que pode vir depois naquele contexto: o lookahead.</string>
     <string name="lalr_l_04">Aqui estão quatro itens LR(1). Depois da vírgula vem o lookahead. A redução só vale se o próximo token for ele.</string>
@@ -124,6 +137,9 @@
     <string name="min_l_r2">2. Marque o par que vai a um par marcado.</string>
     <string name="min_l_r3">3. Repita até nada mudar. Branco: junte.</string>
     <string name="ast_l_01">O parser montou a árvore de derivação. Ela tem um nó para cada regra usada, e fica enorme.</string>
+    <string name="ast_l_01q">Destes cinco pedaços, quais mudam o resultado da conta? Toque neles.</string>
+    <string name="ast_l_01q_dica">Tire os parênteses. A conta muda?</string>
+    <string name="ast_l_01q_ok">O a, o mais e o b. Os parênteses em volta do b não mudam nada.</string>
     <string name="ast_l_02">As fases seguintes só precisam saber qual é a operação e quais são os operandos.</string>
     <string name="ast_l_03">A árvore que guarda só isso é a árvore sintática abstrata, a AST.</string>
     <string name="ast_l_05">A receita para montar a AST tem três regras.</string>
@@ -143,6 +159,9 @@
     <string name="ast_l_r2">2. Valor ou nome vira folha.</string>
     <string name="ast_l_r3">3. Parêntese e regra de passagem somem.</string>
     <string name="mips_l_01">O processador não conhece variáveis. Ele só conhece registradores, que são poucos e rápidos, e posições de memória.</string>
+    <string name="mips_l_01q">A conta total mais um vai acontecer. Em quais destes lugares ela pode ser feita? Toque em todos.</string>
+    <string name="mips_l_01q_dica">A conta acontece dentro do processador. As caixas laranja ficam lá.</string>
+    <string name="mips_l_01q_ok">No dólar t zero ou no dólar t um. Por isso o lw traz o total da memória para um registrador antes.</string>
     <string name="mips_l_02">Contas só acontecem entre registradores, dentro do processador.</string>
     <string name="mips_l_03">A geração de código traduz cada linha de três endereços para instruções da máquina. Aqui a máquina é o MIPS.</string>
     <string name="mips_l_05">A receita para cada linha de três endereços tem três passos.</string>

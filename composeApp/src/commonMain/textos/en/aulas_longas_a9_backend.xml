@@ -2,6 +2,9 @@
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas_a9_backend.xml. -->
 <resources>
     <string name="attr_l_01">On the machine, adding integers and adding reals are different instructions.</string>
+    <string name="attr_l_01q">If a and x are float, which instruction does this addition? Tap it.</string>
+    <string name="attr_l_01q_dica">Read what is under each instruction. Look for adding floats.</string>
+    <string name="attr_l_01q_ok">The add dot s. The instruction changes with the type, so the compiler must know the type first.</string>
     <string name="attr_l_02">To pick the right instruction, the compiler must know the type of each piece of the expression.</string>
     <string name="attr_l_palavra">ATTRIBUTE</string>
     <string name="attr_l_03">An attribute is a piece of information attached to a tree node, such as its type or value. The rules that compute it come with the grammar.</string>
@@ -27,6 +30,9 @@
     <string name="attr_l_12">The error goes up to the root, and the compiler reports it. In the practice step, you see the other kind of attribute: the inherited one, which goes down.</string>
 
     <string name="esc_l_01">Two functions each declare a variable i. Each one wants its own.</string>
+    <string name="esc_l_01q">A use of i inside g refers to which declaration? Tap it.</string>
+    <string name="esc_l_01q_dica">Look for the declaration between the braces of g.</string>
+    <string name="esc_l_01q_ok">The float i, declared inside g. The int i of f does not count there.</string>
     <string name="esc_l_02">At every use of i, the compiler must find the right declaration.</string>
     <string name="esc_l_03">The scope of a declaration is the part of the program where it holds. In C, it is the block where it was made.</string>
     <string name="esc_l_05">Each block has its own table. The recipe takes care of their stack.</string>
@@ -84,6 +90,9 @@
     <string name="tac_l_13">Four lines, and none does more than one operation. In the practice step, if and while also become lines, with labels and jumps.</string>
 
     <string name="otim_l_01">This line runs a thousand times inside a loop.</string>
+    <string name="otim_l_01q">As it is, how many times does the program compute two times three? Tap it.</string>
+    <string name="otim_l_01q_dica">The operation is inside the loop. How many times does the loop run?</string>
+    <string name="otim_l_01q_ok">A thousand times, once per pass. And the result is always six.</string>
     <string name="otim_l_02">Each operation done ahead saves a thousand when the program runs.</string>
     <string name="otim_l_palavra">OPTIMIZE</string>
     <string name="otim_l_03">To optimize is to replace the code with faster or smaller code that gives exactly the same result.</string>
