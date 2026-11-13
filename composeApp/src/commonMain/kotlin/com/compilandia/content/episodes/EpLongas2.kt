@@ -19,6 +19,8 @@ import com.compilandia.engine.ExprParser
 import com.compilandia.engine.Grammar
 import com.compilandia.engine.LL1Table
 import com.compilandia.engine.LRAction
+import com.compilandia.engine.LRAutomaton
+import com.compilandia.engine.render
 import com.compilandia.engine.LRKind
 import com.compilandia.engine.LRTable
 import com.compilandia.engine.isComplete
@@ -83,11 +85,16 @@ val aulasLongas2 by lazy {
             pergunta(tx("ll_l_01q"), setOf("ra"), setOf("rb"), tx("ll_l_01q_dica"), tx("ll_l_01q_ok")) { hot("g1") }
             cena(tx("ll_l_02")) { hot("ra", "rb", "g1") }
             palavra("LL(1)", tx("ll_l_03"))
+            // FIRST e FOLLOW à vista enquanto a tabela enche (professor do bloco 3), tirados do motor.
+            val ffExpr = com.compilandia.engine.FirstFollow(Grammar.parse(GRAMATICA_EXPR.joinToString("\n")))
+            fun conjunto(s: Set<String>) = s.joinToString(", ", "{ ", " }")
             cena(tx("epparsers_tabela_ll_1_junta_tudo")) {
                 clear()
                 add(titulo(tx("epparsers_tabela_preditiva")))
                 add(codigo("g", listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )"), 60f, x = 90f, passo = 26f, size = 15f))
-                add(tabela("m", base, 170f, cw = 56f, ch = 42f, size = 12f))
+                add(rotulo("ffa", "FIRST(T) = " + conjunto(ffExpr.first.getValue("T")) + "   FIRST(X) = " + conjunto(ffExpr.first.getValue("X")), 180f, 138f, Tint.YELLOW, 14f))
+                add(rotulo("ffb", "FOLLOW(X) = " + conjunto(ffExpr.follow.getValue("X")), 180f, 162f, Tint.YELLOW, 14f))
+                add(tabela("m", base, 200f, cw = 56f, ch = 40f, size = 12f))
             }
             cena(tx("epparsers_regra_comeca_com_id_ou")) {
                 hot("g0", "ml1c1", "ml1c3")
@@ -247,6 +254,31 @@ val aulasLongas2 by lazy {
                 add(Box("i2", "S -> • ( S )", 180f, 314f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f), Box("i3", "S -> • id", 180f, 356f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f))
                 hot("i1", "i2", "i3")
             }
+            // 5. O autômato inteiro, tirado do motor: o goto que volta ao mesmo estado e o estado que aceita
+            val aut = LRAutomaton.lr0(Grammar.parse(GRAMATICA_LR_2.joinToString("\n")))
+            val ag = aut.grammar
+            fun ir(de: Int, x: String) = aut.transitions.getValue(de to x)
+            val eAceita = ir(0, "S"); val eId = ir(0, "id"); val ePar = ir(0, "("); val eS = ir(ePar, "S"); val eFecha = ir(eS, ")")
+            val lugar = mapOf(0 to (40f to 190f), eAceita to (130f to 96f), ePar to (150f to 190f), eId to (150f to 288f), eS to (250f to 190f), eFecha to (320f to 288f))
+            fun itens(st: Int) = aut.states[st].items.map { it.render(ag).replace("→", "->") }
+            cena(tx("lr_l_13")) {
+                clear()
+                add(titulo(tx("lr_l_titulo_automato"), size = 20f))
+                for ((st, xy) in lugar) {
+                    val completo = aut.states[st].items.any { it.isComplete(ag) }
+                    add(Box("e$st", "I$st", xy.first, xy.second, 46f, 46f, if (completo) Look.ACCEPT else Look.STATE, if (st == eAceita) Tint.GREEN else if (completo) Tint.ORANGE else Tint.NONE, size = 14f))
+                }
+                for ((k, para) in aut.transitions) if (k.first in lugar && para in lugar) wire("e${k.first}", "e$para", k.second)
+                add(codigo("it", itens(ePar), 330f, x = 70f, passo = 22f, size = 13f))
+                hot("e$ePar")
+            }
+            pergunta(tx("lr_l_14"), setOf("e$ePar"), lugar.keys.map { "e$it" }.toSet() - "e$ePar", tx("lr_l_14_dica"), tx("lr_l_14_ok")) { hot() }
+            pergunta(tx("lr_l_15"), setOf("e$eAceita"), lugar.keys.map { "e$it" }.toSet() - "e$eAceita", tx("lr_l_15_dica"), tx("lr_l_15_ok")) {
+                dropAll("it")
+                add(codigo("it", itens(eAceita), 330f, x = 70f, size = 13f))
+                hot()
+            }
+            cena(tx("lr_l_16"), mood = EpMood.HAPPY) { hot("e$eId", "e$eFecha", "e$eAceita") }
             fecho(Fecho(
                 tx("lr_f_af"), false, tx("lr_f_q"), tx("lr_f_dica"), tx("lr_f_ok"), tx("lr_f_certo"),
                 tx("lr_f_erro2"), tx("lr_f_certo2"), tx("lr_f_fala2"),

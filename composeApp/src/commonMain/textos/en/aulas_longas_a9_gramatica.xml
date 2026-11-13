@@ -9,6 +9,11 @@
     <string name="cfg_l_03">Listing every correct sentence is impossible: there are infinitely many. And a regular expression is not enough, because it cannot match parentheses.</string>
     <string name="cfg_l_palavra">GRAMMAR</string>
     <string name="cfg_l_04">A context-free grammar is a short list of rewriting rules that generates every valid sentence.</string>
+    <string name="cfg_l_titulo_eps">The empty rule</string>
+    <string name="cfg_l_eps">A rule can have an empty right side. We write epsilon. Here, S goes to epsilon erases the S. I already replaced S with a S b.</string>
+    <string name="cfg_l_epsq">Which of these is a sentence, only terminals, that comes from S? Tap it.</string>
+    <string name="cfg_l_epsq_dica">Replace the S in the middle with epsilon. What is left?</string>
+    <string name="cfg_l_epsq_ok">a b. a S b still has a nonterminal: it is a sentential form. And b a does not come from this grammar.</string>
     <string name="cfg_l_05">Deriving a sentence takes three steps. They stay here on screen.</string>
     <string name="cfg_l_r1">1. Start from the start symbol.</string>
     <string name="cfg_l_r2">2. Replace the leftmost nonterminal.</string>

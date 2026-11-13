@@ -87,6 +87,10 @@ val cardsPart2: List<SkillCard> = listOf(
         flashcards = listOf(
             tx("lessonspart2_regra_1_tabela") to tx("lessonspart2_para_cada_first_em_m"),
             tx("lessonspart2_regra_2_tabela") to tx("lessonspart2_se_first_em_m_b"),
+            // As três condições LL(1) do livro, para cada A → α | β (professor do bloco 3: só existiam nos textos).
+            tx("ll1_cond1_q") to tx("ll1_cond1_r"),
+            tx("ll1_cond2_q") to tx("ll1_cond2_r"),
+            tx("ll1_cond3_q") to tx("ll1_cond3_r"),
             tx("lessonspart2_celula_vazia_significa") to tx("lessonspart2_erro_sintaxe"),
             tx("lessonspart2_celula_com_duas_producoes_significa") to tx("lessonspart2_conflito_gramatica_nao_ll_1"),
             tx("lessonspart2_que_significa_ll_1") to tx("lessonspart2_left_to_right_leftmost_derivation"),

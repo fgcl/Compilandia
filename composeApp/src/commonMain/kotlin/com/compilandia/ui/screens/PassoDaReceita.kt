@@ -38,7 +38,7 @@ object PassoDaReceita {
         Skill.FIRST to "013100334",
         Skill.FOLLOW to "02330022",
         Skill.LL1_TABLE to "01123023013",
-        Skill.LR0_ITEMS to "01223",
+        Skill.LR0_ITEMS to "012232233",
         Skill.SLR_TABLE to "0220",
         Skill.LALR to "1223",
         Skill.DFA_MINIMIZATION to "01300122330012",

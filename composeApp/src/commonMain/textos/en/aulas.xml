@@ -227,12 +227,12 @@
     <string name="epgramatica_gramatica_lista_trocas_pode_virar">Each rule, or production, says the symbol on the left can be replaced by the right-hand side. Here, E can become E plus E, or it can become n.</string>
     <string name="epgramatica_gramatica">Grammar</string>
     <string name="epgramatica_letra_maiuscula_nao_terminal_ainda">E is a nonterminal: it will still be replaced. Plus and n are terminals: they are the tokens, and they stay in the sentence.</string>
-    <string name="epgramatica_troco_pela_primeira_regra">I start with the start symbol, E, and apply the first rule. Each replacement is a derivation step.</string>
+    <string name="epgramatica_troco_pela_primeira_regra">I start from the start symbol, E, and apply the first rule. What appears along the way, like E plus E, is called a sentential form.</string>
     <string name="epgramatica_numa_derivacao_mais_esquerda_qual">In a leftmost derivation, which E do I replace now? Tap it.</string>
     <string name="epgramatica_nome_ja_conta_mais_esquerda">The name says it: leftmost.</string>
     <string name="epgramatica_esse_mesmo_sempre_nao_terminal">That one. Always the leftmost nonterminal.</string>
     <string name="epgramatica_ele_vira_n_depois_troco">It becomes n. Then I replace the other one, and the sentence n plus n is left.</string>
-    <string name="epgramatica_so_sobrou_terminal_frase_pertence">Only terminals are left, so the sentence belongs to the grammar's language. The drawing of these replacements is the parse tree.</string>
+    <string name="epgramatica_so_sobrou_terminal_frase_pertence">Only terminals are left. A form with only terminals is a sentence, and it belongs to the language. The drawing of these replacements is the parse tree.</string>
     <string name="epgramatica_duas_arvores_frase">Two trees, one sentence</string>
     <string name="epgramatica_esta_gramatica_aceita_mais_vezes">This grammar accepts plus and times. I will build the tree for the sentence n plus n times n.</string>
     <string name="epgramatica_nesta_arvore_vezes_fica_embaixo">In this tree, times sits deeper. It is computed first, as in math.</string>

@@ -78,18 +78,18 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Associatividade: a árvore de `9 - 5 - 2` nas duas gramáticas, e a pergunta "o menos passou a ser da direita?"
 - [ ] Montar E/T/F na aula de ambiguidade
 - [ ] Derivação mais à direita praticada em 3 cenas
-- [ ] ε como produção, "forma sentencial" e "sentença" ditas na aula
+- [x] ε como produção, "forma sentencial" e "sentença" ditas na aula
 - [ ] Abrir a Ponte apresentando o parser descendente
 - [ ] Recursão indireta até o fim
 - [x] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
 
 **Templo Top-Down**
 - [x] Pegadinha do FOLLOW com `S → A B c`
-- [ ] As três condições LL(1) na ficha; FIRST e FOLLOW visíveis na aula da tabela
+- [x] As três condições LL(1) na ficha; FIRST e FOLLOW visíveis na aula da tabela
 - [x] Descida recursiva: pré-requisito, `casa()` e o `main` com o teste do `$`
 
 **Fortaleza e Oficina**
-- [ ] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
+- [x] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
 - [ ] SLR: a tabela nasce das caixas de itens
 - [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"

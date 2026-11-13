@@ -79,6 +79,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **Pré-requisitos.** Recursão à esquerda pede ambiguidade (usa `E → E + T | T`); tabela LL(1) pede recursão e fatoração; descida recursiva pede o analisador preditivo, porque abre com a tabela.
 3. **Descida recursiva com `casa()` e `main`.** Três cenas mostram o corpo de `casa()` e o `main` que lê o primeiro token, chama E e testa o `$`. A pergunta: em `id id`, E volta depois do primeiro id; o `main` avisa o erro. O teste simula o código da aula e confere que E volta com id na entrada. A fala "LL(1): sem recursão à esquerda e fatorada" virou "isso ajuda, mas não basta: a tabela não pode ter conflito".
 
+## Feito em 13/11 (décima rodada)
+
+1. **As três condições LL(1) na ficha, e FIRST e FOLLOW à vista.** A ficha da tabela ganhou três flashcards: FIRST(α) e FIRST(β) sem terminal comum; no máximo uma alternativa deriva ε; se β deriva ε, FIRST(α) e FOLLOW(A) sem terminal comum. No primeiro exemplo da aula, FIRST(T), FIRST(X) e FOLLOW(X) ficam na tela enquanto a tabela enche, calculados pelo motor.
+2. **O autômato LR(0) inteiro.** A aula terminava dizendo "os estados estão prontos" com três estados na tela. Agora quatro cenas desenham os seis estados de `S → ( S ) | id` a partir do `LRAutomaton`, com os itens do estado do `(` embaixo. O aluno toca no destino do goto por `(` nesse estado (ele mesmo: conjunto igual é o mesmo estado, e por isso a construção termina) e no estado que aceita, o de `S' → S •`.
+3. **ε como produção, forma sentencial e sentença.** Duas cenas com `S → a S b | ε`: a regra vazia apaga o S, e o aluno escolhe a sentença `a b` entre `a S b` (forma sentencial) e `b a`. O primeiro exemplo passa a dizer "forma sentencial" para `E + E` e "sentença" para a forma só com terminais.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

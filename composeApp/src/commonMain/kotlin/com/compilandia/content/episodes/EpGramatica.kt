@@ -43,6 +43,9 @@ val ARVORE_AMB_DIR = no("E", no("E", no("n")), no("-"), no("E", no("E", no("n"))
 /** A única árvore de n - n - n na gramática consertada. */
 val ARVORE_AMB_CONSERTO = no("E", no("E", no("E", no("n")), no("-"), no("n")), no("-"), no("n"))
 
+/** ε como produção: S → ε apaga o S, e S ⇒ a S b ⇒ a b. */
+val GRAMATICA_EPS = listOf("S -> a S b | ε")
+
 /** Segundo exemplo da recursão à esquerda: uma lista de ids, e ela consertada. */
 val GRAMATICA_REC_2 = listOf("L -> L , id | id")
 val GRAMATICA_REC_2_DEPOIS = listOf("L  -> id L'", "L' -> , id L' | ε")
@@ -109,6 +112,18 @@ val gramaticas by lazy {
                 dropAll("w"); hot()
                 val (b, w) = arvore(no("E", no("E", no("n")), no("+"), no("E", no("n"))), 170f, passoY = 58f, largura = 240f)
                 add(b); for (x in w) wire(x)
+            }
+            // ε como produção (professor do bloco 2): o aluno só conhecia ε de autômato.
+            cena(tx("cfg_l_eps")) {
+                clear()
+                add(titulo(tx("cfg_l_titulo_eps")))
+                add(codigo("g", GRAMATICA_EPS, 74f, x = 110f, size = 17f))
+                add(fileira("w", listOf("a" to Tint.TEAL, "S" to Tint.ORANGE, "b" to Tint.TEAL), 170f, w = 44f))
+                hot("g0")
+            }
+            pergunta(tx("cfg_l_epsq"), setOf("s2"), setOf("s1", "s3"), tx("cfg_l_epsq_dica"), tx("cfg_l_epsq_ok")) {
+                add(bloco("s1", "a S b", 75f, 270f, w = 84f), bloco("s2", "a b", 180f, 270f, w = 84f), bloco("s3", "b a", 285f, 270f, w = 84f))
+                hot()
             }
             // 3. A receita
             cena(tx("cfg_l_05")) {

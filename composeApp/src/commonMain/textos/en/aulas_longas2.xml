@@ -57,6 +57,15 @@
     <string name="lr_l_11_dica">A dot before a nonterminal always pulls in its rules.</string>
     <string name="lr_l_11_ok">That's it. The rules of S come in again.</string>
     <string name="lr_l_12">The states are ready. Where there is a complete item, the table will reduce. Where the dot is before a terminal, it will shift.</string>
+    <string name="lr_l_titulo_automato">The whole automaton</string>
+    <string name="lr_l_13">Repeating goto and closure until no new state appears gives six states. Below are the items of the open parenthesis state.</string>
+    <string name="lr_l_14">In that state, reading open parenthesis again, where does goto lead? Tap the state.</string>
+    <string name="lr_l_14_dica">Move the dot over the open parenthesis and close. Compare the result with the states that already exist.</string>
+    <string name="lr_l_14_ok">To itself. Goto gives the same set of items, and the same set is the same state. That is why the construction ends.</string>
+    <string name="lr_l_15">Which state accepts the input? Tap it.</string>
+    <string name="lr_l_15_dica">Look for the item of the extra rule with the dot at the end.</string>
+    <string name="lr_l_15_ok">The state of S prime goes to S dot. With dollar in the input, it accepts.</string>
+    <string name="lr_l_16">Six states. Two reduce: the id one and the closed parenthesis one. One accepts, and in the others the dot is before a symbol.</string>
     <string name="lr_l_r1">1. Closure: a dot before A pulls in the rules of A.</string>
     <string name="lr_l_r2">2. Goto: move the dot over X and close again.</string>
     <string name="lr_l_r3">3. Dot at the end: complete item, may reduce.</string>

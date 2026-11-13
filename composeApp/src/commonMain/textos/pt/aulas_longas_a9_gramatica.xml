@@ -9,6 +9,11 @@
     <string name="cfg_l_03">Listar todas as frases certas não dá: elas são infinitas. E expressão regular não basta, porque não sabe casar parênteses.</string>
     <string name="cfg_l_palavra">GRAMÁTICA</string>
     <string name="cfg_l_04">Uma gramática livre de contexto é uma lista curta de regras de troca que gera todas as frases válidas.</string>
+    <string name="cfg_l_titulo_eps">A regra vazia</string>
+    <string name="cfg_l_eps">Uma regra pode ter o lado direito vazio. Escrevemos épsilon. Aqui, S vai para épsilon apaga o S. Já troquei S por a S b.</string>
+    <string name="cfg_l_epsq">Qual destas é uma sentença, só com terminais, que sai de S? Toque.</string>
+    <string name="cfg_l_epsq_dica">Troque o S do meio por épsilon. O que sobra?</string>
+    <string name="cfg_l_epsq_ok">a b. O a S b ainda tem não-terminal: é uma forma sentencial. E b a não sai dessa gramática.</string>
     <string name="cfg_l_05">Derivar uma frase tem três passos. Eles ficam aqui na tela.</string>
     <string name="cfg_l_r1">1. Comece pelo símbolo inicial.</string>
     <string name="cfg_l_r2">2. Troque o não-terminal mais à esquerda.</string>

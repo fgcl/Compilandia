@@ -242,12 +242,12 @@
     <string name="epgramatica_gramatica_lista_trocas_pode_virar">Cada regra, ou produção, diz que o símbolo da esquerda pode ser trocado pelo lado direito. Aqui, E pode virar E mais E, ou pode virar n.</string>
     <string name="epgramatica_gramatica">Gramática</string>
     <string name="epgramatica_letra_maiuscula_nao_terminal_ainda">E é um não-terminal: ainda vai ser trocado. O mais e o n são terminais: são os tokens, e ficam na frase.</string>
-    <string name="epgramatica_troco_pela_primeira_regra">Começo pelo símbolo inicial, E, e aplico a primeira regra. Cada troca é um passo de derivação.</string>
+    <string name="epgramatica_troco_pela_primeira_regra">Começo pelo símbolo inicial, E, e aplico a primeira regra. O que aparece no meio do caminho, como E mais E, se chama forma sentencial.</string>
     <string name="epgramatica_numa_derivacao_mais_esquerda_qual">Numa derivação mais à esquerda, qual E eu troco agora? Toque nele.</string>
     <string name="epgramatica_nome_ja_conta_mais_esquerda">O nome já conta: mais à esquerda.</string>
     <string name="epgramatica_esse_mesmo_sempre_nao_terminal">Esse mesmo. Sempre o não-terminal mais à esquerda.</string>
     <string name="epgramatica_ele_vira_n_depois_troco">Ele vira n. Depois troco o outro, e sobra a frase n mais n.</string>
-    <string name="epgramatica_so_sobrou_terminal_frase_pertence">Só sobraram terminais, então a frase pertence à linguagem da gramática. O desenho dessas trocas é a árvore de derivação.</string>
+    <string name="epgramatica_so_sobrou_terminal_frase_pertence">Só sobraram terminais. Uma forma só com terminais é uma sentença, e ela pertence à linguagem. O desenho dessas trocas é a árvore de derivação.</string>
     <string name="epgramatica_duas_arvores_frase">Duas árvores, uma frase</string>
     <string name="epgramatica_esta_gramatica_aceita_mais_vezes">Esta gramática aceita mais e vezes. Vou montar a árvore da frase n mais n vezes n.</string>
     <string name="epgramatica_nesta_arvore_vezes_fica_embaixo">Nesta árvore o vezes fica mais fundo. Ele é calculado primeiro, como na matemática.</string>

@@ -57,6 +57,15 @@
     <string name="lr_l_11_dica">Ponto antes de um não-terminal sempre puxa as regras dele.</string>
     <string name="lr_l_11_ok">É isso. Entram de novo as regras de S.</string>
     <string name="lr_l_12">Os estados estão prontos. Onde há item completo, a tabela vai reduzir. Onde o ponto está antes de um terminal, ela vai empilhar.</string>
+    <string name="lr_l_titulo_automato">O autômato inteiro</string>
+    <string name="lr_l_13">Repetindo o goto e o closure até não surgir estado novo, saem seis estados. Embaixo estão os itens do estado do abre parêntese.</string>
+    <string name="lr_l_14">Nesse estado, lendo abre parêntese de novo, para onde o goto leva? Toque no estado.</string>
+    <string name="lr_l_14_dica">Ande o ponto pelo abre parêntese e feche. Compare o resultado com os estados que já existem.</string>
+    <string name="lr_l_14_ok">Para ele mesmo. O goto dá o mesmo conjunto de itens, e conjunto igual é o mesmo estado. É por isso que a construção termina.</string>
+    <string name="lr_l_15">Qual estado aceita a entrada? Toque.</string>
+    <string name="lr_l_15_dica">Procure o item da regra extra com o ponto no fim.</string>
+    <string name="lr_l_15_ok">O estado de S linha vai para S ponto. Com o cifrão na entrada, ele aceita.</string>
+    <string name="lr_l_16">Seis estados. Dois reduzem: o do id e o do parêntese fechado. Um aceita, e nos outros o ponto está antes de um símbolo.</string>
     <string name="lr_l_r1">1. Closure: ponto antes de A puxa as regras de A.</string>
     <string name="lr_l_r2">2. Goto: ande o ponto por X e feche de novo.</string>
     <string name="lr_l_r3">3. Ponto no fim: item completo, pode reduzir.</string>

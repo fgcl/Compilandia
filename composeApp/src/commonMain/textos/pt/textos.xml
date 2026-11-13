@@ -952,6 +952,12 @@
     <string name="lessonspart2_preencher_celula_por_celula_no">Preencher célula por célula 'no olho' em vez de produção por produção.</string>
     <string name="lessonspart2_regra_1_tabela">Regra 1 da tabela?</string>
     <string name="lessonspart2_para_cada_first_em_m">Para cada a ∈ FIRST(α), A → α em M[A, a].</string>
+    <string name="ll1_cond1_q">Condição 1 de LL(1), para A → α | β?</string>
+    <string name="ll1_cond1_r">FIRST(α) e FIRST(β) não têm terminal em comum.</string>
+    <string name="ll1_cond2_q">Condição 2 de LL(1)?</string>
+    <string name="ll1_cond2_r">No máximo uma das alternativas de A deriva ε.</string>
+    <string name="ll1_cond3_q">Condição 3 de LL(1)?</string>
+    <string name="ll1_cond3_r">Se β deriva ε, FIRST(α) e FOLLOW(A) não têm terminal em comum.</string>
     <string name="lessonspart2_regra_2_tabela">Regra 2 da tabela?</string>
     <string name="lessonspart2_se_first_em_m_b">Se ε ∈ FIRST(α), A → α em M[A, b] para cada b ∈ FOLLOW(A).</string>
     <string name="lessonspart2_celula_vazia_significa">Célula vazia significa?</string>

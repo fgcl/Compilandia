@@ -179,4 +179,29 @@ class AulasConsertadasTest {
         assertTrue(Skill.LL1_TABLE.prereqs.containsAll(listOf(Skill.LEFT_RECURSION, Skill.LEFT_FACTORING)))
         assertTrue(Skill.LL1_PARSING in Skill.RECURSIVE_DESCENT.prereqs)
     }
+
+    /** Itens LR(0) de S -> ( S ) | id: seis estados; lendo ( no estado do ( volta a ele mesmo; um estado aceita. */
+    @Test fun automatoLr0Inteiro() {
+        val aut = com.compilandia.engine.LRAutomaton.lr0(Grammar.parse(com.compilandia.content.episodes.GRAMATICA_LR_2.joinToString("\n")))
+        assertEquals(6, aut.states.size)
+        val par = aut.transitions.getValue(0 to "(")
+        assertEquals(par, aut.transitions.getValue(par to "("), "o goto por ( no estado do ( volta a ele")
+        assertEquals(aut.transitions.getValue(0 to "id"), aut.transitions.getValue(par to "id"), "id leva ao mesmo estado dos dois lados")
+        val aceita = aut.transitions.getValue(0 to "S")
+        assertTrue(aut.states[aceita].items.any { it.prodId == 0 && it.dot == 1 }, "S' -> S • está no estado que aceita")
+    }
+
+    /** ε como produção: S -> a S b | ε gera a b, e não b a. */
+    @Test fun regraVaziaGeraSentenca() {
+        val g = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_EPS.joinToString("\n"))
+        assertTrue(com.compilandia.engine.Earley(g).accepts(listOf("a", "b")))
+        assertTrue(!com.compilandia.engine.Earley(g).accepts(listOf("b", "a")))
+    }
+
+    /** As três condições LL(1) entraram na ficha da tabela. */
+    @Test fun fichaDaTabelaTemAsTresCondicoes() {
+        val ficha = com.compilandia.content.Library.cards.first { it.skill == Skill.LL1_TABLE }
+        val perguntas = ficha.flashcards.map { it.first }
+        for (k in listOf("ll1_cond1_q", "ll1_cond2_q", "ll1_cond3_q")) assertTrue(com.compilandia.textos.tx(k) in perguntas, k)
+    }
 }

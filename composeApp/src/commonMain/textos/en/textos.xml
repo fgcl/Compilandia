@@ -923,6 +923,12 @@
     <string name="lessonspart2_preencher_celula_por_celula_no">Filling it cell by cell 'by eye' instead of production by production.</string>
     <string name="lessonspart2_regra_1_tabela">Table rule 1?</string>
     <string name="lessonspart2_para_cada_first_em_m">For each a ∈ FIRST(α), A → α in M[A, a].</string>
+    <string name="ll1_cond1_q">LL(1) condition 1, for A → α | β?</string>
+    <string name="ll1_cond1_r">FIRST(α) and FIRST(β) share no terminal.</string>
+    <string name="ll1_cond2_q">LL(1) condition 2?</string>
+    <string name="ll1_cond2_r">At most one alternative of A derives ε.</string>
+    <string name="ll1_cond3_q">LL(1) condition 3?</string>
+    <string name="ll1_cond3_r">If β derives ε, FIRST(α) and FOLLOW(A) share no terminal.</string>
     <string name="lessonspart2_regra_2_tabela">Table rule 2?</string>
     <string name="lessonspart2_se_first_em_m_b">If ε ∈ FIRST(α), A → α in M[A, b] for each b ∈ FOLLOW(A).</string>
     <string name="lessonspart2_celula_vazia_significa">What does an empty cell mean?</string>
