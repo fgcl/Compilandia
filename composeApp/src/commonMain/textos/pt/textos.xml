@@ -2682,7 +2682,7 @@
     <string name="lessonspart3c_quadruplas_triplas_op_arg1_arg2">quádruplas                      triplas\n     op  arg1  arg2  res             op  arg1  arg2\n(0)  +   a     b     t1        (0)   +   a     b\n(1)  -   a     c     t2        (1)   -   a     c\n(2)  *   t1    t2    t3        (2)   *   (0)   (1)\n(3)  =   t3          x         (3)   =   x     (2)</string>
     <string name="lessonspart3c_duas_representacoes_das_mesmas_instrucoes">Duas representações das mesmas instruções</string>
     <string name="lessonspart3c_exercicio_2_comandos_com_desvio">Exercício 2: comandos com desvio. if (a &lt; b) x = 1; else x = 2;</string>
-    <string name="lessonspart3c_iffalse_b_goto_l1_x" translatable="false">    ifFalse a &lt; b goto L1\n    x = 1\n    goto L2\nL1: x = 2\nL2: ...</string>
+    <string name="lessonspart3c_iffalse_b_goto_l1_x" translatable="false">    t1 = a &lt; b\n    ifFalse t1 goto L1\n    x = 1\n    goto L2\nL1: x = 2\nL2: ...</string>
     <string name="lessonspart3c_rotulos_desvios_if_vira_pule">Rótulos e desvios: o if vira 'pule se for falso'</string>
     <string name="lessonspart3c_agora_eu_faco">Agora eu faço!</string>
     <string name="lessonspart3c_tac_y_b_b">TAC de y = a * b + a * b.</string>

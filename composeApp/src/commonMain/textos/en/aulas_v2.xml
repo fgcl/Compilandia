@@ -243,7 +243,7 @@
     <string name="rec_f_fala2">Another mistake: forgetting epsilon in A prime. It is what ends the repetition. Without it, the derivation never reaches terminals only.</string>
     <string name="rec_f_z1">Left recursion: A → A α. The top-down parser loops forever.</string>
     <string name="rec_f_z2">The fix: A → β A' and A' → α A' | ε.</string>
-    <string name="rec_f_z3">The language does not change; only the recursion moves to the right.</string>
+    <string name="rec_f_z3">The language does not change; the tree does. The parser's loop keeps the arithmetic right.</string>
     <string name="rec_f_resumo">To sum up: left recursion hangs a top-down parser. The fix puts beta in front and pushes the repetition into a new nonterminal, which ends with epsilon.</string>
     <string name="fat_f_af">Factoring A → a b | a c does not change the sentences the grammar generates.</string>
     <string name="fat_f_q">Does left factoring change the language? A classmate said this. Right or wrong?</string>

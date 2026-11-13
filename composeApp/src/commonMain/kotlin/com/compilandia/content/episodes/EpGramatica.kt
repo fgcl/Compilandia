@@ -298,6 +298,28 @@ val gramaticas by lazy {
                 add(codigo("b", listOf("E  -> n E'", "E' -> + n E' | ε"), 160f, x = 80f, passo = 32f, size = 17f))
             }
             cena(tx("epgramatica_linguagem_mesma_n_depois_zero"), mood = EpMood.HAPPY) { hot("b1") }
+            // A árvore muda junto. Com o menos, a árvore nova lida ao pé da letra daria a conta errada (os dois revisores do bloco 2).
+            val (velha, fiosVelha) = arvore(ARVORE_MENOS_VELHA, 120f, passoY = 52f, largura = 300f, prefix = "v")
+            val (nova, fiosNova) = arvore(ARVORE_MENOS_NOVA, 104f, passoY = 46f, largura = 320f, prefix = "w")
+            cena(tx("rec_l_assoc_1"), mood = EpMood.THINK) {
+                clear()
+                add(titulo("E -> E - n | n", size = 20f))
+                add(velha); wires(fiosVelha)
+                add(rotulo("cv", "(9 - 5) - 2 = 2", 180f, 344f, Tint.GREEN, 17f))
+                hot("v0")
+            }
+            cena(tx("rec_l_assoc_2"), mood = EpMood.SURPRISED) {
+                clear()
+                add(titulo("E -> n E'   E' -> - n E' | ε", size = 17f))
+                add(nova); wires(fiosNova)
+                add(rotulo("cn", "9 - (5 - 2) = 6 ?", 180f, 344f, Tint.RED, 17f))
+                hot("w1")
+            }
+            pergunta(tx("rec_l_assoc_3"), setOf("sim0"), setOf("sim1"), tx("rec_l_assoc_3_dica"), tx("rec_l_assoc_3_ok")) {
+                drop("cn")
+                add(Box("sim0", tx("rec_l_assoc_nao"), 110f, 344f, 100f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("sim1", tx("rec_l_assoc_sim"), 250f, 344f, 100f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+            }
             // 3. A receita
             cena(tx("rec_l_04")) {
                 clear()
@@ -442,3 +464,15 @@ val gramaticas by lazy {
         },
     )
 }
+
+/** 9 - 5 - 2 em E -> E - n | n: pende para a esquerda, e a conta sai certa, (9 - 5) - 2. */
+internal val ARVORE_MENOS_VELHA = ParseNode("E", listOf(
+    ParseNode("E", listOf(ParseNode("E", listOf(ParseNode("9"))), ParseNode("-"), ParseNode("5"))),
+    ParseNode("-"), ParseNode("2"),
+))
+
+/** A mesma frase em E -> n E' e E' -> - n E' | ε: pende para a direita. */
+internal val ARVORE_MENOS_NOVA = ParseNode("E", listOf(
+    ParseNode("9"),
+    ParseNode("E'", listOf(ParseNode("-"), ParseNode("5"), ParseNode("E'", listOf(ParseNode("-"), ParseNode("2"), ParseNode("E'", listOf(ParseNode("ε"))))))),
+))

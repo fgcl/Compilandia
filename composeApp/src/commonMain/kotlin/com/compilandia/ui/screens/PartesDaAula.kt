@@ -57,11 +57,12 @@ fun RotulosDasPartes(partes: List<IntRange>, index: Int, maisLonge: Int, onSeek:
             val aqui = index in parte
             val aberta = parte.first <= maisLonge
             Box(
-                Modifier.weight(parte.count().toFloat()).then(if (aberta && !aqui) Modifier.clickable { onSeek(parte.first) } else Modifier),
+                // O respiro no fim impede que um nome cortado encoste no próximo ("ReceitSua vez").
+                Modifier.weight(parte.count().toFloat()).padding(end = 4.dp).then(if (aberta && !aqui) Modifier.clickable { onSeek(parte.first) } else Modifier),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 Text(
-                    nomes[k], maxLines = 1, overflow = TextOverflow.Clip,
+                    nomes[k], maxLines = 1, overflow = TextOverflow.Ellipsis, softWrap = false,
                     color = when { aqui -> Palette.hazard; aberta -> Palette.ink; else -> Palette.inkSoft.copy(alpha = 0.6f) },
                     style = MaterialTheme.typography.labelSmall,
                 )

@@ -66,6 +66,13 @@
     <string name="rec_l_02_ok">Right. It calls itself without reading anything.</string>
     <string name="rec_l_palavra">LEFT RECURSION</string>
     <string name="rec_l_03">A rule whose right-hand side starts with its own left-hand side has left recursion. No top-down parser accepts that.</string>
+    <string name="rec_l_assoc_1">Now swap the plus for a minus. In the old grammar, the tree of nine minus five minus two leans left. Nine minus five sits at the bottom and goes first: the result is two.</string>
+    <string name="rec_l_assoc_2">In the new grammar, the same sentence gives a tree that leans right. Read literally, it would do five minus two first, and give six.</string>
+    <string name="rec_l_assoc_3">So does minus now group from the right? Tap the answer.</string>
+    <string name="rec_l_assoc_3_dica">The new grammar generates the same sentences. The code that builds the result decides the arithmetic.</string>
+    <string name="rec_l_assoc_3_ok">Right. The language is the same, but the tree changed. The parser joins the pieces in a loop, from left to right. The result is two again. You will see that loop in the AST topic.</string>
+    <string name="rec_l_assoc_nao">No</string>
+    <string name="rec_l_assoc_sim">Yes</string>
     <string name="rec_l_04">The fix has three steps. It works for any rule of this kind.</string>
     <string name="rec_l_r1">1. Split: A → A α loops, A → β does not.</string>
     <string name="rec_l_r2">2. Replace each A → β with A → β A'.</string>

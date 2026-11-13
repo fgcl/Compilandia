@@ -283,7 +283,7 @@
     <string name="tpguidec_atribuicao_se_enquanto_esquema_traducao">Atribuição, se e enquanto: o esquema de tradução com rótulos</string>
     <string name="tpguidec_dois_moldes_templates_que_voce">Os dois moldes (templates) que você vai desenhar no relatório</string>
     <string name="tpguidec_entrada_saida_com_syscall">Entrada e saída com syscall</string>
-    <string name="tpguidec_div_com_tres_operandos_rem">`div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`.</string>
+    <string name="tpguidec_div_com_tres_operandos_rem">`div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`. Também são pseudo-instruções `li`, `la`, `move` e o `lw`/`sw` com rótulo: o MARS troca `move` por `addu` e monta `li`, `la` e o rótulo com `lui` e `ori`. Se o enunciado proibir, escreva essas trocas à mão.</string>
     <string name="tpguidec_novo_contagem_byt_capitulo_2">De novo o contagem.byt do capítulo 2…</string>
     <string name="tpguidec_saida_asm_completo_que_nosso">…e o saida.asm COMPLETO que o nosso compilador gera para ele</string>
     <string name="tpguidec_rodando_no_mars">Rodando no MARS</string>

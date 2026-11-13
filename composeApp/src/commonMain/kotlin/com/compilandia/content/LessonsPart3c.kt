@@ -298,7 +298,7 @@ internal val tacLessonsP3: List<Lesson> = listOf(
             Say(BYTE, tx("lessonspart3c_agora_eu_faco")),
             Reveal(tx("lessonspart3c_tac_y_b_b"), tx("lessonspart3c_t1_b_t2_b_t3")),
             Reveal(tx("lessonspart3c_triplas_y_b_b"), "(0) * a b; (1) * a b; (2) + (0) (1); (3) = y (2)."),
-            Reveal("TAC de while (a < b) a = a + 1;", "L1: ifFalse a < b goto L2;  t1 = a + 1;  a = t1;  goto L1;  L2: ..."),
+            Reveal("TAC de while (a < b) a = a + 1;", "L1: t1 = a < b;  ifFalse t1 goto L2;  t2 = a + 1;  a = t2;  goto L1;  L2: ..."),
             Visual(VisualKind.TAC, input = tx("lessonspart3c_b_b_2"), caption = tx("lessonspart3c_confira_primeira_resposta")),
             Callout(EXAM_TIP, tx("lessonspart3c_em_triplas_resultado_referenciado_pela")),
         ),

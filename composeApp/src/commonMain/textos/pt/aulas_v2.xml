@@ -243,7 +243,7 @@
     <string name="rec_f_fala2">Outro erro: esquecer o épsilon em A linha. É ele que encerra a repetição. Sem ele, a derivação nunca chega só em terminais.</string>
     <string name="rec_f_z1">Recursão à esquerda: A → A α. O parser descendente entra em laço.</string>
     <string name="rec_f_z2">Conserto: A → β A' e A' → α A' | ε.</string>
-    <string name="rec_f_z3">A linguagem não muda; só a recursão passa para a direita.</string>
+    <string name="rec_f_z3">A linguagem não muda; a árvore muda. O laço do parser mantém a conta certa.</string>
     <string name="rec_f_resumo">Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon.</string>
     <string name="fat_f_af">Fatorar A → a b | a c não muda as frases que a gramática gera.</string>
     <string name="fat_f_q">Fatorar à esquerda muda a linguagem? Um colega disse isto. Certo ou errado?</string>

@@ -20,7 +20,8 @@
     <string name="epbackend_isso_x_dentro_esconde_fora">Right. The inner x hides the outer one.</string>
     <string name="epbackend_busca_comeca_no_topo_desce">The lookup starts at the top table and goes down, block by block, until it finds the name. If no table has it, it is a semantic error.</string>
     <string name="epbackend_quando_bloco_acaba_tabela_sai">When the block ends, its table leaves the stack, and the local variables cease to exist.</string>
-    <string name="epbackend_por_isso_x_igual_dois">That's why x equals two talks about the global x.</string>
+    <string name="epbackend_por_isso_x_igual_dois">In main, x equals two. Main's table has no x, so the search goes down and finds the global x.</string>
+    <string name="epbackend_main_vazia">main: (no x)</string>
     <string name="epbackend_arvore_enxuta">The lean tree</string>
     <string name="epbackend_arvore_derivacao_guarda_tudo_ate">The parse tree keeps everything: parentheses, and even the rules that merely pass from one nonterminal to another.</string>
     <string name="epbackend_tem_no_sobrando_aqui_toque">There are extra nodes here. Tap both parentheses: they don't change the math.</string>
@@ -251,7 +252,7 @@
     <string name="epgramatica_isso_comeca_com_entao_parser">Right. A starts with A, so the parser never gets anywhere.</string>
     <string name="epgramatica_qual_trava">Which one gets stuck?</string>
     <string name="epgramatica_conserto_parte_sem_recursao_vem">The fix: the alternative without recursion comes first. What used to repeat goes to a new nonterminal, with right recursion.</string>
-    <string name="epgramatica_linguagem_mesma_n_depois_zero">The language is the same: an n, then zero or more times plus n. Only the side of the recursion changed.</string>
+    <string name="epgramatica_linguagem_mesma_n_depois_zero">The language is the same: an n, then zero or more times plus n. Only the side of the recursion changed, and with it the shape of the tree.</string>
     <string name="epgramatica_por_em_evidencia">Pulling it out</string>
     <string name="epgramatica_estas_duas_regras_comecam_igual">These two alternatives start the same way. Reading a, a predictive parser cannot tell which of the two to pick.</string>
     <string name="epgramatica_qual_das_duas">Which of the two?</string>

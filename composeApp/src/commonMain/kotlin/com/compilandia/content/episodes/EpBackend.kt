@@ -214,7 +214,7 @@ val semantica by lazy {
             palavra(tx("epbackend_escopo").uppercase(), tx("esc_l_03"))
             // 2. Primeiro exemplo
             comecaExemplo()
-            val src = listOf("int x;", "void f() {", "  float x;", "  x = 1.5;", "}", "x = 2;")
+            val src = listOf("int x;", "void f() {", "  float x;", "  x = 1.5;", "}", "int main() { x = 2; }")
             cena(tx("epbackend_mesmo_nome_pode_existir_em")) {
                 clear()
                 add(titulo(tx("epbackend_escopo")))
@@ -236,7 +236,11 @@ val semantica by lazy {
                 drop("p1")
                 hot("c4")
             }
-            cena(tx("epbackend_por_isso_x_igual_dois"), mood = EpMood.HAPPY) { hot("c5", "p0") }
+            // Uso fora de f, mas dentro de uma função: em C, comando solto no arquivo não compila.
+            cena(tx("epbackend_por_isso_x_igual_dois"), mood = EpMood.HAPPY) {
+                add(Box("p2", tx("epbackend_main_vazia"), 180f, 328f, 220f, 38f, Look.TOKEN, Tint.ORANGE))
+                hot("c5", "p2", "p0")
+            }
             // 3. A receita
             cena(tx("esc_l_05")) {
                 clear()
@@ -633,15 +637,16 @@ val backend by lazy {
                 add(codigo("c", code.map { it.toString() }, 64f, x = 110f, passo = 26f, size = 16f))
                 temps.forEachIndexed { i, id -> add(t(id, i)) }
             }
-            pergunta(tx("reg_l_09"), vivo[linhaT2], temps.toSet() - vivo[linhaT2], tx("reg_l_09_dica"), tx("reg_l_09_ok")) {
-                hot("c$linhaT2")
-            }
-            pergunta(tx("reg_l_10"), vivo[linhaT3], temps.toSet() - vivo[linhaT3], tx("reg_l_10_dica"), tx("reg_l_10_ok")) {
-                liga(vivo[linhaT2])
+            // A vivacidade anda de baixo para cima, como a cena da receita diz: primeiro a linha do t3, depois a do t2.
+            pergunta(tx("reg_l_09"), vivo[linhaT3], temps.toSet() - vivo[linhaT3], tx("reg_l_09_dica"), tx("reg_l_09_ok")) {
                 hot("c$linhaT3")
             }
-            pergunta(tx("reg_l_11"), setOf("q$k"), (1..3).map { "q$it" }.toSet() - "q$k", tx("reg_l_11_dica"), tx("reg_l_11_ok")) {
+            pergunta(tx("reg_l_10"), vivo[linhaT2], temps.toSet() - vivo[linhaT2], tx("reg_l_10_dica"), tx("reg_l_10_ok")) {
                 liga(vivo[linhaT3])
+                hot("c$linhaT2")
+            }
+            pergunta(tx("reg_l_11"), setOf("q$k"), (1..3).map { "q$it" }.toSet() - "q$k", tx("reg_l_11_dica"), tx("reg_l_11_ok")) {
+                liga(vivo[linhaT2])
                 add((1..3).map { opcao("q$it", "$it", 120f + (it - 1) * 60f, 386f) })
                 hot()
             }

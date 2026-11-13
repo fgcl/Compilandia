@@ -21,7 +21,8 @@
     <string name="epbackend_isso_x_dentro_esconde_fora">Isso. O x de dentro esconde o de fora.</string>
     <string name="epbackend_busca_comeca_no_topo_desce">A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico.</string>
     <string name="epbackend_quando_bloco_acaba_tabela_sai">Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir.</string>
-    <string name="epbackend_por_isso_x_igual_dois">Por isso x igual a dois fala do x global.</string>
+    <string name="epbackend_por_isso_x_igual_dois">No main, x igual a dois. A tabela do main não tem x, então a busca desce e acha o x global.</string>
+    <string name="epbackend_main_vazia">main: (sem x)</string>
     <string name="epbackend_arvore_enxuta">A árvore enxuta</string>
     <string name="epbackend_arvore_derivacao_guarda_tudo_ate">A árvore de derivação guarda tudo: parênteses, e até as regras que só passam de um não-terminal para outro.</string>
     <string name="epbackend_b" translatable="false">a + ( b )</string>
@@ -221,7 +222,6 @@
     <string name="epemc_exatamente_que_seu_gerador_em">É exatamente o que o seu gerador em C escreveria.</string>
     <string name="epemc_monte_mips_1">Monte o MIPS de %1$s.</string>
     <string name="epemc_em_c_5_flex_bison">Em C 5: flex, bison e o main</string>
-    <string name="epemc_e_e_e" translatable="false">e: e '+' e</string>
     <string name="epemc_0_9_num" translatable="false">[0-9]+  NUM</string>
     <string name="epemc_yylval_atoi_yytext" translatable="false">yylval = atoi(yytext)</string>
     <string name="epemc_compilador_em_c_verdade_costuma">Um compilador em C de verdade costuma ter três arquivos.</string>
@@ -267,7 +267,7 @@
     <string name="epgramatica_isso_comeca_com_entao_parser">Isso. A começa com A, então o parser não sai do lugar.</string>
     <string name="epgramatica_qual_trava">Qual trava?</string>
     <string name="epgramatica_conserto_parte_sem_recursao_vem">O conserto: a alternativa sem recursão vem primeiro. O que se repetia vai para um não-terminal novo, com recursão à direita.</string>
-    <string name="epgramatica_linguagem_mesma_n_depois_zero">A linguagem é a mesma: um n, depois zero ou mais vezes mais n. Só mudou o lado da recursão.</string>
+    <string name="epgramatica_linguagem_mesma_n_depois_zero">A linguagem é a mesma: um n, depois zero ou mais vezes mais n. Só mudou o lado da recursão, e com ele a forma da árvore.</string>
     <string name="epgramatica_por_em_evidencia">Pôr em evidência</string>
     <string name="epgramatica_estas_duas_regras_comecam_igual">Estas duas alternativas começam igual. Lendo o a, um parser preditivo não sabe qual das duas escolher.</string>
     <string name="epgramatica_qual_das_duas">Qual das duas?</string>

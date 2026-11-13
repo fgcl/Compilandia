@@ -35,6 +35,13 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 7. **Alternativas embaralhadas na tela** (`learning/OrdemDasOpcoes.kt`): "Preveja", abertura com o Bug e pergunta do Caça-Conflitos. Números ficam em ordem crescente, e "nenhuma", "as duas" ou "depende" ficam no fim. Com o embaralho, a certa cai em cada uma das 4 posições perto de 1/4 das vezes; antes caía na última 0 vezes em 139.
 8. **O colega acerta em 13 das 29 aulas.** Na parte Erros, "Um colega disse isto" agora tem afirmação certa em LL(1), preditivo, LALR, Bison, fases, AFN→AFD, Flex, fatoração, escopo, três endereços, registro de ativação, alocação e AST. O teste `OrdemDasOpcoesTest` falha se a proporção sair de 35% a 65%.
 
+## Feito em 13/11 (terceira rodada)
+
+1. **E7 a E13 conferidos e consertados.** A tabela SLR sai inteira do motor (5 estados, GOTO e regras numeradas). O `x = 2;` do escopo foi para dentro do `main`. A vivacidade da alocação anda de baixo para cima, como a própria aula manda. O `ifFalse` do texto WORKED segue a forma da prática. A aula de MIPS não mostra mais `$t1` ao lado de `t1`. O `calc.y` da série em C mostra os `%left` que o motor usa. A cola do Guia ganhou `move`, e a caixa de pseudo-instruções ficou completa.
+2. **Associatividade na Ponte.** Três cenas depois do primeiro exemplo de recursão à esquerda: a árvore de `9 - 5 - 2` na gramática velha (pende para a esquerda, dá 2) e na nova (pende para a direita; lida ao pé da letra daria 6), e a pergunta "o menos passou a juntar pela direita?". Resposta: não, o laço do parser mantém a conta. As árvores são conferidas contra as gramáticas em `AulasConsertadasTest`.
+3. **Receita do FOLLOW sem α e β.** Cada passo diz para que serve: "Fim da entrada", "Depois de B: FIRST sem ε. Se some, o próximo", "Fim da regra: herde o FOLLOW da esquerda", "Repita".
+4. **Fita da aula**: nome de parte que não cabe ganha reticências e um respiro, em vez de encostar no seguinte ("ReceitSua vez").
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:
@@ -47,13 +54,13 @@ Conferidos, com o estado de cada um:
 | E4 | Tokens | "Token" como pedaço, como classe e como "tipo" | feito |
 | E5 | Tokens, cena 1 | "parser" usado antes de ser apresentado | feito |
 | E6 | Fatoração, cena 11 × ficha × WORKED | Regra do "maior prefixo" diferente em cada lugar | feito (ficha e FORMAL); conferir o WORKED |
-| E7 | SLR, cena 4 | Tabela "SLR(1)" mostra 3 de 5 estados; `s3` aponta para estado ausente (aluno 4) | **a conferir** |
-| E8 | Escopo, cena 4 | `x = 2;` fora de função, que não compila em C (aluno 5) | **a conferir** |
-| E9 | Alocação, cenas 14 e 15 | Vivacidade percorrida de cima para baixo, contra o que a cena 19 chama de erro (aluno 5) | **a conferir** |
-| E10 | TAC, texto WORKED | `ifFalse a < b goto L1` não bate com a prática nem com o FORMAL (aluno 5) | **a conferir** |
-| E11 | MIPS, cena 5 | `$t1` e `t1` na mesma tela sem aviso (aluno 5) | **a conferir** |
-| E12 | Série em C 5 | `e: e '+' e` sem `%left`, e `2+3*4 = 14` mostrando só a regra do `+` (aluno 6) | **a conferir** |
-| E13 | Guia do TP, cap. 8 | A cola diz "só isto" basta, mas o gerador usa `move`; pseudo-instruções fora da lista (aluno 6) | **a conferir** |
+| E7 | SLR, cena 4 | Tabela "SLR(1)" mostra 3 de 5 estados; `s3` aponta para estado ausente (aluno 4) | feito |
+| E8 | Escopo, cena 4 | `x = 2;` fora de função, que não compila em C (aluno 5) | feito |
+| E9 | Alocação, cenas 14 e 15 | Vivacidade percorrida de cima para baixo, contra o que a cena 19 chama de erro (aluno 5) | feito |
+| E10 | TAC, texto WORKED | `ifFalse a < b goto L1` não bate com a prática nem com o FORMAL (aluno 5) | feito |
+| E11 | MIPS, cena 5 | `$t1` e `t1` na mesma tela sem aviso (aluno 5) | feito |
+| E12 | Série em C 5 | `e: e '+' e` sem `%left`, e `2+3*4 = 14` mostrando só a regra do `+` (aluno 6) | feito |
+| E13 | Guia do TP, cap. 8 | A cola diz "só isto" basta, mas o gerador usa `move`; pseudo-instruções fora da lista (aluno 6) | feito |
 
 ## Padrões que valem para o jogo inteiro
 

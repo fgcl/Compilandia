@@ -16,6 +16,11 @@ import com.compilandia.content.rotulo
 import com.compilandia.content.tabela
 import com.compilandia.content.titulo
 import com.compilandia.engine.ExprParser
+import com.compilandia.engine.Grammar
+import com.compilandia.engine.LRAction
+import com.compilandia.engine.LRKind
+import com.compilandia.engine.LRTable
+import com.compilandia.engine.isComplete
 import com.compilandia.engine.ParseNode
 import com.compilandia.engine.Mips
 import com.compilandia.engine.TacGen
@@ -195,11 +200,13 @@ val aulasLongas2 by lazy {
             cena(tx("epparsers_automato_vira_tabela_linha_estado")) {
                 clear()
                 add(titulo(tx("epparsers_tabela_slr_1")))
-                add(tabela("m", listOf(listOf("", "n", "+", "$"), listOf("0", "s2", "", ""), listOf("1", "", "s3", "ok"), listOf("2", "", "r2", "r2")), 80f, cw = 72f, ch = 44f, size = 14f))
+                add(tabela("m", tabelaSlrDaAula(), 74f, cw = 62f, ch = 38f, size = 14f))
+                // O r2 da tabela é "reduza pela regra 2": o número precisa estar na tela.
+                add(rotulo("rg", "1: E -> E + n    2: E -> n", 180f, 290f, size = 14f))
             }
             cena(tx("epparsers_letra_manda_empilhar_letra_r")) { hot("ml1c1", "ml3c2") }
             cena(tx("epparsers_mas_reduzir_quando_slr_so"), mood = EpMood.THINK) {
-                add(Box("f", "FOLLOW(E) = { +, $ }", 180f, 300f, 240f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("f", "FOLLOW(E) = { +, $ }", 180f, 336f, 240f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
                 hot("f")
             }
             pergunta(
@@ -461,9 +468,10 @@ val aulasLongas2 by lazy {
         },
 
         episodio(Skill.CODEGEN_MIPS, tx("epbackend_carrega_opera_guarda")) {
-            val tac = TacGen.generate(ExprParser.parse("b * c"))
+            // O resultado vai para a variável a, e não para o temporário t1: senão $t1 e t1 aparecem juntos na tela.
+            val tac = TacGen.generate(ExprParser.parse("b * c")).map { it.copy(target = "a") }
             val mips = Mips.fromTac(tac)
-            val mips2 = Mips.fromTac(TacGen.generate(ExprParser.parse("preco + taxa")))
+            val mips2 = Mips.fromTac(TacGen.generate(ExprParser.parse("preco + taxa")).map { it.copy(target = "total") })
             val embaralhada = listOf(2, 0, 3, 1).filter { it < mips2.size }
             cena(tx("mips_l_01"), mood = EpMood.THINK) {
                 add(titulo("MIPS"))
@@ -521,4 +529,19 @@ val aulasLongas2 by lazy {
             ))
         },
     )
+}
+
+/**
+ * A tabela SLR de E -> E + n | n, inteira e tirada do motor: ACTION de n, + e $, e GOTO de E.
+ * As falas citam "o estado 2" como o de E -> n •, então a numeração do motor precisa bater.
+ */
+internal fun tabelaSlrDaAula(): List<List<String>> {
+    val t = LRTable(Grammar.parse("E -> E + n | n"), LRKind.SLR1)
+    val g = t.grammar
+    val reduzN = t.automaton.states.single { st -> st.items.any { it.isComplete(g) && g.productions[it.prodId].rhs == listOf("n") } }.id
+    check(reduzN == 2) { "a aula diz que o estado 2 reduz E -> n, mas o motor deu $reduzN" }
+    val ts = listOf("n", "+", "$")
+    return listOf(listOf("") + ts + "E") + t.automaton.states.indices.map { s ->
+        listOf("$s") + ts.map { a -> t.action[s to a]?.let { if (it is LRAction.Accept) "ok" else it.short() } ?: "" } + (t.gotoTable[s to "E"]?.toString() ?: "")
+    }
 }

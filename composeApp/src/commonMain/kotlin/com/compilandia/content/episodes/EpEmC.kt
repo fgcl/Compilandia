@@ -224,9 +224,10 @@ val serieEmC by lazy {
         episodio(Skill.YACC_BISON, tx("epemc_em_c_5_flex_bison"), EM_C) {
             val conta = "2+3*4"
             val valor = MiniBison.compile(SPEC_CALC.joinToString("\n")).run(conta).value
-            val y = registro("y", "calc.y", listOf(tx("epemc_e_e_e"), "{ \$\$ = \$1 + \$3; }"), 180f, 100f, 180f, Tint.ORANGE, 13f)
-            val l = registro("l", "calc.l", listOf(tx("epemc_0_9_num"), tx("epemc_yylval_atoi_yytext")), 92f, 232f, 172f, Tint.TEAL, 13f)
-            val m = registro("main", "main.c", listOf("int main(void) {", "  return yyparse();", "}"), 272f, 232f, 162f, Tint.YELLOW, 13f)
+            // O calc.y da tela é o mesmo que o MiniBison roda: sem o %left, e: e '+' e seria a gramática ambígua da Oficina.
+            val y = registro("y", "calc.y", SPEC_CALC.filter { it != "%token NUM" && it != "%%" }, 180f, 120f, 300f, Tint.ORANGE, 13f)
+            val l = registro("l", "calc.l", listOf(tx("epemc_0_9_num"), tx("epemc_yylval_atoi_yytext")), 92f, 276f, 172f, Tint.TEAL, 13f)
+            val m = registro("main", "main.c", listOf("int main(void) {", "  return yyparse();", "}"), 272f, 276f, 162f, Tint.YELLOW, 13f)
             cena(tx("epemc_compilador_em_c_verdade_costuma")) {
                 add(titulo(tx("epemc_flex_bison_c")))
                 add(l, y, m)
@@ -252,11 +253,11 @@ val serieEmC by lazy {
                 tx("epemc_isso_parser_pede_token_por"),
             ) { lit("l", -1) }
             cena(tx("epemc_bison_flex_escrevem_arquivos_c")) {
-                add(registro("gcc", "terminal", listOf(tx("epemc_bison_d_calc_y"), tx("epemc_flex_calc_l"), tx("epemc_gcc_c_calc")), 92f, 350f, 172f, Tint.NONE, 13f))
+                add(registro("gcc", "terminal", listOf(tx("epemc_bison_d_calc_y"), tx("epemc_flex_calc_l"), tx("epemc_gcc_c_calc")), 92f, 368f, 172f, Tint.NONE, 13f))
                 hot("gcc")
             }
             cena(tx("epemc_roda_calc_digita_conta_sai"), mood = EpMood.HAPPY) {
-                add(registro("run", "./calc", listOf(conta, "= $valor"), 272f, 350f, 150f, Tint.GREEN, 14f, lit = 1))
+                add(registro("run", "./calc", listOf(conta, "= $valor"), 272f, 368f, 150f, Tint.GREEN, 14f, lit = 1))
                 wire(Wire("gcc", "run"))
                 hot("run")
             }

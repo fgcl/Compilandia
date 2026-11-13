@@ -15,14 +15,14 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Fatoração: uma regra só para o "maior prefixo" na ficha e no FORMAL
 - [ ] Fatoração: conferir o texto WORKED ("comum às TRÊS") com a regra nova
 - [x] Ambientes de execução: "a pilha cresce para cima" só no desenho
-- [ ] E7. SLR, cena 4: tabela com 3 de 5 estados e `s3` sem estado
-- [ ] E8. Escopo, cena 4: `x = 2;` fora de função
-- [ ] E9. Alocação, cenas 14 e 15: vivacidade de baixo para cima
-- [ ] E10. TAC, texto WORKED: forma do `ifFalse` igual à da prática
-- [ ] E11. MIPS, cena 5: `$t1` × `t1` na mesma tela
-- [ ] E12. Série em C 5: `e: e '+' e` sem `%left`
-- [ ] E13. Guia do TP, cap. 8: `move` e pseudo-instruções na cola
-- [ ] AST, texto STORY: "compilador em Java" × "seu compilador em C"
+- [x] E7. SLR, cena 4: tabela inteira, tirada do motor, com GOTO e as regras numeradas
+- [x] E8. Escopo, cena 4: `x = 2;` agora dentro do `main`, com a tabela vazia do `main` na pilha
+- [x] E9. Alocação, cenas 14 e 15: vivacidade de baixo para cima
+- [x] E10. TAC, texto WORKED: `t1 = a < b` e `ifFalse t1 goto L1`, como na prática
+- [x] E11. MIPS, cena 5: o resultado vai para a variável `a` (e `total`), sem `t1` ao lado de `$t1`
+- [x] E12. Série em C 5: o `calc.y` da tela é o que o motor roda, com os `%left`
+- [x] E13. Guia do TP, cap. 8: `move` na cola; `li`, `la`, `move` e rótulo na lista de pseudo-instruções
+- [x] AST, texto STORY: "compilador em Java" está certo (o Guia do TP é em Java); a confusão é a falta de explicar as duas linguagens, item da seção 5
 - [ ] "Só a semântica consulta a tabela de símbolos" × ficha
 - [ ] AFD com "no máximo uma" × "exatamente uma" seta
 
@@ -38,6 +38,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [ ] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto"
 - [ ] Dar falas à professora e ao Bug nas aulas animadas
+- [ ] Série em C 5: o rótulo `yyparse()` some atrás do `main.c` (as duas caixas ficam lado a lado)
 
 ## 3. O aluno produz a resposta
 
@@ -53,7 +54,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 - [ ] AFN→AFD: `(ab|a)c`, com fecho que muda o conjunto e um move vazio
 - [ ] Minimização: o AFD do livro (3 rodadas) e `a*b*` com estado morto
-- [ ] FOLLOW: `S → A B d`, com dois símbolos depois do não-terminal; receita sem α e β
+- [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
+- [ ] FOLLOW: segundo exemplo `S → A B d`, com dois símbolos depois do não-terminal
 - [ ] FIRST: uma rodada que muda algo e uma regra `B → C`
 - [ ] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
 - [ ] Recursão à esquerda: `E → E + T | E − T | T`, e E/T/F numa prática
@@ -69,7 +71,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
 
 **Vale e Ponte**
-- [ ] Associatividade: a árvore muda depois de tirar a recursão, e o laço do parser recupera a conta
+- [x] Associatividade: a árvore de `9 - 5 - 2` nas duas gramáticas, e a pergunta "o menos passou a ser da direita?"
 - [ ] Montar E/T/F na aula de ambiguidade
 - [ ] Derivação mais à direita praticada em 3 cenas
 - [ ] ε como produção, "forma sentencial" e "sentença" ditas na aula

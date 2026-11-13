@@ -168,6 +168,7 @@ internal val tpCap8 = GuideChapter(
                 li   $t0, 42              # $t0 = 42                     (load immediate)
                 lw   $t0, n_0             # $t0 = memória[n_0]           (load word)
                 sw   $t0, n_0             # memória[n_0] = $t0           (store word)
+                move $a0, $t0             # $a0 = $t0                    (copia registrador)
                 add  $t0, $t0, $t1        # também sub, mul, div, rem, and, or
                 slt  $t0, $t0, $t1        # $t0 = ($t0 < $t1) ? 1 : 0    (e sgt, sle, sge, seq, sne)
                 xori $t0, $t0, 1          # troca 0 <-> 1: o nosso 'nao'

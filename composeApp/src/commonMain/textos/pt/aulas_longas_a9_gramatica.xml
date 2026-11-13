@@ -66,6 +66,13 @@
     <string name="rec_l_02_ok">Isso. Ela chama a si mesma, sem ler nada.</string>
     <string name="rec_l_palavra">RECURSÃO À ESQUERDA</string>
     <string name="rec_l_03">Regra em que o lado direito começa com o próprio lado esquerdo tem recursão à esquerda. Nenhum parser descendente aceita isso.</string>
+    <string name="rec_l_assoc_1">Agora troque o mais pelo menos. Na gramática velha, a árvore de nove menos cinco menos dois pende para a esquerda. O nove menos cinco fica embaixo e sai primeiro: dá dois.</string>
+    <string name="rec_l_assoc_2">Na gramática nova, a mesma frase dá uma árvore que pende para a direita. Lida ao pé da letra, ela faria cinco menos dois primeiro, e daria seis.</string>
+    <string name="rec_l_assoc_3">Então o menos passou a juntar pela direita? Toque na resposta.</string>
+    <string name="rec_l_assoc_3_dica">A gramática nova gera as mesmas frases. Quem decide a conta é o código que monta o resultado.</string>
+    <string name="rec_l_assoc_3_ok">Isso. A linguagem é a mesma, mas a árvore mudou. O parser junta os pedaços num laço, da esquerda para a direita. A conta volta a dar dois. Você vai ver esse laço no assunto da AST.</string>
+    <string name="rec_l_assoc_nao">Não</string>
+    <string name="rec_l_assoc_sim">Sim</string>
     <string name="rec_l_04">O conserto tem três passos. Ele vale para qualquer regra desse tipo.</string>
     <string name="rec_l_r1">1. Separe: A → A α tem laço, A → β não tem.</string>
     <string name="rec_l_r2">2. Troque cada A → β por A → β A'.</string>

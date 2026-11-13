@@ -244,7 +244,7 @@
     <string name="tpguidec_atribuicao_se_enquanto_esquema_traducao">Assignment, se and enquanto: the translation scheme with labels</string>
     <string name="tpguidec_dois_moldes_templates_que_voce">The two templates you'll draw in the report</string>
     <string name="tpguidec_entrada_saida_com_syscall">Input and output with syscall</string>
-    <string name="tpguidec_div_com_tres_operandos_rem">`div` with three operands, `rem`, `seq`, `sne`, `sgt`, `sle` and `sge` are **pseudo-instructions**: MARS expands them into real instructions. They work perfectly on MARS, but if the assignment forbids pseudo-instructions, swap them for `div`+`mflo`/`mfhi` and for combinations of `slt` with `xori`.</string>
+    <string name="tpguidec_div_com_tres_operandos_rem">`div` with three operands, `rem`, `seq`, `sne`, `sgt`, `sle` and `sge` are **pseudo-instructions**: MARS expands them into real instructions. They work perfectly on MARS, but if the assignment forbids pseudo-instructions, swap them for `div`+`mflo`/`mfhi` and for combinations of `slt` with `xori`. `li`, `la`, `move` and `lw`/`sw` with a label are pseudo-instructions too: MARS turns `move` into `addu` and builds `li`, `la` and the label with `lui` and `ori`. If the assignment forbids them, write those replacements by hand.</string>
     <string name="tpguidec_novo_contagem_byt_capitulo_2">contagem.byt from chapter 2 again…</string>
     <string name="tpguidec_saida_asm_completo_que_nosso">…and the COMPLETE saida.asm our compiler generates for it</string>
     <string name="tpguidec_rodando_no_mars">Running it on MARS</string>
