@@ -1,0 +1,1574 @@
+=== CAPITULO 1: Visão geral e planejamento (PHASES)
+Resumo: O TP é um compilador inteiro, mas são cinco programinhas que conversam. Planeje antes de codar.
+[NARRADOR] Semana 3 do semestre. O enunciado cai no Canvas: 'Construir um compilador completo para uma linguagem imperativa simples, em Java, gerando assembly MIPS executável no MARS'. Você lê duas vezes. Depois lê de novo.
+[BYTE] Um compilador INTEIRO? Eu mal faço um for em Java sem olhar a internet…
+[PROF] Respira. Ninguém escreve um compilador de uma vez. Você vai escrever **cinco pedaços pequenos** que conversam entre si, e cada um você já treinou aqui no Compilândia.
+WIDGET PIPELINE gramatica= entrada= legenda=Cada estação da esteira vira uma classe Java no seu TP.
+PASSOS As peças do TP (e o arquivo Java de cada uma):
+    1. **Léxico** (`Lexico.java`): texto → tokens. Um AFD escrito com `switch` de estados.
+    2. **Sintático** (`Sintatico.java`): tokens → 'o programa está bem formado?'. Descida recursiva: um método por não-terminal.
+    3. **Semântico** (`TabelaSimbolos.java` + checagens dentro do `Sintatico`): declarou? o tipo bate?
+    4. **Gerador** (também dentro do `Sintatico`): cada método emite o seu pedaço de assembly MIPS.
+    5. **Otimização** (opcional/bônus): dobrar constantes, cortar código morto.
+    6. **Testes**: uma pasta de programas que DEVEM compilar e outra de programas que DEVEM dar erro.
+TEXTO: Repare num detalhe: semântico e gerador moram **dentro** do sintático. É o esquema de **tradução dirigida pela sintaxe em uma passada**: o parser pede um token ao léxico quando precisa, confere a semântica na hora e já cospe o MIPS. Sem árvore gigante na memória, sem segunda passada. É o formato que cabe num TP de semestre.
+CODIGO (Estrutura de pastas sugerida):
+    byteiro/
+    ├── src/
+    │   ├── Main.java              // lê o .byt, chama o compilador, grava o .asm
+    │   ├── ErroCompilacao.java    // exceção que carrega o número da linha
+    │   ├── TipoToken.java         // enum com as categorias de token
+    │   ├── Token.java
+    │   ├── Lexico.java            // o AFD (capítulo 3)
+    │   ├── Sintatico.java         // descida recursiva + semântica + MIPS
+    │   ├── TipoDado.java
+    │   ├── Simbolo.java
+    │   └── TabelaSimbolos.java    // pilha de escopos (capítulo 6)
+    ├── testes/
+    │   ├── ok/                    // programas que DEVEM compilar
+    │   └── erro/                  // programas que DEVEM falhar (um erro por arquivo!)
+    └── README.md                  // como compilar e rodar
+CODIGO (ErroCompilacao.java, TODO erro do compilador passa por aqui, sempre com a linha):
+    public class ErroCompilacao extends RuntimeException {
+        public final int linha;
+    
+        public ErroCompilacao(int linha, String msg) {
+            super("linha " + linha + ": " + msg);
+            this.linha = linha;
+        }
+    }
+CODIGO (Main.java: o maestro (Java 17)):
+    import java.nio.file.Files;
+    import java.nio.file.Path;
+    
+    public class Main {
+        public static void main(String[] args) throws Exception {
+            if (args.length < 1) {
+                System.err.println("uso: java Main programa.byt [saida.asm]");
+                return;
+            }
+            String fonte = Files.readString(Path.of(args[0]));
+            String saida = args.length > 1 ? args[1] : "saida.asm";
+            try {
+                Sintatico s = new Sintatico(new Lexico(fonte));
+                String asm = s.compila();           // análise + geração numa passada só
+                Files.writeString(Path.of(saida), asm);
+                System.out.println("compilado com sucesso -> " + saida);
+            } catch (ErroCompilacao e) {
+                System.out.println(e.getMessage()); // ex.: linha 7: erro sintático: esperava ';'...
+                System.exit(1);
+            }
+        }
+    }
+PREVEJA: Qual ordem de implementação dá MENOS dor de cabeça?
+    (     ) Escrever tudo de uma vez e testar na última semana
+    (certa) Léxico → sintático → semântico → geração, testando cada fase antes de seguir
+    (     ) Começar pela geração de MIPS, que é o que vale mais ponto
+    (     ) Começar pela tabela de símbolos, que todo mundo usa
+    EXPLICACAO: Cada fase CONSOME a saída da anterior. Se o léxico tem bug, o parser parece quebrado sem estar. Construa de baixo para cima e teste cada camada antes de empilhar a próxima.
+PASSOS Cronograma de 8 semanas (ajuste à data do seu enunciado):
+    1. Semana 1: Definir a linguagem e escrever 10 programas-exemplo (5 certos, 5 com erro).
+    2. Semana 2: Léxico + um `TesteLexico` que imprime os tokens.
+    3. Semanas 3–4: Gramática LL(1) no papel (FIRST/FOLLOW!) e o parser descendente.
+    4. Semana 5: Tabela de símbolos e verificação de tipos.
+    5. Semanas 6–7: Geração de MIPS, testando cada comando no MARS.
+    6. Semana 8: Otimização, bateria de testes, relatório. E uma folga: algo SEMPRE atrasa.
+CODIGO (Git desde o dia 1: um branch por fase, commits pequenos):
+    git init byteiro && cd byteiro
+    git checkout -b lexico
+    # ... escreve, testa ...
+    git add src/Lexico.java testes/
+    git commit -m "lexico: reconhece <- e comentarios de bloco"
+    git checkout main
+    git merge lexico
+DESTAQUE REAL_WORLD: Commit pequeno salva vida: quando a geração de código quebrar o parser às 23h, `git diff` mostra exatamente o que mudou. E o histórico de commits prova que o trabalho é da equipe.
+[LEXI] Dupla? Um começa o léxico enquanto o outro escreve a gramática no papel. Trio? O terceiro escreve a bateria de testes desde o primeiro dia.
+[PROF] Mas atenção: **todo mundo** precisa entender **tudo**. Na arguição, o professor aponta para qualquer método e pergunta 'por que isso está aqui?' para qualquer integrante.
+DESTAQUE WATCH_OUT: Leia o enunciado com marca-texto. Formato da mensagem de erro, nome do arquivo de saída, se para no primeiro erro, se palavras-chave ignoram maiúsculas… Alguns professores corrigem com scripts que comparam a saída caractere por caractere, um espaço a mais vira 'teste falhou'.
+DESTAQUE NO_DUMB_QUESTIONS: P: Posso usar ANTLR, JavaCC ou outro gerador? R: Na maioria das turmas, NÃO, o objetivo é escrever léxico e parser à mão. Em alguns campi o léxico é feito com lex/flex (a Oficina Flex do app treina isso). Na dúvida, pergunte ao professor ANTES de começar.
+REVELAR: Em uma frase: o que o seu `Main` faz?
+    RESPOSTA: Lê o arquivo-fonte, entrega ao `Sintatico` (que puxa tokens do `Lexico`, consulta a `TabelaSimbolos` e emite MIPS) e grava o `.asm`: ou imprime a linha e a mensagem do primeiro erro.
+[PILHA] Devagar… e sempre… uma fase… por vez.
+
+=== CAPITULO 2: Definindo a linguagem Byteiro (TOKENS)
+Resumo: Antes do Java: tokens, precedência e uma gramática informal de uma linguagem pequena e completa.
+[PROF] Antes de uma linha de Java, você precisa de uma linguagem. No TP a turma inventa (ou recebe) a sua. Neste guia vamos inventar a **Byteiro**: pequenininha de propósito.
+[BYTE] Posso pôr classes, lambdas, vetores, funções recursivas…?
+[PROF] NÃO. Cada recurso a mais é um capítulo a mais de dor. **Pequena e completa ganha de grande e quebrada.** Funções e vetores ficam como 'trabalhos futuros' no relatório.
+CODIGO (contagem.byt: um programa Byteiro completo (vamos compilá-lo até o MIPS no capítulo 8)):
+    programa contagem {
+        inteiro n, soma;
+        caractere c;
+        n <- 5;
+        soma <- 0;
+        enquanto (n > 0) {
+            soma <- soma + n * 2;   // acumula o dobro
+            n <- n - 1;
+        }
+        c <- 'A';
+        se (soma >= 30 e nao (n <> 0)) {
+            escreva("soma = ", soma);
+        } senao {
+            escreva("pouco: ", c);
+        }
+    }
+PASSOS Ficha técnica da Byteiro:
+    1. **Tipos**: `inteiro` (32 bits), `logico` (`verdadeiro`/`falso`), `caractere` (`'A'`).
+    2. **Comandos**: declaração (`inteiro a, b;`), atribuição com `<-`, `se`/`senao`, `enquanto`, `escreva(...)`, `leia(x)`.
+    3. **Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.
+    4. **Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`.
+    5. **Comentários**: `// até o fim da linha` e `/* de bloco */`.
+    6. **Strings** só aparecem dentro do `escreva`: não existe tipo string.
+CODIGO (Tabela de tokens: vai direto para o relatório):
+    Categoria      Padrão (informal)                    Exemplos
+    -------------  -----------------------------------  ----------------
+    reservadas     programa inteiro logico caractere    se, enquanto
+                   se senao enquanto escreva leia
+                   e ou nao verdadeiro falso
+    ID             letra (letra | dígito | _)*          soma, n1, valor_max
+    NUM            dígito+                              0, 42, 32767
+    CHAR           ' um-caractere '                     'A', '7'
+    STRING         " qualquer coisa sem aspas e sem \n " "soma = "
+    ATRIB          <-
+    relacionais    =  <>  <  >  <=  >=
+    aritméticos    +  -  *  /  %
+    pontuação      (  )  {  }  ,  ;
+CODIGO (Tabela de precedência da Byteiro):
+    Precedência (da MAIS FRACA para a MAIS FORTE)
+    1. ou                          associa à esquerda
+    2. e                           associa à esquerda
+    3. =  <>  <  >  <=  >=         NÃO associativo: a < b < c é erro
+    4. +  -                        associa à esquerda
+    5. *  /  %                     associa à esquerda
+    6. nao   - (unário)            prefixo
+    7. ( )  literais  variáveis
+PREVEJA: Na Byteiro, como é agrupado `a + b * 2 > 10 e ok`?
+    (     ) ((a + b) * 2) > (10 e ok)
+    (certa) ((a + (b * 2)) > 10) e ok
+    (     ) a + ((b * 2) > (10 e ok))
+    (     ) Erro: misturar aritmética e lógica é proibido
+    EXPLICACAO: Quem está mais EMBAIXO na tabela gruda mais forte: primeiro `*`, depois `+`, depois `>`, e por último `e`. É exatamente a ordem que o parser vai seguir no capítulo 5.
+DESTAQUE WATCH_OUT: Por que `<-` para atribuir? Assim `=` fica livre para COMPARAR e ninguém escreve `se (x = 1)` achando que atribui. Mas tem pegadinha: `a<-1` agora é `a <- 1` (atribuição), e não `a < -1`. É a regra do **maior lexema**: o léxico sempre pega o token mais comprido possível. Documente isso no relatório!
+WIDGET TOKENIZE gramatica= entrada=if (x<-1) y = 0; // C de verdade legenda=O Lexi do app conhece C: em C, `x<-1` é `x < -1`. Na Byteiro o MESMO texto vira `x <- 1`. Quem define os tokens é a especificação da linguagem.
+CODIGO (Gramática informal (EBNF): { } = repete 0+ vezes, [ ] = opcional. As expressões ficam para o capítulo 4.):
+    programa   = "programa" ID bloco
+    bloco      = "{" { comando } "}"
+    comando    = declaracao | atribuicao | se | enquanto | escreva | leia | bloco
+    declaracao = tipo ID { "," ID } ";"
+    tipo       = "inteiro" | "logico" | "caractere"
+    atribuicao = ID "<-" expr ";"
+    se         = "se" "(" expr ")" bloco [ "senao" bloco ]
+    enquanto   = "enquanto" "(" expr ")" bloco
+    escreva    = "escreva" "(" arg { "," arg } ")" ";"
+    arg        = STRING | expr
+    leia       = "leia" "(" ID ")" ";"
+DESTAQUE REAL_WORLD: Exigir chaves no `se` fecha a porta do 'senão pendurado' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha.
+REVELAR: Quem pega cada erro? (1) `x <- 3 # 2;`  (2) `x <- 3 + ;`  (3) `x <- verdadeiro + 1;`
+    RESPOSTA: (1) **Léxico**: `#` não pertence a nenhum token. (2) **Sintático**: depois do `+` deveria vir uma expressão. (3) **Semântico**: a forma está certa, mas somar um `logico` não faz sentido.
+PREVEJA: E `inteiro 2x;`? Que tipo de erro a Byteiro deve dar?
+    (     ) Léxico: número malformado '2x'
+    (     ) Sintático: esperava identificador, encontrou '2'
+    (certa) Depende de como VOCÊ especificou o léxico, e precisa documentar
+    (     ) Nenhum: 2x é um identificador válido
+    EXPLICACAO: Um léxico pode cortar `2x` em NUM(2) + ID(x) e deixar o sintático reclamar, ou recusar na hora. Os dois são defensáveis! Na Byteiro decidimos que é erro **léxico** ('número malformado'). O que tira ponto é não ter decidido.
+DESTAQUE EXAM_TIP: Escreva a especificação no relatório ANTES do código: tabela de tokens, precedência, gramática, decisões (maiúsculas importam? pode redeclarar em bloco interno?). Ela vira o seu mapa, e muitos professores dão nota para essa parte.
+PASSOS Lição de casa antes do capítulo 3:
+    1. Escreva 5 programas Byteiro CORRETOS, cada um exercitando um recurso (declaração, se/senao, enquanto, escreva, expressões).
+    2. Escreva 5 programas ERRADOS, com UM erro cada: léxico, sintático, não declarado, tipo errado, redeclaração.
+    3. Ao lado de cada um, anote a saída esperada. Parabéns: você acabou de começar a bateria de testes.
+[LEXI] Tabela de tokens pronta? Então me passa a katana. Próximo capítulo eu fatio tudo.
+
+=== CAPITULO 3: Do regex ao AFD: o analisador léxico (REGEX_DFA)
+Resumo: Cada token é uma regex, cada regex é um AFD, todos viram UM autômato, escrito em Java com switch.
+[LEXI] Meu segredo: cada categoria de token é uma **expressão regular**; cada regex vira um **AFD**; e todos os AFDs são colados num autômato grande, com um estado inicial só.
+CODIGO (As regex da Byteiro):
+    ID      =  l (l | d | _)*          l = letra, d = dígito
+    NUM     =  d d*
+    CHAR    =  ' c '                   c = qualquer caractere menos ' e \n
+    STRING  =  " s* "                  s = qualquer caractere menos " e \n
+    MENOR   =  <        ATRIB = <-     MENOR_IGUAL = <=     DIFERENTE = <>
+    MAIOR   =  >        MAIOR_IGUAL = >=
+    DIV     =  /        (// e /* */ são comentários: descartados)
+WIDGET DFA gramatica= entrada=l(l|d)* legenda=ID (l = letra, d = dígito; o _ ficou de fora para caber no widget). Teste 'l', 'ldl' e 'dl'.
+WIDGET DFA gramatica= entrada=dd* legenda=NUM: pelo menos um dígito. Teste 'd', 'ddd' e a cadeia vazia.
+WIDGET DFA gramatica= entrada=m(h|i|g)? legenda=A família do '<' (m = '<', h = '-', i = '=', g = '>'): aceita m, mh, mi, mg. Repare que o estado depois de 'm' já é final, é o MENOR sozinho.
+[BYTE] Tá, são vários AFDs. Mas como eu junto tudo num só?
+[PROF] Crie um estado 0 com uma seta para o começo de cada AFD. Como os primeiros caracteres são diferentes, letra, dígito, '<', '/'…, nunca há duas setas com o mesmo rótulo saindo do 0. Continua determinístico!
+CODIGO (O autômato grande da Byteiro (desenhe a versão bonita no relatório!)):
+                 letra/dígito/_ ⟲
+    (0) ─letra──► (1) ── outro* → ID ou reservada
+     │
+     ├─dígito──► (2) ⟲ dígito    outro* → NUM     letra → ERRO "número malformado"
+     │
+     ├── '<' ──► (3) ── '-' → ATRIB   '=' → MENOR_IGUAL   '>' → DIFERENTE   outro* → MENOR
+     ├── '>' ──► (4) ── '=' → MAIOR_IGUAL   outro* → MAIOR
+     │
+     ├── '/' ──► (5) ── '/' → (6) comentário de linha: volta ao (0) no '\n'
+     │                ── '*' → (7) comentário de bloco: volta ao (0) no "*/"
+     │                ── outro* → DIV
+     │
+     ├── ' ───► (8) ── c → (9) ── ' → CHAR
+     ├── " ───► (10) ⟲ s    " → STRING    '\n' ou fim → ERRO
+     ├── espaço, \t, \r → fica no (0)      '\n' → fica no (0) e linha++
+     └── + - * % = ( ) { } , ;  → token de 1 caractere
+    
+    outro* = o caractere que ENCERROU o token NÃO é consumido
+CODIGO (Pedaço da tabela de transições (* = devolve o token sem consumir o caractere)):
+    estado │ letra  │ dígito │   <    │   -    │   =    │   >    │ outro
+    ───────┼────────┼────────┼────────┼────────┼────────┼────────┼────────
+      0    │   1    │   2    │   3    │ MENOS  │ IGUAL  │   4    │ (ver acima)
+      1    │   1    │   1    │  ID*   │  ID*   │  ID*   │  ID*   │  ID*
+      2    │  ERRO  │   2    │  NUM*  │  NUM*  │  NUM*  │  NUM*  │  NUM*
+      3    │ MENOR* │ MENOR* │ MENOR* │ ATRIB  │ M_IGU  │ DIFER  │ MENOR*
+      4    │ MAIOR* │ MAIOR* │ MAIOR* │ MAIOR* │ MA_IGU │ MAIOR* │ MAIOR*
+DESTAQUE NO_DUMB_QUESTIONS: P: Cada palavra reservada precisa de um AFD próprio? R: Daria um autômato enorme. O truque clássico: reconheça tudo como ID (estado 1) e, no fim, consulte uma tabela (HashMap) de reservadas. Se estiver lá, é palavra-chave; senão, é ID.
+CODIGO (TipoToken.java e Token.java):
+    public enum TipoToken {
+        // palavras reservadas (o texto é a própria palavra)
+        PROGRAMA("programa"), INTEIRO("inteiro"), LOGICO("logico"), CARACTERE("caractere"),
+        SE("se"), SENAO("senao"), ENQUANTO("enquanto"), ESCREVA("escreva"), LEIA("leia"),
+        E("e"), OU("ou"), NAO("nao"), VERDADEIRO("verdadeiro"), FALSO("falso"),
+        // lexema variável
+        ID("identificador"), NUM("número"), CHAR("caractere literal"), STRING("string"),
+        // operadores e pontuação
+        ATRIB("<-"), MAIS("+"), MENOS("-"), VEZES("*"), DIV("/"), MOD("%"),
+        IGUAL("="), DIFERENTE("<>"), MENOR("<"), MAIOR(">"), MENOR_IGUAL("<="), MAIOR_IGUAL(">="),
+        ABRE_PAR("("), FECHA_PAR(")"), ABRE_CHAVE("{"), FECHA_CHAVE("}"),
+        VIRGULA(","), PONTO_VIRGULA(";"), EOF("fim de arquivo");
+    
+        public final String texto;          // usado nas mensagens de erro
+        TipoToken(String texto) { this.texto = texto; }
+    }
+    
+    public class Token {
+        public final TipoToken tipo;
+        public final String lexema;
+        public final int linha;
+    
+        public Token(TipoToken tipo, String lexema, int linha) {
+            this.tipo = tipo; this.lexema = lexema; this.linha = linha;
+        }
+    
+        @Override public String toString() {
+            return String.format("%-3d %-14s %s", linha, tipo, lexema);
+        }
+    }
+CODIGO (Lexico.java (1/3): campos e ajudantes. '\0' faz o papel de 'fim do arquivo'.):
+    import java.util.HashMap;
+    import java.util.Map;
+    
+    public class Lexico {
+        private static final Map<String, TipoToken> RESERVADAS = new HashMap<>();
+        static {   // as 14 primeiras constantes do enum são as reservadas
+            for (TipoToken t : TipoToken.values())
+                if (t.ordinal() <= TipoToken.FALSO.ordinal()) RESERVADAS.put(t.texto, t);
+        }
+    
+        private final String fonte;
+        private int pos = 0;      // índice do próximo caractere a ler
+        private int linha = 1;
+    
+        public Lexico(String fonte) { this.fonte = fonte; }
+    
+        private char atual() { return pos < fonte.length() ? fonte.charAt(pos) : '\0'; }
+        private char espia() { return pos + 1 < fonte.length() ? fonte.charAt(pos + 1) : '\0'; }
+        private Token tok(TipoToken t, String lexema) { return new Token(t, lexema, linha); }
+        private ErroCompilacao erro(String msg) { return new ErroCompilacao(linha, "erro léxico: " + msg); }
+CODIGO (Lexico.java (2/3): o AFD inteiro: um case por estado, igualzinho ao desenho):
+    public Token proximo() {
+        int estado = 0;
+        StringBuilder lex = new StringBuilder();
+        while (true) {
+            char c = atual();
+            switch (estado) {
+                case 0 -> {                                  // estado inicial
+                    if (c == '\0') return tok(TipoToken.EOF, "fim de arquivo");
+                    pos++;                                   // do estado 0 sempre se consome
+                    if (c == '\n') linha++;
+                    else if (c == ' ' || c == '\t' || c == '\r') { /* ignora */ }
+                    else if (Character.isLetter(c)) { lex.append(c); estado = 1; }
+                    else if (Character.isDigit(c))  { lex.append(c); estado = 2; }
+                    else if (c == '<')  estado = 3;
+                    else if (c == '>')  estado = 4;
+                    else if (c == '/')  estado = 5;
+                    else if (c == '\'') estado = 8;
+                    else if (c == '"')  estado = 10;
+                    else return simples(c);
+                }
+                case 1 -> {                                  // ID ou reservada
+                    if (Character.isLetterOrDigit(c) || c == '_') { lex.append(c); pos++; }
+                    else {                                   // 'outro': NÃO consome
+                        String s = lex.toString();
+                        return tok(RESERVADAS.getOrDefault(s, TipoToken.ID), s);
+                    }
+                }
+                case 2 -> {                                  // NUM
+                    if (Character.isDigit(c)) { lex.append(c); pos++; }
+                    else if (Character.isLetter(c)) throw erro("número malformado '" + lex + c + "'");
+                    else return tok(TipoToken.NUM, lex.toString());
+                }
+                case 3 -> {                                  // já leu '<'
+                    if (c == '-') { pos++; return tok(TipoToken.ATRIB, "<-"); }
+                    if (c == '=') { pos++; return tok(TipoToken.MENOR_IGUAL, "<="); }
+                    if (c == '>') { pos++; return tok(TipoToken.DIFERENTE, "<>"); }
+                    return tok(TipoToken.MENOR, "<");        // 'outro': NÃO consome
+                }
+                case 4 -> {                                  // já leu '>'
+                    if (c == '=') { pos++; return tok(TipoToken.MAIOR_IGUAL, ">="); }
+                    return tok(TipoToken.MAIOR, ">");
+                }
+                case 5 -> {                                  // já leu '/'
+                    if (c == '/') { pos++; estado = 6; }
+                    else if (c == '*') { pos++; estado = 7; }
+                    else return tok(TipoToken.DIV, "/");
+                }
+                case 6 -> {                                  // comentário de linha
+                    if (c == '\n' || c == '\0') estado = 0;  // o '\n' é contado no estado 0
+                    else pos++;
+                }
+                case 7 -> {                                  // comentário de bloco
+                    if (c == '\0') throw erro("comentário /* sem */ até o fim do arquivo");
+                    if (c == '*' && espia() == '/') { pos += 2; estado = 0; }
+                    else { if (c == '\n') linha++; pos++; }
+                }
+                case 8 -> {                                  // já leu a aspa simples
+                    if (c == '\'' || c == '\n' || c == '\0') throw erro("caractere vazio ou não fechado");
+                    lex.append(c); pos++; estado = 9;
+                }
+                case 9 -> {                                  // espera a aspa que fecha
+                    if (c != '\'') throw erro("esperava ' depois de '" + lex + "'");
+                    pos++;
+                    return tok(TipoToken.CHAR, lex.toString());
+                }
+                case 10 -> {                                 // dentro da string
+                    if (c == '"') { pos++; return tok(TipoToken.STRING, lex.toString()); }
+                    if (c == '\n' || c == '\0') throw erro("string não fechada");
+                    lex.append(c); pos++;
+                }
+                default -> throw new IllegalStateException("estado " + estado);
+            }
+        }
+    }
+CODIGO (Lexico.java (3/3)):
+        private Token simples(char c) {                      // tokens de 1 caractere
+            return switch (c) {
+                case '+' -> tok(TipoToken.MAIS, "+");
+                case '-' -> tok(TipoToken.MENOS, "-");
+                case '*' -> tok(TipoToken.VEZES, "*");
+                case '%' -> tok(TipoToken.MOD, "%");
+                case '=' -> tok(TipoToken.IGUAL, "=");
+                case '(' -> tok(TipoToken.ABRE_PAR, "(");
+                case ')' -> tok(TipoToken.FECHA_PAR, ")");
+                case '{' -> tok(TipoToken.ABRE_CHAVE, "{");
+                case '}' -> tok(TipoToken.FECHA_CHAVE, "}");
+                case ',' -> tok(TipoToken.VIRGULA, ",");
+                case ';' -> tok(TipoToken.PONTO_VIRGULA, ";");
+                default  -> throw erro("caractere inválido '" + c + "'");
+            };
+        }
+    }
+PREVEJA: Entrada `x<y`. O AFD está no estado 3 (já leu '<') e vê o 'y'. O que o código faz?
+    (     ) Consome o 'y' e devolve MENOR
+    (certa) Devolve MENOR SEM consumir o 'y', ele será o começo do próximo token
+    (     ) Erro léxico: '<y' não é token
+    (     ) Volta ao estado 0 e descarta o '<'
+    EXPLICACAO: O 'y' é o 'outro*' do desenho: ele só serviu para avisar que o token acabou. Se você fizer `pos++` aí, o 'y' some e o parser recebe `x <` seguido do que vier depois. É o bug nº 1 de léxico feito à mão.
+DESTAQUE WATCH_OUT: Contagem de linhas: incremente `linha` em TODO lugar que consome '\n', inclusive dentro do comentário de bloco (estado 7). E não conte '\r': arquivo salvo no Windows tem '\r\n' no fim de cada linha; contar os dois dobra o número da linha nas mensagens.
+DESTAQUE WATCH_OUT: `Character.isLetter` aceita 'ç', 'é', 'π'… Se a especificação diz que identificador é só ASCII, troque por `(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')`. Detalhe pequeno, mas teste de correção adora.
+PASSOS Os erros léxicos da Byteiro (sempre com a linha!):
+    1. Caractere inválido: `x <- 3 # 2;` → linha N: erro léxico: caractere inválido '#'
+    2. Número malformado: `12abc` → número malformado '12a'
+    3. Caractere vazio ou sem fechar: `''` ou `'A`
+    4. String que atravessa a linha: `"olá` + Enter
+    5. Comentário `/*` sem `*/` até o fim do arquivo
+DESTAQUE REAL_WORLD: Muitos enunciados pedem palavras-chave que ignoram maiúsculas (`SE`, `Se`, `se`). É UMA linha: `RESERVADAS.getOrDefault(s.toLowerCase(), TipoToken.ID)`. Decida também se identificadores ignoram maiúsculas (`Soma` = `soma`?), e documente.
+CODIGO (TesteLexico.java: rode ANTES de escrever uma linha do parser):
+    public class TesteLexico {
+        public static void main(String[] args) {
+            Lexico lx = new Lexico("inteiro n; /* contador */\nn <- n+1; se (n<>10) {}");
+            Token t;
+            do {
+                t = lx.proximo();
+                System.out.println(t);
+            } while (t.tipo != TipoToken.EOF);
+        }
+    }
+CODIGO (Saída esperada: o comentário sumiu, `<-` e `<>` são UM token cada, e a linha muda no lugar certo):
+    1   INTEIRO        inteiro
+    1   ID             n
+    1   PONTO_VIRGULA  ;
+    2   ID             n
+    2   ATRIB          <-
+    2   ID             n
+    2   MAIS           +
+    2   NUM            1
+    2   PONTO_VIRGULA  ;
+    2   SE             se
+    2   ABRE_PAR       (
+    2   ID             n
+    2   DIFERENTE      <>
+    2   NUM            10
+    2   FECHA_PAR      )
+    2   ABRE_CHAVE     {
+    2   FECHA_CHAVE    }
+    2   EOF            fim de arquivo
+REVELAR: Por que `proximo()` devolve um token por vez em vez de uma lista com todos?
+    RESPOSTA: Porque o parser de uma passada pede tokens sob demanda, e um erro léxico aparece exatamente quando o parser chega lá. Gerar a lista inteira antes também funciona (e permite espiar vários tokens à frente); só garanta que o erro léxico continue saindo com a linha certa.
+[LEXI] Fatiado! Agora alguém precisa conferir se os pedaços estão na ORDEM certa. Chama a Profª Gramática.
+
+=== CAPITULO 4: A gramática LL(1) da Byteiro (LL1_TABLE)
+Resumo: Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token basta para decidir.
+[PROF] A gramática informal do capítulo 2 é ótima para humanos. Para virar descida recursiva, ela precisa ser **LL(1)**: olhando UM token, o parser sabe qual regra usar, sem voltar atrás, sem adivinhar.
+PASSOS As três checagens antes de programar:
+    1. 1. **Sem recursão à esquerda**: nenhum `A -> A …`. (Em Java isso é recursão infinita.)
+    2. 2. **Fatorada**: duas alternativas do mesmo não-terminal não podem começar igual.
+    3. 3. **FIRST/FOLLOW sem cruzamento**: os FIRST das alternativas são disjuntos; e se uma alternativa pode sumir (ε), os FIRST das outras não cruzam com o FOLLOW.
+CODIGO (Primeira tentativa: precedência certinha… e recursão à esquerda em quatro lugares):
+    Expr  -> Expr ou ExprE | ExprE
+    ExprE -> ExprE e Rel | Rel
+    Rel   -> Add oprel Add | Add
+    Add   -> Add + Mul | Add - Mul | Mul
+    Mul   -> Mul * Un | Mul / Un | Mul % Un | Un
+    Un    -> nao Un | - Un | Prim
+    Prim  -> ( Expr ) | ID | NUM | CHAR | verdadeiro | falso
+PREVEJA: O que acontece se você traduzir `Add -> Add + Mul` direto para Java (`void add() { add(); casaToken(MAIS); mul(); }`)?
+    (     ) Funciona normalmente
+    (certa) StackOverflowError: add() chama add() sem consumir nenhum token
+    (     ) Erro de compilação do Java
+    (     ) Funciona, mas com associatividade errada
+    EXPLICACAO: A primeira coisa que `add()` faz é chamar `add()`: com o MESMO token na frente. Nada muda, então ela se chama para sempre até a pilha estourar.
+WIDGET LEFT_RECURSION gramatica=Add -> Add + Mul | Add - Mul | Mul ; Mul -> Mul * Un | Un ; Un -> - Un | ( Add ) | id | num entrada= legenda=Antes e depois: A -> A α | β vira A -> β A' e A' -> α A' | ε.
+TEXTO: Na EBNF fica ainda mais limpo: `A -> A α | β` é o mesmo que `A -> β { α }`: um β seguido de zero ou mais α. E `{ }` vira um **while** em Java. Bônus: o while monta a árvore para a esquerda, então `10 - 3 - 2` continua dando 5.
+CODIGO (Expressões da Byteiro em EBNF LL(1), sete níveis, sete métodos Java):
+    expr     -> exprE { ou exprE }
+    exprE    -> exprRel { e exprRel }
+    exprRel  -> exprAdd [ oprel exprAdd ]        oprel = "=" | "<>" | "<" | ">" | "<=" | ">="
+    exprAdd  -> exprMul { ( + | - ) exprMul }
+    exprMul  -> exprUn { ( * | / | % ) exprUn }
+    exprUn   -> nao exprUn | - exprUn | primario
+    primario -> ( expr ) | ID | NUM | CHAR | verdadeiro | falso
+DESTAQUE MNEMONIC: Cascata: quanto mais FUNDO o método, mais FORTE o operador. `ou` mora no topo (agrupa por último); `*` mora lá embaixo (agrupa primeiro).
+TEXTO: E o `Rel -> Add oprel Add | Add`? As duas alternativas começam com `Add`: prefixo comum! Fatorando: `Rel -> Add Rel'` e `Rel' -> oprel Add | ε`. Na EBNF isso é o opcional `[ oprel exprAdd ]`: que em Java vira um **if**.
+WIDGET LEFT_FACTORING gramatica=Cmd -> id <- E ; | id ( E ) ; | se ( E ) B | se ( E ) B senao B ; B -> { } ; E -> id | num entrada= legenda=Se a Byteiro tivesse chamada de procedimento `p(x);`, atribuição e chamada começariam com `id`. E `se` com e sem `senao` também. Veja a fatoração.
+CODIGO (Os comandos da Byteiro em BNF (expressões resumidas em E), prontos para o teste LL(1)):
+    Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ;
+    Senao -> senao Bloco | ε
+    Bloco -> { Cmds }
+    Cmds -> Cmd Cmds | ε
+    E -> id | num
+WIDGET FIRST_FOLLOW gramatica=Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ; Senao -> senao Bloco | ε ; Bloco -> { Cmds } ; Cmds -> Cmd Cmds | ε ; E -> id | num entrada= legenda=Calcule FIRST e FOLLOW passo a passo. Repare: `senao` NÃO aparece em FOLLOW(Senao).
+WIDGET LL1_TABLE gramatica=Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ; Senao -> senao Bloco | ε ; Bloco -> { Cmds } ; Cmds -> Cmd Cmds | ε ; E -> id | num entrada= legenda=Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão pendurado.
+PREVEJA: Em `Senao -> senao Bloco | ε`, quando o parser escolhe a alternativa ε?
+    (     ) Nunca: ε é só enfeite
+    (certa) Quando o token atual está em FOLLOW(Senao), na prática, 'quando não é senao'
+    (     ) Quando o token atual é senao
+    (     ) Quando o arquivo acaba
+    EXPLICACAO: A tabela põe ε nas colunas de FOLLOW(Senao). No código da descida recursiva isso vira `if (eh(SENAO)) { … }` sem else: se não é `senao`, não consome nada, e se o token for lixo, o próximo `casaToken` reclama.
+DESTAQUE WATCH_OUT: Se a sua linguagem permitir `se (c) comando senao comando` SEM chaves, a célula [Senao, senao] ganha duas produções: é o dangling else, e a gramática não é LL(1). Solução prática no parser: sempre casar o `senao` com o `se` mais próximo (o `if` guloso), e documentar essa decisão.
+REVELAR: Calcule FIRST(comando) da Byteiro completa.
+    RESPOSTA: { ID, se, enquanto, escreva, leia, `{`, inteiro, logico, caractere }, declarações começam pelo tipo, e um bloco solto começa por `{`. Esse conjunto vira o método `comecaComando()` no capítulo 5.
+REVELAR: FOLLOW de `{ comando }` dentro do bloco: quando a repetição para?
+    RESPOSTA: Quando o token não está em FIRST(comando). Na gramática certa, ele só pode ser `}`: qualquer outra coisa faz o `casaToken(FECHA_CHAVE)` reclamar com uma mensagem precisa.
+DESTAQUE NO_DUMB_QUESTIONS: P: Preciso entregar a tabela LL(1) inteira? R: Depende do enunciado. Para descida recursiva, o que importa é a PROVA de que não há conflito: em cada ponto de decisão do código, os conjuntos de tokens testados são disjuntos. FIRST/FOLLOW no relatório é exatamente essa prova.
+DESTAQUE EXAM_TIP: O trio que cai em prova e no TP: recursão à esquerda → **while**; opcional `[ ]` → **if**; repetição `{ }` → **while**. Decore e você traduz qualquer EBNF para Java em minutos.
+[PILHA] Gramática… LL(1)… pronta. Agora… me deem métodos… para empilhar.
+
+=== CAPITULO 5: O parser descendente recursivo (RECURSIVE_DESCENT)
+Resumo: Um método por não-terminal, casaToken para terminais, if/while no token atual, e erros com linha.
+[PILHA] Eu sou… a pilha de chamadas do Java. Cada método que você chama… eu empilho. Quando ele retorna… desempilho. A árvore sintática… é o caminho que eu faço.
+PASSOS A receita (decore!):
+    1. Um método Java para cada não-terminal: `bloco()`, `comando()`, `expr()`…
+    2. Terminal no lado direito → `casaToken(TIPO)`: confere e avança.
+    3. Não-terminal no lado direito → chama o método dele.
+    4. Várias alternativas → `if`/`switch` olhando o token atual (os FIRST que você calculou).
+    5. `{ … }` → `while`; `[ … ]` → `if`.
+WIDGET DESCENT_CODE gramatica=E -> T E' ; E' -> + T E' | ε ; T -> F T' ; T' -> * F T' | ε ; F -> ( E ) | id | num entrada=id + num * id legenda=O código que o motor gera para a cascata de dois níveis, e a pilha de chamadas para `id + num * id`.
+CODIGO (Sintatico.java (1/4), a infraestrutura. Só `avanca()` mexe em `tok`!):
+    public class Sintatico {
+        private final Lexico lexico;
+        private Token tok;                         // lookahead: o token que o parser está "olhando"
+    
+        public Sintatico(Lexico lexico) {
+            this.lexico = lexico;
+            this.tok = lexico.proximo();
+        }
+    
+        private Token avanca() {                   // consome o token atual e o devolve
+            Token t = tok;
+            tok = lexico.proximo();
+            return t;
+        }
+    
+        private Token casaToken(TipoToken esperado) {
+            if (tok.tipo != esperado) throw erroEsperava("'" + esperado.texto + "'");
+            return avanca();
+        }
+    
+        private boolean eh(TipoToken... tipos) {   // o token atual é algum destes?
+            for (TipoToken t : tipos) if (tok.tipo == t) return true;
+            return false;
+        }
+    
+        private ErroCompilacao erroEsperava(String oQue) {
+            String achou = tok.tipo == TipoToken.EOF ? "fim de arquivo" : "'" + tok.lexema + "'";
+            return new ErroCompilacao(tok.linha, "erro sintático: esperava " + oQue + ", encontrou " + achou);
+        }
+    
+        public String compila() {                  // o capítulo 8 faz isto devolver o MIPS
+            programa();
+            return "";
+        }
+CODIGO (Sintatico.java (2/4), programa, bloco e o 'despachante' comando()):
+    private void programa() {
+        casaToken(TipoToken.PROGRAMA);
+        casaToken(TipoToken.ID);
+        bloco();
+        casaToken(TipoToken.EOF);              // nada pode sobrar depois do '}' final
+    }
+    
+    private void bloco() {
+        casaToken(TipoToken.ABRE_CHAVE);
+        while (comecaComando()) comando();     // { comando }
+        casaToken(TipoToken.FECHA_CHAVE);
+    }
+    
+    private boolean comecaComando() {         // FIRST(comando)
+        return eh(TipoToken.INTEIRO, TipoToken.LOGICO, TipoToken.CARACTERE, TipoToken.ID,
+                  TipoToken.SE, TipoToken.ENQUANTO, TipoToken.ESCREVA, TipoToken.LEIA,
+                  TipoToken.ABRE_CHAVE);
+    }
+    
+    private void comando() {
+        switch (tok.tipo) {
+            case INTEIRO, LOGICO, CARACTERE -> declaracao();
+            case ID         -> atribuicao();
+            case SE         -> se();
+            case ENQUANTO   -> enquanto();
+            case ESCREVA    -> escreva();
+            case LEIA       -> leia();
+            case ABRE_CHAVE -> bloco();
+            default         -> throw erroEsperava("um comando");
+        }
+    }
+CODIGO (Sintatico.java (3/4), os comandos: leia cada método ao lado da sua regra EBNF):
+    private void declaracao() {               // tipo ID { , ID } ;
+        tipo();
+        casaToken(TipoToken.ID);
+        while (eh(TipoToken.VIRGULA)) {
+            avanca();
+            casaToken(TipoToken.ID);
+        }
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private void tipo() {
+        if (eh(TipoToken.INTEIRO, TipoToken.LOGICO, TipoToken.CARACTERE)) avanca();
+        else throw erroEsperava("um tipo");
+    }
+    
+    private void atribuicao() {               // ID <- expr ;
+        casaToken(TipoToken.ID);
+        casaToken(TipoToken.ATRIB);
+        expr();
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private void se() {                       // se ( expr ) bloco [ senao bloco ]
+        casaToken(TipoToken.SE);
+        casaToken(TipoToken.ABRE_PAR);
+        expr();
+        casaToken(TipoToken.FECHA_PAR);
+        bloco();
+        if (eh(TipoToken.SENAO)) {
+            avanca();
+            bloco();
+        }
+    }
+    
+    private void enquanto() {                 // enquanto ( expr ) bloco
+        casaToken(TipoToken.ENQUANTO);
+        casaToken(TipoToken.ABRE_PAR);
+        expr();
+        casaToken(TipoToken.FECHA_PAR);
+        bloco();
+    }
+    
+    private void escreva() {                  // escreva ( arg { , arg } ) ;
+        casaToken(TipoToken.ESCREVA);
+        casaToken(TipoToken.ABRE_PAR);
+        argumento();
+        while (eh(TipoToken.VIRGULA)) { avanca(); argumento(); }
+        casaToken(TipoToken.FECHA_PAR);
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private void argumento() {                // STRING | expr
+        if (eh(TipoToken.STRING)) avanca();
+        else expr();
+    }
+    
+    private void leia() {                     // leia ( ID ) ;
+        casaToken(TipoToken.LEIA);
+        casaToken(TipoToken.ABRE_PAR);
+        casaToken(TipoToken.ID);
+        casaToken(TipoToken.FECHA_PAR);
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+CODIGO (Sintatico.java (4/4), a cascata de precedência: cada nível chama o de baixo):
+        private void expr() {                     // exprE { ou exprE }
+            exprE();
+            while (eh(TipoToken.OU)) { avanca(); exprE(); }
+        }
+    
+        private void exprE() {                    // exprRel { e exprRel }
+            exprRel();
+            while (eh(TipoToken.E)) { avanca(); exprRel(); }
+        }
+    
+        private void exprRel() {                  // exprAdd [ oprel exprAdd ]
+            exprAdd();
+            if (eh(TipoToken.IGUAL, TipoToken.DIFERENTE, TipoToken.MENOR, TipoToken.MAIOR,
+                   TipoToken.MENOR_IGUAL, TipoToken.MAIOR_IGUAL)) {
+                avanca();
+                exprAdd();
+            }
+        }
+    
+        private void exprAdd() {                  // exprMul { (+|-) exprMul }
+            exprMul();
+            while (eh(TipoToken.MAIS, TipoToken.MENOS)) { avanca(); exprMul(); }
+        }
+    
+        private void exprMul() {                  // exprUn { (*|/|%) exprUn }
+            exprUn();
+            while (eh(TipoToken.VEZES, TipoToken.DIV, TipoToken.MOD)) { avanca(); exprUn(); }
+        }
+    
+        private void exprUn() {                   // nao exprUn | - exprUn | primario
+            if (eh(TipoToken.NAO, TipoToken.MENOS)) { avanca(); exprUn(); }
+            else primario();
+        }
+    
+        private void primario() {
+            if (eh(TipoToken.ABRE_PAR)) {
+                avanca();
+                expr();
+                casaToken(TipoToken.FECHA_PAR);
+            } else if (eh(TipoToken.ID, TipoToken.NUM, TipoToken.CHAR,
+                          TipoToken.VERDADEIRO, TipoToken.FALSO)) {
+                avanca();
+            } else {
+                throw erroEsperava("uma expressão");
+            }
+        }
+    }
+REVELAR: Por que `exprRel` usa `if` e `exprAdd` usa `while`?
+    RESPOSTA: Porque `a + b + c` é permitido (repetição → while), mas `a < b < c` não é (relacionais são NÃO associativos → no máximo um → if). Com o if, o `<` extra sobra e o parser reclama dele.
+PASSOS A pilha de chamadas para `x <- a + 2 * b;`:
+    1. `atribuicao()` casa ID(x) e `<-`, depois chama `expr()`.
+    2. `expr` → `exprE` → `exprRel` → `exprAdd` → `exprMul` → `exprUn` → `primario()` casa `a`. Volta tudo até `exprAdd`.
+    3. `exprAdd` vê `+`: avança e chama `exprMul()`.
+    4. `exprMul` → `exprUn` → `primario` casa `2`. De volta em `exprMul`, vê `*`: avança, `exprUn` → `primario` casa `b`.
+    5. `exprMul` não vê mais `*`: retorna. `exprAdd` não vê mais `+`: retorna. Sobe até `atribuicao()`.
+    6. `atribuicao()` casa `;`. Repare: `2 * b` terminou ANTES do `+`: a precedência saiu de graça da ordem das chamadas.
+CODIGO (erro_falta_pv.byt — esqueceram o ';' da linha 2):
+    programa t {
+        inteiro x
+        x <- 1;
+    }
+PREVEJA: Que mensagem o nosso parser imprime para esse programa?
+    (     ) linha 2: erro sintático: esperava ';', encontrou 'x'
+    (certa) linha 3: erro sintático: esperava ';', encontrou 'x'
+    (     ) linha 4: erro sintático: esperava '}', encontrou fim de arquivo
+    (     ) Nenhuma: o programa compila
+    EXPLICACAO: O parser só PERCEBE que falta o ';' quando vê o token seguinte, o `x` da linha 3. A mensagem usa a linha do token encontrado. Se o enunciado pedir 'a linha do erro', isso é o esperado; se quiser a linha anterior, guarde a linha do último token consumido.
+DESTAQUE WATCH_OUT: Esqueceu o `casaToken(TipoToken.EOF)` no fim de `programa()`? Então `programa t { } lixo lixo lixo` compila 'com sucesso'. Esse é um dos primeiros testes que o corretor faz.
+DESTAQUE WATCH_OUT: Chamar `lexico.proximo()` direto em vários lugares 'perde' tokens: você avança duas vezes sem perceber. Regra de ouro: SÓ o `avanca()` (e o `casaToken`, que usa ele) mexe em `tok`.
+WIDGET DESCENT_CODE gramatica=Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ; Senao -> senao Bloco | ε ; Bloco -> { Cmds } ; Cmds -> Cmd Cmds | ε ; E -> id | num entrada=se ( id ) { } legenda=Agora com os comandos da Byteiro: veja o if/else de `Cmd` testando os FIRST de cada alternativa.
+DESTAQUE NO_DUMB_QUESTIONS: P: E se o enunciado pedir para continuar depois do primeiro erro? R: Modo pânico: ao errar, registre a mensagem e descarte tokens até um ponto seguro (`;` ou `}`), depois continue. Para a maioria dos TPs, parar no primeiro erro já é o pedido, confira.
+WIDGET PANIC gramatica=Cmds -> Cmd Cmds | ε ; Cmd -> id <- E ; | escreva ( E ) ; ; E -> id | num entrada=id <- ; escreva ( id ) ; legenda=Atribuição sem expressão: o parser reclama, pula até um token de sincronização e segue para o escreva.
+DESTAQUE REAL_WORLD: Os parsers do GCC (C/C++), do Clang, do javac e do Go são descida recursiva escrita à mão, exatamente a técnica do seu TP. Ela dá controle total sobre as mensagens de erro, e é por isso que os compiladores profissionais voltaram a ela.
+DESTAQUE EXAM_TIP: Questão clássica: 'escreva o procedimento da descida recursiva para o não-terminal X'. Siga a receita: um if por alternativa (com os FIRST), casaToken nos terminais, chamada nos não-terminais, e um else com erro.
+
+=== CAPITULO 6: Tabela de símbolos e escopos (SCOPE_SYMBOLS)
+Resumo: Uma pilha de HashMaps: abre bloco = push, declara = put no topo, usa = busca do topo para baixo.
+[BYTE] Meu parser aceita `x <- 1;` mesmo sem nenhum `inteiro x;`. Ele não lembra de NADA!
+[PROF] Ele precisa de memória: a **tabela de símbolos**. E como a Byteiro tem blocos dentro de blocos, essa memória precisa de **escopos**.
+CODIGO (escopos.byt: leia de cima para baixo e acompanhe cada x):
+    programa escopos {
+        inteiro x;              // x  -> rótulo x_0
+        x <- 1;
+        {
+            caractere x;        // OUTRO x -> x_1 (esconde o de fora)
+            x <- 'A';
+            inteiro y;          // y  -> y_2
+            y <- 2;
+        }
+        x <- x + 1;             // de volta ao x_0, inteiro
+        y <- 3;                 // ERRO: o escopo de y já fechou
+    }
+WIDGET SCOPE gramatica= entrada= legenda=Toque em cada uso e veja a qual declaração ele se liga.
+PREVEJA: O que o compilador diz na linha 11 (`y <- 3;`)?
+    (     ) Nada: y foi declarado no programa
+    (certa) linha 11: erro semântico: 'y' não foi declarado
+    (     ) linha 7: erro semântico: y declarado depois de x
+    (     ) Erro sintático
+    EXPLICACAO: Quando o bloco interno fechou, o escopo dele (com o y) foi DESEMPILHADO. A busca na linha 11 só encontra o escopo de fora, onde não há y.
+PASSOS A pilha de HashMaps em quatro operações:
+    1. `{` → **abreEscopo**: empilha um HashMap vazio.
+    2. `inteiro x;` → **declara**: põe x no HashMap do TOPO (se já estiver lá: erro de redeclaração).
+    3. uso de `x` → **busca**: procura do topo para baixo; o primeiro que achar ganha (é isso que faz o x de dentro esconder o de fora).
+    4. `}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.
+CODIGO (TipoDado.java e Simbolo.java):
+    public enum TipoDado { INTEIRO, LOGICO, CARACTERE }
+    
+    public class Simbolo {
+        public final String nome;      // como está no fonte: "x"
+        public final TipoDado tipo;
+        public final String rotulo;    // endereço no MIPS: "x_1" (único no programa todo)
+        public final int linhaDecl;    // para mensagens de erro caprichadas
+    
+        public Simbolo(String nome, TipoDado tipo, String rotulo, int linhaDecl) {
+            this.nome = nome; this.tipo = tipo; this.rotulo = rotulo; this.linhaDecl = linhaDecl;
+        }
+    }
+CODIGO (TabelaSimbolos.java, a classe inteira cabe numa tela):
+    import java.util.ArrayDeque;
+    import java.util.Deque;
+    import java.util.HashMap;
+    import java.util.Map;
+    
+    public class TabelaSimbolos {
+        private final Deque<Map<String, Simbolo>> escopos = new ArrayDeque<>();
+        private int contador = 0;                  // deixa cada rótulo único: x_0, x_1...
+    
+        public void abreEscopo()  { escopos.push(new HashMap<>()); }
+        public void fechaEscopo() { escopos.pop(); }
+    
+        public Simbolo declara(String nome, TipoDado tipo, int linha) {
+            Map<String, Simbolo> topo = escopos.peek();
+            Simbolo antigo = topo.get(nome);
+            if (antigo != null)
+                throw new ErroCompilacao(linha, "erro semântico: '" + nome
+                    + "' já foi declarado neste escopo (linha " + antigo.linhaDecl + ")");
+            Simbolo s = new Simbolo(nome, tipo, nome + "_" + (contador++), linha);
+            topo.put(nome, s);
+            return s;
+        }
+    
+        public Simbolo busca(String nome) {        // do escopo mais interno para o mais externo
+            for (Map<String, Simbolo> escopo : escopos) {   // ArrayDeque itera a partir do topo
+                Simbolo s = escopo.get(nome);
+                if (s != null) return s;
+            }
+            return null;
+        }
+    }
+[PILHA] Busca? Eu começo… pelo topo. Não achou? Desço um andar. Não achou? Desço mais. Chegou no chão… e nada? Não declarado.
+DESTAQUE WATCH_OUT: Armadilha do Java: se você usar `java.util.Stack` em vez de `ArrayDeque`, o for-each percorre a pilha de BAIXO para CIMA! A busca acha o x de FORA primeiro e o sombreamento quebra sem nenhuma mensagem de erro. Com `ArrayDeque` + `push`, a iteração começa no topo.
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que o rótulo `x_1` e não só `x`? R: Dois motivos. (1) Os dois x do exemplo precisam de DOIS endereços diferentes no `.data`: se ambos fossem `x`, o MARS reclamaria de rótulo duplicado. (2) Variáveis chamadas `b`, `j` ou `add` coincidem com instruções MIPS e podem confundir o montador. O sufixo resolve os dois.
+CODIGO (No Sintatico: o parser agora abre/fecha escopos e registra/consulta nomes):
+    private final TabelaSimbolos tabela = new TabelaSimbolos();
+    
+    private void bloco() {
+        casaToken(TipoToken.ABRE_CHAVE);
+        tabela.abreEscopo();
+        while (comecaComando()) comando();
+        tabela.fechaEscopo();
+        casaToken(TipoToken.FECHA_CHAVE);
+    }
+    
+    private void declaracao() {               // tipo ID { , ID } ;
+        TipoDado t = tipo();
+        declaraUm(t);
+        while (eh(TipoToken.VIRGULA)) {
+            avanca();
+            declaraUm(t);                      // o MESMO tipo desce para cada ID
+        }
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private void declaraUm(TipoDado t) {
+        Token id = casaToken(TipoToken.ID);
+        tabela.declara(id.lexema, t, id.linha);
+    }
+    
+    private TipoDado tipo() {
+        if (!eh(TipoToken.INTEIRO, TipoToken.LOGICO, TipoToken.CARACTERE))
+            throw erroEsperava("um tipo");
+        return switch (avanca().tipo) {
+            case INTEIRO -> TipoDado.INTEIRO;
+            case LOGICO  -> TipoDado.LOGICO;
+            default      -> TipoDado.CARACTERE;
+        };
+    }
+    
+    private Simbolo usa(Token id) {           // toda vez que um ID aparece numa expressão/atribuição
+        Simbolo s = tabela.busca(id.lexema);
+        if (s == null)
+            throw new ErroCompilacao(id.linha, "erro semântico: '" + id.lexema + "' não foi declarado");
+        return s;
+    }
+TEXTO: Onde chamar `usa(...)`? Em todo lugar que um ID aparece sem ser declaração: em `atribuicao()` (o destino), em `leia()` e em `primario()`. No capítulo 7 o `Simbolo` devolvido vai dizer o TIPO; no 8, o RÓTULO de memória.
+PASSOS A tabela durante escopos.byt:
+    1. Linha 1, `{` do programa: pilha = [ {} ]
+    2. Linha 2: pilha = [ {x→x_0 inteiro} ]
+    3. Linha 4, `{`: pilha = [ {}, {x→x_0} ] (topo à esquerda)
+    4. Linhas 5 e 7: topo = {x→x_1 caractere, y→y_2 inteiro}
+    5. Linha 6: busca(x) acha x_1 no topo, o caractere.
+    6. Linha 9, `}`: desempilha. Pilha = [ {x→x_0} ]
+    7. Linha 10: busca(x) acha x_0. Linha 11: busca(y) → null → erro semântico!
+DESTAQUE NO_DUMB_QUESTIONS: P: Pode declarar um x no bloco interno se já existe um x fora? R: Depende da linguagem! C permite (sombreamento). Java PROÍBE redeclarar uma variável local num bloco interno. A Byteiro permite. Qualquer escolha vale, desde que esteja escrita no relatório e o compilador faça o que está escrito.
+DESTAQUE EXAM_TIP: Questão clássica: dado um programa com blocos aninhados, diga a qual declaração cada uso se refere (e quais usos são erro). O jogo Esconde-Esconde do Escopo treina exatamente isso.
+DESTAQUE REAL_WORLD: Compiladores reais guardam bem mais no Simbolo: tamanho, deslocamento no registro de ativação (offset relativo ao frame pointer), se é parâmetro, se foi usado (é daí que vem o aviso 'unused variable').
+REVELAR: E se a Byteiro ganhasse funções com variáveis locais?
+    RESPOSTA: Cada função abriria um escopo para parâmetros e locais, e as locais morariam na PILHA de execução (offset do frame), não no `.data`, para que cada chamada recursiva tenha a sua cópia. Veja a região de registros de ativação na Forja do Código.
+
+=== CAPITULO 7: Verificação de tipos (ATTRIBUTES_TYPES)
+Resumo: Cada método de expressão devolve o TIPO do que reconheceu; atribuição e condição conferem as regras.
+[BYTE] Olha isso: `logico ok; ok <- 3 * 'A';` passa no meu parser! Não deveria dar erro?
+[PROF] Deveria. A forma está certa; o SENTIDO não. A ideia: cada método de expressão para de ser `void` e passa a **devolver o tipo** do pedaço que reconheceu. O tipo sobe da folha para a raiz, é um **atributo sintetizado**.
+WIDGET ATTR_TREE gramatica= entrada=a + 1 > b && ok legenda=O tipo subindo pela árvore (no widget a sintaxe é de C: `&&` é o nosso `e`; a e b são inteiros, ok é lógico).
+CODIGO (Regras de tipo das expressões da Byteiro (vão para o relatório)):
+    Operador           Operandos                  Resultado
+    -----------------  -------------------------  ---------
+    +  -  *  /  %      numérico, numérico         inteiro
+    -  (unário)        numérico                   inteiro
+    <  >  <=  >=       numérico, numérico         logico
+    =  <>              numérico, numérico         logico
+                       logico, logico             logico
+    e  ou              logico, logico             logico
+    nao                logico                     logico
+    
+    numérico = inteiro ou caractere ('A' vale 65 nas contas)
+CODIGO (Regras da atribuição: conversão implícita só no sentido que não perde informação):
+    destino       valor        resultado
+    ---------     ---------    -----------------------------------------
+    inteiro   <-  inteiro      ok
+    inteiro   <-  caractere    ok (conversão implícita: 'A' vira 65)
+    caractere <-  caractere    ok
+    caractere <-  inteiro      ERRO (300 não cabe num caractere)
+    logico    <-  logico       ok
+    qualquer outra combinação  ERRO
+PREVEJA: Com `inteiro n; caractere c;`, qual destas linhas dá erro semântico?
+    (     ) n <- c + 1;
+    (     ) n <- c;
+    (certa) c <- c + 1;
+    (     ) c <- 'Z';
+    EXPLICACAO: `c + 1` é numérico + numérico → **inteiro**. Guardar inteiro em caractere é proibido (poderia não caber). Já `n <- c + 1` e `n <- c` estão ok: caractere sobe para inteiro sem perder nada.
+CODIGO (Ajudantes de tipo no Sintatico):
+    private static boolean numerico(TipoDado t) {
+        return t == TipoDado.INTEIRO || t == TipoDado.CARACTERE;
+    }
+    
+    private void exige(boolean ok, int linha, String msg) {
+        if (!ok) throw new ErroCompilacao(linha, "erro semântico: " + msg);
+    }
+    
+    private static boolean podeAtribuir(TipoDado destino, TipoDado valor) {
+        return destino == valor || (destino == TipoDado.INTEIRO && valor == TipoDado.CARACTERE);
+    }
+    
+    private void checaComparacao(Token op, TipoDado a, TipoDado b) {
+        boolean igualdade = op.tipo == TipoToken.IGUAL || op.tipo == TipoToken.DIFERENTE;
+        boolean ok = (numerico(a) && numerico(b))
+                  || (igualdade && a == TipoDado.LOGICO && b == TipoDado.LOGICO);
+        exige(ok, op.linha, "não dá para comparar " + a + " " + op.lexema + " " + b);
+    }
+CODIGO (A cascata agora devolve TipoDado, o mesmo esqueleto do capítulo 5):
+    private TipoDado exprAdd() {
+        TipoDado t = exprMul();
+        while (eh(TipoToken.MAIS, TipoToken.MENOS)) {
+            Token op = avanca();
+            TipoDado d = exprMul();
+            exige(numerico(t) && numerico(d), op.linha,
+                  "'" + op.lexema + "' precisa de números, recebeu " + t + " e " + d);
+            t = TipoDado.INTEIRO;
+        }
+        return t;
+    }
+    // exprMul é igual, com VEZES, DIV e MOD
+    
+    private TipoDado exprRel() {
+        TipoDado t = exprAdd();
+        if (eh(TipoToken.IGUAL, TipoToken.DIFERENTE, TipoToken.MENOR, TipoToken.MAIOR,
+               TipoToken.MENOR_IGUAL, TipoToken.MAIOR_IGUAL)) {
+            Token op = avanca();
+            TipoDado d = exprAdd();
+            checaComparacao(op, t, d);
+            t = TipoDado.LOGICO;                 // comparação SEMPRE produz logico
+        }
+        return t;
+    }
+    
+    private TipoDado exprE() {
+        TipoDado t = exprRel();
+        while (eh(TipoToken.E)) {
+            Token op = avanca();
+            TipoDado d = exprRel();
+            exige(t == TipoDado.LOGICO && d == TipoDado.LOGICO, op.linha, "'e' precisa de dois logico");
+        }
+        return t;
+    }
+    // expr é igual, com OU
+CODIGO (Folhas da árvore: literais têm tipo fixo; identificadores perguntam à tabela de símbolos):
+    private TipoDado exprUn() {
+        if (eh(TipoToken.NAO)) {
+            Token op = avanca();
+            exige(exprUn() == TipoDado.LOGICO, op.linha, "'nao' precisa de um logico");
+            return TipoDado.LOGICO;
+        }
+        if (eh(TipoToken.MENOS)) {
+            Token op = avanca();
+            exige(numerico(exprUn()), op.linha, "'-' unário precisa de um número");
+            return TipoDado.INTEIRO;
+        }
+        return primario();
+    }
+    
+    private TipoDado primario() {
+        Token t = tok;
+        if (eh(TipoToken.NUM))  { avanca(); return TipoDado.INTEIRO; }
+        if (eh(TipoToken.CHAR)) { avanca(); return TipoDado.CARACTERE; }
+        if (eh(TipoToken.VERDADEIRO, TipoToken.FALSO)) { avanca(); return TipoDado.LOGICO; }
+        if (eh(TipoToken.ID))   { avanca(); return usa(t).tipo; }   // o tipo vem da tabela!
+        if (eh(TipoToken.ABRE_PAR)) {
+            avanca();
+            TipoDado d = expr();
+            casaToken(TipoToken.FECHA_PAR);
+            return d;
+        }
+        throw erroEsperava("uma expressão");
+    }
+CODIGO (Comandos: atribuição confere a compatibilidade; se/enquanto exigem condição logico):
+    private void atribuicao() {
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = usa(id);
+        Token seta = casaToken(TipoToken.ATRIB);
+        TipoDado t = expr();
+        exige(podeAtribuir(s.tipo, t), seta.linha,
+              "não dá para guardar " + t + " em '" + s.nome + "' (" + s.tipo + ")");
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private void condicao() {                     // ( expr ), usado por se e enquanto
+        casaToken(TipoToken.ABRE_PAR);
+        int linha = tok.linha;
+        exige(expr() == TipoDado.LOGICO, linha, "a condição precisa ser logico");
+        casaToken(TipoToken.FECHA_PAR);
+    }
+DESTAQUE WATCH_OUT: Bug campeão: em `exprRel`, esquecer o `t = TipoDado.LOGICO`. Aí `a < b` 'tem tipo' inteiro, `se (a < b)` dá erro de condição e `x <- a < b` passa para um inteiro. Comparação SEMPRE produz logico, não importa o tipo dos lados.
+PASSOS Os tipos subindo em `ok <- c + 1 > n e nao ok;` (c caractere, n inteiro, ok logico):
+    1. `primario` de c → CARACTERE; de 1 → INTEIRO.
+    2. `exprAdd`: numérico + numérico → INTEIRO.
+    3. `primario` de n → INTEIRO. `exprRel`: INTEIRO > INTEIRO → LOGICO.
+    4. `exprUn`: nao LOGICO → LOGICO.
+    5. `exprE`: LOGICO e LOGICO → LOGICO.
+    6. `atribuicao`: podeAtribuir(LOGICO, LOGICO) → ✓.
+PREVEJA: `inteiro n; … se (n) { … }` na Byteiro:
+    (     ) Compila: n diferente de 0 é verdadeiro, como em C
+    (certa) Erro semântico: a condição precisa ser logico
+    (     ) Erro sintático: esperava comparação
+    (     ) Compila com aviso
+    EXPLICACAO: A Byteiro é 'estilo Java': condição tem que ser logico. Sintaticamente `(n)` é uma expressão perfeita; quem barra é a checagem de tipo do `condicao()`. Escreva `se (n <> 0)`.
+DESTAQUE REAL_WORLD: Cada linguagem escolhe. C converte inteiro para booleano sem pedir licença; JavaScript faz `'5' * 2` dar 10; Java exige boolean no if. Nenhuma está 'certa', o que importa é a regra estar escrita e o compilador obedecê-la.
+DESTAQUE NO_DUMB_QUESTIONS: P: A conversão caractere → inteiro gera alguma instrução? R: Não! O caractere já mora na memória como número (65). A 'conversão' existe só na tabela de tipos. Já em C, int → float gera uma instrução de verdade no MIPS (`cvt.s.w`), porque a representação muda.
+CODIGO (Cinco testes semânticos com a saída esperada, copie para testes/erro/):
+    programa t { logico ok; ok <- 3 * 'A'; }
+      -> linha 1: erro semântico: não dá para guardar INTEIRO em 'ok' (LOGICO)
+    programa t { inteiro n; se (n) { } }
+      -> linha 1: erro semântico: a condição precisa ser logico
+    programa t { inteiro n; n <- verdadeiro + 1; }
+      -> linha 1: erro semântico: '+' precisa de números, recebeu LOGICO e INTEIRO
+    programa t { x <- 1; }
+      -> linha 1: erro semântico: 'x' não foi declarado
+    programa t { inteiro a; caractere a; }
+      -> linha 1: erro semântico: 'a' já foi declarado neste escopo (linha 1)
+DESTAQUE EXAM_TIP: Atributo **sintetizado** sobe (o tipo da expressão, calculado a partir dos filhos). Atributo **herdado** desce: em `inteiro a, b, c;` o tipo é passado como parâmetro para `declaraUm(t)` de cada ID. Seu TP tem os dois: cite isso no relatório!
+REVELAR: A verificação de tipos precisa ser uma fase separada, com uma árvore?
+    RESPOSTA: Não necessariamente. No esquema de uma passada ela vive DENTRO do parser (tradução dirigida pela sintaxe). Construir uma AST e depois visitá-la também é válido, e facilita otimizações maiores, mas dá mais código. Para o TP, uma passada é o caminho mais curto.
+
+=== CAPITULO 8: Gerando MIPS para o MARS (CODEGEN_MIPS)
+Resumo: Expressões em registradores temporários, variáveis no .data, rótulos para se/enquanto, syscalls para escrever.
+[PROF] Hora da Forja. Cada método, além de conferir tipos, agora **emite** o seu pedaço de assembly. Primeiro, o kit mínimo de MIPS que o gerador usa.
+CODIGO (Cola de MIPS do TP: só isto já compila a Byteiro inteira):
+    .data                         # seção de dados (variáveis globais)
+    n_0:  .word 0                 # um inteiro de 32 bits, começa em 0
+    str0: .asciiz "soma = "       # string terminada em \0
+    .text                         # seção de código
+    main:
+        li   $t0, 42              # $t0 = 42                     (load immediate)
+        lw   $t0, n_0             # $t0 = memória[n_0]           (load word)
+        sw   $t0, n_0             # memória[n_0] = $t0           (store word)
+        add  $t0, $t0, $t1        # também sub, mul, div, rem, and, or
+        slt  $t0, $t0, $t1        # $t0 = ($t0 < $t1) ? 1 : 0    (e sgt, sle, sge, seq, sne)
+        xori $t0, $t0, 1          # troca 0 <-> 1: o nosso 'nao'
+        beq  $t0, $zero, rotulo   # se $t0 == 0, pula para rotulo
+        j    rotulo               # pula sempre
+    rotulo:                       # um rótulo dá nome a um endereço do código
+        la   $a0, str0            # $a0 = ENDEREÇO da string
+        li   $v0, 1               # escolhe o serviço do syscall:
+        syscall                   #   1 = escreve inteiro de $a0   4 = string   11 = caractere
+                                  #   5 = lê inteiro em $v0       12 = lê caractere   10 = encerra
+WIDGET MIPS gramatica= entrada=a * b + c * d legenda=O widget usa o estilo 'tudo na memória' (cada temporário vira um .word). Nosso gerador vai guardar os temporários em registradores $t0–$t9.
+TEXTO: A estratégia de expressões: os registradores `$t0…$t9` funcionam como uma **pilha**. Cada método de expressão pega o próximo registrador livre, deixa o resultado nele e devolve QUAL é. Uma operação binária faz `esq = esq op dir` e devolve o `dir` ao estoque — ele sempre é o mais novo.
+CODIGO (A infraestrutura do gerador (dentro do Sintatico, Java 17)):
+    private record Res(TipoDado tipo, String reg) {}             // tipo + onde está o valor
+    
+    private final StringBuilder dados   = new StringBuilder();   // .word das variáveis
+    private final StringBuilder strings = new StringBuilder();   // .asciiz do escreva
+    private final StringBuilder codigo  = new StringBuilder();   // .text
+    private int proxTemp = 0, proxRotulo = 0, proxString = 0;
+    
+    private void emite(String instr)       { codigo.append("    ").append(instr).append('\n'); }
+    private void rotulo(String r)          { codigo.append(r).append(":\n"); }
+    private String novoRotulo(String base) { return base + (proxRotulo++); }
+    
+    private String novoTemp() {                                   // $t0..$t9, em pilha
+        if (proxTemp > 9)
+            throw new ErroCompilacao(tok.linha, "expressão complexa demais (faltaram registradores)");
+        return "$t" + (proxTemp++);
+    }
+    private void liberaTemp() { proxTemp--; }
+    
+    public String compila() {
+        programa();
+        emite("li $v0, 10");                                      // syscall 10 = encerra
+        emite("syscall");
+        return "# gerado pelo compilador Byteiro\n.data\n" + dados + strings
+             + ".text\nmain:\n" + codigo;
+    }
+    
+    private void declaraUm(TipoDado t) {
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = tabela.declara(id.lexema, t, id.linha);
+        dados.append(s.rotulo).append(": .word 0\n");             // toda variável ganha um .word
+    }
+CODIGO (As folhas e os unários: cada folha ocupa UM registrador novo):
+    private Res primario() {
+        Token t = tok;
+        if (eh(TipoToken.ABRE_PAR)) {
+            avanca();
+            Res e = expr();
+            casaToken(TipoToken.FECHA_PAR);
+            return e;
+        }
+        if (eh(TipoToken.ID)) {
+            avanca();
+            Simbolo s = usa(t);
+            String r = novoTemp();
+            emite("lw " + r + ", " + s.rotulo);
+            return new Res(s.tipo, r);
+        }
+        if (eh(TipoToken.NUM, TipoToken.CHAR, TipoToken.VERDADEIRO, TipoToken.FALSO)) {
+            avanca();
+            int valor;
+            TipoDado tipo;
+            if (t.tipo == TipoToken.NUM)       { valor = Integer.parseInt(t.lexema); tipo = TipoDado.INTEIRO; }
+            else if (t.tipo == TipoToken.CHAR) { valor = t.lexema.charAt(0);         tipo = TipoDado.CARACTERE; }
+            else { valor = t.tipo == TipoToken.VERDADEIRO ? 1 : 0;                  tipo = TipoDado.LOGICO; }
+            String r = novoTemp();
+            emite("li " + r + ", " + valor);
+            return new Res(tipo, r);
+        }
+        throw erroEsperava("uma expressão");
+    }
+    
+    private Res exprUn() {
+        if (eh(TipoToken.NAO)) {
+            Token op = avanca();
+            Res v = exprUn();
+            exige(v.tipo() == TipoDado.LOGICO, op.linha, "'nao' precisa de um logico");
+            emite("xori " + v.reg() + ", " + v.reg() + ", 1");     // 0 vira 1, 1 vira 0
+            return v;
+        }
+        if (eh(TipoToken.MENOS)) {
+            Token op = avanca();
+            Res v = exprUn();
+            exige(numerico(v.tipo()), op.linha, "'-' unário precisa de um número");
+            emite("sub " + v.reg() + ", $zero, " + v.reg());       // 0 - v
+            return new Res(TipoDado.INTEIRO, v.reg());
+        }
+        return primario();
+    }
+CODIGO (Operações binárias: o resultado fica no registrador da ESQUERDA):
+    private void binaria(String instr, Res esq, Res dir) {        // esq = esq op dir
+        emite(instr + " " + esq.reg() + ", " + esq.reg() + ", " + dir.reg());
+        liberaTemp();                                             // dir era o mais novo
+    }
+    
+    private Res exprMul() {
+        Res esq = exprUn();
+        while (eh(TipoToken.VEZES, TipoToken.DIV, TipoToken.MOD)) {
+            Token op = avanca();
+            Res dir = exprUn();
+            exige(numerico(esq.tipo()) && numerico(dir.tipo()), op.linha,
+                  "'" + op.lexema + "' precisa de números, recebeu " + esq.tipo() + " e " + dir.tipo());
+            binaria(op.tipo == TipoToken.VEZES ? "mul" : op.tipo == TipoToken.DIV ? "div" : "rem", esq, dir);
+            esq = new Res(TipoDado.INTEIRO, esq.reg());
+        }
+        return esq;
+    }
+    // exprAdd: igual, com MAIS/MENOS -> "add"/"sub"
+    
+    private Res exprRel() {
+        Res esq = exprAdd();
+        if (eh(TipoToken.IGUAL, TipoToken.DIFERENTE, TipoToken.MENOR, TipoToken.MAIOR,
+               TipoToken.MENOR_IGUAL, TipoToken.MAIOR_IGUAL)) {
+            Token op = avanca();
+            Res dir = exprAdd();
+            checaComparacao(op, esq.tipo(), dir.tipo());
+            String instr = switch (op.tipo) {
+                case IGUAL       -> "seq";
+                case DIFERENTE   -> "sne";
+                case MENOR       -> "slt";
+                case MAIOR       -> "sgt";
+                case MENOR_IGUAL -> "sle";
+                default          -> "sge";
+            };
+            binaria(instr, esq, dir);
+            esq = new Res(TipoDado.LOGICO, esq.reg());
+        }
+        return esq;
+    }
+    
+    private Res exprE() {
+        Res esq = exprRel();
+        while (eh(TipoToken.E)) {
+            Token op = avanca();
+            Res dir = exprRel();
+            exige(esq.tipo() == TipoDado.LOGICO && dir.tipo() == TipoDado.LOGICO, op.linha,
+                  "'e' precisa de dois logico");
+            binaria("and", esq, dir);                             // 0/1 and 0/1
+        }
+        return esq;
+    }
+    // expr: igual, com OU -> "or"
+PREVEJA: Quantos registradores $t ficam ocupados AO MESMO TEMPO, no pico, ao gerar `a + b * c`?
+    (     ) 1
+    (     ) 2
+    (certa) 3
+    (     ) 5
+    EXPLICACAO: a → $t0; o `+` chama exprMul: b → $t1, c → $t2 (pico: 3!). `mul $t1, $t1, $t2` libera o $t2; `add $t0, $t0, $t1` libera o $t1. Sobra só o $t0 com o resultado.
+PASSOS `soma <- soma + n * 2;` virando MIPS:
+    1. `primario(soma)` → `lw $t0, soma_1`
+    2. `+` → exprMul → `primario(n)` → `lw $t1, n_0`
+    3. `*` → `primario(2)` → `li $t2, 2`
+    4. binaria → `mul $t1, $t1, $t2` (libera $t2)
+    5. binaria → `add $t0, $t0, $t1` (libera $t1)
+    6. atribuicao → `sw $t0, soma_1` (libera $t0 — de volta a zero registradores ocupados)
+CODIGO (Atribuição, se e enquanto: o esquema de tradução com rótulos):
+    private void atribuicao() {
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = usa(id);
+        Token seta = casaToken(TipoToken.ATRIB);
+        Res v = expr();
+        exige(podeAtribuir(s.tipo, v.tipo()), seta.linha,
+              "não dá para guardar " + v.tipo() + " em '" + s.nome + "' (" + s.tipo + ")");
+        emite("sw " + v.reg() + ", " + s.rotulo);
+        liberaTemp();
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+    
+    private String condicao() {                  // ( expr ) — devolve o registrador com 0/1
+        casaToken(TipoToken.ABRE_PAR);
+        int linha = tok.linha;
+        Res c = expr();
+        exige(c.tipo() == TipoDado.LOGICO, linha, "a condição precisa ser logico");
+        casaToken(TipoToken.FECHA_PAR);
+        liberaTemp();                            // o valor continua no registrador até o beq
+        return c.reg();
+    }
+    
+    private void se() {
+        casaToken(TipoToken.SE);
+        String c = condicao();
+        String senao = novoRotulo("senao"), fim = novoRotulo("fimse");
+        emite("beq " + c + ", $zero, " + senao);   // falso? pula o bloco do então
+        bloco();
+        if (eh(TipoToken.SENAO)) {
+            avanca();
+            emite("j " + fim);                     // o então terminou: pula o senão
+            rotulo(senao);
+            bloco();
+            rotulo(fim);
+        } else {
+            rotulo(senao);                         // sem senão, 'senao' É o fim
+        }
+    }
+    
+    private void enquanto() {
+        casaToken(TipoToken.ENQUANTO);
+        String inicio = novoRotulo("enquanto"), fim = novoRotulo("fimenq");
+        rotulo(inicio);                            // a condição é refeita a cada volta
+        String c = condicao();
+        emite("beq " + c + ", $zero, " + fim);
+        bloco();
+        emite("j " + inicio);
+        rotulo(fim);
+    }
+CODIGO (Os dois moldes (templates) que você vai desenhar no relatório):
+    # se (cond) { A } senao { B }        # enquanto (cond) { C }
+        <cond em $t0>                    enquantoN:
+        beq $t0, $zero, senaoK               <cond em $t0>
+        <código de A>                        beq $t0, $zero, fimenqM
+        j fimseL                             <código de C>
+    senaoK:                                  j enquantoN
+        <código de B>                    fimenqM:
+    fimseL:
+CODIGO (Entrada e saída com syscall):
+    private void escreva() {
+        casaToken(TipoToken.ESCREVA);
+        casaToken(TipoToken.ABRE_PAR);
+        argumento();
+        while (eh(TipoToken.VIRGULA)) { avanca(); argumento(); }
+        casaToken(TipoToken.FECHA_PAR);
+        casaToken(TipoToken.PONTO_VIRGULA);
+        emite("li $a0, 10");                       // '\n' no fim de cada escreva
+        emite("li $v0, 11");
+        emite("syscall");
+    }
+    
+    private void argumento() {
+        if (eh(TipoToken.STRING)) {
+            Token s = avanca();
+            String r = "str" + (proxString++);
+            strings.append(r).append(": .asciiz \"").append(s.lexema).append("\"\n");
+            emite("la $a0, " + r);
+            emite("li $v0, 4");
+        } else {
+            Res e = expr();
+            emite("move $a0, " + e.reg());
+            emite("li $v0, " + (e.tipo() == TipoDado.CARACTERE ? 11 : 1));
+            liberaTemp();
+        }
+        emite("syscall");
+    }
+    
+    private void leia() {
+        casaToken(TipoToken.LEIA);
+        casaToken(TipoToken.ABRE_PAR);
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = usa(id);
+        exige(s.tipo != TipoDado.LOGICO, id.linha, "não dá para ler um logico");
+        emite("li $v0, " + (s.tipo == TipoDado.CARACTERE ? 12 : 5));
+        emite("syscall");                          // o valor lido chega em $v0
+        emite("sw $v0, " + s.rotulo);
+        casaToken(TipoToken.FECHA_PAR);
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+DESTAQUE WATCH_OUT: `div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`.
+CODIGO (De novo o contagem.byt do capítulo 2…):
+    programa contagem {
+        inteiro n, soma;
+        caractere c;
+        n <- 5;
+        soma <- 0;
+        enquanto (n > 0) {
+            soma <- soma + n * 2;   // acumula o dobro
+            n <- n - 1;
+        }
+        c <- 'A';
+        se (soma >= 30 e nao (n <> 0)) {
+            escreva("soma = ", soma);
+        } senao {
+            escreva("pouco: ", c);
+        }
+    }
+CODIGO (…e o saida.asm COMPLETO que o nosso compilador gera para ele):
+    # gerado pelo compilador Byteiro
+    .data
+    n_0: .word 0
+    soma_1: .word 0
+    c_2: .word 0
+    str0: .asciiz "soma = "
+    str1: .asciiz "pouco: "
+    .text
+    main:
+        li $t0, 5
+        sw $t0, n_0
+        li $t0, 0
+        sw $t0, soma_1
+    enquanto0:
+        lw $t0, n_0
+        li $t1, 0
+        sgt $t0, $t0, $t1
+        beq $t0, $zero, fimenq1
+        lw $t0, soma_1
+        lw $t1, n_0
+        li $t2, 2
+        mul $t1, $t1, $t2
+        add $t0, $t0, $t1
+        sw $t0, soma_1
+        lw $t0, n_0
+        li $t1, 1
+        sub $t0, $t0, $t1
+        sw $t0, n_0
+        j enquanto0
+    fimenq1:
+        li $t0, 65
+        sw $t0, c_2
+        lw $t0, soma_1
+        li $t1, 30
+        sge $t0, $t0, $t1
+        lw $t1, n_0
+        li $t2, 0
+        sne $t1, $t1, $t2
+        xori $t1, $t1, 1
+        and $t0, $t0, $t1
+        beq $t0, $zero, senao2
+        la $a0, str0
+        li $v0, 4
+        syscall
+        lw $t0, soma_1
+        move $a0, $t0
+        li $v0, 1
+        syscall
+        li $a0, 10
+        li $v0, 11
+        syscall
+        j fimse3
+    senao2:
+        la $a0, str1
+        li $v0, 4
+        syscall
+        lw $t0, c_2
+        move $a0, $t0
+        li $v0, 11
+        syscall
+        li $a0, 10
+        li $v0, 11
+        syscall
+    fimse3:
+        li $v0, 10
+        syscall
+PASSOS Rodando no MARS:
+    1. Baixe o MARS (um .jar, ex.: `Mars4_5.jar`), precisa de Java instalado.
+    2. Gráfico: `java -jar Mars4_5.jar` → File › Open → `saida.asm`.
+    3. Run › Assemble (F3). Erro aqui = o SEU gerador emitiu algo que não é MIPS válido.
+    4. Run › Go (F5). A saída aparece na aba **Run I/O**: `soma = 30`.
+    5. Linha de comando (ótimo para testes automáticos): `java -jar Mars4_5.jar nc saida.asm` (nc = sem o aviso de copyright).
+    6. Depurando: use Step (F7) e olhe a aba Registers — dá para ver $t0 mudar a cada instrução.
+DESTAQUE WATCH_OUT: Esqueceu o `li $v0, 10` + `syscall` no final? O processador continua executando o que estiver depois do seu código, e o MARS termina com um aviso de 'dropped off bottom'. Encerre sempre explicitamente.
+PREVEJA: Se `novoRotulo` devolvesse sempre `"fimse"`, sem o contador, o que aconteceria num programa com dois `se`?
+    (     ) Nada: rótulos podem repetir
+    (certa) O MARS recusa na montagem: rótulo definido duas vezes
+    (     ) O segundo se pularia para o primeiro fimse
+    (     ) O Java dá erro de compilação
+    EXPLICACAO: Rótulo é um NOME de endereço: dois iguais é ambiguidade, e o montador recusa. Por isso o contador global, e por isso todo teste do TP deve ter `se` dentro de `se` e `enquanto` dentro de `enquanto`.
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que `.word` (4 bytes) até para logico e caractere? R: Simplicidade: tudo usa `lw`/`sw`, sem pensar em alinhamento. Dá para usar `.byte` com `lb`/`sb` para caractere, economiza 3 bytes por variável e acrescenta um monte de casos especiais. Num TP, uniformidade ganha.
+DESTAQUE REAL_WORLD: Esse estilo: toda variável na memória, carrega, opera, guarda, é parecido com o que o GCC faz com `-O0`. Os compiladores de verdade só ficam espertos (variáveis morando em registradores) quando você liga a otimização.
+REVELAR: Uma expressão aninhada à direita com 11 operandos (`a + (b + (c + …))`) esgota $t0–$t9. Como resolver?
+    RESPOSTA: Opções: (1) **derramar** (spill) para a pilha: `addi $sp, $sp, -4` + `sw $t9, 0($sp)` e desempilhar depois; (2) usar também $s0–$s7; (3) avaliar primeiro o lado que precisa de mais registradores (numeração de Sethi-Ullman). Para o TP, documentar o limite já costuma bastar.
+
+=== CAPITULO 9: Otimizações simples e bateria de testes (OPTIMIZATION)
+Resumo: Dobrar constantes, cortar código morto, um peephole de leve, e testes que provam que nada quebrou.
+[BYTE] `x <- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?
+[PROF] Vai: a não ser que o compilador calcule antes. Isso é **dobramento de constantes** (constant folding): se os dois lados de uma operação são conhecidos na compilação, faça a conta no Java e emita só o resultado.
+WIDGET TAC gramatica= entrada=a + 2 * 3 legenda=Repare na instrução de `2 * 3`: os dois operandos são constantes. O compilador pode fazer essa conta sozinho.
+TEXTO: O truque para encaixar isso no gerador de uma passada: o `Res` ganha um terceiro campo, `constante`. Uma folha numérica **reserva** o registrador, mas **adia** o `li`. Se a próxima operação também recebe uma constante, a conta é feita em Java e nenhum código sai. Só quando alguém realmente precisa do valor num registrador é que o `li` é emitido.
+CODIGO (Dobramento de constantes: o Res agora pode carregar um valor conhecido):
+    private record Res(TipoDado tipo, String reg, Integer constante) {
+        Res(TipoDado tipo, String reg) { this(tipo, reg, null); }   // valor só em execução
+    }
+    
+    private Res constante(TipoDado tipo, int valor) {     // reserva o registrador, NÃO emite li
+        return new Res(tipo, novoTemp(), valor);
+    }
+    
+    private String noRegistrador(Res r) {                 // materializa quando precisar
+        if (r.constante() != null) emite("li " + r.reg() + ", " + r.constante());
+        return r.reg();
+    }
+    
+    private Res binaria(Token op, String instr, Res esq, Res dir, TipoDado tipoRes) {
+        if (esq.constante() != null && dir.constante() != null) {
+            Integer v = calcula(op.tipo, esq.constante(), dir.constante());
+            if (v != null) {                               // DOBROU: zero instruções
+                liberaTemp();
+                return new Res(tipoRes, esq.reg(), v);
+            }
+        }
+        String a = noRegistrador(esq), b = noRegistrador(dir);
+        emite(instr + " " + a + ", " + a + ", " + b);
+        liberaTemp();
+        return new Res(tipoRes, a);
+    }
+    
+    private static Integer calcula(TipoToken op, int a, int b) {
+        return switch (op) {
+            case MAIS        -> a + b;
+            case MENOS       -> a - b;
+            case VEZES       -> a * b;
+            case DIV         -> b == 0 ? null : a / b;     // por zero: deixa para a execução
+            case MOD         -> b == 0 ? null : a % b;
+            case IGUAL       -> a == b ? 1 : 0;
+            case DIFERENTE   -> a != b ? 1 : 0;
+            case MENOR       -> a < b ? 1 : 0;
+            case MAIOR       -> a > b ? 1 : 0;
+            case MENOR_IGUAL -> a <= b ? 1 : 0;
+            case MAIOR_IGUAL -> a >= b ? 1 : 0;
+            case E           -> a & b;
+            case OU          -> a | b;
+            default          -> null;
+        };
+    }
+TEXTO: No resto do gerador são três trocas mecânicas: (1) em `primario`, literais viram `return constante(tipo, valor);` em vez de `novoTemp()` + `li`; (2) cada `binaria(instr, esq, dir); esq = new Res(...)` vira `esq = binaria(op, instr, esq, dir, tipo);`; (3) todo lugar que usava `x.reg()` para emitir (`sw`, `move`, `beq`, `xori`, `sub`) passa a usar `noRegistrador(x)`. Nos unários: se o operando é constante, devolva `-c` ou `1 - c` sem emitir nada.
+CODIGO (Seis instruções viram duas):
+    # x <- 2 * 60 + 1;   SEM dobramento        # COM dobramento
+        li  $t0, 2                                 li  $t0, 121
+        li  $t1, 60                                sw  $t0, x_0
+        mul $t0, $t0, $t1
+        li  $t1, 1
+        add $t0, $t0, $t1
+        sw  $t0, x_0
+PREVEJA: Com esse dobramento, `y <- a + 2 + 3;` vira `a + 5`?
+    (     ) Sim, 2 + 3 é dobrado
+    (certa) Não: a árvore é (a + 2) + 3 e nenhuma operação tem DOIS lados constantes
+    (     ) Não, porque `a` é variável e estraga a expressão inteira
+    (     ) Sim, mas só se `a` for zero
+    EXPLICACAO: O `+` associa à esquerda: primeiro `a + 2` (um lado variável), depois `(…) + 3`. Já `2 + 3 + a` vira `5 + a`. Compiladores reais reordenam (reassociação) para pegar o primeiro caso, um bom 'trabalho futuro' para o relatório.
+DESTAQUE WATCH_OUT: Nunca dobre `x / 0` com uma conta em Java: ela lança ArithmeticException e o SEU COMPILADOR cai com um stack trace. Devolva `null` (não dobra) e deixe o erro para a execução, ou emita um aviso com a linha. E repare: Java e MIPS truncam a divisão de inteiros do mesmo jeito (`-7 / 2 = -3`), então dobrar não muda o resultado.
+[LEXI] E aquele `se (1 > 2) { … }`? O bloco nunca roda. Corta fora!
+CODIGO (Eliminação de código morto: o bloco continua sendo ANALISADO (erros ainda aparecem), só não gera MIPS):
+    private boolean emitindo = true;
+    // emite(...) e rotulo(...) ganham um 'if (emitindo)' na frente
+    
+    private void blocoMorto() {                    // analisa e verifica, mas não gera código
+        boolean antes = emitindo;
+        emitindo = false;
+        bloco();
+        emitindo = antes;
+    }
+    
+    private Res condicao() {                       // agora devolve o Res (pode ser constante)
+        casaToken(TipoToken.ABRE_PAR);
+        int linha = tok.linha;
+        Res c = expr();
+        exige(c.tipo() == TipoDado.LOGICO, linha, "a condição precisa ser logico");
+        casaToken(TipoToken.FECHA_PAR);
+        liberaTemp();
+        return c;
+    }
+    
+    private void se() {
+        casaToken(TipoToken.SE);
+        Res c = condicao();
+        if (c.constante() != null) {               // resultado conhecido JÁ na compilação
+            boolean entra = c.constante() != 0;
+            if (entra) bloco(); else blocoMorto();
+            if (eh(TipoToken.SENAO)) {
+                avanca();
+                if (entra) blocoMorto(); else bloco();
+            }
+            return;                                // nenhum beq, nenhum rótulo
+        }
+        String senao = novoRotulo("senao"), fim = novoRotulo("fimse");
+        emite("beq " + noRegistrador(c) + ", $zero, " + senao);
+        // ... o resto igual ao capítulo 8
+    }
+DESTAQUE NO_DUMB_QUESTIONS: P: Por que não simplesmente pular os tokens do bloco morto? R: Porque o bloco ainda precisa estar CERTO: um erro de sintaxe ou de tipo dentro de `se (falso) { … }` continua sendo erro. Por isso ele passa pelo parser normalmente, só com a 'caneta' desligada. (A string de um `escreva` morto ainda vai para o .data, inofensivo.)
+CODIGO (Otimização peephole: uma janela de 2 instruções deslizando sobre o .asm pronto):
+    # antes                          # depois (peephole)
+        lw   $t0, soma_1                 lw   $a0, soma_1
+        move $a0, $t0
+        li   $v0, 1                      li   $v0, 1
+        syscall                          syscall
+    
+        sw   $t0, n_0                    sw   $t0, n_0
+        lw   $t0, n_0                    # lw removido: $t0 já tem esse valor
+DESTAQUE WATCH_OUT: Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço.
+[PILHA] Otimizou? Então… prove… que nada… quebrou.
+PASSOS Bateria de testes que pega bug de verdade:
+    1. **Precedência e associatividade**: `escreva(2 + 3 * 4);` → 14; `escreva((2 + 3) * 4);` → 20; `escreva(10 - 3 - 2);` → 5 (e não 9!).
+    2. **Negativos e resto**: `escreva(-7 / 2, " ", -7 % 2);` → -3 -1.
+    3. **Laços**: `enquanto` que roda 0 vezes, 1 vez e N vezes.
+    4. **Aninhamento**: `se` dentro de `se` dentro de `enquanto` (rótulos únicos!).
+    5. **Escopos**: sombreamento (x interno e externo com valores diferentes, imprima os dois).
+    6. **Erros**: um arquivo por mensagem de erro, léxico, sintático, cada regra semântica.
+    7. **Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, `'A' + 1` impresso como número.
+WIDGET MIPS gramatica= entrada=(a + b) * (c - d) legenda=Treine a conferência à mão: com a=4, b=2, c=3, d=5, o resultado tem que ser -12. Calcule ANTES de rodar.
+CODIGO (Testes de regressão automáticos (Linux/macOS/Git Bash). Gere cada .esperado UMA vez, confira à mão, e congele.):
+    #!/bin/bash
+    # roda_testes.sh, compila cada teste e compara com a saída esperada
+    javac -d bin src/*.java || exit 1
+    passou=0; falhou=0
+    for f in testes/ok/*.byt; do
+      java -cp bin Main "$f" /tmp/t.asm > /dev/null
+      java -jar Mars4_5.jar nc /tmp/t.asm > /tmp/t.out
+      if diff -q /tmp/t.out "${f%.byt}.esperado" > /dev/null; then passou=$((passou+1))
+      else echo "FALHOU: $f"; falhou=$((falhou+1)); fi
+    done
+    for f in testes/erro/*.byt; do
+      java -cp bin Main "$f" /tmp/t.asm > /tmp/t.out
+      if diff -q /tmp/t.out "${f%.byt}.esperado" > /dev/null; then passou=$((passou+1))
+      else echo "FALHOU: $f"; falhou=$((falhou+1)); fi
+    done
+    echo "$passou passaram, $falhou falharam"
+DESTAQUE REAL_WORLD: Isso é teste de **regressão**: depois de cada otimização ou correção, rode a bateria inteira. É exatamente assim que GCC e LLVM trabalham, milhares de programas de teste rodando a cada mudança.
+DESTAQUE EXAM_TIP: Prova adora: 'aplique dobramento de constantes e eliminação de código morto neste código de três endereços'. Primeiro dobre, depois veja quais desvios ficaram com condição constante, depois corte o que nunca é alcançado.
+REVELAR: Por que gerar o `.esperado` rodando o próprio compilador é perigoso?
+    RESPOSTA: Porque se o compilador está errado, você congela o erro como 'resposta certa'. Confira cada `.esperado` à mão (ou calcule antes de rodar) na primeira vez, depois ele protege contra regressões.
+
+=== CAPITULO 10: Checklist de entrega e erros que tiram ponto (ERROR_RECOVERY)
+Resumo: O que conferir na véspera, o que vai no relatório e as perguntas da arguição.
+[NARRADOR] Véspera da entrega. 23h47. A geladeira faz um barulho estranho. O cursor pisca.
+[BYTE] Tá tudo funcionando! …Eu acho.
+[PROF] 'Eu acho' não é teste. Vamos passar o checklist, item por item.
+PASSOS Checklist do código:
+    1. Compila do zero, fora da IDE: `javac -d bin src/*.java` sem erros nem avisos estranhos.
+    2. Roda exatamente como o enunciado manda (ex.: `java Main programa.byt`).
+    3. Nenhum caminho absoluto (`C:\Users\…`) e nenhum `System.out.println` de depuração esquecido.
+    4. Mensagens de erro no formato pedido, com a linha certa, e o programa PARA no primeiro erro (se for o pedido).
+    5. Toda a bateria de testes passa, rode o script uma última vez.
+    6. O `.asm` gerado monta e roda no MARS sem nenhuma edição manual.
+    7. README com: como compilar, como rodar, versão do Java.
+PASSOS Checklist do relatório:
+    1. Especificação da linguagem: tokens (com regex), precedência, gramática.
+    2. O AFD do léxico desenhado + a lista de erros léxicos.
+    3. Gramática LL(1) em EBNF + FIRST/FOLLOW como prova de que não há conflitos.
+    4. Decisões de projeto: maiúsculas, sombreamento, conversões implícitas, `<-` vs `<` `-`.
+    5. Esquemas de tradução: o molde MIPS de cada comando (se, enquanto, escreva…).
+    6. Otimizações implementadas, com exemplo antes/depois.
+    7. Testes: tabela com programa, saída esperada e saída obtida. E as limitações conhecidas (ex.: 10 registradores).
+DESTAQUE WATCH_OUT: **Linha errada nas mensagens.** O erro mais comum de todos. Causas: não contar '\n' dentro de comentário de bloco, contar '\r' também, ou usar a linha do token ANTERIOR quando o enunciado quer a do token encontrado (ou vice-versa). Tenha um teste de erro DEPOIS de um comentário de várias linhas.
+DESTAQUE WATCH_OUT: **Registradores vazando.** Esquecer um `liberaTemp()` não quebra programas pequenos… até o 11º comando, quando aparece 'faltaram registradores' do nada. Teste com um programa de 30 atribuições seguidas.
+CODIGO (Uma linha de 'assert' que economiza uma noite de depuração):
+    private void comando() {
+        int antes = proxTemp;
+        switch (tok.tipo) {
+            // ... os mesmos casos de antes ...
+        }
+        if (proxTemp != antes)               // rede de segurança: pega o bug na hora
+            throw new IllegalStateException("BUG: registrador vazou no comando antes da linha " + tok.linha);
+    }
+PREVEJA: Alguém escreveu no léxico: `if (lexema == "senao") …`. O que acontece?
+    (     ) Funciona sempre
+    (certa) Às vezes não reconhece a palavra: `==` em String compara REFERÊNCIAS, não conteúdo
+    (     ) Erro de compilação do Java
+    (     ) Funciona só no Windows
+    EXPLICACAO: Em Java, `==` entre Strings pergunta 'é o mesmo objeto?'. O lexema montado num StringBuilder é um objeto NOVO, então a comparação falha. Use `equals`: ou, melhor ainda, o HashMap de reservadas e enums como no capítulo 3.
+DESTAQUE WATCH_OUT: **Rótulos e nomes colidindo.** Dois `se` aninhados gerando o mesmo rótulo, ou uma variável chamada `main`, `j` ou `b` virando rótulo cru. O contador nos rótulos e o sufixo `_N` nas variáveis resolvem, tenha um teste com `inteiro j, b, main;`.
+DESTAQUE WATCH_OUT: **Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a < b < c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada.
+DESTAQUE WATCH_OUT: **Variável em laço não reinicia.** Na Byteiro, `inteiro t;` dentro de um `enquanto` NÃO gera código: o `.word` é o mesmo a cada volta e guarda o valor da volta anterior. Ou documente isso ('variáveis valem 0 só no início do programa'), ou gere um `sw $zero, rotulo` em cada declaração.
+DESTAQUE REAL_WORLD: Integridade acadêmica: copiar o compilador de um colega, de um semestre anterior ou pedir para uma IA escrever sem entender aparece na arguição em dois minutos, e costuma zerar o trabalho. Use este guia como MAPA: os exemplos são da Byteiro, a sua linguagem é outra, e o código precisa ser seu.
+DESTAQUE EXAM_TIP: Treine a arguição em voz alta, um integrante perguntando para o outro. As perguntas abaixo são as clássicas.
+REVELAR: Arguição: 'Por que a sua gramática é LL(1)?'
+    RESPOSTA: Porque não tem recursão à esquerda, está fatorada e, em cada não-terminal com alternativas, os FIRST são disjuntos (e não cruzam com o FOLLOW quando há ε). Mostre a tabela FIRST/FOLLOW do relatório e aponte o `if`/`switch` correspondente no código.
+REVELAR: Arguição: 'Mostre onde o tipo de `a + 'b'` é calculado.'
+    RESPOSTA: Em `exprAdd`: `primario` devolve INTEIRO para `a` e CARACTERE para `'b'`; os dois são numéricos, então o resultado é INTEIRO. Nenhuma instrução extra: o caractere já é um número na memória.
+REVELAR: Arguição: 'Como o seu léxico sabe que `<-` é um token só?'
+    RESPOSTA: Estado 3 do AFD: depois de ler '<', ele olha o próximo caractere. Se for '-', consome e devolve ATRIB (maior lexema). Se for outra coisa, devolve MENOR sem consumir.
+REVELAR: Arguição: 'O que acontece com a pilha de escopos quando o bloco do enquanto fecha?'
+    RESPOSTA: `fechaEscopo()` desempilha o HashMap do bloco: os nomes declarados lá deixam de ser visíveis. Mas o `.word` continua no `.data`: escopo é uma regra de COMPILAÇÃO, não de memória.
+PASSOS Plano para as últimas 48 horas:
+    1. 48h: congele funcionalidades. Nada de recurso novo, só correção de bug.
+    2. 36h: rode a bateria inteira, conserte o que falhar, rode de novo.
+    3. 24h: relatório: figuras do AFD, gramática, moldes MIPS, tabela de testes.
+    4. 12h: clone o repositório numa pasta limpa e siga o README como se fosse o professor.
+    5. 2h: entregue. Sim, antes do prazo. O Canvas também cai.
+[LEXI] Tokens cortados.
+[PILHA] Gramática… empilhada.
+[PROF] Tipos conferidos, MIPS rodando, testes passando. Você não 'fez um trabalho de compiladores', você **construiu um compilador**. Pouca gente pode dizer isso.
+REVELAR: Última recuperação: recite as fases do seu compilador e a classe Java de cada uma.
+    RESPOSTA: Léxico → `Lexico` (AFD com switch). Sintático → `Sintatico` (descida recursiva, casaToken). Semântico → `TabelaSimbolos` + checagens no `Sintatico`. Geração → métodos do `Sintatico` emitindo MIPS. Otimização → dobramento de constantes e código morto no gerador. E o `Main` costurando tudo.

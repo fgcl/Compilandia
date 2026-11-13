@@ -1,0 +1,904 @@
+######## REGIAO CIDADE_SEMANTICA: Cidade Semântica (Significado, tipos e escopos)
+
+################ ASSUNTO ATTRIBUTES_TYPES: Atributos e verificação de tipos  prereqs=[CFG_DERIVATION]
+FICHA: Uma SDD pendura atributos nos símbolos da gramática: sintetizados sobem dos filhos, herdados descem do pai/irmãos; a verificação de tipos é uma SDD que calcula tipos e insere coerções.
+  gancho: S↑ H↓: Sintetizado Sobe, Herdado desce. S-atribuída = Só Sintetizado; L-atribuída = herda da Left.
+  termos: [sintetizado, herdado, s-atribuída, l-atribuída, coerção, tipo]
+  erros comuns: [Chamar de herdado um atributo calculado a partir dos filhos, Achar que L-atribuída permite depender de irmãos à direita, Esquecer que toda S-atribuída também é L-atribuída, Tratar int + float como erro em vez de coerção para float, Confundir erro de tipo (compilação) com divisão por zero (execução)]
+  FLASH: Atributo sintetizado depende de... -> Atributos dos filhos (e do próprio nó)
+  FLASH: Atributo herdado depende de... -> Atributos do pai e dos irmãos
+  FLASH: O que é SDD S-atribuída? -> Só tem atributos sintetizados
+  FLASH: O que é SDD L-atribuída? -> Herdados dependem só do pai e de irmãos à esquerda
+  FLASH: Ordem de avaliação de uma S-atribuída? -> Pós-ordem (de baixo para cima)
+  FLASH: Tipo de int + float? -> float, com inttofloat no int
+  FLASH: Tipo de a < b? -> bool
+  FLASH: Em int a, b, c, o tipo chega às variáveis como... -> Atributo herdado
+  FLASH: $$ = $1 + $3 no Bison é que tipo de atributo? -> Sintetizado
+
+=== AULA ANIMADA [BASICO] Tipos sobem pela árvore  (id=ATTRIBUTES_TYPES, ~158s, 20 passos, exemplo começa no passo 3)
+1. [BYTE] Na máquina, somar inteiros e somar reais são instruções diferentes.
+     palco: Tipos sobem pela árvore | a + x | add | add.s | int + int | float + float
+2. [BYTE] Para escolher a instrução certa, o compilador precisa saber o tipo de cada pedaço da expressão.
+     palco: Tipos sobem pela árvore | *a + x | *add | *add.s | int + int | float + float
+3. [BYTE] Um atributo é uma informação associada a um nó da árvore, como o tipo ou o valor. As regras que o calculam vêm junto com a gramática.
+     palco: ATRIBUTO
+4. [BYTE] A árvore já existe. Agora a análise semântica calcula os atributos dela. Aqui, o atributo é o tipo.
+     palco: a + x * 2 | + | a | * | x | 2 | a é int, x é float
+5. [BYTE] Começo pelas folhas. O tipo de a e de x vem da declaração. O dois, sem ponto, é inteiro.
+     palco: a + x * 2 | + | a | * | x | 2 | a é int, x é float | int | float | int
+6. [BYTE] Real vezes inteiro dá o quê? Toque no tipo.
+     palco: a + x * 2 | + | a | ** | x | 2 | a é int, x é float | int | float | int | int | float
+     PERGUNTA(toque): certas=[float] erradas=[int]
+       dica: O tipo maior ganha, para não perder a parte quebrada.
+       acerto: Isso. Inteiro com real dá real.
+7. [BYTE] O dois é convertido para real antes da conta. Essa conversão automática se chama coerção. O tipo real sobe para o nó do vezes.
+     palco: a + x * 2 | + | a | * | x | 2 | a é int, x é float | int | float | int | float
+8. [BYTE] Na raiz, inteiro mais real também dá real. Atributo que o nó calcula a partir dos filhos é um atributo sintetizado.
+     palco: a + x * 2 | *+ | a | * | x | 2 | a é int, x é float | int | float | int | float | float
+9. [PROF] Se os tipos não combinam e não há coerção possível, o compilador acusa erro semântico.
+     palco: a + x * 2 | + | a | * | x | 2 | a é int, x é float | int | float | int | float | float
+10. [BYTE] A verificação de tipos sobe das folhas até a raiz, um nó por vez.
+     palco: Receita | 1. Número com ponto é float. Sem ponto, int. | 2. Variável: o tipo vem da tabela de símbolos. | 3. Conta: um filho float dá float. Senão, int. | 4. Comparação dá bool. Bool numa conta é erro.
+11. [BYTE] No primeiro exemplo, o x era float. Que regra disse isso? Toque.
+     palco: Receita | 1. Número com ponto é float. Sem ponto, int. | 2. Variável: o tipo vem da tabela de símbolos. | 3. Conta: um filho float dá float. Senão, int. | 4. Comparação dá bool. Bool numa conta é erro.
+     PERGUNTA(toque): certas=[2. Variável: o tipo vem da tabela de símbolos.] erradas=[1. Número com ponto é float. Sem ponto, int., 3. Conta: um filho float dá float. Senão, int., 4. Comparação dá bool. Bool numa conta é erro.]
+       dica: O x é uma variável. Onde mora o tipo dela?
+       acerto: Isso. A declaração do x ficou na tabela.
+12. [BYTE] No passo três, o int que encontra um float sofre coerção: vira float antes da conta.
+     palco: Receita | 1. Número com ponto é float. Sem ponto, int. | 2. Variável: o tipo vem da tabela de símbolos. | *3. Conta: um filho float dá float. Senão, int. | 4. Comparação dá bool. Bool numa conta é erro.
+13. [BYTE] Outra conta. As folhas já têm tipo, pelas regras um e dois.
+     palco: c * 2 + y | + | * | c | 2 | y | int | int | float
+14. [BYTE] Qual é o tipo de c vezes dois? Toque.
+     palco: c * 2 + y | + | ** | c | 2 | y | int | int | float | int | float | bool
+     PERGUNTA(toque): certas=[int] erradas=[float, bool]
+       dica: Os dois filhos são int. Nenhum é float.
+       acerto: Isso. Inteiro com inteiro fica inteiro.
+15. [BYTE] E na raiz, inteiro mais real? Toque no tipo.
+     palco: c * 2 + y | *+ | * | c | 2 | y | int | int | float | int | float | bool | int
+     PERGUNTA(toque): certas=[float] erradas=[int, bool]
+       dica: Regra três: basta um filho float.
+       acerto: Isso. O inteiro vira real antes da soma.
+16. [BYTE] Agora o y deu lugar ao ok, que é bool. Que tipo sobe?
+     palco: c * 2 + y | + | * | c | 2 | *ok | int | int | bool | int | int | float | erro
+     PERGUNTA(toque): certas=[erro] erradas=[int, float]
+       dica: Regra quatro: bool não entra em conta.
+       acerto: Isso. A raiz fica com erro de tipo.
+17. [BYTE] O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce.
+     palco: c * 2 + y | *+ | * | c | 2 | ok | int | int | bool | int | erro
+18. [BYTE] De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | Atributo sintetizado é o que o nó recebe do pai. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Nesta aula, os tipos subiram ou desceram pela árvore?
+       acerto: Isso. Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado.
+19. [BYTE] Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido.
+     palco: Erros comuns | Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. | *Errado: int + float é erro de tipo. | *Certo: Há coerção: o int vira float. Erro é misturar bool com número.
+20. [BYTE] Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro.
+     palco: Resumo | Atributo: informação num nó da árvore, calculada por regras semânticas. | O tipo é sintetizado: sobe das folhas para a raiz. | int com float sofre coerção para float. Sem conversão possível: erro semântico.
+
+=== AULA ANIMADA [PEGADINHA] Sintetizado sobe, herdado desce  (id=ATTRIBUTES_TYPES/sintetizadosobeherdadodesce, ~35s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Declaração: int a, b. O tipo está num galho, e os nomes estão no outro.
+     palco: int a, b | D | T: int | L | a | b
+2. [PROF] Em a mais b, o tipo sobe dos filhos para o pai. Isso é sintetizado.
+     palco: int a, b | D | T: int | L | a | b
+3. [BYTE] Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque.
+     palco: int a, b | D | T: int | L | a | b
+     PERGUNTA(toque): certas=[T: int] erradas=[L, b]
+       dica: O int está no galho do lado. Ele precisa atravessar.
+       acerto: Isso. O int passa pelo pai e desce até a. Isso é herdado.
+4. [BYTE] Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado.
+     palco: int a, b | D | *T: int | *L | *a | *b
+5. [PROF] S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita.
+     palco: HERDADO
+
+=== AULA ANIMADA [PRATICA] Suba os tipos  (id=ATTRIBUTES_TYPES/subaostipos, ~27s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Aqui a é inteiro e x é real. Vamos anotar a árvore.
+     palco: a + x * 2 | a: int     x: float
+2. [BYTE] Comece pelas folhas. Depois, cada pai olha os filhos.
+     palco: a + x * 2 | a: int     x: float
+3. [PROF] Se um dos filhos é real, o resultado sobe como real.
+     palco: a + x * 2 | a: int     x: float
+4. [BYTE] Diga o tipo de cada nó aceso, de baixo para cima.
+     palco: + | *a | * | x | 2
+     BRINQUEDO: meta=Diga o tipo do nó aceso teclas=[int, float]
+       dica: Tipo errado. Olhe os filhos desse nó.
+       acerto: Árvore anotada. O tipo subiu até a raiz.
+5. [BYTE] Isso que você fez é atributo sintetizado, na ordem de baixo para cima.
+     palco: a + x * 2 | a: int     x: float
+
+=== AULA ANIMADA [PRATICA] O tipo que desce  (id=ATTRIBUTES_TYPES/otipoquedesce, ~74s, 9 passos, exemplo começa no passo null)
+1. [BYTE] Na declaração int a, b, o tipo está escrito uma vez só, no começo. Mas o a e o b precisam dele.
+     palco: int a, b | D | T | L | int | L | , | id b | id a
+2. [BYTE] O tipo nasce no nó T, pelo token int. Esse atributo é sintetizado: sobe do filho para T.
+     palco: int a, b | D | *T | L | *int | L | , | id b | id a | T.tipo = int
+3. [BYTE] O a e o b estão embaixo de L, que é irmão de T. Para chegar neles, o tipo sobe ou desce pela árvore? Toque.
+     palco: int a, b | D | T | L | int | L | , | *id b | *id a | T.tipo = int | sobe | desce
+     PERGUNTA(toque): certas=[desce] erradas=[sobe]
+       dica: Os ids são folhas, lá embaixo. O tipo está em cima.
+       acerto: Isso. Ele passa de T para o irmão L e desce. Atributo que vem do pai ou de um irmão é um atributo herdado.
+4. [BYTE] A regra semântica diz: o herdado de L recebe o tipo de T. Em cada L de baixo, o herdado é copiado do L de cima.
+     palco: int a, b | D | T | *L | int | *L | , | id b | id a | T.tipo = int | L.her = int | L.her = int
+5. [BYTE] Quando o herdado chega numa folha id, o que o compilador faz com ele? Toque.
+     palco: int a, b | D | T | L | int | L | , | *id b | *id a | T.tipo = int | L.her = int | L.her = int | anota na tabela | soma os valores
+     PERGUNTA(toque): certas=[anota na tabela] erradas=[soma os valores]
+       dica: É uma declaração: o compilador precisa lembrar o tipo de cada nome.
+       acerto: Isso. Cada id entra na tabela de símbolos com o tipo que desceu.
+6. [BYTE] Resultado: a e b entram na tabela como int, mesmo com o tipo escrito uma vez só.
+     palco: int a, b | D | T | L | int | L | , | id b | id a | T.tipo = int | L.her = int | L.her = int | *a: int    b: int
+7. [PROF] Definição que só tem atributo sintetizado é S-atribuída. O parser ascendente calcula tudo nas reduções.
+     palco: int a, b | D | T | L | int | L | , | id b | id a | T.tipo = int | L.her = int | L.her = int | a: int    b: int
+8. [BYTE] Esta definição tem um herdado, que vem do irmão da esquerda. De que tipo ela é? Toque.
+     palco: int a, b | D | T | L | int | L | , | id b | id a | T.tipo = int | L.her = int | L.her = int | S-atribuída | L-atribuída
+     PERGUNTA(toque): certas=[L-atribuída] erradas=[S-atribuída]
+       dica: Se tem atributo herdado, não pode ser a do S.
+       acerto: Isso. L-atribuída: o herdado só depende do pai e dos irmãos à esquerda. Dá para calcular numa passada, da esquerda para a direita.
+9. [BYTE] Sintetizado sobe, herdado desce. Toda definição S-atribuída também é L-atribuída, mas não o contrário.
+     palco: int a, b | D | T | L | int | L | , | id b | id a | T.tipo = int | L.her = int | L.her = int
+
+=== AULA ANIMADA [CLIPE] Atributo sintetizado e herdado  (id=ATTRIBUTES_TYPES/atributosintetizadoeherdado, ~8s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Sintetizado sobe dos filhos para o pai.
+     palco: Sobe | pai | filho
+2. [BYTE] Herdado desce do pai ou vem do irmão.
+     palco: Desce | pai | filho
+
+=== AULA ANIMADA [CLIPE] Coerção de tipo  (id=ATTRIBUTES_TYPES/coerçãodetipo, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Inteiro mais real: o compilador converte o inteiro sozinho.
+     palco: 2 + 1.5 | int | + | float
+2. [BYTE] Isso é coerção. O resultado é real.
+     palco: 2 + 1.5 | float | + | float
+
+=== AULA DE LEITURA [STORY] Notas que sobem, sobrenomes que descem
+[NARRADOR] Cidade Semântica. A árvore sintática já está pronta... mas ela ainda não sabe o que significa.
+[BYTE] Como assim? A árvore de 'a + x * 2' tá certinha!
+[PROF] Ela está certa na FORMA. Agora precisamos pendurar informação em cada nó: tipo, valor, código... Esses penduricalhos são os **atributos**.
+TEXTO: Pense na sua média do semestre: a nota final é calculada a partir das notas das provas, que vêm dos exercícios. A informação **sobe**. Isso é um atributo **sintetizado**.
+TEXTO: Agora pense no sobrenome: você o recebe dos pais e repassa aos irmãos mais novos. A informação **desce** (ou vem do lado). Isso é um atributo **herdado**.
+PASSOS O mapa da analogia:
+    1. Nota final calculada das parciais → **sintetizado** (do filho para o pai)
+    2. Sobrenome vindo dos pais → **herdado** (do pai ou irmão para o filho)
+    3. Regulamento de como calcular a média → **regra semântica** (E.tipo = ...)
+    4. Gramática + atributos + regras → **definição dirigida pela sintaxe (SDD)**
+TEXTO: O fiscal da balança da feira é o **verificador de tipos**: não deixa somar banana com bool. Mas int com float pode, é só converter o int, como trocar reais por dólares antes de somar. Isso é **coerção**.
+PREVEJA: a é int e x é float. Qual o tipo de a + x * 2?
+    (     ) int
+    (certa) float, com coerção de int para float
+    (     ) erro de tipo
+    EXPLICACAO: x * 2 é float (2 é convertido). a + float também vira float: o compilador converte a com inttofloat.
+WIDGET ATTR_TREE gramatica= entrada=a + x * 2 legenda=Os tipos sobem das folhas até a raiz: int + float → float.
+REVELAR: Em 'int a, b, c;', o tipo int é sintetizado ou herdado para cada variável?
+    RESPOSTA: Herdado: ele desce do nó do tipo para a lista de nomes, como um sobrenome passado aos irmãos.
+DESTAQUE NO_DUMB_QUESTIONS: 'Atributo é só uma variável no nó?' Basicamente, sim! O que importa é DE ONDE vem o valor dela: dos filhos (sintetizado) ou do pai/irmãos (herdado).
+
+=== AULA DE LEITURA [VISUAL] Assistindo os tipos subirem pela árvore
+[PROF] Vamos ver o verificador de tipos trabalhando nó por nó, em pós-ordem: filhos primeiro, pai depois.
+WIDGET ATTR_TREE gramatica= entrada=(a + b) * c legenda=Tudo int: as folhas consultam a tabela de símbolos, os operadores combinam. Valor 18 com a=4, b=2, c=3.
+WIDGET ATTR_TREE gramatica= entrada=a + x * 2 legenda=Aqui aparece a coerção: no '+', o int encontra um float e é alargado.
+[BYTE] Então o tipo do pai é só 'o maior' dos tipos dos filhos?
+[PROF] Nas aritméticas, sim: int < float, e o resultado é o maior. Para comparações e lógica, as regras são outras.
+WIDGET ATTR_TREE gramatica= entrada=a < b && ok legenda=Comparação sempre produz bool; && exige dois bool.
+PREVEJA: E ok + 1, com ok sendo bool?
+    (     ) int (true vale 1)
+    (certa) erro de tipo
+    (     ) bool
+    EXPLICACAO: Nesta linguagem (como em Java), não dá para fazer aritmética com bool. E o erro se propaga para cima.
+WIDGET ATTR_TREE gramatica= entrada=ok + 1 legenda=O nó '+' marca erro: bool não entra em aritmética.
+WIDGET PARSE_TREE gramatica=D -> T L ; ; T -> int | float ; L -> id R ; R -> , id R | ε entrada=int id , id ; legenda=Atributo herdado: T.tipo = int é passado para L.in e desce para cada id da lista.
+PASSOS O que você viu:
+    1. Folhas: o tipo vem do literal ou da tabela de símbolos
+    2. Nós internos: tipo calculado dos filhos → sintetizado
+    3. Ordem de avaliação: pós-ordem (como o $$ do Bison, numa redução)
+    4. Na declaração, o tipo desce pela lista → herdado
+DESTAQUE BRAIN_POWER: Um analisador LR calcula atributos sintetizados de graça: em cada redução, os valores dos filhos estão na pilha. É exatamente o $$ = $1 + $3 do Bison.
+
+=== AULA DE LEITURA [WORKED] Árvore anotada com valor e com tipo
+[PROF] Primeiro, valores. A SDD clássica da calculadora:
+CODIGO (SDD S-atribuída (só atributos sintetizados)):
+    E → E1 + T    E.val = E1.val + T.val
+    E → T         E.val = T.val
+    T → T1 * F    T.val = T1.val * F.val
+    T → F         T.val = F.val
+    F → ( E )     F.val = E.val
+    F → num       F.val = num.lexval
+PASSOS Anotando 3 * 5 + 4 de baixo para cima:
+    1. Folhas: num.lexval = 3, 5, 4 → F.val = 3, 5, 4
+    2. T → F: T.val = 3
+    3. T → T1 * F: T.val = 3 * 5 = 15
+    4. E → T: E.val = 15
+    5. E → E1 + T (com T.val = 4): E.val = 15 + 4 = **19**
+[PROF] Agora, tipos, com coerção. Regra: se algum operando é float, o resultado é float e o int é convertido.
+PASSOS Tipando a + x * 2 (a: int, x: float):
+    1. a → int (tabela de símbolos); x → float; 2 → int (literal)
+    2. x * 2: float * int → **float**, converte 2 para 2.0
+    3. a + (x * 2): int + float → **float**, gera inttofloat(a)
+WIDGET ATTR_TREE gramatica= entrada=a + x * 2 legenda=Confira: raiz float, com a coerção marcada.
+[BYTE] Deixa comigo agora.
+REVELAR: Tipo de (a + b) * c, com a, b, c int?
+    RESPOSTA: int em todos os nós internos; nenhuma coerção.
+REVELAR: Tipo de x * 2 + 3 * 4?
+    RESPOSTA: x * 2 é float; 3 * 4 é int; float + int → float (o 12 é convertido).
+REVELAR: Tipo de a < b && ok?
+    RESPOSTA: a < b → bool; bool && bool (ok) → bool.
+WIDGET ATTR_TREE gramatica= entrada=x * 2 + 3 * 4 legenda=Confira a segunda resposta.
+DESTAQUE EXAM_TIP: Em 'desenhe a árvore anotada', escreva o atributo ao lado de CADA nó (até os T → F chatos). O professor quer ver a ordem de avaliação, não só o resultado.
+
+=== AULA DE LEITURA [SOCRATIC] De onde vem a informação de cada nó?
+[PROF] Pergunta-guia de hoje: para calcular este atributo, eu preciso olhar PARA BAIXO ou PARA CIMA?
+REVELAR: O valor de E em E → E1 + T depende de quê?
+    RESPOSTA: De E1.val e T.val: dos filhos. É sintetizado.
+REVELAR: Se TODOS os atributos são sintetizados, em que ordem dá para avaliar?
+    RESPOSTA: Pós-ordem (de baixo para cima). Uma SDD assim é **S-atribuída** e combina perfeitamente com um analisador LR: avalia na hora da redução.
+REVELAR: E em D → T L, com 'int a, b, c', como cada id descobre seu tipo?
+    RESPOSTA: Pelo atributo herdado L.in = T.tipo, que desce pela lista. O id está abaixo e à direita de quem sabe o tipo.
+[BYTE] Então herdado pode vir de qualquer lugar?
+REVELAR: Se um atributo herdado pudesse depender de um irmão à DIREITA, um analisador que lê da esquerda para a direita conseguiria calcular na hora?
+    RESPOSTA: Não: o irmão da direita ainda não foi analisado. Daí a restrição L-atribuída.
+PREVEJA: Numa SDD **L-atribuída**, o atributo herdado de Xi em A → X1 X2 ... Xn pode depender de...
+    (     ) Qualquer atributo de qualquer filho
+    (certa) Atributos herdados de A e atributos de X1 ... Xi-1 (irmãos à esquerda)
+    (     ) Apenas atributos sintetizados de A
+    EXPLICACAO: L de Left: só o pai (herdados dele) e os irmãos à esquerda. Assim uma passada em profundidade, da esquerda para a direita, resolve tudo, perfeito para descida recursiva.
+REVELAR: Toda SDD S-atribuída é L-atribuída?
+    RESPOSTA: Sim! Ela não tem herdados, então a restrição é satisfeita trivialmente.
+REVELAR: Por que o verificador de tipos precisa da tabela de símbolos?
+    RESPOSTA: Porque nas folhas só há nomes. O tipo de 'a' foi decidido lá na declaração; a tabela é a memória que liga uso e declaração.
+WIDGET ATTR_TREE gramatica= entrada=a + b * c legenda=Pós-ordem em ação: b * c primeiro, depois a soma.
+DESTAQUE BRAIN_POWER: Se o grafo de dependências entre atributos tiver um ciclo, não existe ordem de avaliação. S-atribuída e L-atribuída são duas classes que garantem: sem ciclos.
+
+=== AULA DE LEITURA [FORMAL] SDD, atributos e sistema de tipos
+TEXTO: **Definição dirigida pela sintaxe (SDD):** gramática livre de contexto + atributos associados aos símbolos + regras semânticas associadas às produções.
+PASSOS Tipos de atributo (para um não-terminal A num nó N):
+    1. **Sintetizado:** definido por regra da produção em que A é a CABEÇA, usando atributos dos filhos de N e do próprio N
+    2. **Herdado:** definido por regra da produção em que A está no CORPO (no pai de N), usando atributos do pai, dos irmãos e do próprio N
+    3. Terminais só têm atributos sintetizados, fornecidos pelo léxico (ex.: num.lexval)
+PASSOS Classes de SDD:
+    1. **S-atribuída:** só atributos sintetizados → avaliação em pós-ordem; implementável durante a análise LR
+    2. **L-atribuída:** em A → X1...Xn, cada herdado de Xi depende só de herdados de A e de atributos de X1...Xi-1 (e de Xi, sem ciclo) → uma passada em profundidade, esquerda para direita
+    3. **Esquema de tradução (SDT):** gramática com fragmentos de programa {ações} embutidos no corpo; em SDD S-atribuída, as ações vão no fim (SDT pós-fixo)
+CODIGO (SDD L-atribuída clássica: declarações (in é herdado)):
+    D → T L ;        L.in = T.tipo
+    T → int          T.tipo = int
+    T → float        T.tipo = float
+    L → L1 , id      L1.in = L.in ;  addType(id.entrada, L.in)
+    L → id           addType(id.entrada, L.in)
+CODIGO (Verificação de tipos com coerção (alargamento)):
+    E → E1 op E2   (op aritmético):
+      se E1.tipo = bool ou E2.tipo = bool: erro de tipo
+      E.tipo := max(E1.tipo, E2.tipo)      // int < float
+      E.addr1 := widen(E1.addr, E1.tipo, E.tipo)   // insere inttofloat se preciso
+      E.addr2 := widen(E2.addr, E2.tipo, E.tipo)
+    E → E1 relop E2:  numéricos → E.tipo := bool
+    E → E1 && E2:     ambos bool → E.tipo := bool
+PREVEJA: Uma coerção int → float inserida pelo compilador é chamada de...
+    (     ) Conversão explícita (cast)
+    (certa) Coerção implícita (alargamento)
+    (     ) Estreitamento
+    EXPLICACAO: Coerção = conversão implícita feita pelo compilador. int → float é alargamento (não perde a ordem de grandeza). float → int seria estreitamento e costuma exigir cast explícito.
+WIDGET ATTR_TREE gramatica= entrada=a + x * 2 legenda=Instância da regra acima: max(int, float) = float, com widen em a.
+DESTAQUE EXAM_TIP: Ao classificar uma SDD, verifique CADA regra que define um herdado: ela usa algum irmão à direita? Se sim, não é L-atribuída. Sem herdados → S-atribuída (e também L).
+DESTAQUE WATCH_OUT: Verificação de tipos é estática (em tempo de compilação). Divisão por zero com valores de variáveis só aparece em tempo de execução, não é erro de tipo.
+
+=== AULA DE LEITURA [MNEMONIC] S sobe, H desce
+[NARRADOR] Palácio da Memória: Cidade Semântica, prédio dos Tipos. Um elevador só sobe (sintetizado); a escada só desce (herdado).
+DESTAQUE MNEMONIC: **S↑ H↓**: **S**intetizado **S**obe (dos filhos para o pai); **H**erdado desce (do pai/irmãos para o filho).
+DESTAQUE MNEMONIC: **S-atribuída = Só Sintetizado.** **L-atribuída = Left**: herda só do pai e dos irmãos da esquerda.
+DESTAQUE MNEMONIC: Coerção é **copo pequeno no copo grande**: int cabe em float (alargamento). O contrário derrama (estreitamento).
+CODIGO (Tabela de bolso dos tipos (⊕ = + - * /)):
+    int   ⊕ int    → int
+    int   ⊕ float  → float   (inttofloat no int)
+    float ⊕ float  → float
+    num  relop num → bool
+    bool  &&  bool → bool
+    bool  ⊕  num   → ERRO   (e o erro sobe)
+[BYTE] Tipo é que nem fofoca: começa na folha e todo mundo acima fica sabendo!
+PREVEJA: Bison: $$ = $1 + $3; calcula um atributo...
+    (     ) Herdado
+    (certa) Sintetizado
+    (     ) Global
+    EXPLICACAO: $$ é o pai, calculado dos filhos $1 e $3: sobe. O Bison é uma máquina de SDD S-atribuída.
+WIDGET ATTR_TREE gramatica= entrada=ok + 1 legenda=O erro também sobe: um bool numa soma contamina a raiz.
+REVELAR: Diga em uma frase: sintetizado vs herdado.
+    RESPOSTA: Sintetizado: calculado a partir dos filhos (sobe). Herdado: calculado a partir do pai e dos irmãos (desce/vem do lado).
+DESTAQUE FIRESIDE: Sintetizado: 'Eu sou prático: espero meus filhos terminarem e resumo tudo.' Herdado: 'E eu levo o contexto que você não vê lá de baixo, tipo o int de int a, b, c.'
+
+################ ASSUNTO SCOPE_SYMBOLS: Escopo e tabela de símbolos  prereqs=[PHASES]
+FICHA: A tabela de símbolos guarda nome, tipo e categoria; com escopo estático, ela é uma pilha de tabelas: entra no bloco empilha, sai desempilha, e a busca vai do topo para a base.
+  gancho: Escopo é cebola: procure de dentro para fora. Abre chave empilha, fecha chave desempilha.
+  termos: [escopo, pilha, tabela de símbolos, aninhamento, sombreamento, declaração]
+  erros comuns: [Buscar da base para o topo (o certo é do topo, mais interno, para a base), Confundir sombreamento (escopo interno) com redeclaração (mesmo escopo), Achar que o léxico decide a qual declaração um nome se refere, Continuar vendo variáveis de um bloco que já foi fechado, Confundir escopo (onde é visível) com tempo de vida (quando existe)]
+  FLASH: Regra do escopo estático? -> Vale a declaração do bloco mais interno que contém o uso
+  FLASH: Ao entrar num bloco, a tabela... -> Empilha uma tabela nova
+  FLASH: Ao sair do bloco... -> Desempilha (descarta) a tabela do topo
+  FLASH: A busca de um nome começa onde? -> Na tabela do topo (bloco mais interno)
+  FLASH: Redeclaração é checada em qual tabela? -> Só na do topo
+  FLASH: O que é sombreamento? -> Declaração interna escondendo uma externa de mesmo nome
+  FLASH: Nome não achado em nenhuma tabela? -> Erro: variável não declarada
+  FLASH: Escopo dinâmico decide pelo quê? -> Pela cadeia de chamadas em execução
+
+=== AULA ANIMADA [BASICO] Quem é esse x?  (id=SCOPE_SYMBOLS, ~146s, 20 passos, exemplo começa no passo 3)
+1. [BYTE] Duas funções declaram uma variável i. Cada uma quer a sua.
+     palco: Escopo | void f() { |   int i; | } | void g() { |   float i; | }
+2. [BYTE] Em cada uso do i, o compilador precisa achar a declaração certa.
+     palco: Escopo | void f() { | *  int i; | } | void g() { | *  float i; | }
+3. [BYTE] O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita.
+     palco: ESCOPO
+4. [BYTE] O mesmo nome pode existir em dois escopos. Quem guarda cada declaração, com nome e tipo, é a tabela de símbolos.
+     palco: Escopo | int x; | void f() { |   float x; |   x = 1.5; | } | x = 2; | global: x int
+5. [BYTE] Para escopos aninhados, o compilador usa uma pilha de tabelas. Entrou num bloco, empilha uma tabela nova.
+     palco: Escopo | int x; | *void f() { |   float x; |   x = 1.5; | } | x = 2; | global: x int | f: x float
+6. [BYTE] Na linha x igual a um e meio, qual x vale? Toque na tabela certa.
+     palco: Escopo | int x; | void f() { |   float x; | *  x = 1.5; | } | x = 2; | global: x int | f: x float
+     PERGUNTA(toque): certas=[f: x float] erradas=[global: x int]
+       dica: A busca começa na tabela do topo.
+       acerto: Isso. O x de dentro esconde o de fora.
+7. [BYTE] A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico.
+     palco: Escopo | int x; | void f() { |   float x; |   x = 1.5; | } | x = 2; | *global: x int | *f: x float
+8. [BYTE] Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir.
+     palco: Escopo | int x; | void f() { |   float x; |   x = 1.5; | *} | x = 2; | global: x int
+9. [BYTE] Por isso x igual a dois fala do x global.
+     palco: Escopo | int x; | void f() { |   float x; |   x = 1.5; | } | *x = 2; | *global: x int
+10. [BYTE] Cada bloco tem a sua tabela. A receita cuida da pilha delas.
+     palco: Receita | 1. Abriu bloco: empilhe uma tabela vazia. | 2. Declarou: anote o nome na tabela do topo. | 3. Uso: busque do topo. Não achou, erro. | 4. Fechou bloco: desempilhe a tabela dele.
+11. [BYTE] O x de dentro escondeu o de fora. Que regra fez isso? Toque.
+     palco: Receita | 1. Abriu bloco: empilhe uma tabela vazia. | 2. Declarou: anote o nome na tabela do topo. | 3. Uso: busque do topo. Não achou, erro. | 4. Fechou bloco: desempilhe a tabela dele.
+     PERGUNTA(toque): certas=[3. Uso: busque do topo. Não achou, erro.] erradas=[1. Abriu bloco: empilhe uma tabela vazia., 2. Declarou: anote o nome na tabela do topo., 4. Fechou bloco: desempilhe a tabela dele.]
+       dica: Pense em onde a busca começa.
+       acerto: Isso. A busca para no primeiro x que acha.
+12. [BYTE] Regra quatro: o bloco fechou, e os nomes declarados nele somem juntos.
+     palco: Receita | 1. Abriu bloco: empilhe uma tabela vazia. | 2. Declarou: anote o nome na tabela do topo. | 3. Uso: busque do topo. Não achou, erro. | *4. Fechou bloco: desempilhe a tabela dele.
+13. [BYTE] Agora a busca é sua. O bloco de fora já tem a tabela dele.
+     palco: Escopo | *{ |   int z; |   float x; |   z = z + 1; |   { |     float x; |     x = x + 1; |     z = z + 1; |   } |   print(x); | } | fora: z int, x float
+14. [BYTE] Entrou o bloco de dentro. Na linha acesa, qual tabela responde?
+     palco: Escopo | { |   int z; |   float x; |   z = z + 1; |   { |     float x; | *    x = x + 1; |     z = z + 1; |   } |   print(x); | } | fora: z int, x float | dentro: x float
+     PERGUNTA(toque): certas=[dentro: x float] erradas=[fora: z int, x float]
+       dica: A busca começa no topo. O nome está lá?
+       acerto: Isso. A tabela de dentro tem esse nome.
+15. [BYTE] E nesta linha acesa? Toque na tabela onde a busca para.
+     palco: Escopo | { |   int z; |   float x; |   z = z + 1; |   { |     float x; |     x = x + 1; | *    z = z + 1; |   } |   print(x); | } | fora: z int, x float | dentro: x float
+     PERGUNTA(toque): certas=[fora: z int, x float] erradas=[dentro: x float]
+       dica: O topo não tem esse nome. A busca desce.
+       acerto: Isso. Só a tabela de fora conhece esse nome.
+16. [BYTE] Chegou a chave que fecha o bloco. Qual tabela sai da pilha?
+     palco: Escopo | { |   int z; |   float x; |   z = z + 1; |   { |     float x; |     x = x + 1; |     z = z + 1; | *  } |   print(x); | } | fora: z int, x float | dentro: x float
+     PERGUNTA(toque): certas=[dentro: x float] erradas=[fora: z int, x float]
+       dica: Regra quatro: sai a tabela do bloco que fechou.
+       acerto: Isso. Sai a tabela de dentro.
+17. [BYTE] O print usa a única tabela que sobrou, a de fora.
+     palco: Escopo | { |   int z; |   float x; |   z = z + 1; |   { |     float x; |     x = x + 1; |     z = z + 1; |   } | *  print(x); | } | *fora: z int, x float
+18. [BYTE] Já existe um x fora. Posso declarar outro x dentro do bloco? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | Declarar x de novo num bloco interno é erro: o nome já existe. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: A declaração nova entra na tabela do topo, que ainda não tem x.
+       acerto: Isso. Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco.
+19. [BYTE] Outro erro: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global.
+     palco: Erros comuns | Certo: Pode: o x interno esconde o externo. Erro é repetir no mesmo bloco. | *Errado: Buscar o nome só na tabela do topo. | *Certo: A busca desce do topo até a tabela global. Erro só se nenhuma tiver.
+20. [BYTE] Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo.
+     palco: Resumo | Tabela de símbolos: nome, tipo e onde cada coisa foi declarada. | Uma tabela por bloco, numa pilha. Abriu bloco, empilha; fechou, desempilha. | Uso: busca do topo para baixo. O mais interno esconde o de fora.
+
+=== AULA ANIMADA [PEGADINHA] A sombra da variável  (id=SCOPE_SYMBOLS/asombradavariável, ~27s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Dois x, um fora e um dentro. O de dentro faz sombra no de fora.
+     palco: Dois x | int x = 1; | { |   int x = 2; |   print(x); | } | print(x);
+2. [BYTE] O print de dentro enxerga qual x? Toque na declaração.
+     palco: Dois x | int x = 1; | { |   int x = 2; | *  print(x); | } | print(x);
+     PERGUNTA(toque): certas=[  int x = 2;] erradas=[int x = 1;]
+       dica: A busca começa no bloco mais interno.
+       acerto: Isso. Ele acha o x de dentro e para ali.
+3. [BYTE] O bloco fechou. O print de fora enxerga qual x?
+     palco: Dois x | int x = 1; | { |   int x = 2; |   print(x); | } | *print(x);
+     PERGUNTA(toque): certas=[int x = 1;] erradas=[  int x = 2;]
+       dica: Quando o bloco fecha, os nomes dele somem.
+       acerto: Isso. Sobrou só o de fora, que nunca mudou.
+4. [PROF] A pegadinha é achar que x igual a dois mudou o x de fora. É outra variável.
+     palco: Dois x | *int x = 1; | { | *  int x = 2; |   print(x); | } | print(x);
+5. [BYTE] Saída do programa: dois, depois um.
+     palco: Dois x | int x = 1; | { |   int x = 2; |   print(x); | } | print(x); | 2 | 1
+
+=== AULA ANIMADA [CLIPE] Tabela de símbolos  (id=SCOPE_SYMBOLS/tabeladesímbolos, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] A tabela guarda cada nome, com o tipo e o escopo.
+     palco: Tabela de símbolos | x | int | global | y | float | local
+2. [BYTE] Todo uso de variável passa por ela.
+     palco: Tabela de símbolos | *x | int | global | y | float | local
+
+=== AULA DE LEITURA [STORY] O porteiro do condomínio
+[NARRADOR] Cidade Semântica, bairro dos Escopos. Prédios dentro de condomínios, apartamentos dentro de prédios.
+[BYTE] Tem dois 'x' no meu programa. Como o compilador sabe de qual eu estou falando?
+[PROF] Do mesmo jeito que o porteiro acha o 'João' certo. Imagine: alguém chega no seu apartamento e pergunta pelo João.
+TEXTO: O porteiro procura primeiro **no seu apartamento**. Não achou? Procura **no prédio**. Depois **no condomínio inteiro**. O primeiro João encontrado, de dentro para fora, é o João certo.
+TEXTO: Se tem um João no seu apê e outro no condomínio, o do apê **esconde** o de fora enquanto você está lá dentro. Isso é **sombreamento** (shadowing).
+PASSOS O mapa da analogia:
+    1. Apartamento, prédio, condomínio → **blocos aninhados** { { { } } }
+    2. Lista de moradores de cada lugar → **uma tabela de símbolos por escopo**
+    3. Procurar de dentro para fora → **regra do aninhamento mais próximo** (escopo estático)
+    4. Mudou-se do apê → **sair do bloco**: a lista dele é descartada
+    5. Nenhum João em lugar nenhum → erro **'variável não declarada'**
+[PILHA] As listas... ficam empilhadas. Entrou num bloco... empilha. Saiu... desempilha. Eu adoro... esse trabalho.
+CODIGO (Um condomínio de código):
+    {                        // bloco 0
+      int x;  int y;         // (1) x    (2) y
+      x = 1;
+      {                      // bloco 1
+        float x;             // (3) x
+        x = y + 1;
+        {                    // bloco 2
+          int y;             // (4) y
+          print(x + y);
+        }
+        print(y);
+      }
+      print(x);
+    }
+PREVEJA: Na linha print(x + y), dentro do bloco 2, quais declarações são usadas?
+    (     ) x (1) e y (2)
+    (certa) x (3) e y (4)
+    (     ) x (3) e y (2)
+    EXPLICACAO: De dentro para fora: y está no próprio bloco 2 (4); x não está no bloco 2, mas está no bloco 1 (3). O x (1) fica escondido.
+WIDGET SCOPE gramatica= entrada= legenda=Ligue cada uso à sua declaração, como o porteiro faria.
+DESTAQUE NO_DUMB_QUESTIONS: 'E o léxico não resolve isso?' Não: a Lexi só sabe que 'x' é um ID. Quem decide QUAL x é a análise semântica, com a tabela de símbolos.
+
+=== AULA DE LEITURA [VISUAL] A pilha de tabelas, quadro a quadro
+[PROF] Vamos assistir a pilha de tabelas enquanto o compilador lê o programa de cima para baixo.
+CODIGO (O programa):
+    {                        // bloco 0
+      int x;  int y;         // (1) x    (2) y
+      x = 1;
+      {                      // bloco 1
+        float x;             // (3) x
+        x = y + 1;
+        {                    // bloco 2
+          int y;             // (4) y
+          print(x + y);
+        }
+        print(y);
+      }
+      print(x);
+    }
+PASSOS A pilha em cada momento (topo à direita):
+    1. Abre bloco 0 → [ {} ]
+    2. int x; int y; → [ {x:int(1), y:int(2)} ]
+    3. Abre bloco 1 → [ {x(1), y(2)} | {} ]
+    4. float x; → [ {x(1), y(2)} | {x:float(3)} ] — o x(3) sombreia o x(1)
+    5. x = y + 1 → x acha (3) no topo; y não está no topo, desce e acha (2)
+    6. Abre bloco 2, int y; → [ ... | {x(3)} | {y:int(4)} ]
+    7. print(x + y) → x: (3), y: (4)
+    8. Fecha bloco 2 → a tabela {y(4)} é descartada
+    9. print(y) → y: (2)   •   Fecha bloco 1   •   print(x) → x: (1)
+WIDGET SCOPE gramatica= entrada= legenda=Agora com outro programa: para cada uso, qual declaração vence?
+[LEXI] Para mim, todos esses x são iguais. Olha só:
+WIDGET TOKENIZE gramatica= entrada=int x = 1; { float x = 2.5; print(x); } legenda=O léxico vê ID, ID, ID... sem saber a qual declaração cada um pertence.
+PREVEJA: Depois de fechar o bloco 1, alguém ainda consegue achar o x (3)?
+    (     ) Sim, ele fica na tabela global
+    (certa) Não, a tabela do bloco 1 foi desempilhada
+    (     ) Só se for float
+    EXPLICACAO: Saiu do bloco, a tabela daquele escopo sai do topo. O próximo print(x) só enxerga o x (1).
+WIDGET ATTR_TREE gramatica= entrada=a + z legenda=E se o nome não está em tabela nenhuma? A busca falha: 'z' não foi declarada, e o erro sobe pela árvore.
+DESTAQUE BRAIN_POWER: Repare: a busca percorre a pilha do TOPO para a BASE. Isso é toda a regra de escopo estático, em uma frase.
+
+=== AULA DE LEITURA [WORKED] Ligando cada uso à sua declaração
+[PROF] Exercício típico: para cada uso de variável, diga qual declaração ele referencia.
+CODIGO (Programa (declarações numeradas de 1 a 4)):
+    {                        // bloco 0
+      int x;  int y;         // (1) x    (2) y
+      x = 1;
+      {                      // bloco 1
+        float x;             // (3) x
+        x = y + 1;
+        {                    // bloco 2
+          int y;             // (4) y
+          print(x + y);
+        }
+        print(y);
+      }
+      print(x);
+    }
+PASSOS Resolvendo os usos, de dentro para fora:
+    1. x = 1 (bloco 0): x está no bloco 0 → **(1)**
+    2. x = y + 1 (bloco 1): x está no bloco 1 → **(3)**; y não está no bloco 1, sobe para o 0 → **(2)**
+    3. print(x + y) (bloco 2): x não está no 2, está no 1 → **(3)**; y está no 2 → **(4)**
+[BYTE] Peraí, deixa os últimos comigo.
+REVELAR: print(y), depois que o bloco 2 fechou.
+    RESPOSTA: (2). A tabela do bloco 2, onde estava o y (4), já foi desempilhada; no bloco 1 não há y; no bloco 0 há o (2).
+REVELAR: print(x), na última linha.
+    RESPOSTA: (1). Estamos de volta ao bloco 0; o x float (3) morreu com o bloco 1.
+REVELAR: Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?
+    RESPOSTA: Erro de redeclaração: o mesmo nome declarado duas vezes no MESMO escopo. Sombrear é declarar num escopo DIFERENTE.
+REVELAR: Qual o tipo da expressão x + y em print(x + y)?
+    RESPOSTA: x (3) é float e y (4) é int → float + int = float. A tabela de símbolos alimenta a verificação de tipos!
+WIDGET SCOPE gramatica= entrada= legenda=Pratique com um programa sorteado.
+DESTAQUE EXAM_TIP: Na prova, desenhe a pilha de tabelas ao lado do código e atualize a cada { e }. É mais rápido e evita confundir quem já 'morreu'.
+
+=== AULA DE LEITURA [SOCRATIC] Uma tabela só não bastaria?
+[PROF] Vamos desenhar a tabela de símbolos juntos, com perguntas.
+REVELAR: Que informação guardar para cada nome?
+    RESPOSTA: Pelo menos: nome, tipo, categoria (variável, função, parâmetro...) e, mais tarde, endereço/deslocamento na memória. Às vezes a linha da declaração, para mensagens de erro.
+REVELAR: Por que um único mapa global nome → informação não funciona?
+    RESPOSTA: Porque o mesmo nome pode ter declarações diferentes em blocos diferentes (x int e x float). E ao sair de um bloco, os nomes dele precisam sumir.
+REVELAR: Então, o que fazer ao entrar num bloco? E ao sair?
+    RESPOSTA: Entrar: criar uma tabela nova, ligada à anterior. Sair: voltar para a anterior, descartando a nova. Uma pilha de tabelas!
+[BYTE] E pra procurar um nome, eu começo por onde?
+REVELAR: Por onde começa a busca, e quando ela para?
+    RESPOSTA: Começa na tabela do topo (bloco mais interno) e vai descendo; para no primeiro achado. Se chegar ao fundo sem achar: 'não declarada'.
+PREVEJA: Declarar 'int x' quando já existe 'x' num bloco EXTERNO é...
+    (     ) Erro de redeclaração
+    (certa) Permitido: o novo x sombreia o externo
+    (     ) Ignorado
+    EXPLICACAO: A verificação de redeclaração olha só a tabela do TOPO. Em blocos diferentes, o novo x sombreia o antigo (C e C++ permitem; Java, por escolha de projeto, proíbe uma local sombrear outra local, mas a tabela funciona igual).
+REVELAR: Escopo estático (léxico) vs dinâmico: qual a diferença?
+    RESPOSTA: Estático: o x certo é decidido pelo TEXTO do programa (aninhamento). Dinâmico: pela ordem de CHAMADAS em tempo de execução (a declaração mais recente ativa). C, Java e Kotlin usam estático.
+REVELAR: Em qual fase o compilador usa e preenche a tabela?
+    RESPOSTA: O léxico pode inserir os nomes; a análise sintática/semântica insere declarações e resolve usos; a geração de código usa os endereços. Ela acompanha todas as fases.
+WIDGET SCOPE gramatica= entrada= legenda=Teste suas respostas.
+DESTAQUE BRAIN_POWER: Se o compilador inserisse 'x' do bloco interno na MESMA tabela do externo, o que aconteceria com o x externo ao sair do bloco? (Ele teria sido sobrescrito, perdido para sempre.)
+
+=== AULA DE LEITURA [FORMAL] Escopo estático e ambientes encadeados
+TEXTO: **Escopo** de uma declaração: a região do programa em que um uso daquele nome se refere a ela. **Regra do aninhamento mais próximo:** um uso de x refere-se à declaração de x no bloco mais interno que contém o uso.
+CODIGO (Tabela de símbolos encadeada (Livro do Dragão, seção 2.7)):
+    classe Env:
+      tabela:   Mapa<nome, Simbolo>
+      anterior: Env?                      // escopo envolvente
+    
+      put(nome, s): tabela[nome] := s
+      get(nome):
+        e := este
+        enquanto e ≠ nulo:
+          se nome ∈ e.tabela: retorne e.tabela[nome]
+          e := e.anterior
+        retorne nulo
+CODIGO (Esquema de tradução usando a pilha de ambientes):
+    bloco  → '{'       { salvo := topo; topo := new Env(topo) }
+               decls stmts
+               '}'       { topo := salvo }
+    decl   → tipo id ;   { se id ∈ topo.tabela: erro "redeclaração"
+                           senão topo.put(id, Simbolo(tipo)) }
+    fator  → id          { s := topo.get(id)
+                           se s = nulo: erro "não declarada"
+                           senão fator.tipo := s.tipo }
+PASSOS Operações e custos (com tabela hash por escopo):
+    1. entrar no escopo: O(1)
+    2. inserir: O(1) esperado, só no escopo do topo
+    3. buscar: O(profundidade do aninhamento) no pior caso
+    4. sair do escopo: O(1), descarta a tabela do topo
+PREVEJA: Escopo dinâmico: f usa x sem declarar; g declara x=2 e chama f; o global tem x=1. Com escopo DINÂMICO, f vê x =
+    (     ) 1
+    (certa) 2
+    (     ) erro
+    EXPLICACAO: Dinâmico segue a cadeia de CHAMADAS: a ativação mais recente com x é a de g. No escopo estático, f veria o global (1).
+WIDGET SCOPE gramatica= entrada= legenda=Escopo estático: a resposta vem só do texto.
+DESTAQUE EXAM_TIP: Ao responder 'qual declaração', justifique com a regra: 'pelo aninhamento mais próximo, o uso na linha N refere-se à declaração do bloco B'. E diferencie redeclaração (mesmo escopo, erro) de sombreamento (escopo interno, permitido).
+DESTAQUE WATCH_OUT: Escopo é sobre ONDE um nome é visível (estático, no texto). Tempo de vida é sobre QUANDO a variável existe na memória (dinâmico, na execução). Não são a mesma coisa.
+
+=== AULA DE LEITURA [MNEMONIC] A cebola dos escopos
+[NARRADOR] Palácio da Memória: Cidade Semântica, bairro dos Escopos. Cada casa é uma cebola: camadas dentro de camadas.
+DESTAQUE MNEMONIC: **Escopo é cebola: procure de dentro para fora.** A primeira camada que tiver o nome vence.
+DESTAQUE MNEMONIC: **'Abre chave, empilha; fecha chave, desempilha.'** A pilha de tabelas segue as chaves do programa.
+DESTAQUE MNEMONIC: **E-I-B-S**: as quatro operações: **E**ntrar no escopo, **I**nserir, **B**uscar, **S**air. ('É I Bem Simples.')
+DESTAQUE MNEMONIC: Sombreamento: **'quem está mais perto faz sombra em quem está longe'**. O x de fora não morreu; só está na sombra.
+[BYTE] E se eu declarar o mesmo nome duas vezes na mesma camada?
+[PROF] Aí não é sombra, é briga: **redeclaração**, erro. Sombra só existe entre camadas diferentes.
+PREVEJA: Busca na pilha de tabelas: de onde para onde?
+    (     ) Da base para o topo
+    (certa) Do topo para a base
+    (     ) Só no topo
+    EXPLICACAO: Topo = bloco mais interno. Descer a pilha = ir para fora na cebola. (Só no topo é a regra para checar REDECLARAÇÃO, não para buscar usos.)
+WIDGET SCOPE gramatica= entrada= legenda=Descasque a cebola: para cada uso, ache a camada certa.
+REVELAR: Recite a regra do escopo estático numa frase.
+    RESPOSTA: Um uso de x refere-se à declaração de x no bloco mais interno (mais próximo) que contém o uso.
+DESTAQUE FIRESIDE: Escopo estático: 'Me lê o código e você sabe quem eu sou.' Escopo dinâmico: 'Comigo depende de quem me chamou... é mais emocionante.' Programador cansado às 3 da manhã: 'Eu fico com o estático.'
+
+################ ASSUNTO AST_BUILD: Árvore sintática abstrata (AST) com classes  prereqs=[CFG_DERIVATION]
+FICHA: A árvore sintática abstrata guarda só operadores, operandos e construções (BinOp, Var, Num, Atrib, Se, Enquanto, Bloco), jogando fora correntes de não-terminais, parênteses, pontuação e ε; o parser a constrói (new BinOp no descendente ou $$ = new BinOp(...) no Bison) e as fases seguintes andam nela.
+  gancho: AST = Árvore Sem Tralha: corta o CPE (Correntes, Parênteses, Epsilons). Quem está mais fundo trabalha primeiro.
+  termos: [abstrat, arvore, classe, binop, parentes, precedenc, parser]
+  erros comuns: [Criar nós para parênteses ou para não-terminais de corrente (E → T → F), Montar a AST pendurada para a direita (recursão em vez de laço) e inverter a associatividade de - e /, Achar que sem parênteses a precedência se perde (ela mora na forma da árvore), Confundir AST (estrutura em árvore) com TAC (lista de instruções gerada a partir dela), Esquecer $$ = $2 na regra do parêntese ou $$ = $1 nas correntes do Bison]
+  FLASH: O que a AST joga fora? -> Correntes de não-terminais, parênteses/pontuação e ε
+  FLASH: Nós da derivação × AST em a + b * c? -> 13 × 5
+  FLASH: Onde mora a precedência na AST? -> Na forma: quem está mais fundo é calculado primeiro
+  FLASH: Linha-chave da associatividade à esquerda no descendente? -> e = new BinOp(op, e, termo()); dentro do while
+  FLASH: Ação Bison para E → E + T? -> $$ = new BinOp('+', $1, $3);
+  FLASH: Ação Bison para F → ( E )? -> $$ = $2; (o parêntese some)
+  FLASH: Classes de comando típicas? -> Atrib, Se, Enquanto, Bloco (estendem Cmd)
+  FLASH: Vantagem da AST sobre gerar código direto no parser? -> Várias passadas (tipos, depois código), fases separadas e testáveis, otimização na árvore
+  FLASH: Nós da AST com n operadores binários? -> 2n + 1
+
+=== AULA ANIMADA [BASICO] A árvore enxuta  (id=AST_BUILD, ~125s, 17 passos, exemplo começa no passo null)
+1. [BYTE] O parser montou a árvore de derivação. Ela tem um nó para cada regra usada, e fica enorme.
+     palco: AST | a + ( b )
+2. [BYTE] As fases seguintes só precisam saber qual é a operação e quais são os operandos.
+     palco: AST | *a + ( b )
+3. [BYTE] A árvore que guarda só isso é a árvore sintática abstrata, a AST.
+     palco: AST
+4. [BYTE] A árvore de derivação guarda tudo: parênteses, e até as regras que só passam de um não-terminal para outro.
+     palco: a + ( b ) | E | E | id | + | T | ( | E | id | )
+5. [BYTE] Tem nó sobrando aqui. Toque nos dois parênteses: eles não mudam a conta.
+     palco: a + ( b ) | E | E | id | + | T | ( | E | id | )
+     PERGUNTA(toque): certas=[(, )] erradas=[E, id]
+       dica: A árvore já mostra a ordem. O parêntese fez o trabalho dele.
+       acerto: Isso. Pontuação some da árvore abstrata.
+6. [BYTE] A AST guarda só o que tem significado: o operador no nó, e os operandos como filhos.
+     palco: a + ( b ) | BinOp + | a | b
+7. [BYTE] No código, cada nó da AST é um objeto, criado pelo parser na hora em que reconhece a regra.
+     palco: a + ( b ) | BinOp + | a | b | *new BinOp('+', a, b)
+8. [BYTE] A receita para montar a AST tem três regras.
+     palco: Receita | 1. Operador vira nó; operandos viram filhos. | 2. Valor ou nome vira folha. | 3. Parêntese e regra de passagem somem.
+9. [BYTE] Na árvore, cada nome virou folha. Qual regra é essa? Toque.
+     palco: Receita | 1. Operador vira nó; operandos viram filhos. | 2. Valor ou nome vira folha. | 3. Parêntese e regra de passagem somem.
+     PERGUNTA(toque): certas=[2. Valor ou nome vira folha.] erradas=[1. Operador vira nó; operandos viram filhos., 3. Parêntese e regra de passagem somem.]
+       dica: Nome não tem filhos.
+       acerto: Isso. Regra dois: valor e nome viram folha.
+10. [BYTE] Regra três: o parêntese só servia para agrupar. Na AST, a própria forma da árvore já mostra o agrupamento.
+     palco: Receita | 1. Operador vira nó; operandos viram filhos. | 2. Valor ou nome vira folha. | *3. Parêntese e regra de passagem somem.
+11. [BYTE] Agora monte a AST de total vezes, abre parêntese, preço menos dois.
+     palco: AST | total * ( preco - 2 )
+12. [BYTE] Qual operador fica na raiz? Toque nele.
+     palco: AST | total * ( preco - 2 ) | * | - | (
+     PERGUNTA(toque): certas=[*] erradas=[-, (]
+       dica: O parêntese faz o menos acontecer antes. Quem fica por último é a raiz.
+       acerto: Isso. O vezes é a última conta, então vai na raiz.
+13. [BYTE] O menos fica embaixo do vezes. Quais são os filhos do menos? Toque.
+     palco: AST | total * ( preco - 2 ) | * | total | - | preco | 2 | total
+     PERGUNTA(toque): certas=[preco, 2] erradas=[total]
+       dica: São os dois lados do menos.
+       acerto: Isso. Preço e dois são folhas do menos.
+14. [BYTE] Sem parênteses na árvore, e a ordem continua certa: quem está mais fundo é calculado primeiro.
+     palco: AST | total * ( preco - 2 ) | ** | total | *- | preco | 2
+15. [BYTE] Os parênteses aparecem na AST? Um colega desenhou com eles. Certo ou errado?
+     palco: Erros comuns | A AST de a * (b - 2) tem nós para os parênteses. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O parêntese muda a forma da árvore. Depois disso, ele ainda serve?
+       acerto: Isso. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes.
+16. [BYTE] Outro erro: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore.
+     palco: Erros comuns | Certo: Parêntese não vira nó. O agrupamento fica na forma da árvore. | *Errado: Pôr na raiz o primeiro operador que aparece na expressão. | *Certo: Na raiz fica a última operação a ser calculada.
+17. [BYTE] Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas.
+     palco: Resumo | Árvore de derivação: um nó por regra. AST: só operações e operandos. | Operador vira nó interno; nome e valor viram folha. | Parêntese e regra de passagem somem. Mais fundo é calculado antes.
+
+=== AULA ANIMADA [PEGADINHA] O parêntese não vira nó  (id=AST_BUILD/oparêntesenãoviranó, ~32s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Esta conta tem parênteses. Eles mudam a ordem da conta.
+     palco: O parêntese não vira nó | ( a + b ) * c
+2. [BYTE] Na árvore de derivação, cada parêntese aparece como folha.
+     palco: O parêntese não vira nó | ( a + b ) * c | *( | *) | E
+3. [BYTE] Na AST eles somem. A forma da árvore já guarda a ordem.
+     palco: O parêntese não vira nó | ( a + b ) * c | ** | *+ | c | a | b
+4. [BYTE] Quais destes viram nós na árvore? Toque em todos.
+     palco: O parêntese não vira nó | ( a + b ) * c | * | + | c | a | b | * | + | ( | )
+     PERGUNTA(toque): certas=[*, +] erradas=[(, )]
+       dica: A AST guarda operações e valores. Sinal de agrupar não vira nó.
+       acerto: Isso. Vezes e mais viram nós. Os parênteses somem.
+5. [BYTE] O mais fica embaixo do vezes. É assim que a AST lembra do parêntese.
+     palco: O parêntese não vira nó | ( a + b ) * c | ** | *+ | c | a | b
+6. [PROF] Na AST fica o que o programa faz, não como foi escrito.
+     palco: O parêntese não vira nó | ( a + b ) * c | * | + | c | a | b
+
+=== AULA ANIMADA [CLIPE] AST ou árvore de derivação  (id=AST_BUILD/astouárvoredederivação, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] A árvore de derivação guarda cada regra usada.
+     palco: (a + b) | ( E )   E + T   T   F
+2. [BYTE] A AST guarda só o que importa para o significado.
+     palco: (a + b) | a + b
+
+=== AULA DE LEITURA [STORY] O resumo e o livro inteiro
+[NARRADOR] Véspera de prova de Literatura. Byte tem duas opções: reler o livro inteiro, com prefácio, índice e notas de rodapé, ou ler o resumo de duas páginas da colega.
+[BYTE] O resumo, óbvio! Mas... não perde nada importante?
+[PROF] Um BOM resumo não perde nada que importa para a prova: personagens, quem fez o quê, em que ordem. Ele joga fora só o que servia para o livro ser LIDO: capítulos de transição, numeração, notas. A **árvore sintática abstrata (AST)** é o resumo; a **árvore de derivação** é o livro inteiro.
+PASSOS Livro × resumo → árvore de derivação × AST:
+    1. Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.
+    2. Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.
+    3. Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.
+    4. Páginas em branco → produções **ε**: somem.
+    5. Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.
+PREVEJA: Para 'a + b * c', a árvore de derivação da gramática E/T/F tem 13 nós. Quantos tem a AST?
+    (     ) 13
+    (     ) 9
+    (certa) 5
+    (     ) 3
+    EXPLICACAO: Só sobram os 3 operandos e os 2 operadores: BinOp('+') com Var(a) e BinOp('*') com Var(b) e Var(c). 13 → 5: um resumo de verdade!
+WIDGET AST gramatica= entrada=a + b * c legenda=Lado a lado: o livro (derivação) e o resumo (AST). Repare que o * continua mais FUNDO que o +: a precedência sobreviveu.
+[BYTE] Então a AST é só uma árvore mais magrinha. Por que ela é tão importante?
+[PROF] Porque, depois da análise sintática, TODO o resto do compilador estuda pelo resumo: o verificador de tipos, a tabela de símbolos, o gerador de código. Ninguém quer reler o livro inteiro três vezes.
+DESTAQUE REAL_WORLD: No trabalho prático (o compilador em Java), muitos grupos traduzem direto dentro do parser: lê um token, já emite assembly. Funciona, mas é como fazer a prova lendo o livro uma vez só, sem poder voltar. Com a AST você lê uma vez, monta o resumo e depois pode passar por ele quantas vezes quiser: uma vez para checar tipos, outra para gerar código.
+DESTAQUE NO_DUMB_QUESTIONS: P: Se eu jogo fora os parênteses, como o compilador sabe que (a + b) * c é diferente de a + b * c? R: Pela FORMA da árvore. Em (a + b) * c, o + fica embaixo do *; em a + b * c, é o * que fica embaixo do +. Quem está mais fundo é calculado primeiro.
+REVELAR: Na analogia, quem é: livro inteiro, resumo, capítulo de transição, numeração das páginas?
+    RESPOSTA: Árvore de derivação, AST, não-terminal em corrente (E → T → F), parênteses/pontuação.
+
+=== AULA DE LEITURA [VISUAL] Dieta de árvores, ao vivo
+[PROF] Hoje cada widget mostra a mesma expressão duas vezes: a árvore de derivação (gorda) e a AST (magra), com a contagem de nós e o código Java que monta a AST.
+WIDGET AST gramatica= entrada=( ( a ) ) legenda=O caso extremo: 14 nós na árvore de derivação, 1 nó na AST. Tudo era parêntese e corrente.
+PREVEJA: O que restou na AST de '( ( a ) )'?
+    (     ) BinOp com dois filhos
+    (certa) Um único Var(a)
+    (     ) Dois nós de parênteses
+    (     ) Nada: a AST fica vazia
+    EXPLICACAO: Os parênteses só agrupavam; não há operação nenhuma. A AST é apenas new Var("a").
+WIDGET AST gramatica= entrada=a - b - c legenda=Associatividade: 14 nós contra 5. Veja qual '-' ficou embaixo.
+PREVEJA: Na AST de 'a - b - c', qual subtração fica mais funda (é feita primeiro)?
+    (certa) A da esquerda: (a - b) - c
+    (     ) A da direita: a - (b - c)
+    (     ) Tanto faz: dá o mesmo valor
+    EXPLICACAO: A gramática E → E - T é recursiva à ESQUERDA, então a árvore cresce para a esquerda: new BinOp('-', new BinOp('-', a, b), c). E não dá o mesmo valor: com a=10, b=3, c=2, (10-3)-2 = 5 mas 10-(3-2) = 9.
+WIDGET AST gramatica= entrada=a - ( b - c ) legenda=Agora com parênteses à direita: 19 nós contra 5. A forma da AST mudou, mesmo sem nenhum nó de parêntese.
+WIDGET AST gramatica= entrada=( a + b ) * ( c - x ) legenda=28 nós na derivação, 7 na AST: 4 folhas e 3 operadores.
+PASSOS Regras que você acabou de ver acontecendo:
+    1. Folha id/num → **Var** ou **Num** (um nó só, sem a corrente F → id).
+    2. Produção com operador (E → E + T) → **BinOp** com o operador e os dois filhos.
+    3. Produção de corrente (E → T, T → F) → nenhum nó novo: só repassa o filho.
+    4. F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.
+    5. Em expressões binárias: nós da AST = 2 × (nº de operadores) + 1.
+WIDGET MINILANG gramatica= entrada=m = a;
+if (b > m) { m = b; }
+print(m); legenda=Comandos também viram nós (Atrib, Se...). O gerador anda nessa árvore e emite os desvios. Com a=4 e b=7, imprime 7.
+DESTAQUE BRAIN_POWER: Uma expressão com 10 operadores binários: quantos nós tem a AST? E por que a árvore de derivação sempre tem MAIS nós que isso?
+REVELAR: Resposta
+    RESPOSTA: 21 nós (10 BinOp + 11 folhas). A árvore de derivação tem, no mínimo, um nó de não-terminal para cada nó da AST, mais os nós de corrente, de parênteses e dos próprios tokens de operador como folhas.
+
+=== AULA DE LEITURA [WORKED] Construindo a AST na descida recursiva
+[PROF] Lembra do parser descendente recursivo, com um método por não-terminal? A mudança é pequena: em vez de void, cada método **devolve uma Expr**.
+CODIGO (As classes da AST (Java, como no trabalho prático)):
+    abstract class Expr { }
+    class Num extends Expr { int valor;  Num(int v) { valor = v; } }
+    class Var extends Expr { String nome; Var(String n) { nome = n; } }
+    class BinOp extends Expr {
+        char op; Expr esq, dir;
+        BinOp(char op, Expr esq, Expr dir) { this.op = op; this.esq = esq; this.dir = dir; }
+    }
+CODIGO (O parser que CONSTRÓI a AST. O while em expr() e termo() garante associatividade à esquerda.):
+    Expr expr() {                 // E → T (('+'|'-') T)*
+        Expr e = termo();
+        while (tok.equals("+") || tok.equals("-")) {
+            char op = tok.charAt(0); casaToken(tok);
+            e = new BinOp(op, e, termo());   // associa à esquerda
+        }
+        return e;
+    }
+    Expr termo() {                // T → F (('*'|'/') F)*
+        Expr e = fator();
+        while (tok.equals("*") || tok.equals("/")) {
+            char op = tok.charAt(0); casaToken(tok);
+            e = new BinOp(op, e, fator());
+        }
+        return e;
+    }
+    Expr fator() {                // F → ( E ) | id | num
+        if (tok.equals("(")) { casaToken("("); Expr e = expr(); casaToken(")"); return e; }
+        if (ehNumero(tok)) { int v = Integer.parseInt(tok); casaToken(tok); return new Num(v); }
+        String nome = tok; casaToken(tok); return new Var(nome);
+    }
+PASSOS Rastreando '2 * x + y':
+    1. expr() chama termo(); termo() chama fator().
+    2. fator() vê '2' (número) → devolve **new Num(2)**. Em termo(), e = Num(2).
+    3. termo() vê '*': casa, chama fator(), que devolve **Var(x)**. e = **new BinOp('*', Num(2), Var(x))**.
+    4. termo() vê '+', que não é * nem /: sai do while e devolve o BinOp('*').
+    5. De volta em expr(): e = BinOp('*'). Vê '+': casa, chama termo(), que devolve **Var(y)**.
+    6. e = **new BinOp('+', BinOp('*', Num(2), Var(x)), Var(y))**. Fim da entrada: devolve e.
+WIDGET AST gramatica= entrada=2 * x + y legenda=Confira: 13 nós na derivação, 5 na AST, e o código Java gerado.
+DESTAQUE WATCH_OUT: A linha mais importante é `e = new BinOp(op, e, termo());`: o resultado ANTERIOR vira o filho ESQUERDO do novo nó. É assim que 'a - b - c' vira (a - b) - c. Se você escrever recursão (`e = new BinOp(op, e, expr())`), a árvore fica pendurada para a direita e a subtração dá errado.
+TEXTO: Agora é com você (exemplo esmaecido): **a - ( b - c )**.
+REVELAR: O que fator() devolve ao encontrar '('?
+    RESPOSTA: Casa '(', chama expr(), que monta new BinOp('-', Var(b), Var(c)), casa ')' e devolve ESSE BinOp. Nenhum nó de parêntese é criado.
+REVELAR: Escreva o código Java completo da AST.
+    RESPOSTA: new BinOp('-', new Var("a"), new BinOp('-', new Var("b"), new Var("c")))
+REVELAR: Quantos nós tem cada árvore?
+    RESPOSTA: Árvore de derivação: 19 nós. AST: 5 nós (2 BinOp + 3 Var).
+WIDGET AST gramatica= entrada=a - ( b - c ) legenda=Confira suas respostas.
+DESTAQUE EXAM_TIP: Questão comum: 'dada a gramática com ações semânticas, desenhe a AST de tal expressão'. Faça em dois passos: primeiro a árvore de derivação (rascunho), depois risque correntes e parênteses e troque cada produção com operador por um BinOp.
+
+=== AULA DE LEITURA [SOCRATIC] O que o compilador realmente precisa saber?
+[PROF] Hoje eu pergunto, você descobre. Comece olhando a árvore de derivação de '( a + b ) * c'.
+WIDGET AST gramatica= entrada=( a + b ) * c legenda=18 nós na derivação. Olhe primeiro só o lado esquerdo.
+PREVEJA: Para GERAR CÓDIGO dessa expressão, de que informação o compilador precisa?
+    (certa) Quais operações, em que ordem, sobre quais operandos
+    (     ) Quais não-terminais foram usados
+    (     ) Onde estavam os parênteses no texto
+    (     ) Quantos espaços havia entre os tokens
+    EXPLICACAO: Gerar t1 = a + b; t2 = t1 * c só exige operações, operandos e ordem. Todo o resto era andaime para o PARSER decidir essa ordem.
+PREVEJA: Se a AST não tem parênteses, onde está guardada a informação 'some antes de multiplicar'?
+    (     ) Num campo prioridade em cada nó
+    (certa) Na forma da árvore: o + é FILHO do *
+    (     ) Numa tabela à parte
+    (     ) Ela se perde
+    EXPLICACAO: Quem está mais fundo é avaliado primeiro (pós-ordem). A estrutura É a precedência.
+[BYTE] E o nó T no meio da corrente E → T → F? Ele não faz nada?
+REVELAR: Faz alguma coisa?
+    RESPOSTA: Na derivação, ele registra que a gramática passou pelo nível de precedência do *. Mas, como não houve nenhum *, não há operação a representar. Na AST, ele simplesmente some: o método termo() devolve o que fator() devolveu.
+PREVEJA: No TP, seu grupo gera assembly direto no parser. Aí surge: 'a variável x é usada antes de ser declarada mais abaixo no arquivo'. O que fica difícil?
+    (     ) Nada
+    (certa) Você já emitiu código para x antes de conhecer a declaração; seria preciso voltar atrás
+    (     ) O analisador léxico quebra
+    EXPLICACAO: Tradução direta é UMA passada só. Com uma AST, você faz uma passada para coletar declarações e checar tipos e OUTRA para gerar código, quantas forem necessárias.
+REVELAR: Cite duas outras vantagens de construir a AST antes de gerar código.
+    RESPOSTA: 1) Separação de responsabilidades: o parser só reconhece e monta; a semântica e o gerador vivem em métodos das classes (avaliar, verificarTipo, gerar), mais fáceis de testar. 2) Otimizações como dobra de constantes viram 'trocar um BinOp(Num, Num) por um Num' na árvore. Bônus: dá para imprimir a AST e depurar.
+PREVEJA: E comandos, como if e while? Eles viram o quê na AST?
+    (     ) Somem, como os parênteses
+    (certa) Nós próprios, como Se(cond, entao, senao) e Enquanto(cond, corpo)
+    (     ) Folhas Var
+    EXPLICACAO: Cada construção com significado vira uma classe. Palavras-chave, chaves e ponto e vírgula somem; condição e corpo ficam como filhos.
+WIDGET MINILANG gramatica= entrada=i = 0;
+s = 0;
+while (i < 4) { s = s + i; i = i + 1; }
+print(s); legenda=Um Enquanto com Bloco de duas Atrib dentro. O gerador percorre a árvore e produz o laço com desvios. Imprime 6.
+DESTAQUE FIRESIDE: Árvore de derivação: 'Eu tenho TUDO, cada detalhe!' AST: 'E por isso ninguém aguenta andar em você três vezes.' Árvore de derivação: 'Hmpf. Pelo menos o parser me ama.' AST: 'O parser te usa e me entrega para o resto do compilador.'
+
+=== AULA DE LEITURA [FORMAL] AST: definição de prova
+TEXTO: **Árvore de derivação (concreta)**: raiz = símbolo inicial; cada nó interno é um não-terminal A cujos filhos são o lado direito de uma produção A → α usada; folhas, lidas da esquerda para a direita, formam a sentença.
+TEXTO: **Árvore sintática abstrata (AST)**: cada nó interno é um **operador ou construção** da linguagem e seus filhos são os **operandos/componentes** com significado. Omite não-terminais de cadeia (A → B), parênteses, pontuação e ε. A AST não é única da gramática: é uma escolha de projeto do compilador.
+CODIGO (Comandos como classes (junto com Expr, Num, Var, BinOp)):
+    abstract class Cmd { }
+    
+    class Atrib extends Cmd {          // x = expr;
+        String var; Expr valor;
+    }
+    class Se extends Cmd {             // if (cond) entao else senao
+        Expr cond; Cmd entao, senao;   // senao == null quando não há else
+    }
+    class Enquanto extends Cmd {       // while (cond) corpo
+        Expr cond; Cmd corpo;
+    }
+    class Bloco extends Cmd {          // { c1 c2 ... }
+        List<Cmd> cmds = new ArrayList<>();
+    }
+TEXTO: **Construção dirigida pela sintaxe**: cada produção recebe uma regra semântica que sintetiza o atributo `nodo` (a AST do lado esquerdo) a partir dos `nodo` dos filhos. É uma definição **S-atribuída**: os atributos sobem da folha para a raiz.
+CODIGO (No Bison (ascendente): $$ é o valor do lado esquerdo; $1, $2, $3 os dos símbolos do lado direito):
+    exp   : exp '+' termo     { $$ = new BinOp('+', $1, $3); }
+          | exp '-' termo     { $$ = new BinOp('-', $1, $3); }
+          | termo             { $$ = $1; }          /* corrente: só repassa */
+          ;
+    termo : termo '*' fator   { $$ = new BinOp('*', $1, $3); }
+          | fator             { $$ = $1; }
+          ;
+    fator : '(' exp ')'       { $$ = $2; }          /* o parêntese SOME aqui */
+          | ID                { $$ = new Var($1); }
+          | NUM               { $$ = new Num($1); }
+          ;
+PREVEJA: Na regra `fator : '(' exp ')' { $$ = $2; }`, por que $2?
+    (     ) Porque o parêntese é o 2º símbolo
+    (certa) Porque exp é o 2º símbolo do lado direito, e a AST do fator é simplesmente a AST de exp
+    (     ) Para criar um nó de parênteses
+    EXPLICACAO: '(' é $1, exp é $2, ')' é $3. Repassar $2 é exatamente 'jogar fora o parêntese'.
+TEXTO: **Descendente recursivo**: cada método de não-terminal devolve a AST do que reconheceu. Para A → A op B (recursiva à esquerda, eliminada como A → B (op B)*), use um **laço** que acumula: `e = new BinOp(op, e, B())`, preservando a associatividade à esquerda.
+CODIGO (Percorrendo a AST: cada fase é um método (ou um Visitor). Repare na pós-ordem: filhos antes do pai.):
+    abstract class Expr {
+        abstract int avaliar(Map<String, Integer> mem);
+        abstract String gerar(Gerador g);          // devolve onde ficou o valor
+    }
+    class Num extends Expr {
+        int valor;
+        int avaliar(Map<String, Integer> mem) { return valor; }
+        String gerar(Gerador g) { return String.valueOf(valor); }
+    }
+    class Var extends Expr {
+        String nome;
+        int avaliar(Map<String, Integer> mem) { return mem.get(nome); }
+        String gerar(Gerador g) { return nome; }
+    }
+    class BinOp extends Expr {
+        char op; Expr esq, dir;
+        int avaliar(Map<String, Integer> mem) {
+            int x = esq.avaliar(mem), y = dir.avaliar(mem);   // filhos primeiro (pós-ordem)
+            switch (op) { case '+': return x + y; case '-': return x - y;
+                          case '*': return x * y; default:  return x / y; }
+        }
+        String gerar(Gerador g) {
+            String x = esq.gerar(g), y = dir.gerar(g);
+            String t = g.novoTemp();
+            g.emite(t + " = " + x + " " + op + " " + y);       // TAC!
+            return t;
+        }
+    }
+DESTAQUE REAL_WORLD: Com muitas fases, em vez de pôr avaliar/gerar/verificarTipo em cada classe, usa-se o padrão **Visitor**: uma classe por fase (VerificadorDeTipos, GeradorMips) com um método visitar por tipo de nó. javac, Roslyn (C#) e o Clang são organizados em torno da AST assim.
+DESTAQUE EXAM_TIP: Três perguntas que caem: (1) desenhar a AST de uma expressão (lembre: sem parênteses, associativa à esquerda); (2) escrever as ações $$ = new ... de uma gramática Bison; (3) 'diferencie árvore de derivação de AST', responda com a definição + um exemplo com contagem de nós.
+REVELAR: Defina AST e cite três coisas que ela descarta em relação à árvore de derivação.
+    RESPOSTA: Árvore em que nós internos são operadores/construções e filhos são operandos com significado. Descarta: não-terminais de cadeia (E → T → F), parênteses/pontuação e produções ε (e, com elas, as palavras-chave que só marcavam a construção).
+
+=== AULA DE LEITURA [MNEMONIC] A árvore de dieta
+DESTAQUE MNEMONIC: **AST = Árvore Sem Tralha.** Tira três tralhas: **C**orrentes (E → T → F), **P**arênteses (e pontuação) e **E**psilons. 'Corta o CPE.'
+TEXTO: **Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** , uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso.
+DESTAQUE MNEMONIC: **Parênteses são andaimes**: indispensáveis enquanto o prédio está sendo construído (parsing), retirados quando ele fica pronto. A forma do prédio (a árvore) já guarda o que eles seguravam.
+DESTAQUE MNEMONIC: **Corrente de WhatsApp**: E → T → F → a é como mensagem encaminhada cinco vezes. O conteúdo é o 'a'; os encaminhamentos não acrescentam nada. Na AST: Var(a), e só.
+DESTAQUE MNEMONIC: **Quem está mais fundo trabalha primeiro.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.
+PREVEJA: Qual linha de código é o 'segredo' da associatividade à esquerda no parser descendente?
+    (     ) return new BinOp(op, termo(), expr());
+    (certa) e = new BinOp(op, e, termo()); dentro de um while
+    (     ) if (tok.equals("(")) return expr();
+    EXPLICACAO: 'O velho vai para a esquerda': o resultado acumulado vira filho esquerdo do novo nó, a cada volta do laço.
+DESTAQUE MNEMONIC: **Bison em três palavras: 'filho vira pai'.** $$ = new BinOp('+', $1, $3), os filhos $1 e $3 se tornam filhos do nó novo $$. Corrente? $$ = $1. Parêntese? $$ = $2.
+DESTAQUE WATCH_OUT: Contrastes que confundem: **árvore de derivação** tem não-terminais e todos os tokens; a **AST** tem só operadores e operandos. **AST** é estrutura; **TAC** é uma lista de instruções gerada a partir dela. **Parse tree** = árvore de derivação = árvore sintática concreta (três nomes, uma coisa).
+WIDGET AST gramatica= entrada=( a + b ) * c legenda=Corta o CPE: conte as correntes, os parênteses e veja 18 virar 5.
+REVELAR: Sem olhar: o que é jogado fora, o que fica e onde mora a precedência?
+    RESPOSTA: Fora: correntes, parênteses/pontuação, ε. Fica: operadores (BinOp) e operandos (Var, Num), e construções (Atrib, Se, Enquanto, Bloco). Precedência e associatividade moram na FORMA da árvore.
+REVELAR: Por que vale a pena montar a AST no TP em vez de gerar código direto no parser?
+    RESPOSTA: Porque aí o compilador pode percorrer o programa várias vezes (tipos, depois código), com cada fase separada e testável, e otimizar mexendo na árvore. Tradução direta é uma passada só, sem volta.
+
