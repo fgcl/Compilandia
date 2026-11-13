@@ -147,8 +147,8 @@
     <string name="fases_f_erro2">The compiler runs the program.</string>
     <string name="fases_f_certo2">The compiler only translates. The processor runs it, or an interpreter does.</string>
     <string name="fases_f_fala2">A common mistake: thinking the compiler runs the program. It only translates. An interpreter is what runs it directly, without generating the file.</string>
-    <string name="fases_f_z1">Analysis: lexical → tokens; syntax → tree; semantic → typed tree.</string>
-    <string name="fases_f_z2">Synthesis: intermediate code, optimization and code generation.</string>
+    <string name="fases_f_z1">Analysis: lexical → tokens; syntax → tree; semantic → types; and the intermediate code.</string>
+    <string name="fases_f_z2">Synthesis: optimization and machine code generation.</string>
     <string name="fases_f_z3">Lexical error: character. Syntax: form. Semantic: meaning.</string>
     <string name="fases_f_resumo">To sum up: the compiler translates in six phases. Three analyze the source code, three build the machine code. Each phase catches one kind of error.</string>
     <string name="tok_f_af">For x&gt;=10, the scanner produces the tokens x, &gt;, = and 10.</string>

@@ -230,6 +230,7 @@ val topDown by lazy {
                 add(titulo(tx("epparsers_tabela_preditiva")))
                 add(tabela("m", TABELA_LL_1, 120f, cw = 56f, ch = 42f, size = 12f))
             }
+            pergunta(tx("desc_l_01q"), setOf("ml2c1"), (1..3).flatMap { l -> (1..5).map { c -> "ml${l}c$c" } }.toSet() - "ml2c1", tx("desc_l_01q_dica"), tx("desc_l_01q_ok")) { hot() }
             cena(tx("desc_l_02")) {
                 add(Box("erro", "M[X, id]", 180f, 330f, 160f, 44f, Look.TOKEN, Tint.RED, size = 15f))
                 hot("ml2c1")

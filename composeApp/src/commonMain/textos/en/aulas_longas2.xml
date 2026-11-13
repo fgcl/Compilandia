@@ -2,6 +2,9 @@
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas2.xml. -->
 <resources>
     <string name="ll_l_01">The parser has X on top and reads plus. Which rule of X does it use? FIRST and FOLLOW already know the answer.</string>
+    <string name="ll_l_01q">Tap the rule the parser uses with plus in the input.</string>
+    <string name="ll_l_01q_dica">The token read is plus. Which rule starts with it?</string>
+    <string name="ll_l_01q_ok">X goes to plus T X, because that rule starts with plus.</string>
     <string name="ll_l_02">But computing the sets at every token would be slow. The compiler computes them once and writes the answers down.</string>
     <string name="ll_l_03">That answer sheet is the LL(1) table: one cell for each pair of nonterminal and next token.</string>
     <string name="ll_l_05">The table recipe has three steps. You apply the first two to every rule of the grammar.</string>
@@ -23,6 +26,9 @@
     <string name="ll_l_r2">2. If α is nullable, also into those of FOLLOW(A).</string>
     <string name="ll_l_r3">3. Two rules in a cell: not LL(1). Empty: error.</string>
     <string name="lr_l_01">The parser shifted E and plus. To know whether to shift or reduce, it must remember where it is in each rule.</string>
+    <string name="lr_l_01q">The stack already has E and plus. What still has to arrive to complete the rule? Tap it.</string>
+    <string name="lr_l_01q_dica">Compare the stack with the right side of the rule, left to right.</string>
+    <string name="lr_l_01q_ok">The n is missing. The parser is in the middle of the rule, right after the plus.</string>
     <string name="lr_l_02">Without that, it cannot tell whether it still expects an n or the handle is already complete.</string>
     <string name="lr_l_03">An LR(0) item is a rule with a dot in its right-hand side. The dot marks how far the rule has been read.</string>
     <string name="lr_l_05">The recipe starts with an extra rule, S prime goes to S, and uses two operations.</string>
@@ -48,6 +54,9 @@
     <string name="lr_l_sim">yes</string>
     <string name="lr_l_nao">no</string>
     <string name="slr_l_01">This state has the complete item E goes to n, dot. LR(0) would always reduce. But is reducing now right?</string>
+    <string name="slr_l_01q">In this grammar, which tokens can come right after E? Tap both.</string>
+    <string name="slr_l_01q_dica">In the rule E goes to E plus n, look at what follows the first E. Also remember that E is the start symbol.</string>
+    <string name="slr_l_01q_ok">Plus and dollar. The plus comes from the rule, and the dollar because E is the start symbol.</string>
     <string name="slr_l_02">If the next token cannot come after E, the reduction leads to a dead end.</string>
     <string name="slr_l_03">SLR, for Simple LR, reduces by A only when the next token is in FOLLOW of A.</string>
     <string name="slr_l_05">The SLR table recipe has three rules.</string>

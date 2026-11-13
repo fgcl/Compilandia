@@ -25,7 +25,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] AST, texto STORY: "compilador em Java" está certo (o Guia do TP é em Java); a confusão é a falta de explicar as duas linguagens, item da seção 5
 - [x] "Só a semântica consulta a tabela de símbolos": agora diz que a semântica procura o y na tabela
 - [x] AFD: uma seta por símbolo em cada estado; a que não aparece vai para o estado morto
-- [ ] Fases: "três de análise, três de síntese" × o livro, que põe o código intermediário no front-end
+- [x] Fases: a análise vai até o código intermediário, e a síntese parte dele (como no livro)
 
 ## 2. Padrões do jogo inteiro
 
@@ -33,13 +33,14 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] O colega da parte Erros acerta em parte das aulas (13 de 29)
 - [x] Variar a fala de acerto: 240 de 259 começavam com "Isso"; agora nenhuma, e o `FalaDeAcertoTest` barra a volta
 - [ ] Menos perguntas de duas opções (92 de 192)
-- [ ] Primeira interação antes da cena 4 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
+- [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
+- [ ] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
 - [ ] Nenhum trecho com mais de 4 cenas só ouvindo
 - [ ] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
 - [ ] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [ ] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto"
 - [ ] Dar falas à professora e ao Bug nas aulas animadas
-- [ ] Série em C 5: o rótulo `yyparse()` some atrás do `main.c` (as duas caixas ficam lado a lado)
+- [x] Série em C 5: os fios `yyparse()` e `NUM 42` saem do alto das caixas, e o rótulo fica no vão
 
 ## 3. O aluno produz a resposta
 
@@ -57,7 +58,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Minimização: o AFD do livro (3 rodadas) e `a*b*` com estado morto
 - [x] FOLLOW: receita sem α e β, com "se some, olhe o próximo" e "fim da regra"
 - [x] FOLLOW: caso difícil `S → B C d` (C some, o d entra), conferido pelo motor
-- [ ] FIRST: uma rodada que muda algo e uma regra `B → C`
+- [x] FIRST: caso `S → B d`, `B → C | b`, `C → c | ε` (anulável sem ε escrito; a primeira rodada deixa S só com o d)
 - [ ] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
 - [ ] Recursão à esquerda: `E → E + T | E − T | T`, e E/T/F numa prática
 - [ ] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)

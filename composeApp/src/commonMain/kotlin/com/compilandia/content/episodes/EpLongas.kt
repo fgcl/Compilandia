@@ -23,6 +23,8 @@ import com.compilandia.textos.tx
 
 /** Gramática do segundo exemplo do FIRST. */
 val GRAMATICA_FIRST_2 = listOf("S -> A b | c", "A -> a A | ε")
+/** B some sem épsilon escrito (B -> C), e na ordem das regras a primeira rodada deixa S incompleto. */
+val GRAMATICA_FIRST_3 = listOf("S -> B d", "B -> C | b", "C -> c | ε")
 
 /** Gramática do segundo exemplo do FOLLOW. */
 val GRAMATICA_FOLLOW_2 = listOf("E -> T R", "R -> + T R | ε", "T -> F Y", "Y -> * F Y | ε", "F -> ( E ) | id")
@@ -172,6 +174,7 @@ val aulasLongas by lazy {
             val gram = listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )")
             // 1. Por que existe
             cena(tx("first_l_01"), mood = EpMood.THINK) { escolha("T", "id", "T -> id", "T -> ( E )", GRAMATICA_EXPR, 2) }
+            pergunta(tx("first_l_01q"), setOf("ra"), setOf("rb"), tx("first_l_01q_dica"), tx("first_l_01q_ok")) { hot("g2") }
             cena(tx("first_l_02")) { hot("ra", "rb", "g2") }
             palavra("FIRST", tx("first_l_03"))
             // 2. Primeiro exemplo
@@ -240,6 +243,30 @@ val aulasLongas by lazy {
                 add(ficha("s3", "c", 292f, 296f))
                 hot("s1", "s2", "s3")
             }
+            // 5. O caso difícil: anulável sem épsilon escrito, e uma rodada que muda
+            cena(tx("first_l_14")) {
+                clear()
+                add(titulo("FIRST"))
+                add(codigo("g", GRAMATICA_FIRST_3, 70f, x = 100f, passo = 30f, size = 16f))
+                add(saco("sB", "FIRST(B)", 100f, 316f), saco("sS", "FIRST(S)", 260f, 316f))
+                hot("g1")
+            }
+            pergunta(tx("first_l_15"), setOf("v1"), setOf("v2"), tx("first_l_15_dica"), tx("first_l_15_ok")) {
+                hot("g1", "g2")
+                add(Box("v1", tx("ab_sim"), 130f, 200f, 80f, 40f, Look.TOKEN, Tint.YELLOW), Box("v2", tx("comum_nao"), 230f, 200f, 80f, 40f, Look.TOKEN, Tint.YELLOW))
+            }
+            pergunta(tx("first_l_16"), setOf("o1", "o2", "o3"), setOf("o4"), tx("first_l_16_dica"), tx("first_l_16_ok")) {
+                drop("v1", "v2")
+                add(ficha("b1", "b", 64f, 296f), ficha("b2", "c", 100f, 296f), ficha("b3", "ε", 136f, 296f))
+                hot("g0")
+                add(opcao("o1", "b", 90f), opcao("o2", "c", 150f), opcao("o3", "d", 210f), opcao("o4", "ε", 270f))
+            }
+            cena(tx("first_l_17")) {
+                drop("o1", "o2", "o3", "o4")
+                add(ficha("t1", "b", 224f, 296f), ficha("t2", "c", 260f, 296f), ficha("t3", "d", 296f, 296f))
+                add(regra("r4", tx("first_l_r4"), 220f))
+                hot("r4", "t3")
+            }
             fecho(Fecho(
                 tx("first_f_af"), false, tx("first_f_q"), tx("first_f_dica"), tx("first_f_ok"), tx("first_f_certo"),
                 tx("first_f_erro2"), tx("first_f_certo2"), tx("first_f_fala2"),
@@ -252,6 +279,7 @@ val aulasLongas by lazy {
             val gram = listOf("E -> T X", "X -> + T X | ε", "T -> id | ( E )")
             // 1. Por que existe
             cena(tx("follow_l_01"), mood = EpMood.THINK) { escolha("X", ")", "X -> + T X", "X -> ε", GRAMATICA_EXPR, 1) }
+            pergunta(tx("follow_l_01q"), setOf("rb"), setOf("ra"), tx("follow_l_01q_dica"), tx("follow_l_01q_ok")) { hot("g1") }
             cena(tx("follow_l_02")) { hot("rb", "tok", "g1") }
             palavra("FOLLOW", tx("follow_l_03"))
             // 2. Primeiro exemplo

@@ -12,8 +12,8 @@
     <string name="fases_l_02_ok">Código de máquina. O compilador é o programa que traduz o seu código para aquilo.</string>
     <string name="fases_l_03">Traduzir tudo de uma vez seria difícil de fazer e de conferir. Então o trabalho é dividido.</string>
     <string name="fases_l_04">O compilador trabalha em seis fases, uma depois da outra. O que sai de uma fase é a entrada da seguinte.</string>
-    <string name="fases_l_05">As três primeiras fases são a análise. Agora começa a síntese. O código intermediário escreve uma conta por linha, sem depender da máquina.</string>
-    <string name="fases_l_06">A otimização melhora esse código sem mudar o resultado. A geração escreve o código de máquina final.</string>
+    <string name="fases_l_05">A análise termina no código intermediário. Ele escreve uma conta por linha, sem depender da máquina.</string>
+    <string name="fases_l_06">Daqui em diante é a síntese. A otimização melhora esse código sem mudar o resultado. A geração escreve o código de máquina final.</string>
     <string name="fases_l_titulo_receita">O que sai de cada fase</string>
     <string name="fases_l_07">A receita é o que sai de cada fase. Guarde a ordem, porque ela cai em prova.</string>
     <string name="fases_l_r_lexica">Léxica → tokens</string>
@@ -35,10 +35,13 @@
     <string name="fases_l_13">Em qual fase o laço vira desvios, com uma conta por linha?</string>
     <string name="fases_l_13_dica">Vem depois da semântica e antes da otimização.</string>
     <string name="fases_l_13_ok">Exato. O código intermediário escreve o laço com desvios.</string>
-    <string name="fases_l_14">Seis fases em ordem: três de análise, três de síntese. O mapa do jogo segue esse mesmo caminho.</string>
+    <string name="fases_l_14">Seis fases em ordem. A análise vai até o código intermediário, e a síntese parte dele. O mapa do jogo segue esse mesmo caminho.</string>
 
     <!-- FIRST -->
     <string name="first_l_01">O parser tem T no topo da pilha e lê id. T tem duas regras, e ele só pode olhar um token.</string>
+    <string name="first_l_01q">Com id na entrada, qual das duas regras serve? Toque.</string>
+    <string name="first_l_01q_dica">Uma das regras começa com abre parêntese. O token lido é id.</string>
+    <string name="first_l_01q_ok">T vai para id. Deu para ver porque essa regra começa com o próprio token.</string>
     <string name="first_l_02">Para escolher sem voltar atrás, ele precisa saber com que token cada regra pode começar.</string>
     <string name="first_l_03">FIRST de um símbolo é o conjunto dos terminais que podem aparecer no começo do que ele gera.</string>
     <string name="first_l_04">Vamos calcular nesta gramática. Cada não-terminal ganha um saco, e o FIRST dele enche aos poucos.</string>
@@ -63,9 +66,20 @@
     <string name="first_l_12_dica">A segunda regra de S começa com um terminal.</string>
     <string name="first_l_12_ok">Acertou. A letra c entra pelo passo um.</string>
     <string name="first_l_13">FIRST de S: a, b e c. Mais uma rodada não muda nada, então o cálculo acabou.</string>
+    <string name="first_l_14">Mais um caso de prova. Repare: a regra de B não tem épsilon escrito.</string>
+    <string name="first_l_15">Mesmo assim, B pode sumir? Toque na resposta.</string>
+    <string name="first_l_15_dica">Siga B vai para C. O que C pode virar?</string>
+    <string name="first_l_15_ok">Pode. B vai para C, e C vai para épsilon. Então o FIRST de B tem b, c e épsilon.</string>
+    <string name="first_l_16">Agora S vai para B d. Toque em tudo que entra no FIRST de S.</string>
+    <string name="first_l_16_dica">Use o FIRST de B sem o épsilon. E como B some, olhe o próximo.</string>
+    <string name="first_l_16_ok">Três tokens: b, c e d. O d entra porque B some. O épsilon fica de fora, porque o d nunca some.</string>
+    <string name="first_l_17">Na ordem das regras, a primeira rodada deixa S só com o d. É que B ainda está vazio. As rodadas seguintes trazem o b e o c. Por isso o passo quatro manda repetir.</string>
 
     <!-- FOLLOW -->
     <string name="follow_l_01">O parser tem X no topo e lê fecha parêntese. X é anulável: pode sumir, ou pode virar mais T X.</string>
+    <string name="follow_l_01q">Nenhuma regra de X começa com fecha parêntese. Qual delas o parser usa? Toque.</string>
+    <string name="follow_l_01q_dica">Uma das regras deixa X sumir.</string>
+    <string name="follow_l_01q_ok">X vai para épsilon. X some, e o fecha parêntese fica para quem vem depois.</string>
     <string name="follow_l_02">Sumir só está certo se fecha parêntese puder aparecer logo depois de X. O FIRST não responde isso.</string>
     <string name="follow_l_03">FOLLOW de um não-terminal é o conjunto dos terminais que podem aparecer logo depois dele em alguma derivação.</string>
     <string name="follow_l_04">Mesma gramática, três sacos de novo. Agora cada saco guarda o que pode vir depois do não-terminal.</string>

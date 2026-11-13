@@ -35,7 +35,7 @@ import com.compilandia.ui.Palette
 object PassoDaReceita {
     val porAssunto: Map<Skill, String> = mapOf(
         Skill.PHASES to "01240",
-        Skill.FIRST to "01310",
+        Skill.FIRST to "013100334",
         Skill.FOLLOW to "02330022",
         Skill.LL1_TABLE to "01123",
         Skill.LR0_ITEMS to "01223",

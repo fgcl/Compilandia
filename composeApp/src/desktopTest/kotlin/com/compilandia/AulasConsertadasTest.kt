@@ -2,6 +2,8 @@ package com.compilandia
 
 import com.compilandia.content.episodes.ARVORE_MENOS_NOVA
 import com.compilandia.content.episodes.ARVORE_MENOS_VELHA
+import com.compilandia.content.episodes.GRAMATICA_EXPR
+import com.compilandia.content.episodes.GRAMATICA_FIRST_3
 import com.compilandia.content.episodes.GRAMATICA_FOLLOW_3
 import com.compilandia.content.episodes.tabelaSlrDaAula
 import com.compilandia.engine.FirstFollow
@@ -52,5 +54,23 @@ class AulasConsertadasTest {
         val f = FirstFollow(Grammar.parse(GRAMATICA_FOLLOW_3.joinToString("\n")))
         assertEquals(setOf("c", "d"), f.follow["B"])
         assertTrue("ε" in f.firstOfSymbol("C"), "C precisa ser anulável, senão o d não entra")
+    }
+
+    /** FIRST, caso difícil: B some sem ε escrito, e na ordem das regras a primeira rodada deixa S só com o d. */
+    @Test fun firstComAnulavelSemEpsilonEscrito() {
+        val f = FirstFollow(Grammar.parse(GRAMATICA_FIRST_3.joinToString("\n")))
+        assertEquals(setOf("b", "c", "ε"), f.first["B"])
+        assertEquals(setOf("b", "c", "d"), f.first["S"])
+        val deS = f.steps.filter { it.kind == com.compilandia.engine.SetStep.Kind.FIRST && it.nonTerminal == "S" }
+        assertEquals(setOf("d"), deS.first().added, "a primeira coisa que entra em S é o d")
+        assertTrue(f.firstRounds >= 3, "o b e o c chegam em rodadas seguintes")
+    }
+
+    /** As perguntas novas do começo das aulas: o que vem depois de E no SLR, e a casa M[X, id] vazia na descida. */
+    @Test fun perguntasDoComeco() {
+        assertEquals(setOf("+", "$"), FirstFollow(Grammar.parse("E -> E + n | n")).follow["E"])
+        val g = FirstFollow(Grammar.parse(GRAMATICA_EXPR.joinToString("\n")))
+        assertTrue("id" !in g.first.getValue("X") && "id" !in g.follow.getValue("X"), "M[X, id] tem de ser vazia")
+        assertTrue("+" in g.first.getValue("X") && ")" in g.follow.getValue("X"))
     }
 }

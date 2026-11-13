@@ -36,6 +36,9 @@
 
     <!-- Descida recursiva -->
     <string name="desc_l_01">A tabela LL(1) funciona, mas é uma grade de casas. Ninguém gosta de preencher nem de depurar isso à mão.</string>
+    <string name="desc_l_01q">Com X no topo e id na entrada, qual casa o parser consulta? Toque.</string>
+    <string name="desc_l_01q_dica">Linha do não-terminal do topo, coluna do token lido.</string>
+    <string name="desc_l_01q_ok">Linha X, coluna id. A casa está vazia, então é erro de sintaxe.</string>
     <string name="desc_l_02">E quando dá erro, você quer saber em que regra o parser estava, para dar uma mensagem boa.</string>
     <string name="desc_l_03">Na descida recursiva, cada não-terminal vira uma função. A pilha do analisador vira a pilha de chamadas do programa.</string>
     <string name="desc_l_05">A receita traduz cada regra para código, símbolo por símbolo.</string>

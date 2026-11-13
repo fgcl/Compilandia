@@ -48,6 +48,13 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **Fala de acerto variada.** 240 das 259 falas de acerto começavam com "Isso". A tela já comemora o acerto (som, Byte pulando), então a maioria agora começa direto pela explicação, e uma em cada três abre com "Certo", "Exato", "Boa", "Acertou" ou "É isso", em rodízio. Nas aulas de texto, o "**Isso!**" fixo virou um de quatro elogios. O `FalaDeAcertoTest` falha se duas falas seguidas abrirem igual ou se "Isso" passar de 20%.
 3. **FOLLOW com o caso difícil.** Três cenas novas com `S → B C d`, `C → c | ε`: o aluno toca em tudo que entra no FOLLOW de B (c e d). É o caso em que o revisor aluno errou. O motor confere a resposta em `AulasConsertadasTest`.
 
+## Feito em 13/11 (quinta rodada)
+
+1. **O aluno toca já na cena 2.** FIRST, FOLLOW, tabela LL(1), descida recursiva, itens LR(0) e SLR abriam com 5 ou 6 cenas só de ouvir. Agora cada uma pergunta logo depois da situação de abertura algo que o aluno já consegue responder: qual regra serve com aquele token, o que falta chegar à pilha, que casa da tabela consultar, que tokens vêm depois de E. Na descida, todas as casas da tabela são tocáveis, para o destaque não entregar a resposta.
+2. **FIRST com o caso difícil.** Quatro cenas com `S → B d`, `B → C | b`, `C → c | ε`: B some sem épsilon escrito, o d entra no FIRST de S, e, na ordem das regras, a primeira rodada deixa S só com o d. É o que justifica o passo "repita". O motor confere cada conjunto e a ordem das rodadas.
+3. **Fases como no livro.** A análise vai até o código intermediário; a síntese parte dele (otimização e geração). Antes, a aula dizia "três de análise, três de síntese".
+4. **Série em C 5.** Os fios `yyparse()` e `NUM 42` saem do alto das caixas; o rótulo e as fichas ficam no vão, e não atrás de `calc.l`.
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

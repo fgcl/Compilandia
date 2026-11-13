@@ -233,7 +233,7 @@ val serieEmC by lazy {
                 add(l, y, m)
             }
             cena(tx("epemc_main_chama_yyparse_parser_que")) {
-                wire(Wire("main", "y", "yyparse()", hot = true, fromRow = 1))
+                wire(Wire("main", "y", "yyparse()", hot = true))
                 lit("main", 1)
             }
             cena(tx("epemc_sempre_que_precisa_token_parser")) {
@@ -242,8 +242,8 @@ val serieEmC by lazy {
             }
             cena(tx("epemc_yylex_devolve_tipo_valor_vai")) {
                 clearWires()
-                wire(Wire("main", "y", "yyparse()", fromRow = 1))
-                wire(Wire("l", "y", flow = listOf("NUM", "42"), fromRow = 1))
+                wire(Wire("main", "y", "yyparse()"))
+                wire(Wire("l", "y", flow = listOf("NUM", "42")))
                 lit("l", 1)
             }
             pergunta(

@@ -36,6 +36,9 @@
 
     <!-- Recursive descent -->
     <string name="desc_l_01">The LL(1) table works, but it is a grid of cells. Nobody likes filling it in or debugging it by hand.</string>
+    <string name="desc_l_01q">With X on top and id in the input, which cell does the parser look up? Tap it.</string>
+    <string name="desc_l_01q_dica">Row of the nonterminal on top, column of the token read.</string>
+    <string name="desc_l_01q_ok">Row X, column id. The cell is empty, so it's a syntax error.</string>
     <string name="desc_l_02">And when an error shows up, you want to know which rule the parser was in, to give a good message.</string>
     <string name="desc_l_03">In recursive descent, each nonterminal becomes a function. The parser's stack becomes the program's call stack.</string>
     <string name="desc_l_05">The recipe translates each rule into code, symbol by symbol.</string>

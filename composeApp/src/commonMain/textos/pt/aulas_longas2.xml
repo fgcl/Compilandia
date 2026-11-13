@@ -2,6 +2,9 @@
 <!-- Aulas básicas longas, segunda leva (A2): tabela LL(1), itens LR(0), SLR, LALR, minimização, AST e MIPS. -->
 <resources>
     <string name="ll_l_01">O parser tem X no topo e lê mais. Qual regra de X ele usa? FIRST e FOLLOW já sabem a resposta.</string>
+    <string name="ll_l_01q">Toque na regra que o parser usa com mais na entrada.</string>
+    <string name="ll_l_01q_dica">O token lido é mais. Qual regra começa com ele?</string>
+    <string name="ll_l_01q_ok">X vai para mais T X, porque essa regra começa com mais.</string>
     <string name="ll_l_02">Mas calcular os conjuntos a cada token seria lento. O compilador calcula uma vez e anota as respostas.</string>
     <string name="ll_l_03">Essa folha de respostas é a tabela LL(1): uma casa para cada par de não-terminal e próximo token.</string>
     <string name="ll_l_05">A receita da tabela tem três passos. Você aplica os dois primeiros em cada regra da gramática.</string>
@@ -23,6 +26,9 @@
     <string name="ll_l_r2">2. Se α é anulável, vai também nas do FOLLOW(A).</string>
     <string name="ll_l_r3">3. Duas regras na casa: não é LL(1). Vazia: erro.</string>
     <string name="lr_l_01">O parser empilhou E e mais. Para saber se empilha ou reduz, ele precisa lembrar em que ponto de cada regra está.</string>
+    <string name="lr_l_01q">A pilha já tem E e mais. O que falta chegar para a regra ficar completa? Toque.</string>
+    <string name="lr_l_01q_dica">Compare a pilha com o lado direito da regra, da esquerda para a direita.</string>
+    <string name="lr_l_01q_ok">Falta o n. O parser está no meio da regra, logo depois do mais.</string>
     <string name="lr_l_02">Sem isso, ele não sabe se ainda espera um n ou se o handle já está completo.</string>
     <string name="lr_l_03">Um item LR(0) é uma regra com um ponto no lado direito. O ponto marca até onde a regra já foi lida.</string>
     <string name="lr_l_05">A receita começa com uma regra extra, S linha vai para S, e usa duas operações.</string>
@@ -48,6 +54,9 @@
     <string name="lr_l_sim">sim</string>
     <string name="lr_l_nao">não</string>
     <string name="slr_l_01">Este estado tem o item completo E vai para n, ponto. O LR(0) reduziria sempre. Mas reduzir agora está certo?</string>
+    <string name="slr_l_01q">Nesta gramática, que tokens podem vir logo depois de E? Toque nos dois.</string>
+    <string name="slr_l_01q_dica">Na regra E vai para E mais n, olhe o que vem depois do primeiro E. Lembre também que E é o símbolo inicial.</string>
+    <string name="slr_l_01q_ok">Mais e cifrão. O mais vem da regra, e o cifrão porque E é o símbolo inicial.</string>
     <string name="slr_l_02">Se o próximo token não pode vir depois de E, a redução leva a um beco sem saída.</string>
     <string name="slr_l_03">O SLR, de Simple LR, só reduz por A quando o próximo token está no FOLLOW de A.</string>
     <string name="slr_l_05">A receita da tabela SLR tem três regras.</string>

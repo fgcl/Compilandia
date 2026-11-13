@@ -51,6 +51,7 @@ val aulasLongas2 by lazy {
                 listOf("T", "", "", "", "", ""),
             )
             cena(tx("ll_l_01"), mood = EpMood.THINK) { escolha("X", "+", "X -> + T X", "X -> ε", GRAMATICA_EXPR, 1) }
+            pergunta(tx("ll_l_01q"), setOf("ra"), setOf("rb"), tx("ll_l_01q_dica"), tx("ll_l_01q_ok")) { hot("g1") }
             cena(tx("ll_l_02")) { hot("ra", "rb", "g1") }
             palavra("LL(1)", tx("ll_l_03"))
             cena(tx("epparsers_tabela_ll_1_junta_tudo")) {
@@ -121,7 +122,11 @@ val aulasLongas2 by lazy {
                 add(pilha("p", listOf("E", "+"), 80f, 250f, tint = Tint.ORANGE))
                 add(Box("r", "E -> E + n", 236f, 200f, 170f, 44f, Look.CELL, size = 16f))
             }
-            cena(tx("lr_l_02")) { hot("r") }
+            pergunta(tx("lr_l_01q"), setOf("o1"), setOf("o2", "o3"), tx("lr_l_01q_dica"), tx("lr_l_01q_ok")) {
+                hot("r")
+                add(opcao("o1", "n", 172f, 300f), opcao("o2", "E", 240f, 300f), opcao("o3", "+", 308f, 300f))
+            }
+            cena(tx("lr_l_02")) { drop("o1", "o2", "o3"); hot("r") }
             palavra("ITEM", tx("lr_l_03"))
             cena(tx("epparsers_que_esta_antes_ponto_eu")) {
                 clear()
@@ -195,7 +200,12 @@ val aulasLongas2 by lazy {
                 add(Box("it", "E -> n •", 180f, 150f, 200f, 46f, Look.TOKEN, Tint.TEAL, size = 18f))
                 add(Box("tok", "?", 180f, 240f, 60f, 46f, Look.TOKEN, Tint.YELLOW, size = 20f))
             }
-            cena(tx("slr_l_02")) { hot("tok") }
+            pergunta(tx("slr_l_01q"), setOf("o1", "o2"), setOf("o3"), tx("slr_l_01q_dica"), tx("slr_l_01q_ok")) {
+                add(Box("gs", "E -> E + n | n", 180f, 90f, 220f, 40f, Look.CELL, size = 16f))
+                add(opcao("o1", "+", 112f, 330f), opcao("o2", "$", 180f, 330f), opcao("o3", "n", 248f, 330f))
+                hot("gs")
+            }
+            cena(tx("slr_l_02")) { drop("o1", "o2", "o3"); hot("tok") }
             palavra("SLR", tx("slr_l_03"))
             cena(tx("epparsers_automato_vira_tabela_linha_estado")) {
                 clear()

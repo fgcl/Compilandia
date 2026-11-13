@@ -147,8 +147,8 @@
     <string name="fases_f_erro2">O compilador executa o programa.</string>
     <string name="fases_f_certo2">O compilador só traduz. Quem executa é o processador, ou um interpretador.</string>
     <string name="fases_f_fala2">Um erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo.</string>
-    <string name="fases_f_z1">Análise: léxica → tokens; sintática → árvore; semântica → árvore com tipos.</string>
-    <string name="fases_f_z2">Síntese: código intermediário, otimização e geração de código.</string>
+    <string name="fases_f_z1">Análise: léxica → tokens; sintática → árvore; semântica → tipos; e o código intermediário.</string>
+    <string name="fases_f_z2">Síntese: otimização e geração do código da máquina.</string>
     <string name="fases_f_z3">Erro léxico: caractere. Sintático: forma. Semântico: sentido.</string>
     <string name="fases_f_resumo">Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro.</string>
     <string name="tok_f_af">Em x&gt;=10, o scanner gera os tokens x, &gt;, = e 10.</string>
