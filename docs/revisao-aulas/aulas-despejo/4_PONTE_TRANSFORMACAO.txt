@@ -1,0 +1,497 @@
+######## REGIAO PONTE_TRANSFORMACAO: Ponte da Transformação (Consertar gramáticas)
+
+################ ASSUNTO LEFT_RECURSION: Recursão à esquerda  prereqs=[CFG_DERIVATION]
+FICHA: A → Aα | β faz o analisador descendente entrar em laço infinito; troque por A → βA' e A' → αA' | ε, que gera a mesma linguagem βα*.
+  gancho: Beta começa, alfa repete, épsilon encerra.
+  termos: [recursão à esquerda, descendente, laço infinito, novo não-terminal, mesma linguagem]
+  erros comuns: [Esquecer o | ε em A'., Trocar α e β na receita., Esquecer de colocar A' no fim de cada β., Ignorar a recursão indireta (S → A a, A → S b)., Achar que analisadores LR também precisam eliminar recursão à esquerda.]
+  FLASH: Quando G é recursiva à esquerda? -> Quando existe A com A ⇒⁺ Aα
+  FLASH: A → Aα | β vira o quê? -> A → βA'; A' → αA' | ε
+  FLASH: Linguagem de A → Aα | β? -> βα*
+  FLASH: Quem sofre com recursão à esquerda? -> Analisadores descendentes (LL, descida recursiva)
+  FLASH: E → E + T | T sem recursão à esquerda? -> E → T E'; E' → + T E' | ε
+  FLASH: Pré-condições do algoritmo geral? -> Sem ciclos e sem produções-ε
+  FLASH: Exemplo de recursão indireta? -> S → A a | b; A → S c | d
+  FLASH: LR precisa eliminar recursão à esquerda? -> Não, LR lida bem com ela
+
+=== AULA ANIMADA [BASICO] O laço sem fim  (id=LEFT_RECURSION, ~150s, 20 passos, exemplo começa no passo 2)
+1. [BYTE] Num parser descendente, cada não-terminal vira uma função. A função segue o lado direito da regra, da esquerda para a direita.
+     palco: E -> E + n | n | void E(void) { |     E(); |     casa('+'); |     casa(NUM); | }
+2. [BYTE] Antes de ler qualquer token, o que a função E faz? Toque na linha.
+     palco: E -> E + n | n | void E(void) { |     E(); |     casa('+'); |     casa(NUM); | }
+     PERGUNTA(toque): certas=[    E();] erradas=[    casa('+');,     casa(NUM);]
+       dica: Olhe a primeira linha dentro da função.
+       acerto: Isso. Ela chama a si mesma, sem ler nada.
+3. [BYTE] Olhe esta regra. O lado direito de E começa com o próprio E.
+     palco: E -> E + n | n | E
+4. [BYTE] Um parser de cima para baixo procura E. Para isso, procura E. Para isso, procura E.
+     palco: E -> E + n | n | E | E | E | ...
+5. [BYTE] Regra em que o lado direito começa com o próprio lado esquerdo tem recursão à esquerda. Nenhum parser descendente aceita isso.
+     palco: RECURSÃO À ESQUERDA
+6. [BYTE] Qual destas regras tem recursão à esquerda? Toque nela.
+     palco: Qual trava? | A -> A b | A -> b A | A -> c
+     PERGUNTA(toque): certas=[A -> A b] erradas=[A -> b A, A -> c]
+       dica: Procure a regra cujo lado direito começa com o próprio lado esquerdo.
+       acerto: Isso. A começa com A, então o parser não sai do lugar.
+7. [BYTE] O conserto: a alternativa sem recursão vem primeiro. O que se repetia vai para um não-terminal novo, com recursão à direita.
+     palco: Antes | E -> E + n | n | Depois | E  -> n E' | E' -> + n E' | ε
+8. [BYTE] A linguagem é a mesma: um n, depois zero ou mais vezes mais n. Só mudou o lado da recursão.
+     palco: Antes | E -> E + n | n | Depois | E  -> n E' | *E' -> + n E' | ε
+9. [BYTE] O conserto tem três passos. Ele vale para qualquer regra desse tipo.
+     palco: Receita | 1. Separe: A → A α tem laço, A → β não tem. | 2. Troque cada A → β por A → β A'. | 3. Crie A' → α A' | ε. | A -> A α | β
+10. [BYTE] Aqui, qual alternativa faz o papel do beta, a que não tem laço?
+     palco: Receita | *1. Separe: A → A α tem laço, A → β não tem. | 2. Troque cada A → β por A → β A'. | 3. Crie A' → α A' | ε. | E -> E + n | n | + n | n
+     PERGUNTA(toque): certas=[n] erradas=[+ n]
+       dica: O beta não começa com E.
+       acerto: Isso. O n é o beta, e o mais n é o alfa.
+11. [BYTE] Uma lista de ids separados por vírgula. Agora quem conserta é você.
+     palco: Lista de ids | L -> L , id | id | L , id | id
+12. [BYTE] Passo um: qual alternativa começa com o próprio L? Toque nela.
+     palco: Lista de ids | *L -> L , id | id | L , id | id
+     PERGUNTA(toque): certas=[L , id] erradas=[id]
+       dica: Procure a alternativa cujo primeiro símbolo é o L.
+       acerto: Isso. Ela tem o laço. A vírgula e o id formam o alfa.
+13. [BYTE] Passo dois: como fica a regra nova de L? Toque nela.
+     palco: Lista de ids | L -> L , id | id | L , id | id | L -> id L' | L -> L' id | L -> , id L'
+     PERGUNTA(toque): certas=[L -> id L'] erradas=[L -> L' id, L -> , id L']
+       dica: A parte sem laço vem primeiro. O L linha vai no fim.
+       acerto: Isso. Primeiro o id, depois a regra nova.
+14. [BYTE] Passo três: o que entra em L linha? Toque nas duas alternativas.
+     palco: Lista de ids | L -> L , id | id | L , id | id | L  -> id L' | , id L' | ε | L , id | id L'
+     PERGUNTA(toque): certas=[, id L', ε] erradas=[L , id, id L']
+       dica: O alfa seguido de L linha, e o épsilon para parar.
+       acerto: Isso. Vírgula e id repetem, e o épsilon encerra.
+15. [BYTE] Pronto. Nenhuma regra começa com o próprio lado esquerdo.
+     palco: Lista de ids | L -> L , id | id | L , id | id | *L  -> id L' | *L' -> , id L' | ε
+16. [BYTE] A gramática nova ainda gera id vírgula id? Toque na resposta.
+     palco: Lista de ids | L -> L , id | id | L , id | id | L  -> id L' | L' -> , id L' | ε | id , id | Sim | Não
+     PERGUNTA(toque): certas=[Sim] erradas=[Não]
+       dica: Primeiro, L vai para id e L linha. Depois, vírgula, id e épsilon.
+       acerto: Isso. A linguagem continua a mesma.
+17. [BYTE] Agora a função de L lê um id antes de chamar outra função. A cada chamada a entrada anda, e o parser termina.
+     palco: Lista de ids | L -> L , id | id | L , id | id | *L  -> id L' | L' -> , id L' | ε | id , id
+18. [BYTE] Um colega consertou a recursão à esquerda assim. Certo ou errado? Toque.
+     palco: Erros comuns | Para tirar a recursão de A → A α | β, basta escrever A → α A | β. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Gere uma frase com as duas versões. O beta fica no começo ou no fim?
+       acerto: Isso. A original gera beta seguido de vários alfas. A do colega gera os alfas antes do beta. A linguagem mudou.
+19. [BYTE] Outro erro: esquecer o épsilon em A linha. É ele que encerra a repetição. Sem ele, a derivação nunca chega só em terminais.
+     palco: Erros comuns | Certo: A → β A' e A' → α A' | ε. O β continua no começo. | *Errado: Esquecer o ε na regra nova A'. | *Certo: Sem A' → ε a repetição nunca termina, e nenhuma frase é gerada.
+20. [BYTE] Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon.
+     palco: Resumo | Recursão à esquerda: A → A α. O parser descendente entra em laço. | Conserto: A → β A' e A' → α A' | ε. | A linguagem não muda; só a recursão passa para a direita.
+
+=== AULA ANIMADA [PEGADINHA] A recursão escondida  (id=LEFT_RECURSION/arecursãoescondida, ~28s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Nenhuma regra aqui começa com ela mesma. Parece que não tem recursão.
+     palco: Sem recursão? | S -> A a | b | A -> S c | d
+2. [BYTE] Siga a primeira opção. S vira A a.
+     palco: Sem recursão? | S -> A a | b | A -> S c | d | A | a
+3. [BYTE] Agora troque o A por S c. Quem reaparece no começo? Toque nele.
+     palco: Sem recursão? | S -> A a | b | A -> S c | d | S | c | a
+     PERGUNTA(toque): certas=[S] erradas=[c, a]
+       dica: Olhe o primeiro símbolo da frase.
+       acerto: Isso. S chegou em S sem ler nada. É recursão indireta.
+4. [BYTE] O conserto começa colocando as opções de A dentro de S. Assim a recursão aparece.
+     palco: Sem recursão? | S -> A a | b | A -> S c | d | *S -> S c a | d a | b
+5. [PROF] Agora é recursão direta, e a receita de sempre resolve.
+     palco: Sem recursão? | S -> A a | b | A -> S c | d | S -> S c a | d a | b
+
+=== AULA ANIMADA [PRATICA] Rode a versão consertada  (id=LEFT_RECURSION/rodeaversãoconsertada, ~28s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Esta gramática já está consertada. Sem recursão à esquerda, a pilha anda.
+     palco: n + n | E -> n X | X -> + n X | ε
+2. [BYTE] Topo não terminal: troca pela regra. Topo igual à entrada: casa.
+     palco: n + n | *E -> n X | X -> + n X | ε
+3. [PROF] Repare no X à direita. A recursão foi para o fim, onde não trava.
+     palco: n + n | E -> n X | *X -> + n X | ε
+4. [BYTE] Opere a pilha até aceitar.
+     palco: pilha | *n | + | n | $ | $ | E
+     BRINQUEDO: meta=Leve a pilha até o fim teclas=[Trocar pela regra, Casar]
+       dica: Olhe o topo. Ele é terminal ou não terminal?
+       acerto: Aceitou. Com a recursão à direita, o parser sempre lê um token antes de voltar.
+5. [BYTE] A linguagem é a mesma de antes. Só a forma da regra mudou.
+     palco: n + n | E -> n X | *X -> + n X | ε
+
+=== AULA ANIMADA [CLIPE] Por que a recursão trava  (id=LEFT_RECURSION/porquearecursãotrava, ~13s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Na regra E vai para E mais T, o parser troca E por E. Ele não lê nada.
+     palco: E -> E + T | *E | + | T
+2. [BYTE] Ele repete isso para sempre. Por isso o LL(1) não aceita.
+     palco: E -> E + T | *E | + | T | + | T
+
+=== AULA DE LEITURA [STORY] O cachorro que corre atrás do rabo
+[NARRADOR] Repartição pública. Placa na parede: 'Para tirar o documento A, apresente o documento A.'
+[BYTE] Mas… isso é impossível! Eu nunca saio do lugar!
+[PROF] Pois é exatamente isso que acontece com um analisador **descendente** (top-down) diante de `E -> E + T`.
+TEXTO: Na descida recursiva, cada não-terminal vira uma função. A função E() tenta a produção E → E + T: 'para reconhecer E, primeiro reconheça E'. Ela chama E()… que chama E()… que chama E()…
+CODIGO (Laço infinito → estouro de pilha):
+    void E() {
+        E();          // chama a si mesma sem consumir NADA
+        match('+');
+        T();
+    }
+[PILHA] E()… E()… E()… E()… Eu… só… vejo… o… topo… e… ele… não… para… de… crescer… ESTOUREI.
+DESTAQUE WATCH_OUT: O problema não é ter recursão, é a recursão ser a PRIMEIRA coisa, antes de consumir qualquer token. Cachorro correndo atrás do rabo: gira, gira e não sai do lugar.
+[BYTE] E como sai do ciclo?
+[PROF] Olha o que `E -> E + T | T` realmente gera: um T e depois quantos '+ T' quiser. T + T + T… Então começamos pelo T (a parte que NÃO é recursiva) e deixamos a repetição para o final.
+CODIGO (Mesma linguagem, recursão agora à DIREITA):
+    E  -> T E'
+    E' -> + T E' | ε
+TEXTO: É como consertar a placa da repartição: 'Apresente o RG. Depois, se quiser, mais documentos.' Primeiro algo concreto; depois a repetição.
+WIDGET LEFT_RECURSION gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada= legenda=Antes e depois: E e T ganharam os ajudantes E' e T'.
+PREVEJA: A gramática nova gera a mesma linguagem?
+    (certa) Sim, as mesmas cadeias
+    (     ) Não, gera menos cadeias
+    EXPLICACAO: As duas geram T (+ T)*. Muda só o formato da árvore.
+DESTAQUE REAL_WORLD: Analisadores LR (Yacc/Bison) adoram recursão à esquerda, ela até economiza pilha. O problema é só dos descendentes (LL, descida recursiva).
+REVELAR: Por que recursão à esquerda trava o analisador descendente?
+    RESPOSTA: Porque a função de A chama A de novo antes de consumir qualquer token: a entrada não avança e a recursão nunca termina.
+
+=== AULA DE LEITURA [VISUAL] A cirurgia ao vivo
+[PROF] Vamos operar. O widget mostra a gramática antes e depois.
+WIDGET LEFT_RECURSION gramatica=S -> S a | b entrada= legenda=S -> S a | b vira S -> b S' e S' -> a S' | ε.
+TEXTO: Leia assim: α = `a` (o que vem DEPOIS do S recursivo) e β = `b` (a alternativa que NÃO começa com S). A linguagem é b a a a… = βα*.
+WIDGET DERIVATION gramatica=S -> S a | b entrada=b a a legenda=Gramática original: a árvore cresce para a ESQUERDA.
+WIDGET DERIVATION gramatica=S -> b S' ; S' -> a S' | ε entrada=b a a legenda=Gramática nova: a árvore cresce para a DIREITA.
+PREVEJA: Qual das duas um analisador descendente consegue usar?
+    (     ) A original
+    (certa) A nova
+    EXPLICACAO: Na nova, S começa consumindo b, e S' decide pelo próximo token: 'a' → continua; fim → ε.
+WIDGET LEFT_RECURSION gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada= legenda=Agora com duas recursões: E e T.
+TEXTO: Repare: F não mudou, ela não tinha recursão à esquerda. A cirurgia só mexe em quem precisa.
+WIDGET LL1_TABLE gramatica=E -> E + T | T ; T -> T * F | F ; F -> ( E ) | id entrada= legenda=Tabela LL(1) da gramática ORIGINAL: veja as células com conflito.
+WIDGET LL1_TABLE gramatica=E -> T E' ; E' -> + T E' | ε ; T -> F T' ; T' -> * F T' | ε ; F -> ( E ) | id entrada= legenda=Tabela da gramática transformada: uma produção por célula. LL(1)!
+REVELAR: Por que a tabela original tinha conflito?
+    RESPOSTA: E → E + T e E → T começam, ambas, com algo que deriva id ou '('. Olhando só o próximo token, não dá para escolher. Recursão à esquerda SEMPRE causa esse conflito.
+DESTAQUE NO_DUMB_QUESTIONS: P: O ε em E' é obrigatório? R: Sim! É ele que encerra a repetição. Sem o ε, E' nunca terminaria de gerar.
+
+=== AULA DE LEITURA [WORKED] Eliminando passo a passo
+[PROF] Receita: A → Aα₁ | … | Aαₘ | β₁ | … | βₙ vira A → β₁A' | … | βₙA' e A' → α₁A' | … | αₘA' | ε.
+CODIGO (Exercício resolvido):
+    E -> E + T | E - T | T
+PASSOS Resolvido:
+    1. 1. Separe as alternativas que começam com E (recursivas) das outras.
+    2. 2. Recursivas: E + T e E - T → α₁ = `+ T`, α₂ = `- T`.
+    3. 3. Não recursiva: T → β₁ = `T`.
+    4. 4. Novo E: cada β seguido de E' → E → T E'.
+    5. 5. Novo E': cada α seguido de E', mais ε → E' → + T E' | - T E' | ε.
+WIDGET LEFT_RECURSION gramatica=E -> E + T | E - T | T ; T -> id entrada= legenda=Confira com o motor.
+TEXTO: Agora esmaecido (exemplo do Livro do Dragão): `A -> A c | A a d | b d | ε`.
+REVELAR: Quem são os α's?
+    RESPOSTA: α₁ = `c` e α₂ = `a d`: o que vem DEPOIS do A nas alternativas recursivas.
+REVELAR: Quem são os β's? (Atenção ao ε!)
+    RESPOSTA: β₁ = `b d` e β₂ = `ε`. A alternativa vazia também é um β: ela não começa com A.
+REVELAR: Escreva a gramática final.
+    RESPOSTA: A → b d A' | A'
+A' → c A' | a d A' | ε
+WIDGET LEFT_RECURSION gramatica=A -> A c | A a d | b d | ε entrada= legenda=Confira: o β = ε virou A → A'.
+DESTAQUE WATCH_OUT: Erro nº 1: esquecer o `| ε` em A'. Erro nº 2: esquecer de colocar A' no fim de CADA β.
+DESTAQUE EXAM_TIP: Se a questão pedir 'elimine a recursão à esquerda e mostre que a gramática resultante é LL(1)', faça a transformação E depois a tabela. Os pontos costumam vir das duas partes.
+
+=== AULA DE LEITURA [SOCRATIC] Descubra a receita sozinho
+CODIGO ():
+    S -> S a | b
+PREVEJA: Quais cadeias essa gramática gera?
+    (certa) b, ba, baa, baaa…
+    (     ) a, ab, aab…
+    (     ) ab, aabb, aaabbb…
+    EXPLICACAO: S ⇒ S a ⇒ S a a ⇒ b a a: o b sempre fica na ponta esquerda, e os a's se acumulam à direita.
+REVELAR: Escreva essa linguagem como expressão regular.
+    RESPOSTA: `ba*`: um b e depois quantos a's quiser. Em geral, A → Aα | β gera βα*.
+PREVEJA: Um analisador descendente lendo `b a a` precisa escolher a primeira produção de S. Olhando só o 'b', ele sabe quantas vezes usar S → S a?
+    (     ) Sim
+    (certa) Não: teria que adivinhar o futuro (quantos a's virão)
+    EXPLICACAO: A quantidade de S → S a depende de quantos a's vêm DEPOIS. Com um token de lookahead, impossível saber.
+[PROF] Então vamos gerar βα* de outro jeito: primeiro o β, depois um 'gerador de α's'.
+PREVEJA: Qual gramática gera b a* sem recursão à esquerda?
+    (certa) S -> b S'  e  S' -> a S' | ε
+    (     ) S -> S' b  e  S' -> a S' | ε
+    (     ) S -> a S | b
+    EXPLICACAO: A segunda e a terceira geram a*b (o b no FIM). Só a primeira põe o b na frente e repete os a's depois.
+REVELAR: Generalize: o que fazer com A → Aα | β?
+    RESPOSTA: A → β A' e A' → α A' | ε.
+PREVEJA: `S -> A a | b` e `A -> S c | d` têm recursão à esquerda?
+    (     ) Não: nenhuma produção começa com o próprio lado esquerdo
+    (certa) Sim, indireta: S ⇒ A a ⇒ S c a
+    EXPLICACAO: Recursão à esquerda INDIRETA: S ⇒⁺ S… A receita imediata não basta; primeiro é preciso substituir para torná-la imediata.
+REVELAR: Como eliminar essa recursão indireta?
+    RESPOSTA: Ordene S, A. Em A → S c, substitua S pelas suas alternativas: A → A a c | b c | d. Agora é imediata: A → b c A' | d A'; A' → a c A' | ε.
+WIDGET LEFT_RECURSION gramatica=S -> A a | b ; A -> A a c | b c | d entrada= legenda=O último passo (recursão já imediata), feito pelo motor.
+
+=== AULA DE LEITURA [FORMAL] Algoritmo de eliminação
+TEXTO: **Definição.** Uma gramática é **recursiva à esquerda** se tem um não-terminal A tal que A ⇒⁺ Aα para alguma cadeia α. A recursão é **imediata** quando existe uma produção A → Aα.
+TEXTO: Métodos de análise descendente não conseguem tratar gramáticas recursivas à esquerda; é necessária uma transformação que elimine a recursão.
+CODIGO ():
+    Recursão imediata:
+      A → Aα₁ | Aα₂ | ... | Aαₘ | β₁ | β₂ | ... | βₙ
+      (nenhum βᵢ começa com A)
+    substituir por:
+      A  → β₁A' | β₂A' | ... | βₙA'
+      A' → α₁A' | α₂A' | ... | αₘA' | ε
+CODIGO (Algoritmo 4.19 (Livro do Dragão)):
+    Entrada: G sem ciclos (A ⇒⁺ A) e sem produções-ε
+    ordene os não-terminais A₁, A₂, ..., Aₙ
+    para i ← 1 até n:
+        para j ← 1 até i − 1:
+            substitua cada Aᵢ → Aⱼγ por Aᵢ → δ₁γ | δ₂γ | ... | δₖγ,
+            onde Aⱼ → δ₁ | δ₂ | ... | δₖ são as produções atuais de Aⱼ
+        elimine a recursão imediata das produções de Aᵢ
+DESTAQUE WATCH_OUT: Pré-condição: sem ciclos e sem produções-ε. (O algoritmo pode até funcionar com ε, mas sem garantia.) Na prova, cite isso!
+PREVEJA: Ao final do algoritmo, toda produção Aᵢ → Aⱼγ satisfaz…
+    (     ) j < i
+    (certa) j > i
+    (     ) j = i
+    EXPLICACAO: Depois da iteração i, qualquer Aᵢ → Aⱼγ tem j > i. Os índices só sobem, nenhum ciclo de recursão à esquerda sobrevive.
+TEXTO: Exemplo do livro: S → A a | b, A → A c | S d | ε. Para A, substitua S em A → S d: A → A c | A a d | b d | ε. Eliminando a imediata: A → b d A' | A', A' → c A' | a d A' | ε.
+WIDGET LEFT_RECURSION gramatica=S -> A a | b ; A -> A c | A a d | b d | ε entrada= legenda=O resultado do exemplo (depois da substituição).
+DESTAQUE EXAM_TIP: Duas armadilhas: (1) a nova gramática gera a MESMA linguagem, mas as árvores mudam (a associatividade fica 'escondida' em A' e é recuperada com atributos herdados); (2) recursão à esquerda NÃO é ambiguidade.
+REVELAR: Por que exigir que nenhum βᵢ comece com A?
+    RESPOSTA: Porque se βᵢ começasse com A, A → βᵢA' continuaria recursiva à esquerda, a transformação não resolveria nada.
+
+=== AULA DE LEITURA [MNEMONIC] Beta começa, alfa repete, épsilon encerra
+DESTAQUE MNEMONIC: **Beta começa, alfa repete, épsilon encerra.** A → β A'; A' → α A' | ε.
+DESTAQUE MNEMONIC: **Rabo à esquerda morde**: em A → **A**α, o A morde o próprio rabo logo de cara. Recursão à DIREITA (A → αA) é inofensiva: primeiro come α (consome tokens), depois chama.
+TEXTO: β vem 'antes': é o começo da cadeia, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.
+DESTAQUE MNEMONIC: **O A-linha é um while disfarçado**: enquanto aparecer α, repete; quando não, ε e sai do laço.
+TEXTO: **Palácio da memória**: na cabeceira da **Ponte da Transformação**, um cachorro corre atrás do rabo (A → Aα). O guarda da ponte só deixa passar quem mostra o β primeiro. No meio da ponte, um carrossel (A') gira α, α, α… até alguém gritar ε.
+PREVEJA: Elimine a recursão de `L -> L , id | id`.
+    (certa) L -> id L'  e  L' -> , id L' | ε
+    (     ) L -> , id L'  e  L' -> id L' | ε
+    (     ) L -> id , L | id
+    EXPLICACAO: β = `id` começa; α = `, id` repete; ε encerra. (A terceira até gera a mesma linguagem, mas precisaria de fatoração para ser LL(1).)
+WIDGET LEFT_RECURSION gramatica=L -> L , id | id entrada= legenda=Lista de identificadores separados por vírgula.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) trocar α e β; (2) esquecer o ε; (3) achar que só existe recursão imediata (há a INDIRETA: S → A a, A → S b); (4) achar que LR também precisa eliminar, não precisa!
+DESTAQUE MNEMONIC: **LL** = lê da **L**eft, derivação mais à **L**eft, e **L**eft recursion é o inimigo nº 1 do LL.
+REVELAR: Recite a receita aplicada a E → E + T | T.
+    RESPOSTA: Beta começa: E → T E'. Alfa repete, épsilon encerra: E' → + T E' | ε.
+
+################ ASSUNTO LEFT_FACTORING: Fatoração à esquerda  prereqs=[CFG_DERIVATION]
+FICHA: Quando duas alternativas começam com o mesmo prefixo α, ponha α em evidência: A → αA' e A' → β₁ | β₂, adiando a decisão do analisador preditivo.
+  gancho: ab + ac = a(b + c): coloque o prefixo comum em evidência.
+  termos: [prefixo comum, fatoração, novo não-terminal, adiar, preditivo]
+  erros comuns: [Achar que a fatoração elimina ambiguidade., Parar na primeira rodada sem fatorar o novo não-terminal., Usar um prefixo que não é comum a todas as alternativas do grupo., Esquecer o ε quando uma alternativa é exatamente o prefixo.]
+  FLASH: A → αβ₁ | αβ₂ fatorada? -> A → αA'; A' → β₁ | β₂
+  FLASH: Para que serve a fatoração à esquerda? -> Adiar a escolha da produção até ver entrada suficiente
+  FLASH: Qual prefixo usar? -> O maior prefixo comum a duas ou mais alternativas
+  FLASH: Fatore A → x y z | x y -> A → x y A'; A' → z | ε
+  FLASH: Else pendurado fatorado? -> S → i E t S S' | a; S' → e S | ε
+  FLASH: Fatorar resolve ambiguidade? -> Não
+  FLASH: Fatorada e sem recursão à esquerda ⇒ LL(1)? -> Não necessariamente
+
+=== AULA ANIMADA [BASICO] Pôr em evidência  (id=LEFT_FACTORING, ~137s, 20 passos, exemplo começa no passo 2)
+1. [BYTE] Um comando pode ser atribuição ou chamada. Os dois começam com id.
+     palco: *C -> id = n | id ( ) | C | id | C -> id = n | C -> id ( )
+2. [BYTE] Vendo só o id, qual regra o parser escolhe? Toque.
+     palco: *C -> id = n | id ( ) | C | id | C -> id = n | C -> id ( ) | não dá para saber
+     PERGUNTA(toque): certas=[não dá para saber] erradas=[C -> id = n, C -> id ( )]
+       dica: Olhe o primeiro token de cada regra.
+       acerto: Isso. Um token só não decide entre as duas.
+3. [BYTE] Estas duas alternativas começam igual. Lendo o a, um parser preditivo não sabe qual das duas escolher.
+     palco: Qual das duas? | a | b | a | c
+4. [BYTE] Toque na parte que as duas regras têm em comum.
+     palco: Qual das duas? | a | b | a | c
+     PERGUNTA(toque): certas=[a] erradas=[b, c]
+       dica: Compare o começo das duas linhas.
+       acerto: Isso. O a é o prefixo comum das duas.
+5. [PROF] Faço como na matemática: ponho o prefixo comum em evidência. Isso é a fatoração à esquerda.
+     palco: Qual das duas? | a | b | c
+6. [BYTE] A escolha fica para depois do a, num não-terminal novo. Aí basta olhar o próximo token.
+     palco: Fatorada | A  -> a b | a c | A  -> a A' | *A' -> b | c
+7. [BYTE] Com um token só de previsão, o parser sempre sabe o que fazer. É o que uma gramática LL(1) exige.
+     palco: Fatorada | A  -> a b | a c | A  -> a A' | *A' -> b | c
+8. [BYTE] A fatoração tem quatro passos. Eles ficam aqui na tela.
+     palco: Receita | 1. Ache o maior prefixo comum α. | 2. Troque as regras por A → α A'. | 3. Em A', ponha o resto de cada regra. | 4. Repita enquanto duas regras começarem igual.
+9. [BYTE] Qual passo guarda o que sobrou de cada regra? Toque nele.
+     palco: Receita | 1. Ache o maior prefixo comum α. | 2. Troque as regras por A → α A'. | 3. Em A', ponha o resto de cada regra. | 4. Repita enquanto duas regras começarem igual.
+     PERGUNTA(toque): certas=[3. Em A', ponha o resto de cada regra.] erradas=[1. Ache o maior prefixo comum α., 2. Troque as regras por A → α A'., 4. Repita enquanto duas regras começarem igual.]
+       dica: O resto vem depois do começo comum.
+       acerto: Isso. O resto vira as alternativas da regra nova.
+10. [BYTE] Três comandos começam com id: uma atribuição e duas chamadas.
+     palco: Comandos | *C -> id = n | id ( ) | id ( n )
+11. [BYTE] Passo um: qual é o maior começo comum das três? Toque.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | id | id = | id (
+     PERGUNTA(toque): certas=[id] erradas=[id =, id (]
+       dica: Compare o segundo símbolo das três. Ele já muda.
+       acerto: Isso. As três regras começam com id.
+12. [BYTE] Ponho o id em evidência. O resto vai para a regra nova.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | *C  -> id C' | C' -> = n | ( ) | ( n )
+13. [BYTE] Na regra nova, duas alternativas ainda começam igual. Toque nas duas.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | C  -> id C' | *C' -> = n | ( ) | ( n ) | = n | ( ) | ( n )
+     PERGUNTA(toque): certas=[( ), ( n )] erradas=[= n]
+       dica: Procure duas com o mesmo primeiro símbolo.
+       acerto: Isso. As duas começam com abre parêntese.
+14. [BYTE] Passo quatro: fatore de novo. Como fica a regra nova? Toque.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | C  -> id C' | *C' -> = n | ( ) | ( n ) | C' -> = n | ( C'' | C' -> = n | ( ) C'' | C' -> ( C''
+     PERGUNTA(toque): certas=[C' -> = n | ( C''] erradas=[C' -> = n | ( ) C'', C' -> ( C'']
+       dica: O abre parêntese vai para a frente. O resto desce para outra regra.
+       acerto: Isso. O que vem depois do parêntese ganha uma regra só dele.
+15. [BYTE] Pronto. Nenhuma regra tem duas alternativas com o mesmo começo.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | C   -> id C' | *C'  -> = n | ( C'' | *C'' -> ) | n )
+16. [BYTE] O parser está na segunda regra e lê abre parêntese. Quantas alternativas servem?
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | C   -> id C' | *C'  -> = n | ( C'' | C'' -> ) | n ) | 1 | 2
+     PERGUNTA(toque): certas=[1] erradas=[2]
+       dica: Conte as alternativas que começam com abre parêntese.
+       acerto: Isso. Uma só. A gramática fatorada é LL(1).
+17. [BYTE] Fatorar não muda a linguagem. Só adia a escolha até chegar o token que decide.
+     palco: Comandos | C -> id = n | id ( ) | id ( n ) | C   -> id C' | C'  -> = n | ( C'' | C'' -> ) | n )
+18. [BYTE] Fatorar à esquerda muda a linguagem? Um colega disse que sim. Certo ou errado?
+     palco: Erros comuns | A → a b | a c: fatorar muda as frases que a gramática gera. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Derive a b e a c com a gramática fatorada.
+       acerto: Isso. As frases são as mesmas. A fatoração só muda o momento da escolha, não o que é gerado.
+19. [BYTE] Outro erro: fatorar pela metade. Se as alternativas novas ainda começam igual, o conflito continua. Repita até não sobrar prefixo comum.
+     palco: Erros comuns | Certo: A → a A' e A' → b | c geram as mesmas frases: a b e a c. | *Errado: Pôr em evidência só uma parte do prefixo comum. | *Certo: Use o maior prefixo comum, e repita se sobrar começo igual.
+20. [BYTE] Resumindo: prefixo comum impede a escolha com um token. A fatoração põe o prefixo em evidência e adia a decisão, sem mudar a linguagem.
+     palco: Resumo | Prefixo comum: duas alternativas do mesmo não-terminal começam igual. | Fatorar: A → α A', e A' recebe o resto de cada alternativa. | Não muda a linguagem. É um dos preparos para a gramática ser LL(1).
+
+=== AULA ANIMADA [PEGADINHA] Quando fatorar não basta  (id=LEFT_FACTORING/quandofatorarnãobasta, ~31s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Aqui as opções de A começam diferente: uma com a, outra com B.
+     palco: Sem prefixo? | A -> a b | B | B -> a c
+2. [BYTE] Mas B também começa com a. O começo igual está escondido uma regra abaixo.
+     palco: Sem prefixo? | A -> a b | B | *B -> a c
+3. [BYTE] Com a na entrada, quantas opções de A valem? Toque no número.
+     palco: Sem prefixo? | A -> a b | B | B -> a c | uma | duas
+     PERGUNTA(toque): certas=[duas] erradas=[uma]
+       dica: A primeira opção começa com a. E o B começa com o quê?
+       acerto: Isso. Duas opções: é conflito, mesmo sem prefixo à vista.
+4. [BYTE] Primeiro coloque B dentro de A. Depois fatore.
+     palco: Sem prefixo? | A -> a b | B | B -> a c | *A -> a b | a c | A -> a X | X -> b | c
+5. [PROF] Fatorar só enxerga o que está escrito. Às vezes é preciso abrir a regra antes.
+     palco: Sem prefixo? | A -> a b | B | B -> a c | A -> a b | a c | *A -> a X | *X -> b | c
+
+=== AULA ANIMADA [CLIPE] Fatorar é adiar a escolha  (id=LEFT_FACTORING/fatoraréadiaraescolha, ~11s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Quando duas opções começam igual, o parser não sabe qual pegar.
+     palco: A -> a b | a c | a | ?
+2. [BYTE] Fatorar lê o começo igual uma vez e decide depois.
+     palco: A -> a X | a | X
+
+=== AULA DE LEITURA [STORY] O menu do telefone do banco
+[NARRADOR] Você liga para o banco. A voz robótica: 'Para segunda via do boleto, diga BOLETO SEGUNDA VIA. Para boleto vencido, diga BOLETO VENCIDO…'
+[BYTE] Eu digo 'boleto…' e o robô fica perdido!
+[PROF] Pois é. Ouvindo só 'boleto', o sistema ainda não sabe qual opção você quer. Ele precisa ADIAR a decisão até ouvir mais.
+TEXTO: Um analisador preditivo tem o mesmo problema: olhando só o próximo token, precisa escolher UMA produção. Se duas alternativas começam igual, ele trava.
+CODIGO (As duas começam com 'if E then S', qual escolher ao ver 'if'?):
+    S -> if E then S
+       | if E then S else S
+[PROF] Solução da URA esperta: 'Diga BOLETO'. Depois, um submenu: 'segunda via ou vencido?'. Junta o pedaço comum e decide depois.
+CODIGO (Prefixo comum na frente; as diferenças vão para S'):
+    S  -> if E then S S'
+    S' -> else S | ε
+DESTAQUE MNEMONIC: Lembra da escola? ab + ac = a(b + c). **Colocar em evidência!** Fatoração à esquerda é exatamente isso, com o prefixo comum.
+WIDGET LEFT_FACTORING gramatica=S -> i E t S | i E t S e S | a ; E -> b entrada= legenda=i = if, t = then, e = else. O prefixo comum 'i E t S' foi para a frente.
+PREVEJA: Depois da fatoração, ao ver 'if', o analisador sabe qual produção de S usar?
+    (certa) Sim: só uma alternativa de S começa com if
+    (     ) Não
+    EXPLICACAO: Agora há uma única alternativa com if. A dúvida 'tem else ou não?' fica para S', quando o token else (ou outro) já estiver à vista.
+DESTAQUE NO_DUMB_QUESTIONS: P: A fatoração muda a linguagem? R: Não. Só reorganiza as produções, assim como a(b + c) = ab + ac.
+DESTAQUE WATCH_OUT: Fatorar NÃO tira ambiguidade. O else pendurado continua ambíguo: ao ver else, S' ainda poderia escolher 'else S' ou ε. Casar com o if mais próximo continua sendo uma regra extra.
+REVELAR: Na analogia, o que é o 'submenu'?
+    RESPOSTA: O novo não-terminal (S', A'…): guarda os 'restos' depois do prefixo comum, e a decisão fica para depois.
+
+=== AULA DE LEITURA [VISUAL] Fatorando ao vivo
+[PROF] Olhe o antes e o depois. Primeiro, o clássico do else.
+WIDGET LEFT_FACTORING gramatica=S -> i E t S | i E t S e S | a ; E -> b entrada= legenda=
+TEXTO: O motor procurou o MAIOR prefixo comum entre as alternativas que começam com o mesmo símbolo: `i E t S`. O que sobrou (ε e `e S`) foi para S'.
+WIDGET DERIVATION gramatica=S -> i E t S S' | a ; S' -> e S | ε ; E -> b entrada=i b t a e a legenda=Derivando com a gramática fatorada.
+WIDGET LL1_TABLE gramatica=S -> i E t S | i E t S e S | a ; E -> b entrada= legenda=Antes: duas produções disputando a célula [S, i].
+WIDGET LL1_TABLE gramatica=S -> i E t S S' | a ; S' -> e S | ε ; E -> b entrada= legenda=Depois: [S, i] resolvida… mas olhe [S', e]! A ambiguidade do else continua.
+PREVEJA: Por que [S', e] tem conflito?
+    (certa) Porque e ∈ FIRST(e S) e também e ∈ FOLLOW(S')
+    (     ) Porque a fatoração foi feita errado
+    EXPLICACAO: S' → e S entra pela coluna e (FIRST), e S' → ε entra pelas colunas de FOLLOW(S'), que inclui e. É a ambiguidade, não a fatoração.
+WIDGET LEFT_FACTORING gramatica=L -> S ; L | S ; S -> id = E | print E ; E -> id | num entrada= legenda=Lista de comandos: L -> S ; L | S também precisa de fatoração.
+TEXTO: Resultado: L → S L' e L' → ; L | ε. Leia: 'um comando e, talvez, um ponto e vírgula com mais comandos'.
+REVELAR: Quando o analisador escolhe L' → ε?
+    RESPOSTA: Quando o próximo token NÃO é ';', quando ele está em FOLLOW(L'), como o fim da entrada.
+WIDGET LL1_TABLE gramatica=L -> S L' ; L' -> ; L | ε ; S -> id = E | print E ; E -> id | num entrada= legenda=Sem conflitos: agora é LL(1).
+
+=== AULA DE LEITURA [WORKED] Fatorando passo a passo
+[PROF] Receita: para cada A, ache o MAIOR prefixo α comum a duas ou mais alternativas. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ.
+CODIGO (Exercício resolvido):
+    A -> a b c | a b d | a e | f
+PASSOS Resolvido:
+    1. 1. Alternativas que começam com `a`: a b c, a b d, a e. (f fica de fora: é o γ.)
+    2. 2. Maior prefixo comum às TRÊS: só `a` (a e não tem b).
+    3. 3. Primeira rodada: A → a A' | f; A' → b c | b d | e.
+    4. 4. Repita! Em A', `b c` e `b d` compartilham `b`.
+    5. 5. Segunda rodada: A' → b A'' | e; A'' → c | d.
+    6. 6. Fim: nenhum par de alternativas do mesmo NT começa igual.
+WIDGET LEFT_FACTORING gramatica=A -> a b c | a b d | a e | f entrada= legenda=O motor repete as rodadas até estabilizar.
+TEXTO: Sua vez, esmaecido: `C -> id = E | id ( ) | id ( E )`, com `E -> num`.
+REVELAR: Primeira rodada: qual o maior prefixo comum às três?
+    RESPOSTA: Só `id` (o segundo símbolo é `=` numa e `(` nas outras). C → id C'; C' → = E | ( ) | ( E ).
+REVELAR: Segunda rodada, em C'?
+    RESPOSTA: `( )` e `( E )` compartilham `(`. C' → = E | ( C''; C'' → ) | E ).
+WIDGET LEFT_FACTORING gramatica=C -> id = E | id ( ) | id ( E ) ; E -> num entrada= legenda=Confira.
+DESTAQUE WATCH_OUT: Não pare na primeira rodada! Depois de fatorar, olhe de novo o novo não-terminal.
+DESTAQUE EXAM_TIP: Use o MAIOR prefixo comum a pelo menos duas alternativas. Prefixo menor não é erro, só dá mais rodadas; prefixo que não é comum a todas do grupo, aí sim é erro.
+
+=== AULA DE LEITURA [SOCRATIC] Por que adiar a decisão?
+CODIGO ():
+    A -> a b | a c
+PREVEJA: Um analisador preditivo com 1 token de lookahead vê 'a'. Qual produção ele escolhe?
+    (     ) A -> a b
+    (     ) A -> a c
+    (certa) Ainda não dá para saber
+    EXPLICACAO: As duas começam com a. Só o SEGUNDO token decide, e ele ainda não está visível.
+PREVEJA: E se ele pudesse olhar 2 tokens à frente?
+    (     ) Ainda não daria
+    (certa) Daria: o 2º token (b ou c) decide
+    EXPLICACAO: Isso seria LL(2). Mas queremos LL(1), mais simples e rápido. Em vez de olhar mais longe, mudamos a gramática.
+REVELAR: Como reescrever A para decidir só depois de consumir o 'a'?
+    RESPOSTA: A → a A'; A' → b | c. Ao ver 'a' há uma única opção; b ou c é decidido em A', com o token certo à vista.
+PREVEJA: Em `A -> a B | a B c`, qual o prefixo comum?
+    (     ) a
+    (certa) a B
+    (     ) a B c
+    EXPLICACAO: As duas começam com `a B`; a segunda continua com c, a primeira acaba.
+REVELAR: Fatore.
+    RESPOSTA: A → a B A'; A' → c | ε. (O ε aparece porque uma alternativa era exatamente o prefixo.)
+PREVEJA: Esta gramática tem prefixo comum? `S -> A x | B y`, `A -> c`, `B -> c`
+    (     ) Não: A e B são diferentes
+    (certa) Sim, escondido: depois de expandir, as duas começam com c
+    EXPLICACAO: A fatoração 'de olho' só vê símbolos iguais escritos. Aqui FIRST(A x) ∩ FIRST(B y) = {c}: conflito LL(1) mesmo sem prefixo literal. Seria preciso substituir A e B primeiro.
+WIDGET LL1_TABLE gramatica=S -> A x | B y ; A -> c ; B -> c entrada= legenda=Conflito em [S, c] mesmo sem prefixo literal comum.
+REVELAR: Qual a relação entre fatoração à esquerda e LL(1)?
+    RESPOSTA: A fatoração remove um tipo de conflito (alternativas com o mesmo início), adiando a escolha até haver token suficiente. Junto com eliminar recursão à esquerda, é a transformação típica para tentar deixar uma gramática LL(1).
+
+=== AULA DE LEITURA [FORMAL] Algoritmo de fatoração à esquerda
+TEXTO: **Fatoração à esquerda** é uma transformação de gramática útil para produzir gramáticas adequadas à análise preditiva (descendente). Quando a escolha entre duas alternativas de A não está clara, reescrevemos as produções de A para adiar a decisão até ter visto entrada suficiente.
+CODIGO (Algoritmo 4.21 (Livro do Dragão)):
+    Entrada: gramática G.  Saída: gramática equivalente fatorada.
+    para cada não-terminal A:
+        encontre o MAIOR prefixo α comum a duas ou mais alternativas
+        se α ≠ ε:
+            substitua  A → αβ₁ | αβ₂ | ... | αβₙ | γ
+            por        A  → αA' | γ
+                       A' → β₁ | β₂ | ... | βₙ
+            (γ = alternativas que não começam com α; A' é novo)
+    repita até que nenhum par de alternativas de um NT tenha prefixo comum
+TEXTO: Exemplo do livro: S → i E t S | i E t S e S | a, E → b. Resultado: S → i E t S S' | a, S' → e S | ε, E → b.
+WIDGET LEFT_FACTORING gramatica=S -> i E t S | i E t S e S | a ; E -> b entrada= legenda=
+PREVEJA: Fatorar `A -> α β1 | α β2` preserva a linguagem?
+    (certa) Sim, sempre
+    (     ) Não, perde cadeias
+    EXPLICACAO: αA' com A' → β₁ | β₂ gera exatamente αβ₁ e αβ₂, é a propriedade distributiva.
+PREVEJA: Uma gramática fatorada e sem recursão à esquerda é necessariamente LL(1)?
+    (     ) Sim
+    (certa) Não
+    EXPLICACAO: São condições necessárias, não suficientes. O else pendurado fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).
+DESTAQUE EXAM_TIP: Ordem segura numa questão 'torne LL(1)': (1) elimine a recursão à esquerda; (2) fatore à esquerda; (3) calcule FIRST e FOLLOW; (4) monte a tabela e verifique se alguma célula tem mais de uma produção.
+DESTAQUE WATCH_OUT: Não confunda: fatoração trata PREFIXOS COMUNS (A → αβ₁ | αβ₂); recursão à esquerda trata A → Aα. Problemas diferentes, receitas diferentes, e ambos atrapalham o LL(1).
+REVELAR: Escreva a forma geral da fatoração.
+    RESPOSTA: A → αβ₁ | … | αβₙ | γ  ⟹  A → αA' | γ  e  A' → β₁ | … | βₙ.
+
+=== AULA DE LEITURA [MNEMONIC] Coloque em evidência
+DESTAQUE MNEMONIC: **ab + ac = a(b + c)**: fatoração à esquerda é o 'colocar em evidência' do ensino fundamental, com o prefixo comum no papel do a.
+DESTAQUE MNEMONIC: **Primeiro o que é igual, depois o que difere.** A → (parte igual) A'; A' → (as diferenças).
+DESTAQUE MNEMONIC: **Recursão = rabo; fatoração = gêmeos.** Na recursão à esquerda, o NT aparece no início do próprio lado direito. Na fatoração, duas alternativas nascem com a mesma cara.
+TEXTO: **Palácio da memória**: do outro lado da **Ponte da Transformação**, longe do cachorro, há uma bifurcação com duas placas idênticas 'if E then S…'. O engenheiro junta as duas estradas num trecho único e só coloca a bifurcação depois (S'), onde as placas ficam diferentes.
+PREVEJA: Qual gramática PRECISA de fatoração (e não de eliminar recursão à esquerda)?
+    (     ) E -> E + T | T
+    (certa) S -> id ( ) | id = num
+    (     ) S -> a S b | ε
+    EXPLICACAO: As duas alternativas de S começam com id: gêmeos! A primeira opção é rabo (recursão); a terceira já está boa.
+WIDGET LEFT_FACTORING gramatica=S -> id ( ) | id = num entrada= legenda=Gêmeos separados: id em evidência.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que fatorar resolve ambiguidade (não resolve!); (2) parar na primeira rodada; (3) usar um prefixo que não é comum a todas as alternativas do grupo; (4) esquecer o ε quando uma alternativa é igual ao prefixo (A → αβ | α vira A' → β | ε).
+DESTAQUE MNEMONIC: As duas cirurgias da Ponte antes do Templo LL(1): **'Rabo e Gêmeos'**: corte o rabo (recursão à esquerda) e separe os gêmeos (fatoração).
+REVELAR: Fatore `A -> x y z | x y` em voz alta.
+    RESPOSTA: Prefixo comum `x y`: A → x y A'; A' → z | ε.
+

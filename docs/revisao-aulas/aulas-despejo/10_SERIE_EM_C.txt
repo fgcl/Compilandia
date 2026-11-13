@@ -1,0 +1,113 @@
+=== AULA ANIMADA [EM_C] Em C 1: o laço do getchar  (id=TOKENS/emc1olaçodogetchar, ~50s, 9 passos, exemplo começa no passo null)
+1. [BYTE] Vamos escrever o analisador léxico em C, na mão.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7
+2. [BYTE] O getchar lê um caractere por vez. Chegou o 4.
+     palco: lexer.c | *int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '4';v = ?}
+3. [BYTE] É dígito. Entra no if, e o valor começa em zero.
+     palco: lexer.c | int c = getchar(); | *if (isdigit(c)) { | *  int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '4';v = 0}
+4. [BYTE] Cada volta do while junta um dígito. Agora v vale quatro.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { | *    v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '4';v = 4}
+5. [BYTE] Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { | *    v = v * 10 + (c - '0'); | *    c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '2';v = 42}
+6. [BYTE] Agora chegou o mais. Qual linha roda logo depois? Toque nela.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '+';v = 42}
+     PERGUNTA(toque): certas=[  ungetc(c, stdin);] erradas=[    v = v * 10 + (c - '0');,     c = getchar();, if (isdigit(c)) {]
+       dica: O mais não é dígito. O while para.
+       acerto: Isso. O laço para e o ungetc devolve o mais.
+7. [BYTE] O mais foi lido a mais. O ungetc devolve ele para a entrada.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } | *  ungetc(c, stdin); |   return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '+';v = 42}
+8. [BYTE] E sai o token. Ele é um struct com o tipo e o valor.
+     palco: lexer.c | int c = getchar(); | if (isdigit(c)) { |   int v = 0; |   while (isdigit(c)) { |     v = v * 10 + (c - '0'); |     c = getchar(); |   } |   ungetc(c, stdin); | *  return (Token){NUM, v}; | } | 4 | 2 | + | 7 | variáveis{c = '+';v = 42} | Token{tipo: NUM;valor: 42}
+9. [BYTE] Agora corte uma linha inteira, como o seu lexer em C faria.
+     palco: *x | 1 | = | 4 | 2 | + | y | ;
+     BRINQUEDO: meta=Corte a linha em tokens. teclas=[Mais uma letra, Cortar aqui]
+       dica: Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token.
+       acerto: Os tokens que você cortou são os que o seu lexer devolveria.
+
+=== AULA ANIMADA [EM_C] Em C 2: uma função por regra  (id=RECURSIVE_DESCENT/emc2umafunçãoporregra, ~51s, 9 passos, exemplo começa no passo null)
+1. [BYTE] Na descida recursiva em C, cada regra da gramática vira uma função.
+     palco: parser.c | void expr(void) { |   termo(); |   while (tok == '+') { |     casa('+'); |     termo(); |   } | }
+2. [BYTE] expr chama termo. O while repete enquanto vier um mais.
+     palco: parser.c | void expr(void) { | *  termo(); | *  while (tok == '+') { |     casa('+'); |     termo(); |   } | }
+3. [BYTE] termo é igual, com o vezes. E fator só casa um número.
+     palco: parser.c | void expr(void) { |   termo(); |   while (tok == '+') { |     casa('+'); |     termo(); |   } | } | void termo(void) { | *  fator(); while (tok == '*') ... | } | *void fator(void) { casa(NUM); }
+4. [BYTE] Vamos rodar com dois mais três vezes quatro. O main chama expr.
+     palco: parser.c | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM | main() | expr() | 2 | + | 3 | * | 4
+5. [BYTE] expr chama termo, e termo chama fator. A pilha cresce.
+     palco: parser.c | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM | main() | expr() | termo() | fator() | 2 | + | 3 | * | 4
+6. [BYTE] fator casa o 2 e volta. Depois termo volta também.
+     palco: parser.c | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM | main() | expr() | 2 | + | 3 | * | 4
+7. [BYTE] Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque.
+     palco: parser.c | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM | main() | expr() | 2 | + | 3 | * | 4
+     PERGUNTA(toque): certas=[expr()] erradas=[main()]
+       dica: Quem tem o while do mais?
+       acerto: Isso. O while do mais mora dentro de expr.
+8. [PROF] No vezes, quem casa é termo. Cada função cuida do seu operador.
+     palco: parser.c | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM | main() | expr() | termo() | 2 | + | 3 | * | 4
+9. [BYTE] Agora você é o processador. Chame, case e volte, na ordem certa.
+     palco: *1 | * | 2 | + | 3 | *main() | pilha de chamadas | expr:  termo ('+' termo)* | termo: fator ('*' fator)* | fator: NUM
+     BRINQUEDO: meta=Rode 1 * 2 + 3 até a pilha esvaziar. teclas=[Chamar, Casar, Voltar]
+       dica: Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou.
+       acerto: Você rodou a descida recursiva inteira, igual ao programa em C.
+
+=== AULA ANIMADA [EM_C] Em C 3: o struct Node  (id=AST_BUILD/emc3ostructnode, ~43s, 8 passos, exemplo começa no passo null)
+1. [BYTE] Na AST em C, cada nó da árvore é um struct.
+     palco: struct Node | typedef struct Node { |   char op; |   int val; |   struct Node *esq, *dir; | } Node;
+2. [BYTE] op guarda o operador. val guarda o número.
+     palco: struct Node | typedef struct Node { | *  char op; | *  int val; |   struct Node *esq, *dir; | } Node;
+3. [BYTE] esq e dir são ponteiros. Eles apontam para os filhos.
+     palco: struct Node | typedef struct Node { |   char op; |   int val; | *  struct Node *esq, *dir; | } Node;
+4. [BYTE] Para dois mais três vezes quatro, o parser cria os nós de baixo para cima.
+     palco: 2 + 3 * 4 | Node{val: 2} | Node{val: 3} | Node{val: 4}
+5. [BYTE] Primeiro as folhas, um nó para cada número. Depois vem o vezes.
+     palco: 2 + 3 * 4 | Node{val: 2} | Node{val: 3} | Node{val: 4} | *Node{op: '*';esq ●;dir ●}
+6. [BYTE] Por último o mais, que vira a raiz da árvore.
+     palco: 2 + 3 * 4 | Node{val: 2} | Node{val: 3} | Node{val: 4} | Node{op: '*';esq ●;dir ●} | *Node{op: '+';esq ●;dir ●}
+7. [BYTE] Para qual nó aponta o ponteiro dir da raiz? Toque nele.
+     palco: 2 + 3 * 4 | Node{val: 2} | Node{val: 3} | Node{val: 4} | Node{op: '*';esq ●;dir ●} | Node{op: '+';esq ●;dir ●}
+     PERGUNTA(toque): certas=[Node] erradas=[Node, Node, Node]
+       dica: Siga o fio que sai da linha dir.
+       acerto: Isso. O dir da raiz aponta para o vezes.
+8. [PROF] A árvore é isso: structs ligados por ponteiros.
+     palco: 2 + 3 * 4 | Node{val: 2} | Node{val: 3} | Node{val: 4} | Node{op: '*';esq ●;dir ●} | Node{op: '+';esq ●;dir ●}
+
+=== AULA ANIMADA [EM_C] Em C 4: da árvore ao MIPS  (id=CODEGEN_MIPS/emc4daárvoreaomips, ~42s, 7 passos, exemplo começa no passo null)
+1. [BYTE] O gerador anda na árvore e escreve MIPS, uma linha por vez.
+     palco: a + b * c | Node{op: '+';esq ●;dir ●} | Node{nome: a} | Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c}
+2. [BYTE] Ele visita os filhos antes do pai. O primeiro nó pronto é o vezes.
+     palco: a + b * c | Node{op: '+';esq ●;dir ●} | Node{nome: a} | *Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c}
+3. [BYTE] O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda.
+     palco: a + b * c | Node{op: '+';esq ●;dir ●} | Node{nome: a} | *Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c} | *lw $t1, b | *lw $t2, c | *mul $t3, $t1, $t2 | *sw $t3, t1
+4. [BYTE] Qual nó o gerador visita agora? Toque nele.
+     palco: a + b * c | Node{op: '+';esq ●;dir ●} | Node{nome: a} | Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c} | lw $t1, b | lw $t2, c | mul $t3, $t1, $t2 | sw $t3, t1
+     PERGUNTA(toque): certas=[Node] erradas=[Node, Node, Node]
+       dica: Os dois filhos da raiz já estão prontos.
+       acerto: Isso. Agora é a vez da raiz.
+5. [BYTE] O mais usa o resultado do vezes, que já está guardado na memória.
+     palco: a + b * c | *Node{op: '+';esq ●;dir ●} | Node{nome: a} | Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c} | lw $t1, b | lw $t2, c | mul $t3, $t1, $t2 | sw $t3, t1 | *lw $t1, a | *lw $t2, t1 | *add $t3, $t1, $t2 | *sw $t3, t2
+6. [PROF] Em C, é uma função recursiva: gera os filhos e depois o pai.
+     palco: a + b * c | Node{op: '+';esq ●;dir ●} | Node{nome: a} | Node{op: '*';esq ●;dir ●} | Node{nome: b} | Node{nome: c} | lw $t1, b | lw $t2, c | mul $t3, $t1, $t2 | sw $t3, t1 | lw $t1, a | lw $t2, t1 | add $t3, $t1, $t2 | sw $t3, t2 | void gera(Node *n) { | *  if (n->op) { gera(n->esq); gera(n->dir); } |   emite(n); | }
+7. [BYTE] Agora monte o MIPS na ordem certa, instrução por instrução.
+     palco: a + b * c | próxima instrução
+     BRINQUEDO: meta=Monte o MIPS de a + b * c. teclas=[lw, mul, sw, add]
+       dica: Antes de calcular, os dois valores precisam estar nos registradores.
+       acerto: É exatamente o que o seu gerador em C escreveria.
+
+=== AULA ANIMADA [EM_C] Em C 5: flex, bison e o main  (id=YACC_BISON/emc5flexbisoneomain, ~36s, 7 passos, exemplo começa no passo null)
+1. [BYTE] Um compilador em C de verdade costuma ter três arquivos.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}}
+2. [BYTE] O main chama o yyparse, o parser que o Bison escreveu.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}}
+3. [BYTE] Sempre que precisa de um token, o parser chama o yylex.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}}
+4. [BYTE] O yylex devolve o tipo. O valor vai junto, em yylval.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}}
+5. [BYTE] Quem chama o yylex? Toque no arquivo.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}}
+     PERGUNTA(toque): certas=[calc.y] erradas=[calc.l, main.c]
+       dica: Quem pede tokens é o parser.
+       acerto: Isso. O parser pede um token por vez.
+6. [BYTE] O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}} | *terminal{bison -d calc.y;flex calc.l;gcc *.c -o calc}
+7. [BYTE] Roda o calc, digita a conta, e sai o resultado.
+     palco: flex + bison + C | calc.l{[0-9]+  NUM;yylval = atoi(yytext)} | calc.y{e: e '+' e;{ $$ = $1 + $3; }} | main.c{int main(void) {;  return yyparse();;}} | terminal{bison -d calc.y;flex calc.l;gcc *.c -o calc} | *./calc{2+3*4;= 14}

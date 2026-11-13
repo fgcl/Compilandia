@@ -1,0 +1,1542 @@
+######## REGIAO FLORESTA_LEXICA: Floresta Léxica (Cortar texto em tokens)
+
+################ ASSUNTO TOKENS: Tokens, lexemas e padrões  prereqs=[PHASES]
+FICHA: Lexema é o texto real, token é a classe (nome + atributo) e padrão é a regra que diz quais lexemas pertencem ao token.
+  gancho: Token é a gaveta, lexema é a meia, padrão é a etiqueta.
+  termos: [token, lexema, padrão, atributo, maior casamento, palavra-chave]
+  erros comuns: [Contar espaços e comentários como tokens., Separar `>=` em dois tokens (o maior casamento pega `>=` inteiro)., Achar que `x` e `y` são tokens diferentes (mesmo token id, lexemas diferentes)., Achar que `iff` é a palavra-chave if seguida de um f.]
+  FLASH: O que é um lexema? -> A sequência de caracteres do fonte que casa com o padrão de um token
+  FLASH: O que é um token? -> Um par ⟨nome, atributo⟩ que representa uma classe de unidades léxicas
+  FLASH: O que é um padrão? -> A descrição (em geral uma ER) dos lexemas de um token
+  FLASH: Quantos tokens em `x>=10;`? -> 4: x, >=, 10, ;
+  FLASH: Regra do maior casamento? -> Escolher o maior prefixo que casa com algum padrão
+  FLASH: `if` casa com id e palavra-chave: quem vence? -> A palavra-chave (reservada, de maior prioridade)
+  FLASH: Atributo do token id? -> Ponteiro para a entrada na tabela de símbolos
+  FLASH: Em `fi (a == b)`, o léxico acusa erro? -> Não: fi é um identificador válido
+
+=== AULA ANIMADA [BASICO] Cortar a linha  (id=TOKENS, ~156s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] O parser trabalha com palavras, como nomes e operadores. Mas o arquivo chega caractere por caractere.
+     palco: Letras demais | i | f | ( | x | 1 | > | = | 1 | 0 | )
+2. [BYTE] Quantas palavras o parser quer ver nesta linha? Toque no número.
+     palco: Letras demais | i | f | ( | x | 1 | > | = | 1 | 0 | ) | 5 | 6 | 13
+     PERGUNTA(toque): certas=[6] erradas=[5, 13]
+       dica: Nome, número, sinal e parêntese contam. Espaço não conta.
+       acerto: Isso. Seis palavras no lugar de treze caracteres.
+3. [BYTE] Por isso existe a análise léxica. O analisador léxico, ou scanner, junta os caracteres em tokens antes do parser.
+     palco: Letras demais | i | f | ( | x | 1 | > | = | 1 | 0 | ) | if | ( | x1 | >= | 10 | )
+4. [BYTE] Para o computador, esta linha é só uma fila de caracteres.
+     palco: Scanner | c | o | n | t | a | = | 1 | 0 | + | x | 1 | ;
+5. [BYTE] O scanner anda por ela da esquerda para a direita e separa os pedaços. Cada pedaço vira um token.
+     palco: Scanner | c | o | n | t | a | = | 1 | 0 | + | x | 1 | ; | conta | = | 10 | + | x1 | ; | entram letras | saem tokens
+6. [BYTE] Cada token tem uma classe: identificador, número ou operador. É a classe que o parser enxerga.
+     palco: Scanner | c | o | n | t | a | = | 1 | 0 | + | x | 1 | ; | conta | = | 10 | + | x1 | ; | ID | NUM | OP
+7. [BYTE] Espaços, quebras de linha e comentários são descartados aqui. Nenhuma fase depois os vê.
+     palco: Scanner | conta | = | 10 | + | x1 | ; | ID | NUM | OP | c | o | n | t | a | = | 1 | 0 | + | x | 1 | ;
+8. [BYTE] Sua vez. Toque nos dois cortes desta linha.
+     palco: Onde corta? | x | > | = | 1 | 0
+     PERGUNTA(toque): certas=[, ] erradas=[, ]
+       dica: O maior ou igual fica inteiro, e o número também.
+       acerto: Isso. Três tokens: x, maior ou igual, e dez.
+9. [BYTE] Essa é a regra do maior casamento: o scanner sempre pega o pedaço mais longo possível. Por isso conta2 é um nome só.
+     palco: Maior casamento | > | = | >= | conta2
+10. [BYTE] O texto exato do pedaço é o lexema. A classe dele é o token. Vários lexemas diferentes têm o mesmo token.
+     palco: Lexema e token | x1 | ID | lexema | token
+11. [BYTE] A receita do scanner tem três passos. Ela fica aqui na tela.
+     palco: Receita | 1. Pule espaços e comentários. | 2. Pegue o pedaço mais longo que forma token. | 3. Dê a classe: palavra-chave, ID, NUM, OP...
+12. [BYTE] Por que conta2 virou um token só, e não dois? Toque no passo.
+     palco: Receita | 1. Pule espaços e comentários. | 2. Pegue o pedaço mais longo que forma token. | 3. Dê a classe: palavra-chave, ID, NUM, OP... | conta2
+     PERGUNTA(toque): certas=[2. Pegue o pedaço mais longo que forma token.] erradas=[1. Pule espaços e comentários., 3. Dê a classe: palavra-chave, ID, NUM, OP...]
+       dica: O scanner segue lendo enquanto o pedaço ainda forma um nome.
+       acerto: Isso. Passo dois, o maior casamento.
+13. [BYTE] Passo três: if é palavra reservada e tem classe própria. Já ifx é um identificador comum, pelo maior casamento.
+     palco: Receita | 1. Pule espaços e comentários. | 2. Pegue o pedaço mais longo que forma token. | *3. Dê a classe: palavra-chave, ID, NUM, OP... | if | ifx
+14. [BYTE] Entram letras, saem tokens. Agora quem corta é você.
+     palco: Outra linha | w | h | i | l | e | ( | i | < | = | n | ) | i | + | + | ;
+15. [BYTE] A linha começa com while. Qual é a classe dele? Toque.
+     palco: Outra linha | w | h | i | l | e | ( | i | < | = | n | ) | i | + | + | ; | ID | palavra-chave
+     PERGUNTA(toque): certas=[palavra-chave] erradas=[ID]
+       dica: While está na lista de palavras reservadas da linguagem.
+       acerto: Isso. Palavra-chave, como if e for.
+16. [BYTE] Agora o fim da linha. Toque nos dois cortes deste pedaço.
+     palco: Outra linha | w | h | i | l | e | ( | i | < | = | n | ) | i | + | + | ; | i | + | + | ;
+     PERGUNTA(toque): certas=[, ] erradas=[]
+       dica: O mais mais fica inteiro, como o maior ou igual.
+       acerto: Isso. Três tokens: o nome, o mais mais e o ponto e vírgula.
+17. [BYTE] Quantos tokens saem da linha inteira? Toque no número.
+     palco: Outra linha | w | h | i | l | e | ( | i | < | = | n | ) | i | + | + | ; | 7 | 9 | 17
+     PERGUNTA(toque): certas=[9] erradas=[7, 17]
+       dica: Conte cada nome, cada sinal e cada parêntese. Pule os espaços.
+       acerto: Isso. Essa linha gera nove tokens.
+18. [BYTE] Nove tokens, cada um com sua classe. É isso que o parser recebe.
+     palco: Outra linha | w | h | i | l | e | ( | i | < | = | n | ) | i | + | + | ; | while | ( | i | <= | n | ) | i | ++ | ;
+19. [BYTE] Como o scanner corta este trecho? Um colega cortou assim. Certo ou errado?
+     palco: Erros comuns | Em x>=10, o scanner gera os tokens x, >, = e 10. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O scanner pega sempre o pedaço mais longo que forma um token.
+       acerto: Isso. Pelo maior casamento, maior ou igual é um token só. São três tokens, não quatro.
+20. [BYTE] Outro erro: confundir token com lexema. Lexema é o texto que estava no arquivo. Token é a classe que o parser recebe.
+     palco: Erros comuns | Certo: x>=10 dá três tokens: x, >= e 10. É o maior casamento. | *Errado: Token e lexema são a mesma coisa. | *Certo: Lexema é o texto (conta2). Token é a classe (ID).
+21. [BYTE] Resumindo: a análise léxica transforma caracteres em tokens. Ela usa o maior casamento, separa lexema de classe e joga fora espaços e comentários.
+     palco: Resumo | O scanner lê caracteres e entrega tokens ao parser. | Maior casamento: sempre o pedaço mais longo que forma token. | Lexema é o texto; token é a classe. Espaço e comentário somem.
+
+=== AULA ANIMADA [PEGADINHA] Por que ifa não é if  (id=TOKENS/porqueifanãoéif, ~39s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Olhe esta linha: ifa igual a um. O scanner começa pelo i.
+     palco: ifa = 1; | *i | f | a | = | 1 | ;
+2. [BYTE] Depois do i vem o f. O pedaço agora é if, que é palavra reservada.
+     palco: ifa = 1; | *i | *f | a | = | 1 | ;
+3. [BYTE] Ele fecha o token agora? Toque na última letra desse token.
+     palco: ifa = 1; | i | f | a | = | 1 | ;
+     PERGUNTA(toque): certas=[a] erradas=[f, =]
+       dica: O scanner estica enquanto der. O a ainda cabe num nome.
+       acerto: Isso. O a ainda cabe, então o token é ifa.
+4. [BYTE] Maior casamento: fica o pedaço mais comprido. Por isso ifa é um nome comum.
+     palco: ifa = 1; | *i | *f | *a | = | 1 | ; | ifa | = | 1 | ;
+5. [PROF] A palavra reservada só ganha no empate. If sozinho tem o mesmo tamanho nas duas regras.
+     palco: ifa = 1; | i | f | a | = | 1 | ; | ifa | = | 1 | ;
+6. [BYTE] Ordem de decisão: primeiro o tamanho, depois a reservada.
+     palco: MAIOR CASAMENTO
+
+=== AULA ANIMADA [PRATICA] Corte você mesmo  (id=TOKENS/cortevocêmesmo, ~26s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Agora você é o scanner. A linha é x maior ou igual a dez.
+     palco: x>=10; | x | >= | 10 | ;
+2. [BYTE] Mais uma letra estica o pedaço. Cortar fecha o token.
+     palco: x>=10; | x | *>= | 10 | ;
+3. [PROF] Lembra da regra? Estique enquanto couber.
+     palco: x>=10; | x | >= | 10 | ;
+4. [BYTE] Corte a linha inteira. Estique, e corte na hora certa.
+     palco: *x | > | = | 1 | 0 | ;
+     BRINQUEDO: meta=Corte a linha inteira teclas=[Mais uma letra, Cortar aqui]
+       dica: O motor recusou. Pense no maior pedaço possível.
+       acerto: Linha cortada. Foram quatro tokens.
+5. [BYTE] Scanner de verdade faz isso milhões de vezes por segundo.
+     palco: x>=10; | *x | *>= | *10 | *;
+
+=== AULA ANIMADA [CLIPE] Token e lexema  (id=TOKENS/tokenelexema, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] Lexema é o texto que está no código, como conta.
+     palco: Lexema | conta
+2. [BYTE] Token é a classe dele, como identificador.
+     palco: Token | conta | identificador
+
+=== AULA ANIMADA [CLIPE] Maior casamento  (id=TOKENS/maiorcasamento, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] O scanner fica com o pedaço mais comprido que puder.
+     palco: Maior casamento | x | *> | = | 1
+2. [BYTE] Maior ou igual é um token só, e não dois.
+     palco: Maior casamento | x | *> | *= | 1
+
+=== AULA ANIMADA [CLIPE] Palavra-chave ou nome  (id=TOKENS/palavrachaveounome, ~10s, 2 passos, exemplo começa no passo null)
+1. [BYTE] If casa com a regra de nome e com a palavra reservada.
+     palco: Empate | if | nome | reservada
+2. [BYTE] Quando o tamanho empata, a reservada ganha.
+     palco: Empate | if | nome | *reservada
+
+=== AULA DE LEITURA [STORY] O caixa do supermercado
+[NARRADOR] Supermercado em dia de promoção. A Lexi está no caixa, passando os produtos da esteira um por um.
+[LEXI] Bip! 'Guaraná 2L'. Bip! 'Pão francês'. Bip! 'Guaraná lata'. Pra mim, cada produto vai para uma CATEGORIA no cupom fiscal.
+[PROF] Repare em três coisas diferentes: o produto concreto na mão dela, a categoria impressa no cupom e a regra que diz qual produto vai em qual categoria.
+PASSOS Supermercado → compilador:
+    1. O produto concreto ('Guaraná 2L') → **lexema**: o pedaço de texto real do programa, como `contador` ou `42`.
+    2. A categoria no cupom (BEBIDA) → **token**: o nome da classe, como `id` ou `num`.
+    3. A regra ('todo líquido engarrafado é BEBIDA') → **padrão**: a descrição de quais lexemas pertencem ao token, como 'letra seguida de letras ou dígitos'.
+[BYTE] Então 'Guaraná 2L' e 'Guaraná lata' são lexemas diferentes do MESMO token?
+[PROF] Exatamente! Como `x` e `total`: lexemas diferentes, mesmo token `id`.
+TEXTO: Mas no cupom a categoria sozinha não basta: precisa saber QUAL bebida foi. Por isso o token carrega um **atributo**: ⟨id, ponteiro para `total` na tabela de símbolos⟩.
+PREVEJA: Em `if (x >= 10)`, qual é o LEXEMA do token de comparação?
+    (     ) relop (operador relacional)
+    (certa) >=
+    (     ) x >= 10
+    (     ) if
+    EXPLICACAO: `>=` é o texto real (lexema). 'relop' é o nome do token, a categoria.
+[LEXI] E tem mais: eu sempre pego o MAIOR pedaço possível. Vendo `>=`, não corto em `>` e `=`. É como ler 'guarda-chuva' como uma palavra só, e não 'guarda' + 'chuva'.
+DESTAQUE NO_DUMB_QUESTIONS: P: E o `if`? Ele também casa com 'letras seguidas de letras', o padrão de identificador! R: Empate. Palavras-chave são **reservadas**: a regra delas tem prioridade. Já `iff` é mais comprido que `if`, então pelo maior casamento vira identificador.
+WIDGET TOKENIZE gramatica= entrada=if (iff >= 10) whilex = whilex + 1; legenda=Repare: `iff` e `whilex` são identificadores, não palavras-chave!
+DESTAQUE REAL_WORLD: Por isso em C você não pode chamar uma variável de `while`, mas pode chamar de `whilex`.
+REVELAR: Na analogia, quem é lexema, quem é token e quem é padrão?
+    RESPOSTA: Lexema = o produto concreto (o texto). Token = a categoria no cupom (a classe). Padrão = a regra que decide a categoria.
+
+=== AULA DE LEITURA [VISUAL] Fatiando código em cores
+[LEXI] Olha a minha katana em ação. Cada cor é um token diferente.
+WIDGET TOKENIZE gramatica= entrada=while (i <= n1) i++; legenda=Toque em cada token para ver o lexema e a classe.
+TEXTO: Repare em três coisas: (1) os espaços desaparecem; (2) `<=` é UM token; (3) `i++` vira dois tokens, `i` e `++`.
+PREVEJA: Quantos tokens tem `x+=y;`?
+    (     ) 3
+    (certa) 4
+    (     ) 5
+    (     ) 6
+    EXPLICACAO: x, +=, y e ;: 4 tokens. Mesmo sem espaços, o maior casamento pega `+=` inteiro.
+WIDGET TOKENIZE gramatica= entrada=x+=y; legenda=Sem espaços, o léxico ainda sabe onde cortar.
+[PROF] Mas como a Lexi SABE que `n1` é identificador? Ela segue um padrão, e padrão se desenha como autômato.
+WIDGET DFA gramatica= entrada=l(l|d)* legenda=Padrão de identificador (l = letra, d = dígito). Teste 'ld', 'll' e 'dl'.
+[BYTE] 'dl' foi rejeitada! Faz sentido: identificador não começa com dígito.
+WIDGET DFA gramatica= entrada=d+(pd+)? legenda=Padrão de número (d = dígito, p = ponto). Teste 'dpd', 'd' e 'dp'.
+DESTAQUE WATCH_OUT: Em 'dp' (como `3.`) o autômato termina num estado NÃO final. Então o maior casamento válido é só `3`; o ponto sobra para o próximo token.
+DESTAQUE BRAIN_POWER: Como a Lexi corta `x = a+++b;`? Pense no maior casamento antes de tocar.
+REVELAR: Resposta
+    RESPOSTA: x, =, a, ++, +, b, ; — ela morde `++` primeiro (o maior), e sobra um `+`.
+WIDGET TOKENIZE gramatica= entrada=x = a+++b; legenda=Confira a mordida gulosa.
+REVELAR: Por que o token id carrega um ponteiro para a tabela de símbolos?
+    RESPOSTA: O sintático só precisa saber que é um `id`, mas as fases seguintes precisam saber QUAL: nome, tipo, escopo. O atributo aponta para essa entrada.
+
+=== AULA DE LEITURA [WORKED] Montando a tabela de tokens
+[PROF] Vamos montar a tabela lexema / token / atributo de uma linha, com calma.
+CODIGO (Entrada):
+    if (x >= 10) total += x;
+PASSOS Resolvido:
+    1. `if` → palavra-chave **if**. Também casa com id, mas palavra reservada vence. Sem atributo.
+    2. `(` → delimitador **(**.
+    3. `x` → **id**, atributo: ponteiro para x na tabela de símbolos.
+    4. `>=` → **relop**, atributo GE. Maior casamento: não é `>` + `=`.
+    5. `10` → **num**, atributo: o valor 10.
+    6. `)` → delimitador **)**.
+    7. `total` → **id**, ponteiro para total.
+    8. `+=` → operador de atribuição composta **+=**.
+    9. `x` → **id**, o MESMO ponteiro do primeiro x.
+    10. `;` → delimitador **;**. Total: 10 tokens.
+WIDGET TOKENIZE gramatica= entrada=if (x >= 10) total += x; legenda=Confira com a Lexi.
+DESTAQUE WATCH_OUT: Os dois `x` geram dois TOKENS, mas a tabela de símbolos tem UMA só entrada para x. Token se repete; entrada na tabela, não.
+TEXTO: Sua vez (exemplo esmaecido): `while (i <= n1) i++;`
+REVELAR: Quantos tokens?
+    RESPOSTA: 9: while, (, i, <=, n1, ), i, ++, ;
+REVELAR: Qual é o token de `while`? E de `n1`?
+    RESPOSTA: `while` é palavra-chave (reservada). `n1` é id: começa com letra e depois vem um dígito.
+REVELAR: `<=` e `++` são um token cada ou dois?
+    RESPOSTA: Um cada: maior casamento. `<=` é relop (LE); `++` é o operador de incremento.
+WIDGET TOKENIZE gramatica= entrada=while (i <= n1) i++; legenda=Confira suas respostas.
+DESTAQUE EXAM_TIP: Questão comum: 'quantos tokens há no trecho?'. Armadilhas: operadores de dois caracteres (`<=`, `==`, `++`), número com ponto (`3.14` é UM token), string (`"a b c"` é UM token) e comentários (zero tokens).
+
+=== AULA DE LEITURA [SOCRATIC] Por que existe um analisador léxico?
+[PROF] Vou te fazer perguntas. Chute sem medo: errar aqui é parte do método.
+PREVEJA: O analisador léxico descarta espaços e comentários. Por quê?
+    (certa) Porque eles não mudam o significado do programa (na maioria das linguagens)
+    (     ) Porque ocupam memória demais
+    (     ) Porque o sintático tem preguiça
+    (     ) Porque é proibido usar espaços em C
+    EXPLICACAO: Espaço só separa lexemas; depois disso não serve pra mais nada. (Python é a exceção famosa: a indentação vira tokens INDENT/DEDENT!)
+PREVEJA: Em `count2=count2+1`, o que é `count2`?
+    (     ) Dois tokens: id `count` e num `2`
+    (certa) Um único token id
+    (     ) Erro léxico
+    (     ) Uma palavra-chave
+    EXPLICACAO: O padrão de id é letra seguida de letras OU dígitos, e o maior casamento engole o 2 junto.
+PREVEJA: `>=` deve virar quantos tokens?
+    (certa) 1
+    (     ) 2
+    EXPLICACAO: Um só. Regra do **maior casamento** (maximal munch): pegue o maior prefixo da entrada que casa com algum padrão.
+[BYTE] Mas e o `if`? Ele casa com o padrão de identificador E com o de palavra-chave. Empate!
+REVELAR: Como desempatar `if`? E por que `iff` não é palavra-chave?
+    RESPOSTA: Empate de MESMO tamanho: vence a regra listada primeiro, palavras-chave vêm antes de id. `iff` tem 3 letras: o maior casamento prefere o id de 3 letras ao `if` de 2.
+PREVEJA: Em `fi (a == f(x))`, o léxico percebe que `fi` deveria ser `if`?
+    (     ) Sim, é erro léxico
+    (certa) Não: `fi` é um identificador válido
+    EXPLICACAO: O léxico não enxerga o contexto: `fi` casa com o padrão de id. Exemplo literal do Livro do Dragão!
+[PROF] Última: por que não deixar o sintático fazer tudo, lendo caractere por caractere?
+REVELAR: Três motivos para separar análise léxica de sintática.
+    RESPOSTA: 1) **Simplicidade**: a gramática não precisa falar de espaços e comentários. 2) **Eficiência**: técnicas especializadas (buffers, autômatos) leem caracteres muito rápido. 3) **Portabilidade**: as peculiaridades da entrada ficam isoladas no léxico.
+DESTAQUE FIRESIDE: Léxico: 'Eu trabalho com caracteres; você, com tokens.' Sintático: 'E eu te chamo quando preciso: getNextToken()!', na prática o léxico é uma sub-rotina do sintático.
+WIDGET TOKENIZE gramatica= entrada=fi (a == f(x)) x = 1; legenda=Veja: `fi` passa como identificador sem reclamação.
+
+=== AULA DE LEITURA [FORMAL] Token, padrão e lexema: definições
+TEXTO: **Token**: par ⟨nome-do-token, valor-de-atributo⟩. O nome é um símbolo abstrato que representa um tipo de unidade léxica (palavra-chave, identificador…); é o que o analisador sintático processa.
+TEXTO: **Padrão**: descrição da forma que os lexemas de um token podem assumir. Para uma palavra-chave, é a própria sequência de caracteres; para identificadores, é uma estrutura casada por muitas cadeias.
+TEXTO: **Lexema**: sequência de caracteres do programa fonte que casa com o padrão de um token e é identificada pelo analisador léxico como uma instância desse token.
+CODIGO (Exemplos de tokens (Livro do Dragão, Fig. 3.2)):
+    TOKEN       PADRÃO (informal)                    LEXEMAS
+    if          caracteres i, f                      if
+    else        caracteres e, l, s, e                else
+    comparison  < ou > ou <= ou >= ou == ou !=       <=, !=
+    id          letra seguida de letras e dígitos    pi, score, D2
+    number      qualquer constante numérica          3.14159, 0, 6.02e23
+    literal     qualquer coisa entre aspas           "core dumped"
+TEXTO: Exemplo: `E = M * C ** 2` gera ⟨id, ptr E⟩ ⟨assign_op⟩ ⟨id, ptr M⟩ ⟨mult_op⟩ ⟨id, ptr C⟩ ⟨exp_op⟩ ⟨number, 2⟩.
+CODIGO (Esqueleto de um analisador léxico):
+    função getNextToken():
+        pular espaços e comentários (contando linhas)
+        lexemeBegin ← forward
+        para cada padrão P, em ordem de prioridade:
+            achar o MAIOR prefixo da entrada que casa com P
+        escolher o maior prefixo; empate → padrão listado primeiro
+        se nenhum casou: erro léxico (ex.: modo pânico)
+        se for id: instalar/consultar na tabela de símbolos
+        retornar ⟨nome, atributo⟩
+DESTAQUE NO_DUMB_QUESTIONS: P: E quando nenhum padrão casa? R: Recuperação em **modo pânico**: apagar caracteres até achar um token válido. Outras ações possíveis: inserir, remover, substituir um caractere ou trocar dois adjacentes.
+PREVEJA: Em `x = 3.14;`, quantos lexemas existem?
+    (certa) 4
+    (     ) 5
+    (     ) 6
+    EXPLICACAO: x, =, 3.14 e ;: o número com ponto é UM lexema só.
+DESTAQUE EXAM_TIP: Não troque as definições! Token = CLASSE (nome + atributo). Lexema = INSTÂNCIA (o texto). Padrão = REGRA (em geral uma expressão regular). Frase de prova perfeita: 'o lexema `3.14` casa com o padrão de number e é reportado como o token ⟨number, 3.14⟩'.
+REVELAR: Por que o token id precisa de atributo e o token `if` não?
+    RESPOSTA: Porque há infinitos lexemas possíveis para id, o sintático não saberia QUAL nome era. Para `if` existe um único lexema, então o nome do token já diz tudo.
+
+=== AULA DE LEITURA [MNEMONIC] Gaveta, meia e etiqueta
+DESTAQUE MNEMONIC: **Token é a gaveta**, **lexema é a meia** que você guarda, **padrão é a etiqueta** que diz quais meias vão naquela gaveta.
+[LEXI] Outro truque: **LEXema = LEtra EXata**. É o texto literal, do jeitinho que está no código.
+DESTAQUE MNEMONIC: Do abstrato ao concreto: **T**ipo (token) → **P**rescrição (padrão) → **L**iteral (lexema).
+TEXTO: **Palácio da memória**: Floresta Léxica, primeira parada depois do Porto. A Lexi corta os troncos de texto com a katana, cada tora cortada é um lexema, e joga cada tora na carroça certa (o token).
+DESTAQUE MNEMONIC: **Maior casamento = guloso**: a Lexi sempre morde o maior pedaço que dá. `>=` inteiro, `count2` inteiro, `iff` inteiro.
+DESTAQUE MNEMONIC: **Reservada é VIP**: em empate de tamanho, palavra-chave fura a fila na frente do identificador.
+PREVEJA: Lendo `y = 42;`, qual é o LEXEMA do token ⟨num, 42⟩?
+    (     ) num
+    (certa) 42
+    (     ) y
+    (     ) ⟨num, 42⟩
+    EXPLICACAO: O lexema é o texto `42`. 'num' é o nome do token; o par inteiro é o token.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que `x` e `y` são tokens diferentes, mesmo token id, lexemas diferentes; (2) achar que o léxico pega erro de digitação em palavra-chave (`whlie` é um id válido!); (3) contar espaços como tokens.
+REVELAR: Complete: 'O lexema ___ casa com o padrão ___ e vira o token ___.'
+    RESPOSTA: Exemplo: 'O lexema `total` casa com o padrão `letra(letra|dígito)*` e vira o token ⟨id, ponteiro para total⟩.'
+WIDGET TOKENIZE gramatica= entrada=float media = total / n1; legenda=Gaveta, meia, etiqueta: identifique cada uma.
+
+################ ASSUNTO REGEX_DFA: Expressões regulares e autômatos  prereqs=[TOKENS]
+FICHA: Expressões regulares descrevem os padrões dos tokens; Thompson as transforma em AFN, e a construção de subconjuntos gera um AFD que reconhece cada cadeia com um passo por caractere.
+  gancho: Thompson Transforma (ER → AFN), Subconjuntos Simplificam (AFN → AFD).
+  termos: [expressão regular, afn, afd, estado, transição, subconjuntos, thompson]
+  erros comuns: [Achar que AFN reconhece mais linguagens do que AFD., Esquecer de aplicar o ε-fecho depois do move., Errar a precedência: * > concatenação > |., Achar que uma ER consegue descrever aⁿbⁿ ou parênteses balanceados.]
+  FLASH: Precedência dos operadores de ER? -> * > concatenação > |
+  FLASH: r+ escrito com *? -> r r*
+  FLASH: r? escrito com |? -> r | ε
+  FLASH: Algoritmo ER → AFN? -> Construção de Thompson
+  FLASH: Algoritmo AFN → AFD? -> Construção de subconjuntos
+  FLASH: O que é ε-fecho(T)? -> Os estados alcançáveis a partir de T só com transições ε
+  FLASH: Máximo de estados do AFD vindo de um AFN de n estados? -> 2ⁿ
+  FLASH: Estados do AFD mínimo de (a|b)*abb? -> 4
+  FLASH: Uma ER reconhece aⁿbⁿ? -> Não: a linguagem não é regular
+
+=== AULA ANIMADA [BASICO] O trem do autômato  (id=REGEX_DFA, ~159s, 22 passos, exemplo começa no passo 2)
+1. [BYTE] Existem infinitos nomes de variável. Não dá para listar todos. É preciso descrever o formato deles.
+     palco: Nomes sem fim | x1 | conta | 1x | total2
+2. [BYTE] Um destes não pode ser nome de variável. Toque nele.
+     palco: Nomes sem fim | x1 | conta | 1x | total2
+     PERGUNTA(toque): certas=[1x] erradas=[x1, conta, total2]
+       dica: Em C, o nome começa com letra, nunca com dígito.
+       acerto: Isso. Nome não começa com dígito. Falta um jeito curto e exato de escrever essa regra.
+3. [BYTE] Uma expressão regular descreve um formato de cadeia. Esta diz: um a, seguido de quantos b quiser, até nenhum.
+     palco: a b*
+4. [BYTE] O autômato finito é a máquina que confere esse formato. Cada círculo é um estado, e cada seta é uma transição.
+     palco: a b* | q0 | q1
+5. [BYTE] O trem começa no estado inicial e lê um símbolo por vez. É um AFD: de cada estado sai no máximo uma seta por símbolo.
+     palco: a b* | q0 | q1 | *a | b | b
+6. [BYTE] Leu a. O trem segue a seta do a até o outro estado.
+     palco: a b* | q0 | q1 | a | *b | b
+7. [BYTE] O trem está no segundo estado e lê b. Para onde ele vai? Toque.
+     palco: a b* | q0 | q1 | a | b | *b
+     PERGUNTA(toque): certas=[q1] erradas=[q0]
+       dica: Procure a seta com b que sai do estado onde ele está.
+       acerto: Isso. A seta com b é um laço no mesmo estado.
+8. [BYTE] Leu b. Dá a volta no laço e fica no mesmo estado.
+     palco: a b* | q0 | q1 | a | b | *b
+9. [BYTE] A cadeia acabou num estado final, o de círculo duplo. A cadeia foi aceita.
+     palco: a b* | q0 | *q1 | a | b | b
+10. [BYTE] E a cadeia b a? O trem sai do primeiro estado lendo b. Toque na resposta.
+     palco: a b* | q0 | *q1 | b | a | Aceita | Rejeita
+     PERGUNTA(toque): certas=[Rejeita] erradas=[Aceita]
+       dica: Olhe as setas que saem do primeiro estado. Alguma tem b?
+       acerto: Certo. Sem transição para b, o autômato rejeita a cadeia.
+11. [BYTE] É assim que o scanner reconhece cada tipo de token: uma expressão regular descreve, e um autômato confere.
+     palco: a b* | q0 | *q1 | b | a
+12. [BYTE] Para ler uma cadeia, o trem segue sempre quatro passos.
+     palco: Receita | 1. Comece no estado inicial. | 2. A cada símbolo, siga a transição dele. | 3. Faltou transição: rejeite a cadeia. | 4. Acabou num estado final: aceita.
+13. [BYTE] Em a b a, o trem trava na última letra. Qual passo explica? Toque.
+     palco: Receita | 1. Comece no estado inicial. | 2. A cada símbolo, siga a transição dele. | 3. Faltou transição: rejeite a cadeia. | 4. Acabou num estado final: aceita. | a | b | a
+     PERGUNTA(toque): certas=[3. Faltou transição: rejeite a cadeia.] erradas=[1. Comece no estado inicial., 2. A cada símbolo, siga a transição dele., 4. Acabou num estado final: aceita.]
+       dica: Depois de a b, ele está no segundo estado. Sai seta com a dali?
+       acerto: Isso. Sem seta para a letra, o trem rejeita a cadeia.
+14. [BYTE] Na expressão, a estrela repete zero ou mais vezes. A barra quer dizer ou. E um símbolo ao lado do outro é sequência.
+     palco: Receita | 1. Comece no estado inicial. | 2. A cada símbolo, siga a transição dele. | 3. Faltou transição: rejeite a cadeia. | 4. Acabou num estado final: aceita. | b*  →  ε, b, bb, bbb...
+15. [BYTE] Outra expressão: a, depois b quantas vezes quiser, e c no fim.
+     palco: a b* c | q0 | q1 | q2
+16. [BYTE] Qual destes estados deve ser final? Toque nele.
+     palco: a b* c | q0 | q1 | q2
+     PERGUNTA(toque): certas=[q2] erradas=[q0, q1]
+       dica: A cadeia só pode acabar depois da letra c.
+       acerto: Isso. Só a seta com a letra c chega ao final.
+17. [BYTE] A cadeia a c é aceita ou rejeitada? Toque na resposta.
+     palco: a b* c | q0 | q1 | q2 | a | c | Aceita | Rejeita
+     PERGUNTA(toque): certas=[Aceita] erradas=[Rejeita]
+       dica: A estrela deixa a letra b aparecer zero vezes.
+       acerto: Isso. A letra b pode faltar, e a cadeia passa.
+18. [BYTE] Agora a cadeia a b c b. Ela é aceita ou rejeitada? Toque.
+     palco: a b* c | q0 | q1 | q2 | Aceita | Rejeita | a | b | c | b
+     PERGUNTA(toque): certas=[Rejeita] erradas=[Aceita]
+       dica: Depois do c, o trem está no final. Sai seta com b dali?
+       acerto: Isso. Sobrou um b sem seta, então o trem rejeita a cadeia.
+19. [BYTE] O scanner tem uma máquina dessas para cada tipo de token.
+     palco: a b* c | q0 | q1 | *q2 | a | b | c | b
+20. [BYTE] Quando o autômato aceita? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | A cadeia passou por um estado final no meio do caminho, então foi aceita. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O que importa é onde o trem está quando a cadeia termina.
+       acerto: Isso. Só vale o estado em que a leitura termina. Passar por um final no meio não aceita nada.
+21. [BYTE] Outro erro: achar que a estrela exige ao menos uma repetição. Estrela é zero ou mais. A cadeia vazia também casa.
+     palco: Erros comuns | Certo: Aceita só se a cadeia inteira foi lida e parou num estado final. | *Errado: A expressão a* exige pelo menos um a. | *Certo: A estrela aceita zero vezes. Para uma ou mais, use a a* (ou a+).
+22. [BYTE] Resumindo: a expressão regular descreve o formato de um token, e o autômato finito confere cadeia por cadeia. Aceitar é terminar a leitura num estado final.
+     palco: Resumo | A expressão regular descreve o formato; o autômato confere. | AFD: um estado inicial, uma transição por símbolo, estados finais. | Aceita se leu tudo e parou num final. Sem transição, rejeita.
+
+=== AULA ANIMADA [PEGADINHA] Estrela, mais e interrogação  (id=REGEX_DFA/estrelamaiseinterrogação, ~31s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Três símbolos parecidos, que a prova adora trocar.
+     palco: a*   a+   a? | vazia | a | aa | a* | a+ | a?
+2. [BYTE] A estrela aceita zero ou mais. Vale vazio, um a e dois a.
+     palco: a*   a+   a? | vazia | a | aa | *a* | sim | sim | sim | a+ | a?
+3. [BYTE] O mais exige pelo menos um. Toque na casa em que a mais recusa a cadeia.
+     palco: a*   a+   a? | vazia | a | aa | a* | sim | sim | sim | *a+ | a?
+     PERGUNTA(toque): certas=[] erradas=[, ]
+       dica: Pelo menos um a. Qual cadeia não tem nenhum?
+       acerto: Isso. A cadeia vazia fica de fora.
+4. [BYTE] A interrogação é zero ou um. Vale vazio, vale um a, e dois a passa do limite.
+     palco: a*   a+   a? | vazia | a | aa | a* | sim | sim | sim | a+ | não | sim | sim | *a? | sim | sim | não
+5. [PROF] Estrela é zero ou mais. Mais é um ou mais. Interrogação é zero ou um.
+     palco: a*   a+   a? | vazia | a | aa | a* | sim | sim | sim | a+ | não | sim | sim | a? | sim | sim | não
+
+=== AULA ANIMADA [PRATICA] Pilote o trem  (id=REGEX_DFA/piloteotrem, ~29s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Esta regex pede um a, quantos a mais quiser, e um b no fim.
+     palco: a a* b | a | a* | b
+2. [BYTE] O autômato tem um estado para cada situação. Cada letra é uma seta.
+     palco: a a* b | a | *a* | b
+3. [PROF] O laço no meio é a estrela: dá para ficar ali lendo a.
+     palco: a a* b | a | *a* | b
+4. [BYTE] Agora pilote. Chegue no círculo duplo com exatamente três letras.
+     palco: *q0 | q1 | q2
+     BRINQUEDO: meta=Chegue no círculo duplo com 3 letras teclas=[a, b]
+       dica: Essa letra não deu certo. Olhe as setas do estado aceso.
+       acerto: Chegou no círculo duplo. A frase foi aceita.
+5. [BYTE] Pilotar é rodar o autômato de cabeça. É isso que a prova pede.
+     palco: a a* b | a | *a* | b
+
+=== AULA ANIMADA [TABELAS] O autômato vira tabela  (id=REGEX_DFA/oautômatoviratabela, ~56s, 10 passos, exemplo começa no passo null)
+1. [BYTE] Este autômato aceita as palavras que terminam em abb.
+     palco: (a|b)*abb | q0 | q1 | q2 | q3
+2. [BYTE] Agora cada estado vira caixa: o nome em cima, uma linha por letra.
+     palco: (a|b)*abb | *q0 início{a → q1;b → q0} | q1{a → q1;b → q2} | q2{a → q1;b → q3} | q3 final{a → q1;b → q0}
+3. [BYTE] O fio sai da linha certa. A linha b do q1 leva ao q2.
+     palco: (a|b)*abb | q0 início{a → q1;b → q0} | *q1{a → q1;b → q2} | q2{a → q1;b → q3} | q3 final{a → q1;b → q0}
+4. [BYTE] Estou no q2 e chegou um b. Toque no estado de destino.
+     palco: (a|b)*abb | q0 início{a → q1;b → q0} | q1{a → q1;b → q2} | *q2{a → q1;b → q3} | q3 final{a → q1;b → q0}
+     PERGUNTA(toque): certas=[q3 final] erradas=[q0 início, q1, q2]
+       dica: Procure a linha do b dentro da caixa do q2.
+       acerto: Isso. O b do q2 leva ao q3, que é o estado final.
+5. [BYTE] Junte as caixas e cada uma vira uma linha. A seta marca o início, e o asterisco, o final.
+     palco: Tabela de transição | δ | a | b | *→q0 | q1 | q0 | q1 | q1 | q2 | q2 | q1 | q3 | **q3 | q1 | q0
+6. [BYTE] Vamos ler abb. Começa na linha do q0 e lê o a.
+     palco: Tabela de transição | δ | a | b | →q0 | *q1 | q0 | q1 | q1 | q2 | q2 | q1 | q3 | *q3 | q1 | q0 | a | b | b
+7. [BYTE] A célula diz q1. Pula para a linha do q1 e lê o b.
+     palco: Tabela de transição | δ | a | b | →q0 | q1 | q0 | q1 | q1 | *q2 | q2 | q1 | q3 | *q3 | q1 | q0 | a | b | b
+8. [BYTE] Deu q2. Lê o último b, e a célula manda para o q3.
+     palco: Tabela de transição | δ | a | b | →q0 | q1 | q0 | q1 | q1 | q2 | q2 | q1 | *q3 | *q3 | q1 | q0 | a | b | b
+9. [PROF] O q3 tem asterisco. A palavra foi aceita só olhando a tabela.
+     palco: Tabela de transição | δ | a | b | →q0 | q1 | q0 | q1 | q1 | q2 | q2 | q1 | q3 | **q3 | q1 | q0 | a | b | b
+10. [BYTE] Agora você. Leia quatro letras e termine na linha com asterisco.
+     palco: δ | a | b | *→q0 | q1 | q0 | q1 | q1 | q2 | q2 | q1 | q3 | *q3 | q1 | q0
+     BRINQUEDO: meta=Quatro letras, terminando na linha com asterisco. teclas=[a, b]
+       dica: Olhe a célula da linha acesa. Para terminar no q3, as três últimas precisam ser abb.
+       acerto: Chegou ao final usando só a tabela.
+
+=== AULA ANIMADA [CLIPE] O que a estrela faz  (id=REGEX_DFA/oqueaestrelafaz, ~12s, 2 passos, exemplo começa no passo null)
+1. [BYTE] A estrela repete o que vem antes, zero ou mais vezes.
+     palco: a* | a
+2. [BYTE] Então a seguido de estrela aceita vazio, um a, dois a, e assim por diante.
+     palco: a* | a | a | a
+
+=== AULA DE LEITURA [STORY] O trem que lê palavras
+[NARRADOR] Na Floresta Léxica passa um trenzinho. Ele só anda pelos trilhos pintados com a letra que está lendo.
+[PROF] Cada estação é um **estado**. Cada trilho tem uma letra: é uma **transição**. Algumas estações têm bandeira de chegada: são os **estados finais** (de aceitação).
+[BYTE] E como o trem decide se a palavra é aceita?
+[PROF] Ele parte da estação inicial e lê a palavra letra por letra, seguindo os trilhos. Acabou a palavra numa estação com bandeira? Aceita! Ficou sem trilho, ou parou longe da bandeira? Rejeita.
+WIDGET DFA gramatica= entrada=(a|b)*abb legenda=O trem do Livro do Dragão: aceita palavras de a's e b's que terminam em abb. Teste 'aabb' e 'abab'.
+TEXTO: Esse trem é um **AFD** (autômato finito determinístico): em cada estação, para cada letra, há NO MÁXIMO um trilho. O maquinista nunca fica em dúvida.
+[BYTE] E se tivesse dois trilhos com a mesma letra?
+[PROF] Aí é um **AFN** (não determinístico): um trem mágico que se divide e segue TODOS os caminhos ao mesmo tempo, como num multiverso. E ainda tem trilhos ε, que ele pega sem ler letra nenhuma.
+DESTAQUE FIRESIDE: AFN: 'Eu sou fácil de construir a partir da expressão regular!' AFD: 'Mas eu sou rápido: um passo por letra, sem dúvida nenhuma.' Os dois reconhecem exatamente as mesmas linguagens: as regulares.
+PASSOS A fábrica de trens:
+    1. **Expressão regular**: o desenho do trajeto, como `(a|b)*abb`.
+    2. **Construção de Thompson**: transforma a ER num AFN, peça por peça (união, concatenação, fecho).
+    3. **Construção de subconjuntos**: cada estação do AFD é um CESTO de estações do AFN onde o trem mágico poderia estar.
+    4. **Minimização**: junta estações que se comportam igual. O AFD de `(a|b)*abb` fica com 4 estados.
+PREVEJA: Um AFN com 3 estados vira um AFD com, NO MÁXIMO, quantos estados?
+    (     ) 3
+    (     ) 6
+    (certa) 8
+    (     ) 9
+    EXPLICACAO: Cada estado do AFD é um SUBCONJUNTO dos estados do AFN: 2³ = 8 subconjuntos possíveis. Na prática, quase sempre são bem menos.
+DESTAQUE REAL_WORLD: Lex/Flex fazem exatamente isso: você escreve as ERs dos tokens e eles geram o AFD que vira o coração do analisador léxico.
+REVELAR: Na analogia, o que é estação, trilho, bandeira e trem mágico?
+    RESPOSTA: Estado, transição, estado final (de aceitação) e AFN (que pode estar em vários estados ao mesmo tempo).
+
+=== AULA DE LEITURA [VISUAL] Brincando com autômatos
+[PROF] Cada widget é um AFD MÍNIMO gerado pelo motor a partir da expressão regular. Teste cadeias e veja o caminho acender.
+WIDGET DFA gramatica= entrada=ab* legenda=ab*: um a e depois quantos b quiser. Teste 'a', 'abbb' e 'ba'.
+TEXTO: Repare: o `*` (fecho de Kleene) virou um **laço**: um trilho que sai e volta para o mesmo estado.
+WIDGET DFA gramatica= entrada=(a|b)*abb legenda=Termina em abb.
+PREVEJA: Em `(a|b)*abb`, depois de ler 'ab', em que situação o autômato está?
+    (     ) Já aceitou
+    (certa) Já viu 'ab': falta um b
+    (     ) Rejeitou para sempre
+    (     ) Voltou ao início
+    EXPLICACAO: Cada estado do AFD mínimo 'lembra' quanto do sufixo abb já viu: nada, 'a', 'ab' ou 'abb'. Por isso são 4 estados.
+WIDGET DFA gramatica= entrada=(aa)* legenda=Quantidade par de a's: dois estados que se alternam, como um interruptor.
+[BYTE] Dá para fazer um que aceite a's e b's na mesma quantidade, tipo aaabbb?
+[PROF] Não dá! Autômato finito tem memória finita: não consegue contar até um número arbitrário. aⁿbⁿ precisa de gramática livre de contexto, você vai ver no Vale das Gramáticas.
+WIDGET DFA gramatica= entrada=0|1(0|1)* legenda=Binários sem zero à esquerda: teste '0', '101' e '011'.
+REVELAR: Por que '011' é rejeitada?
+    RESPOSTA: Depois de ler '0', o autômato está num estado final SEM saídas: o '0' sozinho é aceito, mas não pode ser seguido de nada. Ler '1' cai no estado morto.
+DESTAQUE WATCH_OUT: O motor desenha o AFD mínimo SEM o estado morto. Transição que não aparece = vai para o estado morto (rejeição).
+WIDGET DFA gramatica= entrada=x(y|z)+ legenda=Agora teste você: quais cadeias são aceitas?
+
+=== AULA DE LEITURA [WORKED] Construção de subconjuntos na mão
+[PROF] Vamos converter um AFN em AFD com calma. Este AFN aceita as cadeias de a's e b's que terminam em ab.
+CODIGO (AFN: em 0, lendo a, o trem pode ficar em 0 OU ir para 1 (não determinismo!)):
+    estados: 0 (inicial), 1, 2 (final)
+    0 --a--> 0     0 --b--> 0
+    0 --a--> 1
+    1 --b--> 2
+TEXTO: Regra do jogo: cada estado do AFD é um **conjunto** de estados do AFN, e Dtran[T, x] = ε-fecho(move(T, x)). Este AFN não tem transições ε, então o ε-fecho não acrescenta nada.
+PASSOS Resolvido:
+    1. Início: A = ε-fecho({0}) = {0}.
+    2. A com a: move({0}, a) = {0, 1} → novo estado **B**.
+    3. A com b: move({0}, b) = {0} → é o próprio **A**.
+    4. B com a: move({0, 1}, a) = {0, 1} → **B**.
+    5. B com b: move({0, 1}, b) = {0, 2} → novo estado **C**.
+    6. C com a: {0, 1} = **B**. C com b: {0} = **A**.
+    7. Finais: os conjuntos que contêm o estado 2 → só **C**. Pronto: AFD com 3 estados.
+CODIGO (Tabela de transição do AFD (→ inicial, * final)):
+          a    b
+    →A    B    A
+     B    B    C
+    *C    B    A
+WIDGET DFA gramatica= entrada=(a|b)*ab legenda=O motor chega ao mesmo AFD de 3 estados. Compare!
+TEXTO: Agora esmaecido: AFN para cadeias que terminam em **bb**: 0 --a,b--> 0, 0 --b--> 1, 1 --b--> 2 (final).
+REVELAR: A = {0}. Calcule Dtran[A, a] e Dtran[A, b].
+    RESPOSTA: Dtran[A, a] = {0} = A. Dtran[A, b] = {0, 1} = novo estado B.
+REVELAR: Agora B = {0, 1}: com a? com b?
+    RESPOSTA: B com a: {0} = A. B com b: {0, 1, 2} = novo estado C.
+REVELAR: C = {0, 1, 2}: com a? com b? Quem é final?
+    RESPOSTA: C com a: {0} = A. C com b: {0, 1, 2} = C. Final: C (contém o 2). AFD com 3 estados.
+WIDGET DFA gramatica= entrada=(a|b)*bb legenda=Confira: o motor também dá 3 estados.
+DESTAQUE EXAM_TIP: Na prova, organize em tabela: 'estado do AFD', 'conjunto do AFN' e uma coluna por símbolo. E SEMPRE aplique o ε-fecho depois do move quando o AFN tiver transições ε, o de Thompson tem muitas!
+
+=== AULA DE LEITURA [SOCRATIC] Descobrindo as expressões regulares
+[PROF] Vou te mostrar autômatos e perguntar. As regras, você descobre.
+PREVEJA: Quais cadeias `a(a|b)*b` aceita?
+    (certa) As que começam com a e terminam com b
+    (     ) Só 'ab'
+    (     ) Qualquer cadeia de a's e b's
+    (     ) As que começam com b
+    EXPLICACAO: Um a obrigatório, qualquer miolo de a's e b's, e um b obrigatório no fim.
+WIDGET DFA gramatica= entrada=a(a|b)*b legenda=Teste: 'ab', 'aab', 'abba', 'ba'.
+PREVEJA: `x(y|z)+` aceita a cadeia 'x'?
+    (     ) Sim
+    (certa) Não
+    EXPLICACAO: `+` significa 'uma ou mais vezes': r+ = r r*. Sem pelo menos um y ou z, rejeita.
+PREVEJA: Qual ER descreve os binários ímpares (terminam em 1)?
+    (certa) (0|1)*1
+    (     ) 1(0|1)*
+    (     ) (01)*
+    (     ) 0*1*
+    EXPLICACAO: Qualquer coisa, desde que o último dígito seja 1. `1(0|1)*` descreve os que COMEÇAM com 1.
+WIDGET DFA gramatica= entrada=(0|1)*1 legenda=
+REVELAR: Escreva `r?` usando só |, concatenação e *.
+    RESPOSTA: `r?` = `r | ε` (zero ou uma vez). E `r+` = `r r*`. Ou seja: `?` e `+` são só açúcar sintático!
+PREVEJA: Dá para escrever uma ER para parênteses balanceados, como (()) e ()()?
+    (     ) Sim, com bastante *
+    (certa) Não: autômato finito não consegue contar profundidade arbitrária
+    EXPLICACAO: Para saber quantos ')' faltam, seria preciso memória ilimitada. Isso é trabalho de gramática livre de contexto.
+[PROF] Agora a pergunta de ouro: por que o analisador léxico usa ER e autômato, e não gramática?
+REVELAR: Por que ER/AFD no léxico?
+    RESPOSTA: Tokens têm estrutura simples (regular), e o AFD reconhece em tempo linear: um passo por caractere, sem voltar atrás. Estruturas aninhadas (parênteses, blocos) ficam para o sintático, com gramáticas.
+REVELAR: Se AFN e AFD têm o mesmo poder, por que usar AFN?
+    RESPOSTA: Porque o AFN é muito mais fácil de construir a partir de uma ER (Thompson, peça por peça). Depois convertemos para AFD, que é rápido de executar.
+
+=== AULA DE LEITURA [FORMAL] ER, AFN e AFD: definições e algoritmos
+TEXTO: **Expressão regular** sobre o alfabeto Σ: ε e cada a ∈ Σ são ERs; se r e s são ERs, então r|s, rs, r* e (r) também são. L(r|s) = L(r) ∪ L(s); L(rs) = L(r)L(s); L(r*) = (L(r))*.
+TEXTO: Precedência: `*` (maior) > concatenação > `|` (menor), todas associativas à esquerda. Assim, `a|b*c` = `a|((b*)c)`.
+TEXTO: **AFN**: (S, Σ, move, s₀, F), conjunto finito de estados S, alfabeto Σ, função de transição que leva (estado, símbolo ou ε) a um CONJUNTO de estados, estado inicial s₀ e estados finais F. **AFD**: caso especial sem transições ε e com exatamente um destino para cada par (estado, símbolo).
+CODIGO (Algoritmo 3.23 (Livro do Dragão)):
+    Construção de Thompson (ER → AFN):
+      ε     :  i --ε--> f
+      a     :  i --a--> f
+      s|t   :  novo i --ε--> N(s) e N(t); finais de ambos --ε--> novo f
+      st    :  final de N(s) se funde com o inicial de N(t)
+      s*    :  i --ε--> N(s), i --ε--> f;
+               final de N(s) --ε--> início de N(s) e --ε--> f
+    Propriedade: N(r) tem no máximo 2 × (nº de símbolos e operadores de r) estados.
+CODIGO (Algoritmo 3.20 (Livro do Dragão)):
+    Construção de subconjuntos (AFN → AFD):
+      Dstates ← { ε-fecho(s₀) }, não marcado
+      enquanto existe T não marcado em Dstates:
+          marque T
+          para cada símbolo a:
+              U ← ε-fecho(move(T, a))
+              se U ∉ Dstates: adicione U (não marcado)
+              Dtran[T, a] ← U
+      finais: todo T que contém um estado final do AFN
+TEXTO: **ε-fecho(T)**: estados alcançáveis a partir de algum estado de T usando só transições ε (inclui o próprio T). **move(T, a)**: estados alcançáveis a partir de T com UMA transição rotulada a.
+PREVEJA: Qual é a precedência correta dos operadores?
+    (     ) | > concatenação > *
+    (certa) * > concatenação > |
+    (     ) concatenação > * > |
+    EXPLICACAO: Como na aritmética: * é a 'potência', concatenação a 'multiplicação' e | a 'soma'.
+PREVEJA: Pela precedência, `ab*` significa…
+    (     ) (ab)*
+    (certa) a(b*)
+    EXPLICACAO: O * se aplica só ao símbolo imediatamente à esquerda: um a seguido de zero ou mais b's.
+WIDGET DFA gramatica= entrada=ab* legenda=Confirme: 'abab' é rejeitada.
+DESTAQUE EXAM_TIP: Cai muito: (1) desenhar o AFN de Thompson de `(a|b)*abb` (11 estados, de 0 a 10); (2) aplicar subconjuntos e chegar a A, B, C, D, E, com E final; (3) minimizar juntando A e C → 4 estados. Saiba que ε-fecho({0}) = {0, 1, 2, 4, 7}.
+DESTAQUE WATCH_OUT: Um AFN de n estados pode virar um AFD de até 2ⁿ estados (explosão exponencial), mas isso é raro na prática. Em troca, simular o AFD gasta só um passo por caractere.
+REVELAR: Defina ε-fecho e move em uma linha cada.
+    RESPOSTA: ε-fecho(T): estados alcançáveis a partir de T só por transições ε (incluindo T). move(T, a): estados alcançáveis a partir de T por exatamente uma transição rotulada a.
+
+=== AULA DE LEITURA [MNEMONIC] Thompson Transforma, Subconjuntos Simplificam
+DESTAQUE MNEMONIC: **T**hompson **T**ransforma (ER → AFN). **S**ubconjuntos **S**implificam o caos (AFN → AFD). E a **M**inimização **M**ata os estados repetidos.
+DESTAQUE MNEMONIC: **N** de AFN = **N**ão sei para onde vou (vários caminhos). **D** de AFD = **D**ecidido (um caminho só).
+DESTAQUE MNEMONIC: Precedência igual à da matemática: `*` é potência, concatenação é multiplicação, `|` é soma. Como 2 + 3·4², `a|bc*` = `a|(b(c*))`.
+DESTAQUE MNEMONIC: `*` = zero ou mais (a estrela é generosa: aceita até nada). `+` = um ou mais (MAIS = pelo menos um). `?` = talvez (zero ou um).
+PREVEJA: Qual ER aceita a cadeia vazia?
+    (     ) a+
+    (     ) ab*
+    (certa) (ab)*
+    (     ) x(y|z)+
+    EXPLICACAO: Só a estrela no 'lado de fora' permite zero repetições de tudo. As outras exigem pelo menos um símbolo.
+WIDGET DFA gramatica= entrada=(ab)* legenda=O estado inicial já é final: a cadeia vazia é aceita!
+TEXTO: **Palácio da memória**: ainda na Floresta Léxica, o **Trem do Autômato**. A Lexi desenha o trajeto (ER), os duendes de Thompson espalham trilhos ε por todo lado (AFN), e o maquinista junta estações em cestos (subconjuntos) para nunca ficar em dúvida (AFD).
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que AFN é mais poderoso que AFD, reconhecem as mesmas linguagens; (2) esquecer o ε-fecho depois do move; (3) achar que ER sabe contar (aⁿbⁿ não é regular!).
+DESTAQUE MNEMONIC: **Regular não conta e não aninha.** Precisou contar ou casar parênteses? É trabalho de gramática.
+REVELAR: Recite a esteira com o nome de cada algoritmo.
+    RESPOSTA: ER →(Thompson)→ AFN →(subconjuntos)→ AFD →(minimização)→ AFD mínimo.
+
+################ ASSUNTO NFA_TO_DFA: AFN → AFD (construção de subconjuntos)  prereqs=[REGEX_DFA]
+FICHA: A construção de subconjuntos transforma um AFN em AFD: cada estado do AFD é um CONJUNTO de estados do AFN, começando em ε-fecho({s₀}), com Dtran[T, a] = ε-fecho(move(T, a)); é final todo conjunto que contém um final do AFN.
+  gancho: Anda e fecha a porta: move com a letra, depois ε-fecho. Cesto com uma fruta premiada é final; cesto vazio é o estado morto.
+  termos: [conjunto, fecho, move, final, morto, inicial]
+  erros comuns: [Esquecer o ε-fecho depois do move, Usar {s₀} como estado inicial em vez de ε-fecho({s₀}), Marcar como final só o conjunto em que TODOS os estados são finais (basta um), Achar que a construção de subconjuntos já entrega o AFD mínimo, Achar que AFN reconhece mais linguagens que AFD]
+  FLASH: O que é um estado do AFD na construção de subconjuntos? -> Um conjunto de estados do AFN
+  FLASH: Fórmula de Dtran[T, a]? -> ε-fecho(move(T, a))
+  FLASH: Estado inicial do AFD? -> ε-fecho({s₀})
+  FLASH: Quando um estado do AFD é final? -> Quando contém pelo menos um estado final do AFN
+  FLASH: move(T, a) vazio leva a quê? -> Ao estado morto ∅
+  FLASH: Máximo de estados do AFD para um AFN de n estados? -> 2ⁿ
+  FLASH: ε-fecho({0}) no AFN de Thompson de (a|b)*abb? -> {0, 1, 2, 4, 7}
+  FLASH: Linguagem clássica da explosão exponencial? -> O n-ésimo símbolo a partir do fim é a (2ⁿ estados)
+  FLASH: Por que o léxico usa AFD e não AFN? -> Um passo por caractere, sem carregar conjuntos
+
+=== AULA ANIMADA [BASICO] De muitos caminhos para um  (id=NFA_TO_DFA, ~168s, 21 passos, exemplo começa no passo 3)
+1. [BYTE] Este é um AFN, um autômato não determinístico. Nele, o mesmo símbolo pode levar a dois estados. Lendo a, o estado zero tem duas saídas.
+     palco: AFN: termina em ab | 0 | 1 | 2
+2. [BYTE] O trem está no zero e lê a. Qual seta ele segue? Toque.
+     palco: AFN: termina em ab | 0 | 1 | 2 | fica no 0 | vai para 1 | as duas
+     PERGUNTA(toque): certas=[as duas] erradas=[fica no 0, vai para 1]
+       dica: Nada no desenho escolhe entre as duas setas.
+       acerto: Isso. O AFN segue as duas ao mesmo tempo. Ele aceita se algum caminho termina num estado final.
+3. [BYTE] Um programa não pode adivinhar o caminho certo. A saída é acompanhar o conjunto de todos os estados em que o AFN pode estar.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0}
+4. [BYTE] Começo no conjunto que só tem o zero. Lendo a, o AFN pode estar em zero ou em um. Nasce o conjunto zero e um.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | *{0,1}
+5. [BYTE] Do conjunto zero e um, lendo b, para onde vamos? Toque no conjunto certo.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | *{0,1} | {0} | {0,2} | {2}
+     PERGUNTA(toque): certas=[{0,2}] erradas=[{0}, {2}]
+       dica: Veja cada estado do conjunto. Com b, o zero fica no zero e o um vai para o dois.
+       acerto: Isso. Juntando os dois caminhos, dá zero e dois.
+6. [BYTE] Cada conjunto novo vira um estado do AFD. Se o conjunto contém algum estado final do AFN, ele é final no AFD.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | {0,1} | *{0,2}
+7. [BYTE] Do conjunto zero e dois, lendo a, para onde vamos? Toque no conjunto.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | {0,1} | *{0,2}
+     PERGUNTA(toque): certas=[{0,1}] erradas=[{0}, {0,2}]
+       dica: Lendo a letra a, o estado zero vai para zero e um. O dois não anda.
+       acerto: Isso. Volta para o conjunto zero e um, que já existe.
+8. [BYTE] As transições que faltam caem em conjuntos que já existem. Quando não surge conjunto novo, a construção acabou.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | {0,1} | {0,2}
+9. [BYTE] Pronto. O AFD aceita as mesmas cadeias do AFN, sem chute: uma transição só para cada símbolo.
+     palco: AFN: termina em ab | 0 | 1 | 2 | {0} | {0,1} | {0,2}
+10. [BYTE] Esse método é a construção de subconjuntos. Ela tem quatro passos.
+     palco: Receita | 1. Comece pelo ε-fecho do estado inicial. | 2. Para cada símbolo, junte os destinos (move). | 3. Aplique o ε-fecho. Conjunto novo vira estado. | 4. Tem final dentro? O conjunto é final.
+11. [PROF] Quando o AFN tem transição épsilon, ele passa por ela sem ler nada. O épsilon fecho de um conjunto junta tudo que se alcança assim.
+     palco: Receita | *1. Comece pelo ε-fecho do estado inicial. | 2. Para cada símbolo, junte os destinos (move). | *3. Aplique o ε-fecho. Conjunto novo vira estado. | 4. Tem final dentro? O conjunto é final.
+12. [BYTE] O conjunto zero e dois virou final. Qual passo decide isso? Toque.
+     palco: Receita | 1. Comece pelo ε-fecho do estado inicial. | 2. Para cada símbolo, junte os destinos (move). | 3. Aplique o ε-fecho. Conjunto novo vira estado. | 4. Tem final dentro? O conjunto é final.
+     PERGUNTA(toque): certas=[4. Tem final dentro? O conjunto é final.] erradas=[1. Comece pelo ε-fecho do estado inicial., 2. Para cada símbolo, junte os destinos (move)., 3. Aplique o ε-fecho. Conjunto novo vira estado.]
+       dica: No AFN, o estado dois é final.
+       acerto: Isso. Basta um final dentro do conjunto.
+13. [BYTE] Outro AFN, agora com setas épsilon. Quem monta os conjuntos é você.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4
+14. [BYTE] Primeiro passo: o fecho épsilon do zero. Toque nos estados que entram.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4
+     PERGUNTA(toque): certas=[0, 1, 3] erradas=[2, 4]
+       dica: Comece no zero e siga só as setas épsilon.
+       acerto: Isso. Zero, um e três, sem ler nenhuma letra.
+15. [BYTE] Desse conjunto, lendo a, aonde chegamos? Toque no conjunto.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4 | {0,1,3} | {2,4} | {2} | {1,2}
+     PERGUNTA(toque): certas=[{2}] erradas=[{2,4}, {1,2}]
+       dica: Só o estado um tem seta com a letra a. Ela leva ao dois.
+       acerto: Isso. Nasce o conjunto que só tem o dois.
+16. [BYTE] E se o conjunto zero, um e três ler c? Toque no destino.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4 | {0,1,3} | {2} | {3,4} | {2,4} | {4}
+     PERGUNTA(toque): certas=[{4}] erradas=[{3,4}, {2,4}]
+       dica: Procure a única seta com a letra c no desenho.
+       acerto: Isso. Nasce o conjunto que só tem o quatro.
+17. [BYTE] Quais estados do AFD são finais? Toque em todos.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4 | {0,1,3} | {2} | {4}
+     PERGUNTA(toque): certas=[{2}, {4}] erradas=[{0,1,3}]
+       dica: No AFN, o dois e o quatro são finais.
+       acerto: Isso. Cada um tem um final dentro.
+18. [BYTE] Pronto. O AFD tem três estados e lê sem adivinhar. No pior caso, um AFN de n estados vira um AFD de dois elevado a n.
+     palco: AFN: ab* | c | 0 | 1 | 2 | 3 | 4 | {0,1,3} | *{2} | *{4}
+19. [BYTE] Quando um conjunto é final no AFD? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | O conjunto {0, 2} só é final se todos os estados dele forem finais. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: O AFN aceita se algum caminho chega a um final.
+       acerto: Isso. Basta um estado final dentro do conjunto. O AFN aceita quando pelo menos um caminho dá certo.
+20. [BYTE] Outro erro: esquecer o épsilon fecho depois de ler o símbolo. Os estados alcançados por épsilon também fazem parte do conjunto.
+     palco: Erros comuns | Certo: Basta um estado final do AFN dentro do conjunto. | *Errado: Calcular o move e esquecer o ε-fecho do resultado. | *Certo: Depois de cada move, aplique o ε-fecho. Senão faltam estados.
+21. [BYTE] Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar.
+     palco: Resumo | Cada estado do AFD é um conjunto de estados do AFN. | Começa no ε-fecho do inicial. Para cada símbolo: move e ε-fecho. | Conjunto com algum final é final. Acaba quando não surge conjunto novo.
+
+=== AULA ANIMADA [PEGADINHA] O fecho esquecido  (id=NFA_TO_DFA/ofechoesquecido, ~35s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Este autômato anda de q0 para q1 sem ler nada. A seta com épsilon é de graça.
+     palco: Começo do AFD | q0 | q1 | q2
+2. [BYTE] Qual é o estado inicial do AFD? Toque em todos os estados do AFN que entram nele.
+     palco: Começo do AFD | q0 | q1 | q2
+     PERGUNTA(toque): certas=[q0, q1] erradas=[q2]
+       dica: Comece em q0 e ande pelas setas de épsilon. Sem ler letra nenhuma.
+       acerto: Isso. Inicial é q0 mais tudo que se alcança sem ler.
+3. [BYTE] O erro comum é escrever só q0. Sem o fecho, a seta com a some, e o AFD aceita menos.
+     palco: Começo do AFD | q0 | q1 | q2 | { q0, q1 } | estado inicial do AFD
+4. [PROF] A receita tem dois passos: anda com a letra, depois fecha com épsilon.
+     palco: Começo do AFD | q0 | q1 | q2 | { q0, q1 } | estado inicial do AFD | *move  depois  fecho
+5. [BYTE] Nunca pule o fecho. Ele vale no começo e depois de cada letra.
+     palco: FECHO
+
+=== AULA ANIMADA [CLIPE] AFN e AFD  (id=NFA_TO_DFA/afneafd, ~9s, 2 passos, exemplo começa no passo null)
+1. [BYTE] No AFD, cada letra leva a um só lugar.
+     palco: AFD | q0 | q1 | q2
+2. [BYTE] No AFN, a mesma letra pode levar a vários lugares.
+     palco: AFN | q0 | q1 | q2
+
+=== AULA ANIMADA [CLIPE] Épsilon-fecho  (id=NFA_TO_DFA/épsilonfecho, ~11s, 2 passos, exemplo começa no passo null)
+1. [BYTE] O fecho junta um estado com tudo que se alcança sem ler nada.
+     palco: Fecho | *q0 | q1 | q2
+2. [BYTE] É o passeio de graça pelas setas de épsilon.
+     palco: Fecho | *q0 | *q1 | *q2
+
+=== AULA DE LEITURA [STORY] A turma no grupo do WhatsApp
+[NARRADOR] Rodoviária lotada, véspera de feriado. Você e sua turma precisam chegar à plataforma certa, mas a placa diz: 'Ônibus A: plataforma 1 OU plataforma 3'. Cadê a certeza?
+[BYTE] Eu ia travar. Escolho uma e torço?
+[PROF] Um **AFN** faz diferente: ele não escolhe. A turma se DIVIDE e cada um vai para uma possibilidade. E tem os corredores livres, sem catraca: quem está num ponto pode atravessar de graça. Esses são os trilhos **ε**.
+[PROF] Agora o truque: em vez de acompanhar cada amigo, você só olha o **grupo do WhatsApp** e anota: 'neste momento a turma está em {1, 3, 4}'. Esse conjunto inteiro vira UM estado de um **AFD**.
+PASSOS Rodoviária → construção de subconjuntos:
+    1. Cada plataforma é um **estado do AFN**.
+    2. Corredor livre (sem ler letra nenhuma) é uma **transição ε**. Juntar todo mundo que dá para alcançar a pé é o **ε-fecho**.
+    3. Usar uma passagem com a letra 'a' é o **move(T, a)**: para onde cada amigo pode ir lendo 'a'.
+    4. A lista do grupo ('estamos em {0, 1}') é um **estado do AFD**: um CONJUNTO de estados do AFN.
+    5. Se ninguém da turma tem para onde ir, o grupo fica vazio: é o **estado morto ∅**.
+    6. Se pelo menos UM amigo chegou ao destino, a turma toda comemora: o conjunto é **final** se contém algum final do AFN.
+[BYTE] Então o AFD é só o diário do grupo: 'estávamos aqui, lemos tal letra, fomos parar ali'?
+[PROF] Exatamente. E como o diário é anotado ANTES da viagem, na hora de ler a entrada não existe mais dúvida: um passo por letra.
+PREVEJA: No AFN de '(a|b)*ab' a turma começa em {0}. De 0, lendo 'a', dá para ficar em 0 ou ir para 1. Lendo 'a', onde a turma fica?
+    (     ) {0}
+    (     ) {1}
+    (certa) {0, 1}
+    (     ) ∅
+    EXPLICACAO: A turma se divide: uns ficam em 0, outros vão para 1. O estado do AFD é o conjunto {0, 1}. Sem dúvida, sem sorteio: carregamos as duas possibilidades juntas.
+WIDGET NFA_SUBSET gramatica= entrada=ab legenda=Avance passo a passo: em amarelo, onde a turma está. Repare que o AFD final tem só 3 estados.
+DESTAQUE NO_DUMB_QUESTIONS: P: Se o AFN já reconhece a linguagem, para que converter? R: Simular o AFN obriga a carregar um conjunto a cada letra lida. O AFD faz essa conta UMA vez, na construção; depois, cada caractere custa só uma consulta à tabela. Analisador léxico lê milhões de caracteres: essa economia importa.
+DESTAQUE BRAIN_POWER: Com 3 plataformas, quantas listas diferentes o grupo do WhatsApp poderia ter, no máximo? Pense em cada plataforma como 'tem gente' ou 'não tem'.
+REVELAR: Resposta
+    RESPOSTA: 2³ = 8 listas possíveis (incluindo a vazia). Por isso um AFN de n estados vira um AFD de até 2ⁿ estados. Mas quase sempre a turma só visita poucas listas, no exemplo acima, 3.
+REVELAR: Na analogia, quem é: plataforma, corredor livre, lista do grupo, grupo vazio?
+    RESPOSTA: Estado do AFN, transição ε, estado do AFD (conjunto de estados do AFN) e estado morto ∅.
+
+=== AULA DE LEITURA [VISUAL] Assistindo a fábrica de subconjuntos
+[PROF] Hoje você vai VER a construção acontecer. Em cada passo, o amarelo mostra o conjunto atual, e a tabela do AFD vai se preenchendo sozinha.
+WIDGET NFA_SUBSET gramatica= entrada=abb legenda=O clássico (a|b)*abb, numa versão de AFN com 4 estados. Avance devagar.
+TEXTO: Repare: começamos em A = {0}. Lendo 'a' vamos para {0, 1} = B; de B, lendo 'b', vamos para {0, 2} = C; de C, lendo 'b', chegamos a {0, 3} = D, o único que contém o final 3.
+PREVEJA: Por que TODOS os estados do AFD contêm o 0?
+    (     ) Porque 0 é o inicial e nunca sai do conjunto
+    (certa) Porque 0 tem laço com a e com b: quem está em 0 sempre pode continuar em 0
+    (     ) Coincidência
+    (     ) Porque o 0 é final
+    EXPLICACAO: O laço a,b em 0 significa 'ainda não comecei o sufixo abb'. Essa possibilidade nunca morre, então o 0 aparece em todo conjunto.
+[LEXI] Agora com trilhos ε. Aqui o primeiro estado já NÃO é só {0}.
+WIDGET NFA_SUBSET gramatica= entrada=abc legenda=ab* | c: do estado 0 saem dois trilhos ε. Veja o ε-fecho logo no início.
+PREVEJA: No AFN de 'ab* | c', 0 tem trilhos ε para 1 e para 3. Quanto vale ε-fecho({0})?
+    (     ) {0}
+    (     ) {1, 3}
+    (certa) {0, 1, 3}
+    (     ) {0, 1, 2, 3, 4}
+    EXPLICACAO: O ε-fecho inclui o próprio 0 e todo mundo alcançável só por ε: 1 e 3. O 2 e o 4 exigem ler uma letra, então ficam de fora.
+DESTAQUE WATCH_OUT: Quando o move dá vazio (por exemplo, de A = {0, 1, 3} lendo 'b'), o widget mostra ∅: é o **estado morto**. O desenho do AFD omite o morto, mas ele existe, qualquer transição que não aparece leva para lá.
+WIDGET NFA_SUBSET gramatica= entrada=ou legenda=(ab | a)c: dois caminhos que se reencontram por ε no estado 4.
+TEXTO: Repare no passo de A com 'a': move = {1, 3}, mas o ε-fecho puxa o 4 também, porque 3 --ε--> 4. Resultado: B = {1, 3, 4}. É por isso que 'ac' é aceita: B já 'sabe' que pode ler o c.
+REVELAR: Quantos estados tem o AFD de (ab | a)c, e qual é o final?
+    RESPOSTA: 4 estados: A = {0}, B = {1, 3, 4}, C = {2, 4} e D = {5}. Só D é final, porque só ele contém o 5.
+[BYTE] E quando o número de estados explode mesmo?
+WIDGET DFA gramatica= entrada=(a|b)*a(a|b)(a|b) legenda='O antepenúltimo símbolo é a'. O AFN tem 4 estados; o AFD mínimo tem 8 = 2³. Ele precisa lembrar as 3 últimas letras!
+DESTAQUE REAL_WORLD: Esse tipo de linguagem é o pior caso. Os padrões de tokens de verdade (identificadores, números, palavras-chave) geram AFDs pequenos, por isso Lex/Flex podem converter tudo para AFD sem medo.
+
+=== AULA DE LEITURA [WORKED] Subconjuntos com ε, do começo ao fim
+[PROF] Vamos resolver com calma um AFN COM transições ε. É assim que aparece na prova, porque o AFN de Thompson tem ε por todo lado.
+CODIGO (Dois caminhos (ab ou a) que se juntam no 4 antes do c):
+    AFN de (ab | a)c: inicial 0, final 5
+    0 --a--> 1     1 --b--> 2     2 --ε--> 4
+    0 --a--> 3     3 --ε--> 4
+    4 --c--> 5
+TEXTO: A receita tem um passo só, repetido: **Dtran[T, x] = ε-fecho(move(T, x))**. Primeiro anda com a letra (move), depois anda de graça pelos ε (fecho).
+PASSOS Resolvido:
+    1. Início: A = ε-fecho({0}) = {0}. Do 0 não sai nenhum ε.
+    2. A com a: move = {1, 3}. Fecho: 3 --ε--> 4, então **B = {1, 3, 4}**.
+    3. A com b e A com c: move = ∅ → estado morto.
+    4. B com b: move = {2}. Fecho: 2 --ε--> 4, então **C = {2, 4}**.
+    5. B com c: move = {5} → **D = {5}**. B com a: ∅.
+    6. C com c: move = {5} = D. C com a e com b: ∅.
+    7. D com qualquer letra: ∅. Nenhum estado novo: terminou!
+    8. Finais: quem contém o 5 → só **D**. AFD com 4 estados (sem contar o morto).
+CODIGO (Tabela Dtran (→ inicial, * final, ∅ = estado morto)):
+            a    b    c
+    →A {0}       B    ∅    ∅
+     B {1,3,4}   ∅    C    D
+     C {2,4}     ∅    ∅    D
+    *D {5}       ∅    ∅    ∅
+WIDGET NFA_SUBSET gramatica= entrada=ou legenda=Confira cada linha da tabela com o motor.
+DESTAQUE WATCH_OUT: O erro número 1 é esquecer o fecho depois do move. Sem ele, B seria {1, 3} e o AFD rejeitaria 'ac', mesmo 'ac' estando na linguagem!
+TEXTO: Agora é com você (exemplo esmaecido). AFN de **ab* | c**: 0 --ε--> 1, 0 --ε--> 3, 1 --a--> 2, 2 --b--> 2, 3 --c--> 4. Finais: 2 e 4.
+REVELAR: Qual é o estado inicial A do AFD?
+    RESPOSTA: A = ε-fecho({0}) = {0, 1, 3}. Os dois ε saem do 0.
+REVELAR: Calcule Dtran[A, a], Dtran[A, b] e Dtran[A, c].
+    RESPOSTA: A com a: move = {2}, fecho = {2} = B. A com b: ∅ (morto). A com c: move = {4} = C.
+REVELAR: Continue com B = {2} e C = {4}. Quem é final?
+    RESPOSTA: B com b: {2} = B (o laço do b*). Todo o resto dá ∅. Finais: B (contém 2) e C (contém 4). AFD com 3 estados.
+WIDGET NFA_SUBSET gramatica= entrada=abc legenda=Confira suas respostas.
+DESTAQUE EXAM_TIP: Monte SEMPRE a tabela com as colunas 'estado do AFD | conjunto do AFN | uma coluna por símbolo'. Escreva o move e o fecho separados no rascunho: o professor dá ponto parcial pelo raciocínio.
+
+=== AULA DE LEITURA [SOCRATIC] Por que conjuntos?
+[PROF] Hoje eu só pergunto. Você vai reinventar a construção de subconjuntos sozinho.
+PREVEJA: Um AFN está no estado 0 e tem DOIS trilhos 'a': para 0 e para 1. Lendo 'a', onde ele está?
+    (     ) Em 0
+    (     ) Em 1
+    (certa) Nos dois ao mesmo tempo
+    (     ) Trava: AFN não pode ter isso
+    EXPLICACAO: O AFN aceita se ALGUM caminho aceita. Para não perder nenhum, acompanhamos todos ao mesmo tempo: o AFN está em {0, 1}.
+[BYTE] Então, se eu sempre anotar o CONJUNTO onde ele pode estar, nunca preciso adivinhar?
+[PROF] Isso! E se você dá um nome a cada conjunto (A, B, C…), acabou de inventar um autômato determinístico.
+PREVEJA: Depois de ler uma letra, por que aplicar o ε-fecho de novo?
+    (     ) Não precisa, só no início
+    (certa) Porque, ao chegar num estado, o AFN pode seguir de graça pelos trilhos ε
+    (     ) Para tirar estados repetidos
+    (     ) Para achar os finais
+    EXPLICACAO: Trilho ε não consome entrada. Se você chega em 3 e existe 3 --ε--> 4, então também está em 4. Esquecer isso perde caminhos.
+PREVEJA: E quando move(T, a) dá o conjunto vazio?
+    (     ) A cadeia é aceita
+    (     ) Voltamos ao estado inicial
+    (certa) Vamos para o estado morto ∅, de onde não se sai
+    (     ) É um erro na construção
+    EXPLICACAO: Nenhum caminho sobreviveu. ∅ é um estado do AFD como outro qualquer, só que não final e com laço para tudo.
+REVELAR: Um conjunto como {0, 2} deve ser final quando o final do AFN é o 2? E {0, 1}?
+    RESPOSTA: {0, 2} é final: basta UM caminho ter chegado ao fim. {0, 1} não é: nenhum caminho está num estado final.
+[PROF] Agora o tamanho. Olhe este AFN de 3 estados: 'o penúltimo símbolo é a'.
+WIDGET NFA_SUBSET gramatica= entrada=pen legenda=Conte quantos estados o AFD ganha.
+PREVEJA: Com 3 estados no AFN, o máximo seriam 2³ = 8 conjuntos. Por que só apareceram 4?
+    (     ) O motor errou
+    (certa) Todo conjunto alcançável contém o 0 (por causa do laço), então sobram só 2² = 4 combinações
+    (     ) Porque o AFN não tem ε
+    (     ) Porque o alfabeto tem 2 letras
+    EXPLICACAO: O 0 está sempre presente; só os estados 1 e 2 variam (estão ou não). São 2 × 2 = 4 conjuntos possíveis, e todos aparecem.
+REVELAR: Se fosse 'o n-ésimo símbolo a partir do fim é a', quantos estados o AFD teria?
+    RESPOSTA: 2ⁿ. O AFD precisa lembrar as n últimas letras, e cada uma pode ser a ou b. É o exemplo clássico da explosão exponencial.
+WIDGET DFA gramatica= entrada=(a|b)*a(a|b)(a|b) legenda=n = 3: o AFD mínimo tem 2³ = 8 estados. Nem minimizando dá para fugir.
+REVELAR: Então por que os analisadores léxicos usam AFD mesmo assim?
+    RESPOSTA: Porque a explosão é rara com padrões de tokens reais, a conversão acontece UMA vez (ao gerar o léxico) e depois cada caractere custa um único passo. Pagar na fábrica para economizar na estrada.
+
+=== AULA DE LEITURA [FORMAL] Construção de subconjuntos: definição de prova
+TEXTO: **AFN**: N = (S, Σ, δ, s₀, F), com δ: S × (Σ ∪ {ε}) → P(S). **AFD**: caso particular sem transições ε e com exatamente um destino para cada par (estado, símbolo).
+TEXTO: **ε-fecho(s)**: estados alcançáveis a partir de s usando apenas transições ε (inclui s). **ε-fecho(T)** = ∪ ε-fecho(s), s ∈ T. **move(T, a)**: estados alcançáveis a partir de algum s ∈ T por UMA transição rotulada a.
+CODIGO (Cálculo do ε-fecho (Livro do Dragão, Fig. 3.33)):
+    ε-fecho(T):
+        empilhe todos os estados de T
+        fecho ← T
+        enquanto a pilha não estiver vazia:
+            desempilhe t
+            para cada u com t --ε--> u:
+                se u ∉ fecho: fecho ← fecho ∪ {u}; empilhe u
+        devolva fecho
+CODIGO (Construção de subconjuntos (Algoritmo 3.20)):
+    Dstates ← { ε-fecho({s₀}) }, não marcado
+    enquanto houver T não marcado em Dstates:
+        marque T
+        para cada símbolo a ∈ Σ:
+            U ← ε-fecho(move(T, a))
+            se U ∉ Dstates: adicione U (não marcado)
+            Dtran[T, a] ← U
+    estado inicial do AFD: ε-fecho({s₀})
+    estados finais do AFD: todo T com T ∩ F ≠ ∅
+TEXTO: **Correção**: o AFD D simula todos os caminhos do AFN N em paralelo; após ler w, D está em T exatamente quando T é o conjunto de estados em que N pode estar após ler w. Logo L(D) = L(N).
+CODIGO (Exemplo do livro: AFN de Thompson de (a|b)*abb (estados 0..10, final 10)):
+    A = {0,1,2,4,7}
+    B = {1,2,3,4,6,7,8}
+    C = {1,2,4,5,6,7}
+    D = {1,2,4,5,6,7,9}
+    E = {1,2,4,5,6,7,10}
+    
+    Dtran   a   b
+    →A      B   C
+     B      B   D
+     C      B   C
+     D      B   E
+    *E      B   C
+PREVEJA: No exemplo do livro, por que E é o único estado final?
+    (     ) Porque foi o último criado
+    (certa) Porque é o único que contém o estado 10, final do AFN
+    (     ) Porque tem mais estados
+    (     ) Porque Dtran[E, b] = C
+    EXPLICACAO: Regra: T é final se T ∩ F ≠ ∅. F = {10} e só E contém o 10.
+DESTAQUE NO_DUMB_QUESTIONS: P: O AFD do livro tem 5 estados, mas o AFD mínimo de (a|b)*abb tem 4. Está errado? R: Não! A construção de subconjuntos não garante o mínimo. A e C se comportam igual (ambos vão para B com a e para C com b) e a minimização os funde.
+WIDGET DFA gramatica= entrada=(a|b)*abb legenda=O motor mostra o AFD já minimizado: 4 estados.
+TEXTO: **Custo**: um AFN de n estados pode gerar um AFD de até 2ⁿ estados. Comparação clássica para reconhecer x com a ER r: simular o AFN gasta espaço O(|r|) e tempo O(|r| × |x|); o AFD gasta tempo O(|x|), mas pode exigir espaço O(2^|r|) no pior caso.
+PREVEJA: Qual afirmação é VERDADEIRA?
+    (     ) AFN reconhece mais linguagens que AFD
+    (certa) Todo AFN tem um AFD equivalente, que pode ter exponencialmente mais estados
+    (     ) A construção de subconjuntos sempre produz o AFD mínimo
+    (     ) O estado inicial do AFD é sempre {s₀}
+    EXPLICACAO: Mesmo poder (linguagens regulares), custo de tamanho possivelmente exponencial. O inicial é ε-fecho({s₀}), que pode ser maior que {s₀}.
+DESTAQUE EXAM_TIP: Questão clássica: 'converta o AFN de Thompson de (a|b)*abb em AFD'. Decore o caminho: ε-fecho({0}) = {0,1,2,4,7}, cinco estados A–E, E final, e A ≡ C na minimização. Escreva Dtran[T, a] = ε-fecho(move(T, a)) no topo da folha.
+REVELAR: Escreva a fórmula central do algoritmo e as regras de inicial e finais.
+    RESPOSTA: Dtran[T, a] = ε-fecho(move(T, a)). Inicial: ε-fecho({s₀}). Finais: todo T que contém pelo menos um estado final do AFN.
+
+=== AULA DE LEITURA [MNEMONIC] Anda e Fecha a Porta
+DESTAQUE MNEMONIC: **Anda e fecha a porta!** Primeiro ANDA com a letra (move), depois FECHA (ε-fecho). Como a sua mãe gritando da cozinha: entrou, fecha a porta!
+DESTAQUE MNEMONIC: **Cesto de frutas**: cada estado do AFD é um cesto com estados do AFN dentro. O cesto é **final se tem UMA fruta premiada** (um final do AFN). O **cesto vazio ∅** é o estado morto.
+TEXTO: **Palácio da memória**: na Floresta Léxica, logo depois do Trem do Autômato, fica a **Fábrica de Subconjuntos** . Os duendes de Thompson entregam trilhos bagunçados (AFN); os operários põem estados em cestos, carimbam A, B, C… e entregam ao trem um mapa sem dúvidas (AFD).
+DESTAQUE MNEMONIC: **2ⁿ = interruptores**: cada estado do AFN é uma lâmpada que está acesa (no cesto) ou apagada. n lâmpadas → 2ⁿ combinações. É o TETO, não o normal.
+PREVEJA: Qual a ordem correta dentro de cada passo da construção?
+    (     ) ε-fecho, depois move
+    (certa) move, depois ε-fecho
+    (     ) só move
+    (     ) só ε-fecho
+    EXPLICACAO: Anda (move com a letra) e fecha a porta (ε-fecho). O ε-fecho 'sozinho' só aparece uma vez: no estado inicial, ε-fecho({s₀}).
+DESTAQUE MNEMONIC: **Inicial também fecha a porta**: o estado inicial do AFD NÃO é {s₀}, é ε-fecho({s₀}). Se esqueceu, o cesto começa faltando fruta.
+WIDGET NFA_SUBSET gramatica= entrada=eps legenda=a*b*: o inicial já é {0, 1} por causa do ε. Repare que A já é final, a cadeia vazia é aceita!
+DESTAQUE WATCH_OUT: Contrastes que caem na prova: **move** usa UMA letra; **ε-fecho** não usa letra nenhuma. **AFN** pode estar em vários estados; **AFD** em exatamente um. **∅** é o estado morto, não o inicial. Subconjuntos NÃO minimiza: isso é outra etapa.
+DESTAQUE MNEMONIC: A esteira completa: **T**hompson **T**ransforma (ER → AFN), **S**ubconjuntos **S**implificam (AFN → AFD), **M**inimização **M**ata os repetidos (AFD → AFD mínimo). Lex/Flex rodam a esteira inteira por você.
+REVELAR: Sem olhar: as 3 regras da construção de subconjuntos.
+    RESPOSTA: 1) Inicial = ε-fecho({s₀}). 2) Dtran[T, a] = ε-fecho(move(T, a)), anda e fecha a porta. 3) T é final se contém algum final do AFN.
+REVELAR: Por que analisadores léxicos preferem AFD?
+    RESPOSTA: Um passo por caractere, sem voltar atrás e sem carregar conjuntos. A conversão (talvez cara) é feita uma vez só, quando o léxico é gerado.
+
+################ ASSUNTO DFA_MINIMIZATION: Minimização de AFD (tabela de pares)  prereqs=[REGEX_DFA]
+FICHA: Minimizar um AFD é fundir os estados equivalentes (que nenhuma cadeia consegue distinguir): marca-se todo par final × não-final, propaga-se a marca pelas transições até estabilizar, e os pares que sobram sem marca viram um estado só, o AFD mínimo, único a menos de nomes.
+  gancho: MPJ: Marca, Propaga, Junta. O morto também vota.
+  termos: [equivalen, distingu, par, marca, final, morto, tabela]
+  erros comuns: [Esquecer de completar o AFD com o estado morto antes de montar a tabela, Marcar um par com base num par de destino que ainda NÃO está marcado, Parar depois de uma rodada, sem repetir até nada mudar, Esquecer de remover estados inalcançáveis, Fazer a tabela e não desenhar o AFD mínimo (com inicial e finais) no fim]
+  FLASH: Quando dois estados são equivalentes? -> Quando nenhuma cadeia w leva um a final e o outro a não-final
+  FLASH: O que a rodada 1 marca? -> Todo par (final, não-final), a testemunha é a cadeia vazia
+  FLASH: Regra das rodadas seguintes? -> Marque {p,q} se, para alguma letra c, {δ(p,c), δ(q,c)} já está marcado
+  FLASH: Quando parar? -> Quando uma rodada inteira não marca nenhum par novo
+  FLASH: O que fazer se falta transição? -> Completar com o estado morto ∅ (não final, laço em tudo)
+  FLASH: Quantas casas tem a tabela com n estados? -> n(n−1)/2 (só a escadinha de baixo)
+  FLASH: No AFD do livro para (a|b)*abb, quem se funde? -> q0 e q2 (A e C): 5 estados viram 4
+  FLASH: Método alternativo à tabela? -> Refinar partições (Moore/Hopcroft): começa com {F, S−F} e divide grupos
+  FLASH: O AFD mínimo é único? -> Sim, a menos de renomear os estados (Myhill–Nerode)
+
+=== AULA ANIMADA [BASICO] Juntar os gêmeos  (id=DFA_MINIMIZATION, ~149s, 20 passos, exemplo começa no passo null)
+1. [BYTE] Este AFD tem quatro estados. Talvez dois deles façam exatamente o mesmo papel.
+     palco: AFD | A | B | C | D
+2. [BYTE] Qual destes estados é final? Toque nele.
+     palco: AFD | A | B | C | D
+     PERGUNTA(toque): certas=[D] erradas=[A, B, C]
+       dica: Final tem círculo duplo.
+       acerto: Isso. D é o único final.
+3. [BYTE] Dois estados são equivalentes quando, a partir deles, as mesmas cadeias levam a aceitar e as mesmas levam a rejeitar.
+     palco: AFD | A | *B | *C | D
+4. [BYTE] Juntar os estados equivalentes dá o AFD mínimo: o menor que reconhece a mesma linguagem.
+     palco: MÍNIMO
+5. [BYTE] A ferramenta é a tabela de pares. Cada casa compara dois estados. Um X na casa quer dizer que os dois são diferentes.
+     palco: Tabela de pares | D é o único final | A | B | C | B | C | D
+6. [BYTE] Primeira rodada: um estado final nunca é equivalente a um não final. Marco todo par que tem o D.
+     palco: Tabela de pares | D é o único final | A | B | C | B | C | D | *X | *X | *X
+7. [BYTE] Agora olho para onde cada par vai com cada símbolo. Com b, A vai para C, e B vai para D.
+     palco: Tabela de pares | D é o único final | A | B | C | B | C | D | X | X | X | (C,D) já tem X
+8. [BYTE] O par C e D já está marcado. Se os destinos são diferentes, as origens também são. Marco A com B.
+     palco: Tabela de pares | D é o único final | A | B | C | B | *X | C | *X | D | X | X | X | (C,D) já tem X
+9. [BYTE] Sobrou uma casa em branco. Toque nela: esses dois são gêmeos.
+     palco: Tabela de pares | D é o único final | A | B | C | B | X | C | X | D | X | X | X
+     PERGUNTA(toque): certas=[] erradas=[X, X, X, X, X]
+       dica: Procure a casa sem X na tabela.
+       acerto: Isso. B e C vão sempre para o mesmo lugar.
+10. [BYTE] Casa em branco no fim quer dizer estados equivalentes. B e C viram um estado só.
+     palco: Tabela de pares | D é o único final | A | B | C | B | X | C | X | D | X | X | X | *B + C
+11. [BYTE] A receita tem três passos e se repete até parar.
+     palco: Receita | 1. Marque todo par final com não final. | 2. Marque o par que vai a um par marcado. | 3. Repita até nada mudar. Branco: junte.
+12. [BYTE] Marquei A com B porque eles vão para C e D. Toque na regra que usei.
+     palco: Receita | 1. Marque todo par final com não final. | 2. Marque o par que vai a um par marcado. | 3. Repita até nada mudar. Branco: junte.
+     PERGUNTA(toque): certas=[2. Marque o par que vai a um par marcado.] erradas=[1. Marque todo par final com não final., 3. Repita até nada mudar. Branco: junte.]
+       dica: Não foi por ser final. Foi pelo destino.
+       acerto: Isso. Regra dois, pelo destino.
+13. [BYTE] Pare só quando uma rodada inteira não marcar nada. Uma marca nova pode provocar outra na rodada seguinte.
+     palco: Receita | 1. Marque todo par final com não final. | 2. Marque o par que vai a um par marcado. | *3. Repita até nada mudar. Branco: junte.
+14. [BYTE] Outro autômato: P, Q e R, com R final.
+     palco: AFD | P | Q | R | P, Q | P, R | Q, R
+15. [BYTE] Toque nos pares que a primeira regra marca.
+     palco: AFD | P | Q | *R | P, Q | P, R | Q, R
+     PERGUNTA(toque): certas=[P, R, Q, R] erradas=[P, Q]
+       dica: Procure os pares com o R, que é final.
+       acerto: Isso. Só o R é final. Os outros dois, não.
+16. [BYTE] P e Q, com zero, vão os dois para Q. Com um, para R. Juntar ou separar?
+     palco: AFD | *P | *Q | R | P, Q | P, R | Q, R | juntar | separar
+     PERGUNTA(toque): certas=[juntar] erradas=[separar]
+       dica: Os destinos são iguais. Nenhum par marcado aparece.
+       acerto: Isso. Os dois viram um estado só.
+17. [BYTE] Ficaram dois estados. O autômato reconhece a mesma linguagem de antes.
+     palco: AFD | P | Q | R | *P, Q | P, R | Q, R
+18. [BYTE] Basta os destinos serem estados diferentes para marcar o par? Certo ou errado?
+     palco: Erros comuns | A e B vão para estados diferentes com b. Então A e B são diferentes. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: E se os dois destinos forem equivalentes entre si?
+       acerto: Isso. Só marco o par se os destinos formam um par já marcado. Destinos diferentes, mas equivalentes, não separam ninguém.
+19. [BYTE] Outro erro: parar cedo. Uma marca nova pode revelar outra diferença. Só acabe quando uma rodada passar em branco.
+     palco: Erros comuns | Certo: Marque o par só quando os destinos formam um par já marcado. | *Errado: Parar depois da primeira rodada de destinos. | *Certo: Repita até uma rodada inteira não marcar nenhum par.
+20. [BYTE] Resumindo: a minimização separa o que é diferente e junta o que sobra. Começa por final contra não final, propaga pelas transições e para quando nada muda.
+     palco: Resumo | Estados equivalentes aceitam e rejeitam as mesmas continuações. | Marque final com não final. Depois, os pares que vão a pares marcados. | Pares sem marca no fim são equivalentes: junte.
+
+=== AULA ANIMADA [PEGADINHA] Juntar gêmeos de mentira  (id=DFA_MINIMIZATION/juntargêmeosdementira, ~33s, 6 passos, exemplo começa no passo null)
+1. [BYTE] Dois estados parecem gêmeos quando vão para os mesmos lugares.
+     palco: Juntar gêmeos de mentira | q0 | q1 | q2
+2. [BYTE] A pegadinha: um estado final e um não final nunca são gêmeos.
+     palco: Juntar gêmeos de mentira | q0 | *q1 | *q2
+3. [BYTE] Qual par dá para separar logo de cara? Toque nele.
+     palco: Juntar gêmeos de mentira | q0 | q1 | q2 | q0, q1 | q1, q2
+     PERGUNTA(toque): certas=[q1, q2] erradas=[q0, q1]
+       dica: Um deles aceita a palavra e o outro não.
+       acerto: Isso. Final contra não final já é diferente.
+4. [BYTE] Depois, olhe para onde cada um vai com a mesma letra.
+     palco: Juntar gêmeos de mentira | *q0 | *q1 | q2 | q0, q1 | q1, q2
+5. [BYTE] Se um vai para um par já separado, os dois também se separam.
+     palco: Juntar gêmeos de mentira | q0 | *q1 | *q2 | q0, q1 | q1, q2
+6. [PROF] Só junte o que nenhuma palavra consegue separar.
+     palco: Juntar gêmeos de mentira | q0 | q1 | q2 | q0, q1 | q1, q2
+
+=== AULA DE LEITURA [STORY] Os atendentes que fazem a mesma coisa
+[NARRADOR] Lanchonete do bairro, hora do almoço. O dono olha a folha de pagamento e franze a testa: 'Cinco atendentes... será que preciso de todos?'
+[BYTE] Ué, demite quem trabalha menos?
+[PROF] Não é bem isso. Ele faz um teste: dá a mesma sequência de pedidos para dois atendentes. Se, para QUALQUER sequência, os dois acabam do mesmo jeito (entregando o lanche ou não), eles são **intercambiáveis**. Dá para juntar os dois num cargo só.
+PASSOS Lanchonete → minimização de AFD:
+    1. Cada atendente é um **estado** do AFD.
+    2. Cada pedido do cliente ('a', 'b') é um **símbolo** da entrada: o atendente repassa você para alguém.
+    3. 'Entregar o lanche' no fim da fila de pedidos é terminar num **estado final**.
+    4. Dois atendentes que SEMPRE terminam igual são **equivalentes** (indistinguíveis).
+    5. Se existe UMA sequência de pedidos em que um entrega e o outro não, eles são **distinguíveis**.
+    6. Juntar todos os equivalentes dá o **AFD mínimo**: mesmo serviço, folha de pagamento menor.
+[LEXI] E na Floresta Léxica isso importa muito: meu analisador léxico é um AFD gigante. Menos estados = tabela menor = léxico mais leve.
+PREVEJA: Atendente X entrega o lanche quando a fila de pedidos acaba nele; atendente Y nunca entrega. Eles podem ser equivalentes?
+    (     ) Sim, se repassarem os pedidos para as mesmas pessoas
+    (certa) Não: com a fila VAZIA um entrega e o outro não
+    (     ) Depende do tamanho do alfabeto
+    EXPLICACAO: A cadeia vazia já os separa. Por isso o primeiro passo do método é sempre marcar todo par (final, não-final): eles são distinguíveis de cara.
+[PROF] Depois vem o 'efeito dominó': se X e Y, ao receber 'b', repassam você para dois atendentes que JÁ sabemos que são diferentes, então X e Y também são diferentes.
+WIDGET MINIMIZE gramatica= entrada=0 legenda=O AFD do livro para (a|b)*abb. Avance e veja os pares sendo marcados rodada a rodada. Quem sobra sem marca se funde.
+REVELAR: No widget, quais dois estados sobraram sem marca e se fundiram?
+    RESPOSTA: q0 e q2 (no livro, A e C). Os dois mandam 'a' para q1 e 'b' para q2: fazem exatamente o mesmo trabalho. O AFD cai de 5 para 4 estados.
+DESTAQUE NO_DUMB_QUESTIONS: P: Se a construção de subconjuntos já dá um AFD, por que ele vem com estados sobrando? R: Ela cria um estado para cada CONJUNTO de estados do AFN que aparece, sem perguntar se dois conjuntos diferentes se comportam igual. Minimizar é a faxina depois da mudança.
+DESTAQUE BRAIN_POWER: E o atendente que só fica de braços cruzados e nunca entrega nada, não importa o pedido? Ele também precisa entrar na conta. (Spoiler: é o **estado morto**, e esquecê-lo é o erro mais comum da prova.)
+REVELAR: Na analogia, quem é: atendente, pedido, entregar o lanche, cargo único depois da fusão?
+    RESPOSTA: Estado, símbolo da entrada, terminar num estado final, e um estado do AFD mínimo (uma classe de equivalência).
+
+=== AULA DE LEITURA [VISUAL] Vendo a tabela se preencher
+[PROF] Hoje você só assiste e prevê. A tabela de pares é uma escadinha: uma casa para cada par de estados {p, q}. Marcar a casa = 'esses dois são diferentes'.
+WIDGET MINIMIZE gramatica= entrada=1 legenda=Número par de a's, com estados sobrando. Repare: tudo se resolve já na rodada 1.
+PREVEJA: Nesse AFD, q0 e q2 são finais; q1 e q3 não. Depois da rodada 1, quais pares ficam SEM marca?
+    (     ) Nenhum
+    (certa) {q0,q2} e {q1,q3}
+    (     ) Só {q0,q2}
+    (     ) {q0,q1} e {q2,q3}
+    EXPLICACAO: A rodada 1 marca só final × não-final. Sobram final com final ({q0,q2}) e não-final com não-final ({q1,q3}). Como nenhuma rodada seguinte marca mais nada, eles se fundem: o AFD mínimo tem 2 estados (par / ímpar).
+WIDGET MINIMIZE gramatica= entrada=0 legenda=O clássico do livro. Agora há 3 rodadas de marcação: veja o dominó caindo.
+PASSOS O que você acabou de ver no exemplo do livro:
+    1. Rodada 1: 4 pares marcados, todos com q4, o único final.
+    2. Rodada 2: {q0,q3}, {q1,q3} e {q2,q3}. Com 'b', cada um vai para um par que contém q4 e já estava marcado.
+    3. Rodada 3: {q0,q1} e {q1,q2}. Com 'b', vão para pares marcados na rodada 2.
+    4. Rodada 4: nada novo. Fim. 9 dos 10 pares marcados; só {q0,q2} sobrou.
+[LEXI] Agora um AFD que veio da construção de subconjuntos SEM estado morto. Olha o que o widget faz primeiro.
+WIDGET MINIMIZE gramatica= entrada=5 legenda=a*b*: falta a transição de q2 com 'a'. O widget completa com o estado morto ∅ antes de montar a tabela.
+PREVEJA: Em a*b*, q0, q1 e q2 são TODOS finais. Sem o estado morto, a rodada 1 não marcaria nada. O que o ∅ muda?
+    (     ) Nada, ∅ é ignorado
+    (certa) Com 'a', q2 vai para ∅ e q1 fica em q1; como {q1,∅} é final × não-final, {q1,q2} acaba marcado
+    (     ) ∅ se funde com q2
+    EXPLICACAO: O ∅ é o único não-final, então a rodada 1 marca {q0,∅}, {q1,∅} e {q2,∅}. Na rodada 2, 'a' leva q2 para ∅ e q0/q1 para q1: marca {q0,q2} e {q1,q2}. Resultado: q0 ≡ q1, e q2 fica separado.
+REVELAR: E se você esquecesse o ∅ nesse exemplo?
+    RESPOSTA: Nada seria marcado e você fundiria q0, q1 e q2 num estado só, final, com laço em a e b. Esse AFD aceita (a|b)*, então aceitaria 'ba', que NÃO está em a*b*. Esquecer o estado morto muda a linguagem!
+WIDGET MINIMIZE gramatica= entrada=3 legenda=ab*: aqui o ∅ se distingue de q0 só na rodada 2. Depois, o ∅ sozinho some do desenho do AFD mínimo.
+DESTAQUE WATCH_OUT: O ∅ entra na TABELA, mas, se ficar sozinho na classe dele, não precisa ser desenhado no AFD mínimo: transição que não aparece vai para o morto, por convenção.
+
+=== AULA DE LEITURA [WORKED] A tabela da prova, casa por casa
+[PROF] Esta é A questão de prova sobre minimização. Vamos fazer com o AFD do livro, sem pular nada. Pegue papel.
+CODIGO (Transições e tabela final em escadinha. Desenhe só a metade de baixo: {p,q} e {q,p} são o mesmo par.):
+    AFD do livro para (a|b)*abb   (q0..q4 = A..E do Dragão)
+    
+             a    b
+      → q0   q1   q2
+        q1   q1   q3
+        q2   q1   q2
+        q3   q1   q4
+      * q4   q1   q2
+    
+    Tabela de pares (o número é a RODADA em que o par foi marcado;
+    · = nunca marcado = EQUIVALENTES)
+    
+            +----+
+       q1   | 3  |
+            +----+----+
+       q2   | ·  | 3  |
+            +----+----+----+
+       q3   | 2  | 2  | 2  |
+            +----+----+----+----+
+       q4   | 1  | 1  | 1  | 1  |
+            +----+----+----+----+
+              q0   q1   q2   q3
+TEXTO: Antes de tudo, dois cuidados: o AFD está **completo** (toda casa da tabela de transições preenchida, então não precisa de ∅) e todos os estados são **alcançáveis** a partir de q0.
+CODIGO (Rodada a rodada. ✔ = par de destino já marcado; = = mesmo estado; · = par ainda não marcado):
+    Rodada 1 (final × não-final): q4 é o único final
+      {q0,q4} {q1,q4} {q2,q4} {q3,q4}  → marcados
+    
+    Rodada 2 (olhe só o que foi marcado ATÉ a rodada 1)
+      par       com a        com b        marca?
+      {q0,q1}   {q1,q1} =    {q2,q3} ·    não (ainda)
+      {q0,q2}   {q1,q1} =    {q2,q2} =    não
+      {q0,q3}   {q1,q1} =    {q2,q4} ✔    SIM
+      {q1,q2}   {q1,q1} =    {q3,q2} ·    não (ainda)
+      {q1,q3}   {q1,q1} =    {q3,q4} ✔    SIM
+      {q2,q3}   {q1,q1} =    {q2,q4} ✔    SIM
+    
+    Rodada 3
+      {q0,q1}   com b → {q2,q3} ✔ (marcado na rodada 2)  SIM
+      {q1,q2}   com b → {q3,q2} ✔                        SIM
+      {q0,q2}   a → {q1,q1}, b → {q2,q2}                 não
+    
+    Rodada 4: nada mudou → PARE.
+    Sobrou {q0,q2} sem marca → q0 ≡ q2 (A ≡ C no livro).
+PASSOS Os detalhes que valem ponto:
+    1. Rodada 1: marque TODA casa da linha/coluna de q4 (final × não-final).
+    2. Rodada 2: para cada casa vazia {p,q}, olhe {δ(p,a), δ(q,a)} e {δ(p,b), δ(q,b)}. Se algum destino é casa marcada, marque {p,q}.
+    3. Se os destinos são o MESMO estado (como {q1,q1}), esse símbolo não diz nada.
+    4. Na rodada 2, {q0,q1} vai com 'b' para {q2,q3}, que ainda estava vazio. Não marque ainda: anote e volte depois.
+    5. Rodada 3: {q2,q3} agora está marcado, então {q0,q1} e {q1,q2} caem.
+    6. Rodada 4: nenhuma casa nova. Pare. A casa vazia {q0,q2} diz: q0 ≡ q2.
+CODIGO (Funda q0 e q2. Cada classe vira um estado; a classe com o inicial é inicial; a com final é final.):
+    AFD mínimo (4 estados)
+    
+                   a        b
+      → {q0,q2}    {q1}     {q0,q2}
+        {q1}       {q1}     {q3}
+        {q3}       {q1}     {q4}
+      * {q4}       {q1}     {q0,q2}
+WIDGET MINIMIZE gramatica= entrada=0 legenda=Confira cada casa e cada rodada com o motor.
+TEXTO: Agora é com você (exemplo esmaecido). AFD 'termina em b': q0 inicial; finais q1 e q3. Transições: q0 –a→ q2, q0 –b→ q1, q1 –a→ q2, q1 –b→ q3, q2 –a→ q0, q2 –b→ q3, q3 –a→ q0, q3 –b→ q1.
+REVELAR: Rodada 1: quais casas você marca?
+    RESPOSTA: As de final × não-final: {q0,q1}, {q0,q3}, {q1,q2} e {q2,q3}.
+REVELAR: Rodada 2: teste {q0,q2} e {q1,q3}.
+    RESPOSTA: {q0,q2}: com a → {q2,q0} (o próprio par, vazio); com b → {q1,q3} (vazio). {q1,q3}: com a → {q2,q0}; com b → {q3,q1}. Nenhum destino marcado: nada muda e o algoritmo para.
+REVELAR: Resultado final?
+    RESPOSTA: q0 ≡ q2 e q1 ≡ q3. AFD mínimo com 2 estados: 'a última letra foi b' (final) e 'não foi' (inicial).
+WIDGET MINIMIZE gramatica= entrada=2 legenda=Confira sua tabela.
+DESTAQUE EXAM_TIP: Escreva a rodada dentro de cada casa (1, 2, 3...) e, ao lado, o motivo ('b: {q2,q4}'). Se você errar uma casa, o professor vê o raciocínio e dá ponto parcial. E termine SEMPRE desenhando o AFD mínimo: muita gente faz a tabela e esquece a resposta.
+
+=== AULA DE LEITURA [SOCRATIC] Como provar que dois estados são diferentes?
+[PROF] Hoje você vai inventar o método da tabela respondendo perguntas. Comece por aqui: o que significa dois estados serem 'iguais'?
+PREVEJA: Qual a melhor definição de 'p e q são equivalentes'?
+    (     ) Têm as mesmas setas saindo
+    (certa) Para TODA cadeia w, lendo w a partir de p termina em final se e só se lendo w a partir de q também termina
+    (     ) São ambos finais
+    (     ) Estão perto um do outro no desenho
+    EXPLICACAO: Equivalência é sobre COMPORTAMENTO futuro: nenhuma cadeia consegue separar os dois. Ter as mesmas setas é suficiente, mas não necessário.
+[BYTE] Mas 'para toda cadeia' são infinitas cadeias! Como eu testo isso?
+[PROF] Boa! Vire a pergunta do avesso: em vez de provar que são iguais, tente provar que são **diferentes**. Para isso basta UMA cadeia, uma testemunha.
+PREVEJA: Qual é a testemunha mais curta possível, e quem ela separa?
+    (     ) 'a', separa quem tem laço
+    (certa) A cadeia vazia ε: separa todo final de todo não-final
+    (     ) 'ab', separa os iniciais
+    EXPLICACAO: Lendo nada, você já está no fim. Se p é final e q não, ε é a testemunha. Daí a rodada 1.
+PREVEJA: Suponha que {r, s} já está marcado com testemunha w. Se δ(p,'b') = r e δ(q,'b') = s, qual é a testemunha para {p, q}?
+    (     ) w
+    (certa) 'b' seguido de w
+    (     ) w seguido de 'b'
+    (     ) Não existe
+    EXPLICACAO: De p, ler 'b' leva a r; depois w separa r de s. Então 'b'w separa p de q. É esse o 'efeito dominó': cada rodada cria testemunhas uma letra mais longas.
+REVELAR: Por que o algoritmo precisa repetir as rodadas até nada mudar?
+    RESPOSTA: Porque marcar um par novo pode tornar possível marcar outros que dependiam dele. No AFD do livro, {q0,q1} só cai na rodada 3, depois que {q2,q3} foi marcado na rodada 2.
+REVELAR: Por que o algoritmo sempre termina?
+    RESPOSTA: Há um número finito de pares, e um par marcado nunca é desmarcado. Cada rodada útil marca pelo menos um; quando uma rodada não marca nada, as seguintes também não marcariam.
+PREVEJA: Um par sobreviveu a todas as rodadas sem marca. O que podemos concluir?
+    (     ) Talvez sejam diferentes, por uma cadeia longa que não testamos
+    (certa) São equivalentes: se existisse testemunha, alguma rodada a teria encontrado
+    (     ) Precisamos testar à mão
+    EXPLICACAO: O algoritmo é completo: uma testemunha de tamanho n seria descoberta na rodada n + 1. Sem marca no fim = nenhuma testemunha existe.
+[BYTE] E se uma transição está faltando? Eu comparo com o quê?
+REVELAR: Resposta
+    RESPOSTA: Complete o AFD com o estado morto ∅ (não final, laço em tudo) e compare normalmente. Faltar transição significa 'vai para o morto'; o ∅ é que permite marcar pares como {q1,q2} em a*b*.
+WIDGET MINIMIZE gramatica= entrada=5 legenda=Veja a testemunha 'a' separando q2 de q1 graças ao ∅.
+DESTAQUE FIRESIDE: Estado q0: 'Eu e o q2 fazemos exatamente o mesmo trabalho há anos.' Estado q2: 'Pois é, ninguém nunca achou uma cadeia que nos separasse.' Minimizador: 'Então parabéns, vocês acabam de virar um estado só.'
+
+=== AULA DE LEITURA [FORMAL] Minimização: definição de prova
+TEXTO: Seja D = (S, Σ, δ, s₀, F) um AFD **completo** e com todos os estados alcançáveis. Estenda δ para cadeias: δ*(p, ε) = p e δ*(p, xw) = δ*(δ(p, x), w).
+TEXTO: **Equivalência**: p ≡ q se, para toda w ∈ Σ*, δ*(p, w) ∈ F ⇔ δ*(q, w) ∈ F. Caso contrário, p e q são **distinguíveis**, e uma w que os separa é uma **testemunha**. ≡ é uma relação de equivalência; suas classes são os estados do AFD mínimo.
+CODIGO (Algoritmo de preenchimento da tabela (pares distinguíveis)):
+    MinimizaPorTabela(D):
+        remova os estados inalcançáveis a partir de s₀
+        se faltar transição: adicione ∅ (não final, δ(∅, c) = ∅) e complete
+        para cada par {p, q}:
+            se (p ∈ F) ≠ (q ∈ F): marque {p, q}
+        repita
+            para cada par {p, q} não marcado:
+                se existe c ∈ Σ com {δ(p,c), δ(q,c)} marcado:
+                    marque {p, q}
+        até nenhuma marcação nova
+        pares não marcados ⇒ p ≡ q; junte cada classe num estado
+TEXTO: **Construção do mínimo**: estados = classes [p]; δ'([p], c) = [δ(p, c)] (bem definido, porque estados equivalentes vão para estados equivalentes); inicial = [s₀]; finais = classes contidas em F. Se [∅] tiver só o ∅, pode ser omitido do desenho.
+CODIGO (Alternativa: refinar partições (o caminho do Livro do Dragão, Alg. 3.39)):
+    MinimizaPorPartições(D):        // Moore; Hopcroft é a versão otimizada
+        Π ← { F, S − F }
+        repita
+            para cada grupo G de Π:
+                divida G: p e q ficam juntos se, para todo c,
+                δ(p,c) e δ(q,c) caem no MESMO grupo de Π
+        até Π não mudar
+PASSOS Partições no AFD do livro ((a|b)*abb):
+    1. Π₀ = { {q0,q1,q2,q3}, {q4} }
+    2. Com 'b', q3 vai para {q4} e os outros ficam no grupo grande: Π₁ = { {q0,q1,q2}, {q3}, {q4} }
+    3. Com 'b', q1 vai para {q3} e q0, q2 vão para o grupo grande: Π₂ = { {q0,q2}, {q1}, {q3}, {q4} }
+    4. q0 e q2 têm destinos idênticos: Π não muda mais. Mesmo resultado da tabela: q0 ≡ q2.
+TEXTO: **Teorema (Myhill–Nerode)**: para cada linguagem regular existe um AFD com o número mínimo de estados, e ele é **único a menos de renomear os estados**. Por isso dois alunos que minimizam certo chegam ao mesmo autômato, só com nomes diferentes.
+PREVEJA: Qual afirmação é FALSA?
+    (     ) O AFD mínimo é único a menos de nomes
+    (     ) A tabela e as partições dão o mesmo AFD mínimo
+    (certa) Um par que ficou sem marca numa rodada nunca mais pode ser marcado
+    (     ) Estados inalcançáveis devem ser removidos antes
+    EXPLICACAO: Falso: no AFD do livro, {q0,q1} fica em branco na rodada 2 e é marcado na rodada 3. Só no FIM (quando uma rodada inteira não marca nada) o branco vira veredito de equivalência.
+TEXTO: **Custo**: a tabela tem n(n − 1)/2 casas e cada rodada as varre todas: polinomial, ótimo para provas com até ~8 estados. O algoritmo de Hopcroft faz o mesmo em O(n · |Σ| · log n) e é o que geradores de léxico usam.
+DESTAQUE EXAM_TIP: Roteiro de prova: (1) inalcançáveis fora; (2) completar com ∅; (3) tabela em escadinha com a RODADA em cada casa; (4) repetir até estabilizar; (5) listar as classes; (6) desenhar o AFD mínimo com inicial e finais. Esquecer o passo 6 é perder metade da questão.
+REVELAR: Defina estados distinguíveis e diga o que a rodada 1 marca.
+    RESPOSTA: p e q são distinguíveis se existe w com δ*(p, w) ∈ F e δ*(q, w) ∉ F (ou vice-versa). A rodada 1 marca todo par final × não-final, cuja testemunha é ε.
+
+=== AULA DE LEITURA [MNEMONIC] Marca, Propaga, Junta
+DESTAQUE MNEMONIC: **MPJ: Marca, Propaga, Junta.** MARCA final × não-final. PROPAGA as marcas pelas setas, rodada após rodada. JUNTA quem sobrou sem marca. (Pense em 'MPJ = Ministério Público Julgando quem é igual'.)
+TEXTO: **Palácio da memória**: na Floresta Léxica, logo depois da Fábrica de Subconjuntos, fica a **Tabela dos Pares** : uma escada de pedra. Cada degrau tem casinhas, uma para cada par de estados. O guarda pinta de vermelho as casinhas dos pares diferentes; as que ficam brancas viram uma casa só.
+DESTAQUE MNEMONIC: **Escadinha, não quadrado.** {p,q} = {q,p} e {p,p} não interessa: desenhe só o triângulo de baixo. n estados → n(n−1)/2 casas. Com 5 estados: 10 casas.
+DESTAQUE MNEMONIC: **Final e não-final são água e óleo**: não se misturam nunca. Por isso a rodada 1 é automática.
+DESTAQUE MNEMONIC: **Dominó**: 'se os FILHOS são diferentes, os PAIS também são'. Se p e q, com a mesma letra, caem em casinha vermelha, pinte {p,q} de vermelho.
+PREVEJA: Na rodada 2, o par {q0,q1} vai com 'b' para {q2,q3}, que está em branco AGORA. O que fazer?
+    (     ) Marcar, porque provavelmente vai ser marcado
+    (certa) Deixar em branco e voltar na próxima rodada
+    (     ) Fundir q0 e q1
+    EXPLICACAO: Dominó só cai empurrado por peça que JÁ caiu. Na rodada 3, {q2,q3} está vermelho e aí {q0,q1} cai também.
+DESTAQUE MNEMONIC: **O morto também vota.** O estado ∅ não fala, não aceita nada, mas DISTINGUE: sem ele, a*b* viraria (a|b)*. Antes de desenhar a escadinha, pergunte: 'falta alguma seta?'
+DESTAQUE WATCH_OUT: Os três tropeços clássicos: (1) **esquecer o ∅**; (2) **marcar com base em casinha ainda branca**; (3) **parar depois de uma rodada só**, sem conferir se o dominó continua.
+DESTAQUE MNEMONIC: A esteira da Floresta: **T**hompson **T**ransforma (ER → AFN), **S**ubconjuntos **S**implificam (AFN → AFD), **M**inimização **M**ata os repetidos (AFD → AFD mínimo). E o mínimo é **único**: 'cada linguagem tem uma única certidão de nascimento mínima'.
+WIDGET MINIMIZE gramatica= entrada=0 legenda=Recite MPJ enquanto o widget roda: marca (rodada 1), propaga (rodadas 2 e 3), junta (q0 com q2).
+REVELAR: Sem olhar: os 3 passos e os 3 tropeços.
+    RESPOSTA: Passos: Marca final × não-final; Propaga pelas setas até estabilizar; Junta os pares em branco. Tropeços: esquecer o estado morto, marcar com base em par ainda não marcado, e não repetir as rodadas.
+REVELAR: Contraste: o que a construção de subconjuntos faz e o que a minimização faz?
+    RESPOSTA: Subconjuntos tira o NÃO-DETERMINISMO (AFN → AFD), podendo criar estados sobrando. Minimização tira a REDUNDÂNCIA (AFD → menor AFD equivalente). Uma não substitui a outra.
+
+################ ASSUNTO LEX_FLEX: Lex/Flex: o arquivo .l  prereqs=[TOKENS, REGEX_DFA]
+FICHA: O Lex/Flex lê um arquivo .l (definições %% regras 'padrão { ação }' %% código C) e gera lex.yy.c com a função yylex(), que devolve um token por chamada usando o maior casamento e, no empate, a regra listada primeiro.
+  gancho: D-R-C, guloso mas educado: come o maior pedaço; no empate, respeita a fila. Palavra-chave é VIP: vem antes do ID.
+  termos: [regra, padr, maior, primeir, yytext, yylex, return]
+  erros comuns: [Pôr a regra de identificador antes das palavras-chave, Pôr a regra-coringa '.' antes das outras regras, Achar que a ordem das regras vence o tamanho do lexema, Confundir yytext (o texto do lexema) com yylval (o valor passado ao Bison), Esquecer yywrap (ou %option noyywrap / -ll) e o gcc não linkar]
+  FLASH: Quais são as 3 seções de um arquivo .l? -> Definições %% regras %% código C
+  FLASH: O que o comando lex gera? -> O arquivo lex.yy.c com a função yylex()
+  FLASH: Regra 1 de desempate do Lex? -> O maior casamento (lexema mais longo) vence
+  FLASH: Regra 2 de desempate do Lex? -> Mesmo tamanho: vence a regra listada primeiro
+  FLASH: 'iffy' com "if" antes de [a-z]+ vira o quê? -> Um único ID (maior casamento)
+  FLASH: O que guardam yytext e yyleng? -> O texto do lexema e o seu tamanho
+  FLASH: Ação sem return, como { }, faz o quê? -> Descarta o lexema e yylex() continua
+  FLASH: Como o valor de um número chega ao Bison? -> Por yylval (ex.: yylval = atoi(yytext);)
+  FLASH: Como compilar o scanner do TP? -> lex scanner.l && gcc lex.yy.c
+
+=== AULA ANIMADA [BASICO] O Flex escreve o scanner  (id=LEX_FLEX, ~136s, 18 passos, exemplo começa no passo 2)
+1. [BYTE] Escrito à mão, o scanner tem um teste para cada classe de token, e um autômato por trás de cada teste.
+     palco: Scanner à mão | if (isalpha(c)) { |   while (isalnum(c)) ... | } else if (isdigit(c)) { |   while (isdigit(c)) ... | } else if (c == '=') ...
+2. [BYTE] Qual linha começa o teste dos números? Toque nela.
+     palco: Scanner à mão | if (isalpha(c)) { |   while (isalnum(c)) ... | } else if (isdigit(c)) { |   while (isdigit(c)) ... | } else if (c == '=') ...
+     PERGUNTA(toque): certas=[} else if (isdigit(c)) {] erradas=[if (isalpha(c)) {, } else if (c == '=') ...]
+       dica: Procure o teste de dígito.
+       acerto: Isso. Cada classe pede um teste, e a ordem fica por sua conta.
+3. [BYTE] Fazer isso à mão cansa e dá erro. O Flex é um gerador: você escreve as regras, e ele gera o scanner em C.
+     palco: Arquivo .l | "if"      return IF; | [a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */
+4. [BYTE] No arquivo ponto l, cada linha tem um padrão, que é uma expressão regular, e uma ação em C. Casou o padrão, roda a ação.
+     palco: Arquivo .l | "if"      return IF; | *[a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */
+5. [BYTE] O texto if casa com a primeira e com a segunda regra, do mesmo tamanho. Quem ganha? Toque na regra.
+     palco: Arquivo .l | "if"      return IF; | [a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */ | if
+     PERGUNTA(toque): certas=["if"      return IF;] erradas=[[a-z]+    return ID;]
+       dica: Com tamanhos iguais, a ordem do arquivo decide.
+       acerto: Isso. No empate, vence a regra de cima.
+6. [BYTE] E o texto ifa? A primeira regra casa só duas letras. A segunda casa as três. O casamento mais longo vence.
+     palco: Arquivo .l | "if"      return IF; | *[a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */ | ifa
+7. [BYTE] Guarde duas regras: primeiro o maior casamento. Empatou, vale a de cima.
+     palco: Arquivo .l | "if"      return IF; | [a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */ | ifa | 1. maior casamento | 2. empate: a de cima
+8. [BYTE] Por isso as palavras reservadas vêm antes da regra de identificador no arquivo.
+     palco: Arquivo .l | *"if"      return IF; | [a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */ | ifa | 1. maior casamento | 2. empate: a de cima
+9. [BYTE] Para cada pedaço da entrada, o scanner do Flex faz quatro passos.
+     palco: Receita | 1. Teste todas as regras no ponto atual. | 2. Vence o casamento mais longo. | 3. Empate no tamanho: vence a regra de cima. | 4. Rode a ação. Sem return, o texto some.
+10. [BYTE] Os espaços não chegam ao parser. Qual passo explica isso? Toque.
+     palco: Receita | 1. Teste todas as regras no ponto atual. | 2. Vence o casamento mais longo. | 3. Empate no tamanho: vence a regra de cima. | 4. Rode a ação. Sem return, o texto some. | [ \t\n]  ; /* ignora */
+     PERGUNTA(toque): certas=[4. Rode a ação. Sem return, o texto some.] erradas=[1. Teste todas as regras no ponto atual., 2. Vence o casamento mais longo., 3. Empate no tamanho: vence a regra de cima.]
+       dica: Olhe a ação da regra do espaço. Ela tem return?
+       acerto: Isso. A ação não devolve token, então o espaço some.
+11. [BYTE] Outro arquivo de regras, com um erro escondido. Quem roda agora é você.
+     palco: Arquivo .l | [a-z]+    return ID; | "while"   return WHILE; | "="       return ATRIB; | "=="      return IGUAL; | [0-9]+    return NUM; | " "       ; | w | h | i | l | e | x | = | = | 1 | 0
+12. [BYTE] O scanner lê while. Qual token sai? Toque na resposta.
+     palco: Arquivo .l | [a-z]+    return ID; | "while"   return WHILE; | "="       return ATRIB; | "=="      return IGUAL; | [0-9]+    return NUM; | " "       ; | w | h | i | l | e | x | = | = | 1 | 0 | ID | WHILE
+     PERGUNTA(toque): certas=[ID] erradas=[WHILE]
+       dica: As duas primeiras regras casam cinco letras. No empate, vale a de cima.
+       acerto: Isso. Sai ID. A regra do while nunca ganha.
+13. [BYTE] Agora o scanner chega aos dois iguais. Qual regra vence? Toque nela.
+     palco: Arquivo .l | [a-z]+    return ID; | "while"   return WHILE; | "="       return ATRIB; | "=="      return IGUAL; | [0-9]+    return NUM; | " "       ; | w | h | i | l | e | x | = | = | 1 | 0
+     PERGUNTA(toque): certas=["=="      return IGUAL;] erradas=[[a-z]+    return ID;, "while"   return WHILE;, "="       return ATRIB;, [0-9]+    return NUM;, " "       ;]
+       dica: Uma regra casa um caractere. A outra casa dois.
+       acerto: Isso. O mais longo vence, mesmo estando mais abaixo.
+14. [BYTE] Para while virar WHILE, qual regra precisa subir para o topo? Toque.
+     palco: Arquivo .l | [a-z]+    return ID; | "while"   return WHILE; | "="       return ATRIB; | "=="      return IGUAL; | [0-9]+    return NUM; | " "       ; | w | h | i | l | e | x | = | = | 1 | 0
+     PERGUNTA(toque): certas=["while"   return WHILE;] erradas=[[a-z]+    return ID;, "="       return ATRIB;, "=="      return IGUAL;, [0-9]+    return NUM;, " "       ;]
+       dica: A regra que perde o empate precisa ficar em cima.
+       acerto: Isso. Palavra reservada vem antes da regra de nomes.
+15. [BYTE] Com while no topo, saem quatro tokens: WHILE, ID, IGUAL e NUM.
+     palco: Arquivo .l | [a-z]+    return ID; | *"while"   return WHILE; | "="       return ATRIB; | "=="      return IGUAL; | [0-9]+    return NUM; | " "       ; | WHILE | ID | IGUAL | NUM
+16. [BYTE] Quem vence quando duas regras casam? Um colega disse isto. Certo ou errado?
+     palco: Erros comuns | No Flex, a regra que aparece primeiro no arquivo sempre vence. | certo | errado
+     PERGUNTA(toque): certas=[errado] erradas=[certo]
+       dica: Lembre do ifa: qual regra ganhou, a de cima ou a mais longa?
+       acerto: Isso. Primeiro vale o casamento mais longo. A ordem do arquivo só desempata quando o tamanho é igual.
+17. [BYTE] Outro erro: pôr a regra de identificador em cima. Aí if e while empatam no tamanho, perdem na ordem e viram nomes comuns.
+     palco: Erros comuns | Certo: Primeiro o casamento mais longo. A ordem só desempata. | *Errado: Pôr a regra de identificador antes das palavras reservadas. | *Certo: Palavra reservada primeiro. Senão while e if viram ID.
+18. [BYTE] Resumindo: o Flex gera o scanner a partir de padrões e ações. O mais longo vence, a ordem desempata, e as palavras reservadas ficam em cima.
+     palco: Resumo | Arquivo .l: padrão (expressão regular) e ação em C. | Vence o casamento mais longo; no empate, a regra de cima. | Ação sem return descarta o texto. É assim que os espaços somem.
+
+=== AULA ANIMADA [PEGADINHA] A ordem das regras no Flex  (id=LEX_FLEX/aordemdasregrasnoflex, ~32s, 5 passos, exemplo começa no passo null)
+1. [BYTE] Neste arquivo ponto l, o nome vem antes do if.
+     palco: Arquivo .l | [a-z]+   { return ID; } | "if"     { return IF; }
+2. [BYTE] Chega a palavra if. As duas regras casam duas letras. Deu empate.
+     palco: Arquivo .l | *[a-z]+   { return ID; } | *"if"     { return IF; } | if
+3. [BYTE] No empate, o Flex fica com a primeira regra do arquivo. Qual regra ganha aqui?
+     palco: Arquivo .l | [a-z]+   { return ID; } | "if"     { return IF; } | if
+     PERGUNTA(toque): certas=[[a-z]+   { return ID; }] erradas=["if"     { return IF; }]
+       dica: Olhe qual linha vem primeiro.
+       acerto: Isso. O if vira ID, e a regra de baixo nunca roda.
+4. [PROF] O Flex até avisa que a regra de baixo nunca casa. Quem lê o aviso acha o erro.
+     palco: Arquivo .l | [a-z]+   { return ID; } | "if"     { return IF; } | if | if vira ID
+5. [BYTE] O conserto é subir a palavra reservada. Reservada em cima, nome embaixo.
+     palco: Arquivo .l | [a-z]+   { return ID; } | "if"     { return IF; } | if | if vira IF
+
+=== AULA DE LEITURA [STORY] A triagem dos Correios
+[NARRADOR] Centro de triagem dos Correios, madrugada. Uma esteira infinita de caracteres passa na frente de um robô. A Lexi segura uma folha plastificada cheia de regras.
+[LEXI] Eu não separo nada na mão. Eu escrevo a FOLHA DE REGRAS, entrego para a fábrica, e a fábrica monta o robô que faz a triagem sozinho.
+PASSOS Correios → Lex/Flex:
+    1. A folha de regras ('pacote assim → carimbo tal') é o **arquivo .l**: cada linha é um **padrão** (expressão regular) e uma **ação** em C.
+    2. A fábrica que lê a folha e monta o robô é o programa **lex** (ou **flex**): ele gera o arquivo **lex.yy.c**.
+    3. O robô é a função **yylex()**: cada vez que alguém chama, ela pega o próximo pacote e devolve o carimbo.
+    4. O pacote que o robô pegou é o **lexema**: fica em **yytext**, e o tamanho dele em **yyleng**.
+    5. O carimbo é o **return TOKEN;** da ação. Ação vazia **{ }** é a lixeira: espaço e comentário somem.
+[PROF] O robô obedece a DUAS regras de ouro. Primeira: ele é **guloso**: sempre pega o MAIOR pacote que alguma regra aceita. Segunda: se duas regras aceitam pacotes do mesmo tamanho, vence a que está **mais acima na folha**.
+WIDGET FLEX gramatica=%% ; [ \t\n]+                { } ; "if"                    { return IF; } ; "while"                 { return WHILE; } ; [a-z][a-z0-9]*          { return ID; } ; [0-9]+                  { return NUM; } ; "=="                    { return EQ; } ; "="                     { return ATRIB; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; ";"                     { return PV; } ; %% entrada=if (x1 == 10) y = 2; legenda=Veja qual regra carimbou cada lexema. Edite a entrada e teste!
+PREVEJA: Com essa folha ("if" acima da regra de identificador), o que vira 'iffy'?
+    (     ) IF seguido de ID 'fy'
+    (certa) Um único ID 'iffy'
+    (     ) Erro léxico
+    (     ) IF, IF, ID
+    EXPLICACAO: Guloso! A regra de ID aceita 4 caracteres; a do "if" só 2. O maior pacote vence, e a ordem nem chega a ser consultada.
+[BYTE] E se alguém colar a regra de ID ACIMA da regra do "if"?
+WIDGET FLEX gramatica=%% ; [ \t\n]+                { } ; [a-z][a-z0-9]*          { return ID; } ; "if"                    { return IF; } ; [0-9]+                  { return NUM; } ; %% entrada=if x 10 legenda=Folha com a ordem trocada: olhe o que aconteceu com o 'if'.
+REVELAR: Por que 'if' virou ID?
+    RESPOSTA: Empate: as duas regras aceitam 'if' com 2 caracteres. No empate vence a que vem PRIMEIRO, e agora é a de ID. Palavras-chave SEMPRE vêm antes da regra de identificador.
+DESTAQUE REAL_WORLD: No trabalho prático, o analisador léxico costuma ser feito assim: você escreve o scanner.l, roda `lex scanner.l && gcc lex.yy.c` e testa com `./a.out < programa.txt`. O lex escreve centenas de linhas de C por você.
+DESTAQUE NO_DUMB_QUESTIONS: P: Lex e Flex são a mesma coisa? R: Flex ('fast lex') é a versão livre e mais rápida do Lex original. A sintaxe do .l é praticamente igual; em muitos Linux, o comando `lex` já chama o flex.
+REVELAR: Na analogia, quem é: a folha, a fábrica, o robô, o pacote e o carimbo?
+    RESPOSTA: Arquivo .l, o programa lex/flex, a função yylex() gerada em lex.yy.c, o lexema (yytext) e o token devolvido pelo return.
+
+=== AULA DE LEITURA [VISUAL] Flex ao vivo
+[LEXI] Cada widget abaixo é um scanner .l de verdade rodando. Embaixo de cada token aparece o número da regra que venceu. Mude a entrada à vontade!
+WIDGET FLEX gramatica=%% ; [ \t\n]+                { } ; "if"                    { return IF; } ; "while"                 { return WHILE; } ; [a-z][a-z0-9]*          { return ID; } ; [0-9]+                  { return NUM; } ; "=="                    { return EQ; } ; "="                     { return ATRIB; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; ";"                     { return PV; } ; %% entrada=while (n) n = n; legenda=Espaços casam com a regra 1, que não tem return: somem.
+TEXTO: Repare em `==` e `=`: as duas regras começam com '='. Em `x == 1`, a regra de `==` casa 2 caracteres e vence. Em `y = 2`, só a de `=` casa.
+WIDGET FLEX gramatica=%% ; " "+          { } ; [a-z]+        { return ID; } ; ">"           { return GT; } ; ">="          { return GE; } ; "="           { return ATRIB; } ; "=="          { return EQ; } ; %% entrada=a>=b c==d e=f legenda=Desta vez ">" está ANTES de ">=" na folha. Mesmo assim, >= vira GE. Por quê?
+PREVEJA: Com essa mesma folha, como fica 'x===y'?
+    (     ) ID EQ EQ ID
+    (certa) ID EQ ATRIB ID
+    (     ) ID ATRIB EQ ID
+    (     ) ID ATRIB ATRIB ATRIB ID
+    EXPLICACAO: Guloso, da esquerda para a direita: primeiro o maior pedaço que casa a partir do '=' é '==' (EQ). Sobra um '=' (ATRIB). Teste digitando no widget acima!
+[PROF] Agora um scanner no estilo do trabalho prático, com comentário, número real e uma regra-coringa no fim para erro léxico.
+WIDGET FLEX gramatica=%{ ; #include "y.tab.h" ; int linha = 1; ; %} ; %% ; [ \t]+                  { } ; \n                      { linha++; } ; "//".*                  { } ; "int"                   { return INT; } ; "float"                 { return FLOAT; } ; "if"                    { return IF; } ; "else"                  { return ELSE; } ; [a-zA-Z_][a-zA-Z0-9_]*  { yylval.nome = strdup(yytext); return ID; } ; [0-9]+"."[0-9]+         { yylval.real = atof(yytext); return REAL; } ; [0-9]+                  { yylval.inteiro = atoi(yytext); return NUM; } ; "<="                    { return LE; } ; "<"                     { return LT; } ; "="                     { return ATRIB; } ; "+"                     { return MAIS; } ; ";"                     { return PV; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; .                       { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); } ; %% ; int yywrap(void) { return 1; } entrada=float media = 3.14; // comentario legenda=O comentário inteiro casa com "//".* e some. E 3.14 vira REAL, não NUM + erro + NUM.
+REVELAR: Por que '3.14' virou REAL e não NUM?
+    RESPOSTA: A regra de REAL casa '3.14' (4 caracteres) e a de NUM só '3' (1 caractere). Maior casamento vence, mesmo com NUM vindo depois na folha.
+WIDGET FLEX gramatica=%{ ; #include "y.tab.h" ; int linha = 1; ; %} ; %% ; [ \t]+                  { } ; \n                      { linha++; } ; "//".*                  { } ; "int"                   { return INT; } ; "float"                 { return FLOAT; } ; "if"                    { return IF; } ; "else"                  { return ELSE; } ; [a-zA-Z_][a-zA-Z0-9_]*  { yylval.nome = strdup(yytext); return ID; } ; [0-9]+"."[0-9]+         { yylval.real = atof(yytext); return REAL; } ; [0-9]+                  { yylval.inteiro = atoi(yytext); return NUM; } ; "<="                    { return LE; } ; "<"                     { return LT; } ; "="                     { return ATRIB; } ; "+"                     { return MAIS; } ; ";"                     { return PV; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; .                       { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); } ; %% ; int yywrap(void) { return 1; } entrada=int x@ = 2; legenda=O '@' cai na regra-coringa '.', que imprime o erro e NÃO devolve token. O scanner continua.
+DESTAQUE WATCH_OUT: A regra '.' tem que ser a ÚLTIMA. Ela casa qualquer caractere com tamanho 1; se viesse antes, ganharia todos os empates de tamanho 1, e engoliria `+`, `;` e até identificadores de uma letra!
+WIDGET FLEX gramatica=%% ; .                 { } ; [ ]+              { } ; [a-z]+            { return ID; } ; "+"               { return MAIS; } ; %% entrada=x + ab legenda=Prova: com '.' no topo, 'x' e '+' somem. Só 'ab' sobrevive, porque tem 2 letras.
+REVELAR: Quantos tokens saem de 'x + ab' nessa folha errada, e por quê?
+    RESPOSTA: Só 1: ID 'ab'. 'x' e '+' têm tamanho 1 e empatam com '.', que vem primeiro e joga fora. 'ab' tem tamanho 2 e o '.' não alcança.
+
+=== AULA DE LEITURA [WORKED] Escrevendo o scanner.l do TP
+[PROF] Vamos montar com calma um arquivo .l completo, do jeito que você entrega no trabalho prático. Ele compila sozinho, sem Bison.
+CODIGO (scanner.l: compile com: lex scanner.l && gcc lex.yy.c && ./a.out < teste.txt):
+    %{
+    /* scanner.l : analisador lexico do TP */
+    #include <stdio.h>
+    enum { INT = 1, FLOAT, IF, ELSE, ID, NUM, REAL,
+           LE, LT, ATRIB, MAIS, PV, ABRE, FECHA };
+    int linha = 1;
+    %}
+    DIGITO   [0-9]
+    LETRA    [a-zA-Z_]
+    %%
+    [ \t]+                       { /* ignora espacos */ }
+    \n                           { linha++; }
+    "//".*                       { /* ignora comentario */ }
+    "int"                        { return INT; }
+    "float"                      { return FLOAT; }
+    "if"                         { return IF; }
+    "else"                       { return ELSE; }
+    {LETRA}({LETRA}|{DIGITO})*   { return ID; }
+    {DIGITO}+"."{DIGITO}+        { return REAL; }
+    {DIGITO}+                    { return NUM; }
+    "<="                         { return LE; }
+    "<"                          { return LT; }
+    "="                          { return ATRIB; }
+    "+"                          { return MAIS; }
+    ";"                          { return PV; }
+    "("                          { return ABRE; }
+    ")"                          { return FECHA; }
+    .                            { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); }
+    %%
+    int yywrap(void) { return 1; }
+    
+    int main(void) {
+        int t;
+        while ((t = yylex()) != 0)
+            printf("linha %d: token %d, lexema '%s' (%d chars)\n",
+                   linha, t, yytext, yyleng);
+        return 0;
+    }
+PASSOS Lendo o arquivo, parte por parte:
+    1. **%{ … %}**: código C copiado literalmente para o topo de lex.yy.c, includes, a enumeração dos tokens e o contador de linha.
+    2. **DIGITO [0-9]** e **LETRA [a-zA-Z_]**: definições nomeadas. Nas regras, usamos {DIGITO} e {LETRA} como apelidos.
+    3. Primeiro **%%**: começam as regras. Cada linha: padrão, espaço, ação entre chaves.
+    4. Espaços e comentários: ação sem return → são descartados. O **\n** só soma 1 em `linha`.
+    5. Palavras-chave ("int", "float", "if", "else") ANTES da regra de identificador: ganham o empate.
+    6. REAL antes de NUM por clareza (o maior casamento já resolveria). "<=" antes de "<", também por clareza.
+    7. A regra **.** por último: qualquer caractere que sobrou é erro léxico, com o número da linha.
+    8. Segundo **%%**: código C do usuário. **yywrap** devolvendo 1 avisa que não há outro arquivo; o **main** chama yylex() até ela devolver 0 (fim da entrada).
+TEXTO: Agora vamos 'rodar de cabeça' a linha `float media = 3.14; // comentario`.
+PASSOS Resolvido: tokens da linha:
+    1. 'float' → empate entre "float" e ID (5 caracteres): vence "float", que vem antes → **FLOAT**.
+    2. ' ' → regra de espaços, ação vazia: nada.
+    3. 'media' → só ID casa → **ID**, yytext = "media", yyleng = 5.
+    4. '=' → **ATRIB**. '3.14' → REAL casa 4 caracteres, NUM só 1 → **REAL**.
+    5. ';' → **PV**. '// comentario' → "//".* engole até o fim da linha → nada.
+WIDGET FLEX gramatica=%{ ; #include "y.tab.h" ; int linha = 1; ; %} ; %% ; [ \t]+                  { } ; \n                      { linha++; } ; "//".*                  { } ; "int"                   { return INT; } ; "float"                 { return FLOAT; } ; "if"                    { return IF; } ; "else"                  { return ELSE; } ; [a-zA-Z_][a-zA-Z0-9_]*  { yylval.nome = strdup(yytext); return ID; } ; [0-9]+"."[0-9]+         { yylval.real = atof(yytext); return REAL; } ; [0-9]+                  { yylval.inteiro = atoi(yytext); return NUM; } ; "<="                    { return LE; } ; "<"                     { return LT; } ; "="                     { return ATRIB; } ; "+"                     { return MAIS; } ; ";"                     { return PV; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; .                       { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); } ; %% ; int yywrap(void) { return 1; } entrada=float media = 3.14; // comentario legenda=Confira: FLOAT ID ATRIB REAL PV.
+TEXTO: Sua vez (exemplo esmaecido), com o mesmo scanner.
+REVELAR: Tokens de `intx = 3.5;`?
+    RESPOSTA: ID ATRIB REAL PV. 'intx' tem 4 letras: a regra de ID casa mais que a de "int" (3). Guloso!
+REVELAR: Tokens de `if (x <= 10) x = x + 1;`?
+    RESPOSTA: IF ABRE ID LE NUM FECHA ID ATRIB ID MAIS NUM PV, 12 tokens. '<=' é um token só.
+REVELAR: O que acontece com `int x@ = 2;`?
+    RESPOSTA: Tokens INT ID ATRIB NUM PV, e o scanner imprime 'Erro lexico na linha 1: '@''. A regra '.' não tem return, então o '@' não vira token e a análise continua.
+WIDGET FLEX gramatica=%{ ; #include "y.tab.h" ; int linha = 1; ; %} ; %% ; [ \t]+                  { } ; \n                      { linha++; } ; "//".*                  { } ; "int"                   { return INT; } ; "float"                 { return FLOAT; } ; "if"                    { return IF; } ; "else"                  { return ELSE; } ; [a-zA-Z_][a-zA-Z0-9_]*  { yylval.nome = strdup(yytext); return ID; } ; [0-9]+"."[0-9]+         { yylval.real = atof(yytext); return REAL; } ; [0-9]+                  { yylval.inteiro = atoi(yytext); return NUM; } ; "<="                    { return LE; } ; "<"                     { return LT; } ; "="                     { return ATRIB; } ; "+"                     { return MAIS; } ; ";"                     { return PV; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; .                       { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); } ; %% ; int yywrap(void) { return 1; } entrada=if (x <= 10) x = x + 1; legenda=Confira a segunda resposta (e teste as outras digitando).
+DESTAQUE EXAM_TIP: Sem `yywrap` (ou `%option noyywrap`), o gcc reclama de 'undefined reference to yywrap'. Alternativa: compilar com `-ll` (lex) ou `-lfl` (flex), que trazem uma yywrap pronta.
+
+=== AULA DE LEITURA [SOCRATIC] Por que o .l é desse jeito?
+[PROF] Hoje você vai descobrir as regras do Flex respondendo perguntas. Chute à vontade.
+PREVEJA: Na folha abaixo, "<" vem ANTES de "<=". O que vira 'a<=b'?
+    (     ) ID LT ATRIB ID
+    (certa) ID LE ID
+    (     ) Erro: falta a regra do '='
+    (     ) ID LT ID
+    EXPLICACAO: O robô é guloso: "<=" casa 2 caracteres, "<" só 1. A ordem só desempata lexemas do MESMO tamanho.
+WIDGET FLEX gramatica=%% ; [ ]+              { } ; [a-z]+            { return ID; } ; "<"               { return LT; } ; "<="              { return LE; } ; %% entrada=a<=b c<d legenda=Confira: LE em 'a<=b', LT em 'c<d'.
+[BYTE] Então a ordem das regras nunca importa?
+PREVEJA: Quando a ordem das regras IMPORTA?
+    (     ) Nunca
+    (     ) Sempre
+    (certa) Só quando duas regras casam lexemas do mesmo tamanho
+    (     ) Só para números
+    EXPLICACAO: Empate de tamanho é o único caso. O exemplo clássico: "if" e a regra de ID, ambas casando 'if'.
+PREVEJA: Uma regra sem `return`, como `[ \t]+ { }`, faz o quê?
+    (     ) Devolve token vazio
+    (     ) Para o scanner
+    (certa) Descarta o lexema e yylex() continua procurando o próximo
+    (     ) Dá erro de compilação
+    EXPLICACAO: yylex() é um laço: só sai quando uma ação executa return. Sem return, ela joga o lexema fora e segue lendo.
+PREVEJA: O sintático precisa saber o VALOR de um número (42, não só 'NUM'). Por onde ele chega?
+    (     ) Pelo return
+    (certa) Por yylval, preenchido na ação: yylval = atoi(yytext);
+    (     ) Por yyleng
+    (     ) O sintático lê o arquivo de novo
+    EXPLICACAO: O return leva só a CLASSE (o token). O atributo vai numa variável global combinada com o Bison: yylval.
+PREVEJA: Se a regra '.' (qualquer caractere) ficar no TOPO da folha, o que acontece com 'x + ab'?
+    (     ) Nada muda
+    (certa) x e + somem; só 'ab' vira ID
+    (     ) Tudo some
+    (     ) Erro de compilação
+    EXPLICACAO: x e + têm tamanho 1: empatam com '.', que vem primeiro e descarta. 'ab' tem tamanho 2, então a regra de ID vence pelo tamanho.
+WIDGET FLEX gramatica=%% ; .                 { } ; [ ]+              { } ; [a-z]+            { return ID; } ; "+"               { return MAIS; } ; %% entrada=x + ab legenda=Confira o estrago.
+REVELAR: Como o Flex consegue achar o MAIOR casamento entre dezenas de regras de uma vez?
+    RESPOSTA: Ele junta os AFNs de todas as regras num só (um novo estado inicial com ε para cada um), converte para AFD e roda o AFD até travar no estado morto, lembrando o ÚLTIMO estado final por onde passou. Esse final diz o tamanho do lexema e a regra (a de menor número, em caso de empate).
+REVELAR: E por que o resultado é tão rápido?
+    RESPOSTA: Porque é um AFD: um passo por caractere, uma consulta na tabela. Toda a dificuldade (subconjuntos, minimização) foi paga quando o lex gerou o lex.yy.c.
+
+=== AULA DE LEITURA [FORMAL] A especificação Lex: definição de prova
+TEXTO: Um programa Lex tem três seções separadas por `%%`: **declarações** (código C entre `%{` e `%}` e definições regulares nome → ER), **regras de tradução** na forma `Padrão { Ação }` e **funções auxiliares** em C.
+CODIGO (Estrutura de um arquivo .l):
+    declarações
+    %%
+    regras de tradução
+    %%
+    funções auxiliares
+CODIGO (Expressões regulares do Lex (Livro do Dragão, Fig. 3.8)):
+    EXPRESSÃO  CASA COM                         EXEMPLO
+    c          o caractere c (não operador)     a
+    \c         o caractere c literalmente       \*
+    "s"        a cadeia s literalmente          "**"
+    .          qualquer caractere menos \n      a.*b
+    ^          início de linha                  ^abc
+    $          fim de linha                     abc$
+    [s]        qualquer caractere de s          [abc]
+    [^s]       qualquer caractere fora de s     [^abc]
+    r*         zero ou mais r                   a*
+    r+         um ou mais r                     a+
+    r?         zero ou um r                     a?
+    r{m,n}     de m a n ocorrências de r        a{1,5}
+    r1r2       r1 seguido de r2                 ab
+    r1|r2      r1 ou r2                         a|b
+    r1/r2      r1, se seguido de r2             abc/123
+TEXTO: **Resolução de conflitos** (Dragão, 3.5.3): (1) prefira sempre o **prefixo mais longo** da entrada que casa com algum padrão; (2) se o prefixo mais longo casa com dois ou mais padrões, prefira o **listado primeiro**.
+PASSOS Interface do analisador gerado:
+    1. **yylex()**: devolve o código do próximo token; devolve 0 no fim da entrada.
+    2. **yytext**: ponteiro para o início do lexema reconhecido; **yyleng**: seu comprimento.
+    3. **yylval**: variável global com o valor de atributo do token, compartilhada com o analisador sintático (Yacc/Bison).
+    4. **yyin**: arquivo de entrada (padrão: stdin). **yywrap()**: chamada no fim do arquivo; devolver 1 significa 'acabou'.
+TEXTO: **Implementação**: o Lex constrói um AFN para cada padrão pᵢ, cria um novo estado inicial com transições ε para cada um, e converte o AFN combinado em AFD. Ao ler a entrada, o AFD segue até não haver transição; então recua até o último estado de aceitação visto. Se esse estado contém finais de vários padrões, vale o de menor índice.
+PREVEJA: Com as regras `"if" {…}` e `[a-z]+ {…}` nessa ordem, a entrada 'ifa' produz:
+    (     ) o token de "if" e depois o lexema 'a'
+    (certa) um único lexema 'ifa', da regra [a-z]+
+    (     ) erro: conflito
+    EXPLICACAO: Regra 1 de resolução: prefixo mais longo. [a-z]+ casa 3 caracteres; "if" casa 2.
+PREVEJA: Qual é o papel do operador `/` em `DO/({letra}|{digito})*=…`?
+    (     ) Divisão
+    (certa) Lookahead: só casa DO se o que vem depois casa com o resto, mas o resto não entra no lexema
+    (     ) Comentário
+    (     ) Alternativa, como |
+    EXPLICACAO: É o operador de contexto à direita (lookahead), usado no exemplo do Fortran, onde DO5I=1.25 é atribuição e DO5I=1,25 é laço.
+DESTAQUE EXAM_TIP: Em prova discursiva: cite as 3 seções, as 2 regras de resolução de conflito (mais longo; empate → primeiro) e explique que o Lex gera um AFD a partir das ERs (Thompson + subconjuntos). Bônus: palavras-chave antes de identificadores.
+REVELAR: Escreva a regra de um identificador que devolve ID e guarda o nome para o sintático.
+    RESPOSTA: [a-zA-Z_][a-zA-Z0-9_]*   { yylval.nome = strdup(yytext); return ID; }, strdup copia, porque yytext será sobrescrito no próximo token.
+
+=== AULA DE LEITURA [MNEMONIC] Guloso, mas educado
+DESTAQUE MNEMONIC: **D-R-C**: **D**efinições %% **R**egras %% **C**ódigo. Igualzinho ao Bison: Declara, Regra, Código. Os dois %% são as duas paredes da sala das regras.
+DESTAQUE MNEMONIC: O Flex é **guloso, mas educado**: GULOSO porque sempre come o maior pedaço; EDUCADO porque, no empate, respeita a fila, quem chegou primeiro no arquivo é atendido.
+DESTAQUE MNEMONIC: **Palavra-chave é VIP**: entra ANTES do ID na folha. Se o ID passar na frente, 'if' vira variável e o seu TP quebra.
+TEXTO: **Palácio da memória**: na Floresta Léxica, na beira do rio, fica a **Oficina Flex** . Na porta está pregada a folha D-R-C. Lá dentro, a Lexi alimenta a máquina com expressões regulares e sai pelo outro lado um robô chamado lex.yy.c.
+DESTAQUE MNEMONIC: Tudo do lex começa com **yy**: **yytext** = o TEXTO do lexema; **yyleng** = o LENGth (tamanho); **yylval** = o VALor que vai para o Bison; **yylex** = o próprio LEXer; **yywrap** = 'embrulha' (acabou o arquivo?).
+DESTAQUE MNEMONIC: **{ } vazio = lixeira.** Sem return, o lexema vai para o lixo e o robô continua. É assim que espaços e comentários somem.
+PREVEJA: yytext ou yylval: onde está o texto "42" logo depois de casar `[0-9]+`?
+    (certa) yytext
+    (     ) yylval
+    (     ) yyleng
+    (     ) yylex
+    EXPLICACAO: yytext é o TEXTO cru. yylval só tem o valor se a SUA ação fizer yylval = atoi(yytext).
+WIDGET FLEX gramatica=%% ; [ \t\n]+                { } ; "if"                    { return IF; } ; "while"                 { return WHILE; } ; [a-z][a-z0-9]*          { return ID; } ; [0-9]+                  { return NUM; } ; "=="                    { return EQ; } ; "="                     { return ATRIB; } ; "("                     { return ABRE; } ; ")"                     { return FECHA; } ; ";"                     { return PV; } ; %% entrada=iffy = while2; legenda=Guloso: 'iffy' e 'while2' são IDs. Educado: em 'if' sozinho, a regra de cima ganharia.
+DESTAQUE WATCH_OUT: Confusões clássicas: (1) achar que a ordem resolve TUDO, o tamanho vem antes; (2) pôr a regra '.' no começo; (3) esquecer yywrap/noyywrap; (4) devolver o token do espaço em vez de ignorar; (5) confundir lex.l (o que você escreve) com lex.yy.c (o que o lex gera).
+DESTAQUE REAL_WORLD: Receita do TP para nunca esquecer: `lex scanner.l` → `gcc lex.yy.c` → `./a.out < teste.txt`. Com Bison: `yacc -d parser.y` gera y.tab.h com os tokens, que o scanner.l inclui no %{ %}.
+REVELAR: Recite as duas regras de ouro e o mnemônico das seções.
+    RESPOSTA: 1) Maior casamento (guloso). 2) Empate → regra listada primeiro (educado). Seções: D-R-C, Definições %% Regras %% Código.
+
