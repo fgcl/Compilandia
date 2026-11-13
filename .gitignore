@@ -8,9 +8,6 @@ local.properties
 .DS_Store
 captures/
 
-# Prompts de trabalho: ficam só neste computador.
-docs/PROMPT*.md
-
 # Vereditos da Bancada: ficam só neste computador.
 scripts/bancada/vereditos.json
 *.md
