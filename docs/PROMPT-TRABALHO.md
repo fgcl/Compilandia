@@ -28,8 +28,8 @@ Ficaram de fora, de propósito: "você é um especialista em..." ([persona não 
 ```xml
 <contexto>
 Compilândia é um jogo Kotlin Multiplatform (Android, desktop e navegador) que ensina a disciplina
-de Compiladores da PUC Minas a quem acha o assunto difícil. Eu não sou engenheiro de software nem
-pedagogo: tome as decisões de projeto e me explique as que mudam o que o aluno vê.
+de Compiladores da PUC Minas a quem acha o assunto difícil. Tome as decisões de projeto e me
+explique as que mudam o que o aluno vê.
 <Por que este pedido existe agora: o que você viu, o que um revisor achou, o que incomoda.>
 </contexto>
 
