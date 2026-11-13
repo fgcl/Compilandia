@@ -62,8 +62,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Tabela LL(1): produção anulável não vazia (`S → A B`) e conflito FIRST × FIRST
 - [x] Recursão à esquerda: `E → E + T | E − T | T`
 - [ ] Recursão à esquerda: E/T/F numa prática
-- [ ] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)
-- [ ] Gramáticas não LL(1) no sorteio do "Fazer com ajuda"
+- [x] Fatoração: o caso do resto vazio (`S → if S | if S else S | x`)
+- [x] Gramáticas não LL(1) no sorteio do "Fazer com ajuda"
 
 ## 5. Por região
 
@@ -83,7 +83,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
 
 **Templo Top-Down**
-- [ ] Pegadinha do FOLLOW com `S → A B c`
+- [x] Pegadinha do FOLLOW com `S → A B c`
 - [ ] As três condições LL(1) na ficha; FIRST e FOLLOW visíveis na aula da tabela
 - [ ] Descida recursiva: pré-requisito, `casa()` e o `main` com o teste do `$`
 

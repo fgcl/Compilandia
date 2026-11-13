@@ -18,6 +18,9 @@ import com.compilandia.content.titulo
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
 
+/** A gramática da pegadinha do FOLLOW: FOLLOW(A) = { d, c }, porque B pode sumir. */
+val GRAMATICA_PEG_FOLLOW = listOf("S -> A B c", "A -> a", "B -> d | ε")
+
 /** Pegadinhas de prova: do FIRST ao Bison. */
 val pegadinhasMeio by lazy {
     listOf(
@@ -40,25 +43,21 @@ val pegadinhasMeio by lazy {
             cena(tx("eppegadinhas2_so_entra_epsilon_se_tudo"), mood = EpMood.HAPPY) {}
         },
 
+        // B pode sumir, e isso muda o FOLLOW de A: entra o d de B e também o c que vem depois (professor do bloco 3).
         episodio(Skill.FOLLOW, tx("eppegadinhas2_epsilon_que_muda_follow"), PEGADINHA) {
             cena(tx("eppegadinhas2_b_pode_sumir_isso_muda")) {
-                add(titulo(tx("eppegadinhas2_follow_b")))
-                add(codigo("g", listOf("S -> A b", "A -> a B", "B -> d | ε"), 70f, x = 120f, passo = 28f, size = 16f))
+                add(titulo(tx("peg_follow_titulo")))
+                add(codigo("g", GRAMATICA_PEG_FOLLOW, 70f, x = 120f, passo = 28f, size = 16f))
             }
-            cena(tx("eppegadinhas2_b_esta_no_fim_regra")) {
-                hot("g1")
-                add(Box("p", tx("eppegadinhas2_follow_entra_no_follow_b"), 180f, 180f, 330f, 40f, Look.CELL, Tint.YELLOW, size = 15f))
+            cena(tx("peg_follow_onde_a")) {
+                hot("g0")
+                add(Box("p", tx("peg_follow_depois_de_a"), 180f, 180f, 300f, 40f, Look.CELL, Tint.YELLOW, size = 15f))
             }
-            cena(tx("eppegadinhas2_depois_vem_b_olhando_primeira")) { hot("g0") }
-            pergunta(
-                tx("eppegadinhas2_entao_que_entra_no_follow"),
-                setOf("t0"), setOf("t1", "t2"),
-                tx("eppegadinhas2_nao_olhe_para_dentro_b"),
-                tx("eppegadinhas2_isso_b_nada_epsilon_follow"),
-            ) {
-                hot()
-                add(fileira("t", listOf("b" to Tint.TEAL, "d" to Tint.TEAL, "ε" to Tint.PINK), 260f, w = 70f, h = 56f, size = 20f))
+            pergunta(tx("peg_follow_q"), setOf("t0", "t1"), setOf("t2", "t3"), tx("peg_follow_q_dica"), tx("peg_follow_q_ok")) {
+                hot("g2")
+                add(fileira("t", listOf("d" to Tint.TEAL, "c" to Tint.TEAL, "ε" to Tint.PINK, "$" to Tint.TEAL), 260f, w = 64f, h = 54f, size = 20f))
             }
+            cena(tx("peg_follow_erro"), who = PROF) { drop("t2", "t3"); hot("t1") }
             palavra("FOLLOW", tx("eppegadinhas2_first_olha_para_dentro_follow"), who = PROF, mood = EpMood.HAPPY)
         },
 

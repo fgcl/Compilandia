@@ -7,6 +7,7 @@ import com.compilandia.content.episodes.GRAMATICA_FIRST_3
 import com.compilandia.content.episodes.GRAMATICA_FOLLOW_3
 import com.compilandia.content.episodes.GRAMATICA_LL1_3
 import com.compilandia.content.episodes.GRAMATICA_LL1_4
+import com.compilandia.content.episodes.GRAMATICA_PEG_FOLLOW
 import com.compilandia.content.episodes.tabelaLl1DaAula
 import com.compilandia.engine.GrammarTransform
 import com.compilandia.engine.LL1Table
@@ -98,5 +99,11 @@ class AulasConsertadasTest {
         val fatorada = Grammar.parse("S -> a S'\nS' -> b | c")
         assertTrue(LL1Table(fatorada).isLL1)
         assertEquals(fatorada.toText(), GrammarTransform.leftFactor(Grammar.parse(GRAMATICA_LL1_4.joinToString("\n"))).toText())
+    }
+
+    /** Pegadinha do FOLLOW: B pode sumir, então o FOLLOW de A tem o d de B e o c que vem depois (não tem $ nem ε). */
+    @Test fun pegadinhaDoFollowComVizinhoQueSome() {
+        val f = FirstFollow(Grammar.parse(GRAMATICA_PEG_FOLLOW.joinToString("\n")))
+        assertEquals(setOf("d", "c"), f.follow["A"])
     }
 }

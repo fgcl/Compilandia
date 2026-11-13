@@ -119,6 +119,16 @@
     <string name="fat_l_04">Which step keeps what was left of each rule? Tap it.</string>
     <string name="fat_l_04_dica">The rest comes after the common prefix.</string>
     <string name="fat_l_04_ok">The rest becomes the alternatives of the new rule.</string>
+    <string name="fat_l_titulo_if">If and else</string>
+    <string name="fat_l_13">Now a case that shows up on exams: if with else and without else. One whole rule is the start of the other.</string>
+    <string name="fat_l_14">What is the longest common start of the two if rules? Tap it.</string>
+    <string name="fat_l_14_dica">Compare symbol by symbol. Where does the first rule end?</string>
+    <string name="fat_l_14_ok">The if S. The first rule ends there, and the second goes on with else.</string>
+    <string name="fat_l_15">After if S, what is left of each rule? Tap both leftovers.</string>
+    <string name="fat_l_15_dica">The second rule leaves else S. The first leaves nothing. How do you write nothing?</string>
+    <string name="fat_l_15_ok">The else S, and epsilon. When the rest is empty, it becomes epsilon in the new rule.</string>
+    <string name="fat_l_16">Done. Without epsilon in S prime, the if without else would vanish from the language.</string>
+    <string name="fat_l_17">Careful: it is still not LL(1). With else in the input, S prime has two rules. Factoring does not remove the dangling else ambiguity.</string>
     <string name="fat_l_titulo_comandos">Commands</string>
     <string name="fat_l_05">Three commands start with id: one assignment and two calls.</string>
     <string name="fat_l_06">Step one: what is the longest common prefix of the three? Tap it.</string>

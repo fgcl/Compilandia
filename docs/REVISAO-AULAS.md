@@ -61,6 +61,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **Tabela LL(1) com o caso difícil.** Seis cenas no fim da Sua vez. `S → A B`, `A → a | ε`, `B → b | ε`: a regra não tem ε escrito, mas some inteira, e o aluno toca nas três colunas (a e b pelo FIRST, $ pelo FOLLOW de S). Depois `S → a b | a c`: as duas regras caem em (S, a), o conflito FIRST × FIRST, e a fatoração da Ponte conserta. A tabela da tela sai do motor (`tabelaLl1DaAula`), e `AulasConsertadasTest` confere as casas, o conflito e a fatoração.
 3. **Recursão à esquerda com dois alfas.** `E → E + T | E − T | T`: o aluno toca nas duas alternativas com laço e escolhe o E' certo entre os dois erros de prova (esquecer o menos, esquecer o ε). `A9GramaticaFactsTest` confere com o motor que a conversão bate e que as duas opções erradas perdem frases.
 
+## Feito em 13/11 (sétima rodada)
+
+1. **Pegadinha do FOLLOW que testa o que anuncia.** Era `S → A b`, `A → a B`, `B → d | ε`, em que o FOLLOW de B é {b} com ou sem `B → ε`. Agora é `S → A B c`, `A → a`, `B → d | ε`, e a pergunta é o FOLLOW de A: o d de B e o c, porque B pode sumir. ε e $ ficam como opções erradas. O motor confere em `AulasConsertadasTest`.
+2. **Fatoração com resto vazio.** Quatro cenas no fim da Sua vez com `S → if S | if S else S | x`: o maior começo comum é `if S`, a primeira regra não deixa sobra, e a sobra vazia vira ε em S'. A professora avisa que a gramática fatorada ainda não é LL(1): com else na entrada, S' tem duas regras (o else solto). `A9GramaticaFactsTest` confere a fatoração, o conflito e que, sem o ε, o if sem else some.
+3. **Gramáticas sem LL(1) no "Fazer com ajuda".** Três gramáticas com conflito (`S → A b`, `A → b | ε`; `S → A a`, `A → a A | ε`; `S → id = E | id`) entram no sorteio de FIRST e FOLLOW. Na tabela LL(1), o quarto problema, que a pessoa faz sozinha, é sempre uma delas. A casa com conflito agora sempre vira pergunta, e a resposta certa são as duas regras, como a casa mostra (antes era só a primeira).
+
 ## Erros que ensinam errado
 
 Conferidos, com o estado de cada um:

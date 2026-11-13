@@ -12,6 +12,8 @@ import com.compilandia.content.episodes.GRAMATICA_CFG_2
 import com.compilandia.content.episodes.GRAMATICA_FAT_2
 import com.compilandia.content.episodes.GRAMATICA_FAT_2_DEPOIS
 import com.compilandia.content.episodes.GRAMATICA_FAT_2_RODADA1
+import com.compilandia.content.episodes.GRAMATICA_FAT_3
+import com.compilandia.content.episodes.GRAMATICA_FAT_3_DEPOIS
 import com.compilandia.content.episodes.GRAMATICA_REC_2
 import com.compilandia.content.episodes.GRAMATICA_REC_2_DEPOIS
 import com.compilandia.content.episodes.GRAMATICA_REC_3
@@ -99,6 +101,22 @@ class A9GramaticaFactsTest {
         // As duas opções erradas da pergunta perdem frases: sem o menos, e sem o ε.
         assertFalse(Earley(gram(listOf("E -> T X", "X -> + T X | ε"))).accepts(frase), "sem o menos, perde a subtração")
         assertFalse(Earley(gram(listOf("E -> T X", "X -> + T X | - T X"))).accepts(frase), "sem o ε, nenhuma frase termina")
+    }
+
+    /** Fatoração com resto vazio: o if sem else deixa ε em S'; e o else solto continua em conflito. */
+    @Test fun fatoracaoDoIfComRestoVazio() {
+        val g = gram(GRAMATICA_FAT_3)
+        val depois = GrammarTransform.leftFactor(g)
+        // O motor põe o x antes do if S S'; a aula segue a ordem da gramática original. As regras são as mesmas.
+        fun regras(x: com.compilandia.engine.Grammar) = x.productions.map { it.lhs to it.rhs }.toSet()
+        assertEquals(regras(gram(GRAMATICA_FAT_3_DEPOIS)), regras(depois))
+        assertFalse(GrammarTransform.needsLeftFactoring(depois))
+        val t = LL1Table(depois)
+        assertEquals(listOf("S'" to "else"), t.conflicts, "o else solto: S' com else tem duas regras")
+        for (f in listOf(listOf("if", "x"), listOf("if", "x", "else", "x"), listOf("x")))
+            assertTrue(Earley(depois).accepts(f), "$f")
+        // As opções erradas da pergunta: sem o ε, o if sem else some da linguagem.
+        assertFalse(Earley(gram(listOf("S -> if S S' | x", "S' -> else S"))).accepts(listOf("if", "x")))
     }
 
     @Test fun fatoracaoDosComandos() {

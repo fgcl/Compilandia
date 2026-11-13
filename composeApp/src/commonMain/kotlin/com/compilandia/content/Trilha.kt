@@ -185,6 +185,17 @@ object Guiado {
         "A -> id B\nB -> = num | ( )",
     )
 
+    /**
+     * Gramáticas com conflito, para a pessoa ver que nem toda gramática é LL(1) (professor do bloco 3).
+     * Duas com conflito entre FIRST e FOLLOW (a regra anulável disputa a casa) e uma com FIRST × FIRST.
+     * Entram no sorteio de FIRST e FOLLOW, e a tabela LL(1) sempre fecha a série com uma delas.
+     */
+    val GRAMATICAS_NAO_LL = listOf(
+        "S -> A b\nA -> b | ε",
+        "S -> A a\nA -> a A | ε",
+        "S -> id = E | id\nE -> num",
+    )
+
     private val ASSUNTOS_LL = setOf(Skill.FIRST, Skill.FOLLOW, Skill.LL1_TABLE, Skill.LL1_PARSING, Skill.RECURSIVE_DESCENT)
 
     /** O assunto tem simulação com ao menos duas perguntas. */
@@ -210,7 +221,16 @@ object Guiado {
         }
         try {
             if (s in ASSUNTOS_LL) {
-                for (txt in GRAMATICAS_LL.shuffled(rnd)) tenta(simLL(s, com.compilandia.engine.Grammar.parse(txt), rnd), txt)
+                // Rodar o parser só faz sentido em gramática LL(1); calcular conjuntos e montar a tabela, em qualquer uma.
+                fun usa(lista: List<String>, ate: Int) {
+                    for (txt in lista.shuffled(rnd)) if (achados.size < ate) tenta(simLL(s, com.compilandia.engine.Grammar.parse(txt), rnd), txt)
+                }
+                when (s) {
+                    Skill.FIRST, Skill.FOLLOW -> usa(GRAMATICAS_LL + GRAMATICAS_NAO_LL, PROBLEMAS)
+                    // Os três primeiros sem conflito; o quarto, que a pessoa faz sozinha, com conflito.
+                    Skill.LL1_TABLE -> { usa(GRAMATICAS_LL, PROBLEMAS - 1); usa(GRAMATICAS_NAO_LL, PROBLEMAS) }
+                    else -> usa(GRAMATICAS_LL, PROBLEMAS)
+                }
             } else {
                 for (t in 0 until 24) {
                     val sim = com.compilandia.tutor.Sims.exemplo(s, kotlin.random.Random(semente + t * 7919)) ?: continue

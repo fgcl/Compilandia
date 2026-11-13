@@ -55,6 +55,9 @@ val GRAMATICA_FAT_2 = listOf("C -> id = n | id ( ) | id ( n )")
 /** Depois da primeira rodada, e depois da segunda. */
 val GRAMATICA_FAT_2_RODADA1 = listOf("C  -> id C'", "C' -> = n | ( ) | ( n )")
 val GRAMATICA_FAT_2_DEPOIS = listOf("C   -> id C'", "C'  -> = n | ( C''", "C'' -> ) | n )")
+/** Caso difícil da fatoração: o resto da primeira regra é vazio e vira ε. */
+val GRAMATICA_FAT_3 = listOf("S -> if S | if S else S | x")
+val GRAMATICA_FAT_3_DEPOIS = listOf("S  -> if S S' | x", "S' -> else S | ε")
 
 private fun bloco(id: String, t: String, x: Float, y: Float, w: Float = 80f, size: Float = 15f) =
     Box(id, t, x, y, w, 42f, Look.TOKEN, Tint.YELLOW, size = size)
@@ -481,6 +484,27 @@ val gramaticas by lazy {
             cena(tx("fat_l_12"), mood = EpMood.HAPPY) {
                 drop("k1", "k2"); hot()
             }
+            // 5. O caso difícil: uma das regras é o próprio prefixo, e o resto dela é vazio
+            cena(tx("fat_l_13")) {
+                clear()
+                add(titulo(tx("fat_l_titulo_if")))
+                add(codigo("g", GRAMATICA_FAT_3, 72f, x = 40f, size = 15f))
+                hot("g0")
+            }
+            pergunta(tx("fat_l_14"), setOf("p2"), setOf("p1", "p3"), tx("fat_l_14_dica"), tx("fat_l_14_ok")) {
+                hot()
+                add(bloco("p1", "if", 70f, 150f, w = 64f), bloco("p2", "if S", 172f, 150f, w = 90f), bloco("p3", "if S else", 290f, 150f, w = 110f, size = 14f))
+            }
+            pergunta(tx("fat_l_15"), setOf("o1", "o2"), setOf("o3", "o4"), tx("fat_l_15_dica"), tx("fat_l_15_ok")) {
+                drop("p1", "p3"); tint("p2", Tint.ORANGE); hot()
+                add(bloco("o1", "else S", 60f, 240f, w = 80f, size = 14f), bloco("o2", "ε", 145f, 240f, w = 56f), bloco("o3", "S", 220f, 240f, w = 56f), bloco("o4", "x", 295f, 240f, w = 56f))
+            }
+            cena(tx("fat_l_16"), mood = EpMood.HAPPY) {
+                drop("o1", "o2", "o3", "o4", "p2")
+                add(codigo("h", GRAMATICA_FAT_3_DEPOIS, 150f, x = 70f, passo = 32f, size = 16f))
+                hot("h1")
+            }
+            cena(tx("fat_l_17"), who = PROF) { hot("h1") }
             fecho(Fecho(
                 tx("fat_f_af"), true, tx("fat_f_q"), tx("fat_f_dica"), tx("fat_f_ok"), tx("fat_f_af"),
                 tx("fat_f_erro2"), tx("fat_f_certo2"), tx("fat_f_fala2"),

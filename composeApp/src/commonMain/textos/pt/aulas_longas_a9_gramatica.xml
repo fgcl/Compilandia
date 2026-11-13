@@ -119,6 +119,16 @@
     <string name="fat_l_04">Qual passo guarda o que sobrou de cada regra? Toque nele.</string>
     <string name="fat_l_04_dica">O resto vem depois do começo comum.</string>
     <string name="fat_l_04_ok">O resto vira as alternativas da regra nova.</string>
+    <string name="fat_l_titulo_if">If e else</string>
+    <string name="fat_l_13">Agora um caso que cai em prova: o if com else e sem else. Uma regra inteira é o começo da outra.</string>
+    <string name="fat_l_14">Qual é o maior começo comum das duas regras com if? Toque.</string>
+    <string name="fat_l_14_dica">Compare símbolo por símbolo. Onde a primeira regra acaba?</string>
+    <string name="fat_l_14_ok">O if S. A primeira regra acaba ali, e a segunda continua com o else.</string>
+    <string name="fat_l_15">Depois do if S, o que sobra de cada regra? Toque nas duas sobras.</string>
+    <string name="fat_l_15_dica">A segunda regra deixa o else S. A primeira não deixa nada. Como se escreve nada?</string>
+    <string name="fat_l_15_ok">O else S, e o épsilon. Quando o resto é vazio, ele vira épsilon na regra nova.</string>
+    <string name="fat_l_16">Pronto. Sem o épsilon em S linha, o if sem else sumiria da linguagem.</string>
+    <string name="fat_l_17">Cuidado: ainda não é LL(1). Com else na entrada, S linha tem duas regras. Fatorar não tira a ambiguidade do else solto.</string>
     <string name="fat_l_titulo_comandos">Comandos</string>
     <string name="fat_l_05">Três comandos começam com id: uma atribuição e duas chamadas.</string>
     <string name="fat_l_06">Passo um: qual é o maior começo comum das três? Toque.</string>

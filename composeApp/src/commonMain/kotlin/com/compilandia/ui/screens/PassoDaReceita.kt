@@ -51,7 +51,7 @@ object PassoDaReceita {
         Skill.CFG_DERIVATION to "1222300",
         Skill.AMBIGUITY to "12223000",
         Skill.LEFT_RECURSION to "01230000130",
-        Skill.LEFT_FACTORING to "01244000",
+        Skill.LEFT_FACTORING to "0124400013300",
         Skill.LL1_PARSING to "0212123",
         Skill.RECURSIVE_DESCENT to "024024",
         Skill.ERROR_RECOVERY to "012230",

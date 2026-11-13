@@ -166,10 +166,12 @@ object Sims {
             val diz = if (conflito) tx("sims_conflito_1_regras_na_mesma", rs.size) else
                 if ("ε" in r) tx("sims_1_pode_sumir_2_vem", rs[0].lhs, cols[c], rs[0]) else
                 tx("sims_1_abre_2_regra_3", cols[c], rs[0].rhsText(), rs[0])
-            val (ops, idx) = opcoes(rs[0].rhsText(), g.productionsOf(rows[l]).map { it.rhsText() } + listOf(tx("sims_deixar_vazia")), k)
+            // Na casa com conflito, a resposta certa são as regras todas, como a casa mostra.
+            val certa = rs.joinToString("/") { it.rhsText() }
+            val (ops, idx) = opcoes(certa, g.productionsOf(rows[l]).map { it.rhsText() } + listOf(tx("sims_deixar_vazia")), k)
             passos += SimStep(
                 Shot(fixas + cheias.map { if (it === cheias.last()) it else it.copy(hot = false) }), diz,
-                if (k % 2 == 0) SimAsk(tx("sims_que_vai_na_casa_1", rows[l], cols[c]), ops, idx, diz) else null,
+                if (k % 2 == 0 || conflito) SimAsk(tx("sims_que_vai_na_casa_1", rows[l], cols[c]), ops, idx, diz) else null,
                 erro = conflito,
             )
             k++

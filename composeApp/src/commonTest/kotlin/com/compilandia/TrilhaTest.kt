@@ -17,6 +17,7 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -102,6 +103,28 @@ class TrilhaTest {
         for (txt in Guiado.GRAMATICAS_LL) {
             val g = com.compilandia.engine.Grammar.parse(txt)
             assertTrue(com.compilandia.engine.LL1Table(g).isLL1, "não é LL(1): $txt")
+        }
+    }
+
+    @Test fun bancoComConflitoNaoELL1() {
+        for (txt in Guiado.GRAMATICAS_NAO_LL) {
+            val t = com.compilandia.engine.LL1Table(com.compilandia.engine.Grammar.parse(txt))
+            assertTrue(t.conflicts.isNotEmpty(), "devia ter conflito: $txt")
+        }
+    }
+
+    /** A tabela fecha a série com conflito, e a casa com conflito é perguntada com as duas regras como resposta. */
+    @Test fun tabelaDoFazerComAjudaTerminaComConflito() {
+        for (semente in listOf(1L, 42L, 777L, 2024L)) {
+            val ps = Guiado.problemas(Skill.LL1_TABLE, semente)
+            assertEquals(4, ps.size)
+            assertTrue(ps.take(3).none { p -> p.passos.any { it.erro } }, "os três primeiros são LL(1) (semente $semente)")
+            val conflito = ps[3].passos.filter { it.erro }
+            assertTrue(conflito.isNotEmpty(), "o quarto tem conflito (semente $semente)")
+            for (p in conflito) {
+                val a = assertNotNull(p.ask, "a casa com conflito sempre vira pergunta")
+                assertTrue("/" in a.opcoes[a.certa], "a resposta certa são as duas regras: ${a.opcoes}")
+            }
         }
     }
 
