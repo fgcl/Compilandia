@@ -19,7 +19,7 @@ object FichaDoTexto {
         Skill.PHASES to m("front-end"),
         Skill.TOKENS to m("ponteiro", "padrão"),
         Skill.REGEX_DFA to m("Thompson", "subconjuntos", "2ⁿ", "concatenação", "aⁿbⁿ"),
-        Skill.NFA_TO_DFA to m("Dtran", "exponencial", "2ⁿ"),
+        Skill.NFA_TO_DFA to m("Dtran", "exponencial"),
         Skill.DFA_MINIMIZATION to m("Hopcroft", "Myhill", "n(n−1)/2", "testemunha"),
         Skill.LEX_FLEX to m("yyleng", "yylval", "yytext", "lex.yy.c", "seções"),
         Skill.CFG_DERIVATION to listOf(Marca("componentes", "G = (N, T, P, S)"), Marca("produto")),

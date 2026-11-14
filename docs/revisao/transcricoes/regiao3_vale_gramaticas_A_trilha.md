@@ -15,7 +15,7 @@ BYTE: "Antes da aula: qual frase sai dessa regra?"
 Opções: ✔a c b | a b c | c c
 Depois: "Vale a c b. S vira a S b, e o S de dentro vira c."
 
-#### AULA ANIMADA BÁSICA: "Regras de troca" (29 cenas, ~231s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Regras de troca" (30 cenas, ~236s) [1º exemplo começa na cena 5]
 
 1. TELA: # Frase certa ou errada? ⏎ n + n ⏎ n + +
    BYTE: "O parser recebe os tokens do scanner. Ele precisa saber quais sequências de tokens são frases válidas."
@@ -101,9 +101,9 @@ Depois: "Vale a c b. S vira a S b, e o S de dentro vira c."
 20. TELA: # float * id ; ⏎ Decl -> Tipo Var ; ⏎ Tipo -> int | float ⏎ Var -> id | * id ⏎ Decl ⏎ Tipo ⏎ float ⏎ Var ⏎ * ⏎ id ⏎ ;
    BYTE: "Três trocas, uma por vez. Esta é a árvore da declaração."
 
-21. TELA: # float * id ; ⏎ Decl -> Tipo Var ; ⏎ Tipo -> int | float ⏎ Var -> id | * id ⏎ int id id ; ⏎ Sim ⏎ Não
+21. TELA: # float * id ; ⏎ Decl -> Tipo Var ; ⏎ Tipo -> int | float ⏎ Var -> id | * id ⏎ int id id ; ⏎ Sim ⏎ Não ⏎ Depende da ordem
    BYTE: "E a frase int id id ponto e vírgula? Ela está na linguagem?"
-   PERGUNTA (toque): certo = Não ; errado = Sim
+   PERGUNTA (toque): certo = Não ; errado = Sim | Depende da ordem
    se errar: "Procure uma regra que ponha dois id seguidos."
    se acertar: "Nenhuma regra põe dois id seguidos."
 
@@ -128,16 +128,22 @@ Depois: "Vale a c b. S vira a S b, e o S de dentro vira c."
 26. TELA: # Mais à direita ⏎ Decl -> Tipo Var ; ⏎ Tipo -> int | float ⏎ Var -> id | * id ⏎ Decl ⏎ Tipo Var ; ⏎ *float Var ;* ⏎ float * id ; ⏎ Decl ⏎ Tipo Var ; ⏎ *Tipo * id ;* ⏎ float * id ;
    BYTE: "As duas chegam à mesma sentença, com a mesma árvore. Só muda a ordem das trocas."
 
-27. TELA: # Erros comuns ⏎ Na derivação mais à esquerda, posso trocar qualquer não-terminal em cada passo. ⏎ certo ⏎ errado
+27. TELA: # Diga por quê ⏎ Decl ⇒ Tipo Var ; ⇒ … ⇒ float * id ; ⏎ Usam as mesmas regras, só em outra ordem. ⏎ Toda gramática dá uma árvore só por frase. ⏎ A árvore só guarda o último passo.
+   BYTE: "As duas derivações dão a mesma árvore. Por quê?"
+   PERGUNTA (toque): certo = Usam as mesmas regras, só em outra ordem. ; errado = Toda gramática dá uma árvore só por frase. | A árvore só guarda o último passo.
+   se errar: "Compare as regras que cada derivação usou."
+   se acertar: "As duas usam as mesmas regras. A árvore mostra quais regras, não a ordem das trocas."
+
+28. TELA: # Erros comuns ⏎ Na derivação mais à esquerda, posso trocar qualquer não-terminal em cada passo. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: só se troca o símbolo inicial. ⏎ Certo: a ordem das trocas não importa. ⏎ Errado: troca-se sempre o mais à esquerda.
    BYTE: "Um colega descreveu assim a derivação mais à esquerda. Certo ou errado? Toque."
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: troca-se sempre o mais à esquerda. ; errado = Errado: só se troca o símbolo inicial. | Certo: a ordem das trocas não importa.
    se errar: "O nome diz qual não-terminal é trocado."
    se acertar: "Em cada passo, troca-se sempre o não-terminal mais à esquerda. Na mais à direita, sempre o da direita."
 
-28. TELA: # Erros comuns ⏎ Certo: Mais à esquerda: troque sempre o primeiro não-terminal da forma. ⏎ *Errado: Trocar um terminal por uma regra.* ⏎ *Certo: Só não-terminal fica do lado esquerdo. Terminal é token e não muda.*
+29. TELA: # Erros comuns ⏎ Certo: Mais à esquerda: troque sempre o primeiro não-terminal da forma. ⏎ *Errado: Trocar um terminal por uma regra.* ⏎ *Certo: Só não-terminal fica do lado esquerdo. Terminal é token e não muda.*
    BYTE: "Outro erro: tentar trocar um terminal. Terminal é token, não tem regra. Só não-terminal fica do lado esquerdo de uma produção."
 
-29. TELA: # Resumo ⏎ Gramática: terminais, não-terminais, produções e um símbolo inicial. ⏎ Derivar: começar no inicial e trocar não-terminais até sobrar só terminal. ⏎ A frase está na linguagem se existe uma derivação para ela.
+30. TELA: # Resumo ⏎ Gramática: terminais, não-terminais, produções e um símbolo inicial. ⏎ Derivar: começar no inicial e trocar não-terminais até sobrar só terminal. ⏎ A frase está na linguagem se existe uma derivação para ela.
    BYTE: "Resumindo: a gramática livre de contexto gera as frases por trocas. Derivar é aplicar produções a partir do símbolo inicial, e a árvore registra essas trocas."
 
 #### PEGADINHA: "Duas derivações, uma árvore" (5 cenas, ~28s)
@@ -221,7 +227,7 @@ Flashcards:
 - não-terminal: Símbolo que ainda vai ser trocado por uma regra, como E ou T.
 - derivação: A sequência de trocas que leva do símbolo inicial até a frase.
 - produção: Outro nome para regra. Cada lado direito separado por barra é uma alternativa.
-- sentença: Frase só com terminais. Livros dizem também cadeia ou palavra. Forma sentencial pode ter não-terminais.
+- sentença: Frase só com terminais. No autômato, o jogo diz cadeia. Forma sentencial pode ter não-terminais.
 
 
 ## ASSUNTO AMBIGUITY: Árvores e ambiguidade
@@ -281,9 +287,9 @@ Depois: "Vinte. Duas árvores, dois resultados."
 11. TELA: # Receita ⏎ 1. Escolha uma frase da linguagem. ⏎ 2. Tente montar duas árvores diferentes para ela. ⏎ 3. Achou duas? A gramática é ambígua.
    BYTE: "Para mostrar que uma gramática é ambígua, a receita tem três passos."
 
-12. TELA: # Receita ⏎ 1. Escolha uma frase da linguagem. ⏎ 2. Tente montar duas árvores diferentes para ela. ⏎ *3. Achou duas? A gramática é ambígua.* ⏎ Sim ⏎ Não
+12. TELA: # Receita ⏎ 1. Escolha uma frase da linguagem. ⏎ 2. Tente montar duas árvores diferentes para ela. ⏎ *3. Achou duas? A gramática é ambígua.* ⏎ Sim ⏎ Não ⏎ Sim, se as contas batem
    BYTE: "Uma frase deu uma árvore só. Isso prova que a gramática não é ambígua?"
-   PERGUNTA (toque): certo = Não ; errado = Sim
+   PERGUNTA (toque): certo = Não ; errado = Sim | Sim, se as contas batem
    se errar: "Outra frase ainda pode ter duas árvores."
    se acertar: "Boa. Uma frase basta para provar a ambiguidade, mas não o contrário."
 
@@ -335,9 +341,9 @@ Depois: "Vinte. Duas árvores, dois resultados."
 23. TELA: # n + n * n ⏎ *E -> E + T | T* ⏎ *T -> T * n | n*
    BYTE: "Um nível para cada precedência: o operador que liga mais forte fica no nível de baixo. É a gramática que a Ponte vai consertar a seguir."
 
-24. TELA: # Erros comuns ⏎ Achei duas derivações diferentes para a frase. Então a gramática é ambígua. ⏎ certo ⏎ errado
+24. TELA: # Erros comuns ⏎ Achei duas derivações diferentes para a frase. Então a gramática é ambígua. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: as duas podem ter a mesma árvore. ⏎ Errado: só contas diferentes provam ambiguidade. ⏎ Certo: duas derivações já são duas árvores.
    BYTE: "Duas derivações diferentes da mesma frase provam ambiguidade? Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: as duas podem ter a mesma árvore. ; errado = Errado: só contas diferentes provam ambiguidade. | Certo: duas derivações já são duas árvores.
    se errar: "A mais à esquerda e a mais à direita podem desenhar a mesma árvore."
    se acertar: "O que conta são duas árvores diferentes, ou duas derivações mais à esquerda. Mudar só a ordem das trocas não prova nada."
 

@@ -173,13 +173,14 @@ val gramaticas by lazy {
                 val (b, w) = arvore(ARVORE_CFG_2, 170f, passoY = 58f, largura = 300f)
                 add(b); for (x in w) wire(x)
             }
-            pergunta(tx("cfg_l_12"), setOf("nao"), setOf("sim"), tx("cfg_l_12_dica"), tx("cfg_l_12_ok")) {
+            pergunta(tx("cfg_l_12"), setOf("nao"), setOf("sim", "o3"), tx("cfg_l_12_dica"), tx("cfg_l_12_ok")) {
                 dropAll("t"); clearWires()
                 add(Box("f", FRASE_CFG_FORA.joinToString(" "), 180f, 220f, 200f, 50f, Look.CELL, size = 18f))
-                add(opcao("sim", tx("comum_sim"), 140f, 300f), opcao("nao", tx("comum_nao_2"), 220f, 300f))
+                add(opcao("sim", tx("comum_sim"), 95f, 300f), opcao("nao", tx("comum_nao_2"), 155f, 300f))
+                add(Box("o3", tx("cfg_l_12_o3"), 262f, 300f, 150f, 40f, Look.TOKEN, Tint.YELLOW, size = 13f))
             }
             cena(tx("cfg_l_13"), who = PROF) {
-                drop("sim", "nao"); tint("f", Tint.RED)
+                drop("sim", "nao", "o3"); tint("f", Tint.RED)
             }
             // Derivação mais à direita (professor do bloco 2): é a que o parser de baixo para cima refaz.
             cena(tx("cfg_l_dir1")) {
@@ -260,9 +261,10 @@ val gramaticas by lazy {
                 add(titulo(tx("a2_receita")))
                 add(regra("r1", tx("amb_l_r1"), 110f), regra("r2", tx("amb_l_r2"), 166f), regra("r3", tx("amb_l_r3"), 222f))
             }
-            pergunta(tx("amb_l_05"), setOf("nao"), setOf("sim"), tx("amb_l_05_dica"), tx("amb_l_05_ok")) {
+            pergunta(tx("amb_l_05"), setOf("nao"), setOf("sim", "o3"), tx("amb_l_05_dica"), tx("amb_l_05_ok")) {
                 hot("r3")
-                add(opcao("sim", tx("comum_sim"), 140f, 300f), opcao("nao", tx("comum_nao_2"), 220f, 300f))
+                add(opcao("sim", tx("comum_sim"), 45f, 300f), opcao("nao", tx("comum_nao_2"), 102f, 300f))
+                add(Box("o3", tx("amb_l_05_o3"), 240f, 300f, 200f, 40f, Look.TOKEN, Tint.YELLOW, size = 12f))
             }
             // 4. Segundo exemplo, com perguntas
             cena(tx("amb_l_06")) {
@@ -394,10 +396,11 @@ val gramaticas by lazy {
                 add(rotulo("cn", "9 - (5 - 2) = 6 ?", 180f, 344f, Tint.RED, 17f))
                 hot("w1")
             }
-            pergunta(tx("rec_l_assoc_3"), setOf("sim0"), setOf("sim1"), tx("rec_l_assoc_3_dica"), tx("rec_l_assoc_3_ok")) {
+            pergunta(tx("rec_l_assoc_3"), setOf("sim0"), setOf("sim1", "sim2"), tx("rec_l_assoc_3_dica"), tx("rec_l_assoc_3_ok")) {
                 drop("cn")
-                add(Box("sim0", tx("rec_l_assoc_nao"), 110f, 344f, 100f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
-                add(Box("sim1", tx("rec_l_assoc_sim"), 250f, 344f, 100f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("sim0", tx("rec_l_assoc_nao"), 55f, 344f, 80f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("sim1", tx("rec_l_assoc_sim"), 145f, 344f, 80f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                add(Box("sim2", tx("rec_l_assoc_3_o3"), 272f, 344f, 160f, 42f, Look.TOKEN, Tint.YELLOW, size = 13f))
             }
             // 3. A receita
             cena(tx("rec_l_04")) {
@@ -437,13 +440,14 @@ val gramaticas by lazy {
                 add(codigo("r", GRAMATICA_REC_2_DEPOIS, 214f, x = 100f, passo = 32f, size = 17f))
                 hot("r0", "r1")
             }
-            pergunta(tx("rec_l_11"), setOf("sim"), setOf("nao"), tx("rec_l_11_dica"), tx("rec_l_11_ok")) {
+            pergunta(tx("rec_l_11"), setOf("sim"), setOf("nao", "o3"), tx("rec_l_11_dica"), tx("rec_l_11_ok")) {
                 hot()
                 add(Box("f", "id , id", 180f, 310f, 140f, 40f, Look.CELL, size = 17f))
-                add(opcao("sim", tx("comum_sim"), 140f, 370f), opcao("nao", tx("comum_nao_2"), 220f, 370f))
+                add(opcao("sim", tx("comum_sim"), 80f, 370f), opcao("nao", tx("comum_nao_2"), 140f, 370f))
+                add(Box("o3", tx("rec_l_11_o3"), 258f, 370f, 150f, 40f, Look.TOKEN, Tint.YELLOW, size = 14f))
             }
             cena(tx("rec_l_12"), mood = EpMood.HAPPY) {
-                drop("sim", "nao"); tint("f", Tint.TEAL)
+                drop("sim", "nao", "o3"); tint("f", Tint.TEAL)
                 hot("r0")
             }
             // 5. O caso difícil: dois alfas na mesma regra

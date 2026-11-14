@@ -307,18 +307,19 @@ val lexicos by lazy {
             }
             pergunta(
                 tx("eplexico_cadeia_b_trem_sai_primeiro"),
-                setOf("nao"), setOf("sim"),
+                setOf("nao"), setOf("sim", "esp"),
                 tx("eplexico_olhe_setas_que_saem_primeiro"),
                 tx("eplexico_certo_sem_seta_para_b"),
             ) {
                 dropAll("c")
                 actor(Actor(80f, 182f, 0.72f))
                 add(fita("ba", 320f, cell = 40f))
-                add(Box("sim", tx("eplexico_aceita"), 110f, 90f, 120f, 50f, Look.TOKEN, Tint.TEAL, size = 17f))
-                add(Box("nao", tx("eplexico_rejeita"), 250f, 90f, 120f, 50f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("sim", tx("eplexico_aceita"), 70f, 90f, 100f, 50f, Look.TOKEN, Tint.TEAL, size = 17f))
+                add(Box("nao", tx("eplexico_rejeita"), 180f, 90f, 100f, 50f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("esp", tx("eplexico_espera"), 290f, 90f, 100f, 50f, Look.TOKEN, Tint.YELLOW, size = 17f))
             }
             cena(tx("eplexico_assim_que_scanner_reconhece_nomes"), mood = EpMood.HAPPY) {
-                drop("sim", "nao")
+                drop("sim", "nao", "esp")
                 actor(null)
             }
             // Um operador por cena, com | e parênteses antes de (a|b)*abb, e a classe do Flex (revisores do bloco 1).
@@ -387,19 +388,20 @@ val lexicos by lazy {
             }
             val finais = d2.accepting.map { "q$it" }.toSet()
             pergunta(tx("regex_l_08"), finais, (0 until d2.stateCount).map { "q$it" }.toSet() - finais, tx("regex_l_08_dica"), tx("regex_l_08_ok")) {}
-            pergunta(tx("regex_l_09"), setOf("sim"), setOf("nao"), tx("regex_l_09_dica"), tx("regex_l_09_ok")) {
+            pergunta(tx("regex_l_09"), setOf("sim"), setOf("nao", "o3"), tx("regex_l_09_dica"), tx("regex_l_09_ok")) {
                 for (f in finais) change(f) { it.copy(look = Look.ACCEPT) }
                 add(fita("ac", 280f, cell = 40f))
-                add(Box("sim", tx("eplexico_aceita"), 110f, 370f, 120f, 44f, Look.TOKEN, Tint.TEAL, size = 17f))
-                add(Box("nao", tx("eplexico_rejeita"), 250f, 370f, 120f, 44f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("sim", tx("eplexico_aceita"), 58f, 370f, 96f, 44f, Look.TOKEN, Tint.TEAL, size = 17f))
+                add(Box("nao", tx("eplexico_rejeita"), 160f, 370f, 96f, 44f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("o3", tx("regex_l_09_o3"), 285f, 370f, 140f, 44f, Look.TOKEN, Tint.YELLOW, size = 13f))
             }
-            pergunta(tx("regex_l_10"), setOf("nao"), setOf("sim"), tx("regex_l_10_dica"), tx("regex_l_10_ok")) {
-                dropAll("c")
+            pergunta(tx("regex_l_10"), setOf("nao"), setOf("sim", "o3"), tx("regex_l_10_dica"), tx("regex_l_10_ok")) {
+                dropAll("c"); text("o3", tx("regex_l_10_o3"))
                 add(fita("abcb", 280f, cell = 40f))
                 tint("c3", Tint.RED)
             }
             cena(tx("regex_l_11"), mood = EpMood.HAPPY) {
-                drop("sim", "nao")
+                drop("sim", "nao", "o3")
                 hot(*finais.toTypedArray())
             }
             fecho(Fecho(

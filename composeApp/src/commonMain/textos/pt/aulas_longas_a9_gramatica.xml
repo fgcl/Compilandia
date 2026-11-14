@@ -44,6 +44,7 @@
     <string name="cfg_l_12">E a frase int id id ponto e vírgula? Ela está na linguagem?</string>
     <string name="cfg_l_12_dica">Procure uma regra que ponha dois id seguidos.</string>
     <string name="cfg_l_12_ok">Nenhuma regra põe dois id seguidos.</string>
+    <string name="cfg_l_12_o3">Depende da ordem</string>
     <string name="cfg_l_13">Sem derivação que chegue nela, a frase fica fora da linguagem. É assim que o parser acusa erro de sintaxe.</string>
 
     <string name="amb_l_titulo_porque">Qual conta vem primeiro?</string>
@@ -67,6 +68,7 @@
     <string name="amb_l_05">Uma frase deu uma árvore só. Isso prova que a gramática não é ambígua?</string>
     <string name="amb_l_05_dica">Outra frase ainda pode ter duas árvores.</string>
     <string name="amb_l_05_ok">Boa. Uma frase basta para provar a ambiguidade, mas não o contrário.</string>
+    <string name="amb_l_05_o3">Sim, se as contas batem</string>
     <string name="amb_l_06">Outra gramática, agora só com menos. A frase é n menos n menos n.</string>
     <string name="amb_l_07">Nesta árvore, qual menos acontece primeiro? Toque nele.</string>
     <string name="amb_l_07_ok">Primeiro o menos da esquerda, como na escola.</string>
@@ -105,6 +107,7 @@
     <string name="rec_l_assoc_3">Então o menos passou a juntar pela direita? Toque na resposta.</string>
     <string name="rec_l_assoc_3_dica">A gramática nova gera as mesmas frases. Quem decide a conta é o código que monta o resultado.</string>
     <string name="rec_l_assoc_3_ok">A linguagem é a mesma, mas a árvore mudou. O parser junta os pedaços num laço, da esquerda para a direita. A conta volta a dar dois. Você vai ver esse laço no assunto da AST.</string>
+    <string name="rec_l_assoc_3_o3">A linguagem mudou</string>
     <string name="rec_l_assoc_nao">Não</string>
     <string name="rec_l_assoc_sim">Sim</string>
     <string name="rec_l_04">O conserto tem três passos. Ele vale para qualquer regra desse tipo.</string>
@@ -129,6 +132,7 @@
     <string name="rec_l_11">A gramática nova ainda gera id vírgula id? Toque na resposta.</string>
     <string name="rec_l_11_dica">Primeiro, L vai para id e L linha. Depois, vírgula, id e épsilon.</string>
     <string name="rec_l_11_ok">Exato. A linguagem continua a mesma.</string>
+    <string name="rec_l_11_o3">Só o id sozinho</string>
     <string name="rec_l_12">Agora a função de L lê um id antes de chamar outra função. A cada chamada a entrada anda, e o parser termina.</string>
     <string name="rec_p_titulo">Conserte E, T e F</string>
     <string name="rec_p_01">Esta é a gramática de contas que volta no resto do jogo. E e T têm recursão à esquerda, então a receita roda uma vez em cada um.</string>

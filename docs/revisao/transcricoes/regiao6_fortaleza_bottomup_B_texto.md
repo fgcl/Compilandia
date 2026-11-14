@@ -163,7 +163,7 @@ B → d
 #### ESTILO STORY (História / Analogia): "O marcador de página"
 - NARRADOR: Torre central da Fortaleza Bottom-Up. Cada andar é um 'estado' cheio de marcadores de página.
 - PROF: Um **item LR(0)** é uma produção com um ponto • no meio: um marcador de onde você está na leitura. C → c • C quer dizer: 'já vi o c, agora espero um C'.
-- CÓDIGO (Nosso livro de receitas. Gera cadeias como d d, c d d, c c d c d…):
+- CÓDIGO (Nosso livro de receitas. Gera frases como d d, c d d, c c d c d…):
 ```
 S → C C
 C → c C | d

@@ -27,7 +27,7 @@ Ver -> come | ama
     explicação: Todas as palavras existem (léxico ok!), mas a ordem não segue as regras: erro sintático.
 - TEXTO: Troque palavras por tokens e é igualzinho: `E -> E + T` diz 'uma expressão pode ser uma expressão, um +, e um termo'. O compilador faz análise sintática como você fazia na escola, só que sem preguiça.
 - CAIXA [Não existem perguntas idiotas]: P: Por que 'livre de contexto'? R: Porque o lado esquerdo é UM não-terminal sozinho: você pode trocar SN por 'Art Sub' em qualquer lugar, não importa o que esteja em volta (o contexto).
-- CAIXA [Conversa ao pé da lareira]: Expressão regular: 'Eu descrevo palavras.' Gramática: 'Eu descrevo frases, e sei aninhar coisas, como parênteses dentro de parênteses, coisa que você não consegue!'
+- CAIXA [Conversa ao pé da lareira]: Expressão regular: 'Eu descrevo cadeias de letras, como nomes e números.' Gramática: 'Eu descrevo frases, e sei aninhar coisas, como parênteses dentro de parênteses, coisa que você não consegue!'
 - REVELAR: Nessa gramática, quem são os terminais e os não-terminais?
     → Não-terminais: Frase, SN, SV, Art, Sub, Ver. Terminais: o, a, gato, menina, peixe, come, ama. Símbolo inicial: Frase (o da primeira linha).
 
@@ -84,7 +84,7 @@ E ⇒ E + T
     → ⇒ T + id * id ⇒ F + id * id ⇒ id + id * id
 - CAIXA [Não existem perguntas idiotas]: P: As duas derivações dão árvores diferentes? R: Não! Mesmas produções, mesma árvore, só muda a ordem das trocas. Cada árvore tem exatamente UMA derivação mais à esquerda e UMA mais à direita.
 - WIDGET PARSE_TREE gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» entrada=«id + id * id» legenda: A árvore comum às duas derivações.
-- TEXTO: Mais um, esmaecido: gramática `S -> a S b | ε`, cadeia `a a b b`.
+- TEXTO: Mais um, esmaecido: gramática `S -> a S b | ε`, frase `a a b b`.
 - REVELAR: Derivação completa?
     → S ⇒ a S b ⇒ a a S b b ⇒ a a b b (S → ε no último passo). Com um só NT em cada forma sentencial, mais à esquerda = mais à direita!
 - WIDGET DERIVATION gramática=«S -> a S b | ε» entrada=«a a b b» legenda: Confira.
@@ -99,7 +99,7 @@ S -> a S b | ε
 - PREVEJA: Essa gramática gera `a a b`?
     opções: Sim | ✔Não
     explicação: Toda vez que S vira a S b, entram um a E um b. A quantidade de a's e b's é sempre igual.
-- PREVEJA: Qual é a menor cadeia que ela gera?
+- PREVEJA: Qual é a menor frase que ela gera?
     opções: ab | a | ✔a cadeia vazia ε | b
     explicação: S → ε direto: zero passos de 'a S b'.
 - REVELAR: Descreva a linguagem inteira em uma frase.

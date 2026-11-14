@@ -16,7 +16,7 @@ BYTE: "Antes da aula: quem liga mais forte aqui?"
 Opções: ✔+ | * | empate
 Depois: "O mais. Quanto mais embaixo, mais forte."
 
-#### AULA ANIMADA BÁSICA: "A fábrica de parsers" (27 cenas, ~211s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A fábrica de parsers" (28 cenas, ~217s) [1º exemplo começa na cena 4]
 
 1. TELA: # LALR(1) ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr | expr '-' expr ⏎     | expr '*' expr | expr '/' expr ⏎     | '(' expr ')' | NUM ; ⏎ 14 estados × 8 tokens
    BYTE: "Uma calculadora com parênteses já vira uma tabela LALR de 14 estados."
@@ -114,16 +114,22 @@ Depois: "O mais. Quanto mais embaixo, mais forte."
 24. TELA: # pot.y ⏎ %token NUM ⏎ *%right '^'* ⏎ %% ⏎ expr: expr '^' expr { $$ = pow($1, $3); } ⏎     | NUM ; ⏎ 2 ^ 3 ^ 2 ⏎ 512 ⏎ %left: 64     %right: 512
    BYTE: "Left manda reduzir, e right manda empilhar. Na potência, empilhar é o certo."
 
-25. TELA: # Erros comuns ⏎ No Bison, a linha de precedência que vem por último liga mais forte. ⏎ certo ⏎ errado
+25. TELA: # Diga por quê ⏎ %left '-'     5 - 2 - 1 = 2 ⏎ Left dá ao menos mais força que o vezes. ⏎ Left manda reduzir o 5 - 2 primeiro. ⏎ Left faz o Bison ler da esquerda.
+   BYTE: "Com left no menos, cinco menos dois menos um deu dois. Por quê?"
+   PERGUNTA (toque): certo = Left manda reduzir o 5 - 2 primeiro. ; errado = Left faz o Bison ler da esquerda. | Left dá ao menos mais força que o vezes.
+   se errar: "No conflito, left manda empilhar ou reduzir?"
+   se acertar: "Left manda reduzir. Cinco menos dois vira três primeiro, e três menos um dá dois."
+
+26. TELA: # Erros comuns ⏎ No Bison, a linha de precedência que vem por último liga mais forte. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: a primeira linha é a mais forte. ⏎ Certo: por isso o vezes vem depois do mais. ⏎ Certo: o Bison lê o arquivo de trás para a frente.
    BYTE: "A ordem das linhas de precedência importa. Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: por isso o vezes vem depois do mais. ; errado = Certo: o Bison lê o arquivo de trás para a frente. | Errado: a primeira linha é a mais forte.
    se errar: "Na calculadora, o vezes foi declarado depois do mais, e o vezes liga mais forte."
    se acertar: "A última linha tem a maior precedência. Por isso o vezes vem depois do mais."
 
-26. TELA: # Erros comuns ⏎ Certo: No Bison, a linha de precedência que vem por último liga mais forte. ⏎ *Errado: Ignorar o aviso de conflito porque o parser foi gerado.* ⏎ *Certo: Conflito sem tratar é o Bison escolhendo por você. Use %left ou reescreva a regra.*
+27. TELA: # Erros comuns ⏎ Certo: No Bison, a linha de precedência que vem por último liga mais forte. ⏎ *Errado: Ignorar o aviso de conflito porque o parser foi gerado.* ⏎ *Certo: Conflito sem tratar é o Bison escolhendo por você. Use %left ou reescreva a regra.*
    BYTE: "Um erro comum: ignorar o aviso de conflito. O parser sai, mas a escolha padrão do Bison pode montar a árvore errada."
 
-27. TELA: # Resumo ⏎ Arquivo .y: declarações, %%, e as regras com suas ações. ⏎ $$ é o valor do lado esquerdo; $1, $2 e $3 são os do lado direito. ⏎ %left e %right resolvem conflitos. A última linha tem mais precedência.
+28. TELA: # Resumo ⏎ Arquivo .y: declarações, %%, e as regras com suas ações. ⏎ $$ é o valor do lado esquerdo; $1, $2 e $3 são os do lado direito. ⏎ %left e %right resolvem conflitos. A última linha tem mais precedência.
    BYTE: "Resumindo: o Bison gera a tabela LALR a partir do arquivo ponto y. As ações calculam valores na redução, e as linhas de precedência resolvem os conflitos."
 
 #### PEGADINHA: "Quem fica embaixo manda" (5 cenas, ~31s)

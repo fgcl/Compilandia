@@ -108,7 +108,7 @@ F → ( E ) | id
 - BYTE: Então quando começa com variável, eu copio o FIRST dela. Saquei.
 - PREVEJA: E se B → x | ε? Em A → B c, FIRST(A) = ?
     opções: {x} | {x, ε} | ✔{x, c} | {x, c, ε}
-    explicação: Se B sumir, a cadeia começa com c. Então entram x e c. O ε não entra, porque o c nunca some.
+    explicação: Se B sumir, quem começa é o c. Então entram x e c. O ε não entra, porque o c nunca some.
 - PREVEJA: E se for A → B C, com B → x | ε e C → y | ε?
     opções: {x, y} | ✔{x, y, ε} | {x} | {ε}
     explicação: x (B aparece), y (B some e C aparece) e ε (os dois somem: A pode gerar a cadeia vazia).
@@ -986,7 +986,7 @@ void yyerror(const char *s) {
     · **Modo pânico**: descartar símbolos da entrada, um a um, até encontrar um **token de sincronização** de um conjunto escolhido (ex.: `;`, `}`, FOLLOW(A)). Simples e livre de laços infinitos.
     · **Nível de frase**: correção local do restante da entrada, inserir, remover ou substituir um token (ex.: inserir `;` que falta). Risco de laço se sempre inserir antes do token atual.
     · **Produções de erro**: aumentar a gramática com produções que geram as construções erradas mais comuns, emitindo diagnósticos específicos.
-    · **Correção global**: achar a cadeia correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.
+    · **Correção global**: achar a frase correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.
 - CÓDIGO (Modo pânico no analisador LL(1) (Dragão, 4.4.5)):
 ```
 com A (não-terminal) no topo e a = próximo token:

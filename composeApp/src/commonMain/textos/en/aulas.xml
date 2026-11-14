@@ -321,6 +321,7 @@
     <string name="eplexico_certo_sem_seta_para_b">Correct. With no transition for b, the automaton rejects the string.</string>
     <string name="eplexico_aceita">Accepts</string>
     <string name="eplexico_rejeita">Rejects</string>
+    <string name="eplexico_espera">Waits</string>
     <string name="eplexico_assim_que_scanner_reconhece_nomes">That is how the scanner recognizes each kind of token: a regular expression describes it, and an automaton checks it.</string>
     <string name="eplexico_muitos_caminhos_para">From many paths to one</string>
     <string name="eplexico_num_afn_mesma_letra_pode">This is an NFA, a nondeterministic automaton. In it, the same symbol can lead to two states. Reading a, state zero has two ways out.</string>
@@ -901,7 +902,7 @@
     <string name="eppratica_escolha_proxima_instrucao">Pick the next instruction</string>
     <string name="eppratica_cada_linha_tres_enderecos_vira">Each three-address line becomes this same trio.</string>
     <string name="eptabelas_automato_vira_tabela">The automaton becomes a table</string>
-    <string name="eptabelas_este_automato_aceita_palavras_que">This automaton accepts the words that end in abb.</string>
+    <string name="eptabelas_este_automato_aceita_palavras_que">This automaton accepts the strings that end in abb.</string>
     <string name="eptabelas_agora_cada_estado_vira_caixa">Now each state becomes a box: the name on top, one line per letter.</string>
     <string name="eptabelas_fio_sai_linha_certa_linha">The wire leaves the right line. Line b of q1 leads to q2.</string>
     <string name="eptabelas_estou_no_q2_chegou_b">I'm at q2 and a b arrived. Tap the destination state.</string>
@@ -912,7 +913,7 @@
     <string name="eptabelas_vamos_ler_abb_comeca_na">Let's read abb. It starts on q0's row and reads the a.</string>
     <string name="eptabelas_celula_diz_q1_pula_para">The cell says q1. Jump to q1's row and read the b.</string>
     <string name="eptabelas_deu_q2_le_ultimo_b">It gave q2. Read the last b, and the cell sends you to q3.</string>
-    <string name="eptabelas_q3_tem_asterisco_palavra_foi">q3 has an asterisk. The word was accepted just by looking at the table.</string>
+    <string name="eptabelas_q3_tem_asterisco_palavra_foi">q3 has an asterisk. The string was accepted just by looking at the table.</string>
     <string name="eptabelas_agora_voce_leia_quatro_letras">Now you. Read four letters and end on the row with an asterisk.</string>
     <string name="eptabelas_olhe_celula_linha_acesa_para">Look at the cell on the lit row. To end at q3, the last three must be abb.</string>
     <string name="eptabelas_chegou_ao_final_usando_so">You reached the final state using only the table.</string>

@@ -5,11 +5,11 @@
     <string name="peg4_min_01">Two states look like twins when they go to the same places.</string>
     <string name="peg4_min_02">The trick: a final state and a non-final one are never twins.</string>
     <string name="peg4_min_03">Which pair can you split right away? Tap it.</string>
-    <string name="peg4_min_03_dica">One of them accepts the word and the other doesn't.</string>
+    <string name="peg4_min_03_dica">One of them accepts the string and the other doesn't.</string>
     <string name="peg4_min_03_ok">Final against non-final is already different.</string>
     <string name="peg4_min_04">Then look at where each one goes with the same letter.</string>
     <string name="peg4_min_05">If one goes to a pair already split, these two split too.</string>
-    <string name="peg4_min_06">Only merge what no word can tell apart.</string>
+    <string name="peg4_min_06">Only merge what no string can tell apart.</string>
     <string name="peg4_ll_titulo">A terminal doesn't go to the table</string>
     <string name="peg4_ll_01">The top of the stack can hold two kinds of symbol.</string>
     <string name="peg4_ll_02">With a nonterminal on top, the parser checks the table and swaps it for the rule.</string>

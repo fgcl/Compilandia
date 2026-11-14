@@ -30,7 +30,7 @@
     <string name="robo_mips_titulo">Robô MIPS</string>
     <string name="robo_mips_sub">Monte o programa com cartas. O Byte carrega as caixas.</string>
     <string name="robo_trilho_titulo">Trilho que você constrói</string>
-    <string name="robo_trilho_sub">Ligue os trilhos do autômato. O Byte lê a palavra.</string>
+    <string name="robo_trilho_sub">Ligue os trilhos do autômato. O Byte lê a cadeia.</string>
     <string name="trilha_etapa_programar">Programar o Byte</string>
     <string name="trilha_etapa_programar_sub">Você monta e o Byte executa</string>
     <string name="sala_programar">Programar o Byte</string>
@@ -97,16 +97,16 @@
     <string name="trilho_toque_final">Toque no estado para marcar como final.</string>
     <string name="trilho_toque_celula">Toque na célula para trocar o destino do trilho.</string>
     <string name="trilho_final">final</string>
-    <string name="trilho_palavra">Palavra</string>
+    <string name="trilho_palavra">Cadeia</string>
 
     <!-- J3: fases -->
     <string name="trilho_fase_termina1">termina em 1</string>
     <string name="trilho_fase_par">número par de uns</string>
     <string name="trilho_fase_contem00">contém 00</string>
     <string name="trilho_fase_ident">identificador</string>
-    <string name="trilho_pedido_termina1">Ligue os trilhos para aceitar as palavras que terminam em um.</string>
-    <string name="trilho_pedido_par">Agora aceite as palavras com número par de uns. A vazia tem zero uns.</string>
-    <string name="trilho_pedido_contem00">Com três estados, aceite as palavras que têm dois zeros seguidos.</string>
+    <string name="trilho_pedido_termina1">Ligue os trilhos para aceitar as cadeias que terminam em um.</string>
+    <string name="trilho_pedido_par">Agora aceite as cadeias com número par de uns. A vazia tem zero uns.</string>
+    <string name="trilho_pedido_contem00">Com três estados, aceite as cadeias que têm dois zeros seguidos.</string>
     <string name="trilho_pedido_ident">Aceite os nomes de variável. Começam com letra, depois vêm letras ou dígitos.</string>
 
     <!-- J3: dicas -->
@@ -115,25 +115,25 @@
     <string name="trilho_dica_par_1">Cada estado lembra se você leu um número par ou ímpar de uns até agora.</string>
     <string name="trilho_dica_par_2">Ler 0 não muda a conta. Ler 1 troca de estado. O começo já é par.</string>
     <string name="trilho_dica_contem00_1">q0: não vi zero agora. q1: acabei de ver um zero. q2: já vi 00.</string>
-    <string name="trilho_dica_contem00_2">Depois de achar 00, a palavra já entra. De q2, todo trilho volta para q2.</string>
+    <string name="trilho_dica_contem00_2">Depois de achar 00, a cadeia já entra. De q2, todo trilho volta para q2.</string>
     <string name="trilho_dica_ident_1">A primeira letra decide. Dígito no começo não tem trilho, e o trem para.</string>
     <string name="trilho_dica_ident_2">De q0, só a-z leva a q1. Em q1, letra ou dígito ficam em q1. O q1 é final.</string>
-    <string name="trilho_olhe_celula">Olhe a célula de q%1$s lendo %2$s. A palavra %3$s passa por ali.</string>
-    <string name="trilho_olhe_estado">Siga a palavra %1$s com o dedo. Ela termina em q%2$s. Confira o caminho e se q%2$s é final.</string>
+    <string name="trilho_olhe_celula">Olhe a célula de q%1$s lendo %2$s. A cadeia %3$s passa por ali.</string>
+    <string name="trilho_olhe_estado">Siga a cadeia %1$s com o dedo. Ela termina em q%2$s. Confira o caminho e se q%2$s é final.</string>
 
     <!-- J3: legenda de cada passo -->
     <string name="trilho_nota_inicio">O trem sai de q%1$s.</string>
     <string name="trilho_nota_anda">Leu %1$s: de q%2$s foi para q%3$s.</string>
     <string name="trilho_nota_sem_trilho">Em q%1$s, lendo %2$s, não há trilho. O trem para.</string>
-    <string name="trilho_nota_final">A palavra acabou em q%1$s, que é final. Ela entra.</string>
-    <string name="trilho_nota_nao_final">A palavra acabou em q%1$s, que não é final. Ela fica de fora.</string>
+    <string name="trilho_nota_final">A cadeia acabou em q%1$s, que é final. Ela entra.</string>
+    <string name="trilho_nota_nao_final">A cadeia acabou em q%1$s, que não é final. Ela fica de fora.</string>
 
     <!-- J3: veredito -->
     <string name="trilho_resultado_sem_trilho">sem trilho</string>
     <string name="trilho_resultado_entrou">entra</string>
     <string name="trilho_resultado_fora">fica de fora</string>
-    <string name="trilho_passou">Os %1$s testes passaram. O Byte conferiu todas as palavras, e nenhuma escapou.</string>
-    <string name="trilho_falha">A palavra %1$s %2$s, então devia %3$s. Mas %4$s.</string>
+    <string name="trilho_passou">Os %1$s testes passaram. O Byte conferiu todas as cadeias, e nenhuma escapou.</string>
+    <string name="trilho_falha">A cadeia %1$s %2$s, então devia %3$s. Mas %4$s.</string>
     <string name="trilho_devia_entrar">entrar</string>
     <string name="trilho_devia_ficar_fora">ficar de fora</string>
     <string name="trilho_mas_sem_trilho">em q%1$s, lendo %2$s, o trem ficou sem trilho</string>

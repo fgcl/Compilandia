@@ -241,7 +241,7 @@
     <string name="comojogar_cada_cartao_traz_erro_diga">Cada cartão traz um erro. Diga qual fase pega esse erro, e rápido.</string>
     <string name="comojogar_toque_entre_letras_para_cortar">Toque entre as letras para cortar a linha. Depois diga a classe de cada token.</string>
     <string name="comojogar_voce_pilota_trem_cada_letra">Você pilota o trem. A cada letra, toque no próximo estado.</string>
-    <string name="comojogar_monte_automato_com_dedo_robos">Monte o autômato com o dedo. Os robôs testam, e a frase que furar aparece aqui.</string>
+    <string name="comojogar_monte_automato_com_dedo_robos">Monte o autômato com o dedo. Os robôs testam, e a cadeia que furar aparece aqui.</string>
     <string name="comojogar_voce_porteiro_so_entra_quem">Você é o porteiro. Só entra quem casa com a expressão.</string>
     <string name="comojogar_chegue_na_frase_alvo_troque">Chegue na frase alvo. Troque sempre o não-terminal mais à esquerda.</string>
     <string name="comojogar_prove_que_gramatica_ambigua_monte">Prove que a gramática é ambígua. Monte duas derivações para a mesma frase.</string>

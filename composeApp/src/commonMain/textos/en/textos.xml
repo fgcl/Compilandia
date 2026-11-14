@@ -376,12 +376,12 @@
     <string name="lessonspart1a_complete_lexema_casa_com_padrao">Fill in: 'The lexeme ___ matches the pattern ___ and becomes the token ___.'</string>
     <string name="lessonspart1a_exemplo_lexema_total_casa_com">Example: 'The lexeme `total` matches the pattern `letter(letter|digit)*` and becomes the token ⟨id, pointer to total⟩.'</string>
     <string name="lessonspart1a_gaveta_meia_etiqueta_identifique_cada">Drawer, sock, label: identify each one.</string>
-    <string name="lessonspart1a_trem_que_le_palavras">The train that reads words</string>
+    <string name="lessonspart1a_trem_que_le_palavras">The train that reads strings</string>
     <string name="lessonspart1a_na_floresta_lexica_passa_trenzinho">A little train runs through the Lexical Forest. It only moves along the tracks painted with the letter it's reading.</string>
     <string name="lessonspart1a_cada_estacao_estado_cada_trilho">Each station is a **state**. Each track has a letter: it's a **transition**. Some stations have a finish flag: they're the **final** (accepting) **states**.</string>
-    <string name="lessonspart1a_como_trem_decide_se_palavra">And how does the train decide whether the word is accepted?</string>
-    <string name="lessonspart1a_ele_parte_estacao_inicial_le">It leaves the start station and reads the word letter by letter, following the tracks. The word ended at a station with a flag? Accepted! Ran out of track, or stopped far from the flag? Rejected.</string>
-    <string name="lessonspart1a_trem_livro_dragao_aceita_palavras">The Dragon Book train: accepts words of a's and b's that end in abb. Try 'aabb' and 'abab'.</string>
+    <string name="lessonspart1a_como_trem_decide_se_palavra">And how does the train decide whether the string is accepted?</string>
+    <string name="lessonspart1a_ele_parte_estacao_inicial_le">It leaves the start station and reads the string letter by letter, following the tracks. The string ended at a station with a flag? Accepted! Ran out of track, or stopped far from the flag? Rejected.</string>
+    <string name="lessonspart1a_trem_livro_dragao_aceita_palavras">The Dragon Book train: accepts strings of a's and b's that end in abb. Try 'aabb' and 'abab'.</string>
     <string name="lessonspart1a_esse_trem_afd_automato_finito">This train is a **DFA** (deterministic finite automaton): at each station, for each letter, there's AT MOST one track. The driver is never in doubt.</string>
     <string name="lessonspart1a_se_tivesse_dois_trilhos_com">And what if there were two tracks with the same letter?</string>
     <string name="lessonspart1a_ai_afn_nao_deterministico_trem">Then it's an **NFA** (nondeterministic): a magic train that splits and follows ALL the paths at once, like in a multiverse. And it also has ε tracks, which it takes without reading any letter.</string>
@@ -500,7 +500,7 @@
     <string name="lessonspart1b_todas_palavras_existem_lexico_ok">Every word exists (scanner OK!), but the order doesn't follow the rules: a syntax error.</string>
     <string name="lessonspart1b_troque_palavras_por_tokens_igualzinho">Swap words for tokens and it's just the same: `E -&gt; E + T` says 'an expression can be an expression, a +, and a term'. The compiler parses the way you did at school, only without getting lazy.</string>
     <string name="lessonspart1b_p_por_que_livre_contexto">Q: Why 'context-free'? A: Because the left side is ONE nonterminal alone: you can replace SN with 'Art Sub' anywhere, no matter what's around it (the context).</string>
-    <string name="lessonspart1b_expressao_regular_eu_descrevo_palavras">Regular expression: 'I describe words.' Grammar: 'I describe sentences, and I know how to nest things, like parentheses inside parentheses, something you can't do!'</string>
+    <string name="lessonspart1b_expressao_regular_eu_descrevo_palavras">Regular expression: 'I describe strings of letters, like names and numbers.' Grammar: 'I describe sentences, and I know how to nest things, like parentheses inside parentheses, something you can't do!'</string>
     <string name="lessonspart1b_nessa_gramatica_quem_sao_terminais">In this grammar, which are the terminals and which are the nonterminals?</string>
     <string name="lessonspart1b_nao_terminais_frase_sn_sv">Nonterminals: Frase, SN, SV, Art, Sub, Ver. Terminals: o, a, gato, menina, peixe, come, ama. Start symbol: Frase (the one on the first line).</string>
     <string name="lessonspart1b_derivacao_em_camera_lenta">Derivation in slow motion</string>
@@ -527,7 +527,7 @@
     <string name="lessonspart1b_tres_passos_finais">And the last three steps?</string>
     <string name="lessonspart1b_p_duas_derivacoes_dao_arvores">Q: Do the two derivations give different trees? A: No! Same productions, same tree; only the order of replacements changes. Each tree has exactly ONE leftmost derivation and ONE rightmost derivation.</string>
     <string name="lessonspart1b_arvore_comum_duas_derivacoes">The tree shared by both derivations.</string>
-    <string name="lessonspart1b_mais_esmaecido_gramatica_b_cadeia">One more, faded: grammar `S -&gt; a S b | ε`, string `a a b b`.</string>
+    <string name="lessonspart1b_mais_esmaecido_gramatica_b_cadeia">One more, faded: grammar `S -&gt; a S b | ε`, sentence `a a b b`.</string>
     <string name="lessonspart1b_derivacao_completa">Full derivation?</string>
     <string name="lessonspart1b_b_b_b_b_b">S ⇒ a S b ⇒ a a S b b ⇒ a a b b (S → ε in the last step). With a single nonterminal in each sentential form, leftmost = rightmost!</string>
     <string name="lessonspart1b_em_prova_escreva_passo_por">On the exam, write one step per line, mark the replaced nonterminal and indicate ⇒lm or ⇒rm. Quick check: number of steps = number of internal nodes in the tree.</string>
@@ -535,7 +535,7 @@
     <string name="lessonspart1b_pergunta_1_tente_sem_medo">Question 1: try it without fear.</string>
     <string name="lessonspart1b_essa_gramatica_gera_b">Does this grammar generate `a a b`?</string>
     <string name="lessonspart1b_toda_vez_que_vira_b">Every time S becomes a S b, one a AND one b come in. The number of a's and b's is always equal.</string>
-    <string name="lessonspart1b_qual_menor_cadeia_que_ela">What's the shortest string it generates?</string>
+    <string name="lessonspart1b_qual_menor_cadeia_que_ela">What's the shortest sentence it generates?</string>
     <string name="lessonspart1b_cadeia_vazia">the empty string ε</string>
     <string name="lessonspart1b_descreva_linguagem_inteira_em_frase">Describe the whole language in one sentence.</string>
     <string name="lessonspart1b_anbn_n_0_n_seguidos">{ aⁿbⁿ | n ≥ 0 }: n a's followed by n b's.</string>
@@ -701,8 +701,8 @@
     <string name="lessonspart1c_como_consertar_placa_reparticao_apresente">It's like fixing the office sign: 'Show your ID. Then, if you want, more documents.' Something concrete first; the repetition after.</string>
     <string name="lessonspart1c_antes_depois_t_ganharam_ajudantes">Before and after: E and T got the helpers E' and T'.</string>
     <string name="lessonspart1c_gramatica_nova_gera_mesma_linguagem">Does the new grammar generate the same language?</string>
-    <string name="lessonspart1c_sim_mesmas_cadeias">Yes, the same strings</string>
-    <string name="lessonspart1c_nao_gera_menos_cadeias">No, it generates fewer strings</string>
+    <string name="lessonspart1c_sim_mesmas_cadeias">Yes, the same sentences</string>
+    <string name="lessonspart1c_nao_gera_menos_cadeias">No, it generates fewer sentences</string>
     <string name="lessonspart1c_duas_geram_t_t_muda">Both generate T (+ T)*. Only the shape of the tree changes.</string>
     <string name="lessonspart1c_analisadores_lr_yacc_bison_adoram">LR parsers (Yacc/Bison) love left recursion; it even saves stack space. The problem only affects top-down parsers (LL, recursive descent).</string>
     <string name="lessonspart1c_por_que_recursao_esquerda_trava">Why does left recursion lock up a top-down parser?</string>
@@ -741,7 +741,7 @@
     <string name="lessonspart1c_erro_no_1_esquecer_em">Mistake #1: forgetting the `| ε` in A'. Mistake #2: forgetting to put A' at the end of EACH β.</string>
     <string name="lessonspart1c_se_questao_pedir_elimine_recursao">If the question asks 'remove the left recursion and show the resulting grammar is LL(1)', do the transformation AND then the table. The points usually come from both parts.</string>
     <string name="lessonspart1c_descubra_receita_sozinho">Discover the recipe on your own</string>
-    <string name="lessonspart1c_quais_cadeias_essa_gramatica_gera">Which strings does this grammar generate?</string>
+    <string name="lessonspart1c_quais_cadeias_essa_gramatica_gera">Which sentences does this grammar generate?</string>
     <string name="lessonspart1c_b_ba_baa_baaa">b, ba, baa, baaa…</string>
     <string name="lessonspart1c_ab_aab">a, ab, aab…</string>
     <string name="lessonspart1c_ab_aabb_aaabbb">ab, aabb, aaabbb…</string>
@@ -779,7 +779,7 @@
     <string name="lessonspart1c_beta_comeca_alfa_repete_epsilon">Beta starts, alpha repeats, epsilon ends</string>
     <string name="lessonspart1c_beta_comeca_alfa_repete_epsilon_2">**Beta starts, alpha repeats, epsilon ends.** A → β A'; A' → α A' | ε.</string>
     <string name="lessonspart1c_rabo_esquerda_morde_em_morde">**A tail on the left bites**: in A → **A**α, the A bites its own tail right away. RIGHT recursion (A → αA) is harmless: it eats α first (consumes tokens), then calls.</string>
-    <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β comes 'before': it's the start of the string, the non-recursive part. α is the chorus that repeats. Language: β α α α… = βα*.</string>
+    <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β comes 'before': it's the start of the sentence, the non-recursive part. α is the chorus that repeats. Language: β α α α… = βα*.</string>
     <string name="lessonspart1c_linha_while_disfarcado_enquanto_aparecer">**A-prime is a while in disguise**: as long as α shows up, repeat; when it doesn't, ε and leave the loop.</string>
     <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">**Memory palace**: at the head of the **Transformation Bridge**, a dog chases its tail (A → Aα). The bridge guard only lets through whoever shows the β first. In the middle of the bridge, a carousel (A') spins α, α, α… until someone shouts ε.</string>
     <string name="lessonspart1c_elimine_recursao_l_l_id">Remove the recursion from `L -&gt; L , id | id`.</string>
@@ -858,7 +858,7 @@
     <string name="lessonspart1c_algoritmo_4_21_livro_dragao">Algorithm 4.21 (Dragon Book)</string>
     <string name="lessonspart1c_exemplo_livro_i_t_i">The book's example: S → i E t S | i E t S e S | a, E → b. Result: S → i E t S S' | a, S' → e S | ε, E → b.</string>
     <string name="lessonspart1c_fatorar_1_2_preserva_linguagem">Does factoring `A -&gt; α β1 | α β2` preserve the language?</string>
-    <string name="lessonspart1c_nao_perde_cadeias">No, it loses strings</string>
+    <string name="lessonspart1c_nao_perde_cadeias">No, it loses sentences</string>
     <string name="lessonspart1c_com_1_2_gera_exatamente">αA' with A' → β₁ | β₂ generates exactly αβ₁ and αβ₂; it's the distributive property.</string>
     <string name="lessonspart1c_gramatica_fatorada_sem_recursao_esquerda">Is a factored grammar without left recursion necessarily LL(1)?</string>
     <string name="lessonspart1c_sao_condicoes_necessarias_nao_suficientes">They're necessary conditions, not sufficient ones. The factored dangling else still has a conflict in [S', e]; and an ambiguous grammar is never LL(1).</string>
@@ -1100,7 +1100,7 @@
     <string name="lessonspart2a_comeca_com_b_b_comeca">A starts with B, and B starts with x. FIRST(A) inherits FIRST(B) = {x}. A nonterminal never goes into the set: only terminals (and maybe ε).</string>
     <string name="lessonspart2a_entao_quando_comeca_com_variavel">So when it starts with a variable, I copy its FIRST. Got it.</string>
     <string name="lessonspart2a_se_b_x_em_b">And if B → x | ε? In A → B c, FIRST(A) = ?</string>
-    <string name="lessonspart2a_se_b_sumir_cadeia_comeca">If B vanishes, the string starts with c. So x and c go in. The ε doesn't, because the c never vanishes.</string>
+    <string name="lessonspart2a_se_b_sumir_cadeia_comeca">If B vanishes, c is what comes first. So x and c go in. The ε doesn't, because the c never vanishes.</string>
     <string name="lessonspart2a_se_for_b_c_com">And if it's A → B C, with B → x | ε and C → y | ε?</string>
     <string name="lessonspart2a_x_b_aparece_y_b">x (B shows up), y (B vanishes and C shows up) and ε (both vanish: A can generate the empty string).</string>
     <string name="lessonspart2a_qual_regra_voce_acabou_descobrir">Which 'rule' did you just discover? Try saying it in your own words before tapping.</string>
@@ -1731,7 +1731,7 @@
     <string name="lessonspart2c_marcador_pagina">The bookmark</string>
     <string name="lessonspart2c_torre_central_fortaleza_bottom_up">Central tower of the Bottom-Up Fortress. Each floor is a 'state' full of bookmarks.</string>
     <string name="lessonspart2c_item_lr_0_producao_com">An **LR(0) item** is a production with a dot • in the middle: a bookmark of where you are in the reading. C → c • C means: 'I've seen the c, now I expect a C'.</string>
-    <string name="lessonspart2c_nosso_livro_receitas_gera_cadeias">Our recipe book. It generates strings like d d, c d d, c c d c d…</string>
+    <string name="lessonspart2c_nosso_livro_receitas_gera_cadeias">Our recipe book. It generates sentences like d d, c d d, c c d c d…</string>
     <string name="lessonspart2c_tipo_barra_progresso_download">Like a download progress bar?</string>
     <string name="lessonspart2c_isso_ponto_no_comeco_c">Right! Dot at the start (C → • c C): 0%. Dot at the end (C → c C •): 100%, time to **reduce**.</string>
     <string name="lessonspart2c_quantos_itens_lr_0_producao">How many LR(0) items does the production S → C C produce?</string>
@@ -3252,7 +3252,7 @@
     <string name="lessonspart4c_modo_panico_descartar_simbolos_entrada">**Panic mode**: discard input symbols, one by one, until finding a **sync token** from a chosen set (e.g. `;`, `}`, FOLLOW(A)). Simple and free of infinite loops.</string>
     <string name="lessonspart4c_nivel_frase_correcao_local_restante">**Phrase level**: local correction of the rest of the input: insert, delete or replace a token (e.g. insert a missing `;`). A risk of looping if it always inserts before the current token.</string>
     <string name="lessonspart4c_producoes_erro_aumentar_gramatica_com">**Error productions**: augment the grammar with productions that generate the most common wrong constructs, emitting specific diagnostics.</string>
-    <string name="lessonspart4c_correcao_global_achar_cadeia_correta">**Global correction**: find the correct string y closest to the input x (minimum insertions, deletions and swaps). Of theoretical interest: the cost is too high.</string>
+    <string name="lessonspart4c_correcao_global_achar_cadeia_correta">**Global correction**: find the correct sentence y closest to the input x (minimum insertions, deletions and swaps). Of theoretical interest: the cost is too high.</string>
     <string name="lessonspart4c_com_nao_terminal_no_topo">with A (nonterminal) on top and a = next token:\n    if M[A, a] has a production: expand normally\n    else:  // error\n        report the error (line, expected × found)\n        while a ∉ FIRST(A) and a ∉ FOLLOW(A) ∪ {$}:\n            discard a; a ← next token\n        if a ∈ FIRST(A): continue with A on top\n        else: pop A   // synced on FOLLOW(A)\nwith terminal t on top and t ≠ a:\n    report "expected t"; pop t  // pretend t was there</string>
     <string name="lessonspart4c_modo_panico_no_analisador_ll">Panic mode in the LL(1) parser (Dragon Book, 4.4.5)</string>
     <string name="lessonspart4c_toda_celula_vazia_desta_tabela">Every empty cell in this table is an error point. The FOLLOW(A) columns are each row's 'synch' cells.</string>

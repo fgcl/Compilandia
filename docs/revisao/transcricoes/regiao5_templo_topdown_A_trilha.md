@@ -15,7 +15,7 @@ BYTE: "Antes da aula: o que pode abrir uma frase de S?"
 Opções: ✔a e c | a e b | só a
 Depois: "O a e o c. Cada opção abre com um deles."
 
-#### AULA ANIMADA BÁSICA: "Com o que isso começa?" (27 cenas, ~208s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Com o que isso começa?" (28 cenas, ~214s) [1º exemplo começa na cena 5]
 
 1. TELA: E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ T ⏎ id ⏎ T -> id ⏎ T -> ( E )
    BYTE: "O parser tem T no topo da pilha e lê id. T tem duas regras, e ele só pode olhar um token."
@@ -101,9 +101,9 @@ Depois: "O a e o c. Cada opção abre com um deles."
 21. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S)
    BYTE: "Mais um caso de prova. Repare: a regra de B não tem épsilon escrito."
 
-22. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ *C -> c | ε* ⏎ FIRST(B) ⏎ FIRST(S) ⏎ sim ⏎ não
+22. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ *C -> c | ε* ⏎ FIRST(B) ⏎ FIRST(S) ⏎ sim ⏎ não ⏎ só com ε escrito
    BYTE: "Mesmo assim, B pode sumir? Toque na resposta."
-   PERGUNTA (toque): certo = sim ; errado = não
+   PERGUNTA (toque): certo = sim ; errado = não | só com ε escrito
    se errar: "Siga B vai para C. O que C pode virar?"
    se acertar: "Pode. B vai para C, e C vai para épsilon. Então o FIRST de B tem b, c e épsilon."
 
@@ -116,16 +116,22 @@ Depois: "O a e o c. Cada opção abre com um deles."
 24. TELA: # FIRST ⏎ S -> B d ⏎ B -> C | b ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S) ⏎ b ⏎ c ⏎ ε ⏎ b ⏎ c ⏎ *d* ⏎ *4. Todos anuláveis: ε entra. Repita até parar.*
    BYTE: "Na ordem das regras, a primeira rodada deixa S só com o d. É que B ainda está vazio. As rodadas seguintes trazem o b e o c. Por isso o passo quatro manda repetir."
 
-25. TELA: # Erros comuns ⏎ FIRST(S) = { a, ε, c }, porque A começa com a ou some. ⏎ certo ⏎ errado
+25. TELA: # Diga por quê ⏎ S → B    B → C | b    C → c | ε FIRST(S) = { b, c, ε } ⏎ Todo FIRST de não-terminal tem ε. ⏎ B tem ε escrito na regra dele. ⏎ Tudo na regra pode sumir: B some pelo C.
+   BYTE: "Se S fosse só B, o épsilon entraria no FIRST de S. Por quê?"
+   PERGUNTA (toque): certo = Tudo na regra pode sumir: B some pelo C. ; errado = Todo FIRST de não-terminal tem ε. | B tem ε escrito na regra dele.
+   se errar: "Siga o B até o fim. Ele pode virar nada?"
+   se acertar: "B vira C, e C vira épsilon. Sem o d depois, a regra inteira pode sumir."
+
+26. TELA: # Erros comuns ⏎ FIRST(S) = { a, ε, c }, porque A começa com a ou some. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o b entra, e o ε não. ⏎ Errado: o a não entra, porque A some. ⏎ Certo: A some, então o ε passa para S.
    BYTE: "Um colega calculou assim o FIRST de S. Está certo ou errado? Toque."
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: o b entra, e o ε não. ; errado = Errado: o a não entra, porque A some. | Certo: A some, então o ε passa para S.
    se errar: "A é anulável, mas depois dele vem o b, que nunca some."
    se acertar: "O épsilon só entra se a regra inteira pode sumir. Aqui o b sempre fica, então quem entra é o b."
 
-26. TELA: # Erros comuns ⏎ Certo: FIRST(S) = { a, b, c }. O ε de A não passa para S. ⏎ *Errado: Parar no primeiro não-terminal, mesmo quando ele é anulável.* ⏎ *Certo: Se ele é anulável, junte também o FIRST do símbolo seguinte.*
+27. TELA: # Erros comuns ⏎ Certo: FIRST(S) = { a, b, c }. O ε de A não passa para S. ⏎ *Errado: Parar no primeiro não-terminal, mesmo quando ele é anulável.* ⏎ *Certo: Se ele é anulável, junte também o FIRST do símbolo seguinte.*
    BYTE: "Outro erro comum é parar cedo. Não-terminal anulável não fecha a conta: olhe o símbolo que vem depois dele."
 
-27. TELA: # Resumo ⏎ FIRST(α): os terminais que podem começar o que α gera. ⏎ O ε só entra quando tudo em α é anulável. ⏎ Repita os passos até uma rodada não mudar nada.
+28. TELA: # Resumo ⏎ FIRST(α): os terminais que podem começar o que α gera. ⏎ O ε só entra quando tudo em α é anulável. ⏎ Repita os passos até uma rodada não mudar nada.
    BYTE: "Resumindo: FIRST é o conjunto de começos possíveis. Épsilon só entra quando tudo pode sumir. E o cálculo repete até parar de mudar."
 
 #### PEGADINHA: "FIRST de uma regra inteira" (5 cenas, ~26s)
@@ -226,7 +232,7 @@ BYTE: "Antes da aula: o que pode vir logo depois de T?"
 Opções: ✔+ | id | ε
 Depois: "O mais. Olhe o que está à direita de T na regra."
 
-#### AULA ANIMADA BÁSICA: "O que vem depois?" (27 cenas, ~220s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "O que vem depois?" (28 cenas, ~226s) [1º exemplo começa na cena 5]
 
 1. TELA: E -> T X ⏎ *X -> + T X | ε* ⏎ T -> id | ( E ) ⏎ X ⏎ ) ⏎ X -> + T X ⏎ X -> ε
    BYTE: "O parser tem X no topo e lê fecha parêntese. X é anulável: pode sumir, ou pode virar mais T X."
@@ -321,16 +327,22 @@ Depois: "O mais. Olhe o que está à direita de T na regra."
 24. TELA: # FOLLOW ⏎ S -> B C d ⏎ B -> a ⏎ C -> c | ε ⏎ FOLLOW(B) ⏎ *2. Depois de B: FIRST sem ε. Se some, o próximo.* ⏎ *c* ⏎ *d*
    BYTE: "É o fim do passo dois: se o vizinho some, olhe o próximo. Quem para no C esquece o d."
 
-25. TELA: # Erros comuns ⏎ FOLLOW(F) = { *, ε }, porque depois de F vem Y. ⏎ certo ⏎ errado
+25. TELA: # Diga por quê ⏎ T → F Y    Y → * F Y | ε FOLLOW(F) = { *, +, ), $ } ⏎ FOLLOW nunca tem o mais. ⏎ F só herda o FOLLOW de T quando Y some. ⏎ O mais só entra pelo FIRST de Y.
+   BYTE: "Se Y nunca sumisse, o mais sairia do FOLLOW de F. Por quê?"
+   PERGUNTA (toque): certo = F só herda o FOLLOW de T quando Y some. ; errado = O mais só entra pelo FIRST de Y. | FOLLOW nunca tem o mais.
+   se errar: "O mais veio do FOLLOW de T. Quando o F herda dele?"
+   se acertar: "F herda de T só quando fica no fim da regra. Sem Y sumir, isso nunca acontece."
+
+26. TELA: # Erros comuns ⏎ FOLLOW(F) = { *, ε }, porque depois de F vem Y. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: o FIRST de Y passa inteiro. ⏎ Errado: ε não entra, e entra o FOLLOW de T. ⏎ Errado: o * não entra no FOLLOW de F.
    BYTE: "Um colega copiou o FIRST de Y inteiro para o FOLLOW de F. Certo ou errado? Toque."
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: ε não entra, e entra o FOLLOW de T. ; errado = Errado: o * não entra no FOLLOW de F. | Certo: o FIRST de Y passa inteiro.
    se errar: "FOLLOW só tem terminais e o cifrão."
    se acertar: "Certo. Épsilon nunca entra em FOLLOW. Quando Y some, o que entra é o FOLLOW de T."
 
-26. TELA: # Erros comuns ⏎ Certo: FOLLOW(F) = { *, +, ), $ }. Nunca há ε em FOLLOW. ⏎ *Errado: Esquecer o $ no FOLLOW do símbolo inicial.* ⏎ *Certo: O símbolo inicial sempre tem $ no FOLLOW.*
+27. TELA: # Erros comuns ⏎ Certo: FOLLOW(F) = { *, +, ), $ }. Nunca há ε em FOLLOW. ⏎ *Errado: Esquecer o $ no FOLLOW do símbolo inicial.* ⏎ *Certo: O símbolo inicial sempre tem $ no FOLLOW.*
    BYTE: "Outro erro é esquecer o cifrão. Sem ele, a regra que some no fim da entrada fica sem coluna na tabela."
 
-27. TELA: # Resumo ⏎ FOLLOW(B): os terminais que podem vir logo depois de B. ⏎ Vem do FIRST do que segue B. Se isso some, vem do FOLLOW do lado esquerdo. ⏎ Nunca tem ε. O símbolo inicial sempre tem $.
+28. TELA: # Resumo ⏎ FOLLOW(B): os terminais que podem vir logo depois de B. ⏎ Vem do FIRST do que segue B. Se isso some, vem do FOLLOW do lado esquerdo. ⏎ Nunca tem ε. O símbolo inicial sempre tem $.
    BYTE: "Resumindo: FOLLOW é o que pode vir depois. Ele sai do FIRST do vizinho e do FOLLOW de quem está à esquerda da seta. Épsilon nunca entra."
 
 #### PEGADINHA: "O épsilon que muda o FOLLOW" (5 cenas, ~31s)
@@ -400,7 +412,7 @@ BYTE: "Antes da aula: com id na entrada, qual opção de E vale?"
 Opções: ✔id | ( E ) | nenhuma
 Depois: "A opção id. Cada token aponta para uma regra."
 
-#### AULA ANIMADA BÁSICA: "A tabela de decisões" (27 cenas, ~213s)
+#### AULA ANIMADA BÁSICA: "A tabela de decisões" (28 cenas, ~219s)
 
 1. TELA: E -> T X ⏎ *X -> + T X | ε* ⏎ T -> id | ( E ) ⏎ X ⏎ + ⏎ X -> + T X ⏎ X -> ε
    BYTE: "O parser tem X no topo e lê mais. Qual regra de X ele usa? FIRST e FOLLOW já sabem a resposta."
@@ -501,16 +513,22 @@ Depois: "A opção id. Cada token aponta para uma regra."
 24. TELA: # LL(1) ⏎ S -> a b | a c ⏎ a ⏎ b ⏎ c ⏎ $ ⏎ S ⏎ *a b | a c* ⏎ *S  -> a S'* ⏎ *S' -> b | c*
    BYTE: "Duas regras na mesma casa. Lendo a, o parser não sabe qual usar, então não é LL(1). A fatoração, da Ponte, adia a escolha para depois do a."
 
-25. TELA: # Erros comuns ⏎ A regra R → ε vai nas colunas do FOLLOW(R) na tabela LL(1). ⏎ certo ⏎ errado
+25. TELA: # Diga por quê ⏎ L → id R    R → , id R | ε FOLLOW(R) = { $ } ⏎ Só o $ vem depois de R. ⏎ Regra com ε vai sempre na coluna do $. ⏎ O FIRST de R é o $.
+   BYTE: "R vai para épsilon entrou só na coluna do cifrão. Por quê?"
+   PERGUNTA (toque): certo = Só o $ vem depois de R. ; errado = Regra com ε vai sempre na coluna do $. | O FIRST de R é o $.
+   se errar: "A regra épsilon vai nas colunas do FOLLOW. O que vem depois de R?"
+   se acertar: "Depois de R só vem o fim da entrada. Por isso a regra épsilon fica no cifrão."
+
+26. TELA: # Erros comuns ⏎ A regra R → ε vai nas colunas do FOLLOW(R) na tabela LL(1). ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: ela vai numa coluna ε. ⏎ Certo: R some quando chega o que vem depois dele. ⏎ Certo: regra com ε vai só na coluna do $.
    BYTE: "Um colega disse onde vai a regra que some. Certo ou errado? Toque."
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: R some quando chega o que vem depois dele. ; errado = Certo: regra com ε vai só na coluna do $. | Errado: ela vai numa coluna ε.
    se errar: "Ninguém lê épsilon. O parser usa a regra que some quando o próximo token pode vir depois de R."
    se acertar: "R some quando o próximo token pode vir depois dele. Esses tokens são o FOLLOW de R. Não existe coluna épsilon."
 
-26. TELA: # Erros comuns ⏎ Certo: A regra R → ε vai nas colunas do FOLLOW(R) na tabela LL(1). ⏎ *Errado: Olhar só o FIRST para dizer que a gramática é LL(1).* ⏎ *Certo: Regra anulável ocupa o FOLLOW e pode bater com o FIRST de outra.*
+27. TELA: # Erros comuns ⏎ Certo: A regra R → ε vai nas colunas do FOLLOW(R) na tabela LL(1). ⏎ *Errado: Olhar só o FIRST para dizer que a gramática é LL(1).* ⏎ *Certo: Regra anulável ocupa o FOLLOW e pode bater com o FIRST de outra.*
    BYTE: "Um erro comum é conferir só o FIRST. Uma regra anulável ocupa as colunas do FOLLOW, e ali ela pode bater com outra regra."
 
-27. TELA: # Resumo ⏎ Linha: não-terminal. Coluna: terminal ou $. ⏎ A → α entra no FIRST(α). Se α é anulável, também no FOLLOW(A). ⏎ Duas regras numa casa: conflito. Casa vazia: erro de sintaxe.
+28. TELA: # Resumo ⏎ Linha: não-terminal. Coluna: terminal ou $. ⏎ A → α entra no FIRST(α). Se α é anulável, também no FOLLOW(A). ⏎ Duas regras numa casa: conflito. Casa vazia: erro de sintaxe.
    BYTE: "Resumindo: a tabela guarda, para cada não-terminal e cada token, a regra a usar. O FIRST preenche quase tudo. O FOLLOW cuida das regras que somem."
 
 #### PEGADINHA: "Duas regras, uma casa só" (6 cenas, ~35s)
@@ -586,7 +604,7 @@ BYTE: "Antes da aula: topo e entrada iguais. O que fazer?"
 Opções: ✔casar | expandir | erro
 Depois: "Casar. Os dois saem, e a máquina anda."
 
-#### AULA ANIMADA BÁSICA: "A pilha decide" (22 cenas, ~172s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A pilha decide" (23 cenas, ~178s) [1º exemplo começa na cena 4]
 
 1. TELA: # ( id ) ⏎ ( ⏎ id ⏎ ?
    BYTE: "O parser leu abre parêntese e depois id. A frase ainda não acabou, e ele precisa lembrar o que falta."
@@ -663,16 +681,22 @@ Depois: "Casar. Os dois saem, e a máquina anda."
 19. TELA: # id , id ⏎ L -> id R ⏎ R -> , id R | ε ⏎ pilha ⏎ aceita ⏎ *$* ⏎ *$*
    BYTE: "Cifrão com cifrão: aceita. As regras usadas, na ordem, formam a derivação mais à esquerda da lista."
 
-20. TELA: # Erros comuns ⏎ Para trocar E por T X, empilho primeiro o X e depois o T. ⏎ certo ⏎ errado
+20. TELA: # Diga por quê ⏎ topo: R    entrada: $ ⏎ Com a entrada no fim, qualquer regra serve. ⏎ R vai para ε é a regra padrão. ⏎ O $ está no FOLLOW de R.
+   BYTE: "No fim da entrada, a tabela usou R vai para épsilon. Por quê?"
+   PERGUNTA (toque): certo = O $ está no FOLLOW de R. ; errado = Com a entrada no fim, qualquer regra serve. | R vai para ε é a regra padrão.
+   se errar: "A casa de R com cifrão saiu do FOLLOW de R."
+   se acertar: "O cifrão pode vir depois de R. Então a casa R com cifrão manda R sumir."
+
+21. TELA: # Erros comuns ⏎ Para trocar E por T X, empilho primeiro o X e depois o T. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: assim o T fica no topo. ⏎ Certo: o último símbolo é o mais importante. ⏎ Errado: o T entra primeiro, na ordem da regra.
    BYTE: "Em que ordem o lado direito entra na pilha? Um colega fez assim. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: assim o T fica no topo. ; errado = Certo: o último símbolo é o mais importante. | Errado: o T entra primeiro, na ordem da regra.
    se errar: "Quem precisa ser lido primeiro tem que ficar no topo. Qual dos dois é?"
    se acertar: "Empilha de trás para a frente: primeiro X, depois T. Assim T fica no topo, e o parser trata dele antes."
 
-21. TELA: # Erros comuns ⏎ Certo: Para trocar E por T X, empilho primeiro o X e depois o T. ⏎ *Errado: Ao usar X → ε, avançar a entrada.* ⏎ *Certo: Só X sai da pilha. O token continua na entrada.*
+22. TELA: # Erros comuns ⏎ Certo: Para trocar E por T X, empilho primeiro o X e depois o T. ⏎ *Errado: Ao usar X → ε, avançar a entrada.* ⏎ *Certo: Só X sai da pilha. O token continua na entrada.*
    BYTE: "Um erro comum: avançar a entrada ao aplicar uma regra. Só o casamento de terminal consome token. Trocar por épsilon só tira o topo."
 
-22. TELA: # Resumo ⏎ A pilha começa com $ e o símbolo inicial. ⏎ Não-terminal no topo: troca pela tabela. Terminal no topo: casa com o token. ⏎ $ com $ aceita. Casa vazia ou terminal diferente é erro.
+23. TELA: # Resumo ⏎ A pilha começa com $ e o símbolo inicial. ⏎ Não-terminal no topo: troca pela tabela. Terminal no topo: casa com o token. ⏎ $ com $ aceita. Casa vazia ou terminal diferente é erro.
    BYTE: "Resumindo: o preditivo olha o topo e um token. A tabela escolhe a regra, o casamento consome a entrada, e cifrão com cifrão aceita."
 
 #### PEGADINHA: "Terminal não vai para a tabela" (6 cenas, ~36s)
@@ -754,7 +778,7 @@ BYTE: "Antes da aula: quantas funções a função E precisa chamar?"
 Opções: 1 | ✔2 | 3
 Depois: "Duas: T e X."
 
-#### AULA ANIMADA BÁSICA: "Um método por regra" (26 cenas, ~208s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Um método por regra" (27 cenas, ~213s) [1º exemplo começa na cena 5]
 
 1. TELA: # Tabela preditiva ⏎ id ⏎ + ⏎ ( ⏎ ) ⏎ $ ⏎ E ⏎ T X ⏎ T X ⏎ X ⏎ + T X ⏎ ε ⏎ ε ⏎ T ⏎ id ⏎ ( E )
    BYTE: "A tabela LL(1) funciona, mas é uma grade de casas. Ninguém gosta de preencher nem de depurar isso à mão."
@@ -849,16 +873,22 @@ Depois: "Duas: T e X."
 23. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ void L() { casa(ID); R(); } ⏎ void R() { ⏎ *  if (tok == ',') {* ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ } ⏎ id ⏎ , ⏎ id ⏎ *$*
    BYTE: "Na segunda chamada o token é cifrão, e o if falha. R usa a regra épsilon: não casa nada e volta."
 
-24. TELA: # Erros comuns ⏎ E → E + T vira: void E() { E(); casa('+'); T(); } ⏎ certo ⏎ errado
+24. TELA: # Diga por quê ⏎ void R() { if (tok == ',') { casa(','); casa(ID); R(); } } ⏎ O compilador limita as chamadas. ⏎ R casa a vírgula e o id antes de se chamar. ⏎ Recursão à direita nunca é chamada.
+   BYTE: "R chama R de novo, e mesmo assim não trava. Por quê?"
+   PERGUNTA (toque): certo = R casa a vírgula e o id antes de se chamar. ; errado = Recursão à direita nunca é chamada. | O compilador limita as chamadas.
+   se errar: "O que R faz antes de chamar a si mesma?"
+   se acertar: "Antes de chamar R de novo, ela casa a vírgula e o id. A entrada anda a cada chamada."
+
+25. TELA: # Erros comuns ⏎ E → E + T vira: void E() { E(); casa('+'); T(); } ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só casar o + antes. ⏎ Certo: é uma função por regra, na ordem. ⏎ Errado: E chama E sem ler nada, e não para.
    BYTE: "Um colega traduziu uma regra com recursão à esquerda direto para código. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: E chama E sem ler nada, e não para. ; errado = Errado: falta só casar o + antes. | Certo: é uma função por regra, na ordem.
    se errar: "Veja a primeira coisa que a função E faz, antes de ler qualquer token."
    se acertar: "E chama E sem consumir nada, e a recursão nunca termina. Antes de descer, elimine a recursão à esquerda."
 
-25. TELA: # Erros comuns ⏎ Certo: Recursão à esquerda trava a descida. Elimine antes: E → T X. ⏎ *Errado: Tratar a regra ε com uma chamada casa(ε).* ⏎ *Certo: Regra ε é o else vazio: a função volta sem consumir token.*
+26. TELA: # Erros comuns ⏎ Certo: Recursão à esquerda trava a descida. Elimine antes: E → T X. ⏎ *Errado: Tratar a regra ε com uma chamada casa(ε).* ⏎ *Certo: Regra ε é o else vazio: a função volta sem consumir token.*
    BYTE: "Outro erro é tentar casar o épsilon. Épsilon não é token. A regra épsilon é só voltar sem fazer nada."
 
-26. TELA: # Resumo ⏎ Cada não-terminal é uma função. Não-terminal na regra é chamada; terminal é casa. ⏎ O if olha o próximo token e escolhe a regra pelo FIRST. ⏎ Só vale para gramática LL(1). Sem recursão e fatorada não basta: a tabela não pode ter conflito.
+27. TELA: # Resumo ⏎ Cada não-terminal é uma função. Não-terminal na regra é chamada; terminal é casa. ⏎ O if olha o próximo token e escolhe a regra pelo FIRST. ⏎ Só vale para gramática LL(1). Sem recursão e fatorada não basta: a tabela não pode ter conflito.
    BYTE: "Resumindo: a descida recursiva é o preditivo em forma de código. Uma função por não-terminal, um if por regra, e a pilha de chamadas faz o papel da pilha."
 
 #### PEGADINHA: "Quem avança o token" (5 cenas, ~32s)
@@ -928,7 +958,7 @@ BYTE: "Antes da aula: onde o parser recomeça?"
 Opções: no segundo = | ✔depois do ; | no fim
 Depois: "Depois do ponto e vírgula. Ali começa outro comando."
 
-#### AULA ANIMADA BÁSICA: "Cair e levantar" (22 cenas, ~181s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Cair e levantar" (23 cenas, ~187s) [1º exemplo começa na cena 5]
 
 1. TELA: # Dois erros ⏎ *x = * ;* ⏎ y = 2; ⏎ *z = ;*
    BYTE: "Este código tem dois erros de sintaxe. Um compilador simples para no primeiro e não diz mais nada."
@@ -1005,16 +1035,22 @@ Depois: "Depois do ponto e vírgula. Ali começa outro comando."
 19. TELA: # Modo pânico ⏎ Prog -> Cmd Prog | ε ⏎ Cmd -> id = Val ; ⏎ Val -> id | num ⏎ id ⏎ = ⏎ num ⏎ ; ⏎ id ⏎ = ⏎ ; ⏎ *$*
    BYTE: "Dois erros avisados numa leitura só, e o parser chegou ao fim."
 
-20. TELA: # Erros comuns ⏎ No modo pânico, o parser conserta o programa e gera o código. ⏎ certo ⏎ errado
+20. TELA: # Diga por quê ⏎ topo: Val    token: ; ⏎ O ; está no FOLLOW de Val. ⏎ Ponto e vírgula nunca se descarta. ⏎ O Val estava no topo havia muito tempo.
+   BYTE: "No segundo erro, o parser tirou o Val em vez de descartar. Por quê?"
+   PERGUNTA (toque): certo = O ; está no FOLLOW de Val. ; errado = Ponto e vírgula nunca se descarta. | O Val estava no topo havia muito tempo.
+   se errar: "O ponto e vírgula pode vir depois de Val?"
+   se acertar: "O ponto e vírgula vem depois de Val. Então o parser desiste do Val e segue."
+
+21. TELA: # Erros comuns ⏎ No modo pânico, o parser conserta o programa e gera o código. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o modo pânico para no primeiro erro. ⏎ Certo: o token descartado some do programa. ⏎ Errado: ela só serve para achar mais erros.
    BYTE: "O que a recuperação entrega no fim? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: ela só serve para achar mais erros. ; errado = Errado: o modo pânico para no primeiro erro. | Certo: o token descartado some do programa.
    se errar: "Ele jogou tokens fora. O que sobrou não é mais o seu programa."
    se acertar: "A recuperação serve para achar mais erros. Com erro de sintaxe, o compilador não gera código."
 
-21. TELA: # Erros comuns ⏎ Certo: A recuperação só serve para avisar mais erros na mesma compilação. ⏎ *Errado: Sincronizar em qualquer token que aparecer.* ⏎ *Certo: Sincronize no FIRST ou no FOLLOW do topo, como o ; que fecha o comando.*
+22. TELA: # Erros comuns ⏎ Certo: A recuperação só serve para avisar mais erros na mesma compilação. ⏎ *Errado: Sincronizar em qualquer token que aparecer.* ⏎ *Certo: Sincronize no FIRST ou no FOLLOW do topo, como o ; que fecha o comando.*
    BYTE: "Outro erro é parar de descartar cedo demais. Num token qualquer, o parser trava de novo e solta erros em cascata, que nem existem."
 
-22. TELA: # Resumo ⏎ Erro: casa vazia na tabela, ou terminal do topo diferente do token. ⏎ Modo pânico: descarta até um token de sincronização (FIRST ou FOLLOW do topo). ⏎ Meta: avisar vários erros de uma vez, sem erros em cascata.
+23. TELA: # Resumo ⏎ Erro: casa vazia na tabela, ou terminal do topo diferente do token. ⏎ Modo pânico: descarta até um token de sincronização (FIRST ou FOLLOW do topo). ⏎ Meta: avisar vários erros de uma vez, sem erros em cascata.
    BYTE: "Resumindo: no erro, o parser avisa, descarta até um token seguro e segue. O FOLLOW dá os tokens seguros. O objetivo é mostrar todos os erros numa compilação."
 
 #### PEGADINHA: "Parar ou seguir" (5 cenas, ~34s)

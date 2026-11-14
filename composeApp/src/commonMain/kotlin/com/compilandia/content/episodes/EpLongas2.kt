@@ -261,13 +261,13 @@ val aulasLongas2 by lazy {
                 drop("o3", "o4"); tint("o1", Tint.TEAL); tint("o2", Tint.TEAL)
                 add(Box("p1", "S -> id •", 180f, 262f, 230f, 38f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("p2", "S -> • id", 180f, 306f, 230f, 38f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("p3", "S -> ( S • )", 180f, 350f, 230f, 38f, Look.TOKEN, Tint.YELLOW, size = 15f))
             }
-            pergunta(tx("lr_l_11"), setOf("q1"), setOf("q2"), tx("lr_l_11_dica"), tx("lr_l_11_ok")) {
+            pergunta(tx("lr_l_11"), setOf("q1"), setOf("q2", "q3"), tx("lr_l_11_dica"), tx("lr_l_11_ok")) {
                 drop("p1", "p2", "p3")
                 add(Box("i1", "S -> ( • S )", 180f, 270f, 230f, 38f, Look.TOKEN, Tint.TEAL, size = 15f))
-                add(Box("q1", tx("lr_l_sim"), 130f, 340f, 90f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("q2", tx("lr_l_nao"), 230f, 340f, 90f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("q1", tx("lr_l_sim"), 70f, 340f, 80f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("q2", tx("lr_l_nao"), 160f, 340f, 80f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("q3", tx("lr_l_11_q3"), 278f, 340f, 150f, 40f, Look.TOKEN, Tint.YELLOW, size = 12f))
             }
             cena(tx("lr_l_12"), mood = EpMood.HAPPY) {
-                drop("q1", "q2")
+                drop("q1", "q2", "q3")
                 add(Box("i2", "S -> • ( S )", 180f, 314f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f), Box("i3", "S -> • id", 180f, 356f, 230f, 36f, Look.TOKEN, Tint.TEAL, size = 15f))
                 hot("i1", "i2", "i3")
             }
@@ -585,13 +585,9 @@ val aulasLongas2 by lazy {
             pergunta(tx("min_l_09"), setOf("pr", "qr"), setOf("pq"), tx("min_l_09_dica"), tx("min_l_09_ok")) {
                 hot("q2")
             }
-            pergunta(tx("min_l_10"), setOf("o1"), setOf("o2"), tx("min_l_10_dica"), tx("min_l_10_ok")) {
+            pergunta(tx("min_l_10"), setOf("o1"), setOf("o2", "o3"), tx("min_l_10_dica"), tx("min_l_10_ok")) {
                 tint("pr", Tint.RED); tint("qr", Tint.RED); hot("q0", "q1")
-                add(Box("o1", tx("min_l_juntar"), 130f, 370f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o2", tx("min_l_separar"), 236f, 370f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
-            }
-            cena(tx("min_l_11"), mood = EpMood.HAPPY) {
-                drop("o1", "o2")
-                tint("pq", Tint.GREEN); hot("pq")
+                add(Box("o1", tx("min_l_juntar"), 55f, 370f, 84f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o2", tx("min_l_separar"), 145f, 370f, 88f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o3", tx("min_l_10_o3"), 272f, 370f, 158f, 40f, Look.TOKEN, Tint.YELLOW, size = 12f))
             }
             // 5. O caso difícil: o AFD do livro, em que um par só cai duas rodadas depois
             val nomes = listOf("A", "B", "C", "D", "E")
@@ -634,9 +630,9 @@ val aulasLongas2 by lazy {
                 hot("q2")
             }
             pergunta(tx("min_l_19"), setOf("pm", "qm"), setOf("pq"), tx("min_l_19_dica"), tx("min_l_19_ok")) { hot("q2") }
-            pergunta(tx("min_l_20"), setOf("o2"), setOf("o1"), tx("min_l_20_dica"), tx("min_l_20_ok")) {
+            pergunta(tx("min_l_20"), setOf("o2"), setOf("o1", "o3"), tx("min_l_20_dica"), tx("min_l_20_ok")) {
                 tint("pm", Tint.RED); tint("qm", Tint.RED); hot("q0", "q1")
-                add(Box("o1", tx("min_l_juntar"), 130f, 360f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o2", tx("min_l_separar"), 236f, 360f, 96f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("o1", tx("min_l_juntar"), 55f, 360f, 84f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o2", tx("min_l_separar"), 145f, 360f, 88f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f), Box("o3", tx("min_l_20_o3"), 272f, 360f, 158f, 40f, Look.TOKEN, Tint.YELLOW, size = 12f))
             }
             fecho(Fecho(
                 tx("min_f_af"), false, tx("min_f_q"), tx("min_f_dica"), tx("min_f_ok"), tx("min_f_certo"),

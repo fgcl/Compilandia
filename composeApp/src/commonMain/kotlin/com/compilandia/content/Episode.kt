@@ -120,7 +120,7 @@ data class Episode(val skill: Skill, val title: String, val passos: List<Passo>,
  * Monta um episódio cena a cena. Cada cena herda a anterior: basta dizer o que muda.
  * Assim o Byte explica um algoritmo como quem mexe peças numa mesa.
  */
-class EpisodeBuilder(private val skill: Skill, private val title: String, private val temporada: Temporada = Temporada.BASICO) {
+class EpisodeBuilder(val skill: Skill, private val title: String, private val temporada: Temporada = Temporada.BASICO) {
     private val boxes = linkedMapOf<String, Box>()
     private var wires = mutableListOf<Wire>()
     private var actor: Actor? = null
@@ -292,15 +292,11 @@ class Fecho(
 )
 
 fun EpisodeBuilder.fecho(f: Fecho) {
-    pergunta(f.pergunta, setOf(if (f.vale) "cuS" else "cuN"), setOf(if (f.vale) "cuN" else "cuS"), f.dica, f.porque) {
-        clear()
-        add(titulo(tx("aula_titulo_erros")))
-        add(cartao(CUIDADO_ID, f.afirmacao, 130f))
-        add(Box("cuS", tx("aula_certo"), 110f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
-        add(Box("cuN", tx("aula_errado"), 250f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
-    }
+    // O "diga por quê" fecha a Sua vez, logo antes dos erros comuns.
+    PorQues.suaVez[skill]?.let { porQue(it) }
+    julgamento(f, PorQues.fecho[skill])
     cena(f.fala2) {
-        drop("cuS", "cuN")
+        drop("cuS", "cuN", "cuS2", "cuN2", "cuQ")
         change(CUIDADO_ID) { it.copy(text = tx("aula_certo_prefixo", f.certo), tint = Tint.GREEN, y = 104f) }
         add(cartao("cu2", tx("aula_errado_prefixo", f.erro2), 206f, Tint.RED))
         add(cartao("cu3", tx("aula_certo_prefixo", f.certo2), 284f, Tint.GREEN))
@@ -312,3 +308,29 @@ fun EpisodeBuilder.fecho(f: Fecho) {
         f.resumo.forEachIndexed { i, t -> add(cartao("z${i + 1}", t, 100f + i * 78f, h = 68f)) }
     }
 }
+
+/**
+ * O colega diz uma frase, e a pessoa escolhe o veredito com o motivo (pergunta de dois níveis).
+ * A certa tem o id cuS quando a frase vale e cuN quando não vale; a segunda errada tem o veredito certo e o motivo errado.
+ */
+private fun EpisodeBuilder.julgamento(f: Fecho, r: RazaoDoFecho?) {
+    val (sim, nao) = if (f.vale) "cuS" to "cuN" else "cuN" to "cuS"
+    val ids = if (r == null) listOf(sim, nao) else listOf(sim, "${sim}2", nao)
+    pergunta(f.pergunta, setOf(sim), ids.drop(1).toSet(), f.dica, f.porque) {
+        clear()
+        add(titulo(tx("aula_titulo_erros")))
+        add(cartao(CUIDADO_ID, f.afirmacao, 130f))
+        if (r == null) {
+            add(Box("cuS", tx("aula_certo"), 110f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
+            add(Box("cuN", tx("aula_errado"), 250f, 240f, 110f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
+        } else {
+            fun comMotivo(veredito: Boolean, motivo: String) = tx(if (veredito) "aula_certo_prefixo" else "aula_errado_prefixo", motivo)
+            val textos = listOf(comMotivo(f.vale, r.certa), comMotivo(f.vale, r.mesmoVeredito), comMotivo(!f.vale, r.outroVeredito))
+            add(Box("cuQ", tx("aula_veredito_com_motivo"), 180f, 182f, 336f, 20f, Look.LABEL, size = 13f))
+            // A certa não fica sempre no mesmo lugar: a ordem gira pelo tamanho da frase.
+            val ordem = List(3) { (it + f.afirmacao.length) % 3 }
+            ordem.forEachIndexed { pos, k -> add(Box(ids[k], textos[k], 180f, 222f + pos * 54f, 336f, 46f, Look.CARD, Tint.YELLOW, size = 15f)) }
+        }
+    }
+}
+

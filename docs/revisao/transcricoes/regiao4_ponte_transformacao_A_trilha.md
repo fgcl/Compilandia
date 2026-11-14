@@ -15,7 +15,7 @@ BYTE: "Antes da aula: o que o parser descendente faz aqui?"
 Opções: lê o + | ✔gira sem ler | aceita
 Depois: "Gira sem ler nada. Ele troca E por E para sempre."
 
-#### AULA ANIMADA BÁSICA: "O laço sem fim" (28 cenas, ~224s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "O laço sem fim" (29 cenas, ~229s) [1º exemplo começa na cena 4]
 
 1. TELA: # Rumo ao Templo ⏎ *n* ⏎ + ⏎ n ⏎ um token por vez, sem voltar
    BYTE: "No Templo, você vai programar um parser descendente. Ele lê um token por vez e nunca volta atrás."
@@ -56,9 +56,9 @@ Depois: "Gira sem ler nada. Ele troca E por E para sempre."
 11. TELA: # E -> n E'   E' -> - n E' | ε ⏎ E ⏎ 9 ⏎ *E'* ⏎ - ⏎ 5 ⏎ E' ⏎ - ⏎ 2 ⏎ E' ⏎ ε ⏎ 9 - (5 - 2) = 6 ?
    BYTE: "Na gramática nova, a mesma frase dá uma árvore que pende para a direita. Lida ao pé da letra, ela faria cinco menos dois primeiro, e daria seis."
 
-12. TELA: # E -> n E'   E' -> - n E' | ε ⏎ E ⏎ 9 ⏎ *E'* ⏎ - ⏎ 5 ⏎ E' ⏎ - ⏎ 2 ⏎ E' ⏎ ε ⏎ Não ⏎ Sim
+12. TELA: # E -> n E'   E' -> - n E' | ε ⏎ E ⏎ 9 ⏎ *E'* ⏎ - ⏎ 5 ⏎ E' ⏎ - ⏎ 2 ⏎ E' ⏎ ε ⏎ Não ⏎ Sim ⏎ A linguagem mudou
    BYTE: "Então o menos passou a juntar pela direita? Toque na resposta."
-   PERGUNTA (toque): certo = Não ; errado = Sim
+   PERGUNTA (toque): certo = Não ; errado = Sim | A linguagem mudou
    se errar: "A gramática nova gera as mesmas frases. Quem decide a conta é o código que monta o resultado."
    se acertar: "A linguagem é a mesma, mas a árvore mudou. O parser junta os pedaços num laço, da esquerda para a direita. A conta volta a dar dois. Você vai ver esse laço no assunto da AST."
 
@@ -95,9 +95,9 @@ Depois: "Gira sem ler nada. Ele troca E por E para sempre."
 19. TELA: # Lista de ids ⏎ L -> L , id | id ⏎ L , id ⏎ id ⏎ *L  -> id L'* ⏎ *L' -> , id L' | ε*
    BYTE: "Pronto. Nenhuma regra começa com o próprio lado esquerdo."
 
-20. TELA: # Lista de ids ⏎ L -> L , id | id ⏎ L , id ⏎ id ⏎ L  -> id L' ⏎ L' -> , id L' | ε ⏎ id , id ⏎ Sim ⏎ Não
+20. TELA: # Lista de ids ⏎ L -> L , id | id ⏎ L , id ⏎ id ⏎ L  -> id L' ⏎ L' -> , id L' | ε ⏎ id , id ⏎ Sim ⏎ Não ⏎ Só o id sozinho
    BYTE: "A gramática nova ainda gera id vírgula id? Toque na resposta."
-   PERGUNTA (toque): certo = Sim ; errado = Não
+   PERGUNTA (toque): certo = Sim ; errado = Não | Só o id sozinho
    se errar: "Primeiro, L vai para id e L linha. Depois, vírgula, id e épsilon."
    se acertar: "Exato. A linguagem continua a mesma."
 
@@ -122,16 +122,22 @@ Depois: "Gira sem ler nada. Ele troca E por E para sempre."
 25. TELA: # Dois laços ⏎ E -> E + T | E - T | T ⏎ E + T ⏎ E - T ⏎ T ⏎ E  -> T E' ⏎ *E' -> + T E' | - T E' | ε*
    BYTE: "Cada alfa ganhou sua alternativa, e o épsilon aparece uma vez só. Com três alfas, seriam três alternativas mais o épsilon."
 
-26. TELA: # Erros comuns ⏎ Para tirar a recursão de A → A α | β, basta escrever A → α A | β. ⏎ certo ⏎ errado
+26. TELA: # Diga por quê ⏎ L → L , id | id   vira   L → id L' ⏎ Terminal sempre vem primeiro no conserto. ⏎ O id é o beta, e a lista começa por ele. ⏎ O id é o alfa da regra.
+   BYTE: "No conserto, o id ficou na frente. Por quê?"
+   PERGUNTA (toque): certo = O id é o beta, e a lista começa por ele. ; errado = O id é o alfa da regra. | Terminal sempre vem primeiro no conserto.
+   se errar: "Na regra original, qual alternativa não tem laço?"
+   se acertar: "O beta é o id, a alternativa sem laço. Toda lista começa por ele."
+
+27. TELA: # Erros comuns ⏎ Para tirar a recursão de A → A α | β, basta escrever A → α A | β. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a regra nova não começa com A. ⏎ Errado: os alfas vão parar antes do beta. ⏎ Errado: falta só o ε no fim.
    BYTE: "Um colega consertou a recursão à esquerda assim. Certo ou errado? Toque."
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: os alfas vão parar antes do beta. ; errado = Errado: falta só o ε no fim. | Certo: a regra nova não começa com A.
    se errar: "Gere uma frase com as duas versões. O beta fica no começo ou no fim?"
    se acertar: "A original gera beta seguido de vários alfas. A do colega gera os alfas antes do beta. A linguagem mudou."
 
-27. TELA: # Erros comuns ⏎ Certo: A → β A' e A' → α A' | ε. O β continua no começo. ⏎ *Errado: Esquecer o ε na regra nova A'.* ⏎ *Certo: Sem A' → ε a repetição nunca termina, e nenhuma frase é gerada.*
+28. TELA: # Erros comuns ⏎ Certo: A → β A' e A' → α A' | ε. O β continua no começo. ⏎ *Errado: Esquecer o ε na regra nova A'.* ⏎ *Certo: Sem A' → ε a repetição nunca termina, e nenhuma frase é gerada.*
    BYTE: "Outro erro: esquecer o épsilon em A linha. É ele que encerra a repetição. Sem ele, a derivação nunca chega só em terminais."
 
-28. TELA: # Resumo ⏎ Recursão à esquerda: A → A α. O parser descendente entra em laço. ⏎ Conserto: A → β A' e A' → α A' | ε. ⏎ A linguagem não muda; a árvore muda. O laço do parser mantém a conta certa.
+29. TELA: # Resumo ⏎ Recursão à esquerda: A → A α. O parser descendente entra em laço. ⏎ Conserto: A → β A' e A' → α A' | ε. ⏎ A linguagem não muda; a árvore muda. O laço do parser mantém a conta certa.
    BYTE: "Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon."
 
 #### PEGADINHA: "A recursão escondida" (10 cenas, ~68s)
@@ -248,7 +254,7 @@ BYTE: "Antes da aula: olhando só o a, dá para escolher a opção?"
 Opções: sim | ✔não | às vezes
 Depois: "Não dá. As duas começam igual."
 
-#### AULA ANIMADA BÁSICA: "Pôr em evidência" (25 cenas, ~180s) [1º exemplo começa na cena 3]
+#### AULA ANIMADA BÁSICA: "Pôr em evidência" (26 cenas, ~185s) [1º exemplo começa na cena 3]
 
 1. TELA: *C -> id = n | id ( )* ⏎ C ⏎ id ⏎ C -> id = n ⏎ C -> id ( )
    BYTE: "O parser descendente do Templo escolhe a regra olhando só o próximo token. Um comando pode ser atribuição ou chamada, e os dois começam com id."
@@ -343,16 +349,22 @@ Depois: "Não dá. As duas começam igual."
 22. TELA: # If e else ⏎ S -> if S | if S else S | x ⏎ S  -> if S S' | x ⏎ *S' -> else S | ε*
    PROF: "Cuidado: ainda não é LL(1). Com else na entrada, S linha tem duas regras. Fatorar não tira a ambiguidade do else solto."
 
-23. TELA: # Erros comuns ⏎ Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ certo ⏎ errado
+23. TELA: # Diga por quê ⏎ S → if S S' | x    S' → else S | ε ⏎ S' precisa poder virar nada depois do if S. ⏎ O ε marca o fim da entrada no if sem else. ⏎ Toda regra nova precisa de ε.
+   BYTE: "Sem o épsilon em S linha, o if sem else some. Por quê?"
+   PERGUNTA (toque): certo = S' precisa poder virar nada depois do if S. ; errado = O ε marca o fim da entrada no if sem else. | Toda regra nova precisa de ε.
+   se errar: "No if sem else, o que o S linha tem que gerar?"
+   se acertar: "No if sem else, nada vem depois do if S. Só o épsilon deixa S linha virar nada."
+
+24. TELA: # Erros comuns ⏎ Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: a fatoração tira as frases com prefixo. ⏎ Certo: só muda o momento da escolha. ⏎ Certo: a gramática fica com menos regras.
    BYTE: "Fatorar à esquerda muda a linguagem? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: só muda o momento da escolha. ; errado = Certo: a gramática fica com menos regras. | Errado: a fatoração tira as frases com prefixo.
    se errar: "Derive a b e a c com a gramática fatorada. Sai alguma frase nova?"
    se acertar: "É isso. A → a A' e A' → b | c geram a b e a c, as mesmas frases. A fatoração só muda o momento da escolha."
 
-24. TELA: # Erros comuns ⏎ Certo: Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ *Errado: Pôr em evidência só uma parte do prefixo comum.* ⏎ *Certo: Use o maior prefixo comum, e repita se sobrar começo igual.*
+25. TELA: # Erros comuns ⏎ Certo: Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ *Errado: Pôr em evidência só uma parte do prefixo comum.* ⏎ *Certo: Use o maior prefixo comum, e repita se sobrar começo igual.*
    BYTE: "Um erro comum: fatorar pela metade. Se as alternativas novas ainda começam igual, o conflito continua. Repita até não sobrar prefixo comum."
 
-25. TELA: # Resumo ⏎ Prefixo comum: duas alternativas do mesmo não-terminal começam igual. ⏎ Fatorar: A → α A', e A' recebe o resto de cada alternativa. ⏎ Não muda a linguagem. É um dos preparos para a gramática ser LL(1).
+26. TELA: # Resumo ⏎ Prefixo comum: duas alternativas do mesmo não-terminal começam igual. ⏎ Fatorar: A → α A', e A' recebe o resto de cada alternativa. ⏎ Não muda a linguagem. É um dos preparos para a gramática ser LL(1).
    BYTE: "Resumindo: prefixo comum impede a escolha com um token. A fatoração põe o prefixo em evidência e adia a decisão, sem mudar a linguagem."
 
 #### PEGADINHA: "Quando fatorar não basta" (5 cenas, ~31s)

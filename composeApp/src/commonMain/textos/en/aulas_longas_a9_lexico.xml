@@ -66,9 +66,11 @@
     <string name="regex_l_09">Is the string a c accepted or rejected? Tap the answer.</string>
     <string name="regex_l_09_dica">The star lets the letter b appear zero times.</string>
     <string name="regex_l_09_ok">You got it. The letter b can be missing, and the string passes.</string>
+    <string name="regex_l_09_o3">only with a b</string>
     <string name="regex_l_10">Now the string a b c b. Is it accepted or rejected? Tap.</string>
     <string name="regex_l_10_dica">After the c, the train is in the final state. Is there an arrow with b from there?</string>
     <string name="regex_l_10_ok">A b is left with no arrow, so the train rejects the string.</string>
+    <string name="regex_l_10_o3">Accepts up to c</string>
     <string name="regex_l_11">The scanner has one machine like this for each kind of token.</string>
 
     <!-- AFN para AFD -->

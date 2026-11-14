@@ -382,12 +382,12 @@
     <string name="lessonspart1a_complete_lexema_casa_com_padrao">Complete: 'O lexema ___ casa com o padrão ___ e vira o token ___.'</string>
     <string name="lessonspart1a_exemplo_lexema_total_casa_com">Exemplo: 'O lexema `total` casa com o padrão `letra(letra|dígito)*` e vira o token ⟨id, ponteiro para total⟩.'</string>
     <string name="lessonspart1a_gaveta_meia_etiqueta_identifique_cada">Gaveta, meia, etiqueta: identifique cada uma.</string>
-    <string name="lessonspart1a_trem_que_le_palavras">O trem que lê palavras</string>
+    <string name="lessonspart1a_trem_que_le_palavras">O trem que lê cadeias</string>
     <string name="lessonspart1a_na_floresta_lexica_passa_trenzinho">Na Floresta Léxica passa um trenzinho. Ele só anda pelos trilhos pintados com a letra que está lendo.</string>
     <string name="lessonspart1a_cada_estacao_estado_cada_trilho">Cada estação é um **estado**. Cada trilho tem uma letra: é uma **transição**. Algumas estações têm bandeira de chegada: são os **estados finais** (de aceitação).</string>
-    <string name="lessonspart1a_como_trem_decide_se_palavra">E como o trem decide se a palavra é aceita?</string>
-    <string name="lessonspart1a_ele_parte_estacao_inicial_le">Ele parte da estação inicial e lê a palavra letra por letra, seguindo os trilhos. Acabou a palavra numa estação com bandeira? Aceita! Ficou sem trilho, ou parou longe da bandeira? Rejeita.</string>
-    <string name="lessonspart1a_trem_livro_dragao_aceita_palavras">O trem do Livro do Dragão: aceita palavras de a's e b's que terminam em abb. Teste 'aabb' e 'abab'.</string>
+    <string name="lessonspart1a_como_trem_decide_se_palavra">E como o trem decide se a cadeia é aceita?</string>
+    <string name="lessonspart1a_ele_parte_estacao_inicial_le">Ele parte da estação inicial e lê a cadeia letra por letra, seguindo os trilhos. Acabou a cadeia numa estação com bandeira? Aceita! Ficou sem trilho, ou parou longe da bandeira? Rejeita.</string>
+    <string name="lessonspart1a_trem_livro_dragao_aceita_palavras">O trem do Livro do Dragão: aceita cadeias de a's e b's que terminam em abb. Teste 'aabb' e 'abab'.</string>
     <string name="lessonspart1a_esse_trem_afd_automato_finito">Esse trem é um **AFD** (autômato finito determinístico): em cada estação, para cada letra, há NO MÁXIMO um trilho. O maquinista nunca fica em dúvida.</string>
     <string name="lessonspart1a_se_tivesse_dois_trilhos_com">E se tivesse dois trilhos com a mesma letra?</string>
     <string name="lessonspart1a_ai_afn_nao_deterministico_trem">Aí é um **AFN** (não determinístico): um trem mágico que se divide e segue TODOS os caminhos ao mesmo tempo, como num multiverso. E ainda tem trilhos ε, que ele pega sem ler letra nenhuma.</string>
@@ -509,7 +509,7 @@
     <string name="lessonspart1b_todas_palavras_existem_lexico_ok">Todas as palavras existem (léxico ok!), mas a ordem não segue as regras: erro sintático.</string>
     <string name="lessonspart1b_troque_palavras_por_tokens_igualzinho">Troque palavras por tokens e é igualzinho: `E -&gt; E + T` diz 'uma expressão pode ser uma expressão, um +, e um termo'. O compilador faz análise sintática como você fazia na escola, só que sem preguiça.</string>
     <string name="lessonspart1b_p_por_que_livre_contexto">P: Por que 'livre de contexto'? R: Porque o lado esquerdo é UM não-terminal sozinho: você pode trocar SN por 'Art Sub' em qualquer lugar, não importa o que esteja em volta (o contexto).</string>
-    <string name="lessonspart1b_expressao_regular_eu_descrevo_palavras">Expressão regular: 'Eu descrevo palavras.' Gramática: 'Eu descrevo frases, e sei aninhar coisas, como parênteses dentro de parênteses, coisa que você não consegue!'</string>
+    <string name="lessonspart1b_expressao_regular_eu_descrevo_palavras">Expressão regular: 'Eu descrevo cadeias de letras, como nomes e números.' Gramática: 'Eu descrevo frases, e sei aninhar coisas, como parênteses dentro de parênteses, coisa que você não consegue!'</string>
     <string name="lessonspart1b_nessa_gramatica_quem_sao_terminais">Nessa gramática, quem são os terminais e os não-terminais?</string>
     <string name="lessonspart1b_nao_terminais_frase_sn_sv">Não-terminais: Frase, SN, SV, Art, Sub, Ver. Terminais: o, a, gato, menina, peixe, come, ama. Símbolo inicial: Frase (o da primeira linha).</string>
     <string name="lessonspart1b_derivacao_em_camera_lenta">Derivação em câmera lenta</string>
@@ -540,7 +540,7 @@
     <string name="lessonspart1b_tres_passos_finais">E os três passos finais?</string>
     <string name="lessonspart1b_p_duas_derivacoes_dao_arvores">P: As duas derivações dão árvores diferentes? R: Não! Mesmas produções, mesma árvore, só muda a ordem das trocas. Cada árvore tem exatamente UMA derivação mais à esquerda e UMA mais à direita.</string>
     <string name="lessonspart1b_arvore_comum_duas_derivacoes">A árvore comum às duas derivações.</string>
-    <string name="lessonspart1b_mais_esmaecido_gramatica_b_cadeia">Mais um, esmaecido: gramática `S -&gt; a S b | ε`, cadeia `a a b b`.</string>
+    <string name="lessonspart1b_mais_esmaecido_gramatica_b_cadeia">Mais um, esmaecido: gramática `S -&gt; a S b | ε`, frase `a a b b`.</string>
     <string name="lessonspart1b_derivacao_completa">Derivação completa?</string>
     <string name="lessonspart1b_b_b_b_b_b">S ⇒ a S b ⇒ a a S b b ⇒ a a b b (S → ε no último passo). Com um só NT em cada forma sentencial, mais à esquerda = mais à direita!</string>
     <string name="lessonspart1b_em_prova_escreva_passo_por">Em prova, escreva um passo por linha, marque o NT trocado e indique ⇒lm ou ⇒rm. Conferência rápida: nº de passos = nº de nós internos da árvore.</string>
@@ -548,7 +548,7 @@
     <string name="lessonspart1b_pergunta_1_tente_sem_medo">Pergunta 1: tente sem medo.</string>
     <string name="lessonspart1b_essa_gramatica_gera_b">Essa gramática gera `a a b`?</string>
     <string name="lessonspart1b_toda_vez_que_vira_b">Toda vez que S vira a S b, entram um a E um b. A quantidade de a's e b's é sempre igual.</string>
-    <string name="lessonspart1b_qual_menor_cadeia_que_ela">Qual é a menor cadeia que ela gera?</string>
+    <string name="lessonspart1b_qual_menor_cadeia_que_ela">Qual é a menor frase que ela gera?</string>
     <string name="lessonspart1b_cadeia_vazia">a cadeia vazia ε</string>
     <string name="lessonspart1b_descreva_linguagem_inteira_em_frase">Descreva a linguagem inteira em uma frase.</string>
     <string name="lessonspart1b_anbn_n_0_n_seguidos">{ aⁿbⁿ | n ≥ 0 }: n a's seguidos de n b's.</string>
@@ -725,8 +725,8 @@
     <string name="lessonspart1c_como_consertar_placa_reparticao_apresente">É como consertar a placa da repartição: 'Apresente o RG. Depois, se quiser, mais documentos.' Primeiro algo concreto; depois a repetição.</string>
     <string name="lessonspart1c_antes_depois_t_ganharam_ajudantes">Antes e depois: E e T ganharam os ajudantes E' e T'.</string>
     <string name="lessonspart1c_gramatica_nova_gera_mesma_linguagem">A gramática nova gera a mesma linguagem?</string>
-    <string name="lessonspart1c_sim_mesmas_cadeias">Sim, as mesmas cadeias</string>
-    <string name="lessonspart1c_nao_gera_menos_cadeias">Não, gera menos cadeias</string>
+    <string name="lessonspart1c_sim_mesmas_cadeias">Sim, as mesmas frases</string>
+    <string name="lessonspart1c_nao_gera_menos_cadeias">Não, gera menos frases</string>
     <string name="lessonspart1c_duas_geram_t_t_muda">As duas geram T (+ T)*. Muda só o formato da árvore.</string>
     <string name="lessonspart1c_analisadores_lr_yacc_bison_adoram">Analisadores LR (Yacc/Bison) adoram recursão à esquerda, ela até economiza pilha. O problema é só dos descendentes (LL, descida recursiva).</string>
     <string name="lessonspart1c_por_que_recursao_esquerda_trava">Por que recursão à esquerda trava o analisador descendente?</string>
@@ -765,7 +765,7 @@
     <string name="lessonspart1c_erro_no_1_esquecer_em">Erro nº 1: esquecer o `| ε` em A'. Erro nº 2: esquecer de colocar A' no fim de CADA β.</string>
     <string name="lessonspart1c_se_questao_pedir_elimine_recursao">Se a questão pedir 'elimine a recursão à esquerda e mostre que a gramática resultante é LL(1)', faça a transformação E depois a tabela. Os pontos costumam vir das duas partes.</string>
     <string name="lessonspart1c_descubra_receita_sozinho">Descubra a receita sozinho</string>
-    <string name="lessonspart1c_quais_cadeias_essa_gramatica_gera">Quais cadeias essa gramática gera?</string>
+    <string name="lessonspart1c_quais_cadeias_essa_gramatica_gera">Quais frases essa gramática gera?</string>
     <string name="lessonspart1c_b_ba_baa_baaa">b, ba, baa, baaa…</string>
     <string name="lessonspart1c_ab_aab">a, ab, aab…</string>
     <string name="lessonspart1c_ab_aabb_aaabbb">ab, aabb, aaabbb…</string>
@@ -803,7 +803,7 @@
     <string name="lessonspart1c_beta_comeca_alfa_repete_epsilon">Beta começa, alfa repete, épsilon encerra</string>
     <string name="lessonspart1c_beta_comeca_alfa_repete_epsilon_2">**Beta começa, alfa repete, épsilon encerra.** A → β A'; A' → α A' | ε.</string>
     <string name="lessonspart1c_rabo_esquerda_morde_em_morde">**Rabo à esquerda morde**: em A → **A**α, o A morde o próprio rabo logo de cara. Recursão à DIREITA (A → αA) é inofensiva: primeiro come α (consome tokens), depois chama.</string>
-    <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β vem 'antes': é o começo da cadeia, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.</string>
+    <string name="lessonspart1c_vem_antes_comeco_cadeia_parte">β vem 'antes': é o começo da frase, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.</string>
     <string name="lessonspart1c_linha_while_disfarcado_enquanto_aparecer">**O A-linha é um while disfarçado**: enquanto aparecer α, repete; quando não, ε e sai do laço.</string>
     <string name="lessonspart1c_palacio_memoria_na_cabeceira_ponte">**Palácio da memória**: na cabeceira da **Ponte da Transformação**, um cachorro corre atrás do rabo (A → Aα). O guarda da ponte só deixa passar quem mostra o β primeiro. No meio da ponte, um carrossel (A') gira α, α, α… até alguém gritar ε.</string>
     <string name="lessonspart1c_elimine_recursao_l_l_id">Elimine a recursão de `L -&gt; L , id | id`.</string>
@@ -885,7 +885,7 @@
     <string name="lessonspart1c_algoritmo_4_21_livro_dragao">Algoritmo 4.21 (Livro do Dragão)</string>
     <string name="lessonspart1c_exemplo_livro_i_t_i">Exemplo do livro: S → i E t S | i E t S e S | a, E → b. Resultado: S → i E t S S' | a, S' → e S | ε, E → b.</string>
     <string name="lessonspart1c_fatorar_1_2_preserva_linguagem">Fatorar `A -&gt; α β1 | α β2` preserva a linguagem?</string>
-    <string name="lessonspart1c_nao_perde_cadeias">Não, perde cadeias</string>
+    <string name="lessonspart1c_nao_perde_cadeias">Não, perde frases</string>
     <string name="lessonspart1c_com_1_2_gera_exatamente">αA' com A' → β₁ | β₂ gera exatamente αβ₁ e αβ₂, é a propriedade distributiva.</string>
     <string name="lessonspart1c_gramatica_fatorada_sem_recursao_esquerda">Uma gramática fatorada e sem recursão à esquerda é necessariamente LL(1)?</string>
     <string name="lessonspart1c_sao_condicoes_necessarias_nao_suficientes">São condições necessárias, não suficientes. O else solto fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).</string>
@@ -1132,7 +1132,7 @@
     <string name="lessonspart2a_se_b_x_em_b">E se B → x | ε? Em A → B c, FIRST(A) = ?</string>
     <string name="lessonspart2a_x" translatable="false">{x, ε}</string>
     <string name="lessonspart2a_x_c" translatable="false">{x, c, ε}</string>
-    <string name="lessonspart2a_se_b_sumir_cadeia_comeca">Se B sumir, a cadeia começa com c. Então entram x e c. O ε não entra, porque o c nunca some.</string>
+    <string name="lessonspart2a_se_b_sumir_cadeia_comeca">Se B sumir, quem começa é o c. Então entram x e c. O ε não entra, porque o c nunca some.</string>
     <string name="lessonspart2a_se_for_b_c_com">E se for A → B C, com B → x | ε e C → y | ε?</string>
     <string name="lessonspart2a_x_b_aparece_y_b">x (B aparece), y (B some e C aparece) e ε (os dois somem: A pode gerar a cadeia vazia).</string>
     <string name="lessonspart2a_qual_regra_voce_acabou_descobrir">Qual 'regra' você acabou de descobrir? Tente dizer com suas palavras antes de tocar.</string>
@@ -1778,7 +1778,7 @@
     <string name="lessonspart2c_marcador_pagina">O marcador de página</string>
     <string name="lessonspart2c_torre_central_fortaleza_bottom_up">Torre central da Fortaleza Bottom-Up. Cada andar é um 'estado' cheio de marcadores de página.</string>
     <string name="lessonspart2c_item_lr_0_producao_com">Um **item LR(0)** é uma produção com um ponto • no meio: um marcador de onde você está na leitura. C → c • C quer dizer: 'já vi o c, agora espero um C'.</string>
-    <string name="lessonspart2c_nosso_livro_receitas_gera_cadeias">Nosso livro de receitas. Gera cadeias como d d, c d d, c c d c d…</string>
+    <string name="lessonspart2c_nosso_livro_receitas_gera_cadeias">Nosso livro de receitas. Gera frases como d d, c d d, c c d c d…</string>
     <string name="lessonspart2c_tipo_barra_progresso_download">Tipo a barra de progresso do download?</string>
     <string name="lessonspart2c_isso_ponto_no_comeco_c">Isso! Ponto no começo (C → • c C): 0%. Ponto no fim (C → c C •): 100%, hora de **reduzir**.</string>
     <string name="lessonspart2c_quantos_itens_lr_0_producao">Quantos itens LR(0) a produção S → C C gera?</string>
@@ -3330,7 +3330,7 @@
     <string name="lessonspart4c_modo_panico_descartar_simbolos_entrada">**Modo pânico**: descartar símbolos da entrada, um a um, até encontrar um **token de sincronização** de um conjunto escolhido (ex.: `;`, `}`, FOLLOW(A)). Simples e livre de laços infinitos.</string>
     <string name="lessonspart4c_nivel_frase_correcao_local_restante">**Nível de frase**: correção local do restante da entrada, inserir, remover ou substituir um token (ex.: inserir `;` que falta). Risco de laço se sempre inserir antes do token atual.</string>
     <string name="lessonspart4c_producoes_erro_aumentar_gramatica_com">**Produções de erro**: aumentar a gramática com produções que geram as construções erradas mais comuns, emitindo diagnósticos específicos.</string>
-    <string name="lessonspart4c_correcao_global_achar_cadeia_correta">**Correção global**: achar a cadeia correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.</string>
+    <string name="lessonspart4c_correcao_global_achar_cadeia_correta">**Correção global**: achar a frase correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.</string>
     <string name="lessonspart4c_com_nao_terminal_no_topo">com A (não-terminal) no topo e a = próximo token:\n    se M[A, a] tem produção: expanda normalmente\n    senão:  // erro\n        relate o erro (linha, esperado × encontrado)\n        enquanto a ∉ FIRST(A) e a ∉ FOLLOW(A) ∪ {$}:\n            descarte a; a ← próximo token\n        se a ∈ FIRST(A): continue com A no topo\n        senão: desempilhe A   // sincronizou em FOLLOW(A)\ncom terminal t no topo e t ≠ a:\n    relate "esperava t"; desempilhe t  // finge que t estava lá</string>
     <string name="lessonspart4c_modo_panico_no_analisador_ll">Modo pânico no analisador LL(1) (Dragão, 4.4.5)</string>
     <string name="lessonspart4c_toda_celula_vazia_desta_tabela">Toda célula vazia desta tabela é um ponto de erro. As colunas de FOLLOW(A) são as 'synch' de cada linha.</string>

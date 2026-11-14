@@ -5,11 +5,11 @@
     <string name="peg4_min_01">Dois estados parecem gêmeos quando vão para os mesmos lugares.</string>
     <string name="peg4_min_02">A pegadinha: um estado final e um não final nunca são gêmeos.</string>
     <string name="peg4_min_03">Qual par dá para separar logo de cara? Toque nele.</string>
-    <string name="peg4_min_03_dica">Um deles aceita a palavra e o outro não.</string>
+    <string name="peg4_min_03_dica">Um deles aceita a cadeia e o outro não.</string>
     <string name="peg4_min_03_ok">Final contra não final já é diferente.</string>
     <string name="peg4_min_04">Depois, olhe para onde cada um vai com a mesma letra.</string>
     <string name="peg4_min_05">Se um vai para um par já separado, os dois também se separam.</string>
-    <string name="peg4_min_06">Só junte o que nenhuma palavra consegue separar.</string>
+    <string name="peg4_min_06">Só junte o que nenhuma cadeia consegue separar.</string>
     <string name="peg4_ll_titulo">Terminal não vai para a tabela</string>
     <string name="peg4_ll_01">O topo da pilha pode ter dois tipos de símbolo.</string>
     <string name="peg4_ll_02">Com não-terminal no topo, o parser consulta a tabela e troca pela regra.</string>

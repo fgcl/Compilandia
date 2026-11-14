@@ -261,12 +261,12 @@ val aulasLongas by lazy {
                 add(saco("sB", "FIRST(B)", 100f, 316f), saco("sS", "FIRST(S)", 260f, 316f))
                 hot("g1")
             }
-            pergunta(tx("first_l_15"), setOf("v1"), setOf("v2"), tx("first_l_15_dica"), tx("first_l_15_ok")) {
+            pergunta(tx("first_l_15"), setOf("v1"), setOf("v2", "v3"), tx("first_l_15_dica"), tx("first_l_15_ok")) {
                 hot("g1", "g2")
-                add(Box("v1", tx("ab_sim"), 130f, 200f, 80f, 40f, Look.TOKEN, Tint.YELLOW), Box("v2", tx("comum_nao"), 230f, 200f, 80f, 40f, Look.TOKEN, Tint.YELLOW))
+                add(Box("v1", tx("ab_sim"), 80f, 200f, 70f, 40f, Look.TOKEN, Tint.YELLOW), Box("v2", tx("comum_nao"), 160f, 200f, 70f, 40f, Look.TOKEN, Tint.YELLOW), Box("v3", tx("first_l_15_v3"), 272f, 200f, 150f, 40f, Look.TOKEN, Tint.YELLOW, size = 13f))
             }
             pergunta(tx("first_l_16"), setOf("o1", "o2", "o3"), setOf("o4"), tx("first_l_16_dica"), tx("first_l_16_ok")) {
-                drop("v1", "v2")
+                drop("v1", "v2", "v3")
                 add(ficha("b1", "b", 64f, 296f), ficha("b2", "c", 100f, 296f), ficha("b3", "ε", 136f, 296f))
                 hot("g0")
                 add(opcao("o1", "b", 90f), opcao("o2", "c", 150f), opcao("o3", "d", 210f), opcao("o4", "ε", 270f))

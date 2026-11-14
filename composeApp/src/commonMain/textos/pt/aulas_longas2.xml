@@ -56,6 +56,7 @@
     <string name="lr_l_11">Lendo abre parêntese, o ponto fica antes de S. Precisa de closure?</string>
     <string name="lr_l_11_dica">Ponto antes de um não-terminal sempre puxa as regras dele.</string>
     <string name="lr_l_11_ok">É isso. Entram de novo as regras de S.</string>
+    <string name="lr_l_11_q3">só no estado zero</string>
     <string name="lr_l_12">Os estados estão prontos. Onde há item completo, a tabela vai reduzir. Onde o ponto está antes de um terminal, ela vai empilhar.</string>
     <string name="lr_l_titulo_automato">O autômato inteiro</string>
     <string name="lr_l_13">Repetindo o goto e o closure até não surgir estado novo, saem seis estados. Embaixo estão os itens do estado do abre parêntese.</string>
@@ -163,8 +164,8 @@
     <string name="min_l_09_ok">Só o R é final. Os outros dois, não.</string>
     <string name="min_l_10">P e Q, com zero, vão os dois para Q. Com um, para R. Juntar ou separar?</string>
     <string name="min_l_10_dica">Os destinos são iguais. Nenhum par marcado aparece.</string>
-    <string name="min_l_10_ok">Certo. Os dois viram um estado só.</string>
-    <string name="min_l_11">Ficaram dois estados. O autômato reconhece a mesma linguagem de antes.</string>
+    <string name="min_l_10_ok">Certo. Os dois viram um estado só, e a linguagem não muda.</string>
+    <string name="min_l_10_o3">ver outra rodada</string>
     <string name="min_l_titulo_livro">O AFD do livro</string>
     <string name="min_l_12">Agora o AFD do livro, que termina em a b b. Só o E é final. Em cada casa, eu anoto a rodada da marca.</string>
     <string name="min_l_13">Rodada um: o E, que é final, com todos os outros.</string>
@@ -186,6 +187,7 @@
     <string name="min_l_20">E P com Q? Com a, P vai para P, e Q vai para M. Juntar ou separar?</string>
     <string name="min_l_20_dica">O par P e M já está marcado.</string>
     <string name="min_l_20_ok">Separar. P e M são diferentes, então P e Q também são. Sem o morto na tabela, os dois pareceriam iguais, e o AFD aceitaria b a.</string>
+    <string name="min_l_20_o3">tirar o M e juntar</string>
     <string name="min_l_juntar">juntar</string>
     <string name="min_l_separar">separar</string>
     <string name="min_l_x2">Mais uma casa cai pelo mesmo motivo. Qual? Toque nela.</string>

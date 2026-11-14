@@ -73,6 +73,7 @@
     <string name="first_l_15">Mesmo assim, B pode sumir? Toque na resposta.</string>
     <string name="first_l_15_dica">Siga B vai para C. O que C pode virar?</string>
     <string name="first_l_15_ok">Pode. B vai para C, e C vai para épsilon. Então o FIRST de B tem b, c e épsilon.</string>
+    <string name="first_l_15_v3">só com ε escrito</string>
     <string name="first_l_16">Agora S vai para B d. Toque em tudo que entra no FIRST de S.</string>
     <string name="first_l_16_dica">Use o FIRST de B sem o épsilon. E como B some, olhe o próximo.</string>
     <string name="first_l_16_ok">Três tokens: b, c e d. O d entra porque B some. O épsilon fica de fora, porque o d nunca some.</string>

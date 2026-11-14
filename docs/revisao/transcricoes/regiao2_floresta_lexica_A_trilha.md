@@ -15,7 +15,7 @@ BYTE: "Antes da aula: quantos tokens tem esta linha?"
 Opções: 2 | ✔3 | 5
 Depois: "Três: x, maior ou igual, e dez."
 
-#### AULA ANIMADA BÁSICA: "Cortar a linha" (22 cenas, ~171s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "Cortar a linha" (23 cenas, ~176s) [1º exemplo começa na cena 4]
 
 1. TELA: # Letras demais ⏎ i ⏎ f ⏎ ( ⏎ x ⏎ 1 ⏎ > ⏎ = ⏎ 1 ⏎ 0 ⏎ )
    BYTE: "A fase seguinte é o analisador sintático, que todo mundo chama de parser. Ele trabalha com palavras, como nomes e operadores. Mas o arquivo chega caractere por caractere."
@@ -95,16 +95,22 @@ Depois: "Três: x, maior ou igual, e dez."
 19. TELA: # Outra linha ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ ( ⏎ i ⏎ < ⏎ = ⏎ n ⏎ ) ⏎ i ⏎ + ⏎ + ⏎ ; ⏎ while ⏎ ( ⏎ i ⏎ <= ⏎ n ⏎ ) ⏎ i ⏎ ++ ⏎ ;
    BYTE: "Nove tokens, cada um com sua classe. É isso que o parser recebe."
 
-20. TELA: # Erros comuns ⏎ Em x>=10, o scanner gera os tokens x, >, = e 10. ⏎ certo ⏎ errado
+20. TELA: # Diga por quê ⏎ i++;   →   i  |  ++  |  ; ⏎ Dois símbolos iguais sempre viram um token. ⏎ Todo operador tem dois caracteres. ⏎ O scanner pega o maior pedaço que casa.
+   BYTE: "O mais mais saiu como um token só. Por quê?"
+   PERGUNTA (toque): certo = O scanner pega o maior pedaço que casa. ; errado = Dois símbolos iguais sempre viram um token. | Todo operador tem dois caracteres.
+   se errar: "O scanner para no primeiro mais, ou anda até onde der?"
+   se acertar: "Pelo maior casamento. O mais mais casa inteiro, então não vira dois mais."
+
+21. TELA: # Erros comuns ⏎ Em x>=10, o scanner gera os tokens x, >, = e 10. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: pelo maior casamento, >= é um token só. ⏎ Errado: o 10 vira dois tokens, um por dígito. ⏎ Certo: cada símbolo vira um token.
    BYTE: "Como o scanner corta este trecho? Um colega cortou assim. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: pelo maior casamento, >= é um token só. ; errado = Errado: o 10 vira dois tokens, um por dígito. | Certo: cada símbolo vira um token.
    se errar: "O scanner pega sempre o pedaço mais longo que forma um token."
    se acertar: "Pelo maior casamento, maior ou igual é um token só. São três tokens, não quatro."
 
-21. TELA: # Erros comuns ⏎ Certo: x>=10 dá três tokens: x, >= e 10. É o maior casamento. ⏎ *Errado: Token e lexema são a mesma coisa.* ⏎ *Certo: Lexema é o texto (conta2). O token leva a classe (ID) e o lexema.*
+22. TELA: # Erros comuns ⏎ Certo: x>=10 dá três tokens: x, >= e 10. É o maior casamento. ⏎ *Errado: Token e lexema são a mesma coisa.* ⏎ *Certo: Lexema é o texto (conta2). O token leva a classe (ID) e o lexema.*
    BYTE: "Outro erro: confundir token com lexema. Lexema é o texto que estava no arquivo. Token é o que o parser recebe: a classe, com o lexema junto."
 
-22. TELA: # Resumo ⏎ O scanner lê caracteres e entrega tokens ao parser. ⏎ Maior casamento: sempre o pedaço mais longo que forma token. ⏎ Lexema é o texto; o token leva a classe e o lexema. Espaço e comentário somem.
+23. TELA: # Resumo ⏎ O scanner lê caracteres e entrega tokens ao parser. ⏎ Maior casamento: sempre o pedaço mais longo que forma token. ⏎ Lexema é o texto; o token leva a classe e o lexema. Espaço e comentário somem.
    BYTE: "Resumindo: a análise léxica transforma caracteres em tokens. Ela usa o maior casamento, separa lexema de classe e joga fora espaços e comentários."
 
 #### PEGADINHA: "Por que ifa não é if" (6 cenas, ~39s)
@@ -215,7 +221,7 @@ BYTE: "Antes da aula: qual cadeia casa com ela?"
 Opções: ba | ✔aab | abb
 Depois: "Vale a a b. Quantos a quiser, e um b no fim."
 
-#### AULA ANIMADA BÁSICA: "O trem do autômato" (28 cenas, ~224s) [1º exemplo começa na cena 3]
+#### AULA ANIMADA BÁSICA: "O trem do autômato" (29 cenas, ~229s) [1º exemplo começa na cena 3]
 
 1. TELA: # Nomes sem fim ⏎ x1 ⏎ conta ⏎ 1x ⏎ total2
    BYTE: "Existem infinitos nomes de variável. Não dá para listar todos. É preciso descrever o formato deles."
@@ -250,9 +256,9 @@ Depois: "Vale a a b. Quantos a quiser, e um b no fim."
 9. TELA: # a b* ⏎ q0 ⏎ *q1* ⏎ a ⏎ b ⏎ b
    BYTE: "A cadeia acabou num estado final, o de círculo duplo. A cadeia foi aceita."
 
-10. TELA: # a b* ⏎ q0 ⏎ *q1* ⏎ b ⏎ a ⏎ Aceita ⏎ Rejeita
+10. TELA: # a b* ⏎ q0 ⏎ *q1* ⏎ b ⏎ a ⏎ Aceita ⏎ Rejeita ⏎ Espera
    BYTE: "E a cadeia b a? O trem sai do primeiro estado lendo b. Toque na resposta."
-   PERGUNTA (toque): certo = Rejeita ; errado = Aceita
+   PERGUNTA (toque): certo = Rejeita ; errado = Aceita | Espera
    se errar: "Olhe as setas que saem do primeiro estado. Alguma tem b?"
    se acertar: "Certo. Sem transição para b, o autômato rejeita a cadeia."
 
@@ -307,31 +313,37 @@ Depois: "Vale a a b. Quantos a quiser, e um b no fim."
    se errar: "A cadeia só pode acabar depois da letra c."
    se acertar: "Só a seta com a letra c chega ao final."
 
-23. TELA: # a b* c ⏎ q0 ⏎ q1 ⏎ q2 ⏎ a ⏎ c ⏎ Aceita ⏎ Rejeita
+23. TELA: # a b* c ⏎ q0 ⏎ q1 ⏎ q2 ⏎ a ⏎ c ⏎ Aceita ⏎ Rejeita ⏎ só com um b
    BYTE: "A cadeia a c é aceita ou rejeitada? Toque na resposta."
-   PERGUNTA (toque): certo = Aceita ; errado = Rejeita
+   PERGUNTA (toque): certo = Aceita ; errado = Rejeita | só com um b
    se errar: "A estrela deixa a letra b aparecer zero vezes."
    se acertar: "Acertou. A letra b pode faltar, e a cadeia passa."
 
-24. TELA: # a b* c ⏎ q0 ⏎ q1 ⏎ q2 ⏎ Aceita ⏎ Rejeita ⏎ a ⏎ b ⏎ c ⏎ b
+24. TELA: # a b* c ⏎ q0 ⏎ q1 ⏎ q2 ⏎ Aceita ⏎ Rejeita ⏎ Aceita até o c ⏎ a ⏎ b ⏎ c ⏎ b
    BYTE: "Agora a cadeia a b c b. Ela é aceita ou rejeitada? Toque."
-   PERGUNTA (toque): certo = Rejeita ; errado = Aceita
+   PERGUNTA (toque): certo = Rejeita ; errado = Aceita | Aceita até o c
    se errar: "Depois do c, o trem está no final. Sai seta com b dali?"
    se acertar: "Sobrou um b sem seta, então o trem rejeita a cadeia."
 
 25. TELA: # a b* c ⏎ q0 ⏎ q1 ⏎ *q2* ⏎ a ⏎ b ⏎ c ⏎ b
    BYTE: "O scanner tem uma máquina dessas para cada tipo de token."
 
-26. TELA: # Erros comuns ⏎ A cadeia passou por um estado final no meio do caminho, então foi aceita. ⏎ certo ⏎ errado
+26. TELA: # Diga por quê ⏎ a b* c ⏎ O b estrela precisa de pelo menos um b. ⏎ A expressão exige o c no fim. ⏎ Estado do meio nunca é final.
+   BYTE: "O estado depois do a não é final. Por quê?"
+   PERGUNTA (toque): certo = A expressão exige o c no fim. ; errado = Estado do meio nunca é final. | O b estrela precisa de pelo menos um b.
+   se errar: "Toda cadeia dessa expressão termina com que letra?"
+   se acertar: "Toda cadeia de a, b estrela, c acaba em c. Parar antes do c é rejeitar."
+
+27. TELA: # Erros comuns ⏎ A cadeia passou por um estado final no meio do caminho, então foi aceita. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: só aceita quem passa por todos os estados. ⏎ Certo: tocar num final já aceita. ⏎ Errado: vale só o estado onde a leitura termina.
    BYTE: "Quando o autômato aceita? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: vale só o estado onde a leitura termina. ; errado = Errado: só aceita quem passa por todos os estados. | Certo: tocar num final já aceita.
    se errar: "O que importa é onde o trem está quando a cadeia termina."
    se acertar: "Só vale o estado em que a leitura termina. Passar por um final no meio não aceita nada."
 
-27. TELA: # Erros comuns ⏎ Certo: Aceita só se a cadeia inteira foi lida e parou num estado final. ⏎ *Errado: A expressão a* exige pelo menos um a.* ⏎ *Certo: A estrela aceita zero vezes. Para uma ou mais, use a a* (ou a+).*
+28. TELA: # Erros comuns ⏎ Certo: Aceita só se a cadeia inteira foi lida e parou num estado final. ⏎ *Errado: A expressão a* exige pelo menos um a.* ⏎ *Certo: A estrela aceita zero vezes. Para uma ou mais, use a a* (ou a+).*
    BYTE: "Outro erro: achar que a estrela exige ao menos uma repetição. Estrela é zero ou mais. A cadeia vazia também casa."
 
-28. TELA: # Resumo ⏎ A expressão regular descreve o formato; o autômato confere. ⏎ AFD: um estado inicial, uma seta por símbolo em cada estado, estados finais. ⏎ Aceita se leu tudo e parou num final. Sem transição, rejeita.
+29. TELA: # Resumo ⏎ A expressão regular descreve o formato; o autômato confere. ⏎ AFD: um estado inicial, uma seta por símbolo em cada estado, estados finais. ⏎ Aceita se leu tudo e parou num final. Sem transição, rejeita.
    BYTE: "Resumindo: a expressão regular descreve o formato de um token, e o autômato finito confere cadeia por cadeia. Aceitar é terminar a leitura num estado final."
 
 #### PEGADINHA: "Estrela, mais e interrogação" (5 cenas, ~31s)
@@ -375,7 +387,7 @@ Depois: "Vale a a b. Quantos a quiser, e um b no fim."
 #### DIAGRAMAS DE TABELA: "O autômato vira tabela" (10 cenas, ~56s)
 
 1. TELA: # (a|b)*abb ⏎ q0 ⏎ q1 ⏎ q2 ⏎ q3
-   BYTE: "Este autômato aceita as palavras que terminam em abb."
+   BYTE: "Este autômato aceita as cadeias que terminam em abb."
 
 2. TELA: # (a|b)*abb ⏎ *q0 início{a → q1; b → q0}* ⏎ q1{a → q1; b → q2} ⏎ q2{a → q1; b → q3} ⏎ q3 final{a → q1; b → q0}
    BYTE: "Agora cada estado vira caixa: o nome em cima, uma linha por letra."
@@ -402,7 +414,7 @@ Depois: "Vale a a b. Quantos a quiser, e um b no fim."
    BYTE: "Deu q2. Lê o último b, e a célula manda para o q3."
 
 9. TELA: # Tabela de transição ⏎ δ ⏎ a ⏎ b ⏎ →q0 ⏎ q1 ⏎ q0 ⏎ q1 ⏎ q1 ⏎ q2 ⏎ q2 ⏎ q1 ⏎ q3 ⏎ **q3* ⏎ q1 ⏎ q0 ⏎ a ⏎ b ⏎ b
-   PROF: "O q3 tem asterisco. A palavra foi aceita só olhando a tabela."
+   PROF: "O q3 tem asterisco. A cadeia foi aceita só olhando a tabela."
 
 10. TELA: δ ⏎ a ⏎ b ⏎ *→q0* ⏎ q1 ⏎ q0 ⏎ q1 ⏎ q1 ⏎ q2 ⏎ q2 ⏎ q1 ⏎ q3 ⏎ *q3 ⏎ q1 ⏎ q0
    BYTE: "Agora você. Leia quatro letras e termine na linha com asterisco."
@@ -461,7 +473,7 @@ BYTE: "Antes da aula: lendo a, para onde o autômato vai?"
 Opções: q1 | q2 | ✔os dois
 Depois: "Para os dois. O AFD guarda esse conjunto como um estado só."
 
-#### AULA ANIMADA BÁSICA: "De muitos caminhos para um" (29 cenas, ~240s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "De muitos caminhos para um" (30 cenas, ~246s) [1º exemplo começa na cena 4]
 
 1. TELA: # AFN: termina em ab ⏎ 0 ⏎ 1 ⏎ 2
    BYTE: "Este é um AFN, um autômato não determinístico. Nele, o mesmo símbolo pode levar a dois estados. Lendo a, o estado zero tem duas saídas."
@@ -574,16 +586,22 @@ Depois: "Para os dois. O AFD guarda esse conjunto como um estado só."
 26. TELA: # De onde vem o AFN ⏎ a|b ⏎ 0 ⏎ 1 ⏎ 2 ⏎ 3 ⏎ 4 ⏎ 5 ⏎ (a|b)* ⏎ *8*
    BYTE: "Por isso o AFN de Thompson tem tantas setas épsilon. E por isso o fecho depois do move faz tanta diferença."
 
-27. TELA: # Erros comuns ⏎ O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ certo ⏎ errado
+27. TELA: # Diga por quê ⏎ n estados no AFN → até 2ⁿ estados no AFD ⏎ Cada estado do AFD é um conjunto do AFN. ⏎ Cada símbolo lido dobra o número de estados. ⏎ Cada estado do AFN tem duas setas.
+   BYTE: "Um AFN de n estados vira no máximo dois elevado a n. Por quê?"
+   PERGUNTA (toque): certo = Cada estado do AFD é um conjunto do AFN. ; errado = Cada símbolo lido dobra o número de estados. | Cada estado do AFN tem duas setas.
+   se errar: "Cada estado do AFD é o quê, por dentro?"
+   se acertar: "Cada estado do AFD é um subconjunto dos n estados. E existem dois elevado a n subconjuntos."
+
+28. TELA: # Erros comuns ⏎ O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: o 0 é sempre final. ⏎ Errado: todos os estados do conjunto precisam ser finais. ⏎ Certo: basta um caminho do AFN aceitar.
    BYTE: "Quando um conjunto é final no AFD? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: basta um caminho do AFN aceitar. ; errado = Certo: o 0 é sempre final. | Errado: todos os estados do conjunto precisam ser finais.
    se errar: "O AFN aceita se algum caminho chega a um final. Precisa ser todos?"
    se acertar: "Basta um estado final dentro do conjunto. O AFN aceita quando pelo menos um caminho dá certo."
 
-28. TELA: # Erros comuns ⏎ Certo: O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ *Errado: Calcular o move e esquecer o ε-fecho do resultado.* ⏎ *Certo: Depois de cada move, aplique o ε-fecho. Senão faltam estados.*
+29. TELA: # Erros comuns ⏎ Certo: O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ *Errado: Calcular o move e esquecer o ε-fecho do resultado.* ⏎ *Certo: Depois de cada move, aplique o ε-fecho. Senão faltam estados.*
    BYTE: "Um erro comum: esquecer o épsilon fecho depois de ler o símbolo. Os estados alcançados por épsilon também fazem parte do conjunto."
 
-29. TELA: # Resumo ⏎ Cada estado do AFD é um conjunto de estados do AFN. ⏎ Começa no ε-fecho do inicial. Para cada símbolo: move e ε-fecho. ⏎ Conjunto com algum final é final. Acaba quando não surge conjunto novo.
+30. TELA: # Resumo ⏎ Cada estado do AFD é um conjunto de estados do AFN. ⏎ Começa no ε-fecho do inicial. Para cada símbolo: move e ε-fecho. ⏎ Conjunto com algum final é final. Acaba quando não surge conjunto novo.
    BYTE: "Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar."
 
 #### PEGADINHA: "O fecho esquecido" (5 cenas, ~35s)
@@ -661,7 +679,7 @@ BYTE: "Antes da aula: dois estados fazem tudo igual. O que fazer?"
 Opções: apagar | ✔juntar | deixar
 Depois: "Juntar. Um estado só faz o mesmo trabalho."
 
-#### AULA ANIMADA BÁSICA: "Juntar os gêmeos" (30 cenas, ~222s)
+#### AULA ANIMADA BÁSICA: "Juntar os gêmeos" (30 cenas, ~221s)
 
 1. TELA: # AFD ⏎ A ⏎ B ⏎ C ⏎ D
    BYTE: "Este AFD tem quatro estados. Talvez dois deles façam exatamente o mesmo papel."
@@ -726,63 +744,66 @@ Depois: "Juntar. Um estado só faz o mesmo trabalho."
    se errar: "Procure os pares com o R, que é final."
    se acertar: "Só o R é final. Os outros dois, não."
 
-16. TELA: # AFD ⏎ *P* ⏎ *Q* ⏎ R ⏎ P, Q ⏎ P, R ⏎ Q, R ⏎ juntar ⏎ separar
+16. TELA: # AFD ⏎ *P* ⏎ *Q* ⏎ R ⏎ P, Q ⏎ P, R ⏎ Q, R ⏎ juntar ⏎ separar ⏎ ver outra rodada
    BYTE: "P e Q, com zero, vão os dois para Q. Com um, para R. Juntar ou separar?"
-   PERGUNTA (toque): certo = juntar ; errado = separar
+   PERGUNTA (toque): certo = juntar ; errado = separar | ver outra rodada
    se errar: "Os destinos são iguais. Nenhum par marcado aparece."
-   se acertar: "Certo. Os dois viram um estado só."
+   se acertar: "Certo. Os dois viram um estado só, e a linguagem não muda."
 
-17. TELA: # AFD ⏎ P ⏎ Q ⏎ R ⏎ *P, Q* ⏎ P, R ⏎ Q, R
-   BYTE: "Ficaram dois estados. O autômato reconhece a mesma linguagem de antes."
-
-18. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ *E* ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E
+17. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ *E* ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E
    BYTE: "Agora o AFD do livro, que termina em a b b. Só o E é final. Em cada casa, eu anoto a rodada da marca."
 
-19. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E ⏎ *1* ⏎ *1* ⏎ *1* ⏎ *1*
+18. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E ⏎ *1* ⏎ *1* ⏎ *1* ⏎ *1*
    BYTE: "Rodada um: o E, que é final, com todos os outros."
 
-20. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ *E* ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
+19. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ *E* ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
    BYTE: "Rodada dois. Quais pares vão, com b, para um par com o E? Toque neles."
    PERGUNTA (toque): certo =  |  |  ; errado =  |  | 
    se errar: "Só o D vai para o E com b. Os outros vão para o C ou para o D."
    se acertar: "O D com o A, o B e o C. Com b, o D vai para o E, e os outros não."
 
-21. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
+20. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ C ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
    BYTE: "Rodada três. Marquei a rodada dois com o número dois. Quais casas em branco caem agora? Toque."
    PERGUNTA (toque): certo =  |  ; errado = 
    se errar: "Com b, o A vai para o C, e o B vai para o D. O par C e D caiu na rodada dois."
    se acertar: "A com B e B com C. Os dois caem por causa de uma marca da rodada dois."
 
-22. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ *3* ⏎ C ⏎ *3* ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
+21. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ *3* ⏎ C ⏎ *3* ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
    BYTE: "Uma marca puxou a outra. Por isso a receita repete: parar na rodada dois deixaria esses pares em branco."
 
-23. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ 3 ⏎ C ⏎ 3 ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
+22. TELA: # O AFD do livro ⏎ A ⏎ B ⏎ C ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ 3 ⏎ C ⏎ 3 ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
    BYTE: "Na rodada quatro, nada muda. Que casa ficou em branco? Toque."
    PERGUNTA (toque): certo =  ; errado = 3 | 3 | 2 | 2 | 2 | 1 | 1 | 1 | 1
    se errar: "Procure a casa sem número."
    se acertar: "A com C. Com a, os dois vão para o B. Com b, os dois vão para o C."
 
-24. TELA: # O AFD do livro ⏎ *A* ⏎ B ⏎ *C* ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ 3 ⏎ C ⏎ 3 ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
+23. TELA: # O AFD do livro ⏎ *A* ⏎ B ⏎ *C* ⏎ D ⏎ E ⏎ A ⏎ B ⏎ C ⏎ D ⏎ B ⏎ 3 ⏎ C ⏎ 3 ⏎ D ⏎ 2 ⏎ 2 ⏎ 2 ⏎ E ⏎ 1 ⏎ 1 ⏎ 1 ⏎ 1
    BYTE: "A e C viram um estado só. O AFD mínimo tem quatro estados, como no livro."
 
-25. TELA: # a*b* ⏎ P ⏎ Q ⏎ *M* ⏎ P, Q ⏎ P, M ⏎ Q, M
+24. TELA: # a*b* ⏎ P ⏎ Q ⏎ *M* ⏎ P, Q ⏎ P, M ⏎ Q, M
    BYTE: "Mais um: a estrela b estrela. Depois de b, ler a não tem volta. A seta vai para o estado morto M. Para minimizar, ele precisa aparecer."
 
-26. TELA: # a*b* ⏎ P ⏎ Q ⏎ *M* ⏎ P, Q ⏎ P, M ⏎ Q, M
+25. TELA: # a*b* ⏎ P ⏎ Q ⏎ *M* ⏎ P, Q ⏎ P, M ⏎ Q, M
    BYTE: "Rodada um: quais pares a primeira regra marca? Toque neles."
    PERGUNTA (toque): certo = P, M | Q, M ; errado = P, Q
    se errar: "P e Q são finais. O estado morto não é."
    se acertar: "P com M e Q com M. O estado morto é um estado não final como outro qualquer."
 
-27. TELA: # a*b* ⏎ *P* ⏎ *Q* ⏎ M ⏎ P, Q ⏎ P, M ⏎ Q, M ⏎ juntar ⏎ separar
+26. TELA: # a*b* ⏎ *P* ⏎ *Q* ⏎ M ⏎ P, Q ⏎ P, M ⏎ Q, M ⏎ juntar ⏎ separar ⏎ tirar o M e juntar
    BYTE: "E P com Q? Com a, P vai para P, e Q vai para M. Juntar ou separar?"
-   PERGUNTA (toque): certo = separar ; errado = juntar
+   PERGUNTA (toque): certo = separar ; errado = juntar | tirar o M e juntar
    se errar: "O par P e M já está marcado."
    se acertar: "Separar. P e M são diferentes, então P e Q também são. Sem o morto na tabela, os dois pareceriam iguais, e o AFD aceitaria b a."
 
-28. TELA: # Erros comuns ⏎ Com b, um par vai para A e para C. A e C são estados diferentes, então o par se separa. ⏎ certo ⏎ errado
+27. TELA: # Diga por quê ⏎ E é final. A, B, C e D não são. ⏎ Final e não final têm setas diferentes. ⏎ A receita marca um par por rodada. ⏎ A cadeia vazia aceita num e rejeita no outro.
+   BYTE: "Na rodada um, todo final se separa de todo não final. Por quê?"
+   PERGUNTA (toque): certo = A cadeia vazia aceita num e rejeita no outro. ; errado = Final e não final têm setas diferentes. | A receita marca um par por rodada.
+   se errar: "Sem ler nada, um deles já aceita. E o outro?"
+   se acertar: "Sem ler letra nenhuma, um aceita e o outro não. A cadeia vazia separa os dois."
+
+28. TELA: # Erros comuns ⏎ Com b, um par vai para A e para C. A e C são estados diferentes, então o par se separa. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: A e C não formam um par marcado. ⏎ Errado: com b, nenhum par se separa. ⏎ Certo: destinos diferentes já separam o par.
    BYTE: "Basta os destinos serem estados diferentes para marcar o par? Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = Errado: A e C não formam um par marcado. ; errado = Errado: com b, nenhum par se separa. | Certo: destinos diferentes já separam o par.
    se errar: "No AFD do livro, A com C ficou em branco no fim."
    se acertar: "Só separa quando os destinos formam um par já marcado. A e C são equivalentes, então não separam ninguém."
 
@@ -803,7 +824,7 @@ Depois: "Juntar. Um estado só faz o mesmo trabalho."
 3. TELA: # Juntar gêmeos de mentira ⏎ q0 ⏎ q1 ⏎ q2 ⏎ q0, q1 ⏎ q1, q2
    BYTE: "Qual par dá para separar logo de cara? Toque nele."
    PERGUNTA (toque): certo = q1, q2 ; errado = q0, q1
-   se errar: "Um deles aceita a palavra e o outro não."
+   se errar: "Um deles aceita a cadeia e o outro não."
    se acertar: "Final contra não final já é diferente."
 
 4. TELA: # Juntar gêmeos de mentira ⏎ *q0* ⏎ *q1* ⏎ q2 ⏎ q0, q1 ⏎ q1, q2
@@ -813,7 +834,7 @@ Depois: "Juntar. Um estado só faz o mesmo trabalho."
    BYTE: "Se um vai para um par já separado, os dois também se separam."
 
 6. TELA: # Juntar gêmeos de mentira ⏎ q0 ⏎ q1 ⏎ q2 ⏎ q0, q1 ⏎ q1, q2
-   PROF: "Só junte o que nenhuma palavra consegue separar."
+   PROF: "Só junte o que nenhuma cadeia consegue separar."
 
 #### BUGS DO ÁLBUM (julgar verdade/mentira)
 - Bug dos Gêmeos — mentira: "Estados com o mesmo número de setas são iguais." / verdade: "Só são gêmeos se nenhuma cadeia separa os dois."
@@ -851,7 +872,7 @@ BYTE: "Antes da aula: a palavra if vira qual token?"
 Opções: ✔ID | IF | erro
 Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 
-#### AULA ANIMADA BÁSICA: "O Flex escreve o scanner" (20 cenas, ~155s) [1º exemplo começa na cena 3]
+#### AULA ANIMADA BÁSICA: "O Flex escreve o scanner" (21 cenas, ~160s) [1º exemplo começa na cena 3]
 
 1. TELA: # Scanner à mão ⏎ if (isalpha(c)) { ⏎   while (isalnum(c)) ... ⏎ } else if (isdigit(c)) { ⏎   while (isdigit(c)) ... ⏎ } else if (c == '=') ...
    BYTE: "Escrito à mão, o scanner tem um teste para cada classe de token, e um autômato por trás de cada teste."
@@ -925,16 +946,22 @@ Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 17. TELA: # Arquivo .l ⏎ [a-z]+    return ID; ⏎ *"while"   return WHILE;* ⏎ "="       return ATRIB; ⏎ "=="      return IGUAL; ⏎ [0-9]+    return NUM; ⏎ " "       ; ⏎ WHILE ⏎ ID ⏎ IGUAL ⏎ NUM
    BYTE: "Com while no topo, saem quatro tokens: WHILE, ID, IGUAL e NUM."
 
-18. TELA: # Erros comuns ⏎ No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ certo ⏎ errado
+18. TELA: # Diga por quê ⏎ [a-z]+    return ID; "while"   return WHILE; ⏎ O Flex ignora o que está entre aspas. ⏎ As duas casam while, e a de cima desempata. ⏎ A regra de nomes casa mais letras.
+   BYTE: "Com a regra de nomes em cima, while virou ID. Por quê?"
+   PERGUNTA (toque): certo = As duas casam while, e a de cima desempata. ; errado = A regra de nomes casa mais letras. | O Flex ignora o que está entre aspas.
+   se errar: "Conte as letras que cada regra casa."
+   se acertar: "Empate: as duas casam o while inteiro. No empate, vence a regra de cima."
+
+19. TELA: # Erros comuns ⏎ No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: a regra de cima sempre vence. ⏎ Certo: por isso o ifa vira nome, e não if. ⏎ Certo: o Flex lê as regras de baixo para cima.
    BYTE: "Quem vence quando duas regras casam? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: por isso o ifa vira nome, e não if. ; errado = Certo: o Flex lê as regras de baixo para cima. | Errado: a regra de cima sempre vence.
    se errar: "Lembre do ifa: qual regra ganhou, a de cima ou a mais longa?"
    se acertar: "É isso. O ifa casa inteiro como nome, e isso é mais longo que o if. Só no empate de tamanho vence a regra de cima."
 
-19. TELA: # Erros comuns ⏎ Certo: No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ *Errado: Pôr a regra de identificador antes das palavras reservadas.* ⏎ *Certo: Palavra reservada primeiro. Senão while e if viram ID.*
+20. TELA: # Erros comuns ⏎ Certo: No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ *Errado: Pôr a regra de identificador antes das palavras reservadas.* ⏎ *Certo: Palavra reservada primeiro. Senão while e if viram ID.*
    BYTE: "Um erro comum: pôr a regra de identificador em cima. Aí if e while empatam no tamanho, perdem na ordem e viram nomes comuns."
 
-20. TELA: # Resumo ⏎ Arquivo .l: padrão (expressão regular) e ação em C. ⏎ Vence o casamento mais longo; no empate, a regra de cima. ⏎ Ação sem return descarta o texto. É assim que os espaços somem.
+21. TELA: # Resumo ⏎ Arquivo .l: padrão (expressão regular) e ação em C. ⏎ Vence o casamento mais longo; no empate, a regra de cima. ⏎ Ação sem return descarta o texto. É assim que os espaços somem.
    BYTE: "Resumindo: o Flex gera o scanner a partir de padrões e ações. O mais longo vence, a ordem desempata, e as palavras reservadas ficam em cima."
 
 #### PEGADINHA: "A ordem das regras no Flex" (5 cenas, ~32s)

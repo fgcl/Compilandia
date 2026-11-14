@@ -239,7 +239,7 @@
     <string name="comojogar_cada_cartao_traz_erro_diga">Each card has an error. Say which phase catches it, and fast.</string>
     <string name="comojogar_toque_entre_letras_para_cortar">Tap between the letters to cut the line. Then say the class of each token.</string>
     <string name="comojogar_voce_pilota_trem_cada_letra">You drive the train. At each letter, tap the next state.</string>
-    <string name="comojogar_monte_automato_com_dedo_robos">Build the automaton with your finger. The robots test it, and any sentence that breaks it shows up here.</string>
+    <string name="comojogar_monte_automato_com_dedo_robos">Build the automaton with your finger. The robots test it, and any string that breaks it shows up here.</string>
     <string name="comojogar_voce_porteiro_so_entra_quem">You're the doorman. Only what matches the expression gets in.</string>
     <string name="comojogar_chegue_na_frase_alvo_troque">Reach the target sentence. Always replace the leftmost nonterminal.</string>
     <string name="comojogar_prove_que_gramatica_ambigua_monte">Prove the grammar is ambiguous. Build two derivations for the same sentence.</string>

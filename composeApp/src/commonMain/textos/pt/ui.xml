@@ -686,7 +686,7 @@
     <string name="visuals_terminou_em_q_1_aceitacao">Terminou em q%1$s (aceitação): ACEITA</string>
     <string name="visuals_terminou_em_q_1_nao">Terminou em q%1$s (não é de aceitação): REJEITA</string>
     <string name="visuals_estado_atual_q_1_proximo">Estado atual: q%1$s. Próximo símbolo: '%2$s'</string>
-    <string name="visuals_essa_cadeia_nao_gerada_pela">Essa cadeia não é gerada pela gramática.</string>
+    <string name="visuals_essa_cadeia_nao_gerada_pela">Essa frase não é gerada pela gramática.</string>
     <string name="visuals_usou_1_sempre_no_nao">usou: %1$s  (sempre no não-terminal MAIS À ESQUERDA)</string>
     <string name="visuals_arvore_derivacao">Árvore de derivação:</string>
     <string name="visuals_frase_1">frase: %1$s</string>

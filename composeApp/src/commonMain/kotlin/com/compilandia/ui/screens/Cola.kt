@@ -53,9 +53,14 @@ object Cola {
         return shot.boxes.filter { it.look == Look.CELL && linhaDaReceita.matches(it.id) }.sortedBy { it.id.drop(1).toInt() }.map { it.text }
     }
 
-    /** A última cena da Sua vez: o segundo exemplo resolvido. O fecho (erros e resumo) vem depois e fica de fora. */
-    fun fimDaSuaVez(ep: com.compilandia.content.Episode): Int =
-        partesDaAula(ep.passos, ep.inicioDoExemplo)?.getOrNull(3)?.last ?: ep.passos.lastIndex
+    /**
+     * A última cena da Sua vez: o segundo exemplo resolvido. O fecho (erros e resumo) vem depois e fica de fora,
+     * e o "diga por quê" também: ele fecha a Sua vez, mas não é o exemplo.
+     */
+    fun fimDaSuaVez(ep: com.compilandia.content.Episode): Int {
+        val suaVez = partesDaAula(ep.passos, ep.inicioDoExemplo)?.getOrNull(3) ?: return ep.passos.lastIndex
+        return suaVez.reversed().firstOrNull { k -> ep.passos[k].shot.boxes.none { it.id == com.compilandia.content.PORQUE_ID } } ?: suaVez.last
+    }
 
     /** A gramática do exemplo resolvido, para mostrar em letra de ler em cima do desenho. */
     fun gramatica(s: Skill): List<String> {

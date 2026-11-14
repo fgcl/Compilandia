@@ -56,6 +56,7 @@
     <string name="lr_l_11">Reading an opening parenthesis, the dot lands before S. Does it need a closure?</string>
     <string name="lr_l_11_dica">A dot before a nonterminal always pulls in its rules.</string>
     <string name="lr_l_11_ok">That's it. The rules of S come in again.</string>
+    <string name="lr_l_11_q3">only in state zero</string>
     <string name="lr_l_12">The states are ready. Where there is a complete item, the table will reduce. Where the dot is before a terminal, it will shift.</string>
     <string name="lr_l_titulo_automato">The whole automaton</string>
     <string name="lr_l_13">Repeating goto and closure until no new state appears gives six states. Below are the items of the open parenthesis state.</string>
@@ -163,8 +164,8 @@
     <string name="min_l_09_ok">Only R is final. The other two aren't.</string>
     <string name="min_l_10">P and Q, on zero, both go to Q. On one, to R. Merge or split?</string>
     <string name="min_l_10_dica">The destinations are the same. No marked pair shows up.</string>
-    <string name="min_l_10_ok">Correct. The two become a single state.</string>
-    <string name="min_l_11">Two states are left. The automaton recognizes the same language as before.</string>
+    <string name="min_l_10_ok">Correct. The two become a single state, and the language does not change.</string>
+    <string name="min_l_10_o3">another round</string>
     <string name="min_l_titulo_livro">The book DFA</string>
     <string name="min_l_12">Now the DFA from the book, which ends in a b b. Only E is final. In each cell, I write the round of the mark.</string>
     <string name="min_l_13">Round one: E, which is final, with all the others.</string>
@@ -186,6 +187,7 @@
     <string name="min_l_20">And P with Q? On a, P goes to P, and Q goes to M. Merge or separate?</string>
     <string name="min_l_20_dica">The pair P and M is already marked.</string>
     <string name="min_l_20_ok">Separate. P and M are different, so P and Q are too. Without the dead state in the table, they would look equal, and the DFA would accept b a.</string>
+    <string name="min_l_20_o3">drop M and merge</string>
     <string name="min_l_juntar">merge</string>
     <string name="min_l_separar">split</string>
     <string name="min_l_x2">One more cell falls for the same reason. Which one? Tap it.</string>

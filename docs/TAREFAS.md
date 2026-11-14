@@ -32,13 +32,13 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Embaralhar as alternativas na tela (`OrdemDasOpcoes`)
 - [x] O colega da parte Erros acerta em parte das aulas (13 de 29)
 - [x] Variar a fala de acerto: 240 de 259 começavam com "Isso"; agora nenhuma, e o `FalaDeAcertoTest` barra a volta
-- [ ] Menos perguntas de duas opções (eram 106; agora 90, com `PerguntasDeDuasOpcoesTest` de teto). Faltam as de sim/não, aceita/rejeita e as 29 do "certo ou errado" do fecho
+- [x] Menos perguntas de duas opções: eram 106, agora 50 (`PerguntasDeDuasOpcoesTest` de teto). Sim/não, aceita/rejeita, juntar/separar e as 29 do "certo ou errado" do fecho ganharam a terceira opção; as que sobram pedem tocar num de dois itens do palco
 - [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
 - [x] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
 - [x] Nenhum trecho com mais de 4 cenas só ouvindo (`TrechosSoOuvindoTest`)
 - [x] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
 - [x] Um nome por conceito, o que sobrou: X da aula de FIRST/FOLLOW × E' da recursão (pergunta na aula de FIRST)
-- [ ] Um nome por conceito: cadeia, palavra e frase nas aulas
+- [x] Um nome por conceito: cadeia (o que o autômato lê), frase (o que a gramática gera), palavra só no sentido de todo dia
 - [x] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [x] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto" (`FichaDoTexto`)
 - [ ] Dar falas à professora e ao Bug nas aulas animadas
@@ -51,7 +51,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] "Questão de prova" em NFA_TO_DFA e DFA_MINIMIZATION (tabela Dtran e escadinha de pares)
 - [x] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
 - [x] Exercício integrado "torne LL(1)": tirar a recursão, depois fatorar
-- [ ] Um "diga por quê" depois de cada "Sua vez" (autoexplicação)
+- [x] Um "diga por quê" no fim de cada "Sua vez" (autoexplicação com menu de razões)
 - [x] Revisão espaçada exige acerto antes de dar o assunto por revisado
 
 ## 4. O segundo exemplo traz o caso difícil

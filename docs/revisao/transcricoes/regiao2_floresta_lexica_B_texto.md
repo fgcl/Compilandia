@@ -149,12 +149,12 @@ função getNextToken():
 
 ## ASSUNTO REGEX_DFA: Expressões regulares e autômatos
 
-#### ESTILO STORY (História / Analogia): "O trem que lê palavras"
+#### ESTILO STORY (História / Analogia): "O trem que lê cadeias"
 - NARRADOR: Na Floresta Léxica passa um trenzinho. Ele só anda pelos trilhos pintados com a letra que está lendo.
 - PROF: Cada estação é um **estado**. Cada trilho tem uma letra: é uma **transição**. Algumas estações têm bandeira de chegada: são os **estados finais** (de aceitação).
-- BYTE: E como o trem decide se a palavra é aceita?
-- PROF: Ele parte da estação inicial e lê a palavra letra por letra, seguindo os trilhos. Acabou a palavra numa estação com bandeira? Aceita! Ficou sem trilho, ou parou longe da bandeira? Rejeita.
-- WIDGET DFA entrada=«(a|b)*abb» legenda: O trem do Livro do Dragão: aceita palavras de a's e b's que terminam em abb. Teste 'aabb' e 'abab'.
+- BYTE: E como o trem decide se a cadeia é aceita?
+- PROF: Ele parte da estação inicial e lê a cadeia letra por letra, seguindo os trilhos. Acabou a cadeia numa estação com bandeira? Aceita! Ficou sem trilho, ou parou longe da bandeira? Rejeita.
+- WIDGET DFA entrada=«(a|b)*abb» legenda: O trem do Livro do Dragão: aceita cadeias de a's e b's que terminam em abb. Teste 'aabb' e 'abab'.
 - TEXTO: Esse trem é um **AFD** (autômato finito determinístico): em cada estação, para cada letra, há NO MÁXIMO um trilho. O maquinista nunca fica em dúvida.
 - BYTE: E se tivesse dois trilhos com a mesma letra?
 - PROF: Aí é um **AFN** (não determinístico): um trem mágico que se divide e segue TODOS os caminhos ao mesmo tempo, como num multiverso. E ainda tem trilhos ε, que ele pega sem ler letra nenhuma.

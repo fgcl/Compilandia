@@ -119,7 +119,7 @@
     <string name="gl_producao_def">Outro nome para regra. Cada lado direito separado por barra é uma alternativa.</string>
     <string name="gl_sentenca_nome">sentença</string>
     <string name="gl_sentenca_formas">sentença|sentenças|forma sentencial</string>
-    <string name="gl_sentenca_def">Frase só com terminais. Livros dizem também cadeia ou palavra. Forma sentencial pode ter não-terminais.</string>
+    <string name="gl_sentenca_def">Frase só com terminais. No autômato, o jogo diz cadeia. Forma sentencial pode ter não-terminais.</string>
     <string name="gl_elsesolto_nome">else solto</string>
     <string name="gl_elsesolto_formas">else solto|senão solto</string>
     <string name="gl_elsesolto_def">Else de um if dentro de outro: de qual if ele é? Também chamado pendurado (dangling else).</string>

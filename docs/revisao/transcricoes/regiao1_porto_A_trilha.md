@@ -15,7 +15,7 @@ BYTE: "Antes da aula: qual fase vem no meio?"
 Opções: ✔sintática | otimização | geração
 Depois: "A sintática. Os tokens viram árvore antes de checar o sentido."
 
-#### AULA ANIMADA BÁSICA: "A linha de montagem" (24 cenas, ~195s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A linha de montagem" (25 cenas, ~201s) [1º exemplo começa na cena 4]
 
 1. TELA: # Para que serve? ⏎ conta = preco + 2 ⏎ lw  add  sw ⏎ seu código ⏎ processador
    BYTE: "Você escreve conta igual a preço mais dois. O processador não entende isso: ele só executa instruções simples."
@@ -101,16 +101,22 @@ Depois: "A sintática. Os tokens viram árvore antes de checar o sentido."
 21. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Seis fases em ordem. A análise vai até o código intermediário, e a síntese parte dele. O mapa do jogo segue esse mesmo caminho."
 
-22. TELA: # Erros comuns ⏎ Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ certo ⏎ errado
+22. TELA: # Diga por quê ⏎ while (i < 10 i = i + 1; ⏎ Os tokens existem. Falta o par do parêntese. ⏎ A léxica não lê parênteses, só letras e números. ⏎ A léxica só acha erro de tipo.
+   BYTE: "Sem o fecha parêntese, a sintática reclamou. Por que não a léxica?"
+   PERGUNTA (toque): certo = Os tokens existem. Falta o par do parêntese. ; errado = A léxica não lê parênteses, só letras e números. | A léxica só acha erro de tipo.
+   se errar: "Olhe cada pedaço sozinho. O parêntese, o i e o dez existem?"
+   se acertar: "Cada token está certo. Faltou o par do parêntese, e isso é a forma da frase."
+
+23. TELA: # Erros comuns ⏎ Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma vale, e falta a declaração. ⏎ Certo: o scanner não reconhece o nome. ⏎ Errado: quem confere declaração é a sintática.
    BYTE: "Em que fase cai este erro? Um colega respondeu assim. Certo ou errado?"
-   PERGUNTA (toque): certo = certo ; errado = errado
+   PERGUNTA (toque): certo = Certo: a forma vale, e falta a declaração. ; errado = Certo: o scanner não reconhece o nome. | Errado: quem confere declaração é a sintática.
    se errar: "A gramática aceita o comando mesmo sem a declaração. Quem confere o que o nome significa?"
    se acertar: "A sintática só olha a forma. Quem confere se o nome tem declaração é a análise semântica."
 
-23. TELA: # Erros comuns ⏎ Certo: Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ *Errado: O compilador executa o programa.* ⏎ *Certo: O compilador só traduz. Quem executa é o processador, ou um interpretador.*
+24. TELA: # Erros comuns ⏎ Certo: Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ *Errado: O compilador executa o programa.* ⏎ *Certo: O compilador só traduz. Quem executa é o processador, ou um interpretador.*
    BYTE: "Um erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo."
 
-24. TELA: # Resumo ⏎ Análise: léxica → tokens; sintática → árvore; semântica → tipos; e o código intermediário. ⏎ Síntese: otimização e geração do código da máquina. ⏎ Erro léxico: caractere. Sintático: forma. Semântico: sentido.
+25. TELA: # Resumo ⏎ Análise: léxica → tokens; sintática → árvore; semântica → tipos; e o código intermediário. ⏎ Síntese: otimização e geração do código da máquina. ⏎ Erro léxico: caractere. Sintático: forma. Semântico: sentido.
    BYTE: "Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro."
 
 #### PEGADINHA: "Quem pega este erro?" (5 cenas, ~36s)

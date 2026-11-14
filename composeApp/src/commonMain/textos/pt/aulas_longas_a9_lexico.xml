@@ -66,9 +66,11 @@
     <string name="regex_l_09">A cadeia a c é aceita ou rejeitada? Toque na resposta.</string>
     <string name="regex_l_09_dica">A estrela deixa a letra b aparecer zero vezes.</string>
     <string name="regex_l_09_ok">Acertou. A letra b pode faltar, e a cadeia passa.</string>
+    <string name="regex_l_09_o3">só com um b</string>
     <string name="regex_l_10">Agora a cadeia a b c b. Ela é aceita ou rejeitada? Toque.</string>
     <string name="regex_l_10_dica">Depois do c, o trem está no final. Sai seta com b dali?</string>
     <string name="regex_l_10_ok">Sobrou um b sem seta, então o trem rejeita a cadeia.</string>
+    <string name="regex_l_10_o3">Aceita até o c</string>
     <string name="regex_l_11">O scanner tem uma máquina dessas para cada tipo de token.</string>
 
     <!-- AFN para AFD -->

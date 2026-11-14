@@ -28,7 +28,7 @@ E' -> + T E' | ε
 - TEXTO: É como consertar a placa da repartição: 'Apresente o RG. Depois, se quiser, mais documentos.' Primeiro algo concreto; depois a repetição.
 - WIDGET LEFT_RECURSION gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» legenda: Antes e depois: E e T ganharam os ajudantes E' e T'.
 - PREVEJA: A gramática nova gera a mesma linguagem?
-    opções: ✔Sim, as mesmas cadeias | Não, gera menos cadeias
+    opções: ✔Sim, as mesmas frases | Não, gera menos frases
     explicação: As duas geram T (+ T)*. Muda só o formato da árvore.
 - CAIXA [No mundo real]: Analisadores LR (Yacc/Bison) adoram recursão à esquerda, ela até economiza pilha. O problema é só dos descendentes (LL, descida recursiva).
 - REVELAR: Por que recursão à esquerda trava o analisador descendente?
@@ -81,7 +81,7 @@ A' → c A' | a d A' | ε
 ```
 S -> S a | b
 ```
-- PREVEJA: Quais cadeias essa gramática gera?
+- PREVEJA: Quais frases essa gramática gera?
     opções: ✔b, ba, baa, baaa… | a, ab, aab… | ab, aabb, aaabbb…
     explicação: S ⇒ S a ⇒ S a a ⇒ b a a: o b sempre fica na ponta esquerda, e os a's se acumulam à direita.
 - REVELAR: Escreva essa linguagem como expressão regular.
@@ -137,7 +137,7 @@ para i ← 1 até n:
 #### ESTILO MNEMONIC (Truque de memória): "Beta começa, alfa repete, épsilon encerra"
 - CAIXA [Gancho de memória]: **Beta começa, alfa repete, épsilon encerra.** A → β A'; A' → α A' | ε.
 - CAIXA [Gancho de memória]: **Rabo à esquerda morde**: em A → **A**α, o A morde o próprio rabo logo de cara. Recursão à DIREITA (A → αA) é inofensiva: primeiro come α (consome tokens), depois chama.
-- TEXTO: β vem 'antes': é o começo da cadeia, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.
+- TEXTO: β vem 'antes': é o começo da frase, a parte não recursiva. α é o refrão que se repete. Linguagem: β α α α… = βα*.
 - CAIXA [Gancho de memória]: **O A-linha é um while disfarçado**: enquanto aparecer α, repete; quando não, ε e sai do laço.
 - TEXTO: **Palácio da memória**: na cabeceira da **Ponte da Transformação**, um cachorro corre atrás do rabo (A → Aα). O guarda da ponte só deixa passar quem mostra o β primeiro. No meio da ponte, um carrossel (A') gira α, α, α… até alguém gritar ε.
 - PREVEJA: Elimine a recursão de `L -> L , id | id`.
@@ -259,7 +259,7 @@ repita até que nenhum par de alternativas de um NT tenha prefixo comum
 - TEXTO: Exemplo do livro: S → i E t S | i E t S e S | a, E → b. Resultado: S → i E t S S' | a, S' → e S | ε, E → b.
 - WIDGET LEFT_FACTORING gramática=«S -> i E t S | i E t S e S | a ⏎ E -> b»
 - PREVEJA: Fatorar `A -> α β1 | α β2` preserva a linguagem?
-    opções: ✔Sim, sempre | Não, perde cadeias
+    opções: ✔Sim, sempre | Não, perde frases
     explicação: αA' com A' → β₁ | β₂ gera exatamente αβ₁ e αβ₂, é a propriedade distributiva.
 - PREVEJA: Uma gramática fatorada e sem recursão à esquerda é necessariamente LL(1)?
     opções: Sim | ✔Não

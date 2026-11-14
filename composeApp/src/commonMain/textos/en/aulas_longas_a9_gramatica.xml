@@ -44,6 +44,7 @@
     <string name="cfg_l_12">What about int id id semicolon? Is it in the language?</string>
     <string name="cfg_l_12_dica">Look for a rule that puts two ids in a row.</string>
     <string name="cfg_l_12_ok">No rule puts two ids in a row.</string>
+    <string name="cfg_l_12_o3">Depends on order</string>
     <string name="cfg_l_13">With no derivation reaching it, the sentence is outside the language. That is how the parser reports a syntax error.</string>
 
     <string name="amb_l_titulo_porque">Which operation goes first?</string>
@@ -67,6 +68,7 @@
     <string name="amb_l_05">One sentence gave a single tree. Does that prove the grammar is not ambiguous?</string>
     <string name="amb_l_05_dica">Another sentence may still have two trees.</string>
     <string name="amb_l_05_ok">Nice. One sentence is enough to prove ambiguity, but not the opposite.</string>
+    <string name="amb_l_05_o3">Yes, if results match</string>
     <string name="amb_l_06">Another grammar, now with minus only. The sentence is n minus n minus n.</string>
     <string name="amb_l_07">In this tree, which minus happens first? Tap it.</string>
     <string name="amb_l_07_ok">The left minus first, as in school.</string>
@@ -105,6 +107,7 @@
     <string name="rec_l_assoc_3">So does minus now group from the right? Tap the answer.</string>
     <string name="rec_l_assoc_3_dica">The new grammar generates the same sentences. The code that builds the result decides the arithmetic.</string>
     <string name="rec_l_assoc_3_ok">The language is the same, but the tree changed. The parser joins the pieces in a loop, from left to right. The result is two again. You will see that loop in the AST topic.</string>
+    <string name="rec_l_assoc_3_o3">Language changed</string>
     <string name="rec_l_assoc_nao">No</string>
     <string name="rec_l_assoc_sim">Yes</string>
     <string name="rec_l_04">The fix has three steps. It works for any rule of this kind.</string>
@@ -129,6 +132,7 @@
     <string name="rec_l_11">Does the new grammar still generate id comma id? Tap the answer.</string>
     <string name="rec_l_11_dica">First, L goes to id and L prime. Then comma, id and epsilon.</string>
     <string name="rec_l_11_ok">Exactly. The language stays the same.</string>
+    <string name="rec_l_11_o3">Only a lone id</string>
     <string name="rec_l_12">Now the function for L reads an id before calling another function. With each call the input moves on, and the parser terminates.</string>
     <string name="rec_p_titulo">Fix E, T and F</string>
     <string name="rec_p_01">This is the arithmetic grammar that comes back in the rest of the game. E and T have left recursion, so the recipe runs once on each.</string>

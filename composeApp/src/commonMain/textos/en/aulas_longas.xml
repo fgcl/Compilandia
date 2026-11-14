@@ -69,6 +69,7 @@
     <string name="first_l_15">Even so, can B vanish? Tap the answer.</string>
     <string name="first_l_15_dica">Follow B goes to C. What can C become?</string>
     <string name="first_l_15_ok">It can. B goes to C, and C goes to epsilon. So FIRST of B has b, c and epsilon.</string>
+    <string name="first_l_15_v3">only with ε rule</string>
     <string name="first_l_16">Now S goes to B d. Tap everything that goes into FIRST of S.</string>
     <string name="first_l_16_dica">Use FIRST of B without the epsilon. And since B vanishes, look at the next one.</string>
     <string name="first_l_16_ok">Three tokens: b, c and d. The d goes in because B vanishes. The epsilon stays out, because d never vanishes.</string>
