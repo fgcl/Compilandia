@@ -111,6 +111,8 @@ internal val tpCap4 = GuideChapter(
         Callout(WATCH_OUT, tx("tpguideb_se_sua_linguagem_permitir_se")),
         Reveal(tx("tpguideb_calcule_first_comando_byteiro_completa"), tx("tpguideb_id_se_enquanto_escreva_leia")),
         Reveal(tx("tpguideb_follow_comando_dentro_bloco_quando"), tx("tpguideb_quando_token_nao_esta_em")),
+        // A Byteiro inteira em BNF, com FIRST e FOLLOW tirados do motor (revisor aluno do bloco 6).
+        *tpByteiroInteira.toTypedArray(),
         Callout(NO_DUMB_QUESTIONS, tx("tpguideb_p_preciso_entregar_tabela_ll")),
         Callout(EXAM_TIP, tx("tpguideb_trio_que_cai_em_prova")),
         Say(PILHA, tx("tpguideb_gramatica_ll_1_pronta_agora")),

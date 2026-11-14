@@ -167,6 +167,8 @@ val lexicos by lazy {
                 add(fileira("tk", toks.map { it.lexeme to tintOf(it.cls) }, 190f, w = 50f, h = 36f, size = 14f))
                 add(rotulo("e", tx("eplexico_entram_letras"), 90f, 136f), rotulo("s", tx("eplexico_saem_tokens"), 90f, 238f, Tint.YELLOW))
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("tok_l_q1"), setOf("tk2"), setOf("tk0", "tk3", "tk4"), tx("tok_l_q1_dica"), tx("tok_l_q1_ok")) { drop("e", "s"); hot() }
             cena(tx("eplexico_cada_token_cai_na_caixa")) {
                 drop("e", "s")
                 add(

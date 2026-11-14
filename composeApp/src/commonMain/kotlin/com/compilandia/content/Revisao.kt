@@ -150,7 +150,7 @@ object Lembretes {
     /** Null quando não há revisão pendente: nesse dia o celular fica quieto. */
     fun texto(l: Learner, nowMs: Long): String? {
         val pendente = Skill.entries.filter { l.skill(it).memory.isDue(nowMs) }
-            .minByOrNull { l.skill(it).memory.retrievability(nowMs) } ?: return null
+            .minWithOrNull(compareBy<Skill>({ !l.skill(it).memory.reaprender }, { l.skill(it).memory.retrievability(nowMs) })) ?: return null
         val dia = (nowMs / 86_400_000L).toInt()
         return molde(dia % MOLDES, pendente.title)
     }

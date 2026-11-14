@@ -244,7 +244,8 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
             xp = state.xp + gained,
             gears = state.gears + gearsFor(score, level),
             dailyXp = state.dailyXp + gained,
-            dailyReviews = state.dailyReviews + if (wasDue) 1 else 0,
+            // Só conta como revisado quem acertou: errar deixa o assunto pendente.
+            dailyReviews = state.dailyReviews + if (wasDue && score >= 0.6) 1 else 0,
         )
         touchDay(nowMs)
         return att
@@ -552,7 +553,8 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
             var reason: String
             if (st.memory.isDue(nowMs)) {
                 score += 2.0 + (0.9 - r) * 3
-                reason = tx("learner_revisao_sua_memoria_1_esta", s.title, (r * 100).toInt())
+                reason = if (st.memory.reaprender) tx("learner_revisao_falta_acertar", s.title)
+                    else tx("learner_revisao_sua_memoria_1_esta", s.title, (r * 100).toInt())
             } else if (prereqsMet(s) && !isMastered(s)) {
                 score += 1.5 + (1 - st.mastery)
                 reason = if (st.attempts == 0) tx("learner_novo_territorio_1", s.title) else tx("learner_fronteira_1_esta_quase_la", s.title, (st.mastery * 100).toInt())
@@ -586,7 +588,8 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
     }
 
     fun dueSkills(nowMs: Long): List<Pair<Skill, Double>> =
-        Skill.entries.filter { skill(it).memory.isDue(nowMs) }.map { it to skill(it).memory.retrievability(nowMs) }.sortedBy { it.second }
+        Skill.entries.filter { skill(it).memory.isDue(nowMs) }.map { it to skill(it).memory.retrievability(nowMs) }
+            .sortedWith(compareBy<Pair<Skill, Double>>({ !skill(it.first).memory.reaprender }, { it.second }))
 
     // ---------- Metacognição ----------
     fun calibration(): CalibrationStats {

@@ -78,6 +78,10 @@ internal val tpCap1 = GuideChapter(
             tx("tpguidea_import_java_nio_file_files"),
             tx("tpguidea_main_java_maestro_java_17"),
         ),
+        // Algo rodando já no capítulo 1, com o teste da etapa (revisor aluno do bloco 6). Conferido com javac e no MipsVM.
+        Text(tx("tpguidea_esqueleto_hoje")),
+        Code(tx("tpguidea_esqueleto_codigo"), tx("tpguidea_esqueleto_titulo")),
+        Code(tx("tpguidea_teste_codigo"), tx("tpguidea_teste_titulo")),
         Predict(
             tx("tpguidea_qual_ordem_implementacao_menos_dor"),
             listOf(
@@ -99,6 +103,10 @@ internal val tpCap1 = GuideChapter(
                 tx("tpguidea_semanas_6_7_geracao_mips"),
                 tx("tpguidea_semana_8_otimizacao_bateria_testes"),
             ),
+        ),
+        Steps(
+            tx("tpguidea_cronograma_3_semanas"),
+            listOf(tx("tpguidea_3sem_1"), tx("tpguidea_3sem_2"), tx("tpguidea_3sem_3")),
         ),
         Code(
             tx("tpguidea_git_init_byteiro_cd_byteiro"),

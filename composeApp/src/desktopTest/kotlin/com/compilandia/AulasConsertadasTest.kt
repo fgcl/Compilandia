@@ -421,4 +421,29 @@ class AulasConsertadasTest {
         }
         assertTrue("struct Node" in codigoC && "gera(" in codigoC)
     }
+
+    /** Cap. 4 do guia: a Byteiro inteira em BNF é LL(1), o Senao não tem senao no FOLLOW, e a tabela tem uma linha por não-terminal. */
+    @Test fun byteiroInteiraEhLl1() {
+        val g = Grammar.parse(com.compilandia.content.TP_BYTEIRO_BNF)
+        assertTrue(LL1Table(g).isLL1, LL1Table(g).conflicts.toString())
+        val ff = FirstFollow(g)
+        assertTrue("senao" !in ff.follow.getValue("Senao"))
+        assertEquals(g.nonTerminals.size, com.compilandia.content.tabelaFirstFollowByteiro().size)
+        // Toda palavra reservada e todo comando da EBNF do capítulo 2 estão na BNF.
+        for (t in listOf("programa", "inteiro", "logico", "caractere", "se", "senao", "enquanto", "escreva", "leia", "ou", "e", "nao", "verdadeiro", "falso", "<-", "string"))
+            assertTrue(t in g.terminals, t)
+    }
+
+    /** Cap. 1 do guia: o asm do teste da etapa é o que o Sintatico provisório devolve, e roda no MipsVM até o fim. */
+    @Test fun esqueletoDoPrimeiroDia() {
+        val teste = com.compilandia.textos.tx("tpguidea_teste_codigo")
+        val asm = teste.substringAfter("# o saida.asm:\n")
+        val esqueleto = com.compilandia.textos.tx("tpguidea_esqueleto_codigo")
+        val literais = Regex("\"((?:[^\"\\\\]|\\\\.)*)\"").findAll(esqueleto.substringAfter("return")).map { it.groupValues[1].replace("\\n", "\n") }.toList()
+        val devolvido = literais.first() + 3 + literais.drop(1).joinToString("")
+        assertEquals(asm.trim(), devolvido.trim())
+        assertEquals(3, teste.substringAfter("(3 linhas):\n").substringBefore("\n\n").lines().size)
+        val vm = com.compilandia.engine.MipsVM(asm).run()
+        assertTrue(vm.regs["\$v0"] == 10L)
+    }
 }

@@ -139,7 +139,13 @@ val semantica by lazy {
             }
             // A árvore mudou de cara: avisar que é a enxuta, ensinada na aula de AST (revisor aluno do bloco 5).
             cena(tx("attr_l_enxuta")) { hot(node.getValue("+").id, node.getValue("*").id) }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("attr_l_q1"), setOf("yi"), setOf("yf", "yb"), tx("attr_l_q1_dica"), tx("attr_l_q1_ok")) {
+                add(Box("yf", "float", 100f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f), Box("yi", "int", 180f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f), Box("yb", "bool", 260f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                hot(node.getValue("2").id)
+            }
             cena(tx("epbackend_comeco_pelas_folhas_inteiro_x")) {
+                drop("yi", "yf", "yb")
                 add(tipo("ta", "int", node.getValue("a")), tipo("tx", "float", node.getValue("x")), tipo("t2", "int", node.getValue("2")))
             }
             pergunta(
@@ -346,7 +352,12 @@ val backend by lazy {
                 add(codigo("d", listOf(code[1].toString()), 332f, x = 110f, size = 18f))
                 hot("d0", "t")
             }
-            cena(tx("epbackend_cada_linha_tem_no_maximo"), who = PROF) { hot() }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("tac_l_q1"), setOf("e3"), setOf("e2", "e4"), tx("tac_l_q1_dica"), tx("tac_l_q1_ok")) {
+                add(opcao("e2", "2", 110f, 390f), opcao("e3", "3", 180f, 390f), opcao("e4", "4", 250f, 390f))
+                hot("d0")
+            }
+            cena(tx("epbackend_cada_linha_tem_no_maximo"), who = PROF) { drop("e2", "e3", "e4"); hot() }
             cena(tx("epbackend_ordem_saiu_arvore_parser_ja"), mood = EpMood.HAPPY) {}
             // 3. A receita
             cena(tx("tac_l_05")) {
@@ -524,7 +535,13 @@ val backend by lazy {
                 add(reg("r0", tx("epbackend_fat_n_2_volta_main"), 0, Tint.TEAL))
             }
             cena(tx("epbackend_ali_moram_parametros_variaveis_locais")) { hot("r0") }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("rt_l_q1"), setOf("h2"), setOf("h1", "h3"), tx("rt_l_q1_dica"), tx("rt_l_q1_ok")) {
+                add(opcao("h1", "1", 110f, 170f), opcao("h2", "2", 180f, 170f), opcao("h3", "3", 250f, 170f))
+                hot("r0")
+            }
             cena(tx("epbackend_fat_dois_chama_fat_outro")) {
+                drop("h1", "h2", "h3")
                 add(reg("r1", tx("epbackend_fat_n_1_volta_fat"), 1, Tint.ORANGE))
                 hot("r1")
             }

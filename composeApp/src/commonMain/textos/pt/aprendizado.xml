@@ -56,6 +56,7 @@
     <string name="learner_revisar_1_assunto">Revisar 1 assunto</string>
     <string name="learner_3_acertos_seguidos">3 acertos seguidos</string>
     <string name="learner_revisao_sua_memoria_1_esta">Revisão: sua memória de "%1$s" está em %2$s%. Revisar agora fixa mais.</string>
+    <string name="learner_revisao_falta_acertar">Revisão: a última revisão de "%1$s" não deu certo. Acerte uma vez para dar o assunto por revisado.</string>
     <string name="learner_novo_territorio_1">Novo território: "%1$s"</string>
     <string name="learner_fronteira_1_esta_quase_la">Fronteira: "%1$s" está quase lá (%2$s%)</string>
     <string name="learner_ainda_faltam_bases_para_1">Ainda faltam bases para "%1$s"</string>

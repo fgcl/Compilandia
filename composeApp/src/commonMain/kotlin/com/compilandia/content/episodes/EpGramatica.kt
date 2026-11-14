@@ -95,7 +95,12 @@ val gramaticas by lazy {
                 add(titulo(tx("epgramatica_gramatica")))
                 add(codigo("g", listOf("E -> E + E", "E -> n"), 74f, x = 90f, passo = 30f, size = 17f))
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("cfg_l_q1"), setOf("oE"), setOf("oM", "oN"), tx("cfg_l_q1_dica"), tx("cfg_l_q1_ok")) {
+                add(opcao("oM", "+", 110f, 300f), opcao("oE", "E", 180f, 300f), opcao("oN", "n", 250f, 300f))
+            }
             cena(tx("epgramatica_letra_maiuscula_nao_terminal_ainda")) {
+                drop("oE", "oM", "oN")
                 add(fileira("w", listOf("E" to Tint.ORANGE), 200f, w = 44f))
                 hot("w0")
             }
@@ -225,10 +230,13 @@ val gramaticas by lazy {
                 add(titulo("n + n * n"))
                 add(codigo("g", listOf("E -> E + E | E * E | n"), 66f, x = 60f, size = 16f))
             }
-            cena(tx("epgramatica_nesta_arvore_vezes_fica_embaixo")) {
-                val (b, w) = arvore(mais, 112f, passoY = 50f, largura = 300f)
-                add(b); for (x in w) wire(x)
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            val (bMais, wMais) = arvore(mais, 112f, passoY = 50f, largura = 300f)
+            val noVezes = bMais.first { it.text == "*" }.id
+            pergunta(tx("amb_l_q1"), setOf(noVezes), bMais.filter { it.text == "+" || it.text == "n" }.map { it.id }.toSet(), tx("amb_l_q1_dica"), tx("amb_l_q1_ok")) {
+                add(bMais); for (x in wMais) wire(x)
             }
+            cena(tx("epgramatica_nesta_arvore_vezes_fica_embaixo")) { hot(noVezes) }
             cena(tx("epgramatica_mas_para_montar_outra_arvore"), mood = EpMood.SURPRISED) {
                 dropAll("t")
                 val (b, w) = arvore(vezes, 112f, passoY = 50f, largura = 300f, prefix = "u")

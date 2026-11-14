@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Toques no meio dos trechos longos só de ouvir (nenhum trecho passa de 4 cenas). -->
+<resources>
+    <string name="fases_l_q1">This queue of characters enters the compiler. Which phase works on it first? Tap it.</string>
+    <string name="fases_l_q1_dica">It is the phase that joins letters into words.</string>
+    <string name="fases_l_q1_ok">Lexical. It is first on the belt, and its output feeds the syntax phase.</string>
+    <string name="fases_l_q2">Using a variable that was never declared. Which phase reports that error? Tap it.</string>
+    <string name="fases_l_q2_dica">The tokens exist and the order is right. What is missing is meaning.</string>
+    <string name="fases_l_q2_ok">Semantic. The sentence has the right form, but the name does not exist.</string>
+    <string name="follow_l_q1">Now look for E on the right side of the rules. Which terminal comes right after it? Tap it.</string>
+    <string name="follow_l_q1_dica">Look at the rule for T. Where does E appear?</string>
+    <string name="follow_l_q1_ok">The closing parenthesis. In open parenthesis, E, close parenthesis, it comes right after E.</string>
+    <string name="ll_l_q1">X goes to plus T X. In which cell of the X row does this rule go? Tap it.</string>
+    <string name="ll_l_q1_dica">Look at the first symbol of the right side.</string>
+    <string name="ll_l_q1_ok">In the plus column, the FIRST of that right side.</string>
+    <string name="slr_l_q1">Tap every cell that says to shift.</string>
+    <string name="slr_l_q1_dica">Shift is the letter s with the state number.</string>
+    <string name="slr_l_q1_ok">Those three. Each s comes from an automaton arrow on a terminal.</string>
+    <string name="min_l_q1">First round: final and non-final are never equivalent. Tap the cells that get an X now.</string>
+    <string name="min_l_q1_dica">The only final state is D. Look for the pairs with D.</string>
+    <string name="min_l_q1_ok">The three pairs with D. D is final, and the others are not.</string>
+    <string name="tok_l_q1">Which of these tokens is a number? Tap it.</string>
+    <string name="tok_l_q1_dica">x1 has a digit, but it starts with a letter.</string>
+    <string name="tok_l_q1_ok">Ten. x1 is a name, because it starts with a letter.</string>
+    <string name="cfg_l_q1">In this grammar, which symbol will still be replaced by something else? Tap it.</string>
+    <string name="cfg_l_q1_dica">It is the symbol on the left side of the rules.</string>
+    <string name="cfg_l_q1_ok">E. It is on the left side, so it can be replaced.</string>
+    <string name="amb_l_q1">In the tree, the deepest operation is done first. Tap the operator computed first.</string>
+    <string name="amb_l_q1_dica">Look for the operator farthest from the root.</string>
+    <string name="amb_l_q1_ok">Times. It is deeper, so it comes out first.</string>
+    <string name="desc_l_q1">The rule E goes to T X becomes a function. Tap the line of code that starts that function.</string>
+    <string name="desc_l_q1_dica">The function has the name of the nonterminal.</string>
+    <string name="desc_l_q1_ok">void E. It calls T and then X, in the order of the rule.</string>
+    <string name="sr_l_q1">n is on top, and there is the rule E goes to n. What does the parser do now? Tap it.</string>
+    <string name="sr_l_q1_dica">The top is already the whole right side of a rule.</string>
+    <string name="sr_l_q1_ok">Reduce. The n on top is a handle: n goes out and E comes in.</string>
+    <string name="bison_l_q1">In the rule expr plus expr, each symbol has a number: dollar one, two and three. Which is the second expr? Tap it.</string>
+    <string name="bison_l_q1_dica">Count the plus too: it is a symbol.</string>
+    <string name="bison_l_q1_ok">Dollar three. The first expr is one, the plus is two, and the other expr is three.</string>
+    <string name="attr_l_q1">a is int and x is float. And the two, with no point? Tap its type.</string>
+    <string name="attr_l_q1_dica">A number with no point has no decimal part.</string>
+    <string name="attr_l_q1_ok">Integer. A number written with no point has type int.</string>
+    <string name="tac_l_q1">How many names appear in the line t2 equals a plus t1? Tap it.</string>
+    <string name="tac_l_q1_dica">Count the result and the two operands.</string>
+    <string name="tac_l_q1_ok">Three: t2, a and t1. The result and two operands.</string>
+    <string name="rt_l_q1">fat of two is about to call fat of one. While fat of one runs, how many fat records are on the stack? Tap it.</string>
+    <string name="rt_l_q1_dica">fat of two has not finished yet.</string>
+    <string name="rt_l_q1_ok">Two. The record of fat of two is still there, waiting for the return.</string>
+</resources>

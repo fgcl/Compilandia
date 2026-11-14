@@ -21,6 +21,13 @@
     <string name="tpguidea_estrutura_pastas_sugerida">Suggested folder structure</string>
     <string name="tpguidea_errocompilacao_java_todo_erro_compilador">ErroCompilacao.java: EVERY compiler error goes through here, always with the line</string>
     <string name="tpguidea_main_java_maestro_java_17">Main.java: the conductor (Java 17)</string>
+    <string name="tpguidea_esqueleto_hoje">**Running on day one.** The `Main` above calls `Lexico` and `Sintatico`, which are only born in chapters 3 and 5. Do not wait: create the two temporary classes below today. With them, the project compiles, reads the `.byt` and writes a `.asm` that MARS runs. From then on, each chapter swaps one piece and the rest keeps running.</string>
+    <string name="tpguidea_esqueleto_titulo">Temporary Lexico.java and Sintatico.java: the project runs from day 1</string>
+    <string name="tpguidea_teste_titulo">Test for this step: the command and the expected output (open saida.asm in MARS: it finishes with no error)</string>
+    <string name="tpguidea_cronograma_3_semanas">Only 3 weeks? Short schedule</string>
+    <string name="tpguidea_3sem_1">Week 1: language and scanner (chapters 2 and 3). The skeleton runs on day 1, and `TesteLexico` prints the tokens by the end of the week.</string>
+    <string name="tpguidea_3sem_2">Week 2: LL(1) grammar, parser, symbol table and types (chapters 4 to 7). The FIRST/FOLLOW table in chapter 4 already works as the proof for the report.</string>
+    <string name="tpguidea_3sem_3">Week 3: MIPS on MARS (chapter 8), test suite and the checklist (chapters 9 and 10). Optimization is left out: it is a bonus.</string>
     <string name="tpguidea_qual_ordem_implementacao_menos_dor">Which implementation order causes the LEAST headache?</string>
     <string name="tpguidea_escrever_tudo_vez_testar_na">Write everything at once and test in the last week</string>
     <string name="tpguidea_lexico_sintatico_semantico_geracao_testando">Lexical → syntactic → semantic → generation, testing each phase before moving on</string>
@@ -143,8 +150,12 @@
     <string name="tpguideb_se_sua_linguagem_permitir_se">If your language allows `se (c) comando senao comando` WITHOUT braces, the cell [Senao, senao] gets two productions: that's the dangling else, and the grammar isn't LL(1). Practical fix in the parser: always match the `senao` with the nearest `se` (the greedy `if`), and document that decision.</string>
     <string name="tpguideb_calcule_first_comando_byteiro_completa">Compute FIRST(comando) for the full Byteiro.</string>
     <string name="tpguideb_id_se_enquanto_escreva_leia">{ ID, se, enquanto, escreva, leia, `{`, inteiro, logico, caractere }: declarations start with the type, and a loose block starts with `{`. That set becomes the `comecaComando()` method in chapter 5.</string>
-    <string name="tpguideb_follow_comando_dentro_bloco_quando">FOLLOW of `{ comando }` inside the block: when does the repetition stop?</string>
+    <string name="tpguideb_follow_comando_dentro_bloco_quando">In a block, `{ comando }` repeats. When does the repetition stop?</string>
     <string name="tpguideb_quando_token_nao_esta_em">When the token isn't in FIRST(comando). In the right grammar, it can only be `}`: anything else makes `casaToken(FECHA_CHAVE)` complain with a precise message.</string>
+    <string name="tpguideb_byteiro_inteira_intro">The report asks for FIRST and FOLLOW as proof that the grammar is LL(1). The lesson computations use BNF, and Byteiro is in EBNF. The bridge is a single rule: each `{ α }` becomes a new nonterminal `X -> α X | ε`, and each `[ α ]` becomes `Y -> α | ε`. Below is the whole of Byteiro written that way, from `programa` to `primario`.</string>
+    <string name="tpguideb_byteiro_inteira_bnf">The whole of Byteiro in BNF. Cmds, Ids, Args, Ou, E2, AddR and MulR come from { }; Senao and RelR come from [ ]</string>
+    <string name="tpguideb_byteiro_inteira_tabela">FIRST and FOLLOW of each nonterminal (computed by the game engine)</string>
+    <string name="tpguideb_byteiro_inteira_prova">How to write the proof: for each nonterminal with more than one rule, the FIRST sets of the rules do not overlap. For each one that can vanish (has ε), its FIRST does not overlap its FOLLOW. Example: `Senao` has FIRST { senao, ε } and its FOLLOW has no `senao`, so the parser knows when the else part is over. With this grammar, no cell of the LL(1) table gets two rules.</string>
     <string name="tpguideb_p_preciso_entregar_tabela_ll">Q: Do I have to hand in the whole LL(1) table? A: It depends on the assignment. For recursive descent, what matters is the PROOF that there's no conflict: at each decision point in the code, the sets of tokens tested are disjoint. FIRST/FOLLOW in the report is exactly that proof.</string>
     <string name="tpguideb_trio_que_cai_em_prova">The trio that shows up on the exam and in the project: left recursion → **while**; optional `[ ]` → **if**; repetition `{ }` → **while**. Memorize it and you'll translate any EBNF to Java in minutes.</string>
     <string name="tpguideb_gramatica_ll_1_pronta_agora">Grammar… LL(1)… ready. Now… give me methods… to stack.</string>

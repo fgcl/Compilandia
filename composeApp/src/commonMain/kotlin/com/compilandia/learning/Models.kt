@@ -45,6 +45,8 @@ data class Memory(
     val lastReviewMs: Long = 0,
     val reviews: Int = 0,
     val lapses: Int = 0,
+    /** Errou uma revisão: o assunto fica pendente até a próxima acertar (Rawson e Dunlosky, 2013). */
+    val reaprender: Boolean = false,
 ) {
     fun retrievability(nowMs: Long): Double {
         if (reviews == 0) return 0.0
@@ -68,10 +70,13 @@ data class Memory(
         } else {
             max(0.2, stability * 0.35)
         }
-        return Memory(min(s, 365.0), d, nowMs, reviews + 1, lapses + if (good) 0 else 1)
+        // Errar na primeira vez é aprender; errar quando a revisão já era devida deixa a revisão em aberto.
+        val emAberto = !good && (reaprender || isDue(nowMs))
+        return Memory(min(s, 365.0), d, nowMs, reviews + 1, lapses + if (good) 0 else 1, emAberto)
     }
 
-    fun isDue(nowMs: Long): Boolean = reviews > 0 && retrievability(nowMs) < 0.9
+    /** Pendente quando a memória caiu abaixo de 90% ou quando a última revisão foi um erro. */
+    fun isDue(nowMs: Long): Boolean = reviews > 0 && (reaprender || retrievability(nowMs) < 0.9)
 
     companion object { const val DAY_MS = 86_400_000.0 }
 }

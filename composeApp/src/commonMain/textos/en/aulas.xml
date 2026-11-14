@@ -336,7 +336,6 @@
     <string name="eplexico_juntar_gemeos">Merging the twins</string>
     <string name="eplexico_tabela_pares">Table of pairs</string>
     <string name="eplexico_d_unico_final">D is the only final state</string>
-    <string name="eplexico_primeira_rodada_final_nao_final">First round: a final state is never equivalent to a non-final one. I mark every pair that has D.</string>
     <string name="eplexico_agora_olho_para_onde_cada">Now I look at where each pair goes. With b, A goes to C, and B goes to D. The pair C and D already has an X, so A and B split too.</string>
     <string name="eplexico_c_d_ja_tem_x">(C,D) already has an X</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">One blank cell is left. Tap it: these two are twins.</string>
