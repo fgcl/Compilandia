@@ -173,6 +173,9 @@
     <string name="min_l_20_ok">Separate. P and M are different, so P and Q are too. Without the dead state in the table, they would look equal, and the DFA would accept b a.</string>
     <string name="min_l_juntar">merge</string>
     <string name="min_l_separar">split</string>
+    <string name="min_l_x2">One more cell falls for the same reason. Which one? Tap it.</string>
+    <string name="min_l_x2_dica">With b, C goes to D. Who goes to C with b?</string>
+    <string name="min_l_x2_ok">A with C: with b, they go to C and D. B with C does not fall, because with b both go to D.</string>
     <string name="min_l_r1">1. Mark every final with non-final pair.</string>
     <string name="min_l_r2">2. Mark the pair that goes to a marked pair.</string>
     <string name="min_l_r3">3. Repeat until nothing changes. Blank: merge.</string>

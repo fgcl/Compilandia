@@ -293,4 +293,25 @@ class AulasConsertadasTest {
         assertEquals(512L, right.run("2 ^ 3 ^ 2").value)
         assertEquals(64L, com.compilandia.engine.MiniBison.compile(spec.replace("%right", "%left")).run("2 ^ 3 ^ 2").value)
     }
+
+    /** Minimização, primeiro exemplo: A com B e A com C caem porque vão para C e D; B com C vão os dois para D e ficam. No livro, A com C fica. */
+    @Test fun segundoXDaMinimizacao() {
+        val afd = com.compilandia.engine.DFA(4, 0, setOf(3), listOf('a', 'b'), mapOf((0 to 'a') to 1, (0 to 'b') to 2, (1 to 'b') to 3, (2 to 'b') to 3))
+        val marcados = Minimizer.run(afd).marks.map { it.p to it.q }.filter { (p, q) -> p < 4 && q < 4 }.toSet()
+        assertEquals(setOf(0 to 1, 0 to 2, 0 to 3, 1 to 3, 2 to 3), marcados)
+        assertEquals(3, afd.delta.getValue(1 to 'b')); assertEquals(3, afd.delta.getValue(2 to 'b'))
+        assertTrue((0 to 2) !in Minimizer.run(AFD_LIVRO).marks.map { it.p to it.q })
+    }
+
+    /** Menos unário: sem %prec, o vezes roda antes do sinal; com %prec UMINUS, o sinal roda antes. Os dois dão -6 e não têm conflito. */
+    @Test fun menosUnarioComPrec() {
+        for ((spec, sinalPrimeiro) in listOf(com.compilandia.content.episodes.BISON_UNARIO to false, com.compilandia.content.episodes.BISON_UNARIO_PREC to true)) {
+            val b = com.compilandia.engine.MiniBison.compile(spec.joinToString("\n"))
+            assertTrue(b.conflicts.isEmpty())
+            val r = b.run("- 2 * 3")
+            assertEquals(-6L, r.value)
+            // reductions[0] é expr -> NUM do 2; a segunda é o sinal (com %prec) ou o NUM do 3 (sem).
+            assertEquals(sinalPrimeiro, "'-' expr" in r.reductions[1].substringBefore("⇒"), r.reductions.toString())
+        }
+    }
 }

@@ -242,7 +242,44 @@ val pegadinhasMeio by lazy {
             }
             palavra(tx("eppegadinhas2_precedencia"), tx("eppegadinhas2_pegadinha_achar_que_primeiro_manda"), who = PROF, mood = EpMood.HAPPY)
         },
+
+        // %prec no menos unário (professor do bloco 4): a regra herda a força do último token, e o %prec troca.
+        episodio(Skill.YACC_BISON, tx("peg_un_titulo"), PEGADINHA) {
+            cena(tx("peg_un_01")) {
+                add(titulo("- 2 * 3"))
+                add(codigo("s", BISON_UNARIO, 64f, x = 20f, passo = 26f, size = 12f))
+                hot("s6")
+            }
+            pergunta(tx("peg_un_02"), setOf("u1"), setOf("u2", "u3"), tx("peg_un_02_dica"), tx("peg_un_02_ok")) {
+                add(Box("u2", tx("peg_un_o2"), 180f, 290f, 280f, 38f, Look.TOKEN, Tint.YELLOW, size = 14f))
+                add(Box("u1", tx("peg_un_o1"), 180f, 336f, 280f, 38f, Look.TOKEN, Tint.YELLOW, size = 14f))
+                add(Box("u3", tx("peg_un_o3"), 180f, 382f, 280f, 38f, Look.TOKEN, Tint.YELLOW, size = 14f))
+            }
+            cena(tx("peg_un_03")) {
+                drop("u1", "u2", "u3"); dropAll("s")
+                add(codigo("s", BISON_UNARIO_PREC, 64f, x = 20f, passo = 26f, size = 12f))
+                hot("s3", "s7")
+            }
+            pergunta(tx("peg_un_04"), setOf("m"), setOf("v"), tx("peg_un_04_dica"), tx("peg_un_04_ok")) {
+                add(Box("m", "- 2", 120f, 330f, 100f, 44f, Look.TOKEN, Tint.YELLOW, size = 17f))
+                add(Box("v", "2 * 3", 240f, 330f, 100f, 44f, Look.TOKEN, Tint.YELLOW, size = 17f))
+            }
+            cena(tx("peg_un_05"), mood = EpMood.THINK) { drop("v"); tint("m", Tint.GREEN); hot("s7") }
+            cena(tx("peg_un_06"), who = PROF, mood = EpMood.HAPPY) { hot("s3", "s7") }
+        },
     )
 }
+
+/** Menos unário sem %prec (a regra fica com a força do menos) e com %prec UMINUS. Conferidas em AulasConsertadasTest. */
+val BISON_UNARIO = listOf(
+    "%token NUM", "%left '-'", "%left '*'", "%%",
+    "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | expr '*' expr { \$\$ = \$1 * \$3; }",
+    "    | '-' expr { \$\$ = -\$2; }", "    | NUM ;",
+)
+val BISON_UNARIO_PREC = listOf(
+    "%token NUM", "%left '-'", "%left '*'", "%left UMINUS", "%%",
+    "expr: expr '-' expr { \$\$ = \$1 - \$3; }", "    | expr '*' expr { \$\$ = \$1 * \$3; }",
+    "    | '-' expr %prec UMINUS { \$\$ = -\$2; }", "    | NUM ;",
+)
 
 @Suppress("unused") private val keepActor = Actor(0f, 0f)

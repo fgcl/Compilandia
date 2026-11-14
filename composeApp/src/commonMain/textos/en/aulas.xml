@@ -332,9 +332,8 @@
     <string name="eplexico_tabela_pares">Table of pairs</string>
     <string name="eplexico_d_unico_final">D is the only final state</string>
     <string name="eplexico_primeira_rodada_final_nao_final">First round: a final state is never equivalent to a non-final one. I mark every pair that has D.</string>
-    <string name="eplexico_agora_olho_para_onde_cada">Now I look at where each pair goes with each symbol. With b, A goes to C, and B goes to D.</string>
+    <string name="eplexico_agora_olho_para_onde_cada">Now I look at where each pair goes. With b, A goes to C, and B goes to D. The pair C and D already has an X, so A and B split too.</string>
     <string name="eplexico_c_d_ja_tem_x">(C,D) already has an X</string>
-    <string name="eplexico_se_destinos_sao_diferentes_origem">The pair C and D is already marked. If the targets are different, so are the sources. I mark A with B.</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">One blank cell is left. Tap it: these two are twins.</string>
     <string name="eplexico_procure_casa_sem_x_na">Look for the cell with no X in the table.</string>
     <string name="eplexico_isso_b_c_vao_sempre">That's it. B and C always go to the same place.</string>
@@ -958,4 +957,18 @@
     <string name="eptabelas_fat_devolve_caixa_dele_sai">fat of one returns one. Its box leaves, and the value goes down.</string>
     <string name="eptabelas_devolveu_1">returned %1$s</string>
     <string name="eptabelas_cada_caixa_que_sai_leva">Each box that leaves takes the value to the one below. In the end, main is left with %1$s.</string>
+    <string name="peg_un_titulo">The minus that flips the sign</string>
+    <string name="peg_un_01">The same minus plays two roles. Between two numbers, it subtracts. In front of one, it flips the sign. Look at the rule with the minus alone.</string>
+    <string name="peg_un_02">This rule has no precedence line of its own. What strength does Bison give it? Tap it.</string>
+    <string name="peg_un_o1">The minus one, the weakest</string>
+    <string name="peg_un_o2">The times one, the strongest</string>
+    <string name="peg_un_o3">None: it warns of a conflict</string>
+    <string name="peg_un_02_dica">With nothing said, the rule takes the precedence of its last token.</string>
+    <string name="peg_un_02_ok">The minus one, the last token of the rule. In minus two times three, times wins and runs first.</string>
+    <string name="peg_un_03">For the sign to bind tighter than everything, prec changes the strength of the rule. UMINUS is a made-up name, declared on the last line.</string>
+    <string name="peg_un_04">With prec, in minus two times three, what does Bison reduce first? Tap it.</string>
+    <string name="peg_un_04_dica">UMINUS is below times in the file, so it binds tighter.</string>
+    <string name="peg_un_04_ok">Minus two. The rule now has the strength of UMINUS, greater than that of times.</string>
+    <string name="peg_un_05">Here both orders give minus six, but the tree changes. With a power, the result would change.</string>
+    <string name="peg_un_06">On the exam: a rule has the precedence of its last token. Prec changes that precedence.</string>
 </resources>

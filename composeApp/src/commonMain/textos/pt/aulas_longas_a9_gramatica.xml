@@ -82,6 +82,9 @@
     <string name="amb_l_12_ok">Agora só existe uma árvore.</string>
     <string name="amb_l_13">Esta é a única árvore. O menos associa à esquerda, como na matemática.</string>
 
+    <string name="rec_l_00">No Templo, você vai programar um parser descendente. Ele lê um token por vez e nunca volta atrás.</string>
+    <string name="rec_l_titulo_templo">Rumo ao Templo</string>
+    <string name="rec_l_um_token">um token por vez, sem voltar</string>
     <string name="rec_l_01">Num parser descendente, cada não-terminal vira uma função. A função segue o lado direito da regra, da esquerda para a direita.</string>
     <string name="rec_l_02">Antes de ler qualquer token, o que a função E faz? Toque na linha.</string>
     <string name="rec_l_02_dica">Olhe a primeira linha dentro da função.</string>
@@ -142,7 +145,7 @@
     <string name="rec_p_meta">Chegue em id + id * id</string>
     <string name="rec_p_06">Duas regras com laço, duas rodadas da receita. Na prova, essa gramática cai desse jeito.</string>
 
-    <string name="fat_l_01">Um comando pode ser atribuição ou chamada. Os dois começam com id.</string>
+    <string name="fat_l_01">O parser descendente do Templo escolhe a regra olhando só o próximo token. Um comando pode ser atribuição ou chamada, e os dois começam com id.</string>
     <string name="fat_l_nao_da">não dá para saber</string>
     <string name="fat_l_02">Vendo só o id, qual regra o parser escolhe? Toque.</string>
     <string name="fat_l_02_dica">Olhe o primeiro token de cada regra.</string>

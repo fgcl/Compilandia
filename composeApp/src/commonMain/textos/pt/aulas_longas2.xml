@@ -173,6 +173,9 @@
     <string name="min_l_20_ok">Separar. P e M são diferentes, então P e Q também são. Sem o morto na tabela, os dois pareceriam iguais, e o AFD aceitaria b a.</string>
     <string name="min_l_juntar">juntar</string>
     <string name="min_l_separar">separar</string>
+    <string name="min_l_x2">Mais uma casa cai pelo mesmo motivo. Qual? Toque nela.</string>
+    <string name="min_l_x2_dica">Com b, o C vai para o D. Quem vai para o C com b?</string>
+    <string name="min_l_x2_ok">A com C: com b, eles vão para C e D. Já B com C não cai, porque com b os dois vão para o D.</string>
     <string name="min_l_r1">1. Marque todo par final com não final.</string>
     <string name="min_l_r2">2. Marque o par que vai a um par marcado.</string>
     <string name="min_l_r3">3. Repita até nada mudar. Branco: junte.</string>

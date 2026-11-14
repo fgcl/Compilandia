@@ -186,10 +186,10 @@
     <string name="afn_f_z2">Start at the ε-closure of the initial state. For each symbol: move, then ε-closure.</string>
     <string name="afn_f_z3">A set with some final state is final. It ends when no new set appears.</string>
     <string name="afn_f_resumo">To sum up: the subset construction walks with all possible states at once. Each set becomes a DFA state, and one final state inside is enough to accept.</string>
-    <string name="min_f_af">A and B go to different states with b. So A and B are different.</string>
+    <string name="min_f_af">With b, a pair goes to A and to C. A and C are different states, so the pair splits.</string>
     <string name="min_f_q">Is it enough for the targets to be different states to mark the pair? Right or wrong?</string>
-    <string name="min_f_dica">What if the two targets are equivalent to each other?</string>
-    <string name="min_f_ok">I mark the pair only if the targets form an already marked pair. Targets that differ but are equivalent separate nobody.</string>
+    <string name="min_f_dica">In the book DFA, A with C stayed blank at the end.</string>
+    <string name="min_f_ok">It splits only when the targets form a pair that is already marked. A and C are equivalent, so they split no one.</string>
     <string name="min_f_certo">Mark the pair only when the targets form an already marked pair.</string>
     <string name="min_f_erro2">Stopping after the first round of targets.</string>
     <string name="min_f_certo2">Repeat until a whole round marks no pair.</string>

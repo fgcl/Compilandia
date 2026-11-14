@@ -474,13 +474,11 @@ val aulasLongas2 by lazy {
             }
             cena(tx("eplexico_agora_olho_para_onde_cada"), mood = EpMood.THINK) {
                 add(Box("par", tx("eplexico_c_d_ja_tem_x"), 180f, 320f, 190f, 40f, Look.TOKEN, Tint.YELLOW, size = 14f))
+                text("tl1c1", "X"); tint("tl1c1", Tint.ORANGE)
                 hot("tl1c1")
             }
-            cena(tx("eplexico_se_destinos_sao_diferentes_origem")) {
-                text("tl1c1", "X"); tint("tl1c1", Tint.ORANGE)
-                text("tl2c1", "X"); tint("tl2c1", Tint.ORANGE)
-                hot("tl1c1", "tl2c1")
-            }
+            // O segundo X com o porquê (professor e aluno do bloco 1): A e C, que com b vão para C e D.
+            pergunta(tx("min_l_x2"), setOf("tl2c1"), setOf("tl2c2"), tx("min_l_x2_dica"), tx("min_l_x2_ok")) { hot() }
             pergunta(
                 tx("eplexico_sobrou_casa_em_branco_toque"),
                 setOf("tl2c2"), setOf("tl1c1", "tl2c1", "tl3c1", "tl3c2", "tl3c3"),
@@ -488,6 +486,7 @@ val aulasLongas2 by lazy {
                 tx("eplexico_isso_b_c_vao_sempre"),
             ) {
                 drop("par")
+                text("tl2c1", "X"); tint("tl2c1", Tint.ORANGE)
                 hot()
             }
             cena(tx("eplexico_casa_em_branco_no_fim"), mood = EpMood.HAPPY) {

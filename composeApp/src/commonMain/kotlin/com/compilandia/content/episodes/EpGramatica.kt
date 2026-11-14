@@ -322,8 +322,15 @@ val gramaticas by lazy {
 
         // ─────────────────────────────── RECURSÃO À ESQUERDA ───────────────────────────────
         episodio(Skill.LEFT_RECURSION, tx("epgramatica_laco_sem_fim")) {
-            // 1. Por que existe
+            // 1. Por que existe. A Ponte abre apresentando o parser que ela prepara (professor do bloco 2).
+            cena(tx("rec_l_00")) {
+                add(titulo(tx("rec_l_titulo_templo")))
+                add(fileira("tk", listOf("n" to Tint.TEAL, "+" to Tint.NONE, "n" to Tint.NONE), 170f, w = 56f))
+                add(rotulo("um", tx("rec_l_um_token"), 180f, 240f, Tint.YELLOW, 16f))
+                hot("tk0")
+            }
             cena(tx("rec_l_01")) {
+                clear()
                 add(titulo("E -> E + n | n"))
                 add(codigo("c", listOf("void E(void) {", "    E();", "    casa('+');", "    casa(NUM);", "}"), 100f, x = 90f, passo = 32f, size = 16f))
             }

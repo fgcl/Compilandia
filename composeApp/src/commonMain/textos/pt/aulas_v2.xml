@@ -186,10 +186,10 @@
     <string name="afn_f_z2">Começa no ε-fecho do inicial. Para cada símbolo: move e ε-fecho.</string>
     <string name="afn_f_z3">Conjunto com algum final é final. Acaba quando não surge conjunto novo.</string>
     <string name="afn_f_resumo">Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar.</string>
-    <string name="min_f_af">A e B vão para estados diferentes com b. Então A e B são diferentes.</string>
+    <string name="min_f_af">Com b, um par vai para A e para C. A e C são estados diferentes, então o par se separa.</string>
     <string name="min_f_q">Basta os destinos serem estados diferentes para marcar o par? Certo ou errado?</string>
-    <string name="min_f_dica">E se os dois destinos forem equivalentes entre si?</string>
-    <string name="min_f_ok">Só marco o par se os destinos formam um par já marcado. Destinos diferentes, mas equivalentes, não separam ninguém.</string>
+    <string name="min_f_dica">No AFD do livro, A com C ficou em branco no fim.</string>
+    <string name="min_f_ok">Só separa quando os destinos formam um par já marcado. A e C são equivalentes, então não separam ninguém.</string>
     <string name="min_f_certo">Marque o par só quando os destinos formam um par já marcado.</string>
     <string name="min_f_erro2">Parar depois da primeira rodada de destinos.</string>
     <string name="min_f_certo2">Repita até uma rodada inteira não marcar nenhum par.</string>

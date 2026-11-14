@@ -351,9 +351,8 @@
     <string name="eplexico_tabela_pares">Tabela de pares</string>
     <string name="eplexico_d_unico_final">D é o único final</string>
     <string name="eplexico_primeira_rodada_final_nao_final">Primeira rodada: um estado final nunca é equivalente a um não final. Marco todo par que tem o D.</string>
-    <string name="eplexico_agora_olho_para_onde_cada">Agora olho para onde cada par vai com cada símbolo. Com b, A vai para C, e B vai para D.</string>
+    <string name="eplexico_agora_olho_para_onde_cada">Agora olho para onde cada par vai. Com b, A vai para C, e B vai para D. O par C e D já tem X, então A e B também se separam.</string>
     <string name="eplexico_c_d_ja_tem_x">(C,D) já tem X</string>
-    <string name="eplexico_se_destinos_sao_diferentes_origem">O par C e D já está marcado. Se os destinos são diferentes, as origens também são. Marco A com B.</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">Sobrou uma casa em branco. Toque nela: esses dois são gêmeos.</string>
     <string name="eplexico_procure_casa_sem_x_na">Procure a casa sem X na tabela.</string>
     <string name="eplexico_isso_b_c_vao_sempre">É isso. B e C vão sempre para o mesmo lugar.</string>
@@ -994,4 +993,18 @@
     <string name="eptabelas_fat_devolve_caixa_dele_sai">fat de um devolve um. A caixa dele sai, e o valor desce.</string>
     <string name="eptabelas_devolveu_1">devolveu %1$s</string>
     <string name="eptabelas_cada_caixa_que_sai_leva">Cada caixa que sai leva o valor para a de baixo. No fim, sobra o main com %1$s.</string>
+    <string name="peg_un_titulo">O menos que troca o sinal</string>
+    <string name="peg_un_01">O mesmo menos faz dois papéis. Entre dois números, ele subtrai. Na frente de um só, troca o sinal. Olhe a regra do menos sozinho.</string>
+    <string name="peg_un_02">Essa regra não tem linha de precedência própria. Que força o Bison dá a ela? Toque.</string>
+    <string name="peg_un_o1">A do menos, a mais fraca</string>
+    <string name="peg_un_o2">A do vezes, a mais forte</string>
+    <string name="peg_un_o3">Nenhuma: ele avisa conflito</string>
+    <string name="peg_un_02_dica">Sem aviso, a regra fica com a precedência do último token dela.</string>
+    <string name="peg_un_02_ok">A do menos, o último token da regra. Em menos dois vezes três, o vezes ganha e roda antes.</string>
+    <string name="peg_un_03">Para o sinal ligar mais forte que tudo, o prec troca a força da regra. UMINUS é um nome inventado, declarado na última linha.</string>
+    <string name="peg_un_04">Com o prec, em menos dois vezes três, o que o Bison reduz primeiro? Toque.</string>
+    <string name="peg_un_04_dica">UMINUS está abaixo do vezes no arquivo, então liga mais forte.</string>
+    <string name="peg_un_04_ok">O menos dois. A regra agora tem a força do UMINUS, maior que a do vezes.</string>
+    <string name="peg_un_05">Aqui as duas ordens dão menos seis, mas a árvore muda. Com potência, a conta mudaria.</string>
+    <string name="peg_un_06">Na prova: a regra tem a precedência do último token dela. O prec troca essa precedência.</string>
 </resources>

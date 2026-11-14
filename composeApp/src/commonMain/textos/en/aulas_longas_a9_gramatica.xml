@@ -82,6 +82,9 @@
     <string name="amb_l_12_ok">Just one tree.</string>
     <string name="amb_l_13">This is the only tree. Minus is left-associative, as in math.</string>
 
+    <string name="rec_l_00">In the Temple, you will program a top-down parser. It reads one token at a time and never goes back.</string>
+    <string name="rec_l_titulo_templo">On to the Temple</string>
+    <string name="rec_l_um_token">one token at a time, no going back</string>
     <string name="rec_l_01">In a top-down parser, each nonterminal becomes a function. The function follows the rule's right-hand side, from left to right.</string>
     <string name="rec_l_02">Before reading any token, what does the function E do? Tap the line.</string>
     <string name="rec_l_02_dica">Look at the first line inside the function.</string>
@@ -142,7 +145,7 @@
     <string name="rec_p_meta">Reach id + id * id</string>
     <string name="rec_p_06">Two rules with a loop, two rounds of the recipe. On the exam, this grammar shows up just like this.</string>
 
-    <string name="fat_l_01">A command can be an assignment or a call. Both start with id.</string>
+    <string name="fat_l_01">The top-down parser of the Temple picks the rule by looking only at the next token. A command can be an assignment or a call, and both start with id.</string>
     <string name="fat_l_nao_da">can't tell</string>
     <string name="fat_l_02">Seeing only the id, which rule does the parser pick? Tap it.</string>
     <string name="fat_l_02_dica">Look at the first token of each rule.</string>

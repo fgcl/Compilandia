@@ -71,7 +71,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 **Porto e Floresta**
 - [ ] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
 - [ ] Thompson com um exemplo desenhado, ou tirar da ficha
-- [ ] Minimização: cena 8 × cena 18; justificar o segundo X
+- [x] Minimização: cena 8 × cena 18; justificar o segundo X
 - [ ] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
 
 **Vale e Ponte**
@@ -79,7 +79,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Montar E/T/F na aula de ambiguidade
 - [x] Derivação mais à direita praticada em 3 cenas
 - [x] ε como produção, "forma sentencial" e "sentença" ditas na aula
-- [ ] Abrir a Ponte apresentando o parser descendente
+- [x] Abrir a Ponte apresentando o parser descendente
 - [x] Recursão indireta até o fim
 - [x] Pré-requisitos: LEFT_RECURSION ← AMBIGUITY; LL1_TABLE ← LEFT_RECURSION, LEFT_FACTORING
 
@@ -94,7 +94,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [x] Bison: `%right` com `2^3^2`; "reduz com qualquer token" é a redução padrão
-- [ ] Bison: precedência da regra × do token, `%prec` no menos unário
+- [x] Bison: precedência da regra × do token, `%prec` no menos unário
 
 **Cidade e Forja**
 - [ ] Ambientes de execução depois de Geração de código MIPS

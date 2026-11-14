@@ -91,6 +91,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (décima terceira rodada)
+
+1. **Minimização: o segundo X e a contradição com o Cuidado.** A cena dizia "se os destinos são diferentes, as origens também são", e o Cuidado do fim chamava essa frase de erro. Agora a cena diz "os destinos formam um par marcado". O aluno acha o segundo X (A com C, que com b vão para C e D), e a fala explica por que B com C não cai. O Cuidado usa A e C do AFD do livro: estados diferentes no desenho, mas equivalentes.
+2. **Bison: `%prec` no menos unário.** Pegadinha nova: a regra `'-' expr` fica com a precedência do último token (o menos, a mais fraca). Em `- 2 * 3`, o vezes roda antes. Com `%left UMINUS` e `%prec UMINUS`, o sinal roda antes. O MiniBison confere a ordem das reduções nos dois arquivos.
+3. **A Ponte abre com o parser descendente.** A primeira cena da recursão à esquerda diz que no Templo o aluno vai programar um parser descendente, que lê um token por vez e nunca volta atrás. A fatoração abre dizendo que esse parser escolhe a regra pelo próximo token.
+
 ## Feito em 13/11 (décima segunda rodada)
 
 1. **E/T/F na prática de recursão.** A prática "Rode a versão consertada" usava pilha e `$`, que só chegam no Templo. Agora ela parte de `E → E + T | T`, `T → T * F | F`, `F → id`: o aluno escolhe a regra nova de E e a de T' (com os dois erros de prova como alternativas: sem ε e com o alfa da outra regra) e deriva `id + id * id` na gramática nova. O motor confere que a receita dá a gramática da tela e que a linguagem é a mesma.
