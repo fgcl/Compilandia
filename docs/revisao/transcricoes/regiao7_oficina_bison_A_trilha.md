@@ -84,18 +84,18 @@ Depois: "O mais. Quanto mais embaixo, mais forte."
 17. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict*
    BYTE: "O aviso confirma. Sem precedência, o Bison prefere empilhar."
 
-18. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict* ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4
+18. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict* ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4 ⏎ 8
    BYTE: "Empilhar primeiro junta pela direita. Quanto dá cinco menos dois menos um? Toque."
-   PERGUNTA (toque): certo = 4 ; errado = 2
+   PERGUNTA (toque): certo = 4 ; errado = 2 | 8
    se errar: "Faça dois menos um primeiro. Depois, cinco menos o resultado."
    se acertar: "É isso. Dá quatro, mas a conta certa seria dois."
 
 19. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ;
    BYTE: "Uma linha resolve: left no menos. Agora o Bison reduz primeiro."
 
-20. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4
+20. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4 ⏎ 8
    BYTE: "Com essa linha, quanto dá cinco menos dois menos um? Toque."
-   PERGUNTA (toque): certo = 2 ; errado = 4
+   PERGUNTA (toque): certo = 2 ; errado = 4 | 8
    se errar: "Agora junta pela esquerda: cinco menos dois, depois menos um."
    se acertar: "E o Bison não avisa mais nenhum conflito."
 

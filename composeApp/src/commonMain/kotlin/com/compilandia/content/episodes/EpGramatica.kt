@@ -295,8 +295,8 @@ val gramaticas by lazy {
                 add(codigo("h", GRAMATICA_AMB_CONSERTO, 160f, x = 110f, size = 16f))
                 hot("h0")
             }
-            pergunta(tx("amb_l_12"), setOf("k1"), setOf("k2"), tx("amb_l_12_dica"), tx("amb_l_12_ok")) {
-                add(opcao("k1", "1", 150f, 260f), opcao("k2", "2", 210f, 260f))
+            pergunta(tx("amb_l_12"), setOf("k1"), setOf("k2", "k3"), tx("amb_l_12_dica"), tx("amb_l_12_ok")) {
+                add(opcao("k1", "1", 120f, 260f), opcao("k2", "2", 180f, 260f), opcao("k3", "3", 240f, 260f))
             }
             cena(tx("amb_l_13"), mood = EpMood.HAPPY) {
                 clear()
@@ -550,12 +550,12 @@ val gramaticas by lazy {
                 add(codigo("h", GRAMATICA_FAT_2_DEPOIS, 150f, x = 70f, passo = 32f, size = 16f))
                 hot("h1", "h2")
             }
-            pergunta(tx("fat_l_11"), setOf("k1"), setOf("k2"), tx("fat_l_11_dica"), tx("fat_l_11_ok")) {
+            pergunta(tx("fat_l_11"), setOf("k1"), setOf("k0", "k2"), tx("fat_l_11_dica"), tx("fat_l_11_ok")) {
                 hot("h1")
-                add(opcao("k1", "1", 150f, 300f), opcao("k2", "2", 210f, 300f))
+                add(opcao("k0", "0", 120f, 300f), opcao("k1", "1", 180f, 300f), opcao("k2", "2", 240f, 300f))
             }
             cena(tx("fat_l_12"), mood = EpMood.HAPPY) {
-                drop("k1", "k2"); hot()
+                drop("k0", "k1", "k2"); hot()
             }
             // 5. O caso difícil: uma das regras é o próprio prefixo, e o resto dela é vazio
             cena(tx("fat_l_13")) {

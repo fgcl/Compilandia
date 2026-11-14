@@ -32,12 +32,13 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Embaralhar as alternativas na tela (`OrdemDasOpcoes`)
 - [x] O colega da parte Erros acerta em parte das aulas (13 de 29)
 - [x] Variar a fala de acerto: 240 de 259 começavam com "Isso"; agora nenhuma, e o `FalaDeAcertoTest` barra a volta
-- [ ] Menos perguntas de duas opções (92 de 192)
+- [ ] Menos perguntas de duas opções (eram 106; agora 90, com `PerguntasDeDuasOpcoesTest` de teto). Faltam as de sim/não, aceita/rejeita e as 29 do "certo ou errado" do fecho
 - [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
 - [x] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
 - [x] Nenhum trecho com mais de 4 cenas só ouvindo (`TrechosSoOuvindoTest`)
 - [x] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
-- [ ] Um nome por conceito, o que sobrou: X da aula de FIRST/FOLLOW × E' da recursão; cadeia/palavra/frase nas aulas
+- [x] Um nome por conceito, o que sobrou: X da aula de FIRST/FOLLOW × E' da recursão (pergunta na aula de FIRST)
+- [ ] Um nome por conceito: cadeia, palavra e frase nas aulas
 - [x] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [x] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto" (`FichaDoTexto`)
 - [ ] Dar falas à professora e ao Bug nas aulas animadas
@@ -46,8 +47,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 ## 3. O aluno produz a resposta
 
 - [x] Etapa "Questão de prova" em LL1_TABLE (exemplo resolvido → para completar → sozinho, com conflito no terceiro)
-- [ ] "Questão de prova" em SLR_TABLE: `E → E + n | n`, depois `S → ( S ) | id`, depois `S → L = R | R`
-- [ ] "Questão de prova" em NFA_TO_DFA e DFA_MINIMIZATION (tabela Dtran e escadinha de pares)
+- [x] "Questão de prova" em SLR_TABLE: `E → E + n | n`, depois `S → ( S ) | id`, depois `S → L = R | R`
+- [x] "Questão de prova" em NFA_TO_DFA e DFA_MINIMIZATION (tabela Dtran e escadinha de pares)
 - [x] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
 - [x] Exercício integrado "torne LL(1)": tirar a recursão, depois fatorar
 - [ ] Um "diga por quê" depois de cada "Sua vez" (autoexplicação)

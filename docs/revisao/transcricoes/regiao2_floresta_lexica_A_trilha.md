@@ -74,9 +74,9 @@ Depois: "Três: x, maior ou igual, e dez."
 15. TELA: # Outra linha ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ ( ⏎ i ⏎ < ⏎ = ⏎ n ⏎ ) ⏎ i ⏎ + ⏎ + ⏎ ;
    BYTE: "Entram letras, saem tokens. Agora quem corta é você."
 
-16. TELA: # Outra linha ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ ( ⏎ i ⏎ < ⏎ = ⏎ n ⏎ ) ⏎ i ⏎ + ⏎ + ⏎ ; ⏎ ID ⏎ palavra-chave
+16. TELA: # Outra linha ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ ( ⏎ i ⏎ < ⏎ = ⏎ n ⏎ ) ⏎ i ⏎ + ⏎ + ⏎ ; ⏎ ID ⏎ palavra-chave ⏎ NUM
    BYTE: "A linha começa com while. Qual é a classe dele? Toque."
-   PERGUNTA (toque): certo = palavra-chave ; errado = ID
+   PERGUNTA (toque): certo = palavra-chave ; errado = ID | NUM
    se errar: "While está na lista de palavras reservadas da linguagem."
    se acertar: "Palavra-chave, como if e for."
 
@@ -449,7 +449,7 @@ Flashcards:
 
 ## ASSUNTO NFA_TO_DFA: AFN → AFD (construção de subconjuntos)
 Pré-requisitos no jogo: Expressões regulares e autômatos
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «De muitos caminhos para um» → Pegadinha «O fecho esquecido» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «De muitos caminhos para um» → Pegadinha «O fecho esquecido» → Questão de prova → Desafio
 Jogos que treinam: Trem do Autômato (pilotar o trem estado a estado), Fábrica de Subconjuntos (juntar estados do AFN em estados do AFD)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
 
@@ -650,7 +650,7 @@ Flashcards:
 
 ## ASSUNTO DFA_MINIMIZATION: Minimização de AFD (tabela de pares)
 Pré-requisitos no jogo: Expressões regulares e autômatos
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Juntar os gêmeos» → Pegadinha «Juntar gêmeos de mentira» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Juntar os gêmeos» → Pegadinha «Juntar gêmeos de mentira» → Questão de prova → Desafio
 Jogos que treinam: Trem do Autômato (pilotar o trem estado a estado), Tabela dos Pares (marcar pares distinguíveis e juntar estados), Fábrica de Autômatos (montar o autômato e passar nos robôs de teste)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
 
@@ -870,7 +870,7 @@ Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 
 5. TELA: # Arquivo .l ⏎ "if"      return IF; ⏎ [a-z]+    return ID; ⏎ [0-9]+    return NUM; ⏎ [ \t\n]  ; /* ignora */ ⏎ if
    BYTE: "O texto if casa com a primeira e com a segunda regra, do mesmo tamanho. Quem ganha? Toque na regra."
-   PERGUNTA (toque): certo = "if"      return IF; ; errado = [a-z]+    return ID;
+   PERGUNTA (toque): certo = "if"      return IF; ; errado = [a-z]+    return ID; | [0-9]+    return NUM; | [ \t\n]  ; /* ignora */
    se errar: "Com tamanhos iguais, a ordem do arquivo decide."
    se acertar: "Boa. No empate, vence a regra de cima."
 
@@ -904,9 +904,9 @@ Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 13. TELA: # Arquivo .l ⏎ [a-z]+    return ID; ⏎ "while"   return WHILE; ⏎ "="       return ATRIB; ⏎ "=="      return IGUAL; ⏎ [0-9]+    return NUM; ⏎ " "       ; ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ x ⏎ = ⏎ = ⏎ 1 ⏎ 0
    BYTE: "Outro arquivo de regras, com um erro escondido. Quem roda agora é você."
 
-14. TELA: # Arquivo .l ⏎ [a-z]+    return ID; ⏎ "while"   return WHILE; ⏎ "="       return ATRIB; ⏎ "=="      return IGUAL; ⏎ [0-9]+    return NUM; ⏎ " "       ; ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ x ⏎ = ⏎ = ⏎ 1 ⏎ 0 ⏎ ID ⏎ WHILE
+14. TELA: # Arquivo .l ⏎ [a-z]+    return ID; ⏎ "while"   return WHILE; ⏎ "="       return ATRIB; ⏎ "=="      return IGUAL; ⏎ [0-9]+    return NUM; ⏎ " "       ; ⏎ w ⏎ h ⏎ i ⏎ l ⏎ e ⏎ x ⏎ = ⏎ = ⏎ 1 ⏎ 0 ⏎ ID ⏎ WHILE ⏎ Erro
    BYTE: "O scanner lê while. Qual token sai? Toque na resposta."
-   PERGUNTA (toque): certo = ID ; errado = WHILE
+   PERGUNTA (toque): certo = ID ; errado = WHILE | Erro
    se errar: "As duas primeiras regras casam cinco letras. No empate, vale a de cima."
    se acertar: "Sai ID. A regra do while nunca ganha."
 

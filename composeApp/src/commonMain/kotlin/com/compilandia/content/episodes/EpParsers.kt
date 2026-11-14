@@ -135,15 +135,16 @@ val topDown by lazy {
             }
             pergunta(
                 tx("epparsers_topo_id_token_id_que"),
-                setOf("casar"), setOf("expandir"),
+                setOf("casar"), setOf("expandir", "erro"),
                 tx("epparsers_terminal_no_topo_igual_ao"),
                 tx("epparsers_isso_casou_dois_saem"),
             ) {
                 text("ra", tx("epparsers_topo_id_token_id"))
                 add(Box("casar", tx("comum_casar_2"), 178f, 360f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("expandir", tx("comum_expandir"), 296f, 360f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("erro", tx("comum_erro"), 60f, 360f, 100f, 46f, Look.TOKEN, Tint.RED, size = 17f))
             }
             cena(tx("epparsers_jogo_segue_igual_expande_nao")) {
-                drop("casar", "expandir")
+                drop("casar", "expandir", "erro")
                 parser(listOf("$", "X"), listOf("+", "id", "$"), n)
                 text("ra", tx("epparsers_casou_id"))
                 hot()
@@ -299,18 +300,18 @@ val topDown by lazy {
                 add(codigo("g", GRAMATICA_PREDITIVO_2, 62f, x = 100f, passo = 26f, size = 15f))
                 add(codigo("c", listOf("void L() { casa(ID); ___ }", "void R() {", "  if (tok == ___) {", "    casa(','); casa(ID); R();", "  }", "}"), 132f, x = 40f, passo = 27f, size = 14f))
             }
-            pergunta(tx("desc_l_09"), setOf("o1"), setOf("o2"), tx("desc_l_09_dica"), tx("desc_l_09_ok")) {
+            pergunta(tx("desc_l_09"), setOf("o1"), setOf("o2", "o3"), tx("desc_l_09_dica"), tx("desc_l_09_ok")) {
                 hot("c0")
-                add(botao("o1", "R();", 120f, 330f, 90f), botao("o2", "casa(R);", 240f, 330f, 110f))
+                add(botao("o1", "R();", 70f, 330f, 90f), botao("o2", "casa(R);", 180f, 330f, 110f), botao("o3", "casa(ID);", 300f, 330f, 110f))
             }
-            pergunta(tx("desc_l_10"), setOf("p1"), setOf("p2"), tx("desc_l_10_dica"), tx("desc_l_10_ok")) {
-                drop("o1", "o2")
+            pergunta(tx("desc_l_10"), setOf("p1"), setOf("p2", "p3"), tx("desc_l_10_dica"), tx("desc_l_10_ok")) {
+                drop("o1", "o2", "o3")
                 text("c0", "void L() { casa(ID); R(); }")
                 hot("c2")
-                add(botao("p1", "','", 140f, 330f), botao("p2", "ID", 220f, 330f))
+                add(botao("p1", "','", 100f, 330f), botao("p2", "ID", 180f, 330f), botao("p3", "';'", 260f, 330f))
             }
             cena(tx("desc_l_11")) {
-                drop("p1", "p2")
+                drop("p1", "p2", "p3")
                 text("c2", "  if (tok == ',') {")
                 add(fileira("k", (ENTRADA_PREDITIVO_2 + "$").map { it to Tint.TEAL }, 312f, w = 50f, h = 36f))
                 hot("c0", "c2")
@@ -468,15 +469,16 @@ val bottomUp by lazy {
             }
             pergunta(
                 tx("epparsers_pilha_tem_mais_n_empilho"),
-                setOf("red"), setOf("emp"),
+                setOf("red"), setOf("emp", "acc"),
                 tx("epparsers_olhe_topo_mais_n_lado"),
                 tx("epparsers_isso_handle_no_topo_entao"),
             ) {
                 add(Box("emp", tx("comum_empilhar_2"), 90f, 300f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 16f), Box("red", tx("comum_reduzir"), 90f, 356f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 16f))
+                add(Box("acc", tx("comum_aceitar"), 90f, 244f, 110f, 46f, Look.TOKEN, Tint.GREEN, size = 16f))
                 hot("p0", "q0", "q1")
             }
             cena(tx("epparsers_sobrou_so_entrada_acabou_frase"), mood = EpMood.HAPPY) {
-                drop("emp", "red")
+                drop("emp", "red", "acc")
                 dropAll("q")
                 hot("p0")
             }
@@ -496,6 +498,7 @@ val bottomUp by lazy {
             fun botoes() = add(
                 Box("emp", tx("comum_empilhar_2"), 90f, 300f, 110f, 46f, Look.TOKEN, Tint.TEAL, size = 16f),
                 Box("red", tx("comum_reduzir"), 90f, 356f, 110f, 46f, Look.TOKEN, Tint.ORANGE, size = 16f),
+                Box("acc", tx("comum_aceitar"), 90f, 244f, 110f, 46f, Look.TOKEN, Tint.GREEN, size = 16f),
             )
             cena(tx("sr_l_08")) {
                 clear()
@@ -508,22 +511,22 @@ val bottomUp by lazy {
                 add(pilha("p", listOf("(", "id"), 300f, 340f, h = 34f))
                 hot("p1")
             }
-            pergunta(tx("sr_l_10"), setOf("red"), setOf("emp"), tx("sr_l_10_dica"), tx("sr_l_10_ok")) {
+            pergunta(tx("sr_l_10"), setOf("red"), setOf("emp", "acc"), tx("sr_l_10_dica"), tx("sr_l_10_ok")) {
                 botoes()
                 hot("p1")
             }
             cena(tx("sr_l_11")) {
-                drop("emp", "red")
+                drop("emp", "red", "acc")
                 dropAll("p")
                 add(Box("p0", "(", 300f, 340f, 70f, 34f, Look.TOKEN, Tint.TEAL), Box("p1", "S", 300f, 303f, 70f, 34f, Look.TOKEN, Tint.ORANGE))
                 hot("p1")
             }
-            pergunta(tx("sr_l_12"), setOf("emp"), setOf("red"), tx("sr_l_12_dica"), tx("sr_l_12_ok")) {
+            pergunta(tx("sr_l_12"), setOf("emp"), setOf("red", "acc"), tx("sr_l_12_dica"), tx("sr_l_12_ok")) {
                 botoes()
                 hot("p0", "p1")
             }
             pergunta(tx("sr_l_13"), setOf("p0", "p1", "p2"), setOf("i3"), tx("sr_l_13_dica"), tx("sr_l_13_ok")) {
-                drop("emp", "red")
+                drop("emp", "red", "acc")
                 esteira(listOf(3 to "$"))
                 add(Box("p2", ")", 300f, 266f, 70f, 34f, Look.TOKEN, Tint.TEAL))
                 hot()
@@ -600,7 +603,7 @@ val bottomUp by lazy {
             // 4. Segundo exemplo, com perguntas
             fun conta() = add(
                 Box("conta", "5 - 2 - 1", 180f, 300f, 160f, 40f, Look.TOKEN, Tint.TEAL, size = 16f),
-                botao("v2", "2", 140f, 360f, 60f), botao("v4", "4", 220f, 360f, 60f),
+                botao("v2", "2", 110f, 360f, 60f), botao("v4", "4", 180f, 360f, 60f), botao("v8", "8", 250f, 360f, 60f),
             )
             cena(tx("bison_l_08")) {
                 clear()
@@ -615,17 +618,17 @@ val bottomUp by lazy {
                 add(codigo("o", listOf("\$ bison calc.y", BISON_AVISO), 200f, x = 20f, passo = 26f, size = 12f))
                 hot("o1")
             }
-            pergunta(tx("bison_l_11"), setOf("v4"), setOf("v2"), tx("bison_l_11_dica"), tx("bison_l_11_ok")) { conta() }
+            pergunta(tx("bison_l_11"), setOf("v4"), setOf("v2", "v8"), tx("bison_l_11_dica"), tx("bison_l_11_ok")) { conta() }
             cena(tx("bison_l_12")) {
-                drop("v2", "v4", "conta")
+                drop("v2", "v4", "v8", "conta")
                 dropAll("o")
                 dropAll("s")
                 add(codigo("s", BISON_MENOS_LEFT, 70f, x = 20f, passo = 28f, size = 13f))
                 hot("s1")
             }
-            pergunta(tx("bison_l_13"), setOf("v2"), setOf("v4"), tx("bison_l_13_dica"), tx("bison_l_13_ok")) { conta() }
+            pergunta(tx("bison_l_13"), setOf("v2"), setOf("v4", "v8"), tx("bison_l_13_dica"), tx("bison_l_13_ok")) { conta() }
             cena(tx("bison_l_14"), mood = EpMood.HAPPY) {
-                drop("v4")
+                drop("v4", "v8")
                 tint("v2", Tint.GREEN)
                 add(codigo("o", listOf("\$ bison calc.y"), 230f, x = 20f, passo = 26f, size = 12f))
                 hot("v2")

@@ -150,15 +150,16 @@ val semantica by lazy {
             }
             pergunta(
                 tx("epbackend_real_vezes_inteiro_que_toque"),
-                setOf("of"), setOf("oi"),
+                setOf("of"), setOf("oi", "oe"),
                 tx("epbackend_tipo_maior_ganha_para_nao"),
                 tx("epbackend_isso_real_com_inteiro_real"),
             ) {
-                add(Box("oi", "int", 120f, 380f, 100f, 42f, Look.TOKEN, Tint.TEAL, size = 17f), Box("of", "float", 240f, 380f, 100f, 42f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("oi", "int", 70f, 380f, 100f, 42f, Look.TOKEN, Tint.TEAL, size = 17f), Box("of", "float", 180f, 380f, 100f, 42f, Look.TOKEN, Tint.ORANGE, size = 17f))
+                add(Box("oe", tx("comum_erro"), 290f, 380f, 100f, 42f, Look.TOKEN, Tint.RED, size = 17f))
                 hot("t1")
             }
             cena(tx("epbackend_dois_convertido_para_real_resultado")) {
-                drop("oi", "of")
+                drop("oi", "of", "oe")
                 add(tipo("tm", "float", node.getValue("*")))
                 hot()
             }
@@ -583,13 +584,14 @@ val backend by lazy {
                 empilha(chamadas[0]); empilha(chamadas[1])
                 hot("k1")
             }
-            pergunta(tx("rt_l_09"), setOf("f${g.frame.fn}"), setOf("f${h.frame.fn}") - "f${g.frame.fn}", tx("rt_l_09_dica"), tx("rt_l_09_ok")) {
+            pergunta(tx("rt_l_09"), setOf("f${g.frame.fn}"), setOf("f${h.frame.fn}", "fmain") - "f${g.frame.fn}", tx("rt_l_09_dica"), tx("rt_l_09_ok")) {
                 add(Box("fg", "g", 290f, 290f, 64f, 42f, Look.TOKEN, Tint.YELLOW, size = 18f), Box("fh", "h", 290f, 340f, 64f, 42f, Look.TOKEN, Tint.YELLOW, size = 18f))
+                add(Box("fmain", "main", 290f, 240f, 64f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
                 hot(linhaCom("g(c)"))
             }
             val aDoH = h.frame.args.getValue("a")
             pergunta(tx("rt_l_10"), setOf("a$aDoH"), (1..3).map { "a$it" }.toSet() - "a$aDoH", tx("rt_l_10_dica"), tx("rt_l_10_ok")) {
-                drop("fg", "fh")
+                drop("fg", "fh", "fmain")
                 empilha(g)
                 add((1..3).map { Box("a$it", "a = $it", 300f, 230f + it * 46f, 90f, 40f, Look.TOKEN, Tint.YELLOW, size = 16f) })
                 hot(linhaCom("h(b"))

@@ -416,7 +416,7 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 
 14. TELA: # preco + taxa ⏎ add $t3, $t1, $t2 ⏎ lw $t1, preco ⏎ sw $t3, total ⏎ lw $t2, taxa
    BYTE: "E qual linha fecha o trio? Toque nela."
-   PERGUNTA (toque): certo = sw $t3, total ; errado = add $t3, $t1, $t2
+   PERGUNTA (toque): certo = sw $t3, total ; errado = lw $t1, preco | lw $t2, taxa | add $t3, $t1, $t2
    se errar: "O resultado precisa voltar para a memória."
    se acertar: "O sw guarda o resultado."
 
@@ -580,9 +580,9 @@ Depois: "F de dois. O último a entrar sai primeiro."
 15. TELA: # f(1) ⏎ int h(int a) { ⏎   return a + 1; ⏎ } ⏎ int g(int b) { ⏎   return h(b * 2); ⏎ } ⏎ int f(int c) { ⏎   return g(c) + h(c); ⏎ } ⏎ main ⏎ *f  c = 1*
    BYTE: "Outro programa. O main chamou f com c igual a um."
 
-16. TELA: # f(1) ⏎ int h(int a) { ⏎   return a + 1; ⏎ } ⏎ int g(int b) { ⏎   return h(b * 2); ⏎ } ⏎ int f(int c) { ⏎ *  return g(c) + h(c);* ⏎ } ⏎ main ⏎ f  c = 1 ⏎ g ⏎ h
+16. TELA: # f(1) ⏎ int h(int a) { ⏎   return a + 1; ⏎ } ⏎ int g(int b) { ⏎   return h(b * 2); ⏎ } ⏎ int f(int c) { ⏎ *  return g(c) + h(c);* ⏎ } ⏎ main ⏎ f  c = 1 ⏎ g ⏎ h ⏎ main
    BYTE: "Quem o f chama primeiro? Toque na função."
-   PERGUNTA (toque): certo = g ; errado = h
+   PERGUNTA (toque): certo = g ; errado = h | main
    se errar: "Leia a linha do f da esquerda para a direita."
    se acertar: "Certo. O g ganha um registro em cima do f."
 

@@ -68,7 +68,7 @@
     <string name="ficha_vem_do_texto">Vem da aula Ler com calma</string>
     <!-- Questão de prova (seção 3 da revisão) -->
     <string name="trilha_etapa_prova">Questão de prova</string>
-    <string name="trilha_etapa_prova_sub">Do FIRST ao veredito, como na prova.</string>
+    <string name="trilha_etapa_prova_sub">Três questões inteiras, como na prova.</string>
     <string name="prova_problema">Questão %1$s de 3</string>
     <string name="prova_nivel_0">O Byte resolve esta questão inteira. Acompanhe cada passo.</string>
     <string name="prova_nivel_1">Agora metade das respostas é sua.</string>

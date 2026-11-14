@@ -41,6 +41,9 @@
     <string name="first_l_02">To choose without backtracking, it must know which token each rule can start with.</string>
     <string name="first_l_03">FIRST of a symbol is the set of terminals that can appear at the start of what it generates.</string>
     <string name="first_l_04">Let's compute it for this grammar. Each nonterminal gets a bag, and its FIRST fills up bit by bit.</string>
+    <string name="first_l_x">This is the Bridge grammar, already without recursion. What was X called there?</string>
+    <string name="first_l_x_dica">On the Bridge, the new rule took the old name plus a prime.</string>
+    <string name="first_l_x_ok">E prime. Here it is called X, a shorter name. The role is the same.</string>
     <string name="first_l_titulo_receita">FIRST recipe</string>
     <string name="first_l_05">The FIRST recipe has four steps. You apply them to every rule of the grammar.</string>
     <string name="first_l_r1">1. Starts with a terminal: it goes in.</string>

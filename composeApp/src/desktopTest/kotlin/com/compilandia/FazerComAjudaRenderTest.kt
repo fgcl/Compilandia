@@ -30,15 +30,17 @@ class FazerComAjudaRenderTest : RenderBase() {
     }
 
     @Test fun questaoDeProva() {
-        shot("prova_tela", w = 360, h = 760) { App(stateWith(Screen.FazerComAjuda(Skill.LL1_TABLE, semente = 42, prova = true))) }
-        val ps = com.compilandia.content.Prova.problemas(Skill.LL1_TABLE, 42)
-        for ((p, sim) in ps.withIndex()) {
-            val exigir = com.compilandia.content.Prova.exigir(sim, p)
-            val pergs = sim.passos.indices.filter { sim.passos[it].ask != null }
-            // Uma pergunta da tabela e o veredito.
-            for (k in listOf(pergs[pergs.size - 2], pergs.last())) {
-                shot("prova_q${p + 1}_p$k", w = 360, h = 760) {
-                    CompilandiaTheme { SimPlayer(sim, Modifier.fillMaxSize().background(Palette.paper), comecaEm = k, exigir = exigir.ifEmpty { pergs.toSet() }) }
+        for (s in listOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION)) {
+            val nome = s.name.lowercase()
+            shot("prova_${nome}_tela", w = 360, h = 760) { App(stateWith(Screen.FazerComAjuda(s, semente = 42, prova = true))) }
+            val ps = com.compilandia.content.Prova.problemas(s, 42)
+            for ((p, sim) in ps.withIndex()) {
+                val pergs = sim.passos.indices.filter { sim.passos[it].ask != null }
+                // A primeira pergunta, uma do meio e a última.
+                for (k in listOf(pergs.first(), pergs[pergs.size / 2], pergs.last()).distinct()) {
+                    shot("prova_${nome}_q${p + 1}_p$k", w = 360, h = 760) {
+                        CompilandiaTheme { SimPlayer(sim, Modifier.fillMaxSize().background(Palette.paper), comecaEm = k, exigir = pergs.toSet()) }
+                    }
                 }
             }
         }

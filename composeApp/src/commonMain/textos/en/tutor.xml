@@ -176,4 +176,41 @@
     <string name="pg_amb_q_outra">The other tree does the other operation first. What does it give?</string>
     <string name="pg_amb_fim_diferente">The same sentence gave %1$s in one tree and %2$s in the other. The grammar is ambiguous.</string>
     <string name="pg_amb_fim_igual">Both give %1$s, but they are two trees. The grammar is ambiguous all the same.</string>
+    <!-- Questão de prova: SLR, Dtran e escadinha de pares -->
+    <string name="prova_slr_abre">The exam asks for the LR(0) states, FOLLOW, the table, and whether the grammar is SLR(1).</string>
+    <string name="prova_slr_tabela">SLR(1) table</string>
+    <string name="prova_slr_linhas">One row per state. First the actions on terminals, then GOTO.</string>
+    <string name="prova_slr_casa">What goes in ACTION[%1$s, %2$s]?</string>
+    <string name="prova_slr_conflito">State %1$s on %2$s: two actions in the same cell. That is a conflict.</string>
+    <string name="prova_slr_shift">State %1$s has an item with the dot before %2$s. Shift and go to %3$s.</string>
+    <string name="prova_slr_reduce">State %1$s has %2$s, and %3$s is in FOLLOW of %4$s. Reduce.</string>
+    <string name="prova_slr_aceita">The start item is done, and the input is over: accept.</string>
+    <string name="prova_slr_goto">GOTO[%1$s, %2$s] = %3$s: the arrow labeled %2$s leaving state %1$s.</string>
+    <string name="prova_slr_goto_q">Where does GOTO[%1$s, %2$s] go?</string>
+    <string name="prova_slr_pergunta">Is the grammar SLR(1)?</string>
+    <string name="prova_slr_sim">Yes: no cell has two actions</string>
+    <string name="prova_slr_nao_recursao">No: it has left recursion</string>
+    <string name="prova_slr_nao_casa">No: ACTION[%1$s, %2$s] has two actions</string>
+    <string name="prova_slr_porque_sim">No cell has two actions. Left recursion does not get in LR's way.</string>
+    <string name="prova_slr_porque_nao">In state %1$s, on %2$s, the cell has two actions. SLR cannot tell which to follow.</string>
+    <string name="prova_dtran_titulo">Dtran table</string>
+    <string name="prova_dtran_conjunto">DFA state</string>
+    <string name="prova_dtran_abre">The exam asks for the Dtran table. Each DFA state is a set of NFA states.</string>
+    <string name="prova_dtran_inicio">State A is the ε-closure of the start: %1$s.</string>
+    <string name="prova_dtran_inicio_q">State A is the ε-closure of {%1$s}. Which set is it?</string>
+    <string name="prova_dtran_q">Dtran[%1$s, %2$s] = ε-closure(move(%1$s, %2$s)). Which set is it?</string>
+    <string name="prova_dtran_porque">move(%1$s, %2$s) = %3$s. The ε-closure gives %4$s.</string>
+    <string name="prova_dtran_morto">From %1$s, no arrow reads %2$s. The set is empty: the arrow goes to the dead state.</string>
+    <string name="prova_dtran_finais_q">Which DFA states are final?</string>
+    <string name="prova_dtran_finais_porque">A set is final when it has a final state of the NFA.</string>
+    <string name="prova_min_titulo">Table of pairs</string>
+    <string name="prova_min_abre">The exam asks for the staircase table: one cell for each pair of states.</string>
+    <string name="prova_min_r1">Round 1: every pair with one final and one non-final state falls.</string>
+    <string name="prova_min_r1_q">Which pair falls in round 1?</string>
+    <string name="prova_min_q">Reading %2$s, which pair does %1$s go to?</string>
+    <string name="prova_min_porque">Reading %2$s, %1$s goes to %3$s, which already fell. So %1$s falls in round %4$s.</string>
+    <string name="prova_min_fim_q">Which states merge?</string>
+    <string name="prova_min_nenhum">None</string>
+    <string name="prova_min_fim">The blank pairs merge: %1$s. The minimal DFA has %2$s states.</string>
+    <string name="prova_min_fim_nada">Every cell fell. No states merge.</string>
 </resources>

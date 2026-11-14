@@ -56,9 +56,9 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 10. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ *2* ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int
    BYTE: "Começo pelas folhas. O tipo de a e de x vem da declaração. O dois, sem ponto, é inteiro."
 
-11. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ *** ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ int ⏎ float
+11. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ *** ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ int ⏎ float ⏎ Erro
    BYTE: "Real vezes inteiro dá o quê? Toque no tipo."
-   PERGUNTA (toque): certo = float ; errado = int
+   PERGUNTA (toque): certo = float ; errado = int | Erro
    se errar: "O tipo maior ganha, para não perder a parte quebrada."
    se acertar: "Inteiro com real dá real."
 

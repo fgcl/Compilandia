@@ -181,4 +181,41 @@
     <string name="pg_amb_q_outra">A outra árvore faz primeiro a outra conta. Quanto ela dá?</string>
     <string name="pg_amb_fim_diferente">A mesma frase deu %1$s numa árvore e %2$s na outra. A gramática é ambígua.</string>
     <string name="pg_amb_fim_igual">As duas dão %1$s, mas são duas árvores. A gramática é ambígua do mesmo jeito.</string>
+    <!-- Questão de prova: SLR, Dtran e escadinha de pares -->
+    <string name="prova_slr_abre">A prova pede os estados LR(0), o FOLLOW, a tabela e se a gramática é SLR(1).</string>
+    <string name="prova_slr_tabela">Tabela SLR(1)</string>
+    <string name="prova_slr_linhas">Uma linha por estado. Primeiro as ações com terminais, depois o GOTO.</string>
+    <string name="prova_slr_casa">O que vai em ACTION[%1$s, %2$s]?</string>
+    <string name="prova_slr_conflito">Estado %1$s com %2$s: duas ações na mesma casa. Isso é conflito.</string>
+    <string name="prova_slr_shift">No estado %1$s há item com o ponto antes de %2$s. Empilha e vai para %3$s.</string>
+    <string name="prova_slr_reduce">O estado %1$s tem %2$s, e %3$s está no FOLLOW de %4$s. Reduz.</string>
+    <string name="prova_slr_aceita">O item inicial terminou e a entrada acabou: aceita.</string>
+    <string name="prova_slr_goto">GOTO[%1$s, %2$s] = %3$s: a seta com %2$s que sai do estado %1$s.</string>
+    <string name="prova_slr_goto_q">Para onde vai GOTO[%1$s, %2$s]?</string>
+    <string name="prova_slr_pergunta">A gramática é SLR(1)?</string>
+    <string name="prova_slr_sim">Sim: nenhuma casa tem duas ações</string>
+    <string name="prova_slr_nao_recursao">Não: ela tem recursão à esquerda</string>
+    <string name="prova_slr_nao_casa">Não: ACTION[%1$s, %2$s] tem duas ações</string>
+    <string name="prova_slr_porque_sim">Nenhuma casa tem duas ações. Recursão à esquerda não atrapalha o LR.</string>
+    <string name="prova_slr_porque_nao">No estado %1$s, com %2$s, a casa tem duas ações. O SLR não sabe qual seguir.</string>
+    <string name="prova_dtran_titulo">Tabela Dtran</string>
+    <string name="prova_dtran_conjunto">estado do AFD</string>
+    <string name="prova_dtran_abre">A prova pede a tabela Dtran. Cada estado do AFD é um conjunto de estados do AFN.</string>
+    <string name="prova_dtran_inicio">O estado A é o ε-fecho do início: %1$s.</string>
+    <string name="prova_dtran_inicio_q">O estado A é o ε-fecho de {%1$s}. Que conjunto dá?</string>
+    <string name="prova_dtran_q">Dtran[%1$s, %2$s] = ε-fecho(move(%1$s, %2$s)). Que conjunto dá?</string>
+    <string name="prova_dtran_porque">move(%1$s, %2$s) = %3$s. O ε-fecho dá %4$s.</string>
+    <string name="prova_dtran_morto">De %1$s, nenhuma seta lê %2$s. O conjunto é vazio: a seta vai para o estado morto.</string>
+    <string name="prova_dtran_finais_q">Quais estados do AFD são finais?</string>
+    <string name="prova_dtran_finais_porque">Final é todo conjunto que tem um estado final do AFN.</string>
+    <string name="prova_min_titulo">Escadinha de pares</string>
+    <string name="prova_min_abre">A prova pede a escadinha: uma casa para cada par de estados.</string>
+    <string name="prova_min_r1">Rodada 1: todo par com um final e um não final cai.</string>
+    <string name="prova_min_r1_q">Qual par cai na rodada 1?</string>
+    <string name="prova_min_q">Lendo %2$s, o par %1$s vai para qual par?</string>
+    <string name="prova_min_porque">Lendo %2$s, %1$s vai para %3$s, que já caiu. Então %1$s cai na rodada %4$s.</string>
+    <string name="prova_min_fim_q">Quais estados se juntam?</string>
+    <string name="prova_min_nenhum">Nenhum</string>
+    <string name="prova_min_fim">Os pares em branco se juntam: %1$s. O AFD mínimo fica com %2$s estados.</string>
+    <string name="prova_min_fim_nada">Toda casa caiu. Nenhum estado se junta.</string>
 </resources>

@@ -768,7 +768,7 @@ val aulasLongas2 by lazy {
             val sws = mips2.indices.filter { mips2[it].startsWith("sw") }.map { "l$it" }.toSet()
             val todas = mips2.indices.map { "l$it" }.toSet()
             pergunta(tx("mips_l_09"), lws, todas - lws, tx("mips_l_09_dica"), tx("mips_l_09_ok")) { hot() }
-            pergunta(tx("mips_l_10"), sws, todas - lws - sws, tx("mips_l_10_dica"), tx("mips_l_10_ok")) {
+            pergunta(tx("mips_l_10"), sws, todas - sws, tx("mips_l_10_dica"), tx("mips_l_10_ok")) {
                 for (id in lws) tint(id, Tint.TEAL)
             }
             cena(tx("mips_l_11"), mood = EpMood.HAPPY) {

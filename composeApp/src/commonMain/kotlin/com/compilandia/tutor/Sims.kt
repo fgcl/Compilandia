@@ -624,7 +624,7 @@ object Sims {
             val (chegada, ask) = if (k == 0) "" to null else PerguntasGuiadas.lr0(a, k)
             passos += SimStep(Shot(painel + vistos.map { if (it.id == "I$k") it.copy(tint = Tint.YELLOW, hot = true) else it }, fios.toList()), "$chegada $diz".trim(), ask)
         }
-        return PerguntasGuiadas.comGramatica(Sim(tx("sims_construindo_estados_lr_0"), passos, Skill.LR0_ITEMS), g, 372f)
+        return PerguntasGuiadas.comGramatica(Sim(tx("sims_construindo_estados_lr_0"), passos, Skill.LR0_ITEMS), g, 350f)
     }
 
     // ------------------------------------------------------------ Outro exemplo

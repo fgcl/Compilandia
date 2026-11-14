@@ -47,9 +47,9 @@ Depois: "Reduz. Não há mais nada para empilhar."
 8. TELA: # E -> E + n | n ⏎ pilha ⏎ $ ⏎ E ⏎ + ⏎ n
    BYTE: "Agora não há handle no topo. Empilho o mais e depois o n."
 
-9. TELA: # E -> E + n | n ⏎ pilha ⏎ $ ⏎ *E* ⏎ *+* ⏎ *n* ⏎ Empilhar ⏎ Reduzir
+9. TELA: # E -> E + n | n ⏎ pilha ⏎ $ ⏎ *E* ⏎ *+* ⏎ *n* ⏎ Empilhar ⏎ Reduzir ⏎ Aceitar
    BYTE: "A pilha tem E mais n. Empilho ou reduzo? Toque na resposta."
-   PERGUNTA (toque): certo = Reduzir ; errado = Empilhar
+   PERGUNTA (toque): certo = Reduzir ; errado = Empilhar | Aceitar
    se errar: "Olhe o topo. E mais n é o lado direito de uma regra?"
    se acertar: "Exato. E mais n é o handle. Reduzir, ou reduce, troca os três por E."
 
@@ -77,18 +77,18 @@ Depois: "Reduz. Não há mais nada para empilhar."
 16. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ ( ⏎ *id*
    BYTE: "Nada para reduzir ainda. Empilho o abre parêntese e depois o id."
 
-17. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ ( ⏎ *id* ⏎ Empilhar ⏎ Reduzir
+17. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ ( ⏎ *id* ⏎ Empilhar ⏎ Reduzir ⏎ Aceitar
    BYTE: "Na pilha, abre parêntese e id. Empilho ou reduzo? Toque."
-   PERGUNTA (toque): certo = Reduzir ; errado = Empilhar
+   PERGUNTA (toque): certo = Reduzir ; errado = Empilhar | Aceitar
    se errar: "O id sozinho é o lado direito de uma regra?"
    se acertar: "O id é um handle e vira S."
 
 18. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ ( ⏎ *S*
    BYTE: "Reduzo: o id vira S. No topo ficam abre parêntese e S."
 
-19. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ *(* ⏎ *S* ⏎ Empilhar ⏎ Reduzir
+19. TELA: # S -> ( S ) | id ⏎ pilha ⏎ ) ⏎ $ ⏎ *(* ⏎ *S* ⏎ Empilhar ⏎ Reduzir ⏎ Aceitar
    BYTE: "E agora, com abre parêntese e S? Empilho ou reduzo? Toque."
-   PERGUNTA (toque): certo = Empilhar ; errado = Reduzir
+   PERGUNTA (toque): certo = Empilhar ; errado = Reduzir | Aceitar
    se errar: "Alguma regra termina em S sem o fecha parêntese?"
    se acertar: "Boa. Falta o fecha parêntese, então empilha."
 
@@ -405,7 +405,7 @@ Flashcards:
 
 ## ASSUNTO SLR_TABLE: Tabela SLR(1) e conflitos
 Pré-requisitos no jogo: Itens LR(0), closure e goto, Conjunto FOLLOW
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Quando reduzir?» → Fazer com ajuda → Prática: você pilota «Rode a tabela SLR» → Pegadinha «Conflito não é ambiguidade» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Quando reduzir?» → Fazer com ajuda → Prática: você pilota «Rode a tabela SLR» → Pegadinha «Conflito não é ambiguidade» → Questão de prova → Desafio
 Jogos que treinam: Esteira Shift-Reduce (empilhar ou reduzir contra o relógio), Caça-Conflitos (achar e explicar conflitos)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 

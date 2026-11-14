@@ -233,13 +233,14 @@ val lexicos by lazy {
                 add(titulo(tx("tok_l_titulo_outra")))
                 add(fita(TOKENS_LINHA_2, 100f, cell = 20f))
             }
-            pergunta(tx("tok_l_07"), setOf("kw"), setOf("id"), tx("tok_l_07_dica"), tx("tok_l_07_ok")) {
+            pergunta(tx("tok_l_07"), setOf("kw"), setOf("id", "num"), tx("tok_l_07_dica"), tx("tok_l_07_ok")) {
                 for (i in 0 until 5) tint("c$i", Tint.PINK)
-                add(Box("id", "ID", 100f, 200f, 120f, 44f, Look.TOKEN, Tint.TEAL, size = 16f))
-                add(Box("kw", tx("comum_kt_palavra_chave"), 262f, 200f, 140f, 44f, Look.TOKEN, Tint.PINK, size = 16f))
+                add(Box("id", "ID", 70f, 200f, 110f, 44f, Look.TOKEN, Tint.TEAL, size = 16f))
+                add(Box("kw", tx("comum_kt_palavra_chave"), 198f, 200f, 136f, 44f, Look.TOKEN, Tint.PINK, size = 16f))
+                add(Box("num", "NUM", 316f, 200f, 80f, 44f, Look.TOKEN, Tint.YELLOW, size = 16f))
             }
             pergunta(tx("tok_l_08"), setOf("h1", "h3"), setOf("h2"), tx("tok_l_08_dica"), tx("tok_l_08_ok")) {
-                drop("id", "kw")
+                drop("id", "kw", "num")
                 add(fita(TOKENS_PEDACO_2, 260f, cell = 52f, prefix = "d"))
                 val x0 = 180f - (TOKENS_PEDACO_2.length - 1) * 52f / 2
                 for (i in 1 until TOKENS_PEDACO_2.length) add(Box("h$i", "", x0 + (i - 0.5f) * 52f, 260f, 10f, 92f, Look.GAP))
@@ -597,7 +598,7 @@ val lexicos by lazy {
             cena(tx("eplexico_cada_linha_tem_padrao_acao")) { hot("r1") }
             pergunta(
                 tx("eplexico_texto_if_casa_com_primeira"),
-                setOf("r0"), setOf("r1"),
+                setOf("r0"), setOf("r1", "r2", "r3"),
                 tx("eplexico_com_tamanhos_iguais_ordem_arquivo"),
                 tx("eplexico_isso_no_empate_vence_regra"),
             ) {
@@ -647,14 +648,15 @@ val lexicos by lazy {
                 add(codigo("r", FLEX_2, 66f, x = 60f, passo = 32f, size = 14f))
                 add(fita(FLEX_2_ENTRADA, 290f, cell = 26f))
             }
-            pergunta(tx("flex_l_06"), setOf("oID"), setOf("oWH"), tx("flex_l_06_dica"), tx("flex_l_06_ok")) {
+            pergunta(tx("flex_l_06"), setOf("oID"), setOf("oWH", "oER"), tx("flex_l_06_dica"), tx("flex_l_06_ok")) {
                 for (i in 0 until 5) tint("c$i", Tint.YELLOW)
-                add(Box("oID", errado[0].token, 110f, 366f, 110f, 42f, Look.TOKEN, Tint.TEAL, size = 16f))
-                add(Box("oWH", "WHILE", 252f, 366f, 110f, 42f, Look.TOKEN, Tint.PINK, size = 16f))
+                add(Box("oID", errado[0].token, 70f, 366f, 100f, 42f, Look.TOKEN, Tint.TEAL, size = 16f))
+                add(Box("oWH", "WHILE", 180f, 366f, 100f, 42f, Look.TOKEN, Tint.PINK, size = 16f))
+                add(Box("oER", tx("comum_erro"), 290f, 366f, 100f, 42f, Look.TOKEN, Tint.RED, size = 16f))
             }
             val iguais = errado.first { it.text == "==" }.rule
             pergunta(tx("flex_l_07"), setOf("r$iguais"), (0 until FLEX_2.size).map { "r$it" }.toSet() - "r$iguais", tx("flex_l_07_dica"), tx("flex_l_07_ok")) {
-                drop("oID", "oWH")
+                drop("oID", "oWH", "oER")
                 for (i in 0 until 5) tint("c$i", Tint.NONE)
                 tint("c7", Tint.YELLOW); tint("c8", Tint.YELLOW)
             }

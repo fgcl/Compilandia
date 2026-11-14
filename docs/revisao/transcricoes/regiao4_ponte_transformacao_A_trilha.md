@@ -313,9 +313,9 @@ Depois: "Não dá. As duas começam igual."
 15. TELA: # Comandos ⏎ C -> id = n | id ( ) | id ( n ) ⏎ C   -> id C' ⏎ *C'  -> = n | ( C''* ⏎ *C'' -> ) | n )*
    BYTE: "Pronto. Nenhuma regra tem duas alternativas com o mesmo começo."
 
-16. TELA: # Comandos ⏎ C -> id = n | id ( ) | id ( n ) ⏎ C   -> id C' ⏎ *C'  -> = n | ( C''* ⏎ C'' -> ) | n ) ⏎ 1 ⏎ 2
+16. TELA: # Comandos ⏎ C -> id = n | id ( ) | id ( n ) ⏎ C   -> id C' ⏎ *C'  -> = n | ( C''* ⏎ C'' -> ) | n ) ⏎ 0 ⏎ 1 ⏎ 2
    BYTE: "O parser está na segunda regra e lê abre parêntese. Quantas alternativas servem?"
-   PERGUNTA (toque): certo = 1 ; errado = 2
+   PERGUNTA (toque): certo = 1 ; errado = 0 | 2
    se errar: "Conte as alternativas que começam com abre parêntese."
    se acertar: "Uma só. A gramática fatorada é LL(1)."
 

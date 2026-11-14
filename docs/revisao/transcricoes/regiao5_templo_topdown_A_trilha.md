@@ -15,7 +15,7 @@ BYTE: "Antes da aula: o que pode abrir uma frase de S?"
 Opções: ✔a e c | a e b | só a
 Depois: "O a e o c. Cada opção abre com um deles."
 
-#### AULA ANIMADA BÁSICA: "Com o que isso começa?" (26 cenas, ~202s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Com o que isso começa?" (27 cenas, ~208s) [1º exemplo começa na cena 5]
 
 1. TELA: E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ T ⏎ id ⏎ T -> id ⏎ T -> ( E )
    BYTE: "O parser tem T no topo da pilha e lê id. T tem duas regras, e ele só pode olhar um token."
@@ -35,91 +35,97 @@ Depois: "O a e o c. Cada opção abre com um deles."
 5. TELA: # FIRST ⏎ E -> T X ⏎ X -> + T X | ε ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E)
    BYTE: "Vamos calcular nesta gramática. Cada não-terminal ganha um saco, e o FIRST dele enche aos poucos."
 
-6. TELA: # FIRST ⏎ E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ (
+6. TELA: # FIRST ⏎ *E -> T X* ⏎ *X -> + T X | ε* ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ E' ⏎ T ⏎ E
+   BYTE: "Esta é a gramática da Ponte, já sem recursão. Lá, que nome tinha o X?"
+   PERGUNTA (toque): certo = E' ; errado = T | E
+   se errar: "Na Ponte, a regra nova ganhava o nome do velho com uma linha."
+   se acertar: "E linha. Aqui ele se chama X, um nome mais curto. O papel é o mesmo."
+
+7. TELA: # FIRST ⏎ E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ (
    BYTE: "Comece por T. As duas regras dele começam com terminal: id e abre parêntese. Os dois entram direto."
 
-7. TELA: # FIRST ⏎ E -> T X ⏎ *X -> + T X | ε* ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ T ⏎ ε ⏎ id
+8. TELA: # FIRST ⏎ E -> T X ⏎ *X -> + T X | ε* ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ T ⏎ ε ⏎ id
    BYTE: "Agora X. Uma regra começa com mais, a outra é só épsilon. Toque nos dois itens do FIRST de X."
    PERGUNTA (toque): certo = + | ε ; errado = T | id
    se errar: "O mais entra direto. E quando a regra é épsilon, o próprio épsilon entra."
    se acertar: "Mais e épsilon. Épsilon no FIRST quer dizer que X pode sumir. Um símbolo assim é anulável."
 
-8. TELA: # FIRST ⏎ *E -> T X* ⏎ X -> + T X | ε ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ ε ⏎ *id* ⏎ *(*
+9. TELA: # FIRST ⏎ *E -> T X* ⏎ X -> + T X | ε ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ ε ⏎ *id* ⏎ *(*
    BYTE: "Agora E, que vai para T X. A regra começa com um não-terminal, então o FIRST de T entra no de E."
 
-9. TELA: # FIRST ⏎ E -> T X ⏎ X -> + T X | ε ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ ε ⏎ id ⏎ (
+10. TELA: # FIRST ⏎ E -> T X ⏎ X -> + T X | ε ⏎ T -> id | ( E ) ⏎ FIRST(T) ⏎ FIRST(X) ⏎ FIRST(E) ⏎ id ⏎ ( ⏎ + ⏎ ε ⏎ id ⏎ (
    PROF: "T não é anulável, então paramos nele. Se fosse, o FIRST de X entraria também."
 
-10. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar.
+11. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar.
    BYTE: "A receita do FIRST tem quatro passos. Você aplica em cada regra da gramática."
 
-11. TELA: # Receita do FIRST ⏎ *1. Começa com terminal: ele entra.* ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar.
+12. TELA: # Receita do FIRST ⏎ *1. Começa com terminal: ele entra.* ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar.
    BYTE: "Passo um: a regra começa com terminal. Ele entra no FIRST, e essa regra está resolvida."
 
-12. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar. ⏎ E -> T X
+13. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ 4. Todos anuláveis: ε entra. Repita até parar. ⏎ E -> T X
    BYTE: "Em E vai para T X, qual passo da receita você usa? Toque nele."
    PERGUNTA (toque): certo = 2. Começa com não-terminal: FIRST dele, sem ε. ; errado = 1. Começa com terminal: ele entra. | 3. Se ele é anulável, olhe o próximo símbolo.
    se errar: "E começa com T, e T é um não-terminal com regras próprias."
    se acertar: "Boa. Passo dois: o FIRST de T entra no de E, menos o épsilon."
 
-13. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ *3. Se ele é anulável, olhe o próximo símbolo.* ⏎ 4. Todos anuláveis: ε entra. Repita até parar. ⏎ E -> T X
+14. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ *3. Se ele é anulável, olhe o próximo símbolo.* ⏎ 4. Todos anuláveis: ε entra. Repita até parar. ⏎ E -> T X
    BYTE: "Passo três: se esse não-terminal é anulável, ele pode sumir. Então o símbolo seguinte também pode começar a regra."
 
-14. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ *4. Todos anuláveis: ε entra. Repita até parar.* ⏎ E -> T X
+15. TELA: # Receita do FIRST ⏎ 1. Começa com terminal: ele entra. ⏎ 2. Começa com não-terminal: FIRST dele, sem ε. ⏎ 3. Se ele é anulável, olhe o próximo símbolo. ⏎ *4. Todos anuláveis: ε entra. Repita até parar.* ⏎ E -> T X
    BYTE: "Passo quatro: se todos os símbolos da regra são anuláveis, entra o épsilon. Depois repita tudo, até uma rodada não mudar nada."
 
-15. TELA: # FIRST ⏎ S -> A b | c ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S)
+16. TELA: # FIRST ⏎ S -> A b | c ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S)
    BYTE: "Outra gramática. Agora quem calcula é você. Comece por A, porque S depende dele."
 
-16. TELA: # FIRST ⏎ S -> A b | c ⏎ *A -> a A | ε* ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ b ⏎ ε ⏎ c
+17. TELA: # FIRST ⏎ S -> A b | c ⏎ *A -> a A | ε* ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ b ⏎ ε ⏎ c
    BYTE: "A tem duas regras: a seguido de A, e épsilon. Toque no que entra no FIRST de A."
    PERGUNTA (toque): certo = a | ε ; errado = b | c
    se errar: "Uma regra começa com o terminal a. A outra é épsilon."
    se acertar: "O a entra pelo passo um. O épsilon entra porque A é anulável."
 
-17. TELA: # FIRST ⏎ *S -> A b | c* ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ b ⏎ ε ⏎ A
+18. TELA: # FIRST ⏎ *S -> A b | c* ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ b ⏎ ε ⏎ A
    BYTE: "S vai para A b. O a de A já entra no FIRST de S. Mas A é anulável. Que outro token pode começar S?"
    PERGUNTA (toque): certo = b ; errado = ε | A
    se errar: "Se A sumir, quem fica no começo é o b."
    se acertar: "Pelo passo três, o b entra. O épsilon de A fica de fora, porque o b nunca some."
 
-18. TELA: # FIRST ⏎ *S -> A b | c* ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ a ⏎ b ⏎ c ⏎ ε
+19. TELA: # FIRST ⏎ *S -> A b | c* ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ a ⏎ b ⏎ c ⏎ ε
    BYTE: "Falta a outra regra de S. Toque no que entra por ela."
    PERGUNTA (toque): certo = c ; errado = ε
    se errar: "A segunda regra de S começa com um terminal."
    se acertar: "Acertou. A letra c entra pelo passo um."
 
-19. TELA: # FIRST ⏎ S -> A b | c ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ *a* ⏎ *b* ⏎ *c*
+20. TELA: # FIRST ⏎ S -> A b | c ⏎ A -> a A | ε ⏎ FIRST(A) ⏎ FIRST(S) ⏎ a ⏎ ε ⏎ *a* ⏎ *b* ⏎ *c*
    BYTE: "FIRST de S: a, b e c. Mais uma rodada não muda nada, então o cálculo acabou."
 
-20. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S)
+21. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S)
    BYTE: "Mais um caso de prova. Repare: a regra de B não tem épsilon escrito."
 
-21. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ *C -> c | ε* ⏎ FIRST(B) ⏎ FIRST(S) ⏎ sim ⏎ não
+22. TELA: # FIRST ⏎ S -> B d ⏎ *B -> C | b* ⏎ *C -> c | ε* ⏎ FIRST(B) ⏎ FIRST(S) ⏎ sim ⏎ não
    BYTE: "Mesmo assim, B pode sumir? Toque na resposta."
    PERGUNTA (toque): certo = sim ; errado = não
    se errar: "Siga B vai para C. O que C pode virar?"
    se acertar: "Pode. B vai para C, e C vai para épsilon. Então o FIRST de B tem b, c e épsilon."
 
-22. TELA: # FIRST ⏎ *S -> B d* ⏎ B -> C | b ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S) ⏎ b ⏎ c ⏎ ε ⏎ b ⏎ c ⏎ d ⏎ ε
+23. TELA: # FIRST ⏎ *S -> B d* ⏎ B -> C | b ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S) ⏎ b ⏎ c ⏎ ε ⏎ b ⏎ c ⏎ d ⏎ ε
    BYTE: "Agora S vai para B d. Toque em tudo que entra no FIRST de S."
    PERGUNTA (toque): certo = b | c | d ; errado = ε
    se errar: "Use o FIRST de B sem o épsilon. E como B some, olhe o próximo."
    se acertar: "Três tokens: b, c e d. O d entra porque B some. O épsilon fica de fora, porque o d nunca some."
 
-23. TELA: # FIRST ⏎ S -> B d ⏎ B -> C | b ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S) ⏎ b ⏎ c ⏎ ε ⏎ b ⏎ c ⏎ *d* ⏎ *4. Todos anuláveis: ε entra. Repita até parar.*
+24. TELA: # FIRST ⏎ S -> B d ⏎ B -> C | b ⏎ C -> c | ε ⏎ FIRST(B) ⏎ FIRST(S) ⏎ b ⏎ c ⏎ ε ⏎ b ⏎ c ⏎ *d* ⏎ *4. Todos anuláveis: ε entra. Repita até parar.*
    BYTE: "Na ordem das regras, a primeira rodada deixa S só com o d. É que B ainda está vazio. As rodadas seguintes trazem o b e o c. Por isso o passo quatro manda repetir."
 
-24. TELA: # Erros comuns ⏎ FIRST(S) = { a, ε, c }, porque A começa com a ou some. ⏎ certo ⏎ errado
+25. TELA: # Erros comuns ⏎ FIRST(S) = { a, ε, c }, porque A começa com a ou some. ⏎ certo ⏎ errado
    BYTE: "Um colega calculou assim o FIRST de S. Está certo ou errado? Toque."
    PERGUNTA (toque): certo = errado ; errado = certo
    se errar: "A é anulável, mas depois dele vem o b, que nunca some."
    se acertar: "O épsilon só entra se a regra inteira pode sumir. Aqui o b sempre fica, então quem entra é o b."
 
-25. TELA: # Erros comuns ⏎ Certo: FIRST(S) = { a, b, c }. O ε de A não passa para S. ⏎ *Errado: Parar no primeiro não-terminal, mesmo quando ele é anulável.* ⏎ *Certo: Se ele é anulável, junte também o FIRST do símbolo seguinte.*
+26. TELA: # Erros comuns ⏎ Certo: FIRST(S) = { a, b, c }. O ε de A não passa para S. ⏎ *Errado: Parar no primeiro não-terminal, mesmo quando ele é anulável.* ⏎ *Certo: Se ele é anulável, junte também o FIRST do símbolo seguinte.*
    BYTE: "Outro erro comum é parar cedo. Não-terminal anulável não fecha a conta: olhe o símbolo que vem depois dele."
 
-26. TELA: # Resumo ⏎ FIRST(α): os terminais que podem começar o que α gera. ⏎ O ε só entra quando tudo em α é anulável. ⏎ Repita os passos até uma rodada não mudar nada.
+27. TELA: # Resumo ⏎ FIRST(α): os terminais que podem começar o que α gera. ⏎ O ε só entra quando tudo em α é anulável. ⏎ Repita os passos até uma rodada não mudar nada.
    BYTE: "Resumindo: FIRST é o conjunto de começos possíveis. Épsilon só entra quando tudo pode sumir. E o cálculo repete até parar de mudar."
 
 #### PEGADINHA: "FIRST de uma regra inteira" (5 cenas, ~26s)
@@ -603,9 +609,9 @@ Depois: "Casar. Os dois saem, e a máquina anda."
 6. TELA: # id + id ⏎ E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ pilha ⏎ T -> id ⏎ $ ⏎ X ⏎ *id* ⏎ *id* ⏎ + ⏎ id ⏎ $
    BYTE: "Assim T fica no topo, e X espera embaixo. Com id na entrada, a tabela manda trocar T por id."
 
-7. TELA: # id + id ⏎ E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ pilha ⏎ topo: id, token: id ⏎ $ ⏎ X ⏎ *id* ⏎ *id* ⏎ + ⏎ id ⏎ $ ⏎ Casar ⏎ Expandir
+7. TELA: # id + id ⏎ E -> T X ⏎ X -> + T X | ε ⏎ *T -> id | ( E )* ⏎ pilha ⏎ topo: id, token: id ⏎ $ ⏎ X ⏎ *id* ⏎ *id* ⏎ + ⏎ id ⏎ $ ⏎ Casar ⏎ Expandir ⏎ Erro
    BYTE: "Topo é id e o token é id. O que eu faço? Toque na ação."
-   PERGUNTA (toque): certo = Casar ; errado = Expandir
+   PERGUNTA (toque): certo = Casar ; errado = Expandir | Erro
    se errar: "Terminal no topo igual ao token da entrada: é par."
    se acertar: "Certo. Casou: o id sai da pilha e a entrada avança um token."
 
@@ -819,15 +825,15 @@ Depois: "Duas: T e X."
 18. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ void L() { casa(ID); ___ } ⏎ void R() { ⏎   if (tok == ___) { ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ }
    BYTE: "A lista de ids de novo. Agora quem escreve o código é você."
 
-19. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ *void L() { casa(ID); ___ }* ⏎ void R() { ⏎   if (tok == ___) { ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ } ⏎ R(); ⏎ casa(R);
+19. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ *void L() { casa(ID); ___ }* ⏎ void R() { ⏎   if (tok == ___) { ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ } ⏎ R(); ⏎ casa(R); ⏎ casa(ID);
    BYTE: "L pede id e depois R. O que completa a função L? Toque."
-   PERGUNTA (toque): certo = R(); ; errado = casa(R);
+   PERGUNTA (toque): certo = R(); ; errado = casa(R); | casa(ID);
    se errar: "Não-terminal na regra vira chamada de função."
    se acertar: "Depois de casar o id, L chama R."
 
-20. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ void L() { casa(ID); R(); } ⏎ void R() { ⏎ *  if (tok == ___) {* ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ } ⏎ ',' ⏎ ID
+20. TELA: # Descida recursiva ⏎ L -> id R ⏎ R -> , id R | ε ⏎ void L() { casa(ID); R(); } ⏎ void R() { ⏎ *  if (tok == ___) {* ⏎     casa(','); casa(ID); R(); ⏎   } ⏎ } ⏎ ',' ⏎ ID ⏎ ';'
    BYTE: "Que token faz R escolher a regra da vírgula? Toque."
-   PERGUNTA (toque): certo = ',' ; errado = ID
+   PERGUNTA (toque): certo = ',' ; errado = ID | ';'
    se errar: "Olhe com que token essa regra começa."
    se acertar: "A vírgula é o FIRST dessa regra."
 

@@ -45,6 +45,9 @@
     <string name="first_l_02">Para escolher sem voltar atrás, ele precisa saber com que token cada regra pode começar.</string>
     <string name="first_l_03">FIRST de um símbolo é o conjunto dos terminais que podem aparecer no começo do que ele gera.</string>
     <string name="first_l_04">Vamos calcular nesta gramática. Cada não-terminal ganha um saco, e o FIRST dele enche aos poucos.</string>
+    <string name="first_l_x">Esta é a gramática da Ponte, já sem recursão. Lá, que nome tinha o X?</string>
+    <string name="first_l_x_dica">Na Ponte, a regra nova ganhava o nome do velho com uma linha.</string>
+    <string name="first_l_x_ok">E linha. Aqui ele se chama X, um nome mais curto. O papel é o mesmo.</string>
     <string name="first_l_titulo_receita">Receita do FIRST</string>
     <string name="first_l_05">A receita do FIRST tem quatro passos. Você aplica em cada regra da gramática.</string>
     <string name="first_l_r1">1. Começa com terminal: ele entra.</string>

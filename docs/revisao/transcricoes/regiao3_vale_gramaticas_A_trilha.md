@@ -314,9 +314,9 @@ Depois: "Vinte. Duas árvores, dois resultados."
 18. TELA: # n - n - n ⏎ E -> E - E | n ⏎ Depois ⏎ *E -> E - n | n*
    BYTE: "Conserto: à direita do menos, a regra nova só aceita um n. A recursão fica só à esquerda, e o menos associa à esquerda."
 
-19. TELA: # n - n - n ⏎ E -> E - E | n ⏎ Depois ⏎ *E -> E - n | n* ⏎ 1 ⏎ 2
+19. TELA: # n - n - n ⏎ E -> E - E | n ⏎ Depois ⏎ *E -> E - n | n* ⏎ 1 ⏎ 2 ⏎ 3
    BYTE: "Com a regra nova, quantas árvores tem n menos n menos n?"
-   PERGUNTA (toque): certo = 1 ; errado = 2
+   PERGUNTA (toque): certo = 1 ; errado = 2 | 3
    se errar: "À direita do menos só cabe um n."
    se acertar: "Agora só existe uma árvore."
 

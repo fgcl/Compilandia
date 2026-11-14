@@ -189,7 +189,13 @@ val aulasLongas by lazy {
                 add(codigo("g", gram, 62f, x = 90f, passo = 28f, size = 15f))
                 add(saco("sT", "FIRST(T)", 64f), saco("sX", "FIRST(X)", 180f), saco("sE", "FIRST(E)", 296f))
             }
+            // Um nome por conceito: o X do Templo é o E' que a Ponte criou ao tirar a recursão.
+            pergunta(tx("first_l_x"), setOf("nx0"), setOf("nx1", "nx2"), tx("first_l_x_dica"), tx("first_l_x_ok")) {
+                hot("g0", "g1")
+                add(listOf("E'", "T", "E").mapIndexed { i, t -> Box("nx$i", t, 110f + i * 70f, 196f, 56f, 40f, Look.TOKEN, Tint.YELLOW, size = 17f) })
+            }
             cena(tx("epgramatica_comece_pelo_facil_t_comeca")) {
+                drop("nx0", "nx1", "nx2")
                 hot("g2")
                 add(ficha("t1", "id", 46f), ficha("t2", "(", 82f))
             }

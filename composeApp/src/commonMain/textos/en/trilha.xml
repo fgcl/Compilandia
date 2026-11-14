@@ -68,7 +68,7 @@
     <string name="ficha_vem_do_texto">From the Read at your pace lesson</string>
     <!-- Questão de prova (seção 3 da revisão) -->
     <string name="trilha_etapa_prova">Exam question</string>
-    <string name="trilha_etapa_prova_sub">From FIRST to the verdict, as on the exam.</string>
+    <string name="trilha_etapa_prova_sub">Three whole questions, as on the exam.</string>
     <string name="prova_problema">Question %1$s of 3</string>
     <string name="prova_nivel_0">Byte solves this whole question. Follow each step.</string>
     <string name="prova_nivel_1">Now half of the answers are yours.</string>
