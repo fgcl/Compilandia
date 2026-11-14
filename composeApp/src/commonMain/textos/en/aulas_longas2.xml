@@ -196,7 +196,7 @@
     <string name="min_l_r1">1. Mark every final with non-final pair.</string>
     <string name="min_l_r2">2. Mark the pair that goes to a marked pair.</string>
     <string name="min_l_r3">3. Repeat until nothing changes. Blank: merge.</string>
-    <string name="ast_l_01">The parser built the parse tree. It has a node for each rule used, and it gets huge.</string>
+    <string name="ast_l_01">The parser follows the parse tree. It has a node for each symbol of the rules used, and it gets huge.</string>
     <string name="ast_l_01q">Of these five pieces, which ones change the result? Tap them.</string>
     <string name="ast_l_01q_dica">Remove the parentheses. Does the result change?</string>
     <string name="ast_l_01q_ok">The a, the plus and the b. The parentheses around b change nothing.</string>
@@ -214,7 +214,13 @@
     <string name="ast_l_10">The minus sits under the times. What are the minus's children? Tap them.</string>
     <string name="ast_l_10_dica">They're the two sides of the minus.</string>
     <string name="ast_l_10_ok">Price and two are leaves of the minus.</string>
-    <string name="ast_l_11">No parentheses in the tree, and the order is still right: whatever sits deeper is computed first.</string>
+    <string name="ast_l_11">No parentheses in the tree, and the order is still right: a child is computed before its parent.</string>
+    <string name="ast_l_12">Now a minus b minus c. In the line, both minuses look the same.</string>
+    <string name="ast_l_13">Which of the two minuses ends up lower in the AST? Tap it.</string>
+    <string name="ast_l_13_dica">In school arithmetic, which minus do you do first?</string>
+    <string name="ast_l_13_ok">The left one. A minus b comes first, and c is taken from the result.</string>
+    <string name="ast_l_13_o3">one node with three children</string>
+    <string name="ast_l_14">With ten, three and two, this tree gives five. Hanging to the right, it would give nine.</string>
     <string name="ast_l_r1">1. An operator becomes a node; operands become children.</string>
     <string name="ast_l_r2">2. A value or a name becomes a leaf.</string>
     <string name="ast_l_r3">3. Parentheses and pass-through rules vanish.</string>

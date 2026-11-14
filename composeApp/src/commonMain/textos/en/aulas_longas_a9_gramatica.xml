@@ -60,7 +60,7 @@
     <string name="amb_l_15_o2">Times appears later in the sentence</string>
     <string name="amb_l_15_o3">The times rule comes last</string>
     <string name="amb_l_15_dica">Look at what each nonterminal can generate. Where can a plus appear?</string>
-    <string name="amb_l_15_ok">Plus is only born in the rule of E, which sits above the T nodes. Inside a T only times fits. The deeper one runs first.</string>
+    <string name="amb_l_15_ok">Plus is only born in the rule of E, which sits above the T nodes. Inside a T only times fits. So the times sits below the plus and runs first.</string>
     <string name="amb_l_16">One level per precedence: the operator that binds tighter sits on the lower level. This is the grammar the Bridge will fix next.</string>
     <string name="amb_l_r1">1. Pick a sentence of the language.</string>
     <string name="amb_l_r2">2. Try to build two different trees for it.</string>

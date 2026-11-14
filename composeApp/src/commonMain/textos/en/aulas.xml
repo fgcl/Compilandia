@@ -19,7 +19,7 @@
     <string name="epbackend_busca_comeca_na_tabela_topo">The lookup starts at the table on top.</string>
     <string name="epbackend_isso_x_dentro_esconde_fora">The inner x hides the outer one.</string>
     <string name="epbackend_busca_comeca_no_topo_desce">The lookup starts at the top table and goes down, block by block, until it finds the name. If no table has it, it is a semantic error.</string>
-    <string name="epbackend_quando_bloco_acaba_tabela_sai">When the block ends, its table leaves the stack, and the local variables cease to exist.</string>
+    <string name="epbackend_quando_bloco_acaba_tabela_sai">When the block ends, its table leaves the stack. Its names no longer hold.</string>
     <string name="epbackend_por_isso_x_igual_dois">In main, x equals two. Main's table has no x, so the search goes down and finds the global x.</string>
     <string name="epbackend_main_vazia">main: (no x)</string>
     <string name="epbackend_arvore_enxuta">The lean tree</string>
@@ -32,8 +32,8 @@
     <string name="epbackend_conta_por_linha">One operation per line</string>
     <string name="epbackend_maquina_nao_entende_conta_comprida">Three-address code is an intermediate code: each line does a single operation, with at most three names.</string>
     <string name="epbackend_qual_conta_tem_que_sair">Which operation has to come out first? Tap the operator.</string>
-    <string name="epbackend_arvore_manda_quem_esta_mais">The tree decides: whatever is deeper comes first.</string>
-    <string name="epbackend_isso_vezes_esta_mais_fundo">That's it. The times is deeper.</string>
+    <string name="epbackend_arvore_manda_quem_esta_mais">The tree decides: a child comes before its parent.</string>
+    <string name="epbackend_isso_vezes_esta_mais_fundo">That's it. The times is a child of the plus.</string>
     <string name="epbackend_guardo_resultado_num_temporario_t1">The result of times has no name in the program. The compiler creates a temporary for it, t1.</string>
     <string name="epbackend_na_linha_seguinte_arvore_ja">On the next line, the tree can already use t1 in place of the times.</string>
     <string name="epbackend_cada_linha_tem_no_maximo">Each line has at most three addresses: two operands and one result. That is where the name comes from.</string>
@@ -48,10 +48,10 @@
     <string name="epbackend_otimizar_nunca_pode_mudar_resultado">Golden rule: optimizing can never change the program's result. Only the path to it.</string>
     <string name="epbackend_pilha_chamadas">The call stack</string>
     <string name="epbackend_toda_chamada_funcao_ganha_registro">When main calls fat of two, an activation record is pushed for that call.</string>
-    <string name="epbackend_fat_n_2_volta_main">fat  n = 2  return: main</string>
+    <string name="epbackend_fat_n_2_volta_main">fat  n = 2  return: after fat(2)</string>
     <string name="epbackend_ali_moram_parametros_variaveis_locais">The record holds the parameters, the local variables and the return address: the point to go back to when the function ends.</string>
     <string name="epbackend_fat_dois_chama_fat_outro">fat of two calls fat of one. Another record goes up, with another n.</string>
-    <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  return: fat</string>
+    <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  return: after fat(1)</string>
     <string name="epbackend_so_topo_pilha_esta_rodando">Only the top of the stack is running.</string>
     <string name="epbackend_retornou_registro_sai_controle_volta">It returned: the record leaves the stack, and execution continues at the caller's return address.</string>
     <string name="epbackend_por_isso_recursao_funciona_cada">That's why recursion works: each call has its own n.</string>
@@ -169,7 +169,7 @@
     <string name="epemc_digito_entra_no_if_valor">It's a digit. It enters the if, and the value starts at zero.</string>
     <string name="epemc_cada_volta_while_junta_digito">Each turn of the while adds a digit. Now v is four.</string>
     <string name="epemc_le_2_quatro_vezes_dez">It reads the 2. Four times ten, plus two, gives forty-two.</string>
-    <string name="epemc_agora_chegou_mais_qual_linha">Now the plus arrived. Which line runs right after? Tap it.</string>
+    <string name="epemc_agora_chegou_mais_qual_linha">The plus arrived, and the while stops. Which line runs next? Tap it.</string>
     <string name="epemc_mais_nao_digito_while_para">The plus isn't a digit. The while stops.</string>
     <string name="epemc_isso_laco_para_ungetc_devolve">The loop stops and ungetc gives the plus back.</string>
     <string name="epemc_mais_foi_lido_mais_ungetc">The plus was read one too many. ungetc puts it back in the input.</string>
@@ -195,7 +195,9 @@
     <string name="epemc_rode_1_2_3_ate">Run 1 * 2 + 3 until the stack is empty.</string>
     <string name="epemc_em_c_3_struct_node">In C 3: the Node struct</string>
     <string name="epemc_na_ast_em_c_cada">In an AST in C, each tree node is a struct.</string>
-    <string name="epemc_op_guarda_operador_val_guarda">op holds the operator. val holds the number.</string>
+    <string name="epemc_op_guarda_operador_val_guarda">op holds the operator, val holds the number, and nome holds the variable.</string>
+    <string name="epemc_calc_l_inteiro">On screen, the files were shortened. This is the whole calc.l, and it compiles.</string>
+    <string name="epemc_calc_y_falta">In calc.y, the header, the rule that prints the result and yyerror are missing.</string>
     <string name="epemc_esq_dir_sao_ponteiros_eles">esq and dir are pointers. They point to the children.</string>
     <string name="epemc_para_dois_mais_tres_vezes">For two plus three times four, the parser creates the nodes from the bottom up.</string>
     <string name="epemc_primeiro_folhas_no_para_cada">First the leaves, one node for each number. Then comes the times.</string>
@@ -206,7 +208,7 @@
     <string name="epemc_arvore_isso_structs_ligados_por">That's what the tree is: structs linked by pointers.</string>
     <string name="epemc_em_c_4_arvore_ao">In C 4: from the tree to MIPS</string>
     <string name="epemc_gerador_anda_na_arvore_escreve">The generator walks the tree and writes MIPS, one line at a time.</string>
-    <string name="epemc_ele_visita_filhos_antes_pai">It visits the children before the parent. The first node ready is the times.</string>
+    <string name="epemc_ele_visita_filhos_antes_pai">It visits the children before the parent. The leaves only load a value. The first operation ready is the times.</string>
     <string name="epemc_vezes_vira_quatro_linhas_carrega">The times becomes four lines: load b, load c, multiply and store.</string>
     <string name="epemc_qual_no_gerador_visita_agora">Which node does the generator visit now? Tap it.</string>
     <string name="epemc_dois_filhos_raiz_ja_estao">Both children of the root are already done.</string>
@@ -244,7 +246,7 @@
     <string name="epgramatica_mas_para_montar_outra_arvore">But you can build another tree, with the plus lower.</string>
     <string name="epgramatica_mesma_frase_duas_arvores_isso">One sentence with two different parse trees: the grammar is ambiguous.</string>
     <string name="epgramatica_nesta_arvore_que_roda_primeiro">In this tree, what runs first? Tap the answer.</string>
-    <string name="epgramatica_quem_esta_mais_fundo_na">Whatever is deeper in the tree happens first.</string>
+    <string name="epgramatica_quem_esta_mais_fundo_na">In the tree, a child happens before its parent.</string>
     <string name="epgramatica_certo_aqui_mais_roda_primeiro">Right. Here the plus runs first, and the result comes out wrong.</string>
     <string name="epgramatica_o">the +</string>
     <string name="epgramatica_o_2">the *</string>
@@ -754,7 +756,7 @@
     <string name="eppegadinhas3_aqui_diferente_para_saber_tipo">Here it's different. To know the type of a, the value comes from which node? Tap it.</string>
     <string name="eppegadinhas3_int_esta_no_galho_lado">The int is on the branch next door. It has to cross over.</string>
     <string name="eppegadinhas3_isso_int_passa_pelo_pai">The int goes through the parent and down to a. That's inherited.</string>
-    <string name="eppegadinhas3_herdado_vem_pai_ou_irmao">Inherited comes from the parent or from a sibling on the left. That's why it goes down and sideways.</string>
+    <string name="eppegadinhas3_herdado_vem_pai_ou_irmao">Inherited comes from the parent or from a sibling. That's why it goes down and sideways.</string>
     <string name="eppegadinhas3_atribuida_usa_so_sintetizado_l">S-attributed uses only synthesized. L-attributed accepts inherited, from left to right.</string>
     <string name="eppegadinhas3_sombra_variavel">The variable's shadow</string>
     <string name="eppegadinhas3_dois_x_fora_dentro_dentro">Two x's, one outside and one inside. The inner one shadows the outer one.</string>
@@ -770,7 +772,7 @@
     <string name="eppegadinhas3_ordem_dos_temporarios">The order of the temporaries</string>
     <string name="eppegadinhas3_tres_enderecos_no_maximo_conta">Three addresses: at most one operation per line.</string>
     <string name="eppegadinhas3_qual_conta_vira_primeira_linha">Which operation becomes the first line? Tap the operator.</string>
-    <string name="eppegadinhas3_quem_esta_mais_fundo_na">Whatever is deeper in the tree runs first.</string>
+    <string name="eppegadinhas3_quem_esta_mais_fundo_na">A child runs before its parent.</string>
     <string name="eppegadinhas3_isso_vezes_vai_primeiro_guarda">The times goes first and is stored in t1.</string>
     <string name="eppegadinhas3_primeira_linha_t1_recebe_b">First line: t1 gets b times c.</string>
     <string name="eppegadinhas3_segunda_linha_t2_recebe_mais">Second line: t2 gets a plus t1.</string>

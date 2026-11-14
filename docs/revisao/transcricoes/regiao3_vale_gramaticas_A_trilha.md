@@ -278,7 +278,7 @@ Depois: "Vinte. Duas árvores, dois resultados."
 9. TELA: # n + n * n ⏎ E -> E + E | E * E | n ⏎ E ⏎ E ⏎ E ⏎ n ⏎ + ⏎ E ⏎ n ⏎ * ⏎ E ⏎ n ⏎ o + ⏎ o *
    BYTE: "Nesta árvore, o que roda primeiro? Toque na resposta."
    PERGUNTA (toque): certo = o + ; errado = o *
-   se errar: "Quem está mais fundo na árvore acontece antes."
+   se errar: "Na árvore, o filho acontece antes do pai."
    se acertar: "Certo. Aqui o mais roda primeiro, e o resultado sai errado."
 
 10. TELA: # n + n * n ⏎ E -> E + E | E * E | n ⏎ E ⏎ E ⏎ E ⏎ n ⏎ + ⏎ E ⏎ n ⏎ * ⏎ E ⏎ n
@@ -299,13 +299,13 @@ Depois: "Vinte. Duas árvores, dois resultados."
 14. TELA: # n - n - n ⏎ E -> E - E | n ⏎ E ⏎ E ⏎ E ⏎ n ⏎ - ⏎ E ⏎ n ⏎ - ⏎ E ⏎ n
    BYTE: "Nesta árvore, qual menos acontece primeiro? Toque nele."
    PERGUNTA (toque): certo = - ; errado = -
-   se errar: "Quem está mais fundo na árvore acontece antes."
+   se errar: "Na árvore, o filho acontece antes do pai."
    se acertar: "Primeiro o menos da esquerda, como na escola."
 
 15. TELA: # n - n - n ⏎ E -> E - E | n ⏎ E ⏎ E ⏎ n ⏎ - ⏎ E ⏎ E ⏎ n ⏎ - ⏎ E ⏎ n
    BYTE: "Achei outra árvore para a mesma frase. Aqui, qual menos vem primeiro?"
    PERGUNTA (toque): certo = - ; errado = -
-   se errar: "Quem está mais fundo na árvore acontece antes."
+   se errar: "Na árvore, o filho acontece antes do pai."
    se acertar: "Aqui o menos da direita vem primeiro."
 
 16. TELA: # n - n - n ⏎ E -> E - E | n ⏎ E ⏎ E ⏎ n ⏎ - ⏎ E ⏎ E ⏎ n ⏎ *-* ⏎ E ⏎ n ⏎ 9 - 5 - 2 ⏎ 2 ⏎ 6 ⏎ 16
@@ -336,7 +336,7 @@ Depois: "Vinte. Duas árvores, dois resultados."
    BYTE: "Por que o vezes fica sempre mais fundo que o mais? Toque na razão."
    PERGUNTA (toque): certo = O T só gera vezes, e o mais fica no E ; errado = O vezes aparece depois na frase | A regra do vezes vem por último
    se errar: "Olhe o que cada não-terminal consegue gerar. Onde um mais pode aparecer?"
-   se acertar: "O mais só nasce na regra de E, que fica acima dos T. Dentro de um T só cabem vezes. Quem está mais fundo roda primeiro."
+   se acertar: "O mais só nasce na regra de E, que fica acima dos T. Dentro de um T só cabem vezes. Por isso o vezes fica embaixo do mais e roda antes."
 
 23. TELA: # n + n * n ⏎ *E -> E + T | T* ⏎ *T -> T * n | n*
    BYTE: "Um nível para cada precedência: o operador que liga mais forte fica no nível de baixo. É a gramática que a Ponte vai consertar a seguir."

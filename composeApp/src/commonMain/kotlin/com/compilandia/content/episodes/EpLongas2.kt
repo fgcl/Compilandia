@@ -704,6 +704,7 @@ val aulasLongas2 by lazy {
                 wire("n2", "n3", arrow = false); wire("n2", "n4", arrow = false)
                 hot("n0", "n2")
             }
+            astMenosMenos()
             fecho(Fecho(
                 tx("ast_f_af"), true, tx("ast_f_q"), tx("ast_f_dica"), tx("ast_f_ok"), tx("ast_f_af"),
                 tx("ast_f_erro2"), tx("ast_f_certo2"), tx("ast_f_fala2"),

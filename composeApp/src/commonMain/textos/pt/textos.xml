@@ -3513,7 +3513,7 @@
     <string name="lessonspart5a_endereco_retorno">Endereço de retorno</string>
     <string name="lessonspart5a_controle_dinamico_cadeia_chamadas_acesso">Controle/dinâmico = cadeia de CHAMADAS. Acesso/estático = cadeia de ANINHAMENTO no texto (útil em linguagens com funções aninhadas, como Pascal). O endereço de retorno aponta para uma INSTRUÇÃO, não para um quadro.</string>
     <string name="lessonspart5a_definicao_em_acao_4_ativacoes">A definição em ação: 4 ativações simultâneas no pico (main + 3 de fat).</string>
-    <string name="lessonspart5a_questao_classica_desenhe_registro_ativacao">Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. Liste de cima para baixo nessa ordem.</string>
+    <string name="lessonspart5a_questao_classica_desenhe_registro_ativacao">Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. No MIPS, o `jal` do chamador põe o endereço em `$ra`, e o chamado guarda o `$ra` no quadro. Liste de cima para baixo nessa ordem.</string>
     <string name="lessonspart5a_endereco_retorno_vinculo_controle_primeiro">Endereço de retorno ≠ vínculo de controle. O primeiro diz para qual INSTRUÇÃO voltar; o segundo, qual QUADRO volta a ser o atual.</string>
     <string name="lessonspart5a_predio_memoria_cafe_manha_quadro">O prédio da memória e o café da manhã do quadro</string>
     <string name="lessonspart5a_palacio_memoria_forja_codigo_penultima">Palácio da Memória: Forja do Código, penúltima sala. Um prédio de quatro andares; do telhado, uma pilha de caixas desce sozinha.</string>
@@ -3661,7 +3661,7 @@
     <string name="lessonspart6_afd_minimo_unico">O AFD mínimo é único?</string>
     <string name="lessonspart6_sim_menos_renomear_estados_myhill">Sim, a menos de renomear os estados (Myhill–Nerode)</string>
     <string name="lessonspart6_arvore_sintatica_abstrata_guarda_so">A árvore sintática abstrata guarda só operadores, operandos e construções (BinOp, Var, Num, Atrib, Se, Enquanto, Bloco), jogando fora correntes de não-terminais, parênteses, pontuação e ε; o parser a constrói (new BinOp no descendente ou $$ = new BinOp(...) no Bison) e as fases seguintes andam nela.</string>
-    <string name="lessonspart6_ast_arvore_sem_tralha_corta">AST = Árvore Sem Tralha: corta o CPE (Correntes, Parênteses, Epsilons). Quem está mais fundo trabalha primeiro.</string>
+    <string name="lessonspart6_ast_arvore_sem_tralha_corta">AST = Árvore Sem Tralha: corta o CPE (Correntes, Parênteses, Epsilons). Filho trabalha antes do pai.</string>
     <string name="lessonspart6_criar_nos_para_parenteses_ou">Criar nós para parênteses ou para não-terminais de corrente (E → T → F)</string>
     <string name="lessonspart6_montar_ast_pendurada_para_direita">Montar a AST pendurada para a direita (recursão em vez de laço) e inverter a associatividade de - e /</string>
     <string name="lessonspart6_achar_que_sem_parenteses_precedencia">Achar que sem parênteses a precedência se perde (ela mora na forma da árvore)</string>
@@ -3671,7 +3671,7 @@
     <string name="lessonspart6_correntes_nao_terminais_parenteses_pontuacao">Correntes de não-terminais, parênteses/pontuação e ε</string>
     <string name="lessonspart6_nos_derivacao_ast_em_b">Nós da derivação × AST em a + b * c?</string>
     <string name="lessonspart6_onde_mora_precedencia_na_ast">Onde mora a precedência na AST?</string>
-    <string name="lessonspart6_na_forma_quem_esta_mais">Na forma: quem está mais fundo é calculado primeiro</string>
+    <string name="lessonspart6_na_forma_quem_esta_mais">Na forma: o filho é calculado antes do pai</string>
     <string name="lessonspart6_linha_chave_associatividade_esquerda_no">Linha-chave da associatividade à esquerda no descendente?</string>
     <string name="lessonspart6_acao_bison_para_t">Ação Bison para E → E + T?</string>
     <string name="lessonspart6_acao_bison_para_f">Ação Bison para F → ( E )?</string>
@@ -3937,7 +3937,7 @@
     <string name="lessonspart6b_na_forma_arvore_filho">Na forma da árvore: o + é FILHO do *</string>
     <string name="lessonspart6b_numa_tabela_parte">Numa tabela à parte</string>
     <string name="lessonspart6b_ela_se_perde">Ela se perde</string>
-    <string name="lessonspart6b_quem_esta_mais_fundo_avaliado">Quem está mais fundo é avaliado primeiro (pós-ordem). A estrutura É a precedência.</string>
+    <string name="lessonspart6b_quem_esta_mais_fundo_avaliado">O filho é avaliado antes do pai (pós-ordem). A estrutura É a precedência.</string>
     <string name="lessonspart6b_no_t_no_meio_corrente">E o nó T no meio da corrente E → T → F? Ele não faz nada?</string>
     <string name="lessonspart6b_faz_alguma_coisa">Faz alguma coisa?</string>
     <string name="lessonspart6b_na_derivacao_ele_registra_que">Na derivação, ele registra que a gramática passou pelo nível de precedência do *. Mas, como não houve nenhum *, não há operação a representar. Na AST, ele simplesmente some: o método termo() devolve o que fator() devolveu.</string>
@@ -3975,7 +3975,7 @@
     <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">**Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** , uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso.</string>
     <string name="lessonspart6b_parenteses_sao_andaimes_indispensaveis_enqua">**Parênteses são andaimes**: indispensáveis enquanto o prédio está sendo construído (parsing), retirados quando ele fica pronto. A forma do prédio (a árvore) já guarda o que eles seguravam.</string>
     <string name="lessonspart6b_corrente_whatsapp_t_f_como">**Corrente de WhatsApp**: E → T → F → a é como mensagem encaminhada cinco vezes. O conteúdo é o 'a'; os encaminhamentos não acrescentam nada. Na AST: Var(a), e só.</string>
-    <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**Quem está mais fundo trabalha primeiro.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.</string>
+    <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**Filho trabalha antes do pai.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.</string>
     <string name="lessonspart6b_qual_linha_codigo_segredo_associatividade">Qual linha de código é o 'segredo' da associatividade à esquerda no parser descendente?</string>
     <string name="lessonspart6b_velho_vai_para_esquerda_resultado">'O velho vai para a esquerda': o resultado acumulado vira filho esquerdo do novo nó, a cada volta do laço.</string>
     <string name="lessonspart6b_bison_em_tres_palavras_filho">**Bison em três palavras: 'filho vira pai'.** $$ = new BinOp('+', $1, $3), os filhos $1 e $3 se tornam filhos do nó novo $$. Corrente? $$ = $1. Parêntese? $$ = $2.</string>
@@ -4186,7 +4186,7 @@
     <string name="solta_lessonspart3b_2">int yyparse(void) — o analisador LALR(1); retorna 0 em sucesso e 1 em erro de sintaxe</string>
     <string name="solta_lessonspart3b_3">Na regra expr : '(' expr ')' { $$ = ???; }, o que vai no lugar de ???</string>
     <string name="solta_lessonspart3b_4">a + (x * 2): int + float → **float**, gera inttofloat(a)</string>
-    <string name="solta_lessonspart3c_1">(1). Estamos de volta ao bloco 0; o x float (3) morreu com o bloco 1.</string>
+    <string name="solta_lessonspart3c_1">(1). Estamos de volta ao bloco 0; o x float (3) saiu de vista com o bloco 1.</string>
     <string name="solta_lessonspart3c_2">Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?</string>
     <string name="solta_lessonspart3c_3">**'Abre chave, empilha; fecha chave, desempilha.'** A pilha de tabelas segue as chaves do programa.</string>
     <string name="solta_lessonspart3c_4">'Junte b com c (multiplicando) na tigela t1; depois junte a com t1 na tigela t2.' — a + b * c</string>
@@ -4286,7 +4286,7 @@
     <string name="solta_tpguided_1">`x &lt;- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?</string>
     <string name="solta_tpguided_2">Com esse dobramento, `y &lt;- a + 2 + 3;` vira `a + 5`?</string>
     <string name="solta_tpguided_3">E aquele `se (1 &gt; 2) { … }`? O bloco nunca roda. Corta fora!</string>
-    <string name="solta_tpguided_4">Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço.</string>
+    <string name="solta_tpguided_4">Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço. E só troque `lw $t0` + `move $a0, $t0` por `lw $a0` se o `$t0` não for lido depois. No nosso gerador ele é liberado logo após o `move`: isso é vivacidade, da aula de Alocação.</string>
     <string name="solta_tpguided_5">**Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a &lt; b &lt; c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada.</string>
     <string name="solta_tpguided_6">**Variável em laço não reinicia.** Na Byteiro, `inteiro t;` dentro de um `enquanto` NÃO gera código: o `.word` é o mesmo a cada volta e guarda o valor da volta anterior. Ou documente isso ('variáveis valem 0 só no início do programa'), ou gere um `sw $zero, rotulo` em cada declaração.</string>
 </resources>

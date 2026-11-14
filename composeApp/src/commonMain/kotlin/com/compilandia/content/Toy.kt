@@ -278,7 +278,7 @@ class ToyTipos(src: String, private val env: Map<String, Pair<com.compilandia.en
 
 /** Monta o MIPS na ordem: carrega, calcula, guarda. As linhas saem do gerador do motor. */
 class ToyMips(private val src: String, override val meta: String) : Toy {
-    private val linhas = com.compilandia.engine.Mips.fromTac(com.compilandia.engine.TacGen.generate(com.compilandia.engine.ExprParser.parse(src)))
+    private val linhas = com.compilandia.engine.Mips.nomeiaTemporarios(com.compilandia.engine.Mips.fromTac(com.compilandia.engine.TacGen.generate(com.compilandia.engine.ExprParser.parse(src))))
     private var k = 0
     override val teclas = linhas.map { it.substringBefore(' ') }.distinct()
     override var aviso: String? = null

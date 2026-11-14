@@ -258,7 +258,7 @@ bool  ⊕  num   → ERRO   (e o erro sobe)
 - REVELAR: print(y), depois que o bloco 2 fechou.
     → (2). A tabela do bloco 2, onde estava o y (4), já foi desempilhada; no bloco 1 não há y; no bloco 0 há o (2).
 - REVELAR: print(x), na última linha.
-    → (1). Estamos de volta ao bloco 0; o x float (3) morreu com o bloco 1.
+    → (1). Estamos de volta ao bloco 0; o x float (3) saiu de vista com o bloco 1.
 - REVELAR: Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?
     → Erro de redeclaração: o mesmo nome declarado duas vezes no MESMO escopo. Sombrear é declarar num escopo DIFERENTE.
 - REVELAR: Qual o tipo da expressão x + y em print(x + y)?
@@ -454,7 +454,7 @@ Expr fator() {                // F → ( E ) | id | num
     explicação: Gerar t1 = a + b; t2 = t1 * c só exige operações, operandos e ordem. Todo o resto era andaime para o PARSER decidir essa ordem.
 - PREVEJA: Se a AST não tem parênteses, onde está guardada a informação 'some antes de multiplicar'?
     opções: Num campo prioridade em cada nó | ✔Na forma da árvore: o + é FILHO do * | Numa tabela à parte | Ela se perde
-    explicação: Quem está mais fundo é avaliado primeiro (pós-ordem). A estrutura É a precedência.
+    explicação: O filho é avaliado antes do pai (pós-ordem). A estrutura É a precedência.
 - BYTE: E o nó T no meio da corrente E → T → F? Ele não faz nada?
 - REVELAR: Faz alguma coisa?
     → Na derivação, ele registra que a gramática passou pelo nível de precedência do *. Mas, como não houve nenhum *, não há operação a representar. Na AST, ele simplesmente some: o método termo() devolve o que fator() devolveu.
@@ -552,7 +552,7 @@ class BinOp extends Expr {
 - TEXTO: **Palácio da memória**: na Cidade Semântica, ao lado do cartório da tabela de símbolos, fica a **Fábrica de AST** , uma marcenaria. Chega um tronco enorme (a árvore de derivação); o marceneiro serra os galhos que só passam adiante, joga a serragem dos parênteses fora e entrega uma mesa de 5 peças, pronta para uso.
 - CAIXA [Gancho de memória]: **Parênteses são andaimes**: indispensáveis enquanto o prédio está sendo construído (parsing), retirados quando ele fica pronto. A forma do prédio (a árvore) já guarda o que eles seguravam.
 - CAIXA [Gancho de memória]: **Corrente de WhatsApp**: E → T → F → a é como mensagem encaminhada cinco vezes. O conteúdo é o 'a'; os encaminhamentos não acrescentam nada. Na AST: Var(a), e só.
-- CAIXA [Gancho de memória]: **Quem está mais fundo trabalha primeiro.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.
+- CAIXA [Gancho de memória]: **Filho trabalha antes do pai.** Na AST de a + b * c, o * está no porão: é feito antes. Profundidade = precedência.
 - PREVEJA: Qual linha de código é o 'segredo' da associatividade à esquerda no parser descendente?
     opções: return new BinOp(op, termo(), expr()); | ✔e = new BinOp(op, e, termo()); dentro de um while | if (tok.equals("(")) return expr();
     explicação: 'O velho vai para a esquerda': o resultado acumulado vira filho esquerdo do novo nó, a cada volta do laço.

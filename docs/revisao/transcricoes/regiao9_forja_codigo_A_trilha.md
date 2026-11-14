@@ -3,7 +3,7 @@
 
 
 ## ASSUNTO TAC: Código de três endereços
-Pré-requisitos no jogo: Atributos e verificação de tipos
+Pré-requisitos no jogo: Árvore sintática abstrata (AST) com classes, Atributos e verificação de tipos
 Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Uma conta por linha» → Fazer com ajuda → Prática: você pilota «if e while viram desvios» → Pegadinha «A ordem dos temporários» → Desafio
 Jogos que treinam: Árvore Anotada (calcular atributos de baixo para cima), Linha de Montagem TAC (montar código de três endereços)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
@@ -35,8 +35,8 @@ Depois: "Duas. Uma conta por linha."
 5. TELA: # a + b * c ⏎ + ⏎ a ⏎ * ⏎ b ⏎ c
    BYTE: "Qual conta tem que sair primeiro? Toque no operador."
    PERGUNTA (toque): certo = * ; errado = +
-   se errar: "A árvore manda: quem está mais fundo vem antes."
-   se acertar: "É isso. O vezes está mais fundo."
+   se errar: "A árvore manda: o filho vem antes do pai."
+   se acertar: "É isso. O vezes é filho do mais."
 
 6. TELA: # a + b * c ⏎ + ⏎ a ⏎ *** ⏎ b ⏎ c ⏎ *t1 = b * c*
    BYTE: "O resultado do vezes não tem nome no programa. O compilador cria um temporário para ele, o t1."
@@ -104,13 +104,13 @@ Depois: "Duas. Uma conta por linha."
    se errar: "Do que o vezes precisa para fazer a conta?"
    se acertar: "O vezes usa o t1 e o t2. Ele só roda depois que os dois existem."
 
-21. TELA: # Erros comuns ⏎ x = a + b * c precisa de duas linhas de três endereços. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: cada linha guarda três variáveis. ⏎ Errado: são três linhas, uma por variável. ⏎ Certo: são duas contas, uma por linha.
-   BYTE: "Quantas linhas de três endereços esta atribuição precisa? Um colega disse isto. Certo ou errado?"
+21. TELA: # Erros comuns ⏎ A conta a + b * c precisa de duas linhas de três endereços. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: são três linhas, uma por variável. ⏎ Certo: são duas contas, uma por linha. ⏎ Certo: cada linha guarda três variáveis.
+   BYTE: "Quantas linhas de três endereços esta conta precisa? Um colega disse isto. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: são duas contas, uma por linha. ; errado = Certo: cada linha guarda três variáveis. | Errado: são três linhas, uma por variável.
    se errar: "Conte os operadores. Cada linha leva no máximo um."
-   se acertar: "Exato. São duas contas: t1 = b * c, depois x = a + t1. Cada linha leva um operador e no máximo três endereços."
+   se acertar: "Exato. São duas contas: t1 = b * c, depois t2 = a + t1. Cada linha leva um operador e no máximo três endereços."
 
-22. TELA: # Erros comuns ⏎ Certo: x = a + b * c precisa de duas linhas de três endereços. ⏎ *Errado: Reusar o mesmo temporário para duas contas diferentes.* ⏎ *Certo: Cada operador ganha um temporário novo: t1, t2, t3...*
+22. TELA: # Erros comuns ⏎ Certo: A conta a + b * c precisa de duas linhas de três endereços. ⏎ *Errado: Reusar o mesmo temporário para duas contas diferentes.* ⏎ *Certo: Cada operador ganha um temporário novo: t1, t2, t3...*
    BYTE: "Um erro comum: reaproveitar o t1 na segunda conta. Se o valor antigo ainda for usado, ele se perde. Cada resultado ganha um temporário novo."
 
 23. TELA: # Resumo ⏎ Três endereços: resultado = operando operador operando. ⏎ Gere os filhos antes do pai; cada conta guarda num temporário novo. ⏎ É código intermediário: não depende do processador.
@@ -124,7 +124,7 @@ Depois: "Duas. Uma conta por linha."
 2. TELA: # a + b * c ⏎ a ⏎ + ⏎ b ⏎ * ⏎ c
    BYTE: "Qual conta vira a primeira linha? Toque no operador."
    PERGUNTA (toque): certo = * ; errado = +
-   se errar: "Quem está mais fundo na árvore roda antes."
+   se errar: "O filho roda antes do pai."
    se acertar: "O vezes vai primeiro e guarda em t1."
 
 3. TELA: # a + b * c ⏎ a ⏎ + ⏎ b ⏎ * ⏎ c ⏎ *t1 = b * c*
@@ -435,9 +435,9 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 15. TELA: # preco + taxa ⏎ add $t3, $t1, $t2 ⏎ lw $t1, preco ⏎ sw $t3, total ⏎ lw $t2, taxa
    BYTE: "Agora você traduz qualquer linha de três endereços para MIPS: dois lw, a conta e um sw."
 
-16. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O lw é mais rápido que o add.
+16. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O add lê a memória, mas devagar.
    BYTE: "Os dois lw vêm antes do add. Por quê?"
-   PERGUNTA (toque): certo = O add só faz conta entre registradores. ; errado = O lw é mais rápido que o add. | A ordem tanto faz. É só costume.
+   PERGUNTA (toque): certo = O add só faz conta entre registradores. ; errado = O add lê a memória, mas devagar. | A ordem tanto faz. É só costume.
    se errar: "Onde o add pode buscar os números dele?"
    se acertar: "No MIPS, a conta só acontece entre registradores. O lw traz cada variável para um deles."
 
@@ -553,34 +553,34 @@ Depois: "F de dois. O último a entrar sai primeiro."
 3. TELA: !!REGISTRO!!
    BYTE: "Cada chamada de função ganha um bloco próprio na pilha de execução: o registro de ativação."
 
-4. TELA: # fat(2) ⏎ fat  n = 2  volta: main
+4. TELA: # fat(2) ⏎ fat  n = 2  volta: depois do fat(2)
    BYTE: "Quando o main chama fat de dois, um registro de ativação é empilhado para essa chamada."
 
-5. TELA: # fat(2) ⏎ *fat  n = 2  volta: main*
+5. TELA: # fat(2) ⏎ *fat  n = 2  volta: depois do fat(2)*
    BYTE: "No registro ficam os parâmetros, as variáveis locais e o endereço de retorno: o ponto para onde voltar quando a função acabar."
 
-6. TELA: # fat(2) ⏎ *fat  n = 2  volta: main* ⏎ 1 ⏎ 2 ⏎ 3
+6. TELA: # fat(2) ⏎ *fat  n = 2  volta: depois do fat(2)* ⏎ 1 ⏎ 2 ⏎ 3
    BYTE: "O fat de dois vai chamar o fat de um. Enquanto o fat de um roda, quantos registros de fat ficam na pilha? Toque."
    PERGUNTA (toque): certo = 2 ; errado = 1 | 3
    se errar: "O fat de dois ainda não terminou."
    se acertar: "Dois. O registro do fat de dois continua lá, esperando a volta."
 
-7. TELA: # fat(2) ⏎ fat  n = 2  volta: main ⏎ *fat  n = 1  volta: fat*
+7. TELA: # fat(2) ⏎ fat  n = 2  volta: depois do fat(2) ⏎ *fat  n = 1  volta: depois do fat(1)*
    BYTE: "O fat de dois chama o fat de um. Outro registro sobe, com outro n."
 
-8. TELA: # fat(2) ⏎ fat  n = 2  volta: main ⏎ *fat  n = 1  volta: fat*
+8. TELA: # fat(2) ⏎ fat  n = 2  volta: depois do fat(2) ⏎ *fat  n = 1  volta: depois do fat(1)*
    BYTE: "O fat de um não chama ninguém. Ele devolve um na hora."
 
-9. TELA: # fat(2) ⏎ fat  n = 2  volta: main ⏎ fat  n = 1  volta: fat
+9. TELA: # fat(2) ⏎ fat  n = 2  volta: depois do fat(2) ⏎ fat  n = 1  volta: depois do fat(1)
    BYTE: "Quem retorna primeiro? Toque no registro."
-   PERGUNTA (toque): certo = fat  n = 1  volta: fat ; errado = fat  n = 2  volta: main
+   PERGUNTA (toque): certo = fat  n = 1  volta: depois do fat(1) ; errado = fat  n = 2  volta: depois do fat(2)
    se errar: "Só o topo da pilha está rodando."
    se acertar: "O último a entrar é o primeiro a sair."
 
-10. TELA: # fat(2) ⏎ *fat  n = 2  volta: main*
+10. TELA: # fat(2) ⏎ *fat  n = 2  volta: depois do fat(2)*
    BYTE: "Retornou: o registro sai da pilha, e a execução continua no endereço de retorno de quem chamou."
 
-11. TELA: # fat(2) ⏎ fat  n = 2  volta: main
+11. TELA: # fat(2) ⏎ fat  n = 2  volta: depois do fat(2)
    BYTE: "Por isso a recursão funciona: cada chamada tem o seu próprio n."
 
 12. TELA: # Receita ⏎ 1. Chamou: empilhe o registro (parâmetros, retorno). ⏎ 2. Só o registro do topo está rodando. ⏎ 3. Retornou: desempilhe e vá para o retorno.
@@ -771,22 +771,22 @@ Depois: "Não podem. Um apagaria o outro."
    se errar: "Procure as duas que não têm fio entre elas."
    se acertar: "É isso. Sem aresta entre elas, nunca estão vivas juntas."
 
-8. TELA: # Alocação ⏎ a ⏎ b ⏎ c ⏎ $s0 ⏎ $s1 ⏎ $s0
+8. TELA: # Alocação ⏎ a ⏎ b ⏎ c ⏎ $t0 ⏎ $t1 ⏎ $t0
    BYTE: "Agora é colorir o grafo: vizinhos nunca recebem a mesma cor. Cada cor é um registrador."
 
-9. TELA: # Alocação ⏎ a ⏎ b ⏎ c ⏎ $s0 ⏎ $s1 ⏎ $s0
+9. TELA: # Alocação ⏎ a ⏎ b ⏎ c ⏎ $t0 ⏎ $t1 ⏎ $t0
    BYTE: "Se faltar cor, uma variável vai morar na memória. Isso é o spill, o derramamento."
 
-10. TELA: # Receita ⏎ 1. Vivacidade: quem ainda será lido abaixo? ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
+10. TELA: # Receita ⏎ 1. Vivacidade: quem ainda será lido adiante? ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
    BYTE: "A receita começa no código e termina nas cores."
 
-11. TELA: # Receita ⏎ 1. Vivacidade: quem ainda será lido abaixo? ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
+11. TELA: # Receita ⏎ 1. Vivacidade: quem ainda será lido adiante? ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
    BYTE: "O fio entre as duas primeiras variáveis veio de qual passo? Toque."
-   PERGUNTA (toque): certo = 2. Interferência: ligue quem vive junto. ; errado = 1. Vivacidade: quem ainda será lido abaixo? | 3. Cores: vizinhos diferentes. Sem cor, spill.
+   PERGUNTA (toque): certo = 2. Interferência: ligue quem vive junto. ; errado = 1. Vivacidade: quem ainda será lido adiante? | 3. Cores: vizinhos diferentes. Sem cor, spill.
    se errar: "O fio liga quem vive ao mesmo tempo."
    se acertar: "Interferência vira fio no grafo."
 
-12. TELA: # Receita ⏎ *1. Vivacidade: quem ainda será lido abaixo?* ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
+12. TELA: # Receita ⏎ *1. Vivacidade: quem ainda será lido adiante?* ⏎ 2. Interferência: ligue quem vive junto. ⏎ 3. Cores: vizinhos diferentes. Sem cor, spill.
    BYTE: "A análise de vivacidade anda de trás para a frente, da última linha até a primeira."
 
 13. TELA: # a * b + ( c - d ) * e ⏎ t1 = a * b ⏎ t2 = c - d ⏎ t3 = t2 * e ⏎ t4 = t1 + t3 ⏎ t1 ⏎ t2 ⏎ t3 ⏎ t4

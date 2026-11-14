@@ -59,7 +59,7 @@
     <string name="pq_min_e2">The recipe marks one pair per round.</string>
     <string name="pq_min_dica">Reading nothing, one of them already accepts. What about the other?</string>
     <string name="pq_min_ok">Reading no letter at all, one accepts and the other does not. The empty string tells them apart.</string>
-    <string name="pq_ast_q">Here the minus ended up below the times. Why?</string>
+    <string name="pq_ast_q">In the price expression, the minus ended up below the times. Why?</string>
     <string name="pq_ast_fato">total * (preco - 2)</string>
     <string name="pq_ast_c">The minus runs first, and the times uses the result.</string>
     <string name="pq_ast_e1">Minus has higher precedence than times.</string>
@@ -69,7 +69,7 @@
     <string name="pq_mips_q">Both lw come before the add. Why?</string>
     <string name="pq_mips_fato">lw   lw   add   sw</string>
     <string name="pq_mips_c">The add only works between registers.</string>
-    <string name="pq_mips_e1">The lw is faster than the add.</string>
+    <string name="pq_mips_e1">The add reads memory, but slowly.</string>
     <string name="pq_mips_e2">The order does not matter. It is just habit.</string>
     <string name="pq_mips_dica">Where can the add get its numbers from?</string>
     <string name="pq_mips_ok">In MIPS, arithmetic only happens between registers. The lw brings each variable into one of them.</string>
@@ -162,12 +162,12 @@
     <string name="pq_tipos_c">The integer becomes real before the sum.</string>
     <string name="pq_tipos_e1">Real beats any other type.</string>
     <string name="pq_tipos_e2">The compiler ignores the type of the sum.</string>
-    <string name="pq_tipos_dica">Can an integer be written as a real without losing anything?</string>
-    <string name="pq_tipos_ok">An integer fits in a real without losing anything. The compiler converts it, and the sum becomes real.</string>
+    <string name="pq_tipos_dica">Does the integer become real without spoiling the result?</string>
+    <string name="pq_tipos_ok">The real keeps the integer's order of magnitude. The compiler converts it, and the sum becomes real.</string>
     <string name="pq_escopo_q">In x equals x plus one, the lookup stopped at the inner table. Why?</string>
     <string name="pq_escopo_fato">inner: x float\nouter: z int, x float</string>
     <string name="pq_escopo_c">The lookup starts at the inner block.</string>
-    <string name="pq_escopo_e1">The inner table is always the biggest.</string>
+    <string name="pq_escopo_e1">The outer x was erased when the block opened.</string>
     <string name="pq_escopo_e2">The lookup always ends at the global table.</string>
     <string name="pq_escopo_dica">In which table does the lookup start?</string>
     <string name="pq_escopo_ok">The lookup starts at the top of the stack, the inner block. The x is there, so it stops.</string>
@@ -224,7 +224,7 @@
     <string name="fc_min_a">on b, no pair ever splits.</string>
     <string name="fc_min_b">different targets already split the pair.</string>
     <string name="fc_ast_c">the shape of the tree already groups.</string>
-    <string name="fc_ast_a">the AST has no operator nodes.</string>
+    <string name="fc_ast_a">parentheses never change the result.</string>
     <string name="fc_ast_b">without the node, the minus runs later.</string>
     <string name="fc_mips_c">the add only adds registers.</string>
     <string name="fc_mips_a">only the sw at the end is missing.</string>

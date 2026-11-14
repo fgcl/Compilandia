@@ -196,7 +196,7 @@
     <string name="min_l_r1">1. Marque todo par final com não final.</string>
     <string name="min_l_r2">2. Marque o par que vai a um par marcado.</string>
     <string name="min_l_r3">3. Repita até nada mudar. Branco: junte.</string>
-    <string name="ast_l_01">O parser montou a árvore de derivação. Ela tem um nó para cada regra usada, e fica enorme.</string>
+    <string name="ast_l_01">O parser segue a árvore de derivação. Ela tem um nó para cada símbolo das regras usadas, e fica enorme.</string>
     <string name="ast_l_01q">Destes cinco pedaços, quais mudam o resultado da conta? Toque neles.</string>
     <string name="ast_l_01q_dica">Tire os parênteses. A conta muda?</string>
     <string name="ast_l_01q_ok">O a, o mais e o b. Os parênteses em volta do b não mudam nada.</string>
@@ -214,7 +214,13 @@
     <string name="ast_l_10">O menos fica embaixo do vezes. Quais são os filhos do menos? Toque.</string>
     <string name="ast_l_10_dica">São os dois lados do menos.</string>
     <string name="ast_l_10_ok">Preço e dois são folhas do menos.</string>
-    <string name="ast_l_11">Sem parênteses na árvore, e a ordem continua certa: quem está mais fundo é calculado primeiro.</string>
+    <string name="ast_l_11">Sem parênteses na árvore, e a ordem continua certa: o filho sai antes do pai.</string>
+    <string name="ast_l_12">Agora a menos b menos c. Na linha, os dois menos parecem iguais.</string>
+    <string name="ast_l_13">Qual dos dois menos fica embaixo na AST? Toque nele.</string>
+    <string name="ast_l_13_dica">Na conta da escola, qual menos você faz primeiro?</string>
+    <string name="ast_l_13_ok">O da esquerda. A menos b sai primeiro, e o c sai do resultado.</string>
+    <string name="ast_l_13_o3">um nó só, com três filhos</string>
+    <string name="ast_l_14">Com dez, três e dois, esta árvore dá cinco. Pendurada para a direita, daria nove.</string>
     <string name="ast_l_r1">1. Operador vira nó; operandos viram filhos.</string>
     <string name="ast_l_r2">2. Valor ou nome vira folha.</string>
     <string name="ast_l_r3">3. Parêntese e regra de passagem somem.</string>

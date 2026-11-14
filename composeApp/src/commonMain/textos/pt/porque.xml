@@ -59,7 +59,7 @@
     <string name="pq_min_e2">A receita marca um par por rodada.</string>
     <string name="pq_min_dica">Sem ler nada, um deles já aceita. E o outro?</string>
     <string name="pq_min_ok">Sem ler letra nenhuma, um aceita e o outro não. A cadeia vazia separa os dois.</string>
-    <string name="pq_ast_q">Aqui o menos ficou embaixo do vezes. Por quê?</string>
+    <string name="pq_ast_q">Na conta do preço, o menos ficou embaixo do vezes. Por quê?</string>
     <string name="pq_ast_fato">total * (preco - 2)</string>
     <string name="pq_ast_c">O menos roda antes, e o vezes usa o resultado.</string>
     <string name="pq_ast_e1">O menos tem mais precedência que o vezes.</string>
@@ -69,7 +69,7 @@
     <string name="pq_mips_q">Os dois lw vêm antes do add. Por quê?</string>
     <string name="pq_mips_fato">lw   lw   add   sw</string>
     <string name="pq_mips_c">O add só faz conta entre registradores.</string>
-    <string name="pq_mips_e1">O lw é mais rápido que o add.</string>
+    <string name="pq_mips_e1">O add lê a memória, mas devagar.</string>
     <string name="pq_mips_e2">A ordem tanto faz. É só costume.</string>
     <string name="pq_mips_dica">Onde o add pode buscar os números dele?</string>
     <string name="pq_mips_ok">No MIPS, a conta só acontece entre registradores. O lw traz cada variável para um deles.</string>
@@ -162,12 +162,12 @@
     <string name="pq_tipos_c">O inteiro vira real antes da soma.</string>
     <string name="pq_tipos_e1">Real ganha de qualquer outro tipo.</string>
     <string name="pq_tipos_e2">O compilador ignora o tipo da soma.</string>
-    <string name="pq_tipos_dica">Dá para escrever um inteiro como real sem perder nada?</string>
-    <string name="pq_tipos_ok">O inteiro cabe num real sem perder nada. O compilador converte, e a soma vira real.</string>
+    <string name="pq_tipos_dica">O inteiro vira real sem estragar a conta?</string>
+    <string name="pq_tipos_ok">O real guarda a ordem de grandeza do inteiro. O compilador converte, e a soma vira real.</string>
     <string name="pq_escopo_q">No x igual a x mais um, a busca parou na tabela de dentro. Por quê?</string>
     <string name="pq_escopo_fato">dentro: x float\nfora: z int, x float</string>
     <string name="pq_escopo_c">A busca começa no bloco de dentro.</string>
-    <string name="pq_escopo_e1">A tabela de dentro é sempre a maior.</string>
+    <string name="pq_escopo_e1">O x de fora foi apagado quando o bloco abriu.</string>
     <string name="pq_escopo_e2">A busca sempre termina na tabela global.</string>
     <string name="pq_escopo_dica">Em que tabela a busca começa?</string>
     <string name="pq_escopo_ok">A busca começa no topo da pilha, o bloco de dentro. O x está ali, então ela para.</string>
@@ -224,7 +224,7 @@
     <string name="fc_min_a">com b, nenhum par se separa.</string>
     <string name="fc_min_b">destinos diferentes já separam o par.</string>
     <string name="fc_ast_c">a forma da árvore já agrupa.</string>
-    <string name="fc_ast_a">a AST não tem nó de operador.</string>
+    <string name="fc_ast_a">parêntese nunca muda a conta.</string>
     <string name="fc_ast_b">sem o nó, o menos roda depois.</string>
     <string name="fc_mips_c">o add só soma registradores.</string>
     <string name="fc_mips_a">falta só o sw no fim.</string>

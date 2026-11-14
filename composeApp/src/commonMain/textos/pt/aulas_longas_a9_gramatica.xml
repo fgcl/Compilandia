@@ -60,7 +60,7 @@
     <string name="amb_l_15_o2">O vezes aparece depois na frase</string>
     <string name="amb_l_15_o3">A regra do vezes vem por último</string>
     <string name="amb_l_15_dica">Olhe o que cada não-terminal consegue gerar. Onde um mais pode aparecer?</string>
-    <string name="amb_l_15_ok">O mais só nasce na regra de E, que fica acima dos T. Dentro de um T só cabem vezes. Quem está mais fundo roda primeiro.</string>
+    <string name="amb_l_15_ok">O mais só nasce na regra de E, que fica acima dos T. Dentro de um T só cabem vezes. Por isso o vezes fica embaixo do mais e roda antes.</string>
     <string name="amb_l_16">Um nível para cada precedência: o operador que liga mais forte fica no nível de baixo. É a gramática que a Ponte vai consertar a seguir.</string>
     <string name="amb_l_r1">1. Escolha uma frase da linguagem.</string>
     <string name="amb_l_r2">2. Tente montar duas árvores diferentes para ela.</string>

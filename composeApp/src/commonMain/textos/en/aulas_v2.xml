@@ -288,12 +288,12 @@
     <string name="ast_f_fala2">A common mistake: putting the first operator of the line at the root. The root is the last operation. The first operation sits at the bottom of the tree.</string>
     <string name="ast_f_z1">Parse tree: one node per rule. AST: only operations and operands.</string>
     <string name="ast_f_z2">An operator becomes an inner node; names and values become leaves.</string>
-    <string name="ast_f_z3">Parentheses and pass-through rules vanish. Deeper is computed earlier.</string>
+    <string name="ast_f_z3">Parentheses and pass-through rules vanish. A child is computed before its parent.</string>
     <string name="ast_f_resumo">To sum up: the AST is the parse tree without what only serves the grammar. The operators, the operands and the order of operations remain.</string>
-    <string name="tac_f_af">x = a + b * c needs two three-address lines.</string>
-    <string name="tac_f_q">How many three-address lines does this assignment need? A classmate said this. Right or wrong?</string>
+    <string name="tac_f_af">The expression a + b * c needs two three-address lines.</string>
+    <string name="tac_f_q">How many three-address lines does this expression need? A classmate said this. Right or wrong?</string>
     <string name="tac_f_dica">Count the operators. Each line takes at most one.</string>
-    <string name="tac_f_ok">Exactly. There are two operations: t1 = b * c, then x = a + t1. Each line takes one operator and at most three addresses.</string>
+    <string name="tac_f_ok">Exactly. There are two operations: t1 = b * c, then t2 = a + t1. Each line takes one operator and at most three addresses.</string>
     <string name="tac_f_erro2">Reusing the same temporary for two different operations.</string>
     <string name="tac_f_certo2">Each operator gets a new temporary: t1, t2, t3...</string>
     <string name="tac_f_fala2">A common mistake: reusing t1 in the second operation. If the old value is still needed, it gets lost. Each result gets a new temporary.</string>

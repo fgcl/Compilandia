@@ -158,6 +158,12 @@ object Mips {
         return out
     }
 
+    /**
+     * O temporário do TAC que mora na memória ganha o nome tmp1, tmp2...: `lw $t2, t1` parecia cópia
+     * entre registradores (revisor professor do bloco 6). Só troca o nome, o programa é o mesmo.
+     */
+    fun nomeiaTemporarios(linhas: List<String>): List<String> = linhas.map { it.replace(Regex("(?<![\$\\w])t(\\d+)\\b"), "tmp$1") }
+
     data class State(val regs: Map<String, Long>, val mem: Map<String, Long>)
 
     /** Executa li/lw/sw/add/sub/mul/div/move. Devolve o estado após cada instrução. */

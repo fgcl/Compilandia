@@ -106,7 +106,7 @@
     <string name="sims_olha_arvore_para_esta_frase">Look at a tree for this sentence.</string>
     <string name="sims_agora_outra_arvore_com_mesma">Now another tree, with the same sentence. The grammar is ambiguous.</string>
     <string name="sims_primeira_agrupa_jeito_volte_compare">The first one groups it one way. Go back and compare what sits deeper.</string>
-    <string name="sims_mais_fundo_roda_primeiro_por">The deepest part runs first. Each tree groups the expression its own way.</string>
+    <string name="sims_mais_fundo_roda_primeiro_por">A child runs before its parent. Each tree groups the expression its own way.</string>
     <string name="sims_parser_olha_1_precisa_decidir">The parser looks at %1$s and has to decide.</string>
     <string name="sims_1_virou_2_3_primeiro">%1$s became %2$s %3$s. The first is still %4$s.</string>
     <string name="sims_preso_em_1">Stuck in %1$s</string>
@@ -135,7 +135,7 @@
     <string name="sims_que_classe_1">What class is %1$s?</string>
     <string name="sims_1_2">%1$s is %2$s.</string>
     <string name="sims_cortando_em_tokens">Cutting into tokens</string>
-    <string name="sims_parser_ja_montou_arvore_que">The parser already built the tree. The deepest part runs first.</string>
+    <string name="sims_parser_ja_montou_arvore_que">The parser already built the tree. A child runs before its parent.</string>
     <string name="sims_calculo_1_guardo_em_2">I compute %1$s and store it in %2$s.</string>
     <string name="sims_cada_linha_vira_instrucoes_mips">Each line becomes MIPS instructions: load, compute, store.</string>
     <string name="sims_expressao_ao_mips">From the expression to MIPS</string>

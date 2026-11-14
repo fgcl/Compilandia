@@ -288,12 +288,12 @@
     <string name="ast_f_fala2">Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore.</string>
     <string name="ast_f_z1">Árvore de derivação: um nó por regra. AST: só operações e operandos.</string>
     <string name="ast_f_z2">Operador vira nó interno; nome e valor viram folha.</string>
-    <string name="ast_f_z3">Parêntese e regra de passagem somem. Mais fundo é calculado antes.</string>
+    <string name="ast_f_z3">Parêntese e regra de passagem somem. O filho é calculado antes do pai.</string>
     <string name="ast_f_resumo">Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas.</string>
-    <string name="tac_f_af">x = a + b * c precisa de duas linhas de três endereços.</string>
-    <string name="tac_f_q">Quantas linhas de três endereços esta atribuição precisa? Um colega disse isto. Certo ou errado?</string>
+    <string name="tac_f_af">A conta a + b * c precisa de duas linhas de três endereços.</string>
+    <string name="tac_f_q">Quantas linhas de três endereços esta conta precisa? Um colega disse isto. Certo ou errado?</string>
     <string name="tac_f_dica">Conte os operadores. Cada linha leva no máximo um.</string>
-    <string name="tac_f_ok">Exato. São duas contas: t1 = b * c, depois x = a + t1. Cada linha leva um operador e no máximo três endereços.</string>
+    <string name="tac_f_ok">Exato. São duas contas: t1 = b * c, depois t2 = a + t1. Cada linha leva um operador e no máximo três endereços.</string>
     <string name="tac_f_erro2">Reusar o mesmo temporário para duas contas diferentes.</string>
     <string name="tac_f_certo2">Cada operador ganha um temporário novo: t1, t2, t3...</string>
     <string name="tac_f_fala2">Um erro comum: reaproveitar o t1 na segunda conta. Se o valor antigo ainda for usado, ele se perde. Cada resultado ganha um temporário novo.</string>

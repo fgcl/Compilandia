@@ -529,7 +529,7 @@ val backend by lazy {
             palavra(tx("rt_l_palavra"), tx("rt_l_03"))
             // 2. Primeiro exemplo: o fat do motor para em n = 1 (if n <= 1)
             comecaExemplo()
-            fun reg(id: String, t: String, i: Int, c: Tint) = Box(id, t, 180f, 330f - i * 62f, 250f, 54f, Look.TOKEN, c, size = 15f)
+            fun reg(id: String, t: String, i: Int, c: Tint) = Box(id, t, 180f, 330f - i * 62f, 320f, 54f, Look.TOKEN, c, size = 13f)
             cena(tx("epbackend_toda_chamada_funcao_ganha_registro")) {
                 clear()
                 add(titulo("fat(2)"))
@@ -655,7 +655,7 @@ val backend by lazy {
             ) {}
             cena(tx("epbackend_pinto_grafo_vizinhos_nunca_tem"), mood = EpMood.HAPPY) {
                 tint("a", Tint.TEAL); tint("c", Tint.TEAL); tint("b", Tint.ORANGE)
-                add(rotulo("ra", "\$s0", 80f, 186f, Tint.TEAL, 17f), rotulo("rb", "\$s1", 180f, 286f, Tint.ORANGE, 17f), rotulo("rc", "\$s0", 280f, 186f, Tint.TEAL, 17f))
+                add(rotulo("ra", "\$t0", 80f, 186f, Tint.TEAL, 17f), rotulo("rb", "\$t1", 180f, 286f, Tint.ORANGE, 17f), rotulo("rc", "\$t0", 280f, 186f, Tint.TEAL, 17f))
             }
             cena(tx("epbackend_faltou_cor_variavel_vai_para")) {}
             // 3. A receita

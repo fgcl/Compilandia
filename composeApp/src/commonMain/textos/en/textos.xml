@@ -3433,7 +3433,7 @@
     <string name="lessonspart5a_endereco_retorno">Return address</string>
     <string name="lessonspart5a_controle_dinamico_cadeia_chamadas_acesso">Control/dynamic = the chain of CALLS. Access/static = the chain of NESTING in the text (useful in languages with nested functions, like Pascal). The return address points to an INSTRUCTION, not a frame.</string>
     <string name="lessonspart5a_definicao_em_acao_4_ativacoes">The definition in action: 4 simultaneous activations at the peak (main + 3 of fat).</string>
-    <string name="lessonspart5a_questao_classica_desenhe_registro_ativacao">Classic question: 'draw the activation record and say who fills in each field'. Parameters, return value (space) and return address: the caller. Locals, temporaries and saved registers: the callee. List them from top to bottom in that order.</string>
+    <string name="lessonspart5a_questao_classica_desenhe_registro_ativacao">Classic question: 'draw the activation record and say who fills in each field'. Parameters, return value (space) and return address: the caller. Locals, temporaries and saved registers: the callee. In MIPS, the caller's `jal` puts the address in `$ra`, and the callee saves `$ra` in the frame. List them from top to bottom in that order.</string>
     <string name="lessonspart5a_endereco_retorno_vinculo_controle_primeiro">Return address ≠ control link. The first says which INSTRUCTION to go back to; the second, which FRAME becomes current again.</string>
     <string name="lessonspart5a_predio_memoria_cafe_manha_quadro">The memory building and the frame's breakfast</string>
     <string name="lessonspart5a_palacio_memoria_forja_codigo_penultima">Memory Palace: Code Forge, second-to-last room. A four-story building; from the roof, a stack of boxes comes down on its own.</string>
@@ -3576,7 +3576,7 @@
     <string name="lessonspart6_afd_minimo_unico">Is the minimal DFA unique?</string>
     <string name="lessonspart6_sim_menos_renomear_estados_myhill">Yes, up to renaming the states (Myhill–Nerode)</string>
     <string name="lessonspart6_arvore_sintatica_abstrata_guarda_so">The abstract syntax tree keeps only operators, operands and constructs (BinOp, Var, Num, Atrib, Se, Enquanto, Bloco), throwing away chains of nonterminals, parentheses, punctuation and ε; the parser builds it (new BinOp in top-down or $$ = new BinOp(...) in Bison) and the later phases walk over it.</string>
-    <string name="lessonspart6_ast_arvore_sem_tralha_corta">AST = A Slimmed Tree: it cuts the CPE (Chains, Parentheses, Epsilons). Whoever is deeper works first.</string>
+    <string name="lessonspart6_ast_arvore_sem_tralha_corta">AST = A Slimmed Tree: it cuts the CPE (Chains, Parentheses, Epsilons). A child works before its parent.</string>
     <string name="lessonspart6_criar_nos_para_parenteses_ou">Creating nodes for parentheses or for chain nonterminals (E → T → F)</string>
     <string name="lessonspart6_montar_ast_pendurada_para_direita">Building the AST hanging to the right (recursion instead of a loop) and flipping the associativity of - and /</string>
     <string name="lessonspart6_achar_que_sem_parenteses_precedencia">Thinking that without parentheses the precedence is lost (it lives in the shape of the tree)</string>
@@ -3586,7 +3586,7 @@
     <string name="lessonspart6_correntes_nao_terminais_parenteses_pontuacao">Chains of nonterminals, parentheses/punctuation and ε</string>
     <string name="lessonspart6_nos_derivacao_ast_em_b">Parse tree nodes × AST in a + b * c?</string>
     <string name="lessonspart6_onde_mora_precedencia_na_ast">Where does the precedence live in the AST?</string>
-    <string name="lessonspart6_na_forma_quem_esta_mais">In the shape: whatever is deeper is computed first</string>
+    <string name="lessonspart6_na_forma_quem_esta_mais">In the shape: a child is computed before its parent</string>
     <string name="lessonspart6_linha_chave_associatividade_esquerda_no">Key line for left associativity in top-down?</string>
     <string name="lessonspart6_acao_bison_para_t">Bison action for E → E + T?</string>
     <string name="lessonspart6_acao_bison_para_f">Bison action for F → ( E )?</string>
@@ -3841,7 +3841,7 @@
     <string name="lessonspart6b_na_forma_arvore_filho">In the shape of the tree: the + is a CHILD of the *</string>
     <string name="lessonspart6b_numa_tabela_parte">In a separate table</string>
     <string name="lessonspart6b_ela_se_perde">It gets lost</string>
-    <string name="lessonspart6b_quem_esta_mais_fundo_avaliado">Whatever is deeper is evaluated first (post-order). The structure IS the precedence.</string>
+    <string name="lessonspart6b_quem_esta_mais_fundo_avaliado">A child is evaluated before its parent (post-order). The structure IS the precedence.</string>
     <string name="lessonspart6b_no_t_no_meio_corrente">And the T node in the middle of the chain E → T → F? Doesn't it do anything?</string>
     <string name="lessonspart6b_faz_alguma_coisa">Does it do anything?</string>
     <string name="lessonspart6b_na_derivacao_ele_registra_que">In the derivation, it records that the grammar went through the * precedence level. But, since there was no *, there's no operation to represent. In the AST, it simply vanishes: the termo() method returns whatever fator() returned.</string>
@@ -3879,7 +3879,7 @@
     <string name="lessonspart6b_palacio_memoria_na_cidade_semantica">**Memory palace**: in Semantic City, next to the symbol table's registry office, is the **AST Factory** , a carpentry shop. A huge log arrives (the parse tree); the carpenter saws off the branches that only pass things along, throws away the sawdust of the parentheses and hands over a 5-piece table, ready to use.</string>
     <string name="lessonspart6b_parenteses_sao_andaimes_indispensaveis_enqua">**Parentheses are scaffolding**: needed while the building is under construction (parsing), removed when it's done. The building's shape (the tree) already keeps what they were holding.</string>
     <string name="lessonspart6b_corrente_whatsapp_t_f_como">**A chain message**: E → T → F → a is like a message forwarded five times. The content is the 'a'; the forwards add nothing. In the AST: Var(a), and that's it.</string>
-    <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**Whoever is deeper works first.** In the AST of a + b * c, the * is in the basement: it's done first. Depth = precedence.</string>
+    <string name="lessonspart6b_quem_esta_mais_fundo_trabalha">**A child works before its parent.** In the AST of a + b * c, the * is in the basement: it's done first. Depth = precedence.</string>
     <string name="lessonspart6b_qual_linha_codigo_segredo_associatividade">Which line of code is the 'secret' of left associativity in the top-down parser?</string>
     <string name="lessonspart6b_velho_vai_para_esquerda_resultado">'The old one goes to the left': the accumulated result becomes the new node's left child, on each turn of the loop.</string>
     <string name="lessonspart6b_bison_em_tres_palavras_filho">**Bison in three words: 'child becomes parent'.** $$ = new BinOp('+', $1, $3): the children $1 and $3 become children of the new node $$. A chain? $$ = $1. A parenthesis? $$ = $2.</string>
@@ -4088,7 +4088,7 @@
     <string name="solta_lessonspart3b_2">int yyparse(void): the LALR(1) parser; returns 0 on success and 1 on a syntax error</string>
     <string name="solta_lessonspart3b_3">In the rule expr : '(' expr ')' { $$ = ???; }, what goes in place of ???</string>
     <string name="solta_lessonspart3b_4">a + (x * 2): int + float → **float**, generates inttofloat(a)</string>
-    <string name="solta_lessonspart3c_1">(1). We're back in block 0; the float x (3) died with block 1.</string>
+    <string name="solta_lessonspart3c_1">(1). We're back in block 0; the float x (3) went out of sight with block 1.</string>
     <string name="solta_lessonspart3c_2">If block 2 had 'int y;' twice, what would happen?</string>
     <string name="solta_lessonspart3c_3">**'Open brace, push; close brace, pop.'** The stack of tables follows the program's braces.</string>
     <string name="solta_lessonspart3c_4">'Combine b with c (multiplying) in bowl t1; then combine a with t1 in bowl t2.' That's a + b * c</string>
@@ -4188,7 +4188,7 @@
     <string name="solta_tpguided_1">`x &lt;- 2 * 60 + 1;` becomes li, li, mul, li, add, sw. Will the processor compute 121 EVERY time it passes through there?</string>
     <string name="solta_tpguided_2">With this folding, does `y &lt;- a + 2 + 3;` become `a + 5`?</string>
     <string name="solta_tpguided_3">And that `se (1 &gt; 2) { … }`? The block never runs. Cut it out!</string>
-    <string name="solta_tpguided_4">Peephole never crosses a LABEL. In `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, someone may jump to `enquanto0` from somewhere else, with another value in $t0. Removing that `lw` breaks the loop.</string>
+    <string name="solta_tpguided_4">Peephole never crosses a LABEL. In `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, someone may jump to `enquanto0` from somewhere else, with another value in $t0. Removing that `lw` breaks the loop. And only replace `lw $t0` + `move $a0, $t0` with `lw $a0` if `$t0` is not read afterward. Our generator frees it right after the `move`: that is liveness, from the Register allocation lesson.</string>
     <string name="solta_tpguided_5">**Accepting junk.** `programa t { } xyz`, `escreva(1);;` (two `;`), `a &lt; b &lt; c`. Each of these should be a test in the `erro/` folder with the expected message.</string>
     <string name="solta_tpguided_6">**A variable in a loop doesn't reset.** In Byteiro, `inteiro t;` inside an `enquanto` generates NO code: the `.word` is the same on each pass and keeps the value from the previous pass. Either document it ('variables are 0 only at the start of the program'), or generate a `sw $zero, rotulo` for each declaration.</string>
 </resources>

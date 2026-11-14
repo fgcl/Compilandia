@@ -12,10 +12,10 @@ Os relatórios são lista de suspeitas, não veredito: modelo fingindo ser aluno
 | 2. Vale e Ponte (regiões 3 e 4) | lido | lido |
 | 3. Templo Top-Down (região 5) | lido | lido |
 | 4. Bottom-Up e Bison (regiões 6 e 7) | lido | lido |
-| 5. Semântica e Forja (regiões 8 e 9) | **falta** | lido |
-| 6. Seu compilador (série em C e Guia do TP) | **falta** | lido |
+| 5. Semântica e Forja (regiões 8 e 9) | lido | lido |
+| 6. Seu compilador (série em C e Guia do TP) | lido | lido |
 
-Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 coisas/melhorias"). Faltam só os professores dos blocos 5 e 6.
+Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias"). Os professores dos blocos 5 e 6 foram lidos em 14/11.
 
 ## Onde está cada coisa
 
@@ -90,6 +90,38 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 1. **Derivação mais à direita.** Quatro passos no fim da Sua vez da derivação, com a mesma declaração `float * id ;`. O aluno toca no não-terminal que a mais à direita troca primeiro (Var, porque `;` é terminal) e na forma que só aparece nela (`Tipo * id ;`). A última cena põe as duas derivações lado a lado: mesma sentença, mesma árvore, outra ordem. Nessas cenas a faixa da receita não acende passo, porque o passo 2 diz "mais à esquerda".
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
+
+## Feito em 14/11 (vigésima segunda rodada)
+
+1. **Revisor professor do bloco 5** (`relatorios/professor_5_semantica_forja.md`). Refez tipos, TAC, MIPS, pilhas de ativação, vivacidade e coloração, e não achou conta errada. Achou três regras que contradiziam a própria trilha, agora consertadas:
+   - O colega do TAC dizia que `x = a + b * c` dá duas linhas. A receita copia o último temporário para o x e dá três. A afirmação virou `a + b * c`, com `t2 = a + t1`.
+   - "Quem está mais fundo é calculado antes" falhava no exemplo da Alocação. Virou "o filho sai antes do pai" na AST, no TAC, nas pegadinhas, na ficha e nos textos.
+   - No Escopo, "as variáveis deixam de existir" virou "os nomes deixam de valer". Escopo não é tempo de vida.
+
+   Outros consertos do bloco 5:
+   - Herdado vem "do pai ou de um irmão". O "à esquerda" é a restrição da L-atribuída.
+   - O int vira float guardando a ordem de grandeza, e não "sem perder nada".
+   - O registro do fat mostra "volta: depois do fat(2)", o ponto de retorno, e não o chamador.
+   - A AST diz "um nó para cada símbolo", e o escopo em C vale da declaração até o fecha-chave.
+   - A vivacidade olha "adiante", e as cores da alocação são `$t0` e `$t1`.
+   - A dica de prova do registro de ativação diz quem grava o `$ra`.
+   - TAC tem AST como pré-requisito, e dois distratores fracos foram trocados.
+   - A Sua vez da AST ganhou `a - b - c`. O aluno toca o menos que fica embaixo, com "um nó só, com três filhos" como engano, e vê 10 - 3 - 2 dar 5, e não 9 (`AstMenosMenosTest`).
+2. **Revisor professor do bloco 6** (`relatorios/professor_6_seu_compilador.md`). Refez FIRST e FOLLOW dos 22 não-terminais da Byteiro e o `.asm` do `contagem.byt`, que imprime `soma = 30`. Consertos no Guia do TP:
+   - O léxico recusa número maior que `int` com erro de compilação, em vez de cair com `NumberFormatException`.
+   - O dobramento de constantes não dobra conta que estoura, como o `add` do MIPS.
+   - A ficha avisa que `e` e `ou` não têm curto-circuito.
+   - A caixa das pseudo-instruções diz certo o que vira `lui`, `ori` e `addiu`.
+   - O peephole avisa que o `$t0` precisa estar morto, e o capítulo 4 cita a recursão indireta.
+   - O `==` entre Strings "nunca" reconhece a palavra.
+
+   Consertos na série Em C:
+   - O temporário na memória se chama `tmp1`, e não `t1` ao lado de `$t1` (`Mips.nomeiaTemporarios`).
+   - O `struct Node` ganhou `nome`, e o parser compara `tok.tipo`, como o `struct` do léxico.
+   - A pergunta do `ungetc` diz que o while para.
+   - A aula 5 termina mostrando o `calc.l` inteiro e o que falta no `calc.y`. Montei esses arquivos com flex, bison e gcc nesta máquina, e `2+3*4` imprime `= 14`.
+
+Os pedidos maiores dos dois professores estão na seção 7 de [TAREFAS.md](TAREFAS.md).
 
 ## Feito em 14/11 (vigésima primeira rodada)
 

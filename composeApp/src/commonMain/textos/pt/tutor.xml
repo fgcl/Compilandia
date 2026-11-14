@@ -110,7 +110,7 @@
     <string name="sims_olha_arvore_para_esta_frase">Olha uma árvore para esta frase.</string>
     <string name="sims_agora_outra_arvore_com_mesma">Agora outra árvore, com a mesma frase. A gramática é ambígua.</string>
     <string name="sims_primeira_agrupa_jeito_volte_compare">A primeira agrupa de um jeito. Volte e compare o que fica mais fundo.</string>
-    <string name="sims_mais_fundo_roda_primeiro_por">O mais fundo roda primeiro. Cada árvore agrupa a conta de um jeito.</string>
+    <string name="sims_mais_fundo_roda_primeiro_por">O filho roda antes do pai. Cada árvore agrupa a conta de um jeito.</string>
     <string name="sims_parser_olha_1_precisa_decidir">O parser olha %1$s e precisa decidir.</string>
     <string name="sims_1_virou_2_3_primeiro">%1$s virou %2$s %3$s. O primeiro continua sendo %4$s.</string>
     <string name="sims_preso_em_1">Preso em %1$s</string>
@@ -139,7 +139,7 @@
     <string name="sims_que_classe_1">De que classe é %1$s?</string>
     <string name="sims_1_2">%1$s é %2$s.</string>
     <string name="sims_cortando_em_tokens">Cortando em tokens</string>
-    <string name="sims_parser_ja_montou_arvore_que">O parser já montou a árvore. O que está mais fundo roda primeiro.</string>
+    <string name="sims_parser_ja_montou_arvore_que">O parser já montou a árvore. O filho roda antes do pai.</string>
     <string name="sims_calculo_1_guardo_em_2">Calculo %1$s e guardo em %2$s.</string>
     <string name="sims_cada_linha_vira_instrucoes_mips">Cada linha vira instruções MIPS: carrega, calcula, guarda.</string>
     <string name="sims_expressao_ao_mips">Da expressão ao MIPS</string>

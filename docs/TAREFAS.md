@@ -117,7 +117,18 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Juntar as três pesquisas em [PESQUISA.md](PESQUISA.md)
 - [x] Ler os 5 relatórios que faltavam e juntar os achados em REVISAO-AULAS.md
 - [x] Prompt de trabalho para o Opus 5.5 em [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md)
-- [ ] Revisor professor do bloco 5 (Semântica e Forja)
-- [ ] Revisor professor do bloco 6 (Seu compilador)
+- [x] Revisor professor do bloco 5 (Semântica e Forja), e os erros técnicos dele consertados
+- [x] Revisor professor do bloco 6 (Seu compilador), e os erros técnicos dele consertados
 - [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`)
 - [ ] Teste com aluno de verdade: olhar o que o botão "Não entendi" guardou
+
+## 7. O que os professores dos blocos 5 e 6 pediram e ainda falta
+
+- [ ] Questão de prova na Forja: TAC → quádruplas → triplas, e vivacidade → arestas → cores (`TacGen`, `RegAlloc`)
+- [ ] Região 8 na ordem AST, Escopo, Atributos
+- [ ] Atributos: uma cena com a regra escrita (`E.val = E1.val + T.val`) ao lado da árvore
+- [ ] Booleanos com curto-circuito em TAC e MIPS (`sgt` + `beq $zero`), e o `bge` da pegadinha de MIPS no mesmo esquema
+- [ ] Em C 2 com `( expr )`, para a descida chamar a si mesma, e a ponte com `X -> + T X | ε`
+- [ ] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
+- [ ] Guia do TP: um "Estenda a Byteiro" por capítulo, com a resposta escondida
+- [ ] Guia do TP: capítulo opcional de funções e vetores

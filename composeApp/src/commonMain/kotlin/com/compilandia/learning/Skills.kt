@@ -49,7 +49,7 @@ enum class Skill(val title: String, val region: Region, val prereqs: List<Skill>
     ATTRIBUTES_TYPES(tx("skills_atributos_verificacao_tipos"), Region.CIDADE_SEMANTICA, listOf(CFG_DERIVATION)),
     SCOPE_SYMBOLS(tx("skills_escopo_tabela_simbolos"), Region.CIDADE_SEMANTICA, listOf(PHASES)),
     AST_BUILD(tx("skills_arvore_sintatica_abstrata_ast_com"), Region.CIDADE_SEMANTICA, listOf(CFG_DERIVATION)),
-    TAC(tx("skills_codigo_tres_enderecos"), Region.FORJA_CODIGO, listOf(ATTRIBUTES_TYPES)),
+    TAC(tx("skills_codigo_tres_enderecos"), Region.FORJA_CODIGO, listOf(AST_BUILD, ATTRIBUTES_TYPES)),
     OPTIMIZATION(tx("skills_otimizacao_dobra_constantes"), Region.FORJA_CODIGO, listOf(TAC)),
     CODEGEN_MIPS(tx("skills_geracao_codigo_mips"), Region.FORJA_CODIGO, listOf(TAC)),
     // Depois de MIPS: o fat.asm usa lw, sw, jal e $sp (revisor aluno do bloco 5).

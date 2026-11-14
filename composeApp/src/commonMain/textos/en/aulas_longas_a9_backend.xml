@@ -42,7 +42,7 @@
     <string name="esc_l_01q_dica">Look for the declaration between the braces of g.</string>
     <string name="esc_l_01q_ok">The float i, declared inside g. The int i of f does not count there.</string>
     <string name="esc_l_02">At every use of i, the compiler must find the right declaration.</string>
-    <string name="esc_l_03">The scope of a declaration is the part of the program where it holds. In C, it is the block where it was made.</string>
+    <string name="esc_l_03">The scope of a declaration is the part of the program where it holds. In C, it holds from the declaration to the closing brace of the block.</string>
     <string name="esc_l_05">Each block has its own table. The recipe takes care of their stack.</string>
     <string name="esc_l_r1">1. Block opens: push an empty table.</string>
     <string name="esc_l_r2">2. Declared: write the name in the top table.</string>
@@ -161,7 +161,7 @@
     <string name="reg_l_02_ok">That is why every value wants a register.</string>
     <string name="reg_l_03">Deciding which value stays in which register is register allocation.</string>
     <string name="reg_l_05">The recipe starts at the code and ends at the colors.</string>
-    <string name="reg_l_r1">1. Liveness: who will still be read below?</string>
+    <string name="reg_l_r1">1. Liveness: who will still be read later on?</string>
     <string name="reg_l_r2">2. Interference: link who lives together.</string>
     <string name="reg_l_r3">3. Colors: neighbors differ. No color, spill.</string>
     <string name="reg_l_06">The wire between the first two variables came from which step? Tap it.</string>

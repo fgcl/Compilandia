@@ -1,6 +1,6 @@
 # Série "Seu compilador" em C (aulas animadas EM_C, na ordem)
 
-#### EM_C / TOKENS: "Em C 1: o laço do getchar" (10 cenas, ~64s)
+#### EM_C / TOKENS: "Em C 1: o laço do getchar" (10 cenas, ~65s)
 
 1. TELA: # Em C aqui, Java no TP ⏎ série: C, com árvore ⏎ Guia do TP: Java, sem árvore ⏎ uma função por regra
    PROF: "Esta série escreve o compilador em C e monta a árvore. O Guia do TP faz o trabalho em Java, sem árvore. A ideia é a mesma: uma função por regra. O guia traz a tabela dos nomes."
@@ -21,7 +21,7 @@
    BYTE: "Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois."
 
 7. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
-   BYTE: "Agora chegou o mais. Qual linha roda logo depois? Toque nela."
+   BYTE: "Chegou o mais, e o while para. Qual linha roda em seguida? Toque nela."
    PERGUNTA (toque): certo =   ungetc(c, stdin); ; errado =     v = v * 10 + (c - '0'); |     c = getchar(); | if (isdigit(c)) {
    se errar: "O mais não é dígito. O while para."
    se acertar: "O laço para e o ungetc devolve o mais."
@@ -38,13 +38,13 @@
 
 #### EM_C / RECURSIVE_DESCENT: "Em C 2: uma função por regra" (9 cenas, ~51s)
 
-1. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
+1. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
    BYTE: "Na descida recursiva em C, cada regra da gramática vira uma função."
 
-2. TELA: # parser.c ⏎ void expr(void) { ⏎ *  termo();* ⏎ *  while (tok == '+') {* ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
+2. TELA: # parser.c ⏎ void expr(void) { ⏎ *  termo();* ⏎ *  while (tok.tipo == '+') {* ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
    BYTE: "expr chama termo. O while repete enquanto vier um mais."
 
-3. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ } ⏎ void termo(void) { ⏎ *  fator(); while (tok == '*') ...* ⏎ } ⏎ *void fator(void) { casa(NUM); }*
+3. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ } ⏎ void termo(void) { ⏎ *  fator(); while (tok.tipo == '*') ...* ⏎ } ⏎ *void fator(void) { casa(NUM); }*
    BYTE: "termo é igual, com o vezes. E fator só casa um número."
 
 4. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
@@ -69,15 +69,15 @@
    BYTE: "Agora você é o processador. Chame, case e volte, na ordem certa."
    BRINQUEDO: dica "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou." / acerto "Você rodou a descida recursiva inteira, igual ao programa em C."
 
-#### EM_C / AST_BUILD: "Em C 3: o struct Node" (8 cenas, ~43s)
+#### EM_C / AST_BUILD: "Em C 3: o struct Node" (8 cenas, ~44s)
 
-1. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎   struct Node *esq, *dir; ⏎ } Node;
+1. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎   char *nome; ⏎   struct Node *esq, *dir; ⏎ } Node;
    BYTE: "Na AST em C, cada nó da árvore é um struct."
 
-2. TELA: # struct Node ⏎ typedef struct Node { ⏎ *  char op;* ⏎ *  int val;* ⏎   struct Node *esq, *dir; ⏎ } Node;
-   BYTE: "op guarda o operador. val guarda o número."
+2. TELA: # struct Node ⏎ typedef struct Node { ⏎ *  char op;* ⏎ *  int val;* ⏎ *  char *nome;* ⏎   struct Node *esq, *dir; ⏎ } Node;
+   BYTE: "op guarda o operador, val guarda o número, e nome guarda a variável."
 
-3. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎ *  struct Node *esq, *dir;* ⏎ } Node;
+3. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎   char *nome; ⏎ *  struct Node *esq, *dir;* ⏎ } Node;
    BYTE: "esq e dir são ponteiros. Eles apontam para os filhos."
 
 4. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4}
@@ -98,58 +98,64 @@
 8. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    PROF: "A árvore é isso: structs ligados por ponteiros."
 
-#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~42s)
+#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~45s)
 
 1. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c}
    BYTE: "O gerador anda na árvore e escreve MIPS, uma linha por vez."
 
 2. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} ⏎ Node{nome: c}
-   BYTE: "Ele visita os filhos antes do pai. O primeiro nó pronto é o vezes."
+   BYTE: "Ele visita os filhos antes do pai. As folhas só carregam valor. A primeira conta pronta é o vezes."
 
-3. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ *lw $t1, b* ⏎ *lw $t2, c* ⏎ *mul $t3, $t1, $t2* ⏎ *sw $t3, t1*
+3. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ *lw $t1, b* ⏎ *lw $t2, c* ⏎ *mul $t3, $t1, $t2* ⏎ *sw $t3, tmp1*
    BYTE: "O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda."
 
-4. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1
+4. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1
    BYTE: "Qual nó o gerador visita agora? Toque nele."
    PERGUNTA (toque): certo = Node{op: '+'; esq ●; dir ●} ; errado = Node{nome: a} | Node{nome: b} | Node{nome: c}
    se errar: "Os dois filhos da raiz já estão prontos."
    se acertar: "Agora é a vez da raiz."
 
-5. TELA: # a + b * c ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ *lw $t1, a* ⏎ *lw $t2, t1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, t2*
+5. TELA: # a + b * c ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ *lw $t1, a* ⏎ *lw $t2, tmp1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, tmp2*
    BYTE: "O mais usa o resultado do vezes, que já está guardado na memória."
 
-6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ lw $t1, a ⏎ lw $t2, t1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, t2 ⏎ void gera(Node *n) { ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
+6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ void gera(Node *n) { ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
    PROF: "Em C, é uma função recursiva: gera os filhos e depois o pai."
 
 7. TELA: a + b * c ⏎ próxima instrução
    BYTE: "Agora monte o MIPS na ordem certa, instrução por instrução."
    BRINQUEDO: dica "Antes de calcular, os dois valores precisam estar nos registradores." / acerto "É exatamente o que o seu gerador em C escreveria."
 
-#### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (7 cenas, ~36s)
+#### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (9 cenas, ~50s)
 
-1. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
+1. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "Um compilador em C de verdade costuma ter três arquivos."
 
-2. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
+2. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "O main chama o yyparse, o parser que o Bison escreveu."
 
-3. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
+3. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "Sempre que precisa de um token, o parser chama o yylex."
 
-4. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
+4. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "O yylex devolve o tipo. O valor vai junto, em yylval."
 
-5. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
+5. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "Quem chama o yylex? Toque no arquivo."
-   PERGUNTA (toque): certo = calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ; errado = calc.l{[0-9]+  NUM; yylval = atoi(yytext)} | main.c{int main(void) {;   return yyparse();; }}
+   PERGUNTA (toque): certo = calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ; errado = calc.l{[0-9]+  NUM; yylval = atoi(yytext)} | main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    se errar: "Quem pede tokens é o parser."
    se acertar: "O parser pede um token por vez."
 
-6. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }} ⏎ *terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc}*
+6. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }} ⏎ *terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc}*
    BYTE: "O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa."
 
-7. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }} ⏎ terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc} ⏎ *./calc{2+3*4; = 14}*
+7. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }} ⏎ terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc} ⏎ *./calc{2+3*4; = 14}*
    BYTE: "Roda o calc, digita a conta, e sai o resultado."
+
+8. TELA: # calc.l ⏎ %option noyywrap ⏎ %{ ⏎ #include <stdlib.h> ⏎ #include "calc.tab.h" ⏎ %} ⏎ %% ⏎ *[0-9]+  { yylval = atoi(yytext); return NUM; }* ⏎ [+*\n] { return yytext[0]; } ⏎ [ \t]   ;
+   PROF: "Na tela, os arquivos estavam resumidos. Este é o calc.l inteiro, que compila."
+
+9. TELA: # calc.y ⏎ %{ ⏎ #include <stdio.h> ⏎ int yylex(void); ⏎ void yyerror(const char *s); ⏎ %} ⏎ %token NUM ⏎ %left '+' ⏎ %left '*' ⏎ %% ⏎ *linha: e '\n'  { printf("= %d\n", $1); } ;* ⏎ e: ... ; ⏎ %% ⏎ void yyerror(const char *s) { ⏎   fprintf(stderr, "%s\n", s); ⏎ }
+   PROF: "No calc.y, faltam o cabeçalho, a regra que imprime a conta e o yyerror."
 
 
 # Guia do Trabalho Prático (capítulos de texto)
@@ -176,7 +182,7 @@ C (série Em C)  Java (Guia do TP)
 expr()          exprAdd()
 termo()         exprMul()
 fator()         primario()
-tok == '+'      eh(MAIS)
+tok.tipo == '+'  eh(MAIS)
 casa('+')       casaToken(MAIS)
 struct Node     sem árvore
 gera()          emite() na hora
@@ -348,7 +354,7 @@ programa contagem {
     · **Tipos**: `inteiro` (32 bits), `logico` (`verdadeiro`/`falso`), `caractere` (`'A'`).
     · **Comandos**: declaração (`inteiro a, b;`), atribuição com `<-`, `se`/`senao`, `enquanto`, `escreva(...)`, `leia(x)`.
     · **Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.
-    · **Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`.
+    · **Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`. Atenção: `e` e `ou` sempre calculam os dois lados, sem curto-circuito.
     · **Comentários**: `// até o fim da linha` e `/* de bloco */`.
     · **Strings** só aparecem dentro do `escreva`: não existe tipo string.
 - CÓDIGO (Tabela de tokens: vai direto para o relatório):
@@ -554,6 +560,8 @@ public Token proximo() {
             case 2 -> {                                  // NUM
                 if (Character.isDigit(c)) { lex.append(c); pos++; }
                 else if (Character.isLetter(c)) throw erro("número malformado '" + lex + c + "'");
+                else if (lex.length() > 10 || Long.parseLong(lex.toString()) > Integer.MAX_VALUE)
+                    throw erro("número grande demais '" + lex + "'");
                 else return tok(TipoToken.NUM, lex.toString());
             }
             case 3 -> {                                  // já leu '<'
@@ -684,7 +692,7 @@ Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token bast
 
 - PROF: A gramática informal do capítulo 2 é ótima para humanos. Para virar descida recursiva, ela precisa ser **LL(1)**: olhando UM token, o parser sabe qual regra usar, sem voltar atrás, sem adivinhar.
 - PASSOS (As três checagens antes de programar):
-    · 1. **Sem recursão à esquerda**: nenhum `A -> A …`. (Em Java isso é recursão infinita.)
+    · 1. **Sem recursão à esquerda**: nenhum `A -> A …` (direta) nem `A -> B …` com `B -> A …` (indireta). (Em Java isso é recursão infinita.)
     · 2. **Fatorada**: duas alternativas do mesmo não-terminal não podem começar igual.
     · 3. **FIRST/FOLLOW sem cruzamento**: os FIRST das alternativas são disjuntos; e se uma alternativa pode sumir (ε), os FIRST das outras não cruzam com o FOLLOW.
 - CÓDIGO (Primeira tentativa: precedência certinha… e recursão à esquerda em quatro lugares):
@@ -1650,7 +1658,7 @@ private void leia() {
     casaToken(TipoToken.PONTO_VIRGULA);
 }
 ```
-- CAIXA [Cuidado!]: `div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`. Também são pseudo-instruções `li`, `la`, `move` e o `lw`/`sw` com rótulo: o MARS troca `move` por `addu` e monta `li`, `la` e o rótulo com `lui` e `ori`. Se o enunciado proibir, escreva essas trocas à mão.
+- CAIXA [Cuidado!]: `div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`. Também são pseudo-instruções `li`, `la`, `move` e o `lw`/`sw` com rótulo: o MARS troca `move` por `addu`; `la` vira `lui` + `ori`; o `lw` com rótulo vira `lui` + `lw` com deslocamento; e o `li` com valor pequeno vira `addiu`. Se o enunciado proibir, escreva essas trocas à mão.
 - CÓDIGO (De novo o contagem.byt do capítulo 2…):
 ```
 programa contagem {
@@ -1804,9 +1812,9 @@ private Res binaria(Token op, String instr, Res esq, Res dir, TipoDado tipoRes) 
 
 private static Integer calcula(TipoToken op, int a, int b) {
     return switch (op) {
-        case MAIS        -> a + b;
-        case MENOS       -> a - b;
-        case VEZES       -> a * b;
+        case MAIS        -> semEstouro((long) a + b);
+        case MENOS       -> semEstouro((long) a - b);
+        case VEZES       -> semEstouro((long) a * b);
         case DIV         -> b == 0 ? null : a / b;     // por zero: deixa para a execução
         case MOD         -> b == 0 ? null : a % b;
         case IGUAL       -> a == b ? 1 : 0;
@@ -1819,6 +1827,11 @@ private static Integer calcula(TipoToken op, int a, int b) {
         case OU          -> a | b;
         default          -> null;
     };
+}
+
+// O add do MIPS para o programa no estouro: quem estoura não se dobra, e o erro fica para a execução.
+private static Integer semEstouro(long v) {
+    return v == (int) v ? (int) v : null;
 }
 ```
 - TEXTO: No resto do gerador são três trocas mecânicas: (1) em `primario`, literais viram `return constante(tipo, valor);` em vez de `novoTemp()` + `li`; (2) cada `binaria(instr, esq, dir); esq = new Res(...)` vira `esq = binaria(op, instr, esq, dir, tipo);`; (3) todo lugar que usava `x.reg()` para emitir (`sw`, `move`, `beq`, `xori`, `sub`) passa a usar `noRegistrador(x)`. Nos unários: se o operando é constante, devolva `-c` ou `1 - c` sem emitir nada.
@@ -1888,7 +1901,7 @@ private void se() {
     sw   $t0, n_0                    sw   $t0, n_0
     lw   $t0, n_0                    # lw removido: $t0 já tem esse valor
 ```
-- CAIXA [Cuidado!]: Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço.
+- CAIXA [Cuidado!]: Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço. E só troque `lw $t0` + `move $a0, $t0` por `lw $a0` se o `$t0` não for lido depois. No nosso gerador ele é liberado logo após o `move`: isso é vivacidade, da aula de Alocação.
 - PILHA: Otimizou? Então… prove… que nada… quebrou.
 - PASSOS (Bateria de testes que pega bug de verdade):
     · **Precedência e associatividade**: `escreva(2 + 3 * 4);` → 14; `escreva((2 + 3) * 4);` → 20; `escreva(10 - 3 - 2);` → 5 (e não 9!).
@@ -1969,7 +1982,7 @@ private void comando() {
 }
 ```
 - PREVEJA: Alguém escreveu no léxico: `if (lexema == "senao") …`. O que acontece?
-    opções: Funciona sempre | ✔Às vezes não reconhece a palavra: `==` em String compara REFERÊNCIAS, não conteúdo | Erro de compilação do Java | Funciona só no Windows
+    opções: Funciona sempre | ✔Nunca reconhece a palavra: o lexema é um objeto novo, e `==` em String compara REFERÊNCIAS, não conteúdo | Erro de compilação do Java | Funciona só no Windows
     explicação: Em Java, `==` entre Strings pergunta 'é o mesmo objeto?'. O lexema montado num StringBuilder é um objeto NOVO, então a comparação falha. Use `equals`: ou, melhor ainda, o HashMap de reservadas e enums como no capítulo 3.
 - CAIXA [Cuidado!]: **Rótulos e nomes colidindo.** Dois `se` aninhados gerando o mesmo rótulo, ou uma variável chamada `main`, `j` ou `b` virando rótulo cru. O contador nos rótulos e o sufixo `_N` nas variáveis resolvem, tenha um teste com `inteiro j, b, main;`.
 - CAIXA [Cuidado!]: **Aceitar lixo.** `programa t { } xyz`, `escreva(1);;` (dois `;`), `a < b < c`. Cada um desses deveria ser um teste da pasta `erro/` com a mensagem esperada.

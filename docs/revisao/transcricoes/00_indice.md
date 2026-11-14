@@ -23,7 +23,7 @@
 - Cidade Semântica / ATTRIBUTES_TYPES: Atributos e verificação de tipos (pré-requisitos: CFG_DERIVATION)
 - Cidade Semântica / SCOPE_SYMBOLS: Escopo e tabela de símbolos (pré-requisitos: PHASES)
 - Cidade Semântica / AST_BUILD: Árvore sintática abstrata (AST) com classes (pré-requisitos: CFG_DERIVATION)
-- Forja do Código / TAC: Código de três endereços (pré-requisitos: ATTRIBUTES_TYPES)
+- Forja do Código / TAC: Código de três endereços (pré-requisitos: AST_BUILD, ATTRIBUTES_TYPES)
 - Forja do Código / OPTIMIZATION: Otimização (dobra de constantes) (pré-requisitos: TAC)
 - Forja do Código / CODEGEN_MIPS: Geração de código MIPS (pré-requisitos: TAC)
 - Forja do Código / RUNTIME: Ambientes de execução (registros de ativação) (pré-requisitos: SCOPE_SYMBOLS, CODEGEN_MIPS)

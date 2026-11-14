@@ -27,6 +27,38 @@ import com.compilandia.engine.TacGen
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
 
+/** O calc.l que compila de verdade: noyywrap, os includes, o return NUM e os caracteres soltos. */
+private val CALC_L_INTEIRO = listOf(
+    "%option noyywrap",
+    "%{",
+    "#include <stdlib.h>",
+    "#include \"calc.tab.h\"",
+    "%}",
+    "%%",
+    "[0-9]+  { yylval = atoi(yytext); return NUM; }",
+    "[+*\\n] { return yytext[0]; }",
+    "[ \\t]   ;",
+)
+
+/** O que falta no calc.y da tela: o cabeçalho, a regra que imprime o resultado e o yyerror. */
+private val CALC_Y_FALTA = listOf(
+    "%{",
+    "#include <stdio.h>",
+    "int yylex(void);",
+    "void yyerror(const char *s);",
+    "%}",
+    "%token NUM",
+    "%left '+'",
+    "%left '*'",
+    "%%",
+    "linha: e '\\n'  { printf(\"= %d\\n\", $1); } ;",
+    "e: ... ;",
+    "%%",
+    "void yyerror(const char *s) {",
+    "  fprintf(stderr, \"%s\\n\", s);",
+    "}",
+)
+
 /**
  * Série "Compilador em C": o mesmo compilador escrito em C, um pedaço por aula.
  * O código C aparece curto, com a linha acesa, e o efeito dela no palco ao lado. Quem calcula é o motor.
@@ -101,7 +133,7 @@ val serieEmC by lazy {
             val codigoExpr = listOf(
                 "void expr(void) {",
                 "  termo();",
-                "  while (tok == '+') {",
+                "  while (tok.tipo == '+') {",
                 "    casa('+');",
                 "    termo();",
                 "  }",
@@ -122,7 +154,7 @@ val serieEmC by lazy {
             }
             cena(tx("epemc_expr_chama_termo_while_repete")) { hot("s1", "s2") }
             cena(tx("epemc_termo_igual_com_vezes_fator")) {
-                add(codigo("t", listOf("void termo(void) {", "  fator(); while (tok == '*') ...", "}", "void fator(void) { casa(NUM); }"), 270f, x = 14f, passo = 24f, size = 13f))
+                add(codigo("t", listOf("void termo(void) {", "  fator(); while (tok.tipo == '*') ...", "}", "void fator(void) { casa(NUM); }"), 270f, x = 14f, passo = 24f, size = 13f))
                 hot("t1", "t3")
             }
             cena(tx("epemc_vamos_rodar_com_dois_mais")) {
@@ -160,10 +192,10 @@ val serieEmC by lazy {
             val raiz = "t"
             cena(tx("epemc_na_ast_em_c_cada")) {
                 add(titulo("struct Node"))
-                add(codigo("s", listOf("typedef struct Node {", "  char op;", "  int val;", "  struct Node *esq, *dir;", "} Node;"), 120f, x = 60f, passo = 30f, size = 15f))
+                add(codigo("s", listOf("typedef struct Node {", "  char op;", "  int val;", "  char *nome;", "  struct Node *esq, *dir;", "} Node;"), 112f, x = 60f, passo = 28f, size = 15f))
             }
-            cena(tx("epemc_op_guarda_operador_val_guarda")) { hot("s1", "s2") }
-            cena(tx("epemc_esq_dir_sao_ponteiros_eles")) { hot("s3") }
+            cena(tx("epemc_op_guarda_operador_val_guarda")) { hot("s1", "s2", "s3") }
+            cena(tx("epemc_esq_dir_sao_ponteiros_eles")) { hot("s4") }
             cena(tx("epemc_para_dois_mais_tres_vezes")) {
                 dropAll("s")
                 add(titulo("2 + 3 * 4"))
@@ -192,7 +224,7 @@ val serieEmC by lazy {
         episodio(Skill.CODEGEN_MIPS, tx("epemc_em_c_4_arvore_ao"), EM_C) {
             val src = tx("comum_b_c")
             val e = ExprParser.parse(src)
-            val mips = Mips.fromTac(TacGen.generate(e))
+            val mips = Mips.nomeiaTemporarios(Mips.fromTac(TacGen.generate(e)))
             val (nos, ponteiros) = structsDaExpr(e, 90f, 110f, 190f, dx = -86f, size = 11f, folhaW = 60f, opW = 76f)
             val op = nos.filter { it.rows.size == 3 }
             val vezes = op.first { it.rows[0] == "op: '*'" }.id
@@ -235,14 +267,14 @@ val serieEmC by lazy {
             // O calc.y da tela é o mesmo que o MiniBison roda: sem o %left, e: e '+' e seria a gramática ambígua da Oficina.
             val y = registro("y", "calc.y", SPEC_CALC.filter { it != "%token NUM" && it != "%%" }, 180f, 120f, 300f, Tint.ORANGE, 13f)
             val l = registro("l", "calc.l", listOf(tx("epemc_0_9_num"), tx("epemc_yylval_atoi_yytext")), 92f, 276f, 172f, Tint.TEAL, 13f)
-            val m = registro("main", "main.c", listOf("int main(void) {", "  return yyparse();", "}"), 272f, 276f, 162f, Tint.YELLOW, 13f)
+            val m = registro("main", "main.c", listOf("int yyparse(void);", "int main(void) {", "  return yyparse();", "}"), 272f, 276f, 162f, Tint.YELLOW, 12f)
             cena(tx("epemc_compilador_em_c_verdade_costuma")) {
                 add(titulo(tx("epemc_flex_bison_c")))
                 add(l, y, m)
             }
             cena(tx("epemc_main_chama_yyparse_parser_que")) {
                 wire(Wire("main", "y", "yyparse()", hot = true))
-                lit("main", 1)
+                lit("main", 2)
             }
             cena(tx("epemc_sempre_que_precisa_token_parser")) {
                 lit("main", -1)
@@ -268,6 +300,19 @@ val serieEmC by lazy {
                 add(registro("run", "./calc", listOf(conta, "= $valor"), 272f, 368f, 150f, Tint.GREEN, 14f, lit = 1))
                 wire(Wire("gcc", "run"))
                 hot("run")
+            }
+            // Revisor professor do bloco 6: os arquivos da tela eram resumo e não compilavam. Aqui, o que falta.
+            cena(tx("epemc_calc_l_inteiro"), who = PROF) {
+                clear(); clearWires()
+                add(titulo("calc.l"))
+                add(codigo("l", CALC_L_INTEIRO, 70f, passo = 30f, size = 11f))
+                hot("l6")
+            }
+            cena(tx("epemc_calc_y_falta"), who = PROF) {
+                clear()
+                add(titulo("calc.y"))
+                add(codigo("y", CALC_Y_FALTA, 60f, passo = 23f, size = 11f))
+                hot("y9")
             }
         },
     )

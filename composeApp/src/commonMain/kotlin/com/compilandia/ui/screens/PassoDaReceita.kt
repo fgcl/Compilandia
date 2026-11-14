@@ -43,7 +43,7 @@ object PassoDaReceita {
         Skill.SLR_TABLE to "022001230",
         Skill.LALR to "1223110112230",
         Skill.DFA_MINIMIZATION to "01301223300120",
-        Skill.AST_BUILD to "01130",
+        Skill.AST_BUILD to "01130110",
         Skill.CODEGEN_MIPS to "01200",
         Skill.TOKENS to "032000",
         Skill.REGEX_DFA to "044300",

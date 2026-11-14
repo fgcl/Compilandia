@@ -110,8 +110,8 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 23. TELA: # Diga por quê ⏎ int + float → float ⏎ O inteiro vira real antes da soma. ⏎ Real ganha de qualquer outro tipo. ⏎ O compilador ignora o tipo da soma.
    BYTE: "Inteiro mais real deu real, sem erro. Por quê?"
    PERGUNTA (toque): certo = O inteiro vira real antes da soma. ; errado = Real ganha de qualquer outro tipo. | O compilador ignora o tipo da soma.
-   se errar: "Dá para escrever um inteiro como real sem perder nada?"
-   se acertar: "O inteiro cabe num real sem perder nada. O compilador converte, e a soma vira real."
+   se errar: "O inteiro vira real sem estragar a conta?"
+   se acertar: "O real guarda a ordem de grandeza do inteiro. O compilador converte, e a soma vira real."
 
 24. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: sintetizado sobe dos filhos. ⏎ Errado: sintetizado vem dos irmãos. ⏎ Certo: o pai passa o tipo para os filhos.
    BYTE: "De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?"
@@ -125,7 +125,7 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 26. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
    BYTE: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
 
-#### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~35s)
+#### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~34s)
 
 1. TELA: # int a, b ⏎ D ⏎ T: int ⏎ L ⏎ a ⏎ b
    BYTE: "Declaração: int a, b. O tipo está num galho, e os nomes estão no outro."
@@ -140,7 +140,7 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
    se acertar: "O int passa pelo pai e desce até a. Isso é herdado."
 
 4. TELA: # int a, b ⏎ D ⏎ *T: int* ⏎ *L* ⏎ *a* ⏎ *b*
-   BYTE: "Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado."
+   BYTE: "Herdado vem do pai ou de um irmão. Por isso desce e anda de lado."
 
 5. TELA: !!HERDADO!!
    PROF: "S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita."
@@ -275,7 +275,7 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
    BYTE: "Em cada uso do i, o compilador precisa achar a declaração certa."
 
 4. TELA: !!ESCOPO!!
-   BYTE: "O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita."
+   BYTE: "O escopo de uma declaração é o trecho do programa onde ela vale. Em C, ela vale da declaração até o fecha-chave do bloco."
 
 5. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ int main() { x = 2; } ⏎ global: x int
    BYTE: "O mesmo nome pode existir em dois escopos. Quem guarda cada declaração, com nome e tipo, é a tabela de símbolos."
@@ -293,7 +293,7 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
    BYTE: "A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico."
 
 9. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ *}* ⏎ int main() { x = 2; } ⏎ global: x int
-   BYTE: "Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir."
+   BYTE: "Quando o bloco acaba, a tabela dele sai da pilha. Os nomes dele deixam de valer."
 
 10. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ *int main() { x = 2; }* ⏎ *global: x int* ⏎ *main: (sem x)*
    BYTE: "No main, x igual a dois. A tabela do main não tem x, então a busca desce e acha o x global."
@@ -334,9 +334,9 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
 18. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎   } ⏎ *  print(x);* ⏎ } ⏎ *fora: z int, x float*
    BYTE: "O print usa a única tabela que sobrou, a de fora."
 
-19. TELA: # Diga por quê ⏎ dentro: x float fora: z int, x float ⏎ A tabela de dentro é sempre a maior. ⏎ A busca sempre termina na tabela global. ⏎ A busca começa no bloco de dentro.
+19. TELA: # Diga por quê ⏎ dentro: x float fora: z int, x float ⏎ O x de fora foi apagado quando o bloco abriu. ⏎ A busca sempre termina na tabela global. ⏎ A busca começa no bloco de dentro.
    BYTE: "No x igual a x mais um, a busca parou na tabela de dentro. Por quê?"
-   PERGUNTA (toque): certo = A busca começa no bloco de dentro. ; errado = A tabela de dentro é sempre a maior. | A busca sempre termina na tabela global.
+   PERGUNTA (toque): certo = A busca começa no bloco de dentro. ; errado = O x de fora foi apagado quando o bloco abriu. | A busca sempre termina na tabela global.
    se errar: "Em que tabela a busca começa?"
    se acertar: "A busca começa no topo da pilha, o bloco de dentro. O x está ali, então ela para."
 
@@ -422,10 +422,10 @@ BYTE: "Antes da aula: os parênteses entram na AST?"
 Opções: sim | ✔não | só um
 Depois: "Não. A forma da árvore já mostra o agrupamento."
 
-#### AULA ANIMADA BÁSICA: "A árvore enxuta" (19 cenas, ~136s)
+#### AULA ANIMADA BÁSICA: "A árvore enxuta" (22 cenas, ~155s)
 
 1. TELA: # AST ⏎ a + ( b )
-   BYTE: "O parser montou a árvore de derivação. Ela tem um nó para cada regra usada, e fica enorme."
+   BYTE: "O parser segue a árvore de derivação. Ela tem um nó para cada símbolo das regras usadas, e fica enorme."
 
 2. TELA: # AST ⏎ *a + ( b )* ⏎ a ⏎ + ⏎ ( ⏎ b ⏎ )
    BYTE: "Destes cinco pedaços, quais mudam o resultado da conta? Toque neles."
@@ -482,24 +482,36 @@ Depois: "Não. A forma da árvore já mostra o agrupamento."
    se acertar: "Preço e dois são folhas do menos."
 
 15. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ *** ⏎ total ⏎ *-* ⏎ preco ⏎ 2
-   BYTE: "Sem parênteses na árvore, e a ordem continua certa: quem está mais fundo é calculado primeiro."
+   BYTE: "Sem parênteses na árvore, e a ordem continua certa: o filho sai antes do pai."
 
-16. TELA: # Diga por quê ⏎ total * (preco - 2) ⏎ Menos sempre fica embaixo de vezes, em toda conta. ⏎ O menos roda antes, e o vezes usa o resultado. ⏎ O menos tem mais precedência que o vezes.
-   BYTE: "Aqui o menos ficou embaixo do vezes. Por quê?"
+16. TELA: # AST ⏎ a ⏎ - ⏎ b ⏎ - ⏎ c
+   BYTE: "Agora a menos b menos c. Na linha, os dois menos parecem iguais."
+
+17. TELA: # AST ⏎ a ⏎ - ⏎ b ⏎ - ⏎ c ⏎ um nó só, com três filhos
+   BYTE: "Qual dos dois menos fica embaixo na AST? Toque nele."
+   PERGUNTA (toque): certo = - ; errado = - | um nó só, com três filhos
+   se errar: "Na conta da escola, qual menos você faz primeiro?"
+   se acertar: "O da esquerda. A menos b sai primeiro, e o c sai do resultado."
+
+18. TELA: # AST ⏎ a ⏎ *-* ⏎ b ⏎ - ⏎ c ⏎ - ⏎ - ⏎ a ⏎ b ⏎ c ⏎ 10 - 3 - 2 = 5
+   BYTE: "Com dez, três e dois, esta árvore dá cinco. Pendurada para a direita, daria nove."
+
+19. TELA: # Diga por quê ⏎ total * (preco - 2) ⏎ Menos sempre fica embaixo de vezes, em toda conta. ⏎ O menos roda antes, e o vezes usa o resultado. ⏎ O menos tem mais precedência que o vezes.
+   BYTE: "Na conta do preço, o menos ficou embaixo do vezes. Por quê?"
    PERGUNTA (toque): certo = O menos roda antes, e o vezes usa o resultado. ; errado = O menos tem mais precedência que o vezes. | Menos sempre fica embaixo de vezes, em toda conta.
    se errar: "Qual conta precisa sair primeiro para o vezes funcionar?"
    se acertar: "O parêntese manda fazer o menos antes. O vezes usa o resultado dele."
 
-17. TELA: # Erros comuns ⏎ A AST de a * (b - 2) não tem nó para os parênteses. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma da árvore já agrupa. ⏎ Certo: a AST não tem nó de operador. ⏎ Errado: sem o nó, o menos roda depois.
+20. TELA: # Erros comuns ⏎ A AST de a * (b - 2) não tem nó para os parênteses. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma da árvore já agrupa. ⏎ Certo: parêntese nunca muda a conta. ⏎ Errado: sem o nó, o menos roda depois.
    BYTE: "Os parênteses aparecem na AST? Um colega desenhou sem eles. Certo ou errado?"
-   PERGUNTA (toque): certo = Certo: a forma da árvore já agrupa. ; errado = Certo: a AST não tem nó de operador. | Errado: sem o nó, o menos roda depois.
+   PERGUNTA (toque): certo = Certo: a forma da árvore já agrupa. ; errado = Certo: parêntese nunca muda a conta. | Errado: sem o nó, o menos roda depois.
    se errar: "O parêntese muda a forma da árvore. Depois disso, ele ainda serve?"
    se acertar: "Boa. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes."
 
-18. TELA: # Erros comuns ⏎ Certo: A AST de a * (b - 2) não tem nó para os parênteses. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
+21. TELA: # Erros comuns ⏎ Certo: A AST de a * (b - 2) não tem nó para os parênteses. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
    BYTE: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
 
-19. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. Mais fundo é calculado antes.
+22. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. O filho é calculado antes do pai.
    BYTE: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
 
 #### PEGADINHA: "O parêntese não vira nó" (6 cenas, ~32s)
@@ -541,13 +553,13 @@ Depois: "Não. A forma da árvore já mostra o agrupamento."
 
 #### FICHA DO ASSUNTO
 Em uma frase: A árvore sintática abstrata guarda só operadores, operandos e construções (BinOp, Var, Num, Atrib, Se, Enquanto, Bloco), jogando fora correntes de não-terminais, parênteses, pontuação e ε; o parser a constrói (new BinOp no descendente ou $$ = new BinOp(...) no Bison) e as fases seguintes andam nela.
-Gancho: AST = Árvore Sem Tralha: corta o CPE (Correntes, Parênteses, Epsilons). Quem está mais fundo trabalha primeiro.
+Gancho: AST = Árvore Sem Tralha: corta o CPE (Correntes, Parênteses, Epsilons). Filho trabalha antes do pai.
 Termos-chave: abstrat, arvore, classe, binop, parentes, precedenc, parser
 Erros comuns: Criar nós para parênteses ou para não-terminais de corrente (E → T → F) // Montar a AST pendurada para a direita (recursão em vez de laço) e inverter a associatividade de - e / // Achar que sem parênteses a precedência se perde (ela mora na forma da árvore) // Confundir AST (estrutura em árvore) com TAC (lista de instruções gerada a partir dela) // Esquecer $$ = $2 na regra do parêntese ou $$ = $1 nas correntes do Bison
 Flashcards:
     · P: O que a AST joga fora? → R: Correntes de não-terminais, parênteses/pontuação e ε
     · P: Nós da derivação × AST em a + b * c? → R: 13 × 5
-    · P: Onde mora a precedência na AST? → R: Na forma: quem está mais fundo é calculado primeiro
+    · P: Onde mora a precedência na AST? → R: Na forma: o filho é calculado antes do pai
     · P: Linha-chave da associatividade à esquerda no descendente? → R: e = new BinOp(op, e, termo()); dentro do while
     · P: Ação Bison para E → E + T? → R: $$ = new BinOp('+', $1, $3);
     · P: Ação Bison para F → ( E )? → R: $$ = $2; (o parêntese some)

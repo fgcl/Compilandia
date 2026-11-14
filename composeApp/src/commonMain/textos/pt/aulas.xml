@@ -20,7 +20,7 @@
     <string name="epbackend_busca_comeca_na_tabela_topo">A busca começa na tabela do topo.</string>
     <string name="epbackend_isso_x_dentro_esconde_fora">O x de dentro esconde o de fora.</string>
     <string name="epbackend_busca_comeca_no_topo_desce">A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico.</string>
-    <string name="epbackend_quando_bloco_acaba_tabela_sai">Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir.</string>
+    <string name="epbackend_quando_bloco_acaba_tabela_sai">Quando o bloco acaba, a tabela dele sai da pilha. Os nomes dele deixam de valer.</string>
     <string name="epbackend_por_isso_x_igual_dois">No main, x igual a dois. A tabela do main não tem x, então a busca desce e acha o x global.</string>
     <string name="epbackend_main_vazia">main: (sem x)</string>
     <string name="epbackend_arvore_enxuta">A árvore enxuta</string>
@@ -35,8 +35,8 @@
     <string name="epbackend_conta_por_linha">Uma conta por linha</string>
     <string name="epbackend_maquina_nao_entende_conta_comprida">O código de três endereços é um código intermediário: cada linha faz uma conta só, com no máximo três nomes.</string>
     <string name="epbackend_qual_conta_tem_que_sair">Qual conta tem que sair primeiro? Toque no operador.</string>
-    <string name="epbackend_arvore_manda_quem_esta_mais">A árvore manda: quem está mais fundo vem antes.</string>
-    <string name="epbackend_isso_vezes_esta_mais_fundo">É isso. O vezes está mais fundo.</string>
+    <string name="epbackend_arvore_manda_quem_esta_mais">A árvore manda: o filho vem antes do pai.</string>
+    <string name="epbackend_isso_vezes_esta_mais_fundo">É isso. O vezes é filho do mais.</string>
     <string name="epbackend_guardo_resultado_num_temporario_t1">O resultado do vezes não tem nome no programa. O compilador cria um temporário para ele, o t1.</string>
     <string name="epbackend_na_linha_seguinte_arvore_ja">Na linha seguinte, a árvore já pode usar o t1 no lugar do vezes.</string>
     <string name="epbackend_cada_linha_tem_no_maximo">Cada linha tem no máximo três endereços: dois operandos e um resultado. É daí que vem o nome.</string>
@@ -51,10 +51,10 @@
     <string name="epbackend_otimizar_nunca_pode_mudar_resultado">Regra de ouro: otimizar nunca pode mudar o resultado do programa. Só o caminho até ele.</string>
     <string name="epbackend_pilha_chamadas">A pilha de chamadas</string>
     <string name="epbackend_toda_chamada_funcao_ganha_registro">Quando o main chama fat de dois, um registro de ativação é empilhado para essa chamada.</string>
-    <string name="epbackend_fat_n_2_volta_main">fat  n = 2  volta: main</string>
+    <string name="epbackend_fat_n_2_volta_main">fat  n = 2  volta: depois do fat(2)</string>
     <string name="epbackend_ali_moram_parametros_variaveis_locais">No registro ficam os parâmetros, as variáveis locais e o endereço de retorno: o ponto para onde voltar quando a função acabar.</string>
     <string name="epbackend_fat_dois_chama_fat_outro">O fat de dois chama o fat de um. Outro registro sobe, com outro n.</string>
-    <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  volta: fat</string>
+    <string name="epbackend_fat_n_1_volta_fat">fat  n = 1  volta: depois do fat(1)</string>
     <string name="epbackend_so_topo_pilha_esta_rodando">Só o topo da pilha está rodando.</string>
     <string name="epbackend_retornou_registro_sai_controle_volta">Retornou: o registro sai da pilha, e a execução continua no endereço de retorno de quem chamou.</string>
     <string name="epbackend_por_isso_recursao_funciona_cada">Por isso a recursão funciona: cada chamada tem o seu próprio n.</string>
@@ -176,7 +176,7 @@
     <string name="epemc_digito_entra_no_if_valor">É dígito. Entra no if, e o valor começa em zero.</string>
     <string name="epemc_cada_volta_while_junta_digito">Cada volta do while junta um dígito. Agora v vale quatro.</string>
     <string name="epemc_le_2_quatro_vezes_dez">Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois.</string>
-    <string name="epemc_agora_chegou_mais_qual_linha">Agora chegou o mais. Qual linha roda logo depois? Toque nela.</string>
+    <string name="epemc_agora_chegou_mais_qual_linha">Chegou o mais, e o while para. Qual linha roda em seguida? Toque nela.</string>
     <string name="epemc_mais_nao_digito_while_para">O mais não é dígito. O while para.</string>
     <string name="epemc_isso_laco_para_ungetc_devolve">O laço para e o ungetc devolve o mais.</string>
     <string name="epemc_mais_foi_lido_mais_ungetc">O mais foi lido a mais. O ungetc devolve ele para a entrada.</string>
@@ -204,7 +204,7 @@
     <string name="epemc_rode_1_2_3_ate">Rode 1 * 2 + 3 até a pilha esvaziar.</string>
     <string name="epemc_em_c_3_struct_node">Em C 3: o struct Node</string>
     <string name="epemc_na_ast_em_c_cada">Na AST em C, cada nó da árvore é um struct.</string>
-    <string name="epemc_op_guarda_operador_val_guarda">op guarda o operador. val guarda o número.</string>
+    <string name="epemc_op_guarda_operador_val_guarda">op guarda o operador, val guarda o número, e nome guarda a variável.</string>
     <string name="epemc_esq_dir_sao_ponteiros_eles">esq e dir são ponteiros. Eles apontam para os filhos.</string>
     <string name="epemc_para_dois_mais_tres_vezes">Para dois mais três vezes quatro, o parser cria os nós de baixo para cima.</string>
     <string name="epemc_primeiro_folhas_no_para_cada">Primeiro as folhas, um nó para cada número. Depois vem o vezes.</string>
@@ -215,7 +215,7 @@
     <string name="epemc_arvore_isso_structs_ligados_por">A árvore é isso: structs ligados por ponteiros.</string>
     <string name="epemc_em_c_4_arvore_ao">Em C 4: da árvore ao MIPS</string>
     <string name="epemc_gerador_anda_na_arvore_escreve">O gerador anda na árvore e escreve MIPS, uma linha por vez.</string>
-    <string name="epemc_ele_visita_filhos_antes_pai">Ele visita os filhos antes do pai. O primeiro nó pronto é o vezes.</string>
+    <string name="epemc_ele_visita_filhos_antes_pai">Ele visita os filhos antes do pai. As folhas só carregam valor. A primeira conta pronta é o vezes.</string>
     <string name="epemc_vezes_vira_quatro_linhas_carrega">O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda.</string>
     <string name="epemc_qual_no_gerador_visita_agora">Qual nó o gerador visita agora? Toque nele.</string>
     <string name="epemc_dois_filhos_raiz_ja_estao">Os dois filhos da raiz já estão prontos.</string>
@@ -228,6 +228,8 @@
     <string name="epemc_monte_mips_1">Monte o MIPS de %1$s.</string>
     <string name="epemc_em_c_5_flex_bison">Em C 5: flex, bison e o main</string>
     <string name="epemc_0_9_num" translatable="false">[0-9]+  NUM</string>
+    <string name="epemc_calc_l_inteiro">Na tela, os arquivos estavam resumidos. Este é o calc.l inteiro, que compila.</string>
+    <string name="epemc_calc_y_falta">No calc.y, faltam o cabeçalho, a regra que imprime a conta e o yyerror.</string>
     <string name="epemc_yylval_atoi_yytext" translatable="false">yylval = atoi(yytext)</string>
     <string name="epemc_compilador_em_c_verdade_costuma">Um compilador em C de verdade costuma ter três arquivos.</string>
     <string name="epemc_flex_bison_c">flex + bison + C</string>
@@ -259,7 +261,7 @@
     <string name="epgramatica_mas_para_montar_outra_arvore">Mas dá para montar outra árvore, com o mais embaixo.</string>
     <string name="epgramatica_mesma_frase_duas_arvores_isso">Uma mesma frase com duas árvores de derivação diferentes: a gramática é ambígua.</string>
     <string name="epgramatica_nesta_arvore_que_roda_primeiro">Nesta árvore, o que roda primeiro? Toque na resposta.</string>
-    <string name="epgramatica_quem_esta_mais_fundo_na">Quem está mais fundo na árvore acontece antes.</string>
+    <string name="epgramatica_quem_esta_mais_fundo_na">Na árvore, o filho acontece antes do pai.</string>
     <string name="epgramatica_certo_aqui_mais_roda_primeiro">Certo. Aqui o mais roda primeiro, e o resultado sai errado.</string>
     <string name="epgramatica_o">o +</string>
     <string name="epgramatica_o_2">o *</string>
@@ -787,7 +789,7 @@
     <string name="eppegadinhas3_aqui_diferente_para_saber_tipo">Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque.</string>
     <string name="eppegadinhas3_int_esta_no_galho_lado">O int está no galho do lado. Ele precisa atravessar.</string>
     <string name="eppegadinhas3_isso_int_passa_pelo_pai">O int passa pelo pai e desce até a. Isso é herdado.</string>
-    <string name="eppegadinhas3_herdado_vem_pai_ou_irmao">Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado.</string>
+    <string name="eppegadinhas3_herdado_vem_pai_ou_irmao">Herdado vem do pai ou de um irmão. Por isso desce e anda de lado.</string>
     <string name="eppegadinhas3_atribuida_usa_so_sintetizado_l">S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita.</string>
     <string name="eppegadinhas3_sombra_variavel">A sombra da variável</string>
     <string name="eppegadinhas3_dois_x_fora_dentro_dentro">Dois x, um fora e um dentro. O de dentro faz sombra no de fora.</string>
@@ -803,7 +805,7 @@
     <string name="eppegadinhas3_ordem_dos_temporarios">A ordem dos temporários</string>
     <string name="eppegadinhas3_tres_enderecos_no_maximo_conta">Três endereços: no máximo uma conta por linha.</string>
     <string name="eppegadinhas3_qual_conta_vira_primeira_linha">Qual conta vira a primeira linha? Toque no operador.</string>
-    <string name="eppegadinhas3_quem_esta_mais_fundo_na">Quem está mais fundo na árvore roda antes.</string>
+    <string name="eppegadinhas3_quem_esta_mais_fundo_na">O filho roda antes do pai.</string>
     <string name="eppegadinhas3_isso_vezes_vai_primeiro_guarda">O vezes vai primeiro e guarda em t1.</string>
     <string name="eppegadinhas3_primeira_linha_t1_recebe_b">Primeira linha: t1 recebe b vezes c.</string>
     <string name="eppegadinhas3_segunda_linha_t2_recebe_mais">Segunda linha: t2 recebe a mais t1.</string>

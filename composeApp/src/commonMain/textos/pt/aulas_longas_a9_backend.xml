@@ -42,7 +42,7 @@
     <string name="esc_l_01q_dica">Procure a declaração que está entre as chaves de g.</string>
     <string name="esc_l_01q_ok">O float i, declarado dentro de g. O int i de f não vale ali.</string>
     <string name="esc_l_02">Em cada uso do i, o compilador precisa achar a declaração certa.</string>
-    <string name="esc_l_03">O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita.</string>
+    <string name="esc_l_03">O escopo de uma declaração é o trecho do programa onde ela vale. Em C, ela vale da declaração até o fecha-chave do bloco.</string>
     <string name="esc_l_05">Cada bloco tem a sua tabela. A receita cuida da pilha delas.</string>
     <string name="esc_l_r1">1. Abriu bloco: empilhe uma tabela vazia.</string>
     <string name="esc_l_r2">2. Declarou: anote o nome na tabela do topo.</string>
@@ -161,7 +161,7 @@
     <string name="reg_l_02_ok">Por isso cada valor quer um registrador.</string>
     <string name="reg_l_03">Decidir qual valor fica em qual registrador é a alocação de registradores.</string>
     <string name="reg_l_05">A receita começa no código e termina nas cores.</string>
-    <string name="reg_l_r1">1. Vivacidade: quem ainda será lido abaixo?</string>
+    <string name="reg_l_r1">1. Vivacidade: quem ainda será lido adiante?</string>
     <string name="reg_l_r2">2. Interferência: ligue quem vive junto.</string>
     <string name="reg_l_r3">3. Cores: vizinhos diferentes. Sem cor, spill.</string>
     <string name="reg_l_06">O fio entre as duas primeiras variáveis veio de qual passo? Toque.</string>

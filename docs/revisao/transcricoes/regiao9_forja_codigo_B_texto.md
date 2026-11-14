@@ -871,7 +871,7 @@ jr  $ra   # PC := $ra
     opções: Vínculo de acesso (estático) | ✔Vínculo de controle (dinâmico) | Endereço de retorno
     explicação: Controle/dinâmico = cadeia de CHAMADAS. Acesso/estático = cadeia de ANINHAMENTO no texto (útil em linguagens com funções aninhadas, como Pascal). O endereço de retorno aponta para uma INSTRUÇÃO, não para um quadro.
 - WIDGET CALL_STACK entrada=«fat3» legenda: A definição em ação: 4 ativações simultâneas no pico (main + 3 de fat).
-- CAIXA [Dica de prova]: Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. Liste de cima para baixo nessa ordem.
+- CAIXA [Dica de prova]: Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. No MIPS, o `jal` do chamador põe o endereço em `$ra`, e o chamado guarda o `$ra` no quadro. Liste de cima para baixo nessa ordem.
 - CAIXA [Cuidado!]: Endereço de retorno ≠ vínculo de controle. O primeiro diz para qual INSTRUÇÃO voltar; o segundo, qual QUADRO volta a ser o atual.
 
 #### ESTILO MNEMONIC (Truque de memória): "O prédio da memória e o café da manhã do quadro"

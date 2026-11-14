@@ -17,7 +17,7 @@
     <string name="tpguidea_repare_num_detalhe_semantico_gerador">Notice a detail: semantic and generator live **inside** the syntactic phase. It's **one-pass syntax-directed translation**: the parser asks the scanner for a token when it needs one, checks the semantics on the spot and spits out MIPS right away. No giant tree in memory, no second pass. It's the shape that fits a one-semester project.</string>
     <string name="tpguidea_duas_linguagens">**Why two languages?** In the regions, the **In C** series writes a compiler in C and builds the tree (`struct Node`) before generating code. This guide does the project in **Java** and builds no tree: each parser function checks and emits MIPS in the same pass. The idea is one: **one function per grammar rule**. For the project, follow this guide. Use the series to see the tree from the inside. The table below translates the names.</string>
     <string name="tpguidea_equivalencia_titulo">The same roles, with different names</string>
-    <string name="tpguidea_equivalencia_tabela">C (In C series) Java (guide)\nexpr()          exprAdd()\ntermo()         exprMul()\nfator()         primario()\ntok == '+'      eh(MAIS)\ncasa('+')       casaToken(MAIS)\nstruct Node     no tree\ngera()          emite() right away\n\nMAIS = TipoToken.MAIS</string>
+    <string name="tpguidea_equivalencia_tabela">C (In C series) Java (guide)\nexpr()          exprAdd()\ntermo()         exprMul()\nfator()         primario()\ntok.tipo == '+'  eh(MAIS)\ncasa('+')       casaToken(MAIS)\nstruct Node     no tree\ngera()          emite() right away\n\nMAIS = TipoToken.MAIS</string>
     <string name="tpguidea_estrutura_pastas_sugerida">Suggested folder structure</string>
     <string name="tpguidea_errocompilacao_java_todo_erro_compilador">ErroCompilacao.java: EVERY compiler error goes through here, always with the line</string>
     <string name="tpguidea_main_java_maestro_java_17">Main.java: the conductor (Java 17)</string>
@@ -59,7 +59,7 @@
     <string name="tpguidea_ficha_tecnica_byteiro">Byteiro fact sheet</string>
     <string name="tpguidea_tipos_inteiro_32_bits_logico">**Types**: `inteiro` (integer, 32 bits), `logico` (boolean: `verdadeiro`/`falso`), `caractere` (character: `'A'`).</string>
     <string name="tpguidea_comandos_declaracao_inteiro_b_atribuicao">**Statements**: declaration (`inteiro a, b;`), assignment with `&lt;-`, `se`/`senao` (if/else), `enquanto` (while), `escreva(...)` (write), `leia(x)` (read).</string>
-    <string name="tpguidea_expressoes_aritmetica_relacionais_logicas_ou">**Expressions**: arithmetic `+ - * / %`, relational `= &lt;&gt; &lt; &gt; &lt;= &gt;=`, logical `e ou nao` (and, or, not).</string>
+    <string name="tpguidea_expressoes_aritmetica_relacionais_logicas_ou">**Expressions**: arithmetic `+ - * / %`, relational `= &lt;&gt; &lt; &gt; &lt;= &gt;=`, logical `e ou nao` (and, or, not). Note: `e` and `ou` always evaluate both sides, with no short-circuit.</string>
     <string name="tpguidea_comentarios_ate_fim_linha_bloco">**Comments**: `// to the end of the line` and `/* block */`.</string>
     <string name="tpguidea_strings_so_aparecem_dentro_escreva">**Strings** only show up inside `escreva`: there's no string type.</string>
     <string name="tpguidea_tabela_tokens_vai_direto_para">Token table: it goes straight into the report</string>
@@ -123,7 +123,7 @@
     <string name="tpguideb_tirar_recursao_esquerda_fatorar_provar">Remove left recursion, factor, and prove with FIRST/FOLLOW that one token is enough to decide.</string>
     <string name="tpguideb_gramatica_informal_capitulo_2_otima">Chapter 2's informal grammar is great for humans. To become recursive descent, it needs to be **LL(1)**: looking at ONE token, the parser knows which rule to use, with no backtracking and no guessing.</string>
     <string name="tpguideb_tres_checagens_antes_programar">The three checks before programming</string>
-    <string name="tpguideb_1_sem_recursao_esquerda_nenhum">1. **No left recursion**: no `A -&gt; A …`. (In Java that's infinite recursion.)</string>
+    <string name="tpguideb_1_sem_recursao_esquerda_nenhum">1. **No left recursion**: no `A -&gt; A …` (direct) and no `A -&gt; B …` with `B -&gt; A …` (indirect). (In Java that's infinite recursion.)</string>
     <string name="tpguideb_2_fatorada_duas_alternativas_mesmo">2. **Factored**: two alternatives of the same nonterminal can't start the same way.</string>
     <string name="tpguideb_3_first_follow_sem_cruzamento">3. **FIRST/FOLLOW with no overlap**: the FIRST sets of the alternatives are disjoint; and if an alternative can vanish (ε), the FIRST sets of the others don't overlap with FOLLOW.</string>
     <string name="tpguideb_primeira_tentativa_precedencia_certinha_recu">First try: neat precedence… and left recursion in four places</string>
@@ -258,7 +258,7 @@
     <string name="tpguidec_atribuicao_se_enquanto_esquema_traducao">Assignment, se and enquanto: the translation scheme with labels</string>
     <string name="tpguidec_dois_moldes_templates_que_voce">The two templates you'll draw in the report</string>
     <string name="tpguidec_entrada_saida_com_syscall">Input and output with syscall</string>
-    <string name="tpguidec_div_com_tres_operandos_rem">`div` with three operands, `rem`, `seq`, `sne`, `sgt`, `sle` and `sge` are **pseudo-instructions**: MARS expands them into real instructions. They work perfectly on MARS, but if the assignment forbids pseudo-instructions, swap them for `div`+`mflo`/`mfhi` and for combinations of `slt` with `xori`. `li`, `la`, `move` and `lw`/`sw` with a label are pseudo-instructions too: MARS turns `move` into `addu` and builds `li`, `la` and the label with `lui` and `ori`. If the assignment forbids them, write those replacements by hand.</string>
+    <string name="tpguidec_div_com_tres_operandos_rem">`div` with three operands, `rem`, `seq`, `sne`, `sgt`, `sle` and `sge` are **pseudo-instructions**: MARS expands them into real instructions. They work perfectly on MARS, but if the assignment forbids pseudo-instructions, swap them for `div`+`mflo`/`mfhi` and for combinations of `slt` with `xori`. `li`, `la`, `move` and `lw`/`sw` with a label are pseudo-instructions too: MARS turns `move` into `addu`; `la` becomes `lui` + `ori`; `lw` with a label becomes `lui` + `lw` with an offset; and `li` with a small value becomes `addiu`. If the assignment forbids them, write those replacements by hand.</string>
     <string name="tpguidec_novo_contagem_byt_capitulo_2">contagem.byt from chapter 2 again…</string>
     <string name="tpguidec_saida_asm_completo_que_nosso">…and the COMPLETE saida.asm our compiler generates for it</string>
     <string name="tpguidec_rodando_no_mars">Running it on MARS</string>
@@ -332,7 +332,7 @@
     <string name="tpguided_linha_assert_que_economiza_noite">One 'assert' line that saves a night of debugging</string>
     <string name="tpguided_alguem_escreveu_no_lexico_if">Someone wrote in the scanner: `if (lexema == "senao") …`. What happens?</string>
     <string name="tpguided_funciona_sempre">It always works</string>
-    <string name="tpguided_vezes_nao_reconhece_palavra_em">Sometimes it doesn't recognize the word: `==` on Strings compares REFERENCES, not content</string>
+    <string name="tpguided_vezes_nao_reconhece_palavra_em">It never recognizes the word: the lexeme is a new object, and `==` on Strings compares REFERENCES, not content</string>
     <string name="tpguided_funciona_so_no_windows">It only works on Windows</string>
     <string name="tpguided_em_java_entre_strings_pergunta">In Java, `==` between Strings asks 'is it the same object?'. The lexeme built in a StringBuilder is a NEW object, so the comparison fails. Use `equals`: or, even better, the HashMap of reserved words and enums as in chapter 3.</string>
     <string name="tpguided_rotulos_nomes_colidindo_dois_se">**Colliding labels and names.** Two nested `se` generating the same label, or a variable called `main`, `j` or `b` turning into a raw label. The counter in the labels and the `_N` suffix on variables fix it; have a test with `inteiro j, b, main;`.</string>
