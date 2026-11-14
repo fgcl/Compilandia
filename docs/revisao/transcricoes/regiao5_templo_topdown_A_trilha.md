@@ -383,7 +383,7 @@ Flashcards:
 
 ## ASSUNTO LL1_TABLE: Tabela LL(1)
 Pré-requisitos no jogo: Conjunto FIRST, Conjunto FOLLOW, Recursão à esquerda, Fatoração à esquerda
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «A tabela de decisões» → Fazer com ajuda → Programar o Byte → Pegadinha «Duas regras, uma casa só» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «A tabela de decisões» → Fazer com ajuda → Programar o Byte → Pegadinha «Duas regras, uma casa só» → Questão de prova → Desafio
 Jogos que treinam: Sudoku LL(1) (encaixar produções na tabela), Torre da Pilha (operar a pilha do analisador preditivo), Programador Descendente (montar o código do parser)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: Byte com a pilha
 
@@ -731,6 +731,9 @@ Flashcards:
     · P: Expandir A → ε faz o quê na pilha? → R: Só desempilha A.
     · P: O analisador preditivo faz backtracking? → R: Nunca.
 
+#### GLOSSÁRIO (balão ao tocar no termo)
+- parser descendente: Monta a árvore da raiz às folhas. Também: top-down, de cima para baixo. Preditivo escolhe pelo próximo token.
+
 
 ## ASSUNTO RECURSIVE_DESCENT: Descida recursiva
 Pré-requisitos no jogo: Analisador preditivo (pilha)
@@ -887,10 +890,10 @@ Depois: "Duas: T e X."
     · [F] Descida recursiva roda E -> E + T como está. → Ela entraria em recursão infinita.
 
 #### FICHA DO ASSUNTO
-Em uma frase: Descida recursiva: uma função por não-terminal; o lookahead escolhe a produção, terminais viram match e não-terminais viram chamadas.
-Gancho: Uma variável, uma função; um terminal, um match. Recursão à esquerda = cachorro correndo atrás do rabo.
+Em uma frase: Descida recursiva: uma função por não-terminal; o lookahead escolhe a produção, terminais viram casa() e não-terminais viram chamadas.
+Gancho: Uma variável, uma função; um terminal, um casa(). Recursão à esquerda = cachorro correndo atrás do rabo.
 Termos-chave: função, não-terminal, lookahead, match, recursão à esquerda, first
-Erros comuns: Usar gramática com recursão à esquerda (laço infinito). // Não fatorar à esquerda (um token não decide). // Esquecer de verificar $ no fim: S() pode retornar com tokens sobrando. // Avançar o token dentro de uma chamada de não-terminal sem dar match. // Achar que descida recursiva é bottom-up.
+Erros comuns: Usar gramática com recursão à esquerda (laço infinito). // Não fatorar à esquerda (um token não decide). // Esquecer de verificar $ no fim: S() pode retornar com tokens sobrando. // Avançar o token dentro de uma chamada de não-terminal sem chamar casa(). // Achar que descida recursiva é bottom-up.
 Flashcards:
     · P: Quantas funções? → R: Uma por não-terminal.
     · P: Terminal no lado direito vira? → R: match(terminal).
@@ -900,6 +903,10 @@ Flashcards:
     · P: Por que recursão à esquerda quebra? → R: A() chama A() sem consumir token: laço infinito.
     · P: Recursão à direita é problema? → R: Não: cada chamada consome token antes.
     · P: Que classe de gramáticas a forma preditiva aceita? → R: LL(1).
+
+#### GLOSSÁRIO (balão ao tocar no termo)
+- descida recursiva: Parser descendente programado com uma função por não-terminal e casa() para cada terminal.
+- casa(): Confere o token esperado e avança a entrada. No Guia do TP, casaToken; em inglês, match.
 
 
 ## ASSUNTO ERROR_RECOVERY: Erros sintáticos e recuperação

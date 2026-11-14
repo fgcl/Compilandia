@@ -112,7 +112,7 @@
     <string name="lessonspart1_mais_fundo_longe_raiz">Mais fundo (longe da raiz)</string>
     <string name="lessonspart1_recursao_esquerda_qual_associatividade">Recursão à esquerda dá qual associatividade?</string>
     <string name="lessonspart1_esquerda">À esquerda</string>
-    <string name="lessonspart1_else_pendurado_com_quem_else">Else pendurado: com quem o else casa?</string>
+    <string name="lessonspart1_else_pendurado_com_quem_else">Else solto: com quem o else casa?</string>
     <string name="lessonspart1_com_if_mais_proximo_sem">Com o if mais próximo sem else</string>
     <string name="lessonspart1_decidir_se_glc_ambigua_decidivel">Decidir se uma GLC é ambígua é decidível?</string>
     <string name="lessonspart1_nao_indecidivel">Não, é indecidível</string>
@@ -146,7 +146,7 @@
     <string name="lessonspart1_qual_prefixo_usar">Qual prefixo usar?</string>
     <string name="lessonspart1_maior_prefixo_comum_duas_ou">O maior prefixo comum a todas as alternativas do grupo (as que começam com o mesmo símbolo)</string>
     <string name="lessonspart1_fatore_x_y_z_x">Fatore A → x y z | x y</string>
-    <string name="lessonspart1_else_pendurado_fatorado">Else pendurado fatorado?</string>
+    <string name="lessonspart1_else_pendurado_fatorado">Else solto fatorado?</string>
     <string name="lessonspart1_fatorar_resolve_ambiguidade">Fatorar resolve ambiguidade?</string>
     <string name="lessonspart1_fatorada_sem_recursao_esquerda_ll">Fatorada e sem recursão à esquerda ⇒ LL(1)?</string>
     <string name="lessonspart1_nao_necessariamente">Não necessariamente</string>
@@ -623,7 +623,7 @@
     <string name="lessonspart1b_id_id_id_ou_id">(id + id) + id ou id + (id + id). Com + o valor coincide, mas com - não: (5 - 3) - 1 ≠ 5 - (3 - 1). É um problema de **associatividade**.</string>
     <string name="lessonspart1b_associatividade_quem_se_junta_primeiro">Associatividade: quem se junta primeiro?</string>
     <string name="lessonspart1b_na_gramatica_t_f_recursao">Na gramática E/T/F a recursão à esquerda força (id + id) + id.</string>
-    <string name="lessonspart1b_famoso_else_pendurado">E o famoso 'else pendurado'?</string>
+    <string name="lessonspart1b_famoso_else_pendurado">E o famoso 'else solto'?</string>
     <string name="lessonspart1b_i_if_cond_then_else">i = 'if (cond) then', e = 'else', x = um comando qualquer</string>
     <string name="lessonspart1b_i_i_x_x" translatable="false">i i x e x</string>
     <string name="lessonspart1b_else_pertence_ao_primeiro_if">O else pertence ao primeiro if ou ao segundo?</string>
@@ -683,7 +683,7 @@
     <string name="lessonspart1b_fato_nao_existe_algoritmo_que">**Fato.** Não existe algoritmo que decida se uma GLC arbitrária é ambígua (o problema é indecidível).</string>
     <string name="lessonspart1b_desambiguacao_expressoes_nivel_por_precedenc">Desambiguação de expressões (um nível por precedência):\n  E → E + T | T        (+ : menor precedência, assoc. à esquerda)\n  T → T * F | F        (* : maior precedência, assoc. à esquerda)\n  F → ( E ) | id       (átomos)\nRegras:\n  operador de MENOR precedência fica mais perto da raiz;\n  recursão à ESQUERDA → associatividade à esquerda;\n  recursão à DIREITA  → associatividade à direita (ex.: ^).</string>
     <string name="lessonspart1b_stmt_matched_stmt_open_stmt" translatable="false">stmt → matched_stmt | open_stmt\nmatched_stmt → if ( expr ) matched_stmt else matched_stmt | other\nopen_stmt → if ( expr ) stmt\n          | if ( expr ) matched_stmt else open_stmt</string>
-    <string name="lessonspart1b_else_pendurado_sem_ambiguidade_livro">Else pendurado sem ambiguidade (Livro do Dragão, §4.3.2)</string>
+    <string name="lessonspart1b_else_pendurado_sem_ambiguidade_livro">Else solto sem ambiguidade (Livro do Dragão, §4.3.2)</string>
     <string name="lessonspart1b_para_provar_que_g_ambigua">Para provar que G é ambígua, é suficiente mostrar…</string>
     <string name="lessonspart1b_derivacao_lm_outra_rm_diferentes_2">uma derivação ⇒lm e outra ⇒rm diferentes para w</string>
     <string name="lessonspart1b_duas_derivacoes_lm_diferentes_para">duas derivações ⇒lm diferentes para a mesma w</string>
@@ -703,7 +703,7 @@
     <string name="lessonspart1b_precedencia_profundidade_quem_tem_mais">**Precedência = profundidade.** Quem tem MAIS precedência fica MAIS FUNDO na árvore (é calculado antes). O + fica perto da raiz; o * mais embaixo.</string>
     <string name="lessonspart1b_recursao_aponta_associatividade_t_recursao">**A recursão aponta a associatividade.** E → **E** + T: recursão à esquerda → associa à esquerda. P → B ^ **P**: recursão à direita → associa à direita.</string>
     <string name="lessonspart1b_palacio_memoria_no_vale_das">**Palácio da memória**: no Vale das Gramáticas há duas árvores gêmeas plantadas lado a lado, com a mesma placa: `id + id * id`. É o minijogo **Duas Árvores**.</string>
-    <string name="lessonspart1b_else_pendurado_casa_com_vizinho">**Else pendurado casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.</string>
+    <string name="lessonspart1b_else_pendurado_casa_com_vizinho">**Else solto casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.</string>
     <string name="lessonspart1b_em_2_3_2_potencia">Em `2 ^ 3 ^ 2` (potência, associativa à direita), qual o agrupamento correto?</string>
     <string name="lessonspart1b_associativa_direita_mais_direita_se">Associativa à direita: o de mais à direita se junta primeiro. 3² = 9, e 2⁹ = 512.</string>
     <string name="lessonspart1b_confusoes_classicas_1_achar_que_2">Confusões clássicas: (1) achar que ambiguidade é da linguagem, quase sempre é da gramática; (2) achar que recursão à esquerda causa ambiguidade, E → E + T é recursiva à esquerda e NÃO é ambígua; (3) achar que dá para testar ambiguidade automaticamente sempre (é indecidível).</string>
@@ -827,7 +827,7 @@
     <string name="lessonspart1c_sim_so_alternativa_comeca_com">Sim: só uma alternativa de S começa com if</string>
     <string name="lessonspart1c_agora_ha_unica_alternativa_com">Agora há uma única alternativa com if. A dúvida 'tem else ou não?' fica para S', quando o token else (ou outro) já estiver à vista.</string>
     <string name="lessonspart1c_p_fatoracao_muda_linguagem_r">P: A fatoração muda a linguagem? R: Não. Só reorganiza as produções, assim como a(b + c) = ab + ac.</string>
-    <string name="lessonspart1c_fatorar_nao_tira_ambiguidade_else">Fatorar NÃO tira ambiguidade. O else pendurado continua ambíguo: ao ver else, S' ainda poderia escolher 'else S' ou ε. Casar com o if mais próximo continua sendo uma regra extra.</string>
+    <string name="lessonspart1c_fatorar_nao_tira_ambiguidade_else">Fatorar NÃO tira ambiguidade. O else solto continua ambíguo: ao ver else, S' ainda poderia escolher 'else S' ou ε. Casar com o if mais próximo continua sendo uma regra extra.</string>
     <string name="lessonspart1c_na_analogia_que_submenu">Na analogia, o que é o 'submenu'?</string>
     <string name="lessonspart1c_novo_nao_terminal_guarda_restos">O novo não-terminal (S', A'…): guarda os 'restos' depois do prefixo comum, e a decisão fica para depois.</string>
     <string name="lessonspart1c_fatorando_ao_vivo">Fatorando ao vivo</string>
@@ -888,7 +888,7 @@
     <string name="lessonspart1c_nao_perde_cadeias">Não, perde cadeias</string>
     <string name="lessonspart1c_com_1_2_gera_exatamente">αA' com A' → β₁ | β₂ gera exatamente αβ₁ e αβ₂, é a propriedade distributiva.</string>
     <string name="lessonspart1c_gramatica_fatorada_sem_recursao_esquerda">Uma gramática fatorada e sem recursão à esquerda é necessariamente LL(1)?</string>
-    <string name="lessonspart1c_sao_condicoes_necessarias_nao_suficientes">São condições necessárias, não suficientes. O else pendurado fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).</string>
+    <string name="lessonspart1c_sao_condicoes_necessarias_nao_suficientes">São condições necessárias, não suficientes. O else solto fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).</string>
     <string name="lessonspart1c_ordem_segura_numa_questao_torne">Ordem segura numa questão 'torne LL(1)': (1) elimine a recursão à esquerda; (2) fatore à esquerda; (3) calcule FIRST e FOLLOW; (4) monte a tabela e verifique se alguma célula tem mais de uma produção.</string>
     <string name="lessonspart1c_nao_confunda_fatoracao_trata_prefixos">Não confunda: fatoração trata PREFIXOS COMUNS (A → αβ₁ | αβ₂); recursão à esquerda trata A → Aα. Problemas diferentes, receitas diferentes, e ambos atrapalham o LL(1).</string>
     <string name="lessonspart1c_escreva_forma_geral_fatoracao">Escreva a forma geral da fatoração.</string>
@@ -990,13 +990,13 @@
     <string name="lessonspart2_expandir_faz_que_na_pilha">Expandir A → ε faz o quê na pilha?</string>
     <string name="lessonspart2_so_desempilha">Só desempilha A.</string>
     <string name="lessonspart2_analisador_preditivo_faz_backtracking">O analisador preditivo faz backtracking?</string>
-    <string name="lessonspart2_descida_recursiva_funcao_por_nao">Descida recursiva: uma função por não-terminal; o lookahead escolhe a produção, terminais viram match e não-terminais viram chamadas.</string>
-    <string name="lessonspart2_variavel_funcao_terminal_match_recursao">Uma variável, uma função; um terminal, um match. Recursão à esquerda = cachorro correndo atrás do rabo.</string>
+    <string name="lessonspart2_descida_recursiva_funcao_por_nao">Descida recursiva: uma função por não-terminal; o lookahead escolhe a produção, terminais viram casa() e não-terminais viram chamadas.</string>
+    <string name="lessonspart2_variavel_funcao_terminal_match_recursao">Uma variável, uma função; um terminal, um casa(). Recursão à esquerda = cachorro correndo atrás do rabo.</string>
     <string name="lessonspart2_funcao">função</string>
     <string name="lessonspart2_usar_gramatica_com_recursao_esquerda">Usar gramática com recursão à esquerda (laço infinito).</string>
     <string name="lessonspart2_nao_fatorar_esquerda_token_nao">Não fatorar à esquerda (um token não decide).</string>
     <string name="lessonspart2_esquecer_verificar_no_fim_pode">Esquecer de verificar $ no fim: S() pode retornar com tokens sobrando.</string>
-    <string name="lessonspart2_avancar_token_dentro_chamada_nao">Avançar o token dentro de uma chamada de não-terminal sem dar match.</string>
+    <string name="lessonspart2_avancar_token_dentro_chamada_nao">Avançar o token dentro de uma chamada de não-terminal sem chamar casa().</string>
     <string name="lessonspart2_achar_que_descida_recursiva_bottom">Achar que descida recursiva é bottom-up.</string>
     <string name="lessonspart2_quantas_funcoes">Quantas funções?</string>
     <string name="lessonspart2_por_nao_terminal">Uma por não-terminal.</string>
@@ -1035,10 +1035,10 @@
     <string name="lessonspart2_nao_para_decidir_qual_producao">Não dá para decidir qual produção reduzir.</string>
     <string name="lessonspart2_que_significa_r_lr">O que significa o R de LR?</string>
     <string name="lessonspart2_rightmost_derivacao_mais_direita_ao">Rightmost: derivação mais à direita (ao contrário).</string>
-    <string name="lessonspart2_item_lr_0_producao_com">Item LR(0) é uma produção com um ponto marcando o progresso; o fechamento acrescenta B → •γ quando o ponto está antes de B, e o desvio avança o ponto sobre um símbolo e fecha.</string>
+    <string name="lessonspart2_item_lr_0_producao_com">Item LR(0) é uma produção com um ponto marcando o progresso; o fecho acrescenta B → •γ quando o ponto está antes de B, e o desvio avança o ponto sobre um símbolo e fecha.</string>
     <string name="lessonspart2_ponto_voce_esta_aqui_closure">Ponto = 'você está aqui'. Closure = convida a família. Goto = chuta o ponto um passo e comemora com a família.</string>
-    <string name="lessonspart2_esquecer_aplicar_fechamento_depois_goto">Esquecer de aplicar o fechamento depois do goto.</string>
-    <string name="lessonspart2_no_fechamento_adicionar_itens_com">No fechamento, adicionar itens com o ponto fora do começo.</string>
+    <string name="lessonspart2_esquecer_aplicar_fechamento_depois_goto">Esquecer de aplicar o fecho depois do goto.</string>
+    <string name="lessonspart2_no_fechamento_adicionar_itens_com">No fecho, adicionar itens com o ponto fora do começo.</string>
     <string name="lessonspart2_fechar_sobre_terminais_so_nao">Fechar sobre terminais (só não-terminais após o ponto convidam produções).</string>
     <string name="lessonspart2_criar_estado_novo_para_conjunto">Criar um estado novo para um conjunto de itens que já existe.</string>
     <string name="lessonspart2_esquecer_gramatica_aumentada">Esquecer a gramática aumentada S' → S.</string>
@@ -1536,7 +1536,7 @@
     <string name="lessonspart2c_gramatica_dos_comandos_reparticao">A gramática dos comandos da repartição.</string>
     <string name="lessonspart2c_como_funcionario_sabe_que_fazer">E como o funcionário S sabe o que fazer?</string>
     <string name="lessonspart2c_ele_olha_senha_proximo_cliente">Ele olha a **senha do próximo cliente**: o token de lookahead. Senha 'if'? Segue o roteiro de S → if E then S. Senha 'print'? Roteiro de S → print E.</string>
-    <string name="lessonspart2c_seguir_roteiro_simples_para_cada">Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**match**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**).</string>
+    <string name="lessonspart2c_seguir_roteiro_simples_para_cada">Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**casa()**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**).</string>
     <string name="lessonspart2c_recebeu_senha_begin_qual_sequencia">S recebeu a senha 'begin'. Qual é a sequência de ações do funcionário S?</string>
     <string name="lessonspart2c_chama">Chama E()</string>
     <string name="lessonspart2c_roteiro_begin_l_end_confere">É o roteiro de S → begin L end: confere 'begin', manda para o L, confere 'end'.</string>
@@ -1550,13 +1550,13 @@
     <string name="lessonspart2c_gcc_clang_compiladores_c_c">GCC e Clang, compiladores de C/C++ usados no mundo inteiro, usam analisadores de descida recursiva escritos à mão: fáceis de ler e ótimos para mensagens de erro.</string>
     <string name="lessonspart2c_vendo_funcoes_se_chamarem">Vendo as funções se chamarem</string>
     <string name="lessonspart2c_vamos_ver_descida_recursiva_acontecendo">Vamos ver a descida recursiva acontecendo: cada passo da derivação é uma chamada de função.</string>
-    <string name="lessonspart2c_fun_t_elinha_fun_elinha">fun E() { T(); Elinha() }\nfun Elinha() {\n  if (look == "+") { match("+"); T(); Elinha() }\n  // senão: ε (look deve estar em FOLLOW(E') = { ), $ })\n}\nfun T() { F(); Tlinha() }\nfun Tlinha() {\n  if (look == "*") { match("*"); F(); Tlinha() }\n}\nfun F() {\n  when (look) {\n    "("  -&gt; { match("("); E(); match(")") }\n    "id" -&gt; match("id")\n    else -&gt; erro("esperava ( ou id")\n  }\n}</string>
+    <string name="lessonspart2c_fun_t_elinha_fun_elinha">fun E() { T(); Elinha() }\nfun Elinha() {\n  if (look == "+") { casa("+"); T(); Elinha() }\n  // senão: ε (look deve estar em FOLLOW(E') = { ), $ })\n}\nfun T() { F(); Tlinha() }\nfun Tlinha() {\n  if (look == "*") { casa("*"); F(); Tlinha() }\n}\nfun F() {\n  when (look) {\n    "("  -&gt; { casa("("); E(); casa(")") }\n    "id" -&gt; casa("id")\n    else -&gt; erro("esperava ( ou id")\n  }\n}</string>
     <string name="lessonspart2c_funcao_por_nao_terminal_virou">Uma função por não-terminal (E' virou Elinha, T' virou Tlinha).</string>
     <string name="lessonspart2c_cada_expansao_desta_derivacao_mais">Cada expansão desta derivação mais à esquerda corresponde a uma chamada de função do código acima.</string>
     <string name="lessonspart2c_chamadas_para_id_id">Chamadas para id * id</string>
     <string name="lessonspart2c_chama_t">E() chama T().</string>
-    <string name="lessonspart2c_t_chama_f_f_ve">T() chama F(); F() vê 'id' e faz match(id).</string>
-    <string name="lessonspart2c_t_chama_tlinha_ve_match">T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.</string>
+    <string name="lessonspart2c_t_chama_f_f_ve">T() chama F(); F() vê 'id' e faz casa(id).</string>
+    <string name="lessonspart2c_t_chama_tlinha_ve_match">T() chama Tlinha(); vê '*': casa(*), F() casa o segundo id, Tlinha() de novo.</string>
     <string name="lessonspart2c_tlinha_ve_nao_faz_nada">Tlinha() vê $: não faz nada (ε) e retorna.</string>
     <string name="lessonspart2c_volta_em_que_chama_elinha">De volta em E(), que chama Elinha(); vê $: ε, retorna.</string>
     <string name="lessonspart2c_retorna_com_look_sucesso">E() retorna com look = $: sucesso!</string>
@@ -1569,9 +1569,9 @@
     <string name="lessonspart2c_dois_primeiro_t_filho_t">Dois: o primeiro T' (filho de T) expande para * F T', e o T' de dentro vira ε. Cada chamada de Tlinha() é um nó T'.</string>
     <string name="lessonspart2c_exemplo_resolvido_funcoes_das_declaracoes">Exemplo resolvido: funções das declarações</string>
     <string name="lessonspart2c_exercicio_prova_escreva_analisador_descida">Exercício de prova: escreva um analisador de descida recursiva para as declarações.</string>
-    <string name="lessonspart2c_receita_funcao_por_nao_terminal">Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `match(t)` que confere e avança.</string>
+    <string name="lessonspart2c_receita_funcao_por_nao_terminal">Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `casa(t)` que confere e avança.</string>
     <string name="lessonspart2c_conferir_senha">O 'conferir a senha'.</string>
-    <string name="lessonspart2c_fun_d_t_l_match">fun D() { T(); L(); match(";") }      // produção única\n\nfun T() {\n  when (look) {\n    "int"   -&gt; match("int")\n    "float" -&gt; match("float")\n    else    -&gt; erro("esperava um tipo")\n  }\n}\n\nfun L() { match("id"); R() }          // L → id R</string>
+    <string name="lessonspart2c_fun_d_t_l_match">fun D() { T(); L(); casa(";") }      // produção única\n\nfun T() {\n  when (look) {\n    "int"   -&gt; casa("int")\n    "float" -&gt; casa("float")\n    else    -&gt; erro("esperava um tipo")\n  }\n}\n\nfun L() { casa("id"); R() }          // L → id R</string>
     <string name="lessonspart2c_d_t_l_resolvidos_d">D, T e L resolvidos. D e L têm uma produção só: nem precisam olhar o lookahead.</string>
     <string name="lessonspart2c_r_que_tem">E o R, que tem ε?</string>
     <string name="lessonspart2c_esse_fica_para_voce_pense">Esse fica para você. Pense: qual token faz R escolher R → , id R? E qual faz escolher R → ε?</string>
@@ -1580,12 +1580,12 @@
     <string name="lessonspart2c_qual_escolhe_r">E qual escolhe R → ε?</string>
     <string name="lessonspart2c_follow_r_qualquer_outro_token">';': é FOLLOW(R). Qualquer outro token é erro.</string>
     <string name="lessonspart2c_escreva_r_completo">Escreva R() completo.</string>
-    <string name="lessonspart2c_fun_r_when_look_match">fun R() { when (look) { "," -&gt; { match(","); match("id"); R() };  ";" -&gt; { /* ε: não consome nada */ };  else -&gt; erro("esperava , ou ;") } }</string>
+    <string name="lessonspart2c_fun_r_when_look_match">fun R() { when (look) { "," -&gt; { casa(","); casa("id"); R() };  ";" -&gt; { /* ε: não consome nada */ };  else -&gt; erro("esperava , ou ;") } }</string>
     <string name="lessonspart2c_cada_no_interno_chamada_repare">Cada nó interno = uma chamada. Repare no R chamando R: recursão à DIREITA, inofensiva.</string>
     <string name="lessonspart2c_nas_producoes_com_deixe_teste">Nas produções com ε, deixe o teste explícito: 'se look ∈ FOLLOW(A), não faz nada; senão, erro'. Detectar o erro cedo (no else) costuma valer ponto.</string>
     <string name="lessonspart2c_inventando_descida_recursiva">Inventando a descida recursiva</string>
     <string name="lessonspart2c_vamos_inventar_descida_recursiva_zero">Vamos inventar a descida recursiva do zero. Objetivo: uma função que reconheça 'tudo que S gera'.</string>
-    <string name="lessonspart2c_siga_lado_direito_esquerda_para">Siga o lado direito da esquerda para a direita: terminal vira match; não-terminal vira chamada da função dele.</string>
+    <string name="lessonspart2c_siga_lado_direito_esquerda_para">Siga o lado direito da esquerda para a direita: terminal vira casa(); não-terminal vira chamada da função dele.</string>
     <string name="lessonspart2c_tenta_primeira_se_falhar_volta">Tenta a primeira e, se falhar, volta atrás</string>
     <string name="lessonspart2c_olha_token_primeira_c_segunda">Olha o token: 'a' → primeira, 'c' → segunda</string>
     <string name="lessonspart2c_sempre_primeira">Sempre a primeira</string>
@@ -1607,9 +1607,9 @@
     <string name="lessonspart2c_mesmo_token_x_abre_duas">O mesmo token x abre as duas alternativas: sem fatorar, só com backtracking.</string>
     <string name="lessonspart2c_veja_fatoracao_deixando_gramatica_pronta">Veja a fatoração deixando a gramática pronta para virar funções.</string>
     <string name="lessonspart2c_resuma_com_suas_palavras_como">Resuma com suas palavras como construir uma descida recursiva.</string>
-    <string name="lessonspart2c_funcao_por_nao_terminal_lookahead">Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, match para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).</string>
+    <string name="lessonspart2c_funcao_por_nao_terminal_lookahead">Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, casa() para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).</string>
     <string name="lessonspart2c_if_id_then_print_id" translatable="false">if id then print id</string>
-    <string name="lessonspart2c_treino_imagine_match_if_match">Treino: imagine S() → match(if), E(), match(then), S()… e confira com a árvore.</string>
+    <string name="lessonspart2c_treino_imagine_match_if_match">Treino: imagine S() → casa(if), E(), casa(then), S()… e confira com a árvore.</string>
     <string name="lessonspart2c_descida_recursiva_definicao_prova">Descida recursiva: definição de prova</string>
     <string name="lessonspart2c_definicao_prova_no_estilo_livro">Definição de prova, no estilo do Livro do Dragão.</string>
     <string name="lessonspart2c_analisador_descida_recursiva_conjunto_proced">Um **analisador de descida recursiva** é um conjunto de procedimentos, um para cada não-terminal. A execução começa pelo procedimento do símbolo inicial e tem sucesso se ele termina tendo consumido toda a entrada.</string>
@@ -1630,12 +1630,12 @@
     <string name="lessonspart2c_exercicio_tipico_escreva_l">Exercício típico: escreva S(), L() e E().</string>
     <string name="lessonspart2c_escreva_l_para_l_l">Escreva L() para L → S L | ε.</string>
     <string name="lessonspart2c_l_se_look_if_print">L() { se look ∈ {if, print, begin}: S(); L()   senão se look = end: retorna (ε)   senão: erro() }</string>
-    <string name="lessonspart2c_na_prova_1_elimine_recursao">Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o match e a checagem final do $ (principal: S(); se look ≠ $, erro).</string>
+    <string name="lessonspart2c_na_prova_1_elimine_recursao">Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o casa() e a checagem final do $ (principal: S(); se look ≠ $, erro).</string>
     <string name="lessonspart2c_por_que_recursao_direita_l">Por que a recursão à DIREITA (L → S L) não causa problema?</string>
     <string name="lessonspart2c_porque_antes_chamar_l_novo">Porque antes de chamar L() de novo, S() consome pelo menos um token. A entrada diminui a cada chamada, então a recursão termina.</string>
     <string name="lessonspart2c_variavel_funcao">Uma variável, uma função</string>
     <string name="lessonspart2c_ultimo_corredor_templo_top_down">Último corredor do Templo Top-Down: uma fileira de portas, cada uma com o nome de um não-terminal. Atrás de cada porta, um funcionário que pode abrir outras portas.</string>
-    <string name="lessonspart2c_variavel_funcao_terminal_match">**'Uma variável, uma função. Um terminal, um match.'**</string>
+    <string name="lessonspart2c_variavel_funcao_terminal_match">**'Uma variável, uma função. Um terminal, um casa().'**</string>
     <string name="lessonspart2c_recursao_esquerda_cachorro_correndo_atras">**Recursão à esquerda = cachorro correndo atrás do rabo.** E() chama E() que chama E()… e nunca sai do lugar, porque não come nenhum token.</string>
     <string name="lessonspart2c_olha_senha_antes_atender_lookahead">**'Olha a senha antes de atender.'** O lookahead é a senha do cliente: o FIRST escolhe o roteiro; o FOLLOW autoriza o 'não faço nada' (ε).</string>
     <string name="lessonspart2c_eu_entrego_tokens_ja_cortadinhos">Eu entrego os tokens já cortadinhos. A função só precisa espiar o próximo: nada de reler texto!</string>
@@ -1648,7 +1648,7 @@
     <string name="lessonspart2c_qual_gramatica_nao_serve_para">Qual gramática NÃO serve para descida recursiva preditiva sem transformar?</string>
     <string name="lessonspart2c_cada_no_interno_porta_aberta">Cada nó interno = uma porta aberta (uma função chamada). Conte: D, T, L, R.</string>
     <string name="lessonspart2c_recite_dois_ganchos_principais">Recite os dois ganchos principais.</string>
-    <string name="lessonspart2c_variavel_funcao_terminal_match_recursao">'Uma variável, uma função; um terminal, um match.' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'</string>
+    <string name="lessonspart2c_variavel_funcao_terminal_match_recursao">'Uma variável, uma função; um terminal, um casa().' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'</string>
     <string name="lessonspart2c_montando_lego_baixo_para_cima">Montando Lego de baixo para cima</string>
     <string name="lessonspart2c_bem_vindo_fortaleza_bottom_up">Bem-vindo à Fortaleza Bottom-Up! Aqui ninguém prevê nada: a gente constrói de baixo para cima.</string>
     <string name="lessonspart2c_imagine_montar_lego_seguindo_manual">Imagine montar um Lego seguindo o manual de trás pra frente. Você pega as pecinhas uma a uma (**empilhar**, shift). Quando as peças do topo formam um 'kit' do manual, você as encaixa num bloco maior (**reduzir**, reduce).</string>
@@ -1749,7 +1749,7 @@
     <string name="lessonspart2c_sequencia_reducoes_analisador_empilha_reduz">A sequência de reduções de um analisador empilha-reduz, lida de trás para frente, corresponde a:</string>
     <string name="lessonspart2c_arvore_ambigua">Uma árvore ambígua</string>
     <string name="lessonspart2c_bottom_up_derivacao_mais_direita">Bottom-up = derivação mais à direita (rightmost) ao contrário. É o R de LR.</string>
-    <string name="lessonspart2c_shift_reduce_nao_para_decidir">**shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else pendurado).</string>
+    <string name="lessonspart2c_shift_reduce_nao_para_decidir">**shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else solto).</string>
     <string name="lessonspart2c_reduce_reduce_nao_para_decidir">**reduce/reduce**: não dá para decidir qual redução fazer.</string>
     <string name="lessonspart2c_gramaticas_com_conflito_para_metodo">Gramáticas com conflito para um método não pertencem à classe dele (ex.: não são SLR(1)). Gramáticas ambíguas sempre geram conflito.</string>
     <string name="lessonspart2c_siga_definicoes_na_analise_id">Siga as definições na análise de ( id ).</string>
@@ -1782,8 +1782,8 @@
     <string name="lessonspart2c_tipo_barra_progresso_download">Tipo a barra de progresso do download?</string>
     <string name="lessonspart2c_isso_ponto_no_comeco_c">Isso! Ponto no começo (C → • c C): 0%. Ponto no fim (C → c C •): 100%, hora de **reduzir**.</string>
     <string name="lessonspart2c_quantos_itens_lr_0_producao">Quantos itens LR(0) a produção S → C C gera?</string>
-    <string name="lessonspart2c_agora_magica_fechamento_closure_se">Agora a mágica do **fechamento (closure)**. Se eu espero um C (ponto antes de C), então posso estar no começo de qualquer receita de C. Eu 'convido' C → • c C e C → • d.</string>
-    <string name="lessonspart2c_fechamento_convite_em_cascata_nao">Fechamento = **convite em cascata**: o não-terminal logo depois do ponto convida as próprias produções, com o ponto no começo. Os convidados também convidam os seus.</string>
+    <string name="lessonspart2c_agora_magica_fechamento_closure_se">Agora a mágica do **fecho (closure)**. Se eu espero um C (ponto antes de C), então posso estar no começo de qualquer receita de C. Eu 'convido' C → • c C e C → • d.</string>
+    <string name="lessonspart2c_fechamento_convite_em_cascata_nao">Fecho = **convite em cascata**: o não-terminal logo depois do ponto convida as próprias produções, com o ponto no começo. Os convidados também convidam os seus.</string>
     <string name="lessonspart2c_desvio_goto_andar_ponto_por">E o **desvio (goto)**: andar o ponto por cima de um símbolo. goto(I, c) = pegue os itens com • antes de c, passe o ponto para depois do c e feche de novo.</string>
     <string name="lessonspart2c_predio_inteiro_7_andares_estados">O prédio inteiro: 7 andares (estados I0 a I6) e as escadas (transições) entre eles.</string>
     <string name="lessonspart2c_no_estado_i0_quais_itens">No estado I0, quais itens existem? (Dica: comece por S' → • S e vá convidando.)</string>
@@ -1802,7 +1802,7 @@
     <string name="lessonspart2c_estado_novo">Um estado novo</string>
     <string name="lessonspart2c_goto_i2_d_c_d">goto(I2, d) = { C → d • } = I4. Se o conjunto de itens já existe, reaproveitamos o estado: por isso o autômato é finito.</string>
     <string name="lessonspart2c_por_que_i3_lendo_c">Por que de I3, lendo c, volta pro I3?</string>
-    <string name="lessonspart2c_porque_goto_i3_c_c">Porque goto(I3, c) dá C → c • C de novo, e o fechamento repete os mesmos convidados. Mesmo conjunto = mesmo estado. É o autômato 'contando' os c's sem precisar de memória extra.</string>
+    <string name="lessonspart2c_porque_goto_i3_c_c">Porque goto(I3, c) dá C → c • C de novo, e o fecho repete os mesmos convidados. Mesmo conjunto = mesmo estado. É o autômato 'contando' os c's sem precisar de memória extra.</string>
     <string name="lessonspart2c_agora_gramatica_maior_12_estados">Agora uma gramática maior: 12 estados (I0 a I11). Procure o estado que tem E → T • e T → T • * F juntos.</string>
     <string name="lessonspart2c_que_problema_esse_estado_t">Que problema esse estado (E → T • junto com T → T • * F) causaria se reduzíssemos sempre que um item está completo?</string>
     <string name="lessonspart2c_conflito_empilha_reduz_no_item">Conflito empilha-reduz no '*': o item completo manda reduzir E → T e o outro manda empilhar *. O LR(0) puro não resolve; o SLR(1) usa FOLLOW(E) = {+, ), $} para decidir (próxima sala).</string>
@@ -1820,7 +1820,7 @@
     <string name="lessonspart2c_goto_i3_d">goto(I3, d) = ?</string>
     <string name="lessonspart2c_quantos_estados_ao_todo_quais">Quantos estados ao todo, e quais são de redução?</string>
     <string name="lessonspart2c_7_estados_i0_i6_itens">7 estados (I0 a I6). Itens completos: I1 (aceita), I4 (C → d), I5 (S → C C), I6 (C → c C). Nenhum estado mistura item completo com outro item: a gramática é LR(0)!</string>
-    <string name="lessonspart2c_numere_producoes_gramatica_aumentada_desenhe">Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.</string>
+    <string name="lessonspart2c_numere_producoes_gramatica_aumentada_desenhe">Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fecho e, antes de criar um estado novo, verifique se aquele conjunto já existe.</string>
     <string name="lessonspart2c_por_que_itens_closure_goto">Por que itens, closure e goto?</string>
     <string name="lessonspart2c_vamos_redescobrir_itens_closure_goto">Vamos redescobrir itens, closure e goto só com perguntas.</string>
     <string name="lessonspart2c_num_analisador_empilha_reduz_que">Num analisador empilha-reduz, o que precisamos saber a cada momento?</string>
@@ -1835,18 +1835,18 @@
     <string name="lessonspart2c_espero_x_y_z">Espero X Y Z</string>
     <string name="lessonspart2c_ponto_separa_passado_que_esta">O ponto separa o passado (o que está na pilha) do futuro (o que vem na entrada).</string>
     <string name="lessonspart2c_se_espero_z_item_x">Se espero um Z (item A → X Y • Z) e Z → w | v, o que mais posso estar esperando?</string>
-    <string name="lessonspart2c_esperar_z_esperar_comeco_alguma">Esperar um Z é esperar o começo de alguma produção de Z. Isso é o fechamento.</string>
-    <string name="lessonspart2c_se_item_x_b_y">Se o item é A → X • b Y, com b terminal, quantos itens o fechamento acrescenta por causa dele?</string>
+    <string name="lessonspart2c_esperar_z_esperar_comeco_alguma">Esperar um Z é esperar o começo de alguma produção de Z. Isso é o fecho.</string>
+    <string name="lessonspart2c_se_item_x_b_y">Se o item é A → X • b Y, com b terminal, quantos itens o fecho acrescenta por causa dele?</string>
     <string name="lessonspart2c_todos_b">Todos os de b</string>
     <string name="lessonspart2c_nenhum_terminal_nao_tem_producoes">Nenhum: terminal não tem produções</string>
     <string name="lessonspart2c_dois">Dois</string>
-    <string name="lessonspart2c_fechamento_so_convida_quando_ha">O fechamento só convida quando há um NÃO-terminal logo depois do ponto.</string>
+    <string name="lessonspart2c_fechamento_so_convida_quando_ha">O fecho só convida quando há um NÃO-terminal logo depois do ponto.</string>
     <string name="lessonspart2c_estou_no_conjunto_itens_i">Estou no conjunto de itens I e empilho o símbolo X. O novo conjunto é…</string>
     <string name="lessonspart2c_i_novo">I de novo</string>
     <string name="lessonspart2c_itens_com_antes_x_com">Os itens com • antes de X, com o ponto avançado, e depois fechados</string>
     <string name="lessonspart2c_todos_itens_que_contem_x">Todos os itens que contêm X</string>
     <string name="lessonspart2c_vazio">Vazio</string>
-    <string name="lessonspart2c_isso_goto_i_x_avanca">Isso é goto(I, X): avança o ponto sobre X e aplica o fechamento.</string>
+    <string name="lessonspart2c_isso_goto_i_x_avanca">Isso é goto(I, X): avança o ponto sobre X e aplica o fecho.</string>
     <string name="lessonspart2c_por_que_numero_estados_finito">Por que o número de estados é finito?</string>
     <string name="lessonspart2c_ha_numero_finito_itens_producoes">Há um número finito de itens (produções × posições do ponto), logo um número finito de conjuntos de itens. Conjuntos repetidos viram o mesmo estado.</string>
     <string name="lessonspart2c_para_que_serve_producao_gramatica">Para que serve a produção S' → S da gramática aumentada?</string>
@@ -1863,12 +1863,12 @@
     <string name="lessonspart2c_item_lr_0_producao_g">**Item LR(0)**: produção de G com um ponto em alguma posição do lado direito. A → X Y Z gera A → • X Y Z, A → X • Y Z, A → X Y • Z e A → X Y Z •. A produção A → ε gera só A → •.</string>
     <string name="lessonspart2c_gramatica_aumentada_g_g_com">**Gramática aumentada** G': G com um novo símbolo inicial S' e a produção S' → S. O analisador aceita quando reduziria por S' → S.</string>
     <string name="lessonspart2c_closure_i_j_i_repita">CLOSURE(I):\n  J := I\n  repita\n    para cada item A → α • B β em J:\n      para cada produção B → γ de G':\n        se B → • γ não está em J:\n          adicione B → • γ a J\n  até nenhum item ser adicionado\n  retorne J</string>
-    <string name="lessonspart2c_fechamento_conjunto_itens">Fechamento de um conjunto de itens.</string>
+    <string name="lessonspart2c_fechamento_conjunto_itens">Fecho de um conjunto de itens.</string>
     <string name="lessonspart2c_goto_i_x_closure_x" translatable="false">GOTO(I, X) = CLOSURE({ A → α X • β  |  A → α • X β ∈ I })</string>
     <string name="lessonspart2c_desvio_avanca_ponto_sobre_x">Desvio: avança o ponto sobre X e fecha.</string>
     <string name="lessonspart2c_itens_g_c_closure_repita">ITENS(G'):\n  C := { CLOSURE({ S' → • S }) }\n  repita\n    para cada conjunto I em C:\n      para cada símbolo gramatical X:\n        se GOTO(I, X) ≠ ∅ e GOTO(I, X) ∉ C:\n          adicione GOTO(I, X) a C\n  até nenhum conjunto ser adicionado</string>
     <string name="lessonspart2c_colecao_canonica_conjuntos_itens_lr">Coleção canônica de conjuntos de itens LR(0).</string>
-    <string name="lessonspart2c_itens_nucleo_kernel_todos_itens">**Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fechamento: dá para recalcular a partir do kernel.</string>
+    <string name="lessonspart2c_itens_nucleo_kernel_todos_itens">**Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fecho: dá para recalcular a partir do kernel.</string>
     <string name="lessonspart2c_qual_destes_item_nucleo">Qual destes é item de base (kernel)?</string>
     <string name="lessonspart2c_identifique_em_cada_estado_quais">Identifique, em cada estado, quais itens são de base (kernel).</string>
     <string name="lessonspart2c_pergunta_tipica_calcule_closure_ou">Pergunta típica: 'calcule CLOSURE({…})' ou 'GOTO(I, X)'. Não esqueça: GOTO = avançar o ponto **e depois** fechar. E A → ε gera só o item A → •, que já nasce completo.</string>
@@ -1888,7 +1888,7 @@
     <string name="lessonspart2c_adicionar_c_c">Adicionar S → • C C</string>
     <string name="lessonspart2c_remover_ponto">Remover o ponto</string>
     <string name="lessonspart2c_goto_avancar_fechar_como_ponto">Goto = avançar + fechar. Como o ponto ficou antes de C, a família de C precisa ser convidada.</string>
-    <string name="lessonspart2c_item_estado_ao_pe_lareira">Item e Estado ao pé da lareira. Item: 'Eu sou só um marcador numa receita.' Estado: 'E eu sou o grupo de marcadores que valem ao mesmo tempo: todas as receitas que podem estar em andamento agora.' Item: 'Então você é a minha turma?' Estado: 'Sou. E o fechamento é como eu chamo a turma toda.'</string>
+    <string name="lessonspart2c_item_estado_ao_pe_lareira">Item e Estado ao pé da lareira. Item: 'Eu sou só um marcador numa receita.' Estado: 'E eu sou o grupo de marcadores que valem ao mesmo tempo: todas as receitas que podem estar em andamento agora.' Item: 'Então você é a minha turma?' Estado: 'Sou. E o fecho é como eu chamo a turma toda.'</string>
     <string name="lessonspart2c_treino_rapido_em_b_ache">Treino rápido em S → a S b | ε: ache o estado em que o 'você está aqui' aparece antes do S e conte os convidados.</string>
     <string name="lessonspart2c_ponto_voce_esta_aqui_closure">Ponto = 'você está aqui'. Closure = 'convida a família'. Goto = 'chuta o ponto um passo e comemora com a família'.</string>
     <!-- LessonsPart3.kt -->
@@ -2382,7 +2382,7 @@
     <string name="lessonspart3b_escolhe_shift_emite_aviso_conflito">Escolhe shift e emite um aviso de conflito</string>
     <string name="lessonspart3b_escolhe_reduce">Escolhe reduce</string>
     <string name="lessonspart3b_padrao_yacc_bison_shift_com">Padrão do Yacc/Bison: shift, com aviso ('conflicts: N shift/reduce'). Para reduzir/reduzir, escolhe a regra que aparece primeiro no arquivo.</string>
-    <string name="lessonspart3b_esse_padrao_shift_bom_para">Esse padrão 'shift' é bom para o if-then-else pendurado?</string>
+    <string name="lessonspart3b_esse_padrao_shift_bom_para">Esse padrão 'shift' é bom para o if-then-else solto?</string>
     <string name="lessonspart3b_shift_no_else_faz_else">É! Shift no 'else' faz o else casar com o if mais próximo, o que C e Java fazem. Por isso muita gente aceita esse conflito (e o declara com %expect 1).</string>
     <string name="lessonspart3b_duas_arvores_possiveis_quem_else">Duas árvores possíveis: de quem é o else? O shift escolhe o if de dentro.</string>
     <string name="lessonspart3b_por_que_conflitos_reduzir_reduzir">Por que conflitos reduzir/reduzir são mais perigosos?</string>
@@ -4168,8 +4168,8 @@
     <string name="solta_lessonspart2c_9">A → b, A → A b c, B → d, S → a A B e. Lida ao contrário, é a derivação mais à direita: S ⇒ a A B e ⇒ a A d e ⇒ a A b c d e ⇒ a b b c d e.</string>
     <string name="solta_lessonspart2c_10">S → • C C, S → C • C e S → C C •. Uma produção com n símbolos dá n + 1 itens.</string>
     <string name="solta_lessonspart2c_11">S' → • S, S → • C C, C → • c C, C → • d. O S convidou S → • C C; o C convidou as duas produções de C.</string>
-    <string name="solta_lessonspart2c_12">I0: o estado inicial, fechamento de { S' → • S }.</string>
-    <string name="solta_lessonspart2c_13">C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento.</string>
+    <string name="solta_lessonspart2c_12">I0: o estado inicial, fecho de { S' → • S }.</string>
+    <string name="solta_lessonspart2c_13">C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fecho.</string>
     <string name="solta_lessonspart2c_14">Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?</string>
     <string name="solta_lessonspart3_1">Vamos precisar do FOLLOW: FOLLOW(E) = { +, ), $ } e FOLLOW(T) = FOLLOW(F) = { +, *, ), $ }.</string>
     <string name="solta_lessonspart3_2">L → * R joga FOLLOW(L) dentro de FOLLOW(R), e S → L = R coloca '=' em FOLLOW(L). Resultado: o SLR escreve r5 (R → L) em [2, =], junto com s6 de S → L • = R.</string>

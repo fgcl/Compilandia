@@ -961,13 +961,13 @@
     <string name="lessonspart2_expandir_faz_que_na_pilha">What does expanding A → ε do to the stack?</string>
     <string name="lessonspart2_so_desempilha">It only pops A.</string>
     <string name="lessonspart2_analisador_preditivo_faz_backtracking">Does the predictive parser backtrack?</string>
-    <string name="lessonspart2_descida_recursiva_funcao_por_nao">Recursive descent: one function per nonterminal; the lookahead picks the production, terminals become matches and nonterminals become calls.</string>
-    <string name="lessonspart2_variavel_funcao_terminal_match_recursao">One variable, one function; one terminal, one match. Left recursion = a dog chasing its tail.</string>
+    <string name="lessonspart2_descida_recursiva_funcao_por_nao">Recursive descent: one function per nonterminal; the lookahead picks the production, terminals become casa() calls and nonterminals become calls.</string>
+    <string name="lessonspart2_variavel_funcao_terminal_match_recursao">One variable, one function; one terminal, one casa(). Left recursion = a dog chasing its tail.</string>
     <string name="lessonspart2_funcao">function</string>
     <string name="lessonspart2_usar_gramatica_com_recursao_esquerda">Using a grammar with left recursion (infinite loop).</string>
     <string name="lessonspart2_nao_fatorar_esquerda_token_nao">Not left factoring (one token doesn't decide).</string>
     <string name="lessonspart2_esquecer_verificar_no_fim_pode">Forgetting to check for $ at the end: S() can return with tokens left over.</string>
-    <string name="lessonspart2_avancar_token_dentro_chamada_nao">Advancing the token inside a nonterminal call without a match.</string>
+    <string name="lessonspart2_avancar_token_dentro_chamada_nao">Advancing the token inside a nonterminal call without calling casa().</string>
     <string name="lessonspart2_achar_que_descida_recursiva_bottom">Thinking recursive descent is bottom-up.</string>
     <string name="lessonspart2_quantas_funcoes">How many functions?</string>
     <string name="lessonspart2_por_nao_terminal">One per nonterminal.</string>
@@ -1492,7 +1492,7 @@
     <string name="lessonspart2c_gramatica_dos_comandos_reparticao">The office's statement grammar.</string>
     <string name="lessonspart2c_como_funcionario_sabe_que_fazer">And how does clerk S know what to do?</string>
     <string name="lessonspart2c_ele_olha_senha_proximo_cliente">He looks at the **next customer's ticket**: the lookahead token. Ticket 'if'? He follows the script for S → if E then S. Ticket 'print'? The script for S → print E.</string>
-    <string name="lessonspart2c_seguir_roteiro_simples_para_cada">Following the script is simple: for each **terminal** on the right side, check the ticket and call the next customer (**match**). For each **nonterminal**, send the customer to that clerk's window (**call the function**).</string>
+    <string name="lessonspart2c_seguir_roteiro_simples_para_cada">Following the script is simple: for each **terminal** on the right side, check the ticket and call the next customer (**casa()**). For each **nonterminal**, send the customer to that clerk's window (**call the function**).</string>
     <string name="lessonspart2c_recebeu_senha_begin_qual_sequencia">S got the ticket 'begin'. What's clerk S's sequence of actions?</string>
     <string name="lessonspart2c_chama">Calls E()</string>
     <string name="lessonspart2c_roteiro_begin_l_end_confere">It's the script for S → begin L end: check 'begin', send to L, check 'end'.</string>
@@ -1505,13 +1505,13 @@
     <string name="lessonspart2c_gcc_clang_compiladores_c_c">GCC and Clang, C/C++ compilers used all over the world, use hand-written recursive descent parsers: easy to read and great for error messages.</string>
     <string name="lessonspart2c_vendo_funcoes_se_chamarem">Watching the functions call each other</string>
     <string name="lessonspart2c_vamos_ver_descida_recursiva_acontecendo">Let's watch recursive descent happen: each step of the derivation is a function call.</string>
-    <string name="lessonspart2c_fun_t_elinha_fun_elinha">fun E() { T(); Elinha() }\nfun Elinha() {\n  if (look == "+") { match("+"); T(); Elinha() }\n  // else: ε (look must be in FOLLOW(E') = { ), $ })\n}\nfun T() { F(); Tlinha() }\nfun Tlinha() {\n  if (look == "*") { match("*"); F(); Tlinha() }\n}\nfun F() {\n  when (look) {\n    "("  -&gt; { match("("); E(); match(")") }\n    "id" -&gt; match("id")\n    else -&gt; erro("expected ( or id")\n  }\n}</string>
+    <string name="lessonspart2c_fun_t_elinha_fun_elinha">fun E() { T(); Elinha() }\nfun Elinha() {\n  if (look == "+") { casa("+"); T(); Elinha() }\n  // else: ε (look must be in FOLLOW(E') = { ), $ })\n}\nfun T() { F(); Tlinha() }\nfun Tlinha() {\n  if (look == "*") { casa("*"); F(); Tlinha() }\n}\nfun F() {\n  when (look) {\n    "("  -&gt; { casa("("); E(); casa(")") }\n    "id" -&gt; casa("id")\n    else -&gt; erro("expected ( or id")\n  }\n}</string>
     <string name="lessonspart2c_funcao_por_nao_terminal_virou">One function per nonterminal (E' became Elinha, T' became Tlinha; 'linha' = 'prime').</string>
     <string name="lessonspart2c_cada_expansao_desta_derivacao_mais">Each expansion in this leftmost derivation corresponds to a function call in the code above.</string>
     <string name="lessonspart2c_chamadas_para_id_id">Calls for id * id</string>
     <string name="lessonspart2c_chama_t">E() calls T().</string>
-    <string name="lessonspart2c_t_chama_f_f_ve">T() calls F(); F() sees 'id' and does match(id).</string>
-    <string name="lessonspart2c_t_chama_tlinha_ve_match">T() calls Tlinha(); sees '*': match(*), F() matches the second id, Tlinha() again.</string>
+    <string name="lessonspart2c_t_chama_f_f_ve">T() calls F(); F() sees 'id' and does casa(id).</string>
+    <string name="lessonspart2c_t_chama_tlinha_ve_match">T() calls Tlinha(); sees '*': casa(*), F() matches the second id, Tlinha() again.</string>
     <string name="lessonspart2c_tlinha_ve_nao_faz_nada">Tlinha() sees $: does nothing (ε) and returns.</string>
     <string name="lessonspart2c_volta_em_que_chama_elinha">Back in E(), which calls Elinha(); sees $: ε, returns.</string>
     <string name="lessonspart2c_retorna_com_look_sucesso">E() returns with look = $: success!</string>
@@ -1524,9 +1524,9 @@
     <string name="lessonspart2c_dois_primeiro_t_filho_t">Two: the first T' (child of T) expands to * F T', and the inner T' becomes ε. Each call to Tlinha() is a T' node.</string>
     <string name="lessonspart2c_exemplo_resolvido_funcoes_das_declaracoes">Worked example: the declaration functions</string>
     <string name="lessonspart2c_exercicio_prova_escreva_analisador_descida">Exam exercise: write a recursive descent parser for the declarations.</string>
-    <string name="lessonspart2c_receita_funcao_por_nao_terminal">Recipe: **one function per nonterminal**; a global variable `look` with the current token; a function `match(t)` that checks and advances.</string>
+    <string name="lessonspart2c_receita_funcao_por_nao_terminal">Recipe: **one function per nonterminal**; a global variable `look` with the current token; a function `casa(t)` that checks and advances.</string>
     <string name="lessonspart2c_conferir_senha">The 'check the ticket'.</string>
-    <string name="lessonspart2c_fun_d_t_l_match">fun D() { T(); L(); match(";") }      // single production\n\nfun T() {\n  when (look) {\n    "int"   -&gt; match("int")\n    "float" -&gt; match("float")\n    else    -&gt; erro("expected a type")\n  }\n}\n\nfun L() { match("id"); R() }          // L → id R</string>
+    <string name="lessonspart2c_fun_d_t_l_match">fun D() { T(); L(); casa(";") }      // single production\n\nfun T() {\n  when (look) {\n    "int"   -&gt; casa("int")\n    "float" -&gt; casa("float")\n    else    -&gt; erro("expected a type")\n  }\n}\n\nfun L() { casa("id"); R() }          // L → id R</string>
     <string name="lessonspart2c_d_t_l_resolvidos_d">D, T and L solved. D and L have a single production: they don't even need to look at the lookahead.</string>
     <string name="lessonspart2c_r_que_tem">And R, which has ε?</string>
     <string name="lessonspart2c_esse_fica_para_voce_pense">That one's for you. Think: which token makes R pick R → , id R? And which one makes it pick R → ε?</string>
@@ -1535,12 +1535,12 @@
     <string name="lessonspart2c_qual_escolhe_r">And which one picks R → ε?</string>
     <string name="lessonspart2c_follow_r_qualquer_outro_token">';': it's FOLLOW(R). Any other token is an error.</string>
     <string name="lessonspart2c_escreva_r_completo">Write the complete R().</string>
-    <string name="lessonspart2c_fun_r_when_look_match">fun R() { when (look) { "," -&gt; { match(","); match("id"); R() };  ";" -&gt; { /* ε: consumes nothing */ };  else -&gt; erro("expected , or ;") } }</string>
+    <string name="lessonspart2c_fun_r_when_look_match">fun R() { when (look) { "," -&gt; { casa(","); casa("id"); R() };  ";" -&gt; { /* ε: consumes nothing */ };  else -&gt; erro("expected , or ;") } }</string>
     <string name="lessonspart2c_cada_no_interno_chamada_repare">Each internal node = one call. Notice R calling R: RIGHT recursion, harmless.</string>
     <string name="lessonspart2c_nas_producoes_com_deixe_teste">In productions with ε, make the test explicit: 'if look ∈ FOLLOW(A), do nothing; otherwise, error'. Catching the error early (in the else) usually earns points.</string>
     <string name="lessonspart2c_inventando_descida_recursiva">Inventing recursive descent</string>
     <string name="lessonspart2c_vamos_inventar_descida_recursiva_zero">Let's invent recursive descent from scratch. Goal: a function that recognizes 'everything S generates'.</string>
-    <string name="lessonspart2c_siga_lado_direito_esquerda_para">Follow the right side from left to right: a terminal becomes a match; a nonterminal becomes a call to its function.</string>
+    <string name="lessonspart2c_siga_lado_direito_esquerda_para">Follow the right side from left to right: a terminal becomes casa(); a nonterminal becomes a call to its function.</string>
     <string name="lessonspart2c_tenta_primeira_se_falhar_volta">Try the first and, if it fails, go back</string>
     <string name="lessonspart2c_olha_token_primeira_c_segunda">Look at the token: 'a' → first, 'c' → second</string>
     <string name="lessonspart2c_sempre_primeira">Always the first</string>
@@ -1562,8 +1562,8 @@
     <string name="lessonspart2c_mesmo_token_x_abre_duas">The same token x starts both alternatives: without factoring, only with backtracking.</string>
     <string name="lessonspart2c_veja_fatoracao_deixando_gramatica_pronta">Watch factoring get the grammar ready to become functions.</string>
     <string name="lessonspart2c_resuma_com_suas_palavras_como">Sum up in your own words how to build a recursive descent parser.</string>
-    <string name="lessonspart2c_funcao_por_nao_terminal_lookahead">One function per nonterminal; the lookahead picks the production (FIRST, or FOLLOW for the ε alternative); in the body, match for terminals and a call for nonterminals; the grammar has to be LL(1) (no left recursion and factored).</string>
-    <string name="lessonspart2c_treino_imagine_match_if_match">Practice: picture S() → match(if), E(), match(then), S()… and check it against the tree.</string>
+    <string name="lessonspart2c_funcao_por_nao_terminal_lookahead">One function per nonterminal; the lookahead picks the production (FIRST, or FOLLOW for the ε alternative); in the body, casa() for terminals and a call for nonterminals; the grammar has to be LL(1) (no left recursion and factored).</string>
+    <string name="lessonspart2c_treino_imagine_match_if_match">Practice: picture S() → casa(if), E(), casa(then), S()… and check it against the tree.</string>
     <string name="lessonspart2c_descida_recursiva_definicao_prova">Recursive descent: exam definition</string>
     <string name="lessonspart2c_definicao_prova_no_estilo_livro">Exam definition, Dragon Book style.</string>
     <string name="lessonspart2c_analisador_descida_recursiva_conjunto_proced">A **recursive descent parser** is a set of procedures, one for each nonterminal. Execution starts with the start symbol's procedure and succeeds if it finishes having consumed the whole input.</string>
@@ -1584,12 +1584,12 @@
     <string name="lessonspart2c_exercicio_tipico_escreva_l">Typical exercise: write S(), L() and E().</string>
     <string name="lessonspart2c_escreva_l_para_l_l">Write L() for L → S L | ε.</string>
     <string name="lessonspart2c_l_se_look_if_print">L() { if look ∈ {if, print, begin}: S(); L()   else if look = end: return (ε)   else: error() }</string>
-    <string name="lessonspart2c_na_prova_1_elimine_recursao">On the exam: (1) remove left recursion and factor; (2) compute FIRST/FOLLOW; (3) one function per nonterminal with a 'switch' on the lookahead; (4) don't forget the match and the final $ check (main: S(); if look ≠ $, error).</string>
+    <string name="lessonspart2c_na_prova_1_elimine_recursao">On the exam: (1) remove left recursion and factor; (2) compute FIRST/FOLLOW; (3) one function per nonterminal with a 'switch' on the lookahead; (4) don't forget casa() and the final $ check (main: S(); if look ≠ $, error).</string>
     <string name="lessonspart2c_por_que_recursao_direita_l">Why doesn't RIGHT recursion (L → S L) cause problems?</string>
     <string name="lessonspart2c_porque_antes_chamar_l_novo">Because before calling L() again, S() consumes at least one token. The input shrinks with each call, so the recursion ends.</string>
     <string name="lessonspart2c_variavel_funcao">One variable, one function</string>
     <string name="lessonspart2c_ultimo_corredor_templo_top_down">Last corridor of the Top-Down Temple: a row of doors, each with the name of a nonterminal. Behind each door, a clerk who can open other doors.</string>
-    <string name="lessonspart2c_variavel_funcao_terminal_match">**'One variable, one function. One terminal, one match.'**</string>
+    <string name="lessonspart2c_variavel_funcao_terminal_match">**'One variable, one function. One terminal, one casa().'**</string>
     <string name="lessonspart2c_recursao_esquerda_cachorro_correndo_atras">**Left recursion = a dog chasing its tail.** E() calls E() which calls E()… and never gets anywhere, because it doesn't eat any token.</string>
     <string name="lessonspart2c_olha_senha_antes_atender_lookahead">**'Check the ticket before serving.'** The lookahead is the customer's ticket: FIRST picks the script; FOLLOW authorizes the 'I do nothing' (ε).</string>
     <string name="lessonspart2c_eu_entrego_tokens_ja_cortadinhos">I hand over the tokens already sliced. The function only needs to peek at the next one: no rereading text!</string>
@@ -1602,7 +1602,7 @@
     <string name="lessonspart2c_qual_gramatica_nao_serve_para">Which grammar does NOT work for predictive recursive descent without transforming it?</string>
     <string name="lessonspart2c_cada_no_interno_porta_aberta">Each internal node = one door opened (one function called). Count them: D, T, L, R.</string>
     <string name="lessonspart2c_recite_dois_ganchos_principais">Recite the two main hooks.</string>
-    <string name="lessonspart2c_variavel_funcao_terminal_match_recursao">'One variable, one function; one terminal, one match.' and 'Left recursion = a dog chasing its tail.'</string>
+    <string name="lessonspart2c_variavel_funcao_terminal_match_recursao">'One variable, one function; one terminal, one casa().' and 'Left recursion = a dog chasing its tail.'</string>
     <string name="lessonspart2c_montando_lego_baixo_para_cima">Building Lego from the bottom up</string>
     <string name="lessonspart2c_bem_vindo_fortaleza_bottom_up">Welcome to the Bottom-Up Fortress! Nobody predicts anything here: we build from the bottom up.</string>
     <string name="lessonspart2c_imagine_montar_lego_seguindo_manual">Picture building a Lego set following the manual backwards. You pick up the little pieces one by one (**shift**). When the pieces on top form a 'kit' from the manual, you snap them into a bigger block (**reduce**).</string>

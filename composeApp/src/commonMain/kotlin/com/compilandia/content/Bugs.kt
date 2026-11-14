@@ -40,7 +40,7 @@ object Album {
         Especie("palavra-comum", tx("bugs_bug_palavra_comum"), Skill.LEX_FLEX, tx("bugs_if_nome_como_outro_qualquer"), tx("bugs_no_empate_tamanho_ganha_regra"), listOf(
             v(tx("bugs_no_flex_regra_que_vem")),
             v(tx("bugs_maior_casamento_decide_antes_ordem")),
-            f(tx("bugs_yytext_guarda_classe_token"), tx("bugs_yytext_guarda_lexema")),
+            f(tx("bugs_espacos_chegam_ao_parser"), tx("bugs_espacos_sem_return")),
         )),
         Especie("estrela-cheia", tx("bugs_bug_estrela_cheia"), Skill.REGEX_DFA, tx("bugs_exige_pelo_menos"), tx("bugs_estrela_aceita_zero_ou_mais"), listOf(
             v(tx("bugs_exige_pelo_menos_2")),

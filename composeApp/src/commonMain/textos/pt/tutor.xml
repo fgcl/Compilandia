@@ -110,7 +110,7 @@
     <string name="sims_olha_arvore_para_esta_frase">Olha uma árvore para esta frase.</string>
     <string name="sims_agora_outra_arvore_com_mesma">Agora outra árvore, com a mesma frase. A gramática é ambígua.</string>
     <string name="sims_primeira_agrupa_jeito_volte_compare">A primeira agrupa de um jeito. Volte e compare o que fica mais fundo.</string>
-    <string name="sims_mais_fundo_roda_primeiro_por">O mais fundo roda primeiro. Por isso as duas dão resultados diferentes.</string>
+    <string name="sims_mais_fundo_roda_primeiro_por">O mais fundo roda primeiro. Cada árvore agrupa a conta de um jeito.</string>
     <string name="sims_parser_olha_1_precisa_decidir">O parser olha %1$s e precisa decidir.</string>
     <string name="sims_1_virou_2_3_primeiro">%1$s virou %2$s %3$s. O primeiro continua sendo %4$s.</string>
     <string name="sims_preso_em_1">Preso em %1$s</string>
@@ -151,14 +151,34 @@
     <!-- Perguntas do modo Prever e do Fazer com ajuda (A3) -->
     <string name="sims_ask_tac">Qual conta o gerador faz agora?</string>
     <string name="sims_ask_tac_porque">%1$s já tem os dois lados prontos. Por isso vem agora.</string>
-    <string name="sims_ask_lr0">No estado %1$s, algum item tem o ponto no fim?</string>
-    <string name="sims_ask_lr0_sim">Sim, dá para reduzir</string>
-    <string name="sims_ask_lr0_nao">Não, só empilha</string>
-    <string name="sims_ask_lr0_porque_sim">Um item tem o ponto no fim da regra. Ali o parser pode reduzir.</string>
-    <string name="sims_ask_lr0_porque_nao">Todo item ainda tem símbolo depois do ponto. Ali só se empilha.</string>
     <string name="sims_aceita">aceita</string>
     <string name="sims_erro">erro</string>
     <string name="sims_pilha">pilha</string>
     <string name="diagnostico_ou"> ou </string>
     <string name="diagnostico_empilhar">empilhar</string>
+
+    <!-- Fazer com ajuda: recursão, fatoração, itens LR(0) e ambiguidade -->
+    <string name="pg_rec_repete">Qual pedaço se repete a cada volta?</string>
+    <string name="pg_regra_de">Como fica a regra de %1$s?</string>
+    <string name="pg_rec_regra_de_porque">Primeiro o pedaço que termina, %1$s. Depois, %2$s cuida da repetição.</string>
+    <string name="pg_regra_nova">E a regra nova, %1$s?</string>
+    <string name="pg_rec_regra_nova_porque">Ela repete %1$s e chama a si mesma à direita. O ε deixa parar.</string>
+    <string name="pg_fat_comeco">Qual é o maior começo comum do grupo?</string>
+    <string name="pg_fat_comeco_porque">Todas as opções do grupo começam com %1$s. Logo depois, elas mudam.</string>
+    <string name="pg_fat_regra_de_porque">Lê %1$s uma vez só. Depois, %2$s escolhe o resto.</string>
+    <string name="pg_fat_regra_nova_porque">A regra nova guarda só o que sobra de cada opção. Sobra vazia vira ε.</string>
+    <string name="pg_lr0_chegada">Do estado %1$s, lendo %2$s, chego ao estado %3$s.</string>
+    <string name="pg_lr0_fecho">O estado %1$s começa com %2$s. Que item o fecho acrescenta?</string>
+    <string name="pg_lr0_fecho_porque">O ponto parou antes de %1$s. O fecho puxa as regras de %1$s com o ponto no começo.</string>
+    <string name="pg_lr0_goto">No estado %1$s há %2$s. Lendo %3$s, que item vai para o estado %4$s?</string>
+    <string name="pg_lr0_goto_porque">Lendo %1$s, o ponto pula o %1$s. O resto do item fica igual.</string>
+    <string name="pg_amb_intro">Esta gramática não diz que conta vem primeiro. Veja duas árvores da mesma frase.</string>
+    <string name="pg_amb_primeiro">primeiro: %1$s</string>
+    <string name="pg_amb_fundo">A conta mais funda roda primeiro: %1$s.</string>
+    <string name="pg_amb_q_primeiro">Nesta árvore, que conta roda primeiro?</string>
+    <string name="pg_amb_valor">Esta árvore dá %1$s.</string>
+    <string name="pg_amb_q_valor">Quanto dá esta árvore?</string>
+    <string name="pg_amb_q_outra">A outra árvore faz primeiro a outra conta. Quanto ela dá?</string>
+    <string name="pg_amb_fim_diferente">A mesma frase deu %1$s numa árvore e %2$s na outra. A gramática é ambígua.</string>
+    <string name="pg_amb_fim_igual">As duas dão %1$s, mas são duas árvores. A gramática é ambígua do mesmo jeito.</string>
 </resources>

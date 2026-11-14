@@ -27,7 +27,8 @@ sealed class Screen {
     /** As aulas em C e o Guia do TP numa trilha só (A5). */
     data object SeuCompilador : Screen()
     /** Fazer com ajuda (A3): quatro problemas em que o Byte ajuda cada vez menos. */
-    data class FazerComAjuda(val skill: Skill, val semente: Long = 0, val comeca: Int = 0) : Screen()
+    /** [prova]: a Questão de prova, com três questões inteiras no lugar dos quatro problemas. */
+    data class FazerComAjuda(val skill: Skill, val semente: Long = 0, val comeca: Int = 0, val prova: Boolean = false) : Screen()
     /** J1: um jogo de montar da Bancada do Byte. [fase] -1 abre na primeira por fazer. */
     data class Bancada(val robo: com.compilandia.content.Robo, val fase: Int = -1) : Screen()
     /** A lista dos jogos de montar. */

@@ -129,7 +129,7 @@ B → d
     opções: Uma derivação mais à esquerda | ✔Uma derivação mais à direita | Uma árvore ambígua | A tabela LL(1)
     explicação: Bottom-up = derivação mais à direita (rightmost) ao contrário. É o R de LR.
 - PASSOS (Conflitos):
-    · **shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else pendurado).
+    · **shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else solto).
     · **reduce/reduce**: não dá para decidir qual redução fazer.
     · Gramáticas com conflito para um método não pertencem à classe dele (ex.: não são SLR(1)). Gramáticas ambíguas sempre geram conflito.
 - WIDGET LR_TRACE gramática=«E → E + T | T ⏎ T → T * F | F ⏎ F → ( E ) | id» entrada=«( id )» legenda: Siga as definições na análise de ( id ).
@@ -173,8 +173,8 @@ C → c C | d
 - PREVEJA: Quantos itens LR(0) a produção S → C C gera?
     opções: 1 | 2 | ✔3 | 4
     explicação: S → • C C, S → C • C e S → C C •. Uma produção com n símbolos dá n + 1 itens.
-- PROF: Agora a mágica do **fechamento (closure)**. Se eu espero um C (ponto antes de C), então posso estar no começo de qualquer receita de C. Eu 'convido' C → • c C e C → • d.
-- CAIXA [Gancho de memória]: Fechamento = **convite em cascata**: o não-terminal logo depois do ponto convida as próprias produções, com o ponto no começo. Os convidados também convidam os seus.
+- PROF: Agora a mágica do **fecho (closure)**. Se eu espero um C (ponto antes de C), então posso estar no começo de qualquer receita de C. Eu 'convido' C → • c C e C → • d.
+- CAIXA [Gancho de memória]: Fecho = **convite em cascata**: o não-terminal logo depois do ponto convida as próprias produções, com o ponto no começo. Os convidados também convidam os seus.
 - PROF: E o **desvio (goto)**: andar o ponto por cima de um símbolo. goto(I, c) = pegue os itens com • antes de c, passe o ponto para depois do c e feche de novo.
 - WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: O prédio inteiro: 7 andares (estados I0 a I6) e as escadas (transições) entre eles.
 - REVELAR: No estado I0, quais itens existem? (Dica: comece por S' → • S e vá convidando.)
@@ -191,7 +191,7 @@ C → c C | d
 ```
 - WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Toque em cada estado para ver seus itens. As setas são os desvios (goto).
 - PASSOS (Roteiro de exploração):
-    · I0: o estado inicial, fechamento de { S' → • S }.
+    · I0: o estado inicial, fecho de { S' → • S }.
     · I0 --S--> I1 = { S' → S • }: o estado de aceitação.
     · I0 --C--> I2 = { S → C • C, C → • c C, C → • d }: o ponto passou pelo primeiro C, e o segundo C convidou suas produções.
     · I0 --c--> I3 = { C → c • C, C → • c C, C → • d }. Repare em I3 --c--> I3: um laço!
@@ -201,7 +201,7 @@ C → c C | d
     opções: Um estado novo | ✔I4 | I3 | I6
     explicação: goto(I2, d) = { C → d • } = I4. Se o conjunto de itens já existe, reaproveitamos o estado: por isso o autômato é finito.
 - BYTE: Por que de I3, lendo c, volta pro I3?
-- PROF: Porque goto(I3, c) dá C → c • C de novo, e o fechamento repete os mesmos convidados. Mesmo conjunto = mesmo estado. É o autômato 'contando' os c's sem precisar de memória extra.
+- PROF: Porque goto(I3, c) dá C → c • C de novo, e o fecho repete os mesmos convidados. Mesmo conjunto = mesmo estado. É o autômato 'contando' os c's sem precisar de memória extra.
 - WIDGET LR0_AUTOMATON gramática=«E → E + T | T ⏎ T → T * F | F ⏎ F → ( E ) | id» legenda: Agora uma gramática maior: 12 estados (I0 a I11). Procure o estado que tem E → T • e T → T • * F juntos.
 - REVELAR: Que problema esse estado (E → T • junto com T → T • * F) causaria se reduzíssemos sempre que um item está completo?
     → Conflito empilha-reduz no '*': o item completo manda reduzir E → T e o outro manda empilhar *. O LR(0) puro não resolve; o SLR(1) usa FOLLOW(E) = {+, ), $} para decidir (próxima sala).
@@ -233,7 +233,7 @@ C → c C | d
     → { C → d • } = I4.
 - REVELAR: Quantos estados ao todo, e quais são de redução?
     → 7 estados (I0 a I6). Itens completos: I1 (aceita), I4 (C → d), I5 (S → C C), I6 (C → c C). Nenhum estado mistura item completo com outro item: a gramática é LR(0)!
-- CAIXA [Dica de prova]: Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.
+- CAIXA [Dica de prova]: Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fecho e, antes de criar um estado novo, verifique se aquele conjunto já existe.
 
 #### ESTILO SOCRATIC (Perguntas guiadas): "Por que itens, closure e goto?"
 - PROF: Vamos redescobrir itens, closure e goto só com perguntas.
@@ -245,13 +245,13 @@ C → c C | d
     explicação: O ponto separa o passado (o que está na pilha) do futuro (o que vem na entrada).
 - PREVEJA: Se espero um Z (item A → X Y • Z) e Z → w | v, o que mais posso estar esperando?
     opções: Nada | ✔Z → • w e Z → • v | Z → w • e Z → v • | A → • X Y Z
-    explicação: Esperar um Z é esperar o começo de alguma produção de Z. Isso é o fechamento.
-- PREVEJA: Se o item é A → X • b Y, com b terminal, quantos itens o fechamento acrescenta por causa dele?
+    explicação: Esperar um Z é esperar o começo de alguma produção de Z. Isso é o fecho.
+- PREVEJA: Se o item é A → X • b Y, com b terminal, quantos itens o fecho acrescenta por causa dele?
     opções: Todos os de b | ✔Nenhum: terminal não tem produções | Um | Dois
-    explicação: O fechamento só convida quando há um NÃO-terminal logo depois do ponto.
+    explicação: O fecho só convida quando há um NÃO-terminal logo depois do ponto.
 - PREVEJA: Estou no conjunto de itens I e empilho o símbolo X. O novo conjunto é…
     opções: I de novo | ✔Os itens com • antes de X, com o ponto avançado, e depois fechados | Todos os itens que contêm X | Vazio
-    explicação: Isso é goto(I, X): avança o ponto sobre X e aplica o fechamento.
+    explicação: Isso é goto(I, X): avança o ponto sobre X e aplica o fecho.
 - REVELAR: Por que o número de estados é finito?
     → Há um número finito de itens (produções × posições do ponto), logo um número finito de conjuntos de itens. Conjuntos repetidos viram o mesmo estado.
 - PREVEJA: Para que serve a produção S' → S da gramática aumentada?
@@ -266,7 +266,7 @@ C → c C | d
 - PROF: Definições formais, como no Livro do Dragão.
 - TEXTO: **Item LR(0)**: produção de G com um ponto em alguma posição do lado direito. A → X Y Z gera A → • X Y Z, A → X • Y Z, A → X Y • Z e A → X Y Z •. A produção A → ε gera só A → •.
 - TEXTO: **Gramática aumentada** G': G com um novo símbolo inicial S' e a produção S' → S. O analisador aceita quando reduziria por S' → S.
-- CÓDIGO (Fechamento de um conjunto de itens.):
+- CÓDIGO (Fecho de um conjunto de itens.):
 ```
 CLOSURE(I):
   J := I
@@ -293,10 +293,10 @@ ITENS(G'):
           adicione GOTO(I, X) a C
   até nenhum conjunto ser adicionado
 ```
-- TEXTO: **Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fechamento: dá para recalcular a partir do kernel.
+- TEXTO: **Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fecho: dá para recalcular a partir do kernel.
 - PREVEJA: Qual destes é item de base (kernel)?
     opções: C → • c C | S → • C C | ✔C → c • C | C → • d
-    explicação: C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento.
+    explicação: C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fecho.
 - WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Identifique, em cada estado, quais itens são de base (kernel).
 - CAIXA [Dica de prova]: Pergunta típica: 'calcule CLOSURE({…})' ou 'GOTO(I, X)'. Não esqueça: GOTO = avançar o ponto **e depois** fechar. E A → ε gera só o item A → •, que já nasce completo.
 - REVELAR: Qual a relação entre o autômato LR(0) e os prefixos viáveis?
@@ -316,7 +316,7 @@ ITENS(G'):
 - PREVEJA: Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?
     opções: Nada | ✔Fechar: C → • c C e C → • d | Adicionar S → • C C | Remover o ponto
     explicação: Goto = avançar + fechar. Como o ponto ficou antes de C, a família de C precisa ser convidada.
-- CAIXA [Conversa ao pé da lareira]: Item e Estado ao pé da lareira. Item: 'Eu sou só um marcador numa receita.' Estado: 'E eu sou o grupo de marcadores que valem ao mesmo tempo: todas as receitas que podem estar em andamento agora.' Item: 'Então você é a minha turma?' Estado: 'Sou. E o fechamento é como eu chamo a turma toda.'
+- CAIXA [Conversa ao pé da lareira]: Item e Estado ao pé da lareira. Item: 'Eu sou só um marcador numa receita.' Estado: 'E eu sou o grupo de marcadores que valem ao mesmo tempo: todas as receitas que podem estar em andamento agora.' Item: 'Então você é a minha turma?' Estado: 'Sou. E o fecho é como eu chamo a turma toda.'
 - WIDGET LR0_AUTOMATON gramática=«S → a S b | ε» legenda: Treino rápido em S → a S b | ε: ache o estado em que o 'você está aqui' aparece antes do S e conte os convidados.
 - REVELAR: Recite os três ganchos.
     → Ponto = 'você está aqui'. Closure = 'convida a família'. Goto = 'chuta o ponto um passo e comemora com a família'.

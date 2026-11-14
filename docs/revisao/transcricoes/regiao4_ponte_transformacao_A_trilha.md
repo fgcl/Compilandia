@@ -4,9 +4,9 @@
 
 ## ASSUNTO LEFT_RECURSION: Recursão à esquerda
 Pré-requisitos no jogo: Árvores e ambiguidade
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «O laço sem fim» → Montar na Fábrica → Prática: você pilota «Conserte E, T e F» → Pegadinha «A recursão escondida» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «O laço sem fim» → Fazer com ajuda → Montar na Fábrica → Prática: você pilota «Conserte E, T e F» → Pegadinha «A recursão escondida» → Desafio
 Jogos que treinam: Cirurgia de Gramática (montar a gramática consertada com peças), Sudoku LL(1) (encaixar produções na tabela)
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug prendeu o parser
@@ -237,9 +237,9 @@ Flashcards:
 
 ## ASSUNTO LEFT_FACTORING: Fatoração à esquerda
 Pré-requisitos no jogo: Gramáticas e derivações
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Pôr em evidência» → Prática: você pilota «Torne LL(1)» → Pegadinha «Quando fatorar não basta» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Pôr em evidência» → Fazer com ajuda → Prática: você pilota «Torne LL(1)» → Pegadinha «Quando fatorar não basta» → Desafio
 Jogos que treinam: Cirurgia de Gramática (montar a gramática consertada com peças), Sudoku LL(1) (encaixar produções na tabela)
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug grudou dois começos
@@ -431,7 +431,7 @@ Flashcards:
     · P: Para que serve a fatoração à esquerda? → R: Adiar a escolha da produção até ver entrada suficiente
     · P: Qual prefixo usar? → R: O maior prefixo comum a todas as alternativas do grupo (as que começam com o mesmo símbolo)
     · P: Fatore A → x y z | x y → R: A → x y A'; A' → z | ε
-    · P: Else pendurado fatorado? → R: S → i E t S S' | a; S' → e S | ε
+    · P: Else solto fatorado? → R: S → i E t S S' | a; S' → e S | ε
     · P: Fatorar resolve ambiguidade? → R: Não
     · P: Fatorada e sem recursão à esquerda ⇒ LL(1)? → R: Não necessariamente
 

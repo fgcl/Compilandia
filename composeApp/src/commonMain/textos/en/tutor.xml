@@ -106,7 +106,7 @@
     <string name="sims_olha_arvore_para_esta_frase">Look at a tree for this sentence.</string>
     <string name="sims_agora_outra_arvore_com_mesma">Now another tree, with the same sentence. The grammar is ambiguous.</string>
     <string name="sims_primeira_agrupa_jeito_volte_compare">The first one groups it one way. Go back and compare what sits deeper.</string>
-    <string name="sims_mais_fundo_roda_primeiro_por">The deepest part runs first. That's why the two give different results.</string>
+    <string name="sims_mais_fundo_roda_primeiro_por">The deepest part runs first. Each tree groups the expression its own way.</string>
     <string name="sims_parser_olha_1_precisa_decidir">The parser looks at %1$s and has to decide.</string>
     <string name="sims_1_virou_2_3_primeiro">%1$s became %2$s %3$s. The first is still %4$s.</string>
     <string name="sims_preso_em_1">Stuck in %1$s</string>
@@ -146,14 +146,34 @@
     <string name="sims_construindo_estados_lr_0">Building the LR(0) states</string>
     <string name="sims_ask_tac">Which operation does the generator do now?</string>
     <string name="sims_ask_tac_porque">%1$s already has both sides ready. That's why it comes now.</string>
-    <string name="sims_ask_lr0">In state %1$s, does any item have the dot at the end?</string>
-    <string name="sims_ask_lr0_sim">Yes, it can reduce</string>
-    <string name="sims_ask_lr0_nao">No, it only shifts</string>
-    <string name="sims_ask_lr0_porque_sim">One item has the dot at the end of the rule. There the parser can reduce.</string>
-    <string name="sims_ask_lr0_porque_nao">Every item still has a symbol after the dot. There it only shifts.</string>
     <string name="sims_aceita">accept</string>
     <string name="sims_erro">error</string>
     <string name="sims_pilha">stack</string>
     <string name="diagnostico_ou"> or </string>
     <string name="diagnostico_empilhar">shift</string>
+
+    <!-- Fazer com ajuda: recursão, fatoração, itens LR(0) e ambiguidade -->
+    <string name="pg_rec_repete">Which piece repeats on each loop?</string>
+    <string name="pg_regra_de">What does the rule for %1$s become?</string>
+    <string name="pg_rec_regra_de_porque">First the piece that ends, %1$s. Then %2$s handles the repetition.</string>
+    <string name="pg_regra_nova">And the new rule, %1$s?</string>
+    <string name="pg_rec_regra_nova_porque">It repeats %1$s and calls itself on the right. The ε lets it stop.</string>
+    <string name="pg_fat_comeco">What is the longest common prefix of the group?</string>
+    <string name="pg_fat_comeco_porque">Every option in the group starts with %1$s. Right after that, they differ.</string>
+    <string name="pg_fat_regra_de_porque">Read %1$s only once. Then %2$s picks the rest.</string>
+    <string name="pg_fat_regra_nova_porque">The new rule keeps only what is left of each option. An empty leftover becomes ε.</string>
+    <string name="pg_lr0_chegada">From state %1$s, reading %2$s, I reach state %3$s.</string>
+    <string name="pg_lr0_fecho">State %1$s starts with %2$s. Which item does the closure add?</string>
+    <string name="pg_lr0_fecho_porque">The dot stopped before %1$s. The closure brings in the rules of %1$s with the dot at the start.</string>
+    <string name="pg_lr0_goto">State %1$s has %2$s. Reading %3$s, which item goes to state %4$s?</string>
+    <string name="pg_lr0_goto_porque">Reading %1$s, the dot jumps over the %1$s. The rest of the item stays the same.</string>
+    <string name="pg_amb_intro">This grammar does not say which operation comes first. See two trees for the same sentence.</string>
+    <string name="pg_amb_primeiro">first: %1$s</string>
+    <string name="pg_amb_fundo">The deepest operation runs first: %1$s.</string>
+    <string name="pg_amb_q_primeiro">In this tree, which operation runs first?</string>
+    <string name="pg_amb_valor">This tree gives %1$s.</string>
+    <string name="pg_amb_q_valor">What does this tree give?</string>
+    <string name="pg_amb_q_outra">The other tree does the other operation first. What does it give?</string>
+    <string name="pg_amb_fim_diferente">The same sentence gave %1$s in one tree and %2$s in the other. The grammar is ambiguous.</string>
+    <string name="pg_amb_fim_igual">Both give %1$s, but they are two trees. The grammar is ambiguous all the same.</string>
 </resources>

@@ -220,13 +220,15 @@ Flashcards:
 - terminal: Símbolo que aparece no programa de verdade, como id ou mais.
 - não-terminal: Símbolo que ainda vai ser trocado por uma regra, como E ou T.
 - derivação: A sequência de trocas que leva do símbolo inicial até a frase.
+- produção: Outro nome para regra. Cada lado direito separado por barra é uma alternativa.
+- sentença: Frase só com terminais. Livros dizem também cadeia ou palavra. Forma sentencial pode ter não-terminais.
 
 
 ## ASSUNTO AMBIGUITY: Árvores e ambiguidade
 Pré-requisitos no jogo: Gramáticas e derivações
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Duas árvores, uma frase» → Montar na Fábrica → Pegadinha «O else solto» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Duas árvores, uma frase» → Fazer com ajuda → Montar na Fábrica → Pegadinha «O else solto» → Desafio
 Jogos que treinam: Derivação Turbo (escolher produções e crescer a árvore), Duas Árvores (achar duas árvores para a mesma frase)
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug fez duas árvores
@@ -398,8 +400,9 @@ Flashcards:
     · P: Gramática de expressões não ambígua? → R: E → E + T | T; T → T * F | F; F → ( E ) | id
     · P: Onde fica o operador de maior precedência na árvore? → R: Mais fundo (longe da raiz)
     · P: Recursão à esquerda dá qual associatividade? → R: À esquerda
-    · P: Else pendurado: com quem o else casa? → R: Com o if mais próximo sem else
+    · P: Else solto: com quem o else casa? → R: Com o if mais próximo sem else
     · P: Decidir se uma GLC é ambígua é decidível? → R: Não, é indecidível
 
 #### GLOSSÁRIO (balão ao tocar no termo)
 - ambígua: Gramática em que a mesma frase tem duas árvores diferentes.
+- else solto: Else de um if dentro de outro: de qual if ele é? Também chamado pendurado (dangling else).

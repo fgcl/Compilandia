@@ -37,8 +37,8 @@
     <string name="bugs_no_empate_tamanho_ganha_regra">When the length ties, the rule that comes first wins. The reserved word must come first.</string>
     <string name="bugs_no_flex_regra_que_vem">In Flex, the rule that comes first wins the tie.</string>
     <string name="bugs_maior_casamento_decide_antes_ordem">Longest match decides before rule order.</string>
-    <string name="bugs_yytext_guarda_classe_token">yytext holds the token's class.</string>
-    <string name="bugs_yytext_guarda_lexema">yytext holds the lexeme.</string>
+    <string name="bugs_espacos_chegam_ao_parser">Spaces become tokens and reach the parser.</string>
+    <string name="bugs_espacos_sem_return">The rule for spaces has no return. Flex throws the space away.</string>
     <string name="bugs_bug_estrela_cheia">Full Star Bug</string>
     <string name="bugs_exige_pelo_menos">a* requires at least one a.</string>
     <string name="bugs_estrela_aceita_zero_ou_mais">The star accepts zero or more. The empty string is in.</string>

@@ -63,6 +63,7 @@ fun abrirPasso(app: AppState, s: Skill, p: PassoTrilha, troca: Boolean = false) 
         Etapa.VER -> Screen.Episode(s, abertura = bug != null && Trilha.estado(l, s, bug) == EstadoEtapa.PENDENTE)
         Etapa.PRATICA, Etapa.PEGADINHA -> Screen.Episode(s, id = p.episodio?.id)
         Etapa.FAZER -> Screen.FazerComAjuda(s, semente = nowMs())
+        Etapa.PROVA -> Screen.FazerComAjuda(s, semente = nowMs(), prova = true)
         Etapa.PROGRAMAR -> com.compilandia.content.Robo.de(s)?.let { Screen.Bancada(it) } ?: return
         Etapa.FABRICA -> {
             // Derivação abre o tutorial onde parou; ambiguidade e recursão abrem o desafio do assunto.
@@ -302,17 +303,21 @@ fun SeuCompiladorScreen(app: AppState) {
 @Composable
 fun FazerComAjudaScreen(app: AppState, scr: Screen.FazerComAjuda) {
     val s = scr.skill
-    var p by remember { androidx.compose.runtime.mutableIntStateOf(scr.comeca.coerceIn(0, 3)) }
+    val total = if (scr.prova) com.compilandia.content.Prova.PROBLEMAS else com.compilandia.content.Guiado.PROBLEMAS
+    var p by remember { androidx.compose.runtime.mutableIntStateOf(scr.comeca.coerceIn(0, total - 1)) }
     var terminou by remember(p) { androidx.compose.runtime.mutableStateOf(false) }
-    val serie = remember(s, scr.semente) { com.compilandia.content.Guiado.problemas(s, scr.semente) }
+    val serie = remember(s, scr.semente) {
+        if (scr.prova) com.compilandia.content.Prova.problemas(s, scr.semente) else com.compilandia.content.Guiado.problemas(s, scr.semente)
+    }
     val sim = serie.getOrNull(p)
+    val falas = if (scr.prova) com.compilandia.content.Falas.prova else com.compilandia.content.Falas.guiado
     // A abertura do problema tem voz; o que o motor gera na hora fica em legenda.
-    LaunchedEffect(p) { com.compilandia.ui.voice.Narrator.say(com.compilandia.content.Falas.guiado[p.coerceIn(0, 3)]) }
+    LaunchedEffect(p) { com.compilandia.ui.voice.Narrator.say(falas[p.coerceIn(0, falas.lastIndex)]) }
     Column(Modifier.fillMaxSize()) {
-        Header(tx("trilha_etapa_fazer"), s.title, Palette.region(s.region))
+        Header(tx(if (scr.prova) "trilha_etapa_prova" else "trilha_etapa_fazer"), s.title, Palette.region(s.region))
         Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 8.dp)) {
-            Text(tx("guiado_problema", p + 1), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
-            Text(when (p) { 0 -> tx("guiado_nivel_0"); 1 -> tx("guiado_nivel_1"); 2 -> tx("guiado_nivel_2"); else -> tx("guiado_nivel_3") }, style = MaterialTheme.typography.titleSmall)
+            Text(if (scr.prova) tx("prova_problema", p + 1) else tx("guiado_problema", p + 1), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft)
+            Text(falas[p.coerceIn(0, falas.lastIndex)].text, style = MaterialTheme.typography.titleSmall)
         }
         if (sim == null) {
             LaunchedEffect(Unit) { app.back() }
@@ -321,16 +326,16 @@ fun FazerComAjudaScreen(app: AppState, scr: Screen.FazerComAjuda) {
         androidx.compose.runtime.key(p) {
             com.compilandia.ui.lab.SimPlayer(
                 sim, Modifier.weight(1f).fillMaxWidth(),
-                exigir = com.compilandia.content.Guiado.exigir(sim, p),
+                exigir = if (scr.prova) com.compilandia.content.Prova.exigir(sim, p) else com.compilandia.content.Guiado.exigir(sim, p),
                 onFim = { terminou = true },
             )
         }
         if (terminou) Column(Modifier.fillMaxWidth().background(Palette.paper).padding(horizontal = 14.dp, vertical = 10.dp)) {
-            if (p < com.compilandia.content.Guiado.PROBLEMAS - 1) {
+            if (p < total - 1) {
                 BigButton(tx("guiado_proximo"), Modifier.fillMaxWidth()) { p++ }
             } else {
                 BigButton(tx("guiado_concluir"), Modifier.fillMaxWidth()) {
-                    app.learner.marcaEtapa(s, Etapa.FAZER.name, feita = true, nowMs())
+                    app.learner.marcaEtapa(s, (if (scr.prova) Etapa.PROVA else Etapa.FAZER).name, feita = true, nowMs())
                     app.commit()
                     val prox = Trilha.proximo(app.learner, s)
                     if (prox != null) abrirPasso(app, s, prox, troca = true) else app.back()

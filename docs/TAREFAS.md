@@ -36,18 +36,19 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
 - [x] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
 - [x] Nenhum trecho com mais de 4 cenas só ouvindo (`TrechosSoOuvindoTest`)
-- [ ] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
+- [x] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
+- [ ] Um nome por conceito, o que sobrou: X da aula de FIRST/FOLLOW × E' da recursão; cadeia/palavra/frase nas aulas
 - [x] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
-- [ ] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto"
+- [x] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto" (`FichaDoTexto`)
 - [ ] Dar falas à professora e ao Bug nas aulas animadas
 - [x] Série em C 5: os fios `yyparse()` e `NUM 42` saem do alto das caixas, e o rótulo fica no vão
 
 ## 3. O aluno produz a resposta
 
-- [ ] Etapa "Questão de prova" em LL1_TABLE (exemplo resolvido → para completar → sozinho, com conflito no terceiro)
+- [x] Etapa "Questão de prova" em LL1_TABLE (exemplo resolvido → para completar → sozinho, com conflito no terceiro)
 - [ ] "Questão de prova" em SLR_TABLE: `E → E + n | n`, depois `S → ( S ) | id`, depois `S → L = R | R`
 - [ ] "Questão de prova" em NFA_TO_DFA e DFA_MINIMIZATION (tabela Dtran e escadinha de pares)
-- [ ] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
+- [x] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
 - [x] Exercício integrado "torne LL(1)": tirar a recursão, depois fatorar
 - [ ] Um "diga por quê" depois de cada "Sua vez" (autoexplicação)
 - [x] Revisão espaçada exige acerto antes de dar o assunto por revisado
@@ -102,7 +103,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
 - [x] "PC" sem definição no FORMAL de Ambientes e no cartão do `jal`
 - [x] Cena de transição na abertura da região 8
-- [ ] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto
+- [x] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto (a ficha marca)
 
 **Seu compilador**
 - [x] Por que há duas linguagens, com tabela de equivalência de nomes

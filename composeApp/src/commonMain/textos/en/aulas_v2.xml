@@ -58,12 +58,12 @@
     <string name="pred_f_z2">Nonterminal on top: replace by the table. Terminal on top: match the token.</string>
     <string name="pred_f_z3">$ with $ accepts. Empty cell or different terminal is an error.</string>
     <string name="pred_f_resumo">To sum up: the predictive parser looks at the top and one token. The table picks the rule, matching consumes input, and dollar with dollar accepts.</string>
-    <string name="desc_f_af">E → E + T becomes: void E() { E(); match('+'); T(); }</string>
+    <string name="desc_f_af">E → E + T becomes: void E() { E(); casa('+'); T(); }</string>
     <string name="desc_f_q">A classmate translated a left-recursive rule straight into code. Right or wrong?</string>
     <string name="desc_f_dica">Look at the first thing function E does, before reading any token.</string>
     <string name="desc_f_ok">E calls E without consuming anything, and the recursion never ends. Before descending, remove the left recursion.</string>
     <string name="desc_f_certo">Left recursion hangs the descent. Remove it first: E → T X.</string>
-    <string name="desc_f_erro2">Handling the ε rule with a call match(ε).</string>
+    <string name="desc_f_erro2">Handling the ε rule with a call casa(ε).</string>
     <string name="desc_f_certo2">The ε rule is the empty else: the function returns without consuming a token.</string>
     <string name="desc_f_fala2">Another mistake is trying to match epsilon. Epsilon is not a token. The epsilon rule is just returning without doing anything.</string>
     <string name="desc_f_z1">Each nonterminal is a function. A nonterminal in a rule is a call; a terminal is match.</string>

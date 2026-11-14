@@ -94,6 +94,13 @@ fun FlashcardScreen(app: AppState, skills: List<Skill>) {
             }
             val (skill, qa) = cards[i]
             Text(skill.title, style = MaterialTheme.typography.labelLarge, color = Palette.ink)
+            // Padrão 7: o cartão que cobra o que só a aula de texto ensina avisa de onde veio.
+            if (com.compilandia.content.FichaDoTexto.doTexto(skill, qa.first, qa.second)) {
+                Text(
+                    tx("ficha_vem_do_texto"), style = MaterialTheme.typography.labelMedium, color = Palette.inkSoft,
+                    modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(Palette.paperDark).padding(horizontal = 10.dp, vertical = 4.dp),
+                )
+            }
             Box(
                 Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(22.dp))
                     .background(if (revealed) Palette.teal.copy(alpha = 0.12f) else Palette.white)

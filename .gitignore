@@ -12,3 +12,6 @@ captures/
 scripts/bancada/vereditos.json
 *.md
 /scripts/bancada
+
+# Downloads da pesquisa das aulas (PDFs, ~290 MB): ficam só neste computador.
+/pesquisa-fontes/

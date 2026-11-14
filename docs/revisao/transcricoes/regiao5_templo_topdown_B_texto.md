@@ -667,7 +667,7 @@ E → id
 ```
 - BYTE: E como o funcionário S sabe o que fazer?
 - PROF: Ele olha a **senha do próximo cliente**: o token de lookahead. Senha 'if'? Segue o roteiro de S → if E then S. Senha 'print'? Roteiro de S → print E.
-- TEXTO: Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**match**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**).
+- TEXTO: Seguir o roteiro é simples: para cada **terminal** do lado direito, confere a senha e chama o próximo cliente (**casa()**). Para cada **não-terminal**, manda o cliente ao guichê daquele funcionário (**chama a função**).
 - PREVEJA: S recebeu a senha 'begin'. Qual é a sequência de ações do funcionário S?
     opções: ✔match(begin); L(); match(end) | L(); match(begin); match(end) | match(begin); S(); match(end) | Chama E()
     explicação: É o roteiro de S → begin L end: confere 'begin', manda para o L, confere 'end'.
@@ -693,17 +693,17 @@ F → ( E ) | id
 ```
 fun E() { T(); Elinha() }
 fun Elinha() {
-  if (look == "+") { match("+"); T(); Elinha() }
+  if (look == "+") { casa("+"); T(); Elinha() }
   // senão: ε (look deve estar em FOLLOW(E') = { ), $ })
 }
 fun T() { F(); Tlinha() }
 fun Tlinha() {
-  if (look == "*") { match("*"); F(); Tlinha() }
+  if (look == "*") { casa("*"); F(); Tlinha() }
 }
 fun F() {
   when (look) {
-    "("  -> { match("("); E(); match(")") }
-    "id" -> match("id")
+    "("  -> { casa("("); E(); casa(")") }
+    "id" -> casa("id")
     else -> erro("esperava ( ou id")
   }
 }
@@ -711,8 +711,8 @@ fun F() {
 - WIDGET DERIVATION gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» entrada=«id * id» legenda: Cada expansão desta derivação mais à esquerda corresponde a uma chamada de função do código acima.
 - PASSOS (Chamadas para id * id):
     · E() chama T().
-    · T() chama F(); F() vê 'id' e faz match(id).
-    · T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.
+    · T() chama F(); F() vê 'id' e faz casa(id).
+    · T() chama Tlinha(); vê '*': casa(*), F() casa o segundo id, Tlinha() de novo.
     · Tlinha() vê $: não faz nada (ε) e retorna.
     · De volta em E(), que chama Elinha(); vê $: ε, retorna.
     · E() retorna com look = $: sucesso!
@@ -734,7 +734,7 @@ T → int | float
 L → id R
 R → , id R | ε
 ```
-- TEXTO: Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `match(t)` que confere e avança.
+- TEXTO: Receita: **uma função por não-terminal**; uma variável global `look` com o token atual; uma função `casa(t)` que confere e avança.
 - CÓDIGO (O 'conferir a senha'.):
 ```
 fun match(t: String) {
@@ -744,17 +744,17 @@ fun match(t: String) {
 ```
 - CÓDIGO (D, T e L resolvidos. D e L têm uma produção só: nem precisam olhar o lookahead.):
 ```
-fun D() { T(); L(); match(";") }      // produção única
+fun D() { T(); L(); casa(";") }      // produção única
 
 fun T() {
   when (look) {
-    "int"   -> match("int")
-    "float" -> match("float")
+    "int"   -> casa("int")
+    "float" -> casa("float")
     else    -> erro("esperava um tipo")
   }
 }
 
-fun L() { match("id"); R() }          // L → id R
+fun L() { casa("id"); R() }          // L → id R
 ```
 - BYTE: E o R, que tem ε?
 - PROF: Esse fica para você. Pense: qual token faz R escolher R → , id R? E qual faz escolher R → ε?
@@ -763,7 +763,7 @@ fun L() { match("id"); R() }          // L → id R
 - REVELAR: E qual escolhe R → ε?
     → ';': é FOLLOW(R). Qualquer outro token é erro.
 - REVELAR: Escreva R() completo.
-    → fun R() { when (look) { "," -> { match(","); match("id"); R() };  ";" -> { /* ε: não consome nada */ };  else -> erro("esperava , ou ;") } }
+    → fun R() { when (look) { "," -> { casa(","); casa("id"); R() };  ";" -> { /* ε: não consome nada */ };  else -> erro("esperava , ou ;") } }
 - WIDGET PARSE_TREE gramática=«D → T L ; ⏎ T → int | float ⏎ L → id R ⏎ R → , id R | ε» entrada=«int id , id ;» legenda: Cada nó interno = uma chamada. Repare no R chamando R: recursão à DIREITA, inofensiva.
 - CAIXA [Dica de prova]: Nas produções com ε, deixe o teste explícito: 'se look ∈ FOLLOW(A), não faz nada; senão, erro'. Detectar o erro cedo (no else) costuma valer ponto.
 
@@ -771,7 +771,7 @@ fun L() { match("id"); R() }          // L → id R
 - PROF: Vamos inventar a descida recursiva do zero. Objetivo: uma função que reconheça 'tudo que S gera'.
 - PREVEJA: S → a B c. Qual é o corpo mais natural de S()?
     opções: ✔match(a); B(); match(c) | B(); match(a); match(c) | match(a); match(B); match(c) | S(); B()
-    explicação: Siga o lado direito da esquerda para a direita: terminal vira match; não-terminal vira chamada da função dele.
+    explicação: Siga o lado direito da esquerda para a direita: terminal vira casa(); não-terminal vira chamada da função dele.
 - PREVEJA: S → a B | c D. Como S() escolhe?
     opções: Tenta a primeira e, se falhar, volta atrás | ✔Olha o token: 'a' → primeira, 'c' → segunda | Sempre a primeira | Sorteia
     explicação: Com FIRST disjuntos, um token basta. É a descida recursiva PREDITIVA, sem backtracking.
@@ -788,8 +788,8 @@ fun L() { match("id"); R() }          // L → id R
     explicação: O mesmo token x abre as duas alternativas: sem fatorar, só com backtracking.
 - WIDGET LEFT_FACTORING gramática=«S → a b | a c» legenda: Veja a fatoração deixando a gramática pronta para virar funções.
 - REVELAR: Resuma com suas palavras como construir uma descida recursiva.
-    → Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, match para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).
-- WIDGET PARSE_TREE gramática=«S → if E then S | print E | begin L end ⏎ L → S L | ε ⏎ E → id» entrada=«if id then print id» legenda: Treino: imagine S() → match(if), E(), match(then), S()… e confira com a árvore.
+    → Uma função por não-terminal; o lookahead escolhe a produção (FIRST, ou FOLLOW para a alternativa ε); no corpo, casa() para terminais e chamada para não-terminais; a gramática precisa ser LL(1) (sem recursão à esquerda e fatorada).
+- WIDGET PARSE_TREE gramática=«S → if E then S | print E | begin L end ⏎ L → S L | ε ⏎ E → id» entrada=«if id then print id» legenda: Treino: imagine S() → casa(if), E(), casa(then), S()… e confira com a árvore.
 
 #### ESTILO FORMAL (Definição de prova): "Descida recursiva: definição de prova"
 - PROF: Definição de prova, no estilo do Livro do Dragão.
@@ -822,13 +822,13 @@ E → id
 - REVELAR: Escreva L() para L → S L | ε.
     → L() { se look ∈ {if, print, begin}: S(); L()   senão se look = end: retorna (ε)   senão: erro() }
 - WIDGET FIRST_FOLLOW gramática=«S → if E then S | print E | begin L end ⏎ L → S L | ε ⏎ E → id» legenda: Os conjuntos que decidem cada if: FIRST(S) = {if, print, begin} e FOLLOW(L) = {end}.
-- CAIXA [Dica de prova]: Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o match e a checagem final do $ (principal: S(); se look ≠ $, erro).
+- CAIXA [Dica de prova]: Na prova: (1) elimine recursão à esquerda e fatore; (2) calcule FIRST/FOLLOW; (3) uma função por não-terminal com um 'switch' no lookahead; (4) não esqueça o casa() e a checagem final do $ (principal: S(); se look ≠ $, erro).
 - REVELAR: Por que a recursão à DIREITA (L → S L) não causa problema?
     → Porque antes de chamar L() de novo, S() consome pelo menos um token. A entrada diminui a cada chamada, então a recursão termina.
 
 #### ESTILO MNEMONIC (Truque de memória): "Uma variável, uma função"
 - NARRADOR: Último corredor do Templo Top-Down: uma fileira de portas, cada uma com o nome de um não-terminal. Atrás de cada porta, um funcionário que pode abrir outras portas.
-- CAIXA [Gancho de memória]: **'Uma variável, uma função. Um terminal, um match.'**
+- CAIXA [Gancho de memória]: **'Uma variável, uma função. Um terminal, um casa().'**
 - CAIXA [Gancho de memória]: **Recursão à esquerda = cachorro correndo atrás do rabo.** E() chama E() que chama E()… e nunca sai do lugar, porque não come nenhum token.
 - CAIXA [Gancho de memória]: **'Olha a senha antes de atender.'** O lookahead é a senha do cliente: o FIRST escolhe o roteiro; o FOLLOW autoriza o 'não faço nada' (ε).
 - LEXI: Eu entrego os tokens já cortadinhos. A função só precisa espiar o próximo: nada de reler texto!
@@ -844,7 +844,7 @@ E → id
     explicação: A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada.
 - WIDGET PARSE_TREE gramática=«D → T L ; ⏎ T → int | float ⏎ L → id R ⏎ R → , id R | ε» entrada=«float id ;» legenda: Cada nó interno = uma porta aberta (uma função chamada). Conte: D, T, L, R.
 - REVELAR: Recite os dois ganchos principais.
-    → 'Uma variável, uma função; um terminal, um match.' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'
+    → 'Uma variável, uma função; um terminal, um casa().' e 'Recursão à esquerda = cachorro correndo atrás do rabo.'
 
 
 ## ASSUNTO ERROR_RECOVERY: Erros sintáticos e recuperação

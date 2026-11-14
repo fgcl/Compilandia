@@ -62,7 +62,7 @@ data class Sim(val titulo: String, val passos: List<SimStep>, val skill: Skill? 
 private fun tintDe(g: Grammar, s: String) = if (g.isNonTerminal(s)) Tint.ORANGE else if (s == EOF) Tint.NONE else Tint.TEAL
 
 /** Monta [certa] e dois erros plausíveis em posições que variam com o passo. */
-private fun opcoes(certa: String, erradas: List<String>, k: Int): Pair<List<String>, Int> {
+internal fun opcoes(certa: String, erradas: List<String>, k: Int): Pair<List<String>, Int> {
     val outras = erradas.filter { it != certa }.distinct().take(2)
     val tudo = (listOf(certa) + outras).toMutableList()
     val rotaciona = k % tudo.size
@@ -151,6 +151,7 @@ object Sims {
         cols.forEachIndexed { c, s -> fixas += Box("h$c", s, x0 + (c + 1) * cw, y0, cw - 3f, ch - 3f, Look.CELL, Tint.DARK, size = tam) }
         rows.forEachIndexed { l, s -> fixas += Box("r$l", s, x0, y0 + (l + 1) * ch, cw - 3f, ch - 3f, Look.CELL, Tint.ORANGE, size = tam) }
         for (l in rows.indices) for (c in cols.indices) fixas += Box("v$l-$c", "", x0 + (c + 1) * cw, y0 + (l + 1) * ch, cw - 3f, ch - 3f, Look.CELL, Tint.NONE)
+        fixas += codigo("gx", g.toText().lines(), y0 + (rows.size + 1) * ch + 14f, x = 24f, passo = 17f, size = 12f)
         val passos = mutableListOf(SimStep(Shot(fixas.toList()), tx("sims_linha_para_cada_nao_terminal")))
         val cheias = mutableListOf<Box>()
         var k = 0
@@ -297,7 +298,7 @@ object Sims {
         return build(g.start)
     }
 
-    private fun desenhaArvore(n: ParseNode, y0: Float = 60f, alturaUtil: Float = 310f, g: Grammar? = null): Pair<List<Box>, List<Wire>> {
+    internal fun desenhaArvore(n: ParseNode, y0: Float = 60f, alturaUtil: Float = 310f, g: Grammar? = null): Pair<List<Box>, List<Wire>> {
         val folhas = n.leaves().size.coerceAtLeast(1) + 1
         val passoY = min(56f, alturaUtil / max(n.depth() - 1, 1))
         val (bs, ws) = arvore(n, y0, passoY)
@@ -348,7 +349,7 @@ object Sims {
     // ------------------------------------------------------------ Transformações
 
     /** Uma regra em pecinhas. As peças têm id próprio, para voarem até a regra nova. */
-    private fun linha(y: Float, itens: List<Pair<String, String>>, tint: (String) -> Tint): List<Box> {
+    internal fun linha(y: Float, itens: List<Pair<String, String>>, tint: (String) -> Tint): List<Box> {
         val larguras = itens.map { (_, t) -> max(28f, t.length * 10f + 12f) }
         val total = larguras.sum() + (itens.size - 1) * 4f
         val k = min(1f, 340f / total)
@@ -415,7 +416,7 @@ object Sims {
         }) { if (it.startsWith("n")) Tint.PINK else if (it == "eps") Tint.GREEN else tint(it) }
         val final = GrammarTransform.eliminateImmediateLeftRecursion(g)
         val lista = codigo("g", final.toText().lines().take(6), 290f, size = 13f)
-        return Sim(
+        return PerguntasGuiadas.recursao(g, Sim(
             tx("sims_consertando_recursao"), listOf(
                 SimStep(Shot(cab + r1), tx("sims_esta_regra_comeca_com_ela")),
                 SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("al")) }), tx("sims_pedaco_laranja_que_repete_1", alfa.joinToString(" "))),
@@ -425,7 +426,7 @@ object Sims {
                 SimStep(Shot(cab + d1 + d2 + lista), tx("sims_linguagem_mesma_parser_agora_sabe")),
             ),
             Skill.LEFT_RECURSION,
-        )
+        ))
     }
 
     fun fatorar(g: Grammar): Sim? {
@@ -443,10 +444,13 @@ object Sims {
             if (i > 0) ids += "bar$i" to "|"
             p.rhs.forEachIndexed { j, s -> ids += (if (j < comum) "pre$i-$j" else "res$i-$j") to s }
         }
+        // As opções fora do grupo ficam na regra, iguais antes e depois.
+        val fora = g.productionsOf(nt).filter { it !in grupo }.flatMapIndexed { i, p -> listOf("obar$i" to "|") + p.rhs.ifEmpty { listOf(EPS) }.mapIndexed { j, s -> "out$i-$j" to s } }
+        ids += fora
         fun tint(id: String) = when {
             id.startsWith("pre") -> Tint.ORANGE
             id.startsWith("res") -> Tint.TEAL
-            id.startsWith("bar") || id.startsWith("seta") -> Tint.NONE
+            id.startsWith("bar") || id.startsWith("seta") || id.startsWith("o") -> Tint.NONE
             else -> Tint.YELLOW
         }
         val r1 = linha(150f, ids) { tint(it) }
@@ -454,6 +458,7 @@ object Sims {
             add("a0" to nt); add("seta" to "->")
             pre.forEachIndexed { j, s -> add("pre0-$j" to s) }
             add("n1" to novo)
+            addAll(fora)
         }) { if (it == "n1") Tint.PINK else tint(it) }
         val d2 = linha(220f, buildList {
             add("n0" to novo); add("seta2" to "->")
@@ -464,7 +469,7 @@ object Sims {
             }
         }) { if (it.startsWith("n")) Tint.PINK else tint(it) }
         val prefTxt = pre.joinToString(" ")
-        return Sim(
+        return PerguntasGuiadas.fatoracao(g, nt, grupo, comum, Sim(
             tx("sims_fatorando"), listOf(
                 SimStep(Shot(cab + r1), tx("sims_duas_opcoes_comecam_igual_1", prefTxt)),
                 SimStep(Shot(cab + r1.map { it.copy(hot = it.id.startsWith("pre")) }), tx("sims_olhando_simbolo_so_parser_nao")),
@@ -472,7 +477,7 @@ object Sims {
                 SimStep(Shot(cab + d1 + d2), tx("sims_regra_nova_guarda_so_que")),
             ),
             Skill.LEFT_FACTORING,
-        )
+        ))
     }
 
     // ------------------------------------------------------------ Autômato
@@ -615,17 +620,11 @@ object Sims {
                 completos > 0 -> tx("sims_estado_1_ponto_chegou_ao_2", k)
                 else -> tx("sims_estado_1_andei_ponto_sobre", k)
             }
-            // Pergunta do Prever: o estado tem item completo? É o que decide se ali dá para reduzir.
-            val ask = if (k == 0) null else {
-                val sim = completos > 0
-                SimAsk(
-                    tx("sims_ask_lr0", k), listOf(tx("sims_ask_lr0_sim"), tx("sims_ask_lr0_nao")), if (sim) 0 else 1,
-                    if (sim) tx("sims_ask_lr0_porque_sim") else tx("sims_ask_lr0_porque_nao"),
-                )
-            }
-            passos += SimStep(Shot(painel + vistos.map { if (it.id == "I$k") it.copy(tint = Tint.YELLOW, hot = true) else it }, fios.toList()), diz, ask)
+            // Pergunta do Prever e do Fazer com ajuda: que item o goto ou o fecho põe neste estado.
+            val (chegada, ask) = if (k == 0) "" to null else PerguntasGuiadas.lr0(a, k)
+            passos += SimStep(Shot(painel + vistos.map { if (it.id == "I$k") it.copy(tint = Tint.YELLOW, hot = true) else it }, fios.toList()), "$chegada $diz".trim(), ask)
         }
-        return Sim(tx("sims_construindo_estados_lr_0"), passos, Skill.LR0_ITEMS)
+        return PerguntasGuiadas.comGramatica(Sim(tx("sims_construindo_estados_lr_0"), passos, Skill.LR0_ITEMS), g, 372f)
     }
 
     // ------------------------------------------------------------ Outro exemplo
@@ -648,13 +647,11 @@ object Sims {
             Skill.LL1_TABLE -> tabelaLL(ll())
             Skill.LL1_PARSING, Skill.RECURSIVE_DESCENT -> ll().let { g -> parseLL(g, SentenceGenerator.generate(g, rnd, maxTokens = 7) ?: emptyList()) }
             Skill.CFG_DERIVATION -> ll().let { g -> derivacao(g, SentenceGenerator.generate(g, rnd, maxTokens = 7) ?: emptyList()) }
-            Skill.AMBIGUITY -> GrammarBank.exprAmbiguous.grammar.let { g ->
-                listOf(listOf("id", "+", "id", "*", "id"), listOf("id", "*", "id", "+", "id"), listOf("id", "+", "id", "+", "id")).random(rnd).let { ambigua(g, it) }
-            }
-            Skill.LEFT_RECURSION -> recursao(GrammarBank.exprLeftRec.grammar)
-            Skill.LEFT_FACTORING -> fatorar(Grammar.parse(listOf("S -> if E then S | if E then S else S | a\nE -> b", "A -> a b c | a b d | e", "L -> id , L | id").random(rnd)))
+            Skill.AMBIGUITY -> PerguntasGuiadas.contas(PerguntasGuiadas.CONTAS.random(rnd))
+            Skill.LEFT_RECURSION -> recursao(Grammar.parse(PerguntasGuiadas.RECURSAO.random(rnd)))
+            Skill.LEFT_FACTORING -> fatorar(Grammar.parse(PerguntasGuiadas.FATORACAO.random(rnd)))
             Skill.SHIFT_REDUCE, Skill.SLR_TABLE -> GrammarBank.exprLeftRec.grammar.let { g -> parseLR(g, SentenceGenerator.generate(g, rnd, maxTokens = 7) ?: listOf("id")) }
-            Skill.LR0_ITEMS -> lr0(Grammar.parse(listOf("E -> E + n | n", "S -> ( S ) | id", "L -> L , id | id", "E -> E * n | n", "A -> id = E\nE -> E + n | n").random(rnd)))
+            Skill.LR0_ITEMS -> lr0(Grammar.parse(PerguntasGuiadas.LR0.random(rnd)))
             Skill.TAC, Skill.ATTRIBUTES_TYPES, Skill.AST_BUILD, Skill.CODEGEN_MIPS, Skill.OPTIMIZATION -> expressao(ExprGenerator.random(rnd, 2))
             else -> null
         }

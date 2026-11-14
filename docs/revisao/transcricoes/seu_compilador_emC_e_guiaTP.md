@@ -397,7 +397,7 @@ escreva    = "escreva" "(" arg { "," arg } ")" ";"
 arg        = STRING | expr
 leia       = "leia" "(" ID ")" ";"
 ```
-- CAIXA [No mundo real]: Exigir chaves no `se` fecha a porta do 'senão pendurado' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha.
+- CAIXA [No mundo real]: Exigir chaves no `se` fecha a porta do 'senão solto' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha.
 - REVELAR: Quem pega cada erro? (1) `x <- 3 # 2;`  (2) `x <- 3 + ;`  (3) `x <- verdadeiro + 1;`
     → (1) **Léxico**: `#` não pertence a nenhum token. (2) **Sintático**: depois do `+` deveria vir uma expressão. (3) **Semântico**: a forma está certa, mas somar um `logico` não faz sentido.
 - PREVEJA: E `inteiro 2x;`? Que tipo de erro a Byteiro deve dar?
@@ -724,7 +724,7 @@ Cmds -> Cmd Cmds | ε
 E -> id | num
 ```
 - WIDGET FIRST_FOLLOW gramática=«Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ⏎ Senao -> senao Bloco | ε ⏎ Bloco -> { Cmds } ⏎ Cmds -> Cmd Cmds | ε ⏎ E -> id | num» legenda: Calcule FIRST e FOLLOW passo a passo. Repare: `senao` NÃO aparece em FOLLOW(Senao).
-- WIDGET LL1_TABLE gramática=«Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ⏎ Senao -> senao Bloco | ε ⏎ Bloco -> { Cmds } ⏎ Cmds -> Cmd Cmds | ε ⏎ E -> id | num» legenda: Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão pendurado.
+- WIDGET LL1_TABLE gramática=«Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ⏎ Senao -> senao Bloco | ε ⏎ Bloco -> { Cmds } ⏎ Cmds -> Cmd Cmds | ε ⏎ E -> id | num» legenda: Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão solto.
 - PREVEJA: Em `Senao -> senao Bloco | ε`, quando o parser escolhe a alternativa ε?
     opções: Nunca: ε é só enfeite | ✔Quando o token atual está em FOLLOW(Senao), na prática, 'quando não é senao' | Quando o token atual é senao | Quando o arquivo acaba
     explicação: A tabela põe ε nas colunas de FOLLOW(Senao). No código da descida recursiva isso vira `if (eh(SENAO)) { … }` sem else: se não é `senao`, não consome nada, e se o token for lixo, o próximo `casaToken` reclama.

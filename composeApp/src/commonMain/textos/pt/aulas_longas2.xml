@@ -44,7 +44,7 @@
     <string name="lr_l_05">A receita começa com uma regra extra, S linha vai para S, e usa duas operações.</string>
     <string name="lr_l_06">Ponto antes de E. Qual operação junta as regras de E? Toque.</string>
     <string name="lr_l_06_dica">É a que olha o símbolo logo depois do ponto.</string>
-    <string name="lr_l_06_ok">Acertou. Closure, o fechamento.</string>
+    <string name="lr_l_06_ok">Acertou. Closure, o fecho.</string>
     <string name="lr_l_07">Depois do goto, sempre faça o closure de novo. Repita para cada símbolo depois de um ponto, até não surgir estado novo.</string>
     <string name="lr_l_08">Outra gramática: parênteses em volta de id. O estado zero começa com S linha vai para ponto S.</string>
     <string name="lr_l_09">No estado zero, o ponto está antes de S. Quais itens o closure junta? Toque nos dois.</string>

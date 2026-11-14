@@ -81,7 +81,7 @@
     <string name="tpguidea_por_que_para_atribuir_assim">Por que `&lt;-` para atribuir? Assim `=` fica livre para COMPARAR e ninguém escreve `se (x = 1)` achando que atribui. Mas tem pegadinha: `a&lt;-1` agora é `a &lt;- 1` (atribuição), e não `a &lt; -1`. É a regra do **maior lexema**: o léxico sempre pega o token mais comprido possível. Documente isso no relatório!</string>
     <string name="tpguidea_lexi_app_conhece_c_em">O Lexi do app conhece C: em C, `x&lt;-1` é `x &lt; -1`. Na Byteiro o MESMO texto vira `x &lt;- 1`. Quem define os tokens é a especificação da linguagem.</string>
     <string name="tpguidea_gramatica_informal_ebnf_repete_0">Gramática informal (EBNF): { } = repete 0+ vezes, [ ] = opcional. As expressões ficam para o capítulo 4.</string>
-    <string name="tpguidea_exigir_chaves_no_se_fecha">Exigir chaves no `se` fecha a porta do 'senão pendurado' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha.</string>
+    <string name="tpguidea_exigir_chaves_no_se_fecha">Exigir chaves no `se` fecha a porta do 'senão solto' (dangling else): nunca há dúvida de a qual `se` um `senao` pertence. Go e Rust fazem a mesma escolha.</string>
     <string name="tpguidea_1_lexico_nao_pertence_nenhum">(1) **Léxico**: `#` não pertence a nenhum token. (2) **Sintático**: depois do `+` deveria vir uma expressão. (3) **Semântico**: a forma está certa, mas somar um `logico` não faz sentido.</string>
     <string name="tpguidea_lexico_numero_malformado_2x">Léxico: número malformado '2x'</string>
     <string name="tpguidea_sintatico_esperava_identificador_encontrou_2">Sintático: esperava identificador, encontrou '2'</string>
@@ -159,7 +159,7 @@
     <string name="tpguideb_se_byteiro_tivesse_chamada_procedimento">Se a Byteiro tivesse chamada de procedimento `p(x);`, atribuição e chamada começariam com `id`. E `se` com e sem `senao` também. Veja a fatoração.</string>
     <string name="tpguideb_comandos_byteiro_em_bnf_expressoes">Os comandos da Byteiro em BNF (expressões resumidas em E), prontos para o teste LL(1)</string>
     <string name="tpguideb_calcule_first_follow_passo_passo">Calcule FIRST e FOLLOW passo a passo. Repare: `senao` NÃO aparece em FOLLOW(Senao).</string>
-    <string name="tpguideb_nenhuma_celula_com_duas_producoes">Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão pendurado.</string>
+    <string name="tpguideb_nenhuma_celula_com_duas_producoes">Nenhuma célula com duas produções: é LL(1)! O bloco obrigatório no `se` resolveu o senão solto.</string>
     <string name="tpguideb_em_senao_senao_bloco_quando">Em `Senao -&gt; senao Bloco | ε`, quando o parser escolhe a alternativa ε?</string>
     <string name="tpguideb_nunca_so_enfeite">Nunca: ε é só enfeite</string>
     <string name="tpguideb_quando_token_atual_esta_em">Quando o token atual está em FOLLOW(Senao), na prática, 'quando não é senao'</string>

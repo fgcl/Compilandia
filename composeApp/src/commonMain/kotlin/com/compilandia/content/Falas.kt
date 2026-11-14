@@ -41,6 +41,12 @@ object Falas {
         Fala(BYTE, tx("guiado_nivel_2")),
         Fala(BYTE, tx("guiado_nivel_3")),
     )
+    /** A abertura de cada questão da Questão de prova. */
+    val prova = listOf(
+        Fala(BYTE, tx("prova_nivel_0")),
+        Fala(BYTE, tx("prova_nivel_1")),
+        Fala(BYTE, tx("prova_nivel_2")),
+    )
     val boas = listOf(
         Fala(BYTE, tx("falas_oi_eu_sou_byte_eu")),
         Fala(BYTE, tx("falas_mas_grande_compilador_quebrou_bugs")),
@@ -50,5 +56,5 @@ object Falas {
     )
 
     /** Toda fala solta, para gerar os áudios. */
-    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + retomada + guiado + boas + comoJogar.values + Robos.falas()
+    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + retomada + guiado + prova + boas + comoJogar.values + Robos.falas()
 }

@@ -205,7 +205,7 @@
     <string name="transform_gera_linguagem_que_nenhuma_expressao">Gera (), (()), ()() ... Uma linguagem que NENHUMA expressão regular reconhece.</string>
     <string name="transform_exemplo_classico_linguagem_livre_contexto">O exemplo clássico de linguagem livre de contexto que não é regular.</string>
     <string name="transform_if_then_else_dangling_else">if-then-else (dangling else)</string>
-    <string name="transform_famoso_else_pendurado_ambigua_yacc">O famoso 'else pendurado': ambígua; o Yacc resolve com shift.</string>
+    <string name="transform_famoso_else_pendurado_ambigua_yacc">O famoso 'else solto': ambígua; o Yacc resolve com shift.</string>
     <string name="transform_comandos_simples">Comandos simples</string>
     <string name="transform_lista_comandos_precisa_fatoracao_para">Lista de comandos; precisa de fatoração para ser LL(1).</string>
     <string name="transform_declaracoes_estilo_c_int_b">Declarações estilo C: int a, b, c; , já é LL(1).</string>

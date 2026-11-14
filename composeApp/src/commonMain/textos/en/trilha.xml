@@ -65,4 +65,20 @@
     <string name="regiao_revisar_assunto_1">Review: %1$s</string>
     <string name="trilha_etapa_fabrica">Build it in the Factory</string>
     <string name="trilha_etapa_fabrica_sub">The grammar becomes machines and belts.</string>
+    <string name="ficha_vem_do_texto">From the Read at your pace lesson</string>
+    <!-- Questão de prova (seção 3 da revisão) -->
+    <string name="trilha_etapa_prova">Exam question</string>
+    <string name="trilha_etapa_prova_sub">From FIRST to the verdict, as on the exam.</string>
+    <string name="prova_problema">Question %1$s of 3</string>
+    <string name="prova_nivel_0">Byte solves this whole question. Follow each step.</string>
+    <string name="prova_nivel_1">Now half of the answers are yours.</string>
+    <string name="prova_nivel_2">This one has no help, as on the exam.</string>
+    <string name="prova_abre">The exam asks for FIRST, FOLLOW, the table, and whether the grammar is LL(1).</string>
+    <string name="prova_pergunta">Is the grammar LL(1)?</string>
+    <string name="prova_sim">Yes: no cell has two rules</string>
+    <string name="prova_nao_vazia">No: the table has empty cells</string>
+    <string name="prova_nao_eps">No: a rule goes to ε</string>
+    <string name="prova_nao_casa">No: cell (%1$s, %2$s) has two rules</string>
+    <string name="prova_porque_sim">An empty cell is just a syntax error. LL(1) allows at most one rule per cell.</string>
+    <string name="prova_porque_nao">With %2$s in the input, %1$s has two rules. The parser cannot tell which to pick.</string>
 </resources>

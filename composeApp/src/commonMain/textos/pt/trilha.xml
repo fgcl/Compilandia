@@ -65,4 +65,20 @@
     <string name="regiao_revisar_assunto_1">Revisar: %1$s</string>
     <string name="trilha_etapa_fabrica">Montar na Fábrica</string>
     <string name="trilha_etapa_fabrica_sub">A gramática vira máquinas e esteiras.</string>
+    <string name="ficha_vem_do_texto">Vem da aula Ler com calma</string>
+    <!-- Questão de prova (seção 3 da revisão) -->
+    <string name="trilha_etapa_prova">Questão de prova</string>
+    <string name="trilha_etapa_prova_sub">Do FIRST ao veredito, como na prova.</string>
+    <string name="prova_problema">Questão %1$s de 3</string>
+    <string name="prova_nivel_0">O Byte resolve esta questão inteira. Acompanhe cada passo.</string>
+    <string name="prova_nivel_1">Agora metade das respostas é sua.</string>
+    <string name="prova_nivel_2">Esta é sem ajuda, como na prova.</string>
+    <string name="prova_abre">A prova pede FIRST, FOLLOW, a tabela e se a gramática é LL(1).</string>
+    <string name="prova_pergunta">A gramática é LL(1)?</string>
+    <string name="prova_sim">Sim: nenhuma casa tem duas regras</string>
+    <string name="prova_nao_vazia">Não: a tabela tem casas vazias</string>
+    <string name="prova_nao_eps">Não: uma regra vai para ε</string>
+    <string name="prova_nao_casa">Não: a casa (%1$s, %2$s) tem duas regras</string>
+    <string name="prova_porque_sim">Casa vazia é só erro de sintaxe. LL(1) pede no máximo uma regra por casa.</string>
+    <string name="prova_porque_nao">Com %2$s na entrada, %1$s tem duas regras. O parser não sabe qual escolher.</string>
 </resources>

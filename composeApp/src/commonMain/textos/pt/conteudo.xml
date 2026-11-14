@@ -38,8 +38,8 @@
     <string name="bugs_no_empate_tamanho_ganha_regra">No empate de tamanho, ganha a regra que vem primeiro. A reservada precisa vir antes.</string>
     <string name="bugs_no_flex_regra_que_vem">No Flex, a regra que vem primeiro ganha o empate.</string>
     <string name="bugs_maior_casamento_decide_antes_ordem">O maior casamento decide antes da ordem das regras.</string>
-    <string name="bugs_yytext_guarda_classe_token">yytext guarda a classe do token.</string>
-    <string name="bugs_yytext_guarda_lexema">yytext guarda o lexema.</string>
+    <string name="bugs_espacos_chegam_ao_parser">Os espaços viram tokens e chegam ao parser.</string>
+    <string name="bugs_espacos_sem_return">A regra dos espaços não tem return. O Flex joga o espaço fora.</string>
     <string name="bugs_bug_estrela_cheia">Bug da Estrela Cheia</string>
     <string name="bugs_exige_pelo_menos">a* exige pelo menos um a.</string>
     <string name="bugs_estrela_aceita_zero_ou_mais">A estrela aceita zero ou mais. A cadeia vazia entra.</string>
@@ -250,7 +250,7 @@
     <string name="comojogar_preencha_tabela_toque_numa_celula">Preencha a tabela. Toque numa célula e escolha a regra dela.</string>
     <string name="comojogar_olhe_topo_pilha_proximo_token">Olhe o topo da pilha e o próximo token. Depois escolha a ação.</string>
     <string name="comojogar_empilhe_tokens_quando_lado_direito">Empilhe os tokens. Quando um lado direito aparecer no topo, reduza.</string>
-    <string name="comojogar_monte_estado_marque_itens_que">Monte o estado. Marque os itens que o fechamento acrescenta.</string>
+    <string name="comojogar_monte_estado_marque_itens_que">Monte o estado. Marque os itens que o fecho acrescenta.</string>
     <string name="comojogar_ache_celulas_com_duas_acoes">Ache as células com duas ações. Depois decida como o Bison resolve.</string>
     <string name="comojogar_edite_especificacao_ate_todos_testes">Edite a especificação até todos os testes passarem.</string>
     <string name="comojogar_calcule_baixo_para_cima_toque">Calcule de baixo para cima. Toque num nó com os filhos prontos.</string>

@@ -199,7 +199,7 @@ E -> E + E | E * E | ( E ) | id
     explicação: (id + id) + id ou id + (id + id). Com + o valor coincide, mas com - não: (5 - 3) - 1 ≠ 5 - (3 - 1). É um problema de **associatividade**.
 - WIDGET PARSE_TREE gramática=«E -> E + E | E * E | ( E ) | id» entrada=«id + id + id» legenda: Associatividade: quem se junta primeiro?
 - WIDGET PARSE_TREE gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» entrada=«id + id + id» legenda: Na gramática E/T/F a recursão à esquerda força (id + id) + id.
-- BYTE: E o famoso 'else pendurado'?
+- BYTE: E o famoso 'else solto'?
 - CÓDIGO (i = 'if (cond) then', e = 'else', x = um comando qualquer):
 ```
 S -> i S | i S e S | x
@@ -278,7 +278,7 @@ Regras:
   recursão à ESQUERDA → associatividade à esquerda;
   recursão à DIREITA  → associatividade à direita (ex.: ^).
 ```
-- CÓDIGO (Else pendurado sem ambiguidade (Livro do Dragão, §4.3.2)):
+- CÓDIGO (Else solto sem ambiguidade (Livro do Dragão, §4.3.2)):
 ```
 stmt → matched_stmt | open_stmt
 matched_stmt → if ( expr ) matched_stmt else matched_stmt | other
@@ -302,7 +302,7 @@ open_stmt → if ( expr ) stmt
 - CAIXA [Gancho de memória]: **Precedência = profundidade.** Quem tem MAIS precedência fica MAIS FUNDO na árvore (é calculado antes). O + fica perto da raiz; o * mais embaixo.
 - CAIXA [Gancho de memória]: **A recursão aponta a associatividade.** E → **E** + T: recursão à esquerda → associa à esquerda. P → B ^ **P**: recursão à direita → associa à direita.
 - TEXTO: **Palácio da memória**: no Vale das Gramáticas há duas árvores gêmeas plantadas lado a lado, com a mesma placa: `id + id * id`. É o minijogo **Duas Árvores**.
-- CAIXA [Gancho de memória]: **Else pendurado casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.
+- CAIXA [Gancho de memória]: **Else solto casa com o vizinho**: o else fica com o if mais próximo que ainda está sem par.
 - PREVEJA: Em `2 ^ 3 ^ 2` (potência, associativa à direita), qual o agrupamento correto?
     opções: (2 ^ 3) ^ 2 = 64 | ✔2 ^ (3 ^ 2) = 512
     explicação: Associativa à direita: o de mais à direita se junta primeiro. 3² = 9, e 2⁹ = 512.

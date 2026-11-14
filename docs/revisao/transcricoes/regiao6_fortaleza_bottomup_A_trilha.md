@@ -195,13 +195,14 @@ Flashcards:
 - handle: O lado direito no topo que é certo reduzir agora. Nem todo lado direito no topo é handle.
 - shift: Empilhar: o parser pega o próximo token e põe na pilha.
 - reduce: Reduzir: o parser troca o topo da pilha pelo lado esquerdo de uma regra.
+- acc: Ação de aceitar na tabela LR: a frase vale. O Bison escreve acc.
 
 
 ## ASSUNTO LR0_ITEMS: Itens LR(0), closure e goto
 Pré-requisitos no jogo: Empilha-reduz (shift-reduce)
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «O ponto que anda» → Pegadinha «O fecho que puxa regras» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «O ponto que anda» → Fazer com ajuda → Pegadinha «O fecho que puxa regras» → Desafio
 Jogos que treinam: Esteira Shift-Reduce (empilhar ou reduzir contra o relógio), Construtor de Estados (fechar (closure) e transitar (goto))
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug moveu o ponto
@@ -210,7 +211,7 @@ BYTE: "Antes da aula: o que a máquina espera ler agora?"
 Opções: ✔+ | E | T
 Depois: "O mais. O ponto fica logo antes dele."
 
-#### AULA ANIMADA BÁSICA: "O ponto que anda" (25 cenas, ~205s)
+#### AULA ANIMADA BÁSICA: "O ponto que anda" (25 cenas, ~203s)
 
 1. TELA: # LR(0) ⏎ E ⏎ + ⏎ E -> E + n
    BYTE: "O parser empilhou E e mais. Para saber se empilha ou reduz, ele precisa lembrar em que ponto de cada regra está."
@@ -231,7 +232,7 @@ Depois: "O mais. O ponto fica logo antes dele."
    BYTE: "O que está antes do ponto já está na pilha. O que está depois é o que o parser ainda espera ler."
 
 6. TELA: # Item LR(0) ⏎ E -> • E + n ⏎ *E -> • n*
-   BYTE: "Se o ponto está antes de um não-terminal, como E, o parser pode estar começando qualquer regra de E. Juntar essas regras é o fechamento, o closure."
+   BYTE: "O ponto está antes de E, um não-terminal. O parser pode estar começando qualquer regra de E. Juntar essas regras é o fecho, o closure."
 
 7. TELA: # Item LR(0) ⏎ E -> • E + n ⏎ E -> • n
    BYTE: "Neste estado chega um n. Qual item sobrevive? Toque nele."
@@ -240,7 +241,7 @@ Depois: "O mais. O ponto fica logo antes dele."
    se acertar: "O ponto passa por cima do n. O outro item esperava E, não n, e fica para trás."
 
 8. TELA: # Item LR(0) ⏎ E -> n • ⏎ estado novo
-   BYTE: "Andar o ponto por cima de um símbolo é o goto. O resultado, depois do fechamento, é um novo estado."
+   BYTE: "Andar o ponto por cima de um símbolo é o goto. O resultado, depois do fecho, é um novo estado."
 
 9. TELA: # Item LR(0) ⏎ *E -> n •* ⏎ estado novo
    BYTE: "Ponto no fim é um item completo: o lado direito inteiro está na pilha, e a regra pode ser reduzida."
@@ -255,7 +256,7 @@ Depois: "O mais. O ponto fica logo antes dele."
    BYTE: "Ponto antes de E. Qual operação junta as regras de E? Toque."
    PERGUNTA (toque): certo = 1. Closure: ponto antes de A puxa as regras de A. ; errado = 2. Goto: ande o ponto por X e feche de novo. | 3. Ponto no fim: item completo, pode reduzir.
    se errar: "É a que olha o símbolo logo depois do ponto."
-   se acertar: "Acertou. Closure, o fechamento."
+   se acertar: "Acertou. Closure, o fecho."
 
 13. TELA: # Receita ⏎ 1. Closure: ponto antes de A puxa as regras de A. ⏎ *2. Goto: ande o ponto por X e feche de novo.* ⏎ 3. Ponto no fim: item completo, pode reduzir.
    BYTE: "Depois do goto, sempre faça o closure de novo. Repita para cada símbolo depois de um ponto, até não surgir estado novo."
@@ -382,10 +383,10 @@ Depois: "O mais. O ponto fica logo antes dele."
     · [F] Todo estado LR(0) tem um item só. → O fecho costuma puxar vários.
 
 #### FICHA DO ASSUNTO
-Em uma frase: Item LR(0) é uma produção com um ponto marcando o progresso; o fechamento acrescenta B → •γ quando o ponto está antes de B, e o desvio avança o ponto sobre um símbolo e fecha.
+Em uma frase: Item LR(0) é uma produção com um ponto marcando o progresso; o fecho acrescenta B → •γ quando o ponto está antes de B, e o desvio avança o ponto sobre um símbolo e fecha.
 Gancho: Ponto = 'você está aqui'. Closure = convida a família. Goto = chuta o ponto um passo e comemora com a família.
 Termos-chave: ponto, item, closure, goto, estado, aumentada
-Erros comuns: Esquecer de aplicar o fechamento depois do goto. // No fechamento, adicionar itens com o ponto fora do começo. // Fechar sobre terminais (só não-terminais após o ponto convidam produções). // Criar um estado novo para um conjunto de itens que já existe. // Esquecer a gramática aumentada S' → S.
+Erros comuns: Esquecer de aplicar o fecho depois do goto. // No fecho, adicionar itens com o ponto fora do começo. // Fechar sobre terminais (só não-terminais após o ponto convidam produções). // Criar um estado novo para um conjunto de itens que já existe. // Esquecer a gramática aumentada S' → S.
 Flashcards:
     · P: Quantos itens gera A → X Y Z? → R: 4
     · P: Itens de A → ε? → R: Só A → •
@@ -398,8 +399,8 @@ Flashcards:
 
 #### GLOSSÁRIO (balão ao tocar no termo)
 - item: Uma regra com um ponto que marca quanto dela já foi lido.
-- closure: Fecho: junta ao estado as regras do símbolo que está logo depois do ponto.
-- goto: Para onde o autômato LR vai depois de ler um símbolo.
+- fecho (closure): Fecho: tudo que se alcança sem ler nada. No AFN, setas ε; no LR, regras depois do ponto.
+- goto: No LR, o estado depois de ler um símbolo. No código de três endereços, goto é um desvio.
 
 
 ## ASSUNTO SLR_TABLE: Tabela SLR(1) e conflitos

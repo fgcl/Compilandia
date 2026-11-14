@@ -12,7 +12,10 @@ enum class Etapa { BUG, VER, FAZER,
     PROGRAMAR,
     /** Mural, rodada 3: montar a gramática na Fábrica. Derivação faz o tutorial; ambiguidade e recursão, um desafio. */
     FABRICA,
-    PRATICA, PEGADINHA, DESAFIO,
+    PRATICA, PEGADINHA,
+    /** Questão de prova: o exercício inteiro, do FIRST ao veredito, com a ajuda sumindo em três questões. */
+    PROVA,
+    DESAFIO,
     /** A7: depois da trilha completa, quando a memória cai, um clipe de 30 segundos e um desafio. Não fica na lista. */
     REVISAO }
 
@@ -29,6 +32,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null, val form
         Etapa.FABRICA -> tx("trilha_etapa_fabrica")
         Etapa.PRATICA -> tx("trilha_etapa_pratica")
         Etapa.PEGADINHA -> tx("trilha_etapa_pegadinha")
+        Etapa.PROVA -> tx("trilha_etapa_prova")
         Etapa.DESAFIO -> tx("trilha_etapa_desafio")
         Etapa.REVISAO -> tx("trilha_etapa_revisao")
     }
@@ -40,6 +44,7 @@ data class PassoTrilha(val etapa: Etapa, val episodio: Episode? = null, val form
         Etapa.PROGRAMAR -> tx("trilha_etapa_programar_sub")
         Etapa.FABRICA -> tx("trilha_etapa_fabrica_sub")
         Etapa.PRATICA, Etapa.PEGADINHA -> episodio?.title.orEmpty()
+        Etapa.PROVA -> tx("trilha_etapa_prova_sub")
         Etapa.DESAFIO -> tx("trilha_etapa_desafio_sub")
         Etapa.REVISAO -> formato?.titulo ?: tx("trilha_etapa_revisao_sub")
     }
@@ -60,6 +65,7 @@ object Trilha {
         if (missaoDaFabrica(s) != null) add(PassoTrilha(Etapa.FABRICA))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PRATICA }) add(PassoTrilha(Etapa.PRATICA, e))
         for (e in Episodes.all.filter { it.skill == s && it.temporada == Temporada.PEGADINHA }) add(PassoTrilha(Etapa.PEGADINHA, e))
+        if (Prova.disponivel(s)) add(PassoTrilha(Etapa.PROVA))
         add(PassoTrilha(Etapa.DESAFIO))
     }
 
@@ -87,7 +93,7 @@ object Trilha {
             Etapa.BUG, Etapa.VER -> s.name in ls.episodesSeen
             Etapa.PRATICA, Etapa.PEGADINHA -> p.episodio?.id in ls.episodesSeen
             Etapa.DESAFIO -> l.skill(s).attempts > 0
-            Etapa.FAZER, Etapa.PROGRAMAR -> false
+            Etapa.FAZER, Etapa.PROGRAMAR, Etapa.PROVA -> false
             Etapa.FABRICA -> fabricaFeita(l, s)
             Etapa.REVISAO -> false
         }

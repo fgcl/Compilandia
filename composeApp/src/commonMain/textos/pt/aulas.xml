@@ -542,11 +542,11 @@
     <string name="epparsers_ponto_que_anda">O ponto que anda</string>
     <string name="epparsers_item_lr_0">Item LR(0)</string>
     <string name="epparsers_que_esta_antes_ponto_eu">O que está antes do ponto já está na pilha. O que está depois é o que o parser ainda espera ler.</string>
-    <string name="epparsers_se_ponto_esta_antes_posso">Se o ponto está antes de um não-terminal, como E, o parser pode estar começando qualquer regra de E. Juntar essas regras é o fechamento, o closure.</string>
+    <string name="epparsers_se_ponto_esta_antes_posso">O ponto está antes de E, um não-terminal. O parser pode estar começando qualquer regra de E. Juntar essas regras é o fecho, o closure.</string>
     <string name="epparsers_neste_estado_chega_n_qual">Neste estado chega um n. Qual item sobrevive? Toque nele.</string>
     <string name="epparsers_ponto_so_anda_sobre_simbolo">O ponto só anda sobre o símbolo que vem logo depois dele.</string>
     <string name="epparsers_isso_ponto_passa_por_cima">O ponto passa por cima do n. O outro item esperava E, não n, e fica para trás.</string>
-    <string name="epparsers_andar_ponto_por_simbolo_goto">Andar o ponto por cima de um símbolo é o goto. O resultado, depois do fechamento, é um novo estado.</string>
+    <string name="epparsers_andar_ponto_por_simbolo_goto">Andar o ponto por cima de um símbolo é o goto. O resultado, depois do fecho, é um novo estado.</string>
     <string name="epparsers_estado_novo">estado novo</string>
     <string name="epparsers_ponto_no_fim_quer_dizer">Ponto no fim é um item completo: o lado direito inteiro está na pilha, e a regra pode ser reduzida.</string>
     <string name="epparsers_cada_conjunto_itens_estado_juntos">Cada conjunto de itens é um estado. Os estados e os gotos formam o autômato LR(0).</string>

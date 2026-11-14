@@ -961,7 +961,7 @@ Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 - Bug da Palavra Comum — mentira: "if é um nome como outro qualquer." / verdade: "No empate de tamanho, ganha a regra que vem primeiro. A reservada precisa vir antes."
     · [V] No Flex, a regra que vem primeiro ganha o empate. → Isso mesmo.
     · [V] O maior casamento decide antes da ordem das regras. → Isso mesmo.
-    · [F] yytext guarda a classe do token. → yytext guarda o lexema.
+    · [F] Os espaços viram tokens e chegam ao parser. → A regra dos espaços não tem return. O Flex joga o espaço fora.
 
 #### FICHA DO ASSUNTO
 Em uma frase: O Lex/Flex lê um arquivo .l (definições %% regras 'padrão { ação }' %% código C) e gera lex.yy.c com a função yylex(), que devolve um token por chamada usando o maior casamento e, no empate, a regra listada primeiro.

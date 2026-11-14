@@ -174,7 +174,7 @@ S' -> else S | ε
     opções: ✔Sim: só uma alternativa de S começa com if | Não
     explicação: Agora há uma única alternativa com if. A dúvida 'tem else ou não?' fica para S', quando o token else (ou outro) já estiver à vista.
 - CAIXA [Não existem perguntas idiotas]: P: A fatoração muda a linguagem? R: Não. Só reorganiza as produções, assim como a(b + c) = ab + ac.
-- CAIXA [Cuidado!]: Fatorar NÃO tira ambiguidade. O else pendurado continua ambíguo: ao ver else, S' ainda poderia escolher 'else S' ou ε. Casar com o if mais próximo continua sendo uma regra extra.
+- CAIXA [Cuidado!]: Fatorar NÃO tira ambiguidade. O else solto continua ambíguo: ao ver else, S' ainda poderia escolher 'else S' ou ε. Casar com o if mais próximo continua sendo uma regra extra.
 - REVELAR: Na analogia, o que é o 'submenu'?
     → O novo não-terminal (S', A'…): guarda os 'restos' depois do prefixo comum, e a decisão fica para depois.
 
@@ -263,7 +263,7 @@ repita até que nenhum par de alternativas de um NT tenha prefixo comum
     explicação: αA' com A' → β₁ | β₂ gera exatamente αβ₁ e αβ₂, é a propriedade distributiva.
 - PREVEJA: Uma gramática fatorada e sem recursão à esquerda é necessariamente LL(1)?
     opções: Sim | ✔Não
-    explicação: São condições necessárias, não suficientes. O else pendurado fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).
+    explicação: São condições necessárias, não suficientes. O else solto fatorado ainda tem conflito em [S', e]; e uma gramática ambígua nunca é LL(1).
 - CAIXA [Dica de prova]: Ordem segura numa questão 'torne LL(1)': (1) elimine a recursão à esquerda; (2) fatore à esquerda; (3) calcule FIRST e FOLLOW; (4) monte a tabela e verifique se alguma célula tem mais de uma produção.
 - CAIXA [Cuidado!]: Não confunda: fatoração trata PREFIXOS COMUNS (A → αβ₁ | αβ₂); recursão à esquerda trata A → Aα. Problemas diferentes, receitas diferentes, e ambos atrapalham o LL(1).
 - REVELAR: Escreva a forma geral da fatoração.

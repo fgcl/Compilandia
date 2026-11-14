@@ -165,7 +165,7 @@ echo "2+3*4" | ./calc     # imprime: = 14
 - PREVEJA: Um conflito empilhar/reduzir em que o token NÃO tem precedência declarada. O que o Bison faz?
     opções: Para a compilação com erro | ✔Escolhe shift e emite um aviso de conflito | Escolhe reduce
     explicação: Padrão do Yacc/Bison: shift, com aviso ('conflicts: N shift/reduce'). Para reduzir/reduzir, escolhe a regra que aparece primeiro no arquivo.
-- REVELAR: Esse padrão 'shift' é bom para o if-then-else pendurado?
+- REVELAR: Esse padrão 'shift' é bom para o if-then-else solto?
     → É! Shift no 'else' faz o else casar com o if mais próximo, o que C e Java fazem. Por isso muita gente aceita esse conflito (e o declara com %expect 1).
 - WIDGET PARSE_TREE gramática=«S -> if c then S | if c then S else S | x» entrada=«if c then if c then x else x» legenda: Duas árvores possíveis: de quem é o else? O shift escolhe o if de dentro.
 - REVELAR: Por que conflitos reduzir/reduzir são mais perigosos?
