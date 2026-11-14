@@ -78,7 +78,7 @@
     <string name="bugs_else_if_fora">The else belongs to the outer if.</string>
     <string name="bugs_else_fica_com_if_mais">The else goes with the nearest if.</string>
     <string name="bugs_if_then_if_b_then">if a then if b then x else y has two trees in this grammar.</string>
-    <string name="bugs_bison_resolve_esse_caso_empilhando">Bison resolves this case by shifting the else.</string>
+    <string name="bugs_bison_resolve_esse_caso_empilhando">In practice, the else goes with the nearest if.</string>
     <string name="bugs_reescrever_gramatica_nunca_resolve_else">Rewriting the grammar never fixes the dangling else.</string>
     <string name="bugs_para_reescrever_separando_comandos_fechados">You can rewrite it by separating closed and open statements.</string>
     <string name="bugs_bug_das_duas_contas">Two Sums Bug</string>
@@ -91,15 +91,15 @@
     <string name="bugs_bug_laco_eterno">Endless Loop Bug</string>
     <string name="bugs_recursao_esquerda_so_deixa_parser">Left recursion only makes the parser slow.</string>
     <string name="bugs_ela_trava_parser_descendente_ele">It locks up the top-down parser: it calls the same rule without reading anything.</string>
-    <string name="bugs_parser_lr_aceita_recursao_esquerda">An LR parser accepts left recursion.</string>
-    <string name="bugs_recursao_direita_trava_ll_1">Right recursion locks up LL(1).</string>
+    <string name="bugs_parser_lr_aceita_recursao_esquerda">The bottom-up parser, which you see in the Fortress, accepts left recursion.</string>
+    <string name="bugs_recursao_direita_trava_ll_1">Right recursion locks up the top-down parser.</string>
     <string name="bugs_direita_ele_le_token_antes">On the right, it reads a token before coming back.</string>
     <string name="bugs_bug_comeco_igual">Same Start Bug</string>
     <string name="bugs_fatorar_muda_linguagem">Factoring changes the language.</string>
     <string name="bugs_linguagem_mesma_so_adia_escolha">The language is the same. It just puts off the choice.</string>
     <string name="bugs_fatorar_acrescenta_nivel_na_arvore">Factoring adds a level to the tree.</string>
     <string name="bugs_fatorar_resolve_qualquer_conflito_ll">Factoring fixes any LL(1) conflict.</string>
-    <string name="bugs_conflito_com_follow_por_exemplo">A conflict with FOLLOW, for example, is still there.</string>
+    <string name="bugs_conflito_com_follow_por_exemplo">Factoring only removes the common start. The dangling else, for example, still has two possible rules.</string>
     <string name="bugs_bug_primeiro_so">First Only Bug</string>
     <string name="bugs_first_so_primeiro_simbolo_regra">FIRST is just the first symbol of the rule.</string>
     <string name="bugs_se_ele_nao_terminal_vale">If it's a nonterminal, its FIRST counts. If it vanishes, look at the next one.</string>

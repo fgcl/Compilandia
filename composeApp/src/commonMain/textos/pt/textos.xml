@@ -124,7 +124,7 @@
     <string name="lessonspart1_trocar_na_receita">Trocar α e β na receita.</string>
     <string name="lessonspart1_esquecer_colocar_no_fim_cada">Esquecer de colocar A' no fim de cada β.</string>
     <string name="lessonspart1_ignorar_recursao_indireta_b">Ignorar a recursão indireta (S → A a, A → S b).</string>
-    <string name="lessonspart1_achar_que_analisadores_lr_tambem">Achar que analisadores LR também precisam eliminar recursão à esquerda.</string>
+    <string name="lessonspart1_achar_que_analisadores_lr_tambem">Achar que os analisadores de baixo para cima (LR, da Fortaleza) também precisam eliminar recursão à esquerda.</string>
     <string name="lessonspart1_quando_g_recursiva_esquerda">Quando G é recursiva à esquerda?</string>
     <string name="lessonspart1_quando_existe_com">Quando existe A com A ⇒⁺ Aα</string>
     <string name="lessonspart1_linguagem">Linguagem de A → Aα | β?</string>
@@ -133,8 +133,8 @@
     <string name="lessonspart1_pre_condicoes_algoritmo_geral">Pré-condições do algoritmo geral?</string>
     <string name="lessonspart1_sem_ciclos_sem_producoes">Sem ciclos e sem produções-ε</string>
     <string name="lessonspart1_exemplo_recursao_indireta">Exemplo de recursão indireta?</string>
-    <string name="lessonspart1_lr_precisa_eliminar_recursao_esquerda">LR precisa eliminar recursão à esquerda?</string>
-    <string name="lessonspart1_nao_lr_lida_bem_com">Não, LR lida bem com ela</string>
+    <string name="lessonspart1_lr_precisa_eliminar_recursao_esquerda">O parser de baixo para cima (LR, da Fortaleza) precisa eliminar recursão à esquerda?</string>
+    <string name="lessonspart1_nao_lr_lida_bem_com">Não, ele lida bem com ela</string>
     <string name="lessonspart1_quando_duas_alternativas_comecam_com">Quando duas alternativas começam com o mesmo prefixo α, ponha α em evidência: A → αA' e A' → β₁ | β₂, adiando a decisão do analisador preditivo.</string>
     <string name="lessonspart1_ab_ac_b_c_coloque">ab + ac = a(b + c): coloque o prefixo comum em evidência.</string>
     <string name="lessonspart1_achar_que_fatoracao_elimina_ambiguidade">Achar que a fatoração elimina ambiguidade.</string>

@@ -45,11 +45,11 @@ F → ( E ) | id
     explicação: Os terminais ( e id nascem em F e 'sobem' a corrente: F → T → E. Enquanto FIRST(T) estiver vazio, E não tem o que copiar.
 - WIDGET FIRST_FOLLOW gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» legenda: Avance passo a passo olhando só a parte FIRST: veja ( e id subindo de F para T e de T para E.
 - PASSOS (O que olhar no widget):
-    1) Primeira volta: E' ganha {+, ε} e T' ganha {*, ε}. Terminal no começo da regra entra direto; produção ε dá ε.
-    2) Ainda na primeira volta: F ganha {(, id}.
-    3) Depois: T → F T' copia FIRST(F) para FIRST(T).
-    4) Depois: E → T E' copia FIRST(T) para FIRST(E).
-    5) Uma volta inteira sem novidade: ponto fixo, fim.
+    · Primeira volta: E' ganha {+, ε} e T' ganha {*, ε}. Terminal no começo da regra entra direto; produção ε dá ε.
+    · Ainda na primeira volta: F ganha {(, id}.
+    · Depois: T → F T' copia FIRST(F) para FIRST(T).
+    · Depois: E → T E' copia FIRST(T) para FIRST(E).
+    · Uma volta inteira sem novidade: ponto fixo, fim.
 - BYTE: Por que T não ganhou o ε de T'?
 - PROF: Porque em T → F T' o F vem primeiro e **não** é anulável. F sempre manda alguém, então o T' nem é consultado para o começo.
 - CAIXA [Cuidado!]: Copie FIRST(Xi) **sem o ε**. O ε só entra em FIRST(A) se TODOS os símbolos do lado direito puderem sumir.
@@ -70,12 +70,12 @@ L → id R
 R → , id R | ε
 ```
 - PASSOS (FIRST passo a passo):
-    1) 1) Terminais são o FIRST de si mesmos: FIRST(int) = {int}, FIRST(id) = {id}, FIRST(,) = {,}.
-    2) 2) T → int | float: as duas produções começam com terminal. FIRST(T) = {int, float}.
-    3) 3) L → id R: começa com o terminal id. FIRST(L) = {id}.
-    4) 4) R → , id R | ε: a primeira começa com ',' e a segunda é ε. FIRST(R) = {',', ε}.
-    5) 5) D → T L ;: começa com T, que NÃO é anulável. Copio FIRST(T) e paro. FIRST(D) = {int, float}.
-    6) 6) Mais uma volta conferindo tudo: nada muda. Ponto fixo!
+    · 1) Terminais são o FIRST de si mesmos: FIRST(int) = {int}, FIRST(id) = {id}, FIRST(,) = {,}.
+    · 2) T → int | float: as duas produções começam com terminal. FIRST(T) = {int, float}.
+    · 3) L → id R: começa com o terminal id. FIRST(L) = {id}.
+    · 4) R → , id R | ε: a primeira começa com ',' e a segunda é ε. FIRST(R) = {',', ε}.
+    · 5) D → T L ;: começa com T, que NÃO é anulável. Copio FIRST(T) e paro. FIRST(D) = {int, float}.
+    · 6) Mais uma volta conferindo tudo: nada muda. Ponto fixo!
 - CAIXA [Cuidado!]: No passo 5, NÃO continue para o L só porque deu vontade. Só se avança para o próximo símbolo quando o atual é anulável.
 - WIDGET FIRST_FOLLOW gramática=«D → T L ; ⏎ T → int | float ⏎ L → id R ⏎ R → , id R | ε» legenda: Confira com o motor: os mesmos conjuntos.
 - BYTE: Agora me deixa tentar um sozinho?
@@ -127,10 +127,10 @@ F → ( E ) | id
 - PROF: Agora de terno e gravata. Esta é a versão que você escreve na prova.
 - TEXTO: **Definição.** Para uma cadeia α de símbolos gramaticais, FIRST(α) = { a terminal | α ⇒* a β }. Se α ⇒* ε, então ε ∈ FIRST(α) também.
 - PASSOS (Regras para cada símbolo X):
-    1) 1. Se X é terminal, FIRST(X) = {X}.
-    2) 2. Se X → ε é uma produção, acrescente ε a FIRST(X).
-    3) 3. Se X → Y1 Y2 … Yk: acrescente FIRST(Y1) − {ε}; se ε ∈ FIRST(Y1), acrescente FIRST(Y2) − {ε}; e assim por diante. Se ε ∈ FIRST(Yi) para todo i, acrescente ε.
-    4) 4. Repita até nenhum conjunto mudar (ponto fixo).
+    · 1. Se X é terminal, FIRST(X) = {X}.
+    · 2. Se X → ε é uma produção, acrescente ε a FIRST(X).
+    · 3. Se X → Y1 Y2 … Yk: acrescente FIRST(Y1) − {ε}; se ε ∈ FIRST(Y1), acrescente FIRST(Y2) − {ε}; e assim por diante. Se ε ∈ FIRST(Yi) para todo i, acrescente ε.
+    · 4. Repita até nenhum conjunto mudar (ponto fixo).
 - CÓDIGO (Ponto fixo: os conjuntos só crescem e o número de terminais é finito, então o laço termina. (Com k = 0, A → ε, o ε entra.)):
 ```
 para cada não-terminal A: FIRST(A) := ∅
@@ -163,10 +163,10 @@ até nenhum FIRST mudar
 - CAIXA [Gancho de memória]: **'Todos faltaram? Fila vazia: ε.'** Um único terminal (ou um não-terminal não anulável) no caminho já barra o ε.
 - TEXTO: Contraste que salva nota: FIRST(A) olha o **começo do lado direito das regras DE A**. FOLLOW(A) (próxima sala) olha **onde A aparece** no lado direito das regras dos outros.
 - PASSOS (Confusões clássicas lado a lado):
-    1) FIRST pode ter ε; FOLLOW nunca tem ε.
-    2) FOLLOW do símbolo inicial sempre tem $; FIRST nunca tem $.
-    3) FIRST(A) olha as produções DE A; FOLLOW(A) olha as produções ONDE A aparece.
-    4) FIRST de um terminal é ele mesmo: FIRST(id) = {id}.
+    · FIRST pode ter ε; FOLLOW nunca tem ε.
+    · FOLLOW do símbolo inicial sempre tem $; FIRST nunca tem $.
+    · FIRST(A) olha as produções DE A; FOLLOW(A) olha as produções ONDE A aparece.
+    · FIRST de um terminal é ele mesmo: FIRST(id) = {id}.
 - PREVEJA: Qual destes conjuntos é IMPOSSÍVEL ser um FIRST?
     opções: {a, ε} | {id, (} | ✔{+, $} | {ε}
     explicação: $ é o marcador de fim de entrada: mora no FOLLOW, nunca no FIRST. Já {ε} é possível, por exemplo com A → ε sozinho.
@@ -218,11 +218,11 @@ F → ( E ) | id
     explicação: Logo depois do E vem o ')'. Então ')' ∈ FOLLOW(E). Junto com o $, FOLLOW(E) = {), $}.
 - WIDGET FIRST_FOLLOW gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» legenda: Vá até a parte FOLLOW e leia a justificativa de cada passo.
 - PASSOS (O que observar):
-    1) E → T E': depois de T vem E', então FIRST(E') − {ε} = {+} entra em FOLLOW(T).
-    2) Como E' é anulável, FOLLOW(E) também entra em FOLLOW(T).
-    3) E' está no fim de E → T E': FOLLOW(E') herda FOLLOW(E) = {), $}.
-    4) T → F T': FOLLOW(F) ganha FIRST(T') − {ε} = {*} e, como T' pode sumir, herda FOLLOW(T).
-    5) Repete as voltas até nada mudar.
+    · E → T E': depois de T vem E', então FIRST(E') − {ε} = {+} entra em FOLLOW(T).
+    · Como E' é anulável, FOLLOW(E) também entra em FOLLOW(T).
+    · E' está no fim de E → T E': FOLLOW(E') herda FOLLOW(E) = {), $}.
+    · T → F T': FOLLOW(F) ganha FIRST(T') − {ε} = {*} e, como T' pode sumir, herda FOLLOW(T).
+    · Repete as voltas até nada mudar.
 - BYTE: Tá, mas quanto deu no fim?
 - REVELAR: Tente antes de tocar: FOLLOW(T) = ?
     → {+, ), $}: o + vem de FIRST(E'), e ) e $ vêm herdados de FOLLOW(E).
@@ -244,12 +244,12 @@ R → , id R | ε
 ```
 - TEXTO: Do exercício de FIRST: FIRST(D) = FIRST(T) = {int, float}, FIRST(L) = {id}, FIRST(R) = {',', ε}. R é o único anulável.
 - PASSOS (FOLLOW passo a passo):
-    1) 1) D é o inicial: FOLLOW(D) = {$}.
-    2) 2) Em D → T L ;, depois de T vem L. FIRST(L) = {id} entra em FOLLOW(T). FOLLOW(T) = {id}.
-    3) 3) Na mesma regra, depois de L vem ';'. FOLLOW(L) = {;}.
-    4) 4) Em L → id R, R está no fim: FOLLOW(R) herda FOLLOW(L) = {;}.
-    5) 5) Em R → , id R, R está no fim de novo: herda FOLLOW(R) de si mesmo. Nada novo.
-    6) 6) Mais uma volta: nada muda. Ponto fixo.
+    · 1) D é o inicial: FOLLOW(D) = {$}.
+    · 2) Em D → T L ;, depois de T vem L. FIRST(L) = {id} entra em FOLLOW(T). FOLLOW(T) = {id}.
+    · 3) Na mesma regra, depois de L vem ';'. FOLLOW(L) = {;}.
+    · 4) Em L → id R, R está no fim: FOLLOW(R) herda FOLLOW(L) = {;}.
+    · 5) Em R → , id R, R está no fim de novo: herda FOLLOW(R) de si mesmo. Nada novo.
+    · 6) Mais uma volta: nada muda. Ponto fixo.
 - BYTE: Pera: no passo 2, por que o ';' não entra em FOLLOW(T) também?
 - PROF: Porque L **não é anulável**: ele sempre gera pelo menos um id. Então o ';' nunca encosta no T.
 - WIDGET FIRST_FOLLOW gramática=«D → T L ; ⏎ T → int | float ⏎ L → id R ⏎ R → , id R | ε» legenda: Confira: FOLLOW(D) = {$}, FOLLOW(T) = {id}, FOLLOW(L) = FOLLOW(R) = {;}.
@@ -290,9 +290,9 @@ R → , id R | ε
 - PROF: Versão prova, com todas as letras.
 - TEXTO: **Definição.** Para um não-terminal A, FOLLOW(A) é o conjunto de terminais a que podem aparecer imediatamente à direita de A em alguma forma sentencial, isto é, S ⇒* α A a β. Se A pode ser o símbolo mais à direita de uma forma sentencial, $ ∈ FOLLOW(A).
 - PASSOS (Regras (aplique até nada mudar)):
-    1) 1. Coloque $ em FOLLOW(S), onde S é o símbolo inicial.
-    2) 2. Para cada produção A → α B β: tudo em FIRST(β), exceto ε, entra em FOLLOW(B).
-    3) 3. Para cada produção A → α B, ou A → α B β com ε ∈ FIRST(β): tudo em FOLLOW(A) entra em FOLLOW(B).
+    · 1. Coloque $ em FOLLOW(S), onde S é o símbolo inicial.
+    · 2. Para cada produção A → α B β: tudo em FIRST(β), exceto ε, entra em FOLLOW(B).
+    · 3. Para cada produção A → α B, ou A → α B β com ε ∈ FIRST(β): tudo em FOLLOW(A) entra em FOLLOW(B).
 - CÓDIGO (Repare: FIRST(ε) = {ε}. Por isso, quando B está no fim (β vazio), a regra 3 dispara.):
 ```
 para cada não-terminal A: FOLLOW(A) := ∅
@@ -325,11 +325,11 @@ até nenhum FOLLOW mudar
 - BYTE: Eu sempre confundo a direção da herança…
 - PROF: Pensa em herança de verdade: desce do pai para o filho. FOLLOW(pai, o lado esquerdo) desce para FOLLOW(filho do fim). Filho não deixa herança pro pai.
 - PASSOS (FIRST × FOLLOW: o duelo):
-    1) FIRST: quem ABRE a fila. FOLLOW: quem vem ATRÁS.
-    2) FIRST pode ter ε. FOLLOW: jamais ε.
-    3) FOLLOW pode ter $. FIRST: jamais $.
-    4) FIRST(A): olho as regras DE A. FOLLOW(A): olho as regras ONDE A aparece à direita.
-    5) FOLLOW depende de FIRST; FIRST não depende de FOLLOW.
+    · FIRST: quem ABRE a fila. FOLLOW: quem vem ATRÁS.
+    · FIRST pode ter ε. FOLLOW: jamais ε.
+    · FOLLOW pode ter $. FIRST: jamais $.
+    · FIRST(A): olho as regras DE A. FOLLOW(A): olho as regras ONDE A aparece à direita.
+    · FOLLOW depende de FIRST; FIRST não depende de FOLLOW.
 - PREVEJA: Byte calculou FOLLOW(X) = {a, ε, $}. Onde está o erro?
     opções: Falta o b | O $ não pode | ✔O ε não pode | Está certo
     explicação: ε nunca entra em FOLLOW. Se apareceu, ele provavelmente copiou FIRST(β) sem tirar o ε, quando devia ter aplicado a Herança.
@@ -377,11 +377,11 @@ F → ( E ) | id
 ```
 - WIDGET LL1_TABLE gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» legenda: Toque nas células para ver por que cada produção foi parar ali.
 - PASSOS (O que olhar):
-    1) Linhas = não-terminais; colunas = terminais + $.
-    2) E → T E' aparece em ( e id: é FIRST(T E').
-    3) E' → ε aparece em ) e $: é FOLLOW(E').
-    4) T' → ε aparece em +, ) e $: é FOLLOW(T').
-    5) Nenhuma célula tem duas produções: a gramática é LL(1).
+    · Linhas = não-terminais; colunas = terminais + $.
+    · E → T E' aparece em ( e id: é FIRST(T E').
+    · E' → ε aparece em ) e $: é FOLLOW(E').
+    · T' → ε aparece em +, ) e $: é FOLLOW(T').
+    · Nenhuma célula tem duas produções: a gramática é LL(1).
 - PREVEJA: Em qual célula fica F → ( E )?
     opções: ✔M[F, (] | M[F, )] | M[E, (] | M[F, id]
     explicação: FIRST(( E )) = {(}. Então M[F, (] = F → ( E ).
@@ -404,13 +404,13 @@ R → , id R | ε
 ```
 - TEXTO: Ingredientes já calculados: FIRST(T) = {int, float}, FIRST(L) = {id}, FIRST(R) = {',', ε}; FOLLOW(D) = {$}, FOLLOW(T) = {id}, FOLLOW(L) = FOLLOW(R) = {;}.
 - PASSOS (Produção por produção):
-    1) D → T L ; : FIRST(T L ;) = {int, float}. Anote em M[D, int] e M[D, float].
-    2) T → int : M[T, int].
-    3) T → float : M[T, float].
-    4) L → id R : M[L, id].
-    5) R → , id R : FIRST = {,}. M[R, ,].
-    6) R → ε : FIRST(ε) = {ε}, então use FOLLOW(R) = {;}. M[R, ;].
-    7) Nenhuma célula com duas produções → LL(1).
+    · D → T L ; : FIRST(T L ;) = {int, float}. Anote em M[D, int] e M[D, float].
+    · T → int : M[T, int].
+    · T → float : M[T, float].
+    · L → id R : M[L, id].
+    · R → , id R : FIRST = {,}. M[R, ,].
+    · R → ε : FIRST(ε) = {ε}, então use FOLLOW(R) = {;}. M[R, ;].
+    · Nenhuma célula com duas produções → LL(1).
 - WIDGET LL1_TABLE gramática=«D → T L ; ⏎ T → int | float ⏎ L → id R ⏎ R → , id R | ε» legenda: Confira as 7 células preenchidas. Todo o resto é erro.
 - BYTE: Por que R → ε não vai na coluna $?
 - PROF: Porque $ ∉ FOLLOW(R): depois de R sempre vem ';'. Se chegar $ com R no topo, é erro mesmo, faltou o ponto e vírgula!
@@ -466,9 +466,9 @@ toda entrada vazia de M = erro
 ```
 - TEXTO: **Definição.** G é **LL(1)** se e somente se M não tem nenhuma entrada com mais de uma produção. LL(1): lê a entrada da esquerda para a direita (**L**), produz uma derivação mais à esquerda (**L**), usando **1** símbolo de lookahead.
 - PASSOS (Condições equivalentes, para cada par A → α | β):
-    1) 1. FIRST(α) ∩ FIRST(β) = ∅.
-    2) 2. No máximo um entre α e β deriva ε.
-    3) 3. Se β ⇒* ε, então FIRST(α) ∩ FOLLOW(A) = ∅ (e vice-versa).
+    · 1. FIRST(α) ∩ FIRST(β) = ∅.
+    · 2. No máximo um entre α e β deriva ε.
+    · 3. Se β ⇒* ε, então FIRST(α) ∩ FOLLOW(A) = ∅ (e vice-versa).
 - PREVEJA: Qual destas NÃO é condição para LL(1)?
     opções: FIRST das alternativas disjuntos | No máximo uma alternativa anulável | ✔A gramática não pode ter produções ε | FIRST(α) ∩ FOLLOW(A) = ∅ quando a outra alternativa é anulável
     explicação: Produções ε são permitidas em LL(1)! A gramática de expressões LL(1) tem E' → ε e T' → ε.
@@ -487,10 +487,10 @@ toda entrada vazia de M = erro
 - BYTE: E o nome LL(1)? Sempre esqueço o que é cada L.
 - CAIXA [Gancho de memória]: **L-L-1 = 'Lê da esquerda, Leva a derivação mais à esquerda, 1 espiadinha.'** Left-to-right, Leftmost derivation, 1 token de lookahead.
 - PASSOS (Confusões clássicas):
-    1) Pôr A → ε nas colunas do FIRST: errado. ε vai nas colunas de FOLLOW(A).
-    2) Esquecer a coluna $: ela existe e recebe produções ε quando $ ∈ FOLLOW(A).
-    3) Achar que célula vazia é 'tanto faz': é ERRO de sintaxe.
-    4) Achar que produção ε impede LL(1): não impede.
+    · Pôr A → ε nas colunas do FIRST: errado. ε vai nas colunas de FOLLOW(A).
+    · Esquecer a coluna $: ela existe e recebe produções ε quando $ ∈ FOLLOW(A).
+    · Achar que célula vazia é 'tanto faz': é ERRO de sintaxe.
+    · Achar que produção ε impede LL(1): não impede.
 - PREVEJA: A → ε e FOLLOW(A) = {), $}. Em quais colunas vai A → ε?
     opções: Na coluna ε | ✔Nas colunas ) e $ | Só na coluna $ | Em todas as colunas
     explicação: Não existe coluna ε! A produção vazia vai nas colunas dos terminais de FOLLOW(A): ) e $.
@@ -507,10 +507,10 @@ toda entrada vazia de M = erro
 - PROF: A pilha do analisador preditivo é uma **lista de tarefas**: o que ainda esperamos encontrar na entrada. Começa com S (a frase inteira) em cima do $ (o fim).
 - BYTE: E como o golem trabalha?
 - PASSOS (As regras do golem):
-    1) Topo é terminal e igual ao token da entrada? **Casa**: tira do topo e avança na entrada. Tarefa cumprida!
-    2) Topo é não-terminal A e o token é a? Consulta o caderninho M[A, a] e **troca A pelo lado direito**, empilhado de trás para frente.
-    3) Topo $ e entrada $? **Aceita**.
-    4) Qualquer outra situação? **Erro**.
+    · Topo é terminal e igual ao token da entrada? **Casa**: tira do topo e avança na entrada. Tarefa cumprida!
+    · Topo é não-terminal A e o token é a? Consulta o caderninho M[A, a] e **troca A pelo lado direito**, empilhado de trás para frente.
+    · Topo $ e entrada $? **Aceita**.
+    · Qualquer outra situação? **Erro**.
 - PILHA: De… trás… pra… frente… porque… o primeiro… tem que… ficar… em cima.
 - PREVEJA: Pilha $ E (topo à direita), entrada começando com id, e M[E, id] = E → T E'. Como fica a pilha?
     opções: $ T E' | ✔$ E' T | $ E T E' | $ T
@@ -534,11 +534,11 @@ F → ( E ) | id
 ```
 - WIDGET LL1_TRACE gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» entrada=«id + id * id» legenda: Avance um passo por vez. Antes de cada clique, tente adivinhar a ação.
 - PASSOS (Pontos de atenção no trace):
-    1) Passos 1–3: E → T E', T → F T', F → id. Três expansões até aparecer um terminal no topo.
-    2) Passo 4: id casa com id.
-    3) Passo 5: T' no topo, entrada '+'. M[T', +] = T' → ε: o T' some.
-    4) Passo 6: E' → + T E'. O '+' foi previsto pela tabela, e no passo 7 ele casa.
-    5) No fim: T' → ε e E' → ε com $ na entrada; pilha $ e entrada $: aceita.
+    · Passos 1–3: E → T E', T → F T', F → id. Três expansões até aparecer um terminal no topo.
+    · Passo 4: id casa com id.
+    · Passo 5: T' no topo, entrada '+'. M[T', +] = T' → ε: o T' some.
+    · Passo 6: E' → + T E'. O '+' foi previsto pela tabela, e no passo 7 ele casa.
+    · No fim: T' → ε e E' → ε com $ na entrada; pilha $ e entrada $: aceita.
 - PREVEJA: Topo = T', entrada = *. Qual ação?
     opções: T' → ε | ✔T' → * F T' | Casar * | Erro
     explicação: * ∈ FIRST(* F T'), então M[T', *] = T' → * F T'. Só no passo seguinte o * vai casar.
@@ -561,13 +561,13 @@ L → id R
 R → , id R | ε
 ```
 - PASSOS (Simulação de int id , id ;):
-    1) $ D | int id , id ; $ | expandir D → T L ;
-    2) $ ; L T | int id , id ; $ | expandir T → int
-    3) $ ; L int | int id , id ; $ | casar int
-    4) $ ; L | id , id ; $ | expandir L → id R
-    5) $ ; R id | id , id ; $ | casar id
-    6) $ ; R | , id ; $ | expandir R → , id R
-    7) $ ; R id , | , id ; $ | casar ,
+    · $ D | int id , id ; $ | expandir D → T L ;
+    · $ ; L T | int id , id ; $ | expandir T → int
+    · $ ; L int | int id , id ; $ | casar int
+    · $ ; L | id , id ; $ | expandir L → id R
+    · $ ; R id | id , id ; $ | casar id
+    · $ ; R | , id ; $ | expandir R → , id R
+    · $ ; R id , | , id ; $ | casar ,
 - BYTE: Olha só: o ';' ficou lá embaixo esperando desde o primeiro passo!
 - PILHA: Paciência… é… meu… forte.
 - TEXTO: Agora os passos finais são seus. Pense em cada um antes de revelar. Pilha atual: $ ; R id. Entrada: id ; $.
@@ -642,10 +642,10 @@ se a = $: aceite   senão: erro()
 - BYTE: E qual a diferença entre a pilha daqui e a da Fortaleza Bottom-Up?
 - CAIXA [Conversa ao pé da lareira]: LL e LR ao pé da lareira. LL: 'Minha pilha é o FUTURO: tudo que eu prevejo que vai aparecer.' LR: 'A minha é o PASSADO: tudo que já li e ainda não consegui montar.' LL: 'Eu decido cedo, só com o primeiro token.' LR: 'Eu espero ver o lado direito inteiro antes de decidir. Por isso aceito mais gramáticas.'
 - PASSOS (Confusões clássicas):
-    1) Empilhar o lado direito na ordem normal (X no fundo): errado, X tem que ficar no topo.
-    2) Avançar a entrada numa expansão: não! Só avança quando CASA um terminal.
-    3) Empilhar ε: não existe. Produção ε só desempilha.
-    4) Esquecer de começar com $ S na pilha.
+    · Empilhar o lado direito na ordem normal (X no fundo): errado, X tem que ficar no topo.
+    · Avançar a entrada numa expansão: não! Só avança quando CASA um terminal.
+    · Empilhar ε: não existe. Produção ε só desempilha.
+    · Esquecer de começar com $ S na pilha.
 - PREVEJA: Qual ação faz a entrada avançar?
     opções: Expandir | ✔Casar | Ambas | Nenhuma
     explicação: Só casar consome token. Expandir só reorganiza a pilha.
@@ -710,12 +710,12 @@ fun F() {
 ```
 - WIDGET DERIVATION gramática=«E → T E' ⏎ E' → + T E' | ε ⏎ T → F T' ⏎ T' → * F T' | ε ⏎ F → ( E ) | id» entrada=«id * id» legenda: Cada expansão desta derivação mais à esquerda corresponde a uma chamada de função do código acima.
 - PASSOS (Chamadas para id * id):
-    1) E() chama T().
-    2) T() chama F(); F() vê 'id' e faz match(id).
-    3) T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.
-    4) Tlinha() vê $: não faz nada (ε) e retorna.
-    5) De volta em E(), que chama Elinha(); vê $: ε, retorna.
-    6) E() retorna com look = $: sucesso!
+    · E() chama T().
+    · T() chama F(); F() vê 'id' e faz match(id).
+    · T() chama Tlinha(); vê '*': match(*), F() casa o segundo id, Tlinha() de novo.
+    · Tlinha() vê $: não faz nada (ε) e retorna.
+    · De volta em E(), que chama Elinha(); vê $: ε, retorna.
+    · E() retorna com look = $: sucesso!
 - PREVEJA: Ao analisar 'id * id', quantas vezes F() é chamada?
     opções: 1 | ✔2 | 3 | 0
     explicação: Uma por id: T() chama F() para o primeiro e Tlinha() chama F() para o segundo.
@@ -806,10 +806,10 @@ void A() {
 ```
 - TEXTO: Na forma geral, a escolha da produção pode exigir **retrocesso** (backtracking). Na forma **preditiva**, o lookahead decide: usa-se A → α se look ∈ FIRST(α), ou se α ⇒* ε e look ∈ FOLLOW(A). Isso exige uma gramática **LL(1)**.
 - PASSOS (Requisitos da descida recursiva preditiva):
-    1) Sem recursão à esquerda (direta ou indireta): senão, laço infinito.
-    2) Fatorada à esquerda: senão, um token não decide.
-    3) Condições LL(1) satisfeitas: alternativas com conjuntos de escolha disjuntos.
-    4) Se nenhuma alternativa serve para o lookahead: erro (a menos que haja alternativa ε e look ∈ FOLLOW(A)).
+    · Sem recursão à esquerda (direta ou indireta): senão, laço infinito.
+    · Fatorada à esquerda: senão, um token não decide.
+    · Condições LL(1) satisfeitas: alternativas com conjuntos de escolha disjuntos.
+    · Se nenhuma alternativa serve para o lookahead: erro (a menos que haja alternativa ε e look ∈ FOLLOW(A)).
 - PREVEJA: Qual a relação entre a descida recursiva preditiva e o analisador preditivo com tabela?
     opções: Reconhecem classes diferentes | ✔Mesma classe (LL(1)); a pilha explícita vira a pilha de chamadas | A descida recursiva é bottom-up | O de tabela não precisa de FIRST
     explicação: São duas implementações da mesma ideia: a tabela vira os ifs e a pilha vira a recursão.
@@ -835,10 +835,10 @@ E → id
 - BYTE: E qual a diferença pra pilha do golem?
 - CAIXA [Conversa ao pé da lareira]: Golem Pilha e Descida Recursiva ao pé da lareira. Pilha: 'Eu guardo os não-terminais pendentes numa pilha de pedra.' Descida: 'E eu na pilha de chamadas. Somos gêmeos, só muda a roupa.' Pilha: 'Mas você dá mensagens de erro mais bonitas.' Descida: 'Por isso o Clang me contratou.'
 - PASSOS (Confusões clássicas):
-    1) Descida recursiva NÃO é bottom-up: é top-down, começa pela raiz (S()).
-    2) Recursão à DIREITA é ok; à ESQUERDA, não.
-    3) Esquecer de checar $ no final: S() pode retornar com tokens sobrando.
-    4) Escolher ε 'por padrão' sem checar FOLLOW: funciona, mas o erro é detectado mais tarde.
+    · Descida recursiva NÃO é bottom-up: é top-down, começa pela raiz (S()).
+    · Recursão à DIREITA é ok; à ESQUERDA, não.
+    · Esquecer de checar $ no final: S() pode retornar com tokens sobrando.
+    · Escolher ε 'por padrão' sem checar FOLLOW: funciona, mas o erro é detectado mais tarde.
 - PREVEJA: Qual gramática NÃO serve para descida recursiva preditiva sem transformar?
     opções: E → T E' | L → S L | ε | ✔A → A b | c | R → , id R | ε
     explicação: A → A b | c é recursiva à esquerda: A() chamaria A() sem consumir nada.
@@ -854,15 +854,15 @@ E → id
 - BYTE: Aí ele rasga a redação e vai embora?
 - PROF: Claro que não! Ele marca o erro, acha um ponto seguro para continuar, o próximo ponto final, e segue lendo. No fim, o aluno recebe TODOS os erros de uma vez. Um compilador bom faz igual.
 - PASSOS (Os tipos de erro, na redação e no código):
-    1) 'Caza' em vez de 'casa' → **erro léxico**: um caractere ou palavra que não existe (em C, um `@` solto).
-    2) Frase sem verbo, parêntese sem fechar → **erro sintático**: a estrutura está quebrada (`x = (a + ;`).
-    3) 'O sol congelou a feijoada' → **erro semântico**: estrutura ok, sentido não (somar string com int, variável não declarada).
-    4) Texto perfeito, mas fugiu do tema → **erro lógico**: compila e roda, mas faz a coisa errada (`if (x = 0)` no lugar de `==`).
+    · 'Caza' em vez de 'casa' → **erro léxico**: um caractere ou palavra que não existe (em C, um `@` solto).
+    · Frase sem verbo, parêntese sem fechar → **erro sintático**: a estrutura está quebrada (`x = (a + ;`).
+    · 'O sol congelou a feijoada' → **erro semântico**: estrutura ok, sentido não (somar string com int, variável não declarada).
+    · Texto perfeito, mas fugiu do tema → **erro lógico**: compila e roda, mas faz a coisa errada (`if (x = 0)` no lugar de `==`).
 - PASSOS (As quatro estratégias do corretor):
-    1) **Modo pânico**: pula tudo até o próximo ponto final e recomeça dali. Simples e nunca entra em laço; mas pode pular um trecho grande.
-    2) **Nível de frase**: faz um remendo local, 'aqui faltou uma vírgula, finjo que ela está lá'. Cuidado: remendos mal escolhidos podem gerar laços infinitos.
-    3) **Produções de erro**: o gabarito já prevê os erros mais comuns ('mais melhor') e tem uma mensagem pronta para cada um.
-    4) **Correção global**: reescrever a redação com o MÍNIMO de mudanças até ela ficar certa. Lindo na teoria, caro demais na prática.
+    · **Modo pânico**: pula tudo até o próximo ponto final e recomeça dali. Simples e nunca entra em laço; mas pode pular um trecho grande.
+    · **Nível de frase**: faz um remendo local, 'aqui faltou uma vírgula, finjo que ela está lá'. Cuidado: remendos mal escolhidos podem gerar laços infinitos.
+    · **Produções de erro**: o gabarito já prevê os erros mais comuns ('mais melhor') e tem uma mensagem pronta para cada um.
+    · **Correção global**: reescrever a redação com o MÍNIMO de mudanças até ela ficar certa. Lindo na teoria, caro demais na prática.
 - PREVEJA: Qual dessas estratégias os compiladores de verdade mais usam?
     opções: Correção global | ✔Modo pânico (às vezes com remendos de frase) | Nenhuma: param no primeiro erro | Produções de erro para todo erro possível
     explicação: Pânico é simples e seguro. A correção global é cara demais; produções de erro só para casos frequentes.
@@ -909,13 +909,13 @@ S -> id = E
 E -> id | num
 ```
 - PASSOS (Resolvido (topo da pilha à direita)):
-    1) Pilha `$ P`, entrada `id = ; id = num ; $`: M[P, id] = P → S ; P. Pilha vira `$ P ; S`.
-    2) M[S, id] = S → id = E. Pilha `$ P ; E = id`.
-    3) Casa `id`, casa `=`. Pilha `$ P ; E`, entrada `; id = num ; $`.
-    4) M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.
-    5) Pânico: ';' ∉ FIRST(E), mas ';' ∈ FOLLOW(E). Nada a descartar: **desempilha E**.
-    6) Pilha `$ P ;`: casa `;`. O resto, `id = num ;`, é analisado normalmente.
-    7) No fim, P → ε com `$` e o parser chega ao fim: 1 erro relatado, análise completa.
+    · Pilha `$ P`, entrada `id = ; id = num ; $`: M[P, id] = P → S ; P. Pilha vira `$ P ; S`.
+    · M[S, id] = S → id = E. Pilha `$ P ; E = id`.
+    · Casa `id`, casa `=`. Pilha `$ P ; E`, entrada `; id = num ; $`.
+    · M[E, ;] está vazia → **erro detectado no 3º token**. Mensagem: 'esperava id ou num, encontrou ;'.
+    · Pânico: ';' ∉ FIRST(E), mas ';' ∈ FOLLOW(E). Nada a descartar: **desempilha E**.
+    · Pilha `$ P ;`: casa `;`. O resto, `id = num ;`, é analisado normalmente.
+    · No fim, P → ε com `$` e o parser chega ao fim: 1 erro relatado, análise completa.
 - WIDGET PANIC gramática=«P -> S ; P | ε ⏎ S -> id = E ⏎ E -> id | num» entrada=«id = ; id = num ;» legenda: Confira cada passo com o motor.
 - CAIXA [Cuidado!]: Depois de um erro, o parser NÃO gera código: a recuperação serve só para continuar procurando erros. O programa só compila de verdade quando a lista de erros fica vazia.
 - TEXTO: Sua vez (exemplo esmaecido): `id = = num ; id = num ;`.
@@ -983,10 +983,10 @@ void yyerror(const char *s) {
 - TEXTO: **Objetivos do tratador de erros** (Dragão, 4.1.3): (1) relatar a presença de erros de forma clara e precisa; (2) recuperar-se de cada erro rápido o bastante para detectar erros subsequentes; (3) acrescentar custo mínimo ao processamento de programas corretos.
 - TEXTO: **Propriedade do prefixo viável**: os métodos LL e LR detectam um erro assim que o prefixo da entrada já lido não pode ser completado para formar uma cadeia da linguagem. O erro é acusado no PRIMEIRO token que torna isso impossível.
 - PASSOS (Estratégias de recuperação):
-    1) **Modo pânico**: descartar símbolos da entrada, um a um, até encontrar um **token de sincronização** de um conjunto escolhido (ex.: `;`, `}`, FOLLOW(A)). Simples e livre de laços infinitos.
-    2) **Nível de frase**: correção local do restante da entrada, inserir, remover ou substituir um token (ex.: inserir `;` que falta). Risco de laço se sempre inserir antes do token atual.
-    3) **Produções de erro**: aumentar a gramática com produções que geram as construções erradas mais comuns, emitindo diagnósticos específicos.
-    4) **Correção global**: achar a cadeia correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.
+    · **Modo pânico**: descartar símbolos da entrada, um a um, até encontrar um **token de sincronização** de um conjunto escolhido (ex.: `;`, `}`, FOLLOW(A)). Simples e livre de laços infinitos.
+    · **Nível de frase**: correção local do restante da entrada, inserir, remover ou substituir um token (ex.: inserir `;` que falta). Risco de laço se sempre inserir antes do token atual.
+    · **Produções de erro**: aumentar a gramática com produções que geram as construções erradas mais comuns, emitindo diagnósticos específicos.
+    · **Correção global**: achar a cadeia correta y mais próxima da entrada x (mínimo de inserções, remoções e trocas). Interesse teórico: custo alto demais.
 - CÓDIGO (Modo pânico no analisador LL(1) (Dragão, 4.4.5)):
 ```
 com A (não-terminal) no topo e a = próximo token:

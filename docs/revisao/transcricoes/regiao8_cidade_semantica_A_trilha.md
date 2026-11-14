@@ -15,85 +15,129 @@ BYTE: "Antes da aula: qual é o tipo do resultado?"
 Opções: int | ✔float | erro
 Depois: "Float. O compilador converte o inteiro antes da conta."
 
-#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (20 cenas, ~158s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (25 cenas, ~199s) [1º exemplo começa na cena 7]
 
-1. TELA: # Tipos sobem pela árvore ⏎ a + x ⏎ add add.s ⏎ int + int float + float
+1. TELA: # Forma certa, sentido errado ⏎ a + ok ⏎ a: int ⏎ ok: bool ⏎ nome + nome: o parser aceita
+   BYTE: "Até aqui, o parser conferia a forma. A mais ok tem a forma certa: nome, mais, nome. Mas ok é um bool, verdadeiro ou falso."
+
+2. TELA: # Forma certa, sentido errado ⏎ *a + ok* ⏎ a: int ⏎ ok: bool ⏎ nome + nome: o parser aceita ⏎ scanner ⏎ parser ⏎ semântica
+   BYTE: "Somar número com verdadeiro ou falso não faz sentido. Quem acusa esse erro? Toque."
+   PERGUNTA (toque): certo = semântica ; errado = scanner | parser
+   se errar: "O scanner e o parser só olham a forma. A forma aqui está certa."
+   se acertar: "A análise semântica. Ela confere o sentido, e é o assunto desta região. O primeiro passo é saber o tipo de cada pedaço."
+
+3. TELA: # Tipos sobem pela árvore ⏎ a + x ⏎ add ⏎ add.s ⏎ int + int ⏎ float + float
    BYTE: "Na máquina, somar inteiros e somar reais são instruções diferentes."
 
-2. TELA: # Tipos sobem pela árvore ⏎ *a + x* ⏎ *add* *add.s* ⏎ int + int float + float
+4. TELA: # Tipos sobem pela árvore ⏎ *a + x* ⏎ add ⏎ add.s ⏎ int + int ⏎ float + float ⏎ sub.s ⏎ float - float
+   BYTE: "Se a e x forem float, qual instrução faz essa soma? Toque."
+   PERGUNTA (toque): certo = add.s ; errado = add | sub.s
+   se errar: "Leia o que está embaixo de cada instrução. Procure soma de float."
+   se acertar: "O add ponto s. A instrução muda com o tipo, então o compilador precisa conhecer o tipo antes."
+
+5. TELA: # Tipos sobem pela árvore ⏎ *a + x* ⏎ *add* ⏎ *add.s* ⏎ int + int ⏎ float + float ⏎ *sub.s* ⏎ float - float
    BYTE: "Para escolher a instrução certa, o compilador precisa saber o tipo de cada pedaço da expressão."
 
-3. TELA: !!ATRIBUTO!!
+6. TELA: !!ATRIBUTO!!
    BYTE: "Um atributo é uma informação associada a um nó da árvore, como o tipo ou o valor. As regras que o calculam vêm junto com a gramática."
 
-4. TELA: # a + x * 2 ⏎ + ⏎ a * ⏎ x 2 ⏎ a é int, x é float
+7. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ 2 ⏎ a é int, x é float
    BYTE: "A árvore já existe. Agora a análise semântica calcula os atributos dela. Aqui, o atributo é o tipo."
 
-5. TELA: # a + x * 2 ⏎ + ⏎ a * ⏎ int ⏎ x 2 ⏎ float int ⏎ a é int, x é float
+8. TELA: # a + x * 2 ⏎ *+* ⏎ a ⏎ *** ⏎ x ⏎ 2 ⏎ a é int, x é float
+   BYTE: "Repare na árvore: o operador fica no nó, e não há E, T nem F. É a árvore enxuta, só com operações e valores. Você aprende a montá-la daqui a duas aulas."
+
+9. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ *2* ⏎ a é int, x é float ⏎ float ⏎ int ⏎ bool
+   BYTE: "O a é int, e o x é float. E o dois, sem ponto? Toque no tipo dele."
+   PERGUNTA (toque): certo = int ; errado = float | bool
+   se errar: "Número sem ponto não tem parte decimal."
+   se acertar: "Inteiro. Um número escrito sem ponto é do tipo int."
+
+10. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ *2* ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int
    BYTE: "Começo pelas folhas. O tipo de a e de x vem da declaração. O dois, sem ponto, é inteiro."
 
-6. TELA: # a + x * 2 ⏎ + ⏎ a *** ⏎ int ⏎ x 2 ⏎ float int ⏎ a é int, x é float ⏎ int float
+11. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ *** ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ int ⏎ float
    BYTE: "Real vezes inteiro dá o quê? Toque no tipo."
    PERGUNTA (toque): certo = float ; errado = int
    se errar: "O tipo maior ganha, para não perder a parte quebrada."
-   se acertar: "Isso. Inteiro com real dá real."
+   se acertar: "Inteiro com real dá real."
 
-7. TELA: # a + x * 2 ⏎ + ⏎ a * ⏎ int float ⏎ x 2 ⏎ float int ⏎ a é int, x é float
+12. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ float
    BYTE: "O dois é convertido para real antes da conta. Essa conversão automática se chama coerção. O tipo real sobe para o nó do vezes."
 
-8. TELA: # a + x * 2 ⏎ *+* ⏎ float ⏎ a * ⏎ int float ⏎ x 2 ⏎ float int ⏎ a é int, x é float
+13. TELA: # a + x * 2 ⏎ *+* ⏎ a ⏎ * ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ float ⏎ float
    BYTE: "Na raiz, inteiro mais real também dá real. Atributo que o nó calcula a partir dos filhos é um atributo sintetizado."
 
-9. TELA: # a + x * 2 ⏎ + ⏎ float ⏎ a * ⏎ int float ⏎ x 2 ⏎ float int ⏎ a é int, x é float
+14. TELA: # a + x * 2 ⏎ + ⏎ a ⏎ * ⏎ x ⏎ 2 ⏎ a é int, x é float ⏎ int ⏎ float ⏎ int ⏎ float ⏎ float
    PROF: "Se os tipos não combinam e não há coerção possível, o compilador acusa erro semântico."
 
-10. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ 3. Conta: um filho float dá float. Senão, int. ⏎ 4. Comparação dá bool. Bool numa conta é erro.
+15. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ 3. Conta: um filho float dá float. Senão, int. ⏎ 4. Comparação dá bool. Bool numa conta é erro.
    BYTE: "A verificação de tipos sobe das folhas até a raiz, um nó por vez."
 
-11. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ 3. Conta: um filho float dá float. Senão, int. ⏎ 4. Comparação dá bool. Bool numa conta é erro.
+16. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ 3. Conta: um filho float dá float. Senão, int. ⏎ 4. Comparação dá bool. Bool numa conta é erro.
    BYTE: "No primeiro exemplo, o x era float. Que regra disse isso? Toque."
    PERGUNTA (toque): certo = 2. Variável: o tipo vem da tabela de símbolos. ; errado = 1. Número com ponto é float. Sem ponto, int. | 3. Conta: um filho float dá float. Senão, int. | 4. Comparação dá bool. Bool numa conta é erro.
    se errar: "O x é uma variável. Onde mora o tipo dela?"
-   se acertar: "Isso. A declaração do x ficou na tabela."
+   se acertar: "Certo. A declaração do x ficou na tabela."
 
-12. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ *3. Conta: um filho float dá float. Senão, int.* ⏎ 4. Comparação dá bool. Bool numa conta é erro.
+17. TELA: # Receita ⏎ 1. Número com ponto é float. Sem ponto, int. ⏎ 2. Variável: o tipo vem da tabela de símbolos. ⏎ *3. Conta: um filho float dá float. Senão, int.* ⏎ 4. Comparação dá bool. Bool numa conta é erro.
    BYTE: "No passo três, o int que encontra um float sofre coerção: vira float antes da conta."
 
-13. TELA: # c * 2 + y ⏎ + ⏎ * y ⏎ float ⏎ c 2 ⏎ int int
+18. TELA: # c * 2 + y ⏎ + ⏎ * ⏎ c ⏎ 2 ⏎ y ⏎ int ⏎ int ⏎ float
    BYTE: "Outra conta. As folhas já têm tipo, pelas regras um e dois."
 
-14. TELA: # c * 2 + y ⏎ + ⏎ *** y ⏎ float ⏎ c 2 ⏎ int int ⏎ int float bool
+19. TELA: # c * 2 + y ⏎ + ⏎ *** ⏎ c ⏎ 2 ⏎ y ⏎ int ⏎ int ⏎ float ⏎ int ⏎ float ⏎ bool
    BYTE: "Qual é o tipo de c vezes dois? Toque."
    PERGUNTA (toque): certo = int ; errado = float | bool
    se errar: "Os dois filhos são int. Nenhum é float."
-   se acertar: "Isso. Inteiro com inteiro fica inteiro."
+   se acertar: "Inteiro com inteiro fica inteiro."
 
-15. TELA: # c * 2 + y ⏎ *+* ⏎ * y ⏎ int float ⏎ c 2 ⏎ int int ⏎ int float bool
+20. TELA: # c * 2 + y ⏎ *+* ⏎ * ⏎ c ⏎ 2 ⏎ y ⏎ int ⏎ int ⏎ float ⏎ int ⏎ float ⏎ bool ⏎ int
    BYTE: "E na raiz, inteiro mais real? Toque no tipo."
    PERGUNTA (toque): certo = float ; errado = int | bool
    se errar: "Regra três: basta um filho float."
-   se acertar: "Isso. O inteiro vira real antes da soma."
+   se acertar: "O inteiro vira real antes da soma."
 
-16. TELA: # c * 2 + y ⏎ + ⏎ * *ok* ⏎ int bool ⏎ c 2 ⏎ int int ⏎ int float erro
+21. TELA: # c * 2 + y ⏎ + ⏎ * ⏎ c ⏎ 2 ⏎ *ok* ⏎ int ⏎ int ⏎ bool ⏎ int ⏎ int ⏎ float ⏎ erro
    BYTE: "Agora o y deu lugar ao ok, que é bool. Que tipo sobe?"
    PERGUNTA (toque): certo = erro ; errado = int | float
    se errar: "Regra quatro: bool não entra em conta."
-   se acertar: "Isso. A raiz fica com erro de tipo."
+   se acertar: "Exato. A raiz fica com erro de tipo."
 
-17. TELA: # c * 2 + y ⏎ *+* ⏎ erro ⏎ * ok ⏎ int bool ⏎ c 2 ⏎ int int
+22. TELA: # c * 2 + y ⏎ *+* ⏎ * ⏎ c ⏎ 2 ⏎ ok ⏎ int ⏎ int ⏎ bool ⏎ int ⏎ erro
    BYTE: "O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce."
 
-18. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ certo errado
+23. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ certo ⏎ errado
    BYTE: "De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?"
    PERGUNTA (toque): certo = errado ; errado = certo
    se errar: "Nesta aula, os tipos subiram ou desceram pela árvore?"
-   se acertar: "Isso. Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado."
+   se acertar: "Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado."
 
-19. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
+24. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
    BYTE: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
 
-20. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
+25. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
    BYTE: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
+
+#### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~35s)
+
+1. TELA: # int a, b ⏎ D ⏎ T: int ⏎ L ⏎ a ⏎ b
+   BYTE: "Declaração: int a, b. O tipo está num galho, e os nomes estão no outro."
+
+2. TELA: # int a, b ⏎ D ⏎ T: int ⏎ L ⏎ a ⏎ b
+   PROF: "Em a mais b, o tipo sobe dos filhos para o pai. Isso é sintetizado."
+
+3. TELA: # int a, b ⏎ D ⏎ T: int ⏎ L ⏎ a ⏎ b
+   BYTE: "Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque."
+   PERGUNTA (toque): certo = T: int ; errado = L | b
+   se errar: "O int está no galho do lado. Ele precisa atravessar."
+   se acertar: "O int passa pelo pai e desce até a. Isso é herdado."
+
+4. TELA: # int a, b ⏎ D ⏎ *T: int* ⏎ *L* ⏎ *a* ⏎ *b*
+   BYTE: "Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado."
+
+5. TELA: !!HERDADO!!
+   PROF: "S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita."
 
 #### PRATICA: "Suba os tipos" (5 cenas, ~27s)
 
@@ -106,72 +150,50 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 3. TELA: # a + x * 2 ⏎ a: int     x: float
    PROF: "Se um dos filhos é real, o resultado sobe como real."
 
-4. TELA: + ⏎ *a* * ⏎ x 2
+4. TELA: + ⏎ *a* ⏎ * ⏎ x ⏎ 2
    BYTE: "Diga o tipo de cada nó aceso, de baixo para cima."
-   BRINQUEDO interativo: meta = "Diga o tipo do nó aceso" ; teclas = [int, float]
-   se errar: "Tipo errado. Olhe os filhos desse nó."
-   ao conseguir: "Árvore anotada. O tipo subiu até a raiz."
+   BRINQUEDO: dica "Tipo errado. Olhe os filhos desse nó." / acerto "Árvore anotada. O tipo subiu até a raiz."
 
 5. TELA: # a + x * 2 ⏎ a: int     x: float
    BYTE: "Isso que você fez é atributo sintetizado, na ordem de baixo para cima."
 
 #### PRATICA: "O tipo que desce" (9 cenas, ~74s)
 
-1. TELA: # int a, b ⏎ D ⏎ T L ⏎ int L , id b ⏎ id a
+1. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a
    BYTE: "Na declaração int a, b, o tipo está escrito uma vez só, no começo. Mas o a e o b precisam dele."
 
-2. TELA: # int a, b ⏎ D ⏎ T.tipo = int ⏎ *T* L ⏎ *int* L , id b ⏎ id a
+2. TELA: # int a, b ⏎ D ⏎ *T* ⏎ L ⏎ *int* ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int
    BYTE: "O tipo nasce no nó T, pelo token int. Esse atributo é sintetizado: sobe do filho para T."
 
-3. TELA: # int a, b ⏎ D ⏎ T.tipo = int ⏎ T L ⏎ int L , *id b* ⏎ *id a* ⏎ sobe desce
+3. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ *id b* ⏎ *id a* ⏎ T.tipo = int ⏎ sobe ⏎ desce
    BYTE: "O a e o b estão embaixo de L, que é irmão de T. Para chegar neles, o tipo sobe ou desce pela árvore? Toque."
    PERGUNTA (toque): certo = desce ; errado = sobe
    se errar: "Os ids são folhas, lá embaixo. O tipo está em cima."
-   se acertar: "Isso. Ele passa de T para o irmão L e desce. Atributo que vem do pai ou de um irmão é um atributo herdado."
+   se acertar: "Ele passa de T para o irmão L e desce. Atributo que vem do pai ou de um irmão é um atributo herdado."
 
-4. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T *L* ⏎ int *L* , id b ⏎ L.her = int ⏎ id a
+4. TELA: # int a, b ⏎ D ⏎ T ⏎ *L* ⏎ int ⏎ *L* ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int
    BYTE: "A regra semântica diz: o herdado de L recebe o tipo de T. Em cada L de baixo, o herdado é copiado do L de cima."
 
-5. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T L ⏎ int L , *id b* ⏎ L.her = int ⏎ *id a* ⏎ anota na tabela soma os valores
+5. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ *id b* ⏎ *id a* ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int ⏎ anota na tabela ⏎ soma os valores
    BYTE: "Quando o herdado chega numa folha id, o que o compilador faz com ele? Toque."
    PERGUNTA (toque): certo = anota na tabela ; errado = soma os valores
    se errar: "É uma declaração: o compilador precisa lembrar o tipo de cada nome."
-   se acertar: "Isso. Cada id entra na tabela de símbolos com o tipo que desceu."
+   se acertar: "Acertou. Cada id entra na tabela de símbolos com o tipo que desceu."
 
-6. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T L ⏎ int L , id b ⏎ L.her = int ⏎ id a ⏎ *a: int    b: int*
+6. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int ⏎ *a: int    b: int*
    BYTE: "Resultado: a e b entram na tabela como int, mesmo com o tipo escrito uma vez só."
 
-7. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T L ⏎ int L , id b ⏎ L.her = int ⏎ id a ⏎ a: int    b: int
+7. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int ⏎ a: int    b: int
    PROF: "Definição que só tem atributo sintetizado é S-atribuída. O parser ascendente calcula tudo nas reduções."
 
-8. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T L ⏎ int L , id b ⏎ L.her = int ⏎ id a ⏎ S-atribuída L-atribuída
+8. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int ⏎ S-atribuída ⏎ L-atribuída
    BYTE: "Esta definição tem um herdado, que vem do irmão da esquerda. De que tipo ela é? Toque."
    PERGUNTA (toque): certo = L-atribuída ; errado = S-atribuída
    se errar: "Se tem atributo herdado, não pode ser a do S."
-   se acertar: "Isso. L-atribuída: o herdado só depende do pai e dos irmãos à esquerda. Dá para calcular numa passada, da esquerda para a direita."
+   se acertar: "L-atribuída: o herdado só depende do pai e dos irmãos à esquerda. Dá para calcular numa passada, da esquerda para a direita."
 
-9. TELA: # int a, b ⏎ D ⏎ T.tipo = int L.her = int ⏎ T L ⏎ int L , id b ⏎ L.her = int ⏎ id a
+9. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int
    BYTE: "Sintetizado sobe, herdado desce. Toda definição S-atribuída também é L-atribuída, mas não o contrário."
-
-#### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~35s)
-
-1. TELA: # int a, b ⏎ D ⏎ T: int L ⏎ a b
-   BYTE: "Declaração: int a, b. O tipo está num galho, e os nomes estão no outro."
-
-2. TELA: # int a, b ⏎ D ⏎ T: int L ⏎ a b
-   PROF: "Em a mais b, o tipo sobe dos filhos para o pai. Isso é sintetizado."
-
-3. TELA: # int a, b ⏎ D ⏎ T: int L ⏎ a b
-   BYTE: "Aqui é diferente. Para saber o tipo de a, o valor vem de qual nó? Toque."
-   PERGUNTA (toque): certo = T: int ; errado = L | b
-   se errar: "O int está no galho do lado. Ele precisa atravessar."
-   se acertar: "Isso. O int passa pelo pai e desce até a. Isso é herdado."
-
-4. TELA: # int a, b ⏎ D ⏎ *T: int* *L* ⏎ *a* *b*
-   BYTE: "Herdado vem do pai ou de um irmão à esquerda. Por isso desce e anda de lado."
-
-5. TELA: !!HERDADO!!
-   PROF: "S-atribuída usa só sintetizado. L-atribuída aceita herdado, da esquerda para a direita."
 
 #### CLIPE 30s: "Atributo sintetizado e herdado" (2 cenas, ~8s)
 
@@ -183,10 +205,10 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 
 #### CLIPE 30s: "Coerção de tipo" (2 cenas, ~10s)
 
-1. TELA: # 2 + 1.5 ⏎ int + float
+1. TELA: # 2 + 1.5 ⏎ int ⏎ + ⏎ float
    BYTE: "Inteiro mais real: o compilador converte o inteiro sozinho."
 
-2. TELA: # 2 + 1.5 ⏎ float + float
+2. TELA: # 2 + 1.5 ⏎ float ⏎ + ⏎ float
    BYTE: "Isso é coerção. O resultado é real."
 
 #### BUGS DO ÁLBUM (julgar verdade/mentira)
@@ -232,84 +254,90 @@ BYTE: "Antes da aula: esse x igual a um mexe em qual x?"
 Opções: ✔o de dentro | o de fora | nos dois
 Depois: "No de dentro. A busca começa pelo bloco mais próximo."
 
-#### AULA ANIMADA BÁSICA: "Quem é esse x?" (20 cenas, ~146s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "Quem é esse x?" (21 cenas, ~155s) [1º exemplo começa na cena 5]
 
 1. TELA: # Escopo ⏎ void f() { ⏎   int i; ⏎ } ⏎ void g() { ⏎   float i; ⏎ }
    BYTE: "Duas funções declaram uma variável i. Cada uma quer a sua."
 
-2. TELA: # Escopo ⏎ void f() { ⏎ *  int i;* ⏎ } ⏎ void g() { ⏎ *  float i;* ⏎ }
+2. TELA: # Escopo ⏎ void f() { ⏎   int i; ⏎ } ⏎ *void g() {* ⏎   float i; ⏎ }
+   BYTE: "Um uso de i dentro de g fala de qual declaração? Toque."
+   PERGUNTA (toque): certo =   float i; ; errado =   int i; | *void g() {*
+   se errar: "Procure a declaração que está entre as chaves de g."
+   se acertar: "O float i, declarado dentro de g. O int i de f não vale ali."
+
+3. TELA: # Escopo ⏎ void f() { ⏎ *  int i;* ⏎ } ⏎ void g() { ⏎ *  float i;* ⏎ }
    BYTE: "Em cada uso do i, o compilador precisa achar a declaração certa."
 
-3. TELA: !!ESCOPO!!
+4. TELA: !!ESCOPO!!
    BYTE: "O escopo de uma declaração é o trecho do programa onde ela vale. Em C, é o bloco onde ela foi feita."
 
-4. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ x = 2; ⏎ global: x int
+5. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ int main() { x = 2; } ⏎ global: x int
    BYTE: "O mesmo nome pode existir em dois escopos. Quem guarda cada declaração, com nome e tipo, é a tabela de símbolos."
 
-5. TELA: # Escopo ⏎ int x; ⏎ *void f() {* ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ x = 2; ⏎ f: x float ⏎ global: x int
+6. TELA: # Escopo ⏎ int x; ⏎ *void f() {* ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ int main() { x = 2; } ⏎ global: x int ⏎ f: x float
    BYTE: "Para escopos aninhados, o compilador usa uma pilha de tabelas. Entrou num bloco, empilha uma tabela nova."
 
-6. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎ *  x = 1.5;* ⏎ } ⏎ x = 2; ⏎ f: x float ⏎ global: x int
+7. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎ *  x = 1.5;* ⏎ } ⏎ int main() { x = 2; } ⏎ global: x int ⏎ f: x float
    BYTE: "Na linha x igual a um e meio, qual x vale? Toque na tabela certa."
    PERGUNTA (toque): certo = f: x float ; errado = global: x int
    se errar: "A busca começa na tabela do topo."
-   se acertar: "Isso. O x de dentro esconde o de fora."
+   se acertar: "O x de dentro esconde o de fora."
 
-7. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ x = 2; ⏎ *f: x float* ⏎ *global: x int*
+8. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ int main() { x = 2; } ⏎ *global: x int* ⏎ *f: x float*
    BYTE: "A busca começa na tabela do topo e desce, bloco por bloco, até achar o nome. Se não achar em nenhuma, é erro semântico."
 
-8. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ *}* ⏎ x = 2; ⏎ global: x int
+9. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ *}* ⏎ int main() { x = 2; } ⏎ global: x int
    BYTE: "Quando o bloco acaba, a tabela dele sai da pilha, e as variáveis locais deixam de existir."
 
-9. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ *x = 2;* ⏎ *global: x int*
-   BYTE: "Por isso x igual a dois fala do x global."
-
-10. TELA: # Receita ⏎ 1. Abriu bloco: empilhe uma tabela vazia. ⏎ 2. Declarou: anote o nome na tabela do topo. ⏎ 3. Uso: busque do topo. Não achou, erro. ⏎ 4. Fechou bloco: desempilhe a tabela dele.
-   BYTE: "Cada bloco tem a sua tabela. A receita cuida da pilha delas."
+10. TELA: # Escopo ⏎ int x; ⏎ void f() { ⏎   float x; ⏎   x = 1.5; ⏎ } ⏎ *int main() { x = 2; }* ⏎ *global: x int* ⏎ *main: (sem x)*
+   BYTE: "No main, x igual a dois. A tabela do main não tem x, então a busca desce e acha o x global."
 
 11. TELA: # Receita ⏎ 1. Abriu bloco: empilhe uma tabela vazia. ⏎ 2. Declarou: anote o nome na tabela do topo. ⏎ 3. Uso: busque do topo. Não achou, erro. ⏎ 4. Fechou bloco: desempilhe a tabela dele.
+   BYTE: "Cada bloco tem a sua tabela. A receita cuida da pilha delas."
+
+12. TELA: # Receita ⏎ 1. Abriu bloco: empilhe uma tabela vazia. ⏎ 2. Declarou: anote o nome na tabela do topo. ⏎ 3. Uso: busque do topo. Não achou, erro. ⏎ 4. Fechou bloco: desempilhe a tabela dele.
    BYTE: "O x de dentro escondeu o de fora. Que regra fez isso? Toque."
    PERGUNTA (toque): certo = 3. Uso: busque do topo. Não achou, erro. ; errado = 1. Abriu bloco: empilhe uma tabela vazia. | 2. Declarou: anote o nome na tabela do topo. | 4. Fechou bloco: desempilhe a tabela dele.
    se errar: "Pense em onde a busca começa."
-   se acertar: "Isso. A busca para no primeiro x que acha."
+   se acertar: "Boa. A busca para no primeiro x que acha."
 
-12. TELA: # Receita ⏎ 1. Abriu bloco: empilhe uma tabela vazia. ⏎ 2. Declarou: anote o nome na tabela do topo. ⏎ 3. Uso: busque do topo. Não achou, erro. ⏎ *4. Fechou bloco: desempilhe a tabela dele.*
+13. TELA: # Receita ⏎ 1. Abriu bloco: empilhe uma tabela vazia. ⏎ 2. Declarou: anote o nome na tabela do topo. ⏎ 3. Uso: busque do topo. Não achou, erro. ⏎ *4. Fechou bloco: desempilhe a tabela dele.*
    BYTE: "Regra quatro: o bloco fechou, e os nomes declarados nele somem juntos."
 
-13. TELA: # Escopo ⏎ *{* ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎   } ⏎   print(x); ⏎ } ⏎ fora: z int, x float
+14. TELA: # Escopo ⏎ *{* ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎   } ⏎   print(x); ⏎ } ⏎ fora: z int, x float
    BYTE: "Agora a busca é sua. O bloco de fora já tem a tabela dele."
 
-14. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎ *    x = x + 1;* ⏎     z = z + 1; ⏎   } ⏎   print(x); ⏎ } ⏎ dentro: x float ⏎ fora: z int, x float
+15. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎ *    x = x + 1;* ⏎     z = z + 1; ⏎   } ⏎   print(x); ⏎ } ⏎ fora: z int, x float ⏎ dentro: x float
    BYTE: "Entrou o bloco de dentro. Na linha acesa, qual tabela responde?"
    PERGUNTA (toque): certo = dentro: x float ; errado = fora: z int, x float
    se errar: "A busca começa no topo. O nome está lá?"
-   se acertar: "Isso. A tabela de dentro tem esse nome."
+   se acertar: "A tabela de dentro tem esse nome."
 
-15. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎ *    z = z + 1;* ⏎   } ⏎   print(x); ⏎ } ⏎ dentro: x float ⏎ fora: z int, x float
+16. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎ *    z = z + 1;* ⏎   } ⏎   print(x); ⏎ } ⏎ fora: z int, x float ⏎ dentro: x float
    BYTE: "E nesta linha acesa? Toque na tabela onde a busca para."
    PERGUNTA (toque): certo = fora: z int, x float ; errado = dentro: x float
    se errar: "O topo não tem esse nome. A busca desce."
-   se acertar: "Isso. Só a tabela de fora conhece esse nome."
+   se acertar: "Só a tabela de fora conhece esse nome."
 
-16. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎ *  }* ⏎   print(x); ⏎ } ⏎ dentro: x float ⏎ fora: z int, x float
+17. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎ *  }* ⏎   print(x); ⏎ } ⏎ fora: z int, x float ⏎ dentro: x float
    BYTE: "Chegou a chave que fecha o bloco. Qual tabela sai da pilha?"
    PERGUNTA (toque): certo = dentro: x float ; errado = fora: z int, x float
    se errar: "Regra quatro: sai a tabela do bloco que fechou."
-   se acertar: "Isso. Sai a tabela de dentro."
+   se acertar: "Acertou. Sai a tabela de dentro."
 
-17. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎   } ⏎ *  print(x);* ⏎ } ⏎ *fora: z int, x float*
+18. TELA: # Escopo ⏎ { ⏎   int z; ⏎   float x; ⏎   z = z + 1; ⏎   { ⏎     float x; ⏎     x = x + 1; ⏎     z = z + 1; ⏎   } ⏎ *  print(x);* ⏎ } ⏎ *fora: z int, x float*
    BYTE: "O print usa a única tabela que sobrou, a de fora."
 
-18. TELA: # Erros comuns ⏎ Declarar x de novo num bloco interno é erro: o nome já existe. ⏎ certo errado
+19. TELA: # Erros comuns ⏎ Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ certo ⏎ errado
    BYTE: "Já existe um x fora. Posso declarar outro x dentro do bloco? Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+   PERGUNTA (toque): certo = certo ; errado = errado
    se errar: "A declaração nova entra na tabela do topo, que ainda não tem x."
-   se acertar: "Isso. Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco."
+   se acertar: "Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco."
 
-19. TELA: # Erros comuns ⏎ Certo: Pode: o x interno esconde o externo. Erro é repetir no mesmo bloco. ⏎ *Errado: Buscar o nome só na tabela do topo.* ⏎ *Certo: A busca desce do topo até a tabela global. Erro só se nenhuma tiver.*
-   BYTE: "Outro erro: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
+20. TELA: # Erros comuns ⏎ Certo: Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ *Errado: Buscar o nome só na tabela do topo.* ⏎ *Certo: A busca desce do topo até a tabela global. Erro só se nenhuma tiver.*
+   BYTE: "Um erro comum: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
 
-20. TELA: # Resumo ⏎ Tabela de símbolos: nome, tipo e onde cada coisa foi declarada. ⏎ Uma tabela por bloco, numa pilha. Abriu bloco, empilha; fechou, desempilha. ⏎ Uso: busca do topo para baixo. O mais interno esconde o de fora.
+21. TELA: # Resumo ⏎ Tabela de símbolos: nome, tipo e onde cada coisa foi declarada. ⏎ Uma tabela por bloco, numa pilha. Abriu bloco, empilha; fechou, desempilha. ⏎ Uso: busca do topo para baixo. O mais interno esconde o de fora.
    BYTE: "Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo."
 
 #### PEGADINHA: "A sombra da variável" (5 cenas, ~27s)
@@ -321,26 +349,26 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
    BYTE: "O print de dentro enxerga qual x? Toque na declaração."
    PERGUNTA (toque): certo =   int x = 2; ; errado = int x = 1;
    se errar: "A busca começa no bloco mais interno."
-   se acertar: "Isso. Ele acha o x de dentro e para ali."
+   se acertar: "Ele acha o x de dentro e para ali."
 
 3. TELA: # Dois x ⏎ int x = 1; ⏎ { ⏎   int x = 2; ⏎   print(x); ⏎ } ⏎ *print(x);*
    BYTE: "O bloco fechou. O print de fora enxerga qual x?"
    PERGUNTA (toque): certo = int x = 1; ; errado =   int x = 2;
    se errar: "Quando o bloco fecha, os nomes dele somem."
-   se acertar: "Isso. Sobrou só o de fora, que nunca mudou."
+   se acertar: "É isso. Sobrou só o de fora, que nunca mudou."
 
 4. TELA: # Dois x ⏎ *int x = 1;* ⏎ { ⏎ *  int x = 2;* ⏎   print(x); ⏎ } ⏎ print(x);
    PROF: "A pegadinha é achar que x igual a dois mudou o x de fora. É outra variável."
 
-5. TELA: # Dois x ⏎ int x = 1; ⏎ { ⏎   int x = 2; ⏎   print(x); ⏎ } ⏎ print(x); ⏎ 2 1
+5. TELA: # Dois x ⏎ int x = 1; ⏎ { ⏎   int x = 2; ⏎   print(x); ⏎ } ⏎ print(x); ⏎ 2 ⏎ 1
    BYTE: "Saída do programa: dois, depois um."
 
 #### CLIPE 30s: "Tabela de símbolos" (2 cenas, ~9s)
 
-1. TELA: # Tabela de símbolos ⏎ x int global ⏎ y float local
+1. TELA: # Tabela de símbolos ⏎ x ⏎ int ⏎ global ⏎ y ⏎ float ⏎ local
    BYTE: "A tabela guarda cada nome, com o tipo e o escopo."
 
-2. TELA: # Tabela de símbolos ⏎ *x* int global ⏎ y float local
+2. TELA: # Tabela de símbolos ⏎ *x* ⏎ int ⏎ global ⏎ y ⏎ float ⏎ local
    BYTE: "Todo uso de variável passa por ela."
 
 #### BUGS DO ÁLBUM (julgar verdade/mentira)
@@ -382,72 +410,78 @@ BYTE: "Antes da aula: os parênteses entram na AST?"
 Opções: sim | ✔não | só um
 Depois: "Não. A forma da árvore já mostra o agrupamento."
 
-#### AULA ANIMADA BÁSICA: "A árvore enxuta" (17 cenas, ~125s)
+#### AULA ANIMADA BÁSICA: "A árvore enxuta" (18 cenas, ~131s)
 
 1. TELA: # AST ⏎ a + ( b )
    BYTE: "O parser montou a árvore de derivação. Ela tem um nó para cada regra usada, e fica enorme."
 
-2. TELA: # AST ⏎ *a + ( b )*
+2. TELA: # AST ⏎ *a + ( b )* ⏎ a ⏎ + ⏎ ( ⏎ b ⏎ )
+   BYTE: "Destes cinco pedaços, quais mudam o resultado da conta? Toque neles."
+   PERGUNTA (toque): certo = a | + | b ; errado = ( | )
+   se errar: "Tire os parênteses. A conta muda?"
+   se acertar: "O a, o mais e o b. Os parênteses em volta do b não mudam nada."
+
+3. TELA: # AST ⏎ a + ( b ) ⏎ *a* ⏎ *+* ⏎ *b*
    BYTE: "As fases seguintes só precisam saber qual é a operação e quais são os operandos."
 
-3. TELA: !!AST!!
+4. TELA: !!AST!!
    BYTE: "A árvore que guarda só isso é a árvore sintática abstrata, a AST."
 
-4. TELA: # a + ( b ) ⏎ E ⏎ E + T ⏎ id ( E ) ⏎ id
+5. TELA: # a + ( b ) ⏎ E ⏎ E ⏎ id ⏎ + ⏎ T ⏎ ( ⏎ E ⏎ id ⏎ )
    BYTE: "A árvore de derivação guarda tudo: parênteses, e até as regras que só passam de um não-terminal para outro."
 
-5. TELA: # a + ( b ) ⏎ E ⏎ E + T ⏎ id ( E ) ⏎ id
+6. TELA: # a + ( b ) ⏎ E ⏎ E ⏎ id ⏎ + ⏎ T ⏎ ( ⏎ E ⏎ id ⏎ )
    BYTE: "Tem nó sobrando aqui. Toque nos dois parênteses: eles não mudam a conta."
    PERGUNTA (toque): certo = ( | ) ; errado = E | id
    se errar: "A árvore já mostra a ordem. O parêntese fez o trabalho dele."
-   se acertar: "Isso. Pontuação some da árvore abstrata."
+   se acertar: "Pontuação some da árvore abstrata."
 
-6. TELA: # a + ( b ) ⏎ BinOp + ⏎ a b
+7. TELA: # a + ( b ) ⏎ BinOp + ⏎ a ⏎ b
    BYTE: "A AST guarda só o que tem significado: o operador no nó, e os operandos como filhos."
 
-7. TELA: # a + ( b ) ⏎ BinOp + ⏎ a b ⏎ *new BinOp('+', a, b)*
+8. TELA: # a + ( b ) ⏎ BinOp + ⏎ a ⏎ b ⏎ *new BinOp('+', a, b)*
    BYTE: "No código, cada nó da AST é um objeto, criado pelo parser na hora em que reconhece a regra."
 
-8. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ 3. Parêntese e regra de passagem somem.
+9. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ 3. Parêntese e regra de passagem somem.
    BYTE: "A receita para montar a AST tem três regras."
 
-9. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ 3. Parêntese e regra de passagem somem.
+10. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ 3. Parêntese e regra de passagem somem.
    BYTE: "Na árvore, cada nome virou folha. Qual regra é essa? Toque."
    PERGUNTA (toque): certo = 2. Valor ou nome vira folha. ; errado = 1. Operador vira nó; operandos viram filhos. | 3. Parêntese e regra de passagem somem.
    se errar: "Nome não tem filhos."
-   se acertar: "Isso. Regra dois: valor e nome viram folha."
+   se acertar: "Exato. Regra dois: valor e nome viram folha."
 
-10. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ *3. Parêntese e regra de passagem somem.*
+11. TELA: # Receita ⏎ 1. Operador vira nó; operandos viram filhos. ⏎ 2. Valor ou nome vira folha. ⏎ *3. Parêntese e regra de passagem somem.*
    BYTE: "Regra três: o parêntese só servia para agrupar. Na AST, a própria forma da árvore já mostra o agrupamento."
 
-11. TELA: # AST ⏎ total * ( preco - 2 )
+12. TELA: # AST ⏎ total * ( preco - 2 )
    BYTE: "Agora monte a AST de total vezes, abre parêntese, preço menos dois."
 
-12. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ * - (
+13. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ * ⏎ - ⏎ (
    BYTE: "Qual operador fica na raiz? Toque nele."
    PERGUNTA (toque): certo = * ; errado = - | (
    se errar: "O parêntese faz o menos acontecer antes. Quem fica por último é a raiz."
-   se acertar: "Isso. O vezes é a última conta, então vai na raiz."
+   se acertar: "O vezes é a última conta, então vai na raiz."
 
-13. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ * ⏎ total - ⏎ preco 2 total
+14. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ * ⏎ total ⏎ - ⏎ preco ⏎ 2 ⏎ total
    BYTE: "O menos fica embaixo do vezes. Quais são os filhos do menos? Toque."
    PERGUNTA (toque): certo = preco | 2 ; errado = total
    se errar: "São os dois lados do menos."
-   se acertar: "Isso. Preço e dois são folhas do menos."
+   se acertar: "Preço e dois são folhas do menos."
 
-14. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ *** ⏎ total *-* ⏎ preco 2
+15. TELA: # AST ⏎ total * ( preco - 2 ) ⏎ *** ⏎ total ⏎ *-* ⏎ preco ⏎ 2
    BYTE: "Sem parênteses na árvore, e a ordem continua certa: quem está mais fundo é calculado primeiro."
 
-15. TELA: # Erros comuns ⏎ A AST de a * (b - 2) tem nós para os parênteses. ⏎ certo errado
-   BYTE: "Os parênteses aparecem na AST? Um colega desenhou com eles. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
+16. TELA: # Erros comuns ⏎ A AST de a * (b - 2) não tem nó para os parênteses. ⏎ certo ⏎ errado
+   BYTE: "Os parênteses aparecem na AST? Um colega desenhou sem eles. Certo ou errado?"
+   PERGUNTA (toque): certo = certo ; errado = errado
    se errar: "O parêntese muda a forma da árvore. Depois disso, ele ainda serve?"
-   se acertar: "Isso. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes."
+   se acertar: "Boa. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes."
 
-16. TELA: # Erros comuns ⏎ Certo: Parêntese não vira nó. O agrupamento fica na forma da árvore. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
-   BYTE: "Outro erro: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
+17. TELA: # Erros comuns ⏎ Certo: A AST de a * (b - 2) não tem nó para os parênteses. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
+   BYTE: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
 
-17. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. Mais fundo é calculado antes.
+18. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. Mais fundo é calculado antes.
    BYTE: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
 
 #### PEGADINHA: "O parêntese não vira nó" (6 cenas, ~32s)
@@ -455,22 +489,22 @@ Depois: "Não. A forma da árvore já mostra o agrupamento."
 1. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c
    BYTE: "Esta conta tem parênteses. Eles mudam a ordem da conta."
 
-2. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *(* E *)*
+2. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *(* ⏎ *)* ⏎ E
    BYTE: "Na árvore de derivação, cada parêntese aparece como folha."
 
-3. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *** ⏎ *+* c ⏎ a b
+3. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *** ⏎ *+* ⏎ c ⏎ a ⏎ b
    BYTE: "Na AST eles somem. A forma da árvore já guarda a ordem."
 
-4. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ * ⏎ + c ⏎ a b ⏎ * + ( )
+4. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ * ⏎ + ⏎ c ⏎ a ⏎ b ⏎ * ⏎ + ⏎ ( ⏎ )
    BYTE: "Quais destes viram nós na árvore? Toque em todos."
    PERGUNTA (toque): certo = * | + ; errado = ( | )
    se errar: "A AST guarda operações e valores. Sinal de agrupar não vira nó."
-   se acertar: "Isso. Vezes e mais viram nós. Os parênteses somem."
+   se acertar: "Vezes e mais viram nós. Os parênteses somem."
 
-5. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *** ⏎ *+* c ⏎ a b
+5. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ *** ⏎ *+* ⏎ c ⏎ a ⏎ b
    BYTE: "O mais fica embaixo do vezes. É assim que a AST lembra do parêntese."
 
-6. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ * ⏎ + c ⏎ a b
+6. TELA: # O parêntese não vira nó ⏎ ( a + b ) * c ⏎ * ⏎ + ⏎ c ⏎ a ⏎ b
    PROF: "Na AST fica o que o programa faz, não como foi escrito."
 
 #### CLIPE 30s: "AST ou árvore de derivação" (2 cenas, ~10s)

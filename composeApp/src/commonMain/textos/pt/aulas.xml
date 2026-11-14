@@ -109,7 +109,7 @@
     <string name="epclipes_gramatica_ambigua_quando_mesma_frase">Uma gramática é ambígua quando a mesma frase tem duas árvores.</string>
     <string name="epclipes_duas_arvores_dao_dois_sentidos">Duas árvores dão dois sentidos, e o compilador precisa de um.</string>
     <string name="epclipes_na_regra_vai_para_mais">Na regra E vai para E mais T, o parser troca E por E. Ele não lê nada.</string>
-    <string name="epclipes_ele_repete_isso_para_sempre">Ele repete isso para sempre. Por isso o LL(1) não aceita.</string>
+    <string name="epclipes_ele_repete_isso_para_sempre">Ele repete isso para sempre. Por isso o parser de cima para baixo, o do Templo, não aceita.</string>
     <string name="epclipes_quando_duas_opcoes_comecam_igual">Quando duas opções começam igual, o parser não sabe qual pegar.</string>
     <string name="epclipes_fatorar_le_comeco_igual_vez">Fatorar lê o começo igual uma vez e decide depois.</string>
     <string name="epclipes_first_que_pode_aparecer_primeiro">FIRST é o que pode aparecer primeiro ao expandir um símbolo.</string>
@@ -282,7 +282,7 @@
     <string name="epgramatica_faco_como_na_matematica_ponho">Faço como na matemática: ponho o prefixo comum em evidência. Isso é a fatoração à esquerda.</string>
     <string name="epgramatica_escolha_fica_para_depois_ai">A escolha fica para depois do a, num não-terminal novo. Aí basta olhar o próximo token.</string>
     <string name="epgramatica_fatorada">Fatorada</string>
-    <string name="epgramatica_com_simbolo_so_olhada_parser">Com um token só de previsão, o parser sempre sabe o que fazer. É o que uma gramática LL(1) exige.</string>
+    <string name="epgramatica_com_simbolo_so_olhada_parser">Com um token só de previsão, o parser sempre sabe o que fazer. No Templo, gramática assim se chama LL(1).</string>
     <string name="epgramatica_com_que_isso_comeca">Com o que isso começa?</string>
     <string name="epgramatica_comece_pelo_facil_t_comeca">Comece por T. As duas regras dele começam com terminal: id e abre parêntese. Os dois entram direto.</string>
     <string name="epgramatica_x_ele_tem_duas_regras">Agora X. Uma regra começa com mais, a outra é só épsilon. Toque nos dois itens do FIRST de X.</string>
@@ -644,7 +644,7 @@
     <string name="eppegadinhas1_regra_das_linguagens_else_fica">A regra das linguagens: o else fica com o if mais perto. Toque nesse if.</string>
     <string name="eppegadinhas1_ande_para_tras_partir_else">Ande para trás a partir do else. Qual if aparece primeiro?</string>
     <string name="eppegadinhas1_isso_else_fica_com_if">O else fica com o if de dentro.</string>
-    <string name="eppegadinhas1_bison_resolve_empilhando_else_assim">O Bison resolve empilhando o else. Assim ele gruda no if de dentro.</string>
+    <string name="eppegadinhas1_bison_resolve_empilhando_else_assim">Na prática, as ferramentas escolhem a árvore em que o else gruda no if de dentro. Você vê como na Oficina do Bison.</string>
     <string name="eppegadinhas1_se_quiser_if_fora_use">Se quiser o if de fora, use chaves. Elas fecham o if de dentro.</string>
     <string name="eppegadinhas1_duas_derivacoes_arvore">Duas derivações, uma árvore</string>
     <string name="eppegadinhas1_olhe_esta_gramatica_pequena_frase">Olhe esta gramática pequena. A frase é a b.</string>
@@ -890,7 +890,7 @@
     <string name="eppratica_essa_escolha_saiu_frase_comece">Essa escolha saiu da frase. Comece de novo.</string>
     <string name="eppratica_chegou_isso_derivacao_mais_esquerda">Chegou. Isso é uma derivação mais à esquerda.</string>
     <string name="eppratica_chegue_em_id_id">Chegue em id + id</string>
-    <string name="eppratica_quando_voce_escolhe_certo_sem">Quando você escolhe certo sem pensar, a tabela LL(1) já está na sua cabeça.</string>
+    <string name="eppratica_quando_voce_escolhe_certo_sem">Quando você escolhe certo sem pensar, já faz o trabalho do parser do Templo. Ele olha o próximo token e escolhe a regra.</string>
     <string name="eppratica_olhe_topo_ele_terminal_ou">Olhe o topo. Ele é terminal ou não terminal?</string>
     <string name="eppratica_leve_pilha_ate_fim">Leve a pilha até o fim</string>
     <string name="eppratica_opere_pilha">Opere a pilha</string>

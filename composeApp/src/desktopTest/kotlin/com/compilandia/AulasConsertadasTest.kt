@@ -446,4 +446,39 @@ class AulasConsertadasTest {
         val vm = com.compilandia.engine.MipsVM(asm).run()
         assertTrue(vm.regs["\$v0"] == 10L)
     }
+
+    /** Torne LL(1): a gramática tem recursão e não é LL(1); sem a recursão ainda precisa fatorar; depois de fatorar, é LL(1). */
+    @Test fun torneLl1() {
+        val g0 = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_TORNE_LL1.joinToString("\n"))
+        assertEquals(listOf("L"), GrammarTransform.leftRecursiveNTs(g0))
+        assertTrue(!LL1Table(g0).isLL1)
+        val g1 = GrammarTransform.eliminateImmediateLeftRecursion(g0)
+        assertTrue(GrammarTransform.leftRecursiveNTs(g1).isEmpty())
+        assertTrue(GrammarTransform.needsLeftFactoring(g1))
+        assertTrue(!LL1Table(g1).isLL1)
+        val g2 = GrammarTransform.leftFactor(g1)
+        assertTrue(LL1Table(g2).isLL1, LL1Table(g2).conflicts.toString())
+    }
+
+    /** Guia do TP: cada capítulo fecha com "Na sua linguagem" (3 perguntas), e as saídas do "Teste desta etapa" são as do próprio guia. */
+    @Test fun fechamentoDosCapitulos() {
+        val guia = com.compilandia.content.Library.guide
+        val titulo = com.compilandia.textos.tx("tp_nsl_titulo")
+        for (c in guia) {
+            val nsl = c.beats.filterIsInstance<com.compilandia.content.Beat.Steps>().lastOrNull { it.title == titulo }
+            assertTrue(nsl != null && nsl.steps.size == 3, "capítulo ${c.number} sem Na sua linguagem")
+        }
+        fun codigos(n: Int) = guia.first { it.number == n }.beats.filterIsInstance<com.compilandia.content.Beat.Code>().map { it.code }
+        fun previsoes(n: Int) = guia.first { it.number == n }.beats.filterIsInstance<com.compilandia.content.Beat.Predict>()
+        // Cap. 5: a mensagem do ; que falta é a alternativa certa da previsão do próprio capítulo.
+        val certa = previsoes(5).map { it.options[it.correct] }.first { "esperava ';'" in it }
+        assertTrue(certa in com.compilandia.textos.tx("tp_teste_codigo_5"), certa)
+        // Cap. 6: as duas mensagens estão na lista de testes semânticos do capítulo 7.
+        val semanticos = codigos(7).first { "não foi declarado" in it }
+        for (linha in com.compilandia.textos.tx("tp_teste_codigo_6").lines().filter { it.trim().startsWith("->") }) assertTrue(linha.trim() in semanticos.lines().map { it.trim() }, linha)
+        // Cap. 9: o resumo que o roda_testes.sh imprime.
+        assertTrue(codigos(9).any { "passaram, \$falhou falharam" in it })
+        // Cap. 8: o contagem.byt existe no capítulo 2.
+        assertTrue(guia.first { it.number == 2 }.beats.filterIsInstance<com.compilandia.content.Beat.Code>().any { "contagem.byt" in it.caption })
+    }
 }

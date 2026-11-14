@@ -8,12 +8,12 @@
 - BYTE: Peraí… o que uma lanchonete tem a ver com compilador?
 - PROF: Tudo! O pedido passa por uma linha de montagem: cada pessoa faz UMA tarefa e passa adiante. Um compilador é exatamente isso: uma sequência de **fases**.
 - PASSOS (A linha de montagem da lanchonete):
-    1) O atendente lê o papel letra por letra e separa os itens: [X-tudo] [sem cebola] [+] [suco de laranja] → **análise léxica** (caracteres viram tokens).
-    2) O chefe confere se o pedido está bem montado: 'X-tudo com com batata sem' não é pedido → **análise sintática** (tokens viram árvore).
-    3) O gerente confere o SENTIDO: 'suco de feijoada' tem forma de pedido, mas não existe → **análise semântica** (tipos, declarações).
-    4) O pedido vira uma comanda padronizada que qualquer cozinheiro entende → **geração de código intermediário**.
-    5) A cozinha percebe que dá para esquentar os dois pães na mesma chapa → **otimização**.
-    6) O lanche sai pronto → **geração de código** (código de máquina).
+    · O atendente lê o papel letra por letra e separa os itens: [X-tudo] [sem cebola] [+] [suco de laranja] → **análise léxica** (caracteres viram tokens).
+    · O chefe confere se o pedido está bem montado: 'X-tudo com com batata sem' não é pedido → **análise sintática** (tokens viram árvore).
+    · O gerente confere o SENTIDO: 'suco de feijoada' tem forma de pedido, mas não existe → **análise semântica** (tipos, declarações).
+    · O pedido vira uma comanda padronizada que qualquer cozinheiro entende → **geração de código intermediário**.
+    · A cozinha percebe que dá para esquentar os dois pães na mesma chapa → **otimização**.
+    · O lanche sai pronto → **geração de código** (código de máquina).
 - BYTE: E se alguém da linha errar?
 - PROF: Cada fase pega um tipo de erro. Letra ilegível é com o atendente (léxico). Pedido sem pé nem cabeça é com o chefe (sintático). Pedido sem sentido é com o gerente (semântico).
 - PREVEJA: O cliente escreveu 'X-tudo §§ batata'. Quem reclama PRIMEIRO?
@@ -49,12 +49,12 @@
 #### ESTILO WORKED (Exemplo resolvido): "position = initial + rate * 60, fase por fase"
 - PROF: Vamos resolver com calma o exemplo mais famoso do Livro do Dragão. Entrada: `position = initial + rate * 60`, com as variáveis declaradas como float.
 - PASSOS (Resolvido, fase a fase):
-    1) 1. **Léxica**: ⟨id,1⟩ ⟨=⟩ ⟨id,2⟩ ⟨+⟩ ⟨id,3⟩ ⟨*⟩ ⟨60⟩. O número em ⟨id,1⟩ aponta para a linha de `position` na tabela de símbolos.
-    2) 2. **Sintática**: árvore com `=` na raiz; à direita, `+`; dentro do `+`, o `*`: mais embaixo, porque tem precedência maior.
-    3) 3. **Semântica**: `rate` é float e `60` é inteiro → insere o nó `inttofloat(60)`.
-    4) 4. **Código intermediário**: t1 = inttofloat(60); t2 = id3 * t1; t3 = id2 + t2; id1 = t3.
-    5) 5. **Otimização**: converte 60 em 60.0 já na compilação e elimina temporários: t1 = id3 * 60.0; id1 = id2 + t1.
-    6) 6. **Geração de código**: LDF R2, id3 / MULF R2, R2, #60.0 / LDF R1, id2 / ADDF R1, R1, R2 / STF id1, R1.
+    · 1. **Léxica**: ⟨id,1⟩ ⟨=⟩ ⟨id,2⟩ ⟨+⟩ ⟨id,3⟩ ⟨*⟩ ⟨60⟩. O número em ⟨id,1⟩ aponta para a linha de `position` na tabela de símbolos.
+    · 2. **Sintática**: árvore com `=` na raiz; à direita, `+`; dentro do `+`, o `*`: mais embaixo, porque tem precedência maior.
+    · 3. **Semântica**: `rate` é float e `60` é inteiro → insere o nó `inttofloat(60)`.
+    · 4. **Código intermediário**: t1 = inttofloat(60); t2 = id3 * t1; t3 = id2 + t2; id1 = t3.
+    · 5. **Otimização**: converte 60 em 60.0 já na compilação e elimina temporários: t1 = id3 * 60.0; id1 = id2 + t1.
+    · 6. **Geração de código**: LDF R2, id3 / MULF R2, R2, #60.0 / LDF R1, id2 / ADDF R1, R1, R2 / STF id1, R1.
 - CÓDIGO (Código intermediário antes de otimizar):
 ```
 t1 = inttofloat(60)
@@ -119,12 +119,12 @@ fluxo de caracteres
 Tabela de símbolos: compartilhada por todas as fases
 ```
 - PASSOS (O que cada fase faz (formato de prova)):
-    1) **Análise léxica** (scanning): lê os caracteres e os agrupa em lexemas; para cada lexema produz um token ⟨nome-do-token, valor-de-atributo⟩.
-    2) **Análise sintática** (parsing): usa os tokens para construir a árvore de sintaxe, que representa a estrutura gramatical.
-    3) **Análise semântica**: usa a árvore e a tabela de símbolos para verificar a consistência com a definição da linguagem; tarefa central: verificação de tipos (incluindo coerções).
-    4) **Geração de código intermediário**: produz uma representação de baixo nível, fácil de gerar e de traduzir para a máquina-alvo (ex.: código de três endereços).
-    5) **Otimização de código**: melhora o código intermediário (mais rápido, menor, menos energia) preservando o significado.
-    6) **Geração de código**: mapeia a representação intermediária para a linguagem-alvo, escolhendo registradores e instruções.
+    · **Análise léxica** (scanning): lê os caracteres e os agrupa em lexemas; para cada lexema produz um token ⟨nome-do-token, valor-de-atributo⟩.
+    · **Análise sintática** (parsing): usa os tokens para construir a árvore de sintaxe, que representa a estrutura gramatical.
+    · **Análise semântica**: usa a árvore e a tabela de símbolos para verificar a consistência com a definição da linguagem; tarefa central: verificação de tipos (incluindo coerções).
+    · **Geração de código intermediário**: produz uma representação de baixo nível, fácil de gerar e de traduzir para a máquina-alvo (ex.: código de três endereços).
+    · **Otimização de código**: melhora o código intermediário (mais rápido, menor, menos energia) preservando o significado.
+    · **Geração de código**: mapeia a representação intermediária para a linguagem-alvo, escolhendo registradores e instruções.
 - CAIXA [Não existem perguntas idiotas]: P: Fase é o mesmo que passada (pass)? R: Não. Fase é uma divisão LÓGICA do trabalho; passada é uma leitura completa da entrada. Várias fases podem ser agrupadas numa única passada.
 - PREVEJA: Qual fase recebe como entrada um fluxo de tokens?
     opções: Análise léxica | ✔Análise sintática | Análise semântica | Geração de código

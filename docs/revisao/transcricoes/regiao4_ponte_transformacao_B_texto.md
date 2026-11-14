@@ -58,11 +58,11 @@ E' -> + T E' | ε
 E -> E + T | E - T | T
 ```
 - PASSOS (Resolvido):
-    1) 1. Separe as alternativas que começam com E (recursivas) das outras.
-    2) 2. Recursivas: E + T e E - T → α₁ = `+ T`, α₂ = `- T`.
-    3) 3. Não recursiva: T → β₁ = `T`.
-    4) 4. Novo E: cada β seguido de E' → E → T E'.
-    5) 5. Novo E': cada α seguido de E', mais ε → E' → + T E' | - T E' | ε.
+    · 1. Separe as alternativas que começam com E (recursivas) das outras.
+    · 2. Recursivas: E + T e E - T → α₁ = `+ T`, α₂ = `- T`.
+    · 3. Não recursiva: T → β₁ = `T`.
+    · 4. Novo E: cada β seguido de E' → E → T E'.
+    · 5. Novo E': cada α seguido de E', mais ε → E' → + T E' | - T E' | ε.
 - WIDGET LEFT_RECURSION gramática=«E -> E + T | E - T | T ⏎ T -> id» legenda: Confira com o motor.
 - TEXTO: Agora esmaecido (exemplo do Livro do Dragão): `A -> A c | A a d | b d | ε`.
 - REVELAR: Quem são os α's?
@@ -195,18 +195,18 @@ S' -> else S | ε
 - WIDGET LL1_TABLE gramática=«L -> S L' ⏎ L' -> ; L | ε ⏎ S -> id = E | print E ⏎ E -> id | num» legenda: Sem conflitos: agora é LL(1).
 
 #### ESTILO WORKED (Exemplo resolvido): "Fatorando passo a passo"
-- PROF: Receita: para cada A, ache o MAIOR prefixo α comum a duas ou mais alternativas. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ.
+- PROF: Receita: para cada A, junte num grupo as alternativas que começam com o mesmo símbolo e ache o MAIOR prefixo α comum a todas do grupo. Se α ≠ ε: A → αβ₁ | … | αβₙ | γ vira A → αA' | γ e A' → β₁ | … | βₙ. O livro começa pelo maior prefixo comum a duas ou mais alternativas: a ordem das rodadas muda, mas a gramática do fim é a mesma.
 - CÓDIGO (Exercício resolvido):
 ```
 A -> a b c | a b d | a e | f
 ```
 - PASSOS (Resolvido):
-    1) 1. Alternativas que começam com `a`: a b c, a b d, a e. (f fica de fora: é o γ.)
-    2) 2. Maior prefixo comum às TRÊS: só `a` (a e não tem b).
-    3) 3. Primeira rodada: A → a A' | f; A' → b c | b d | e.
-    4) 4. Repita! Em A', `b c` e `b d` compartilham `b`.
-    5) 5. Segunda rodada: A' → b A'' | e; A'' → c | d.
-    6) 6. Fim: nenhum par de alternativas do mesmo NT começa igual.
+    · 1. Alternativas que começam com `a`: a b c, a b d, a e. (f fica de fora: é o γ.)
+    · 2. Maior prefixo comum às TRÊS do grupo: só `a` (a e não tem b). O `a b` fica para a rodada seguinte.
+    · 3. Primeira rodada: A → a A' | f; A' → b c | b d | e.
+    · 4. Repita! Em A', `b c` e `b d` compartilham `b`.
+    · 5. Segunda rodada: A' → b A'' | e; A'' → c | d.
+    · 6. Fim: nenhum par de alternativas do mesmo NT começa igual.
 - WIDGET LEFT_FACTORING gramática=«A -> a b c | a b d | a e | f» legenda: O motor repete as rodadas até estabilizar.
 - TEXTO: Sua vez, esmaecido: `C -> id = E | id ( ) | id ( E )`, com `E -> num`.
 - REVELAR: Primeira rodada: qual o maior prefixo comum às três?
@@ -215,7 +215,7 @@ A -> a b c | a b d | a e | f
     → `( )` e `( E )` compartilham `(`. C' → = E | ( C''; C'' → ) | E ).
 - WIDGET LEFT_FACTORING gramática=«C -> id = E | id ( ) | id ( E ) ⏎ E -> num» legenda: Confira.
 - CAIXA [Cuidado!]: Não pare na primeira rodada! Depois de fatorar, olhe de novo o novo não-terminal.
-- CAIXA [Dica de prova]: Use o MAIOR prefixo comum a pelo menos duas alternativas. Prefixo menor não é erro, só dá mais rodadas; prefixo que não é comum a todas do grupo, aí sim é erro.
+- CAIXA [Dica de prova]: Use o MAIOR prefixo comum a todas do grupo. Começar pelo prefixo de só duas, como faz o livro, também dá certo, com outra ordem de rodadas. Erro é pôr em evidência um prefixo que alguma alternativa do grupo não tem.
 
 #### ESTILO SOCRATIC (Perguntas guiadas): "Por que adiar a decisão?"
 - CÓDIGO:

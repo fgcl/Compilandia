@@ -10,10 +10,10 @@
 - TEXTO: Pense na sua média do semestre: a nota final é calculada a partir das notas das provas, que vêm dos exercícios. A informação **sobe**. Isso é um atributo **sintetizado**.
 - TEXTO: Agora pense no sobrenome: você o recebe dos pais e repassa aos irmãos mais novos. A informação **desce** (ou vem do lado). Isso é um atributo **herdado**.
 - PASSOS (O mapa da analogia):
-    1) Nota final calculada das parciais → **sintetizado** (do filho para o pai)
-    2) Sobrenome vindo dos pais → **herdado** (do pai ou irmão para o filho)
-    3) Regulamento de como calcular a média → **regra semântica** (E.tipo = ...)
-    4) Gramática + atributos + regras → **definição dirigida pela sintaxe (SDD)**
+    · Nota final calculada das parciais → **sintetizado** (do filho para o pai)
+    · Sobrenome vindo dos pais → **herdado** (do pai ou irmão para o filho)
+    · Regulamento de como calcular a média → **regra semântica** (E.tipo = ...)
+    · Gramática + atributos + regras → **definição dirigida pela sintaxe (SDD)**
 - TEXTO: O fiscal da balança da feira é o **verificador de tipos**: não deixa somar banana com bool. Mas int com float pode, é só converter o int, como trocar reais por dólares antes de somar. Isso é **coerção**.
 - PREVEJA: a é int e x é float. Qual o tipo de a + x * 2?
     opções: int | ✔float, com coerção de int para float | erro de tipo
@@ -36,10 +36,10 @@
 - WIDGET ATTR_TREE entrada=«ok + 1» legenda: O nó '+' marca erro: bool não entra em aritmética.
 - WIDGET PARSE_TREE gramática=«D -> T L ; ⏎ T -> int | float ⏎ L -> id R ⏎ R -> , id R | ε» entrada=«int id , id ;» legenda: Atributo herdado: T.tipo = int é passado para L.in e desce para cada id da lista.
 - PASSOS (O que você viu):
-    1) Folhas: o tipo vem do literal ou da tabela de símbolos
-    2) Nós internos: tipo calculado dos filhos → sintetizado
-    3) Ordem de avaliação: pós-ordem (como o $$ do Bison, numa redução)
-    4) Na declaração, o tipo desce pela lista → herdado
+    · Folhas: o tipo vem do literal ou da tabela de símbolos
+    · Nós internos: tipo calculado dos filhos → sintetizado
+    · Ordem de avaliação: pós-ordem (como o $$ do Bison, numa redução)
+    · Na declaração, o tipo desce pela lista → herdado
 - CAIXA [Poder do cérebro]: Um analisador LR calcula atributos sintetizados de graça: em cada redução, os valores dos filhos estão na pilha. É exatamente o $$ = $1 + $3 do Bison.
 
 #### ESTILO WORKED (Exemplo resolvido): "Árvore anotada com valor e com tipo"
@@ -54,16 +54,16 @@ F → ( E )     F.val = E.val
 F → num       F.val = num.lexval
 ```
 - PASSOS (Anotando 3 * 5 + 4 de baixo para cima):
-    1) Folhas: num.lexval = 3, 5, 4 → F.val = 3, 5, 4
-    2) T → F: T.val = 3
-    3) T → T1 * F: T.val = 3 * 5 = 15
-    4) E → T: E.val = 15
-    5) E → E1 + T (com T.val = 4): E.val = 15 + 4 = **19**
+    · Folhas: num.lexval = 3, 5, 4 → F.val = 3, 5, 4
+    · T → F: T.val = 3
+    · T → T1 * F: T.val = 3 * 5 = 15
+    · E → T: E.val = 15
+    · E → E1 + T (com T.val = 4): E.val = 15 + 4 = **19**
 - PROF: Agora, tipos, com coerção. Regra: se algum operando é float, o resultado é float e o int é convertido.
 - PASSOS (Tipando a + x * 2 (a: int, x: float)):
-    1) a → int (tabela de símbolos); x → float; 2 → int (literal)
-    2) x * 2: float * int → **float**, converte 2 para 2.0
-    3) a + (x * 2): int + float → **float**, gera inttofloat(a)
+    · a → int (tabela de símbolos); x → float; 2 → int (literal)
+    · x * 2: float * int → **float**, converte 2 para 2.0
+    · a + (x * 2): int + float → **float**, gera inttofloat(a)
 - WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Confira: raiz float, com a coerção marcada.
 - BYTE: Deixa comigo agora.
 - REVELAR: Tipo de (a + b) * c, com a, b, c int?
@@ -99,13 +99,13 @@ F → num       F.val = num.lexval
 #### ESTILO FORMAL (Definição de prova): "SDD, atributos e sistema de tipos"
 - TEXTO: **Definição dirigida pela sintaxe (SDD):** gramática livre de contexto + atributos associados aos símbolos + regras semânticas associadas às produções.
 - PASSOS (Tipos de atributo (para um não-terminal A num nó N)):
-    1) **Sintetizado:** definido por regra da produção em que A é a CABEÇA, usando atributos dos filhos de N e do próprio N
-    2) **Herdado:** definido por regra da produção em que A está no CORPO (no pai de N), usando atributos do pai, dos irmãos e do próprio N
-    3) Terminais só têm atributos sintetizados, fornecidos pelo léxico (ex.: num.lexval)
+    · **Sintetizado:** definido por regra da produção em que A é a CABEÇA, usando atributos dos filhos de N e do próprio N
+    · **Herdado:** definido por regra da produção em que A está no CORPO (no pai de N), usando atributos do pai, dos irmãos e do próprio N
+    · Terminais só têm atributos sintetizados, fornecidos pelo léxico (ex.: num.lexval)
 - PASSOS (Classes de SDD):
-    1) **S-atribuída:** só atributos sintetizados → avaliação em pós-ordem; implementável durante a análise LR
-    2) **L-atribuída:** em A → X1...Xn, cada herdado de Xi depende só de herdados de A e de atributos de X1...Xi-1 (e de Xi, sem ciclo) → uma passada em profundidade, esquerda para direita
-    3) **Esquema de tradução (SDT):** gramática com fragmentos de programa {ações} embutidos no corpo; em SDD S-atribuída, as ações vão no fim (SDT pós-fixo)
+    · **S-atribuída:** só atributos sintetizados → avaliação em pós-ordem; implementável durante a análise LR
+    · **L-atribuída:** em A → X1...Xn, cada herdado de Xi depende só de herdados de A e de atributos de X1...Xi-1 (e de Xi, sem ciclo) → uma passada em profundidade, esquerda para direita
+    · **Esquema de tradução (SDT):** gramática com fragmentos de programa {ações} embutidos no corpo; em SDD S-atribuída, as ações vão no fim (SDT pós-fixo)
 - CÓDIGO (SDD L-atribuída clássica: declarações (in é herdado)):
 ```
 D → T L ;        L.in = T.tipo
@@ -164,11 +164,11 @@ bool  ⊕  num   → ERRO   (e o erro sobe)
 - TEXTO: O porteiro procura primeiro **no seu apartamento**. Não achou? Procura **no prédio**. Depois **no condomínio inteiro**. O primeiro João encontrado, de dentro para fora, é o João certo.
 - TEXTO: Se tem um João no seu apê e outro no condomínio, o do apê **esconde** o de fora enquanto você está lá dentro. Isso é **sombreamento** (shadowing).
 - PASSOS (O mapa da analogia):
-    1) Apartamento, prédio, condomínio → **blocos aninhados** { { { } } }
-    2) Lista de moradores de cada lugar → **uma tabela de símbolos por escopo**
-    3) Procurar de dentro para fora → **regra do aninhamento mais próximo** (escopo estático)
-    4) Mudou-se do apê → **sair do bloco**: a lista dele é descartada
-    5) Nenhum João em lugar nenhum → erro **'variável não declarada'**
+    · Apartamento, prédio, condomínio → **blocos aninhados** { { { } } }
+    · Lista de moradores de cada lugar → **uma tabela de símbolos por escopo**
+    · Procurar de dentro para fora → **regra do aninhamento mais próximo** (escopo estático)
+    · Mudou-se do apê → **sair do bloco**: a lista dele é descartada
+    · Nenhum João em lugar nenhum → erro **'variável não declarada'**
 - PILHA: As listas... ficam empilhadas. Entrou num bloco... empilha. Saiu... desempilha. Eu adoro... esse trabalho.
 - CÓDIGO (Um condomínio de código):
 ```
@@ -213,15 +213,15 @@ bool  ⊕  num   → ERRO   (e o erro sobe)
 }
 ```
 - PASSOS (A pilha em cada momento (topo à direita)):
-    1) Abre bloco 0 → [ {} ]
-    2) int x; int y; → [ {x:int(1), y:int(2)} ]
-    3) Abre bloco 1 → [ {x(1), y(2)} | {} ]
-    4) float x; → [ {x(1), y(2)} | {x:float(3)} ] — o x(3) sombreia o x(1)
-    5) x = y + 1 → x acha (3) no topo; y não está no topo, desce e acha (2)
-    6) Abre bloco 2, int y; → [ ... | {x(3)} | {y:int(4)} ]
-    7) print(x + y) → x: (3), y: (4)
-    8) Fecha bloco 2 → a tabela {y(4)} é descartada
-    9) print(y) → y: (2)   •   Fecha bloco 1   •   print(x) → x: (1)
+    · Abre bloco 0 → [ {} ]
+    · int x; int y; → [ {x:int(1), y:int(2)} ]
+    · Abre bloco 1 → [ {x(1), y(2)} | {} ]
+    · float x; → [ {x(1), y(2)} | {x:float(3)} ] — o x(3) sombreia o x(1)
+    · x = y + 1 → x acha (3) no topo; y não está no topo, desce e acha (2)
+    · Abre bloco 2, int y; → [ ... | {x(3)} | {y:int(4)} ]
+    · print(x + y) → x: (3), y: (4)
+    · Fecha bloco 2 → a tabela {y(4)} é descartada
+    · print(y) → y: (2)   •   Fecha bloco 1   •   print(x) → x: (1)
 - WIDGET SCOPE legenda: Agora com outro programa: para cada uso, qual declaração vence?
 - LEXI: Para mim, todos esses x são iguais. Olha só:
 - WIDGET TOKENIZE entrada=«int x = 1; { float x = 2.5; print(x); }» legenda: O léxico vê ID, ID, ID... sem saber a qual declaração cada um pertence.
@@ -251,9 +251,9 @@ bool  ⊕  num   → ERRO   (e o erro sobe)
 }
 ```
 - PASSOS (Resolvendo os usos, de dentro para fora):
-    1) x = 1 (bloco 0): x está no bloco 0 → **(1)**
-    2) x = y + 1 (bloco 1): x está no bloco 1 → **(3)**; y não está no bloco 1, sobe para o 0 → **(2)**
-    3) print(x + y) (bloco 2): x não está no 2, está no 1 → **(3)**; y está no 2 → **(4)**
+    · x = 1 (bloco 0): x está no bloco 0 → **(1)**
+    · x = y + 1 (bloco 1): x está no bloco 1 → **(3)**; y não está no bloco 1, sobe para o 0 → **(2)**
+    · print(x + y) (bloco 2): x não está no 2, está no 1 → **(3)**; y está no 2 → **(4)**
 - BYTE: Peraí, deixa os últimos comigo.
 - REVELAR: print(y), depois que o bloco 2 fechou.
     → (2). A tabela do bloco 2, onde estava o y (4), já foi desempilhada; no bloco 1 não há y; no bloco 0 há o (2).
@@ -315,10 +315,10 @@ fator  → id          { s := topo.get(id)
                        senão fator.tipo := s.tipo }
 ```
 - PASSOS (Operações e custos (com tabela hash por escopo)):
-    1) entrar no escopo: O(1)
-    2) inserir: O(1) esperado, só no escopo do topo
-    3) buscar: O(profundidade do aninhamento) no pior caso
-    4) sair do escopo: O(1), descarta a tabela do topo
+    · entrar no escopo: O(1)
+    · inserir: O(1) esperado, só no escopo do topo
+    · buscar: O(profundidade do aninhamento) no pior caso
+    · sair do escopo: O(1), descarta a tabela do topo
 - PREVEJA: Escopo dinâmico: f usa x sem declarar; g declara x=2 e chama f; o global tem x=1. Com escopo DINÂMICO, f vê x =
     opções: 1 | ✔2 | erro
     explicação: Dinâmico segue a cadeia de CHAMADAS: a ativação mais recente com x é a de g. No escopo estático, f veria o global (1).
@@ -350,11 +350,11 @@ fator  → id          { s := topo.get(id)
 - BYTE: O resumo, óbvio! Mas... não perde nada importante?
 - PROF: Um BOM resumo não perde nada que importa para a prova: personagens, quem fez o quê, em que ordem. Ele joga fora só o que servia para o livro ser LIDO: capítulos de transição, numeração, notas. A **árvore sintática abstrata (AST)** é o resumo; a **árvore de derivação** é o livro inteiro.
 - PASSOS (Livro × resumo → árvore de derivação × AST):
-    1) Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.
-    2) Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.
-    3) Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.
-    4) Páginas em branco → produções **ε**: somem.
-    5) Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.
+    · Livro inteiro → **árvore de derivação (concreta)**: um nó para CADA passo da gramática.
+    · Capítulos de transição ('E vira T, que vira F...') → **não-terminais em corrente**: E → T → F → a. Somem na AST.
+    · Numeração e índice → **parênteses e pontuação**: só serviam para o parser saber a ordem. A forma da AST já guarda essa ordem.
+    · Páginas em branco → produções **ε**: somem.
+    · Personagens e ações → **operadores e operandos**: viram nós `BinOp`, `Var`, `Num`.
 - PREVEJA: Para 'a + b * c', a árvore de derivação da gramática E/T/F tem 13 nós. Quantos tem a AST?
     opções: 13 | 9 | ✔5 | 3
     explicação: Só sobram os 3 operandos e os 2 operadores: BinOp('+') com Var(a) e BinOp('*') com Var(b) e Var(c). 13 → 5: um resumo de verdade!
@@ -379,11 +379,11 @@ fator  → id          { s := topo.get(id)
 - WIDGET AST entrada=«a - ( b - c )» legenda: Agora com parênteses à direita: 19 nós contra 5. A forma da AST mudou, mesmo sem nenhum nó de parêntese.
 - WIDGET AST entrada=«( a + b ) * ( c - x )» legenda: 28 nós na derivação, 7 na AST: 4 folhas e 3 operadores.
 - PASSOS (Regras que você acabou de ver acontecendo):
-    1) Folha id/num → **Var** ou **Num** (um nó só, sem a corrente F → id).
-    2) Produção com operador (E → E + T) → **BinOp** com o operador e os dois filhos.
-    3) Produção de corrente (E → T, T → F) → nenhum nó novo: só repassa o filho.
-    4) F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.
-    5) Em expressões binárias: nós da AST = 2 × (nº de operadores) + 1.
+    · Folha id/num → **Var** ou **Num** (um nó só, sem a corrente F → id).
+    · Produção com operador (E → E + T) → **BinOp** com o operador e os dois filhos.
+    · Produção de corrente (E → T, T → F) → nenhum nó novo: só repassa o filho.
+    · F → ( E ) → nenhum nó novo: devolve a AST de E. O parêntese evapora.
+    · Em expressões binárias: nós da AST = 2 × (nº de operadores) + 1.
 - WIDGET MINILANG entrada=«m = a;
 if (b > m) { m = b; }
 print(m);» legenda: Comandos também viram nós (Atrib, Se...). O gerador anda nessa árvore e emite os desvios. Com a=4 e b=7, imprime 7.
@@ -428,12 +428,12 @@ Expr fator() {                // F → ( E ) | id | num
 }
 ```
 - PASSOS (Rastreando '2 * x + y'):
-    1) expr() chama termo(); termo() chama fator().
-    2) fator() vê '2' (número) → devolve **new Num(2)**. Em termo(), e = Num(2).
-    3) termo() vê '*': casa, chama fator(), que devolve **Var(x)**. e = **new BinOp('*', Num(2), Var(x))**.
-    4) termo() vê '+', que não é * nem /: sai do while e devolve o BinOp('*').
-    5) De volta em expr(): e = BinOp('*'). Vê '+': casa, chama termo(), que devolve **Var(y)**.
-    6) e = **new BinOp('+', BinOp('*', Num(2), Var(x)), Var(y))**. Fim da entrada: devolve e.
+    · expr() chama termo(); termo() chama fator().
+    · fator() vê '2' (número) → devolve **new Num(2)**. Em termo(), e = Num(2).
+    · termo() vê '*': casa, chama fator(), que devolve **Var(x)**. e = **new BinOp('*', Num(2), Var(x))**.
+    · termo() vê '+', que não é * nem /: sai do while e devolve o BinOp('*').
+    · De volta em expr(): e = BinOp('*'). Vê '+': casa, chama termo(), que devolve **Var(y)**.
+    · e = **new BinOp('+', BinOp('*', Num(2), Var(x)), Var(y))**. Fim da entrada: devolve e.
 - WIDGET AST entrada=«2 * x + y» legenda: Confira: 13 nós na derivação, 5 na AST, e o código Java gerado.
 - CAIXA [Cuidado!]: A linha mais importante é `e = new BinOp(op, e, termo());`: o resultado ANTERIOR vira o filho ESQUERDO do novo nó. É assim que 'a - b - c' vira (a - b) - c. Se você escrever recursão (`e = new BinOp(op, e, expr())`), a árvore fica pendurada para a direita e a subtração dá errado.
 - TEXTO: Agora é com você (exemplo esmaecido): **a - ( b - c )**.

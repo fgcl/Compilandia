@@ -5,4 +5,6 @@ package com.compilandia.content
 
 val tpGuide: List<GuideChapter> by lazy {
     listOf(tpCap1, tpCap2, tpCap3, tpCap4, tpCap5, tpCap6, tpCap7, tpCap8, tpCap9, tpCap10)
+        // Cada capítulo fecha com "Na sua linguagem" e "Teste desta etapa" (TpGuideFechamento.kt).
+        .map { it.copy(beats = it.beats + fechamentoDoCapitulo(it.number)) }
 }

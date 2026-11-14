@@ -1,39 +1,40 @@
 # Série "Seu compilador" em C (aulas animadas EM_C, na ordem)
 
-#### EM_C / TOKENS: "Em C 1: o laço do getchar" (9 cenas, ~50s)
+#### EM_C / TOKENS: "Em C 1: o laço do getchar" (10 cenas, ~64s)
 
-1. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7
+1. TELA: # Em C aqui, Java no TP ⏎ série: C, com árvore ⏎ Guia do TP: Java, sem árvore ⏎ uma função por regra
+   PROF: "Esta série escreve o compilador em C e monta a árvore. O Guia do TP faz o trabalho em Java, sem árvore. A ideia é a mesma: uma função por regra. O guia traz a tabela dos nomes."
+
+2. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7
    BYTE: "Vamos escrever o analisador léxico em C, na mão."
 
-2. TELA: # lexer.c ⏎ *int c = getchar();* ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '4'; v = ?}
+3. TELA: # lexer.c ⏎ *int c = getchar();* ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = ?}
    BYTE: "O getchar lê um caractere por vez. Chegou o 4."
 
-3. TELA: # lexer.c ⏎ int c = getchar(); ⏎ *if (isdigit(c)) {* ⏎ *  int v = 0;* ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '4'; v = 0}
+4. TELA: # lexer.c ⏎ int c = getchar(); ⏎ *if (isdigit(c)) {* ⏎ *  int v = 0;* ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = 0}
    BYTE: "É dígito. Entra no if, e o valor começa em zero."
 
-4. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '4'; v = 4}
+5. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = 4}
    BYTE: "Cada volta do while junta um dígito. Agora v vale quatro."
 
-5. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎ *    c = getchar();* ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '2'; v = 42}
+6. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎ *    c = getchar();* ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '2'; v = 42}
    BYTE: "Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois."
 
-6. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '+'; v = 42}
+7. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
    BYTE: "Agora chegou o mais. Qual linha roda logo depois? Toque nela."
    PERGUNTA (toque): certo =   ungetc(c, stdin); ; errado =     v = v * 10 + (c - '0'); |     c = getchar(); | if (isdigit(c)) {
    se errar: "O mais não é dígito. O while para."
-   se acertar: "Isso. O laço para e o ungetc devolve o mais."
+   se acertar: "O laço para e o ungetc devolve o mais."
 
-7. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎ *  ungetc(c, stdin);* ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '+'; v = 42}
+8. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎ *  ungetc(c, stdin);* ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
    BYTE: "O mais foi lido a mais. O ungetc devolve ele para a entrada."
 
-8. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎ *  return (Token){NUM, v};* ⏎ } ⏎ 4 2 + 7 ⏎ variáveis{c = '+'; v = 42} Token{tipo: NUM; valor: 42}
+9. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎ *  return (Token){NUM, v};* ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42} ⏎ Token{tipo: NUM; valor: 42}
    BYTE: "E sai o token. Ele é um struct com o tipo e o valor."
 
-9. TELA: *x* 1 = 4 2 + y ;
+10. TELA: *x* ⏎ 1 ⏎ = ⏎ 4 ⏎ 2 ⏎ + ⏎ y ⏎ ;
    BYTE: "Agora corte uma linha inteira, como o seu lexer em C faria."
-   BRINQUEDO interativo: meta = "Corte a linha em tokens." ; teclas = [Mais uma letra, Cortar aqui]
-   se errar: "Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token."
-   ao conseguir: "Os tokens que você cortou são os que o seu lexer devolveria."
+   BRINQUEDO: dica "Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token." / acerto "Os tokens que você cortou são os que o seu lexer devolveria."
 
 #### EM_C / RECURSIVE_DESCENT: "Em C 2: uma função por regra" (9 cenas, ~51s)
 
@@ -46,29 +47,27 @@
 3. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ } ⏎ void termo(void) { ⏎ *  fator(); while (tok == '*') ...* ⏎ } ⏎ *void fator(void) { casa(NUM); }*
    BYTE: "termo é igual, com o vezes. E fator só casa um número."
 
-4. TELA: # parser.c ⏎ 2 + 3 * 4 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ expr() ⏎ main() ⏎ pilha de chamadas
+4. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
    BYTE: "Vamos rodar com dois mais três vezes quatro. O main chama expr."
 
-5. TELA: # parser.c ⏎ 2 + 3 * 4 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ fator() ⏎ termo() ⏎ expr() ⏎ main() ⏎ pilha de chamadas
+5. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ termo() ⏎ fator() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
    BYTE: "expr chama termo, e termo chama fator. A pilha cresce."
 
-6. TELA: # parser.c ⏎ 2 + 3 * 4 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ expr() ⏎ main() ⏎ pilha de chamadas
+6. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
    BYTE: "fator casa o 2 e volta. Depois termo volta também."
 
-7. TELA: # parser.c ⏎ 2 + 3 * 4 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ expr() ⏎ main() ⏎ pilha de chamadas
+7. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
    BYTE: "Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque."
    PERGUNTA (toque): certo = expr() ; errado = main()
    se errar: "Quem tem o while do mais?"
-   se acertar: "Isso. O while do mais mora dentro de expr."
+   se acertar: "O while do mais mora dentro de expr."
 
-8. TELA: # parser.c ⏎ 2 + 3 * 4 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ termo() ⏎ expr() ⏎ main() ⏎ pilha de chamadas
+8. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ termo() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
    PROF: "No vezes, quem casa é termo. Cada função cuida do seu operador."
 
-9. TELA: *1* * 2 + 3 ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ *main()* ⏎ pilha de chamadas
+9. TELA: *1* ⏎ * ⏎ 2 ⏎ + ⏎ 3 ⏎ *main()* ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM
    BYTE: "Agora você é o processador. Chame, case e volte, na ordem certa."
-   BRINQUEDO interativo: meta = "Rode 1 * 2 + 3 até a pilha esvaziar." ; teclas = [Chamar, Casar, Voltar]
-   se errar: "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou."
-   ao conseguir: "Você rodou a descida recursiva inteira, igual ao programa em C."
+   BRINQUEDO: dica "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou." / acerto "Você rodou a descida recursiva inteira, igual ao programa em C."
 
 #### EM_C / AST_BUILD: "Em C 3: o struct Node" (8 cenas, ~43s)
 
@@ -81,96 +80,109 @@
 3. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎ *  struct Node *esq, *dir;* ⏎ } Node;
    BYTE: "esq e dir são ponteiros. Eles apontam para os filhos."
 
-4. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} Node{val: 4}
+4. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4}
    BYTE: "Para dois mais três vezes quatro, o parser cria os nós de baixo para cima."
 
-5. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} *Node{op: '*'; esq ●; dir ●}* ⏎ Node{val: 3} Node{val: 4}
+5. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ *Node{op: '*'; esq ●; dir ●}*
    BYTE: "Primeiro as folhas, um nó para cada número. Depois vem o vezes."
 
-6. TELA: # 2 + 3 * 4 ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{val: 2} Node{op: '*'; esq ●; dir ●} ⏎ Node{val: 3} Node{val: 4}
+6. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ *Node{op: '+'; esq ●; dir ●}*
    BYTE: "Por último o mais, que vira a raiz da árvore."
 
-7. TELA: # 2 + 3 * 4 ⏎ Node{op: '+'; esq ●; »dir ●«} ⏎ Node{val: 2} Node{op: '*'; esq ●; dir ●} ⏎ Node{val: 3} Node{val: 4}
+7. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    BYTE: "Para qual nó aponta o ponteiro dir da raiz? Toque nele."
-   PERGUNTA (toque): certo = Node ; errado = Node | Node | Node
+   PERGUNTA (toque): certo = Node{op: '*'; esq ●; dir ●} ; errado = Node{val: 2} | Node{val: 3} | Node{val: 4}
    se errar: "Siga o fio que sai da linha dir."
-   se acertar: "Isso. O dir da raiz aponta para o vezes."
+   se acertar: "O dir da raiz aponta para o vezes."
 
-8. TELA: # 2 + 3 * 4 ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{val: 2} Node{op: '*'; esq ●; dir ●} ⏎ Node{val: 3} Node{val: 4}
+8. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    PROF: "A árvore é isso: structs ligados por ponteiros."
 
 #### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~42s)
 
-1. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} Node{nome: c}
+1. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c}
    BYTE: "O gerador anda na árvore e escreve MIPS, uma linha por vez."
 
-2. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} Node{nome: c}
+2. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} ⏎ Node{nome: c}
    BYTE: "Ele visita os filhos antes do pai. O primeiro nó pronto é o vezes."
 
-3. TELA: # a + b * c ⏎ *lw $t1, b* ⏎ Node{op: '+'; esq ●; dir ●} ⏎ *lw $t2, c* ⏎ *mul $t3, $t1, $t2* ⏎ *sw $t3, t1* ⏎ Node{nome: a} *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} Node{nome: c}
+3. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ *Node{op: '*'; esq ●; dir ●}* ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ *lw $t1, b* ⏎ *lw $t2, c* ⏎ *mul $t3, $t1, $t2* ⏎ *sw $t3, t1*
    BYTE: "O vezes vira quatro linhas: carrega b, carrega c, multiplica e guarda."
 
-4. TELA: # a + b * c ⏎ lw $t1, b ⏎ Node{op: '+'; esq ●; dir ●} ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ Node{nome: a} Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} Node{nome: c}
+4. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1
    BYTE: "Qual nó o gerador visita agora? Toque nele."
-   PERGUNTA (toque): certo = Node ; errado = Node | Node | Node
+   PERGUNTA (toque): certo = Node{op: '+'; esq ●; dir ●} ; errado = Node{nome: a} | Node{nome: b} | Node{nome: c}
    se errar: "Os dois filhos da raiz já estão prontos."
-   se acertar: "Isso. Agora é a vez da raiz."
+   se acertar: "Agora é a vez da raiz."
 
-5. TELA: # a + b * c ⏎ lw $t1, b ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ *lw $t1, a* ⏎ Node{nome: a} Node{op: '*'; esq ●; dir ●} *lw $t2, t1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, t2* ⏎ Node{nome: b} Node{nome: c}
+5. TELA: # a + b * c ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ *lw $t1, a* ⏎ *lw $t2, t1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, t2*
    BYTE: "O mais usa o resultado do vezes, que já está guardado na memória."
 
-6. TELA: # a + b * c ⏎ lw $t1, b ⏎ Node{op: '+'; esq ●; dir ●} ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ lw $t1, a ⏎ Node{nome: a} Node{op: '*'; esq ●; dir ●} lw $t2, t1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, t2 ⏎ void gera(Node *n) { Node{nome: b} Node{nome: c} ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
+6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, t1 ⏎ lw $t1, a ⏎ lw $t2, t1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, t2 ⏎ void gera(Node *n) { ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
    PROF: "Em C, é uma função recursiva: gera os filhos e depois o pai."
 
-7. TELA: a + b * c ⏎ [?próxima instrução]
+7. TELA: a + b * c ⏎ próxima instrução
    BYTE: "Agora monte o MIPS na ordem certa, instrução por instrução."
-   BRINQUEDO interativo: meta = "Monte o MIPS de a + b * c." ; teclas = [lw, mul, sw, add]
-   se errar: "Antes de calcular, os dois valores precisam estar nos registradores."
-   ao conseguir: "É exatamente o que o seu gerador em C escreveria."
+   BRINQUEDO: dica "Antes de calcular, os dois valores precisam estar nos registradores." / acerto "É exatamente o que o seu gerador em C escreveria."
 
 #### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (7 cenas, ~36s)
 
-1. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {;   return yyparse();; }}
+1. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
    BYTE: "Um compilador em C de verdade costuma ter três arquivos."
 
-2. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {; »  return yyparse();«; }}  | setas: main.c --yyparse()--> calc.y
+2. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
    BYTE: "O main chama o yyparse, o parser que o Bison escreveu."
 
-3. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {;   return yyparse();; }}  | setas: main.c --yyparse()--> calc.y, calc.y --yylex()--> calc.l
+3. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
    BYTE: "Sempre que precisa de um token, o parser chama o yylex."
 
-4. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; »yylval = atoi(yytext)«} main.c{int main(void) {;   return yyparse();; }}  | setas: main.c --yyparse()--> calc.y
+4. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
    BYTE: "O yylex devolve o tipo. O valor vai junto, em yylval."
 
-5. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {;   return yyparse();; }}  | setas: main.c --yyparse()--> calc.y
+5. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }}
    BYTE: "Quem chama o yylex? Toque no arquivo."
-   PERGUNTA (toque): certo = calc.y ; errado = calc.l | main.c
+   PERGUNTA (toque): certo = calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ; errado = calc.l{[0-9]+  NUM; yylval = atoi(yytext)} | main.c{int main(void) {;   return yyparse();; }}
    se errar: "Quem pede tokens é o parser."
-   se acertar: "Isso. O parser pede um token por vez."
+   se acertar: "O parser pede um token por vez."
 
-6. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {;   return yyparse();; }} ⏎ *terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc}*  | setas: main.c --yyparse()--> calc.y
+6. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }} ⏎ *terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc}*
    BYTE: "O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa."
 
-7. TELA: # flex + bison + C ⏎ calc.y{e: e '+' e; { $$ = $1 + $3; }} ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} main.c{int main(void) {;   return yyparse();; }} ⏎ terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc} *./calc{2+3*4; »= 14«}*  | setas: main.c --yyparse()--> calc.y
+7. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int main(void) {;   return yyparse();; }} ⏎ terminal{bison -d calc.y; flex calc.l; gcc *.c -o calc} ⏎ *./calc{2+3*4; = 14}*
    BYTE: "Roda o calc, digita a conta, e sai o resultado."
 
 
 # Guia do Trabalho Prático (capítulos de texto)
 
 ## Capítulo 1: Visão geral e planejamento [PHASES]
-Resumo: O TP é um compilador inteiro, mas são cinco programinhas que conversam. Planeje antes de codar.
+O TP é um compilador inteiro, mas são cinco programinhas que conversam. Planeje antes de codar.
+
 - NARRADOR: Semana 3 do semestre. O enunciado cai no Canvas: 'Construir um compilador completo para uma linguagem imperativa simples, em Java, gerando assembly MIPS executável no MARS'. Você lê duas vezes. Depois lê de novo.
 - BYTE: Um compilador INTEIRO? Eu mal faço um for em Java sem olhar a internet…
 - PROF: Respira. Ninguém escreve um compilador de uma vez. Você vai escrever **cinco pedaços pequenos** que conversam entre si, e cada um você já treinou aqui no Compilândia.
 - WIDGET PIPELINE legenda: Cada estação da esteira vira uma classe Java no seu TP.
 - PASSOS (As peças do TP (e o arquivo Java de cada uma)):
-    1) **Léxico** (`Lexico.java`): texto → tokens. Um AFD escrito com `switch` de estados.
-    2) **Sintático** (`Sintatico.java`): tokens → 'o programa está bem formado?'. Descida recursiva: um método por não-terminal.
-    3) **Semântico** (`TabelaSimbolos.java` + checagens dentro do `Sintatico`): declarou? o tipo bate?
-    4) **Gerador** (também dentro do `Sintatico`): cada método emite o seu pedaço de assembly MIPS.
-    5) **Otimização** (opcional/bônus): dobrar constantes, cortar código morto.
-    6) **Testes**: uma pasta de programas que DEVEM compilar e outra de programas que DEVEM dar erro.
+    · **Léxico** (`Lexico.java`): texto → tokens. Um AFD escrito com `switch` de estados.
+    · **Sintático** (`Sintatico.java`): tokens → 'o programa está bem formado?'. Descida recursiva: um método por não-terminal.
+    · **Semântico** (`TabelaSimbolos.java` + checagens dentro do `Sintatico`): declarou? o tipo bate?
+    · **Gerador** (também dentro do `Sintatico`): cada método emite o seu pedaço de assembly MIPS.
+    · **Otimização** (opcional/bônus): dobrar constantes, cortar código morto.
+    · **Testes**: uma pasta de programas que DEVEM compilar e outra de programas que DEVEM dar erro.
 - TEXTO: Repare num detalhe: semântico e gerador moram **dentro** do sintático. É o esquema de **tradução dirigida pela sintaxe em uma passada**: o parser pede um token ao léxico quando precisa, confere a semântica na hora e já cospe o MIPS. Sem árvore gigante na memória, sem segunda passada. É o formato que cabe num TP de semestre.
+- CAIXA [Não existem perguntas idiotas]: **Por que duas linguagens?** Nas regiões, a série **Em C** escreve um compilador em C e monta a árvore (`struct Node`) antes de gerar o código. Este guia faz o TP em **Java** e não monta árvore: cada função do sintático confere e emite o MIPS na mesma passada. A ideia é uma só: **uma função por regra da gramática**. Para o TP, siga este guia. Use a série para ver a árvore por dentro. A tabela abaixo traduz os nomes.
+- CÓDIGO (Os mesmos papéis, com nomes diferentes):
+```
+C (série Em C)  Java (Guia do TP)
+expr()          exprAdd()
+termo()         exprMul()
+fator()         primario()
+tok == '+'      eh(MAIS)
+casa('+')       casaToken(MAIS)
+struct Node     sem árvore
+gera()          emite() na hora
+
+MAIS = TipoToken.MAIS
+```
 - CÓDIGO (Estrutura de pastas sugerida):
 ```
 byteiro/
@@ -225,16 +237,65 @@ public class Main {
     }
 }
 ```
+- TEXTO: **Rodando no primeiro dia.** O `Main` acima chama `Lexico` e `Sintatico`, que só nascem nos capítulos 3 e 5. Não espere: crie hoje as duas classes provisórias abaixo. Com elas, o projeto compila, lê o `.byt` e grava um `.asm` que o MARS roda. Daqui em diante, cada capítulo troca um pedaço e o resto continua rodando.
+- CÓDIGO (Lexico.java e Sintatico.java provisórios: o projeto roda desde o dia 1):
+```
+// Provisório: o capítulo 3 troca pelo AFD.
+public class Lexico {
+    final String fonte;
+
+    public Lexico(String fonte) { this.fonte = fonte; }
+}
+
+// Provisório: o capítulo 5 troca pela descida recursiva.
+public class Sintatico {
+    private final Lexico lexico;
+
+    public Sintatico(Lexico lexico) { this.lexico = lexico; }
+
+    public String compila() {
+        long linhas = lexico.fonte.lines().count();
+        return "# " + linhas + " linhas lidas\n"
+             + ".text\n"
+             + "main:\n"
+             + "    li $v0, 10      # encerra o programa\n"
+             + "    syscall\n";
+    }
+}
+```
+- CÓDIGO (Teste desta etapa: o comando e a saída esperada (abra o saida.asm no MARS: ele termina sem erro)):
+```
+# testes/ok/ola.byt (3 linhas):
+programa ola {
+    escreva("ola");
+}
+
+# no terminal:
+javac -d out src/*.java
+java -cp out Main testes/ok/ola.byt
+compilado com sucesso -> saida.asm
+
+# o saida.asm:
+# 3 linhas lidas
+.text
+main:
+    li $v0, 10      # encerra o programa
+    syscall
+```
 - PREVEJA: Qual ordem de implementação dá MENOS dor de cabeça?
     opções: Escrever tudo de uma vez e testar na última semana | ✔Léxico → sintático → semântico → geração, testando cada fase antes de seguir | Começar pela geração de MIPS, que é o que vale mais ponto | Começar pela tabela de símbolos, que todo mundo usa
     explicação: Cada fase CONSOME a saída da anterior. Se o léxico tem bug, o parser parece quebrado sem estar. Construa de baixo para cima e teste cada camada antes de empilhar a próxima.
 - PASSOS (Cronograma de 8 semanas (ajuste à data do seu enunciado)):
-    1) Semana 1: Definir a linguagem e escrever 10 programas-exemplo (5 certos, 5 com erro).
-    2) Semana 2: Léxico + um `TesteLexico` que imprime os tokens.
-    3) Semanas 3–4: Gramática LL(1) no papel (FIRST/FOLLOW!) e o parser descendente.
-    4) Semana 5: Tabela de símbolos e verificação de tipos.
-    5) Semanas 6–7: Geração de MIPS, testando cada comando no MARS.
-    6) Semana 8: Otimização, bateria de testes, relatório. E uma folga: algo SEMPRE atrasa.
+    · Semana 1: Definir a linguagem e escrever 10 programas-exemplo (5 certos, 5 com erro).
+    · Semana 2: Léxico + um `TesteLexico` que imprime os tokens.
+    · Semanas 3–4: Gramática LL(1) no papel (FIRST/FOLLOW!) e o parser descendente.
+    · Semana 5: Tabela de símbolos e verificação de tipos.
+    · Semanas 6–7: Geração de MIPS, testando cada comando no MARS.
+    · Semana 8: Otimização, bateria de testes, relatório. E uma folga: algo SEMPRE atrasa.
+- PASSOS (Só tem 3 semanas? Cronograma curto):
+    · Semana 1: linguagem e léxico (capítulos 2 e 3). O esqueleto roda no dia 1, e o `TesteLexico` imprime os tokens no fim da semana.
+    · Semana 2: gramática LL(1), parser, tabela de símbolos e tipos (capítulos 4 a 7). A tabela FIRST/FOLLOW do capítulo 4 já serve de prova para o relatório.
+    · Semana 3: MIPS no MARS (capítulo 8), bateria de testes e o checklist (capítulos 9 e 10). A otimização fica de fora: é bônus.
 - CÓDIGO (Git desde o dia 1: um branch por fase, commits pequenos):
 ```
 git init byteiro && cd byteiro
@@ -253,9 +314,14 @@ git merge lexico
 - REVELAR: Em uma frase: o que o seu `Main` faz?
     → Lê o arquivo-fonte, entrega ao `Sintatico` (que puxa tokens do `Lexico`, consulta a `TabelaSimbolos` e emite MIPS) e grava o `.asm`: ou imprime a linha e a mensagem do primeiro erro.
 - PILHA: Devagar… e sempre… uma fase… por vez.
+- PASSOS (Na sua linguagem):
+    · Qual é o nome da sua linguagem e a extensão dos arquivos-fonte?
+    · Em que linguagem o compilador deve ser escrito, e o que ele deve gerar (MIPS para o MARS, ou outra coisa)?
+    · Quantas semanas faltam para a entrega? Escolha o cronograma de 8 ou o de 3 semanas.
 
 ## Capítulo 2: Definindo a linguagem Byteiro [TOKENS]
-Resumo: Antes do Java: tokens, precedência e uma gramática informal de uma linguagem pequena e completa.
+Antes do Java: tokens, precedência e uma gramática informal de uma linguagem pequena e completa.
+
 - PROF: Antes de uma linha de Java, você precisa de uma linguagem. No TP a turma inventa (ou recebe) a sua. Neste guia vamos inventar a **Byteiro**: pequenininha de propósito.
 - BYTE: Posso pôr classes, lambdas, vetores, funções recursivas…?
 - PROF: NÃO. Cada recurso a mais é um capítulo a mais de dor. **Pequena e completa ganha de grande e quebrada.** Funções e vetores ficam como 'trabalhos futuros' no relatório.
@@ -279,12 +345,12 @@ programa contagem {
 }
 ```
 - PASSOS (Ficha técnica da Byteiro):
-    1) **Tipos**: `inteiro` (32 bits), `logico` (`verdadeiro`/`falso`), `caractere` (`'A'`).
-    2) **Comandos**: declaração (`inteiro a, b;`), atribuição com `<-`, `se`/`senao`, `enquanto`, `escreva(...)`, `leia(x)`.
-    3) **Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.
-    4) **Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`.
-    5) **Comentários**: `// até o fim da linha` e `/* de bloco */`.
-    6) **Strings** só aparecem dentro do `escreva`: não existe tipo string.
+    · **Tipos**: `inteiro` (32 bits), `logico` (`verdadeiro`/`falso`), `caractere` (`'A'`).
+    · **Comandos**: declaração (`inteiro a, b;`), atribuição com `<-`, `se`/`senao`, `enquanto`, `escreva(...)`, `leia(x)`.
+    · **Blocos** `{ }` — cada bloco abre um escopo novo. `se`, `senao` e `enquanto` EXIGEM bloco.
+    · **Expressões**: aritmética `+ - * / %`, relacionais `= <> < > <= >=`, lógicas `e ou nao`.
+    · **Comentários**: `// até o fim da linha` e `/* de bloco */`.
+    · **Strings** só aparecem dentro do `escreva`: não existe tipo string.
 - CÓDIGO (Tabela de tokens: vai direto para o relatório):
 ```
 Categoria      Padrão (informal)                    Exemplos
@@ -339,13 +405,19 @@ leia       = "leia" "(" ID ")" ";"
     explicação: Um léxico pode cortar `2x` em NUM(2) + ID(x) e deixar o sintático reclamar, ou recusar na hora. Os dois são defensáveis! Na Byteiro decidimos que é erro **léxico** ('número malformado'). O que tira ponto é não ter decidido.
 - CAIXA [Dica de prova]: Escreva a especificação no relatório ANTES do código: tabela de tokens, precedência, gramática, decisões (maiúsculas importam? pode redeclarar em bloco interno?). Ela vira o seu mapa, e muitos professores dão nota para essa parte.
 - PASSOS (Lição de casa antes do capítulo 3):
-    1) Escreva 5 programas Byteiro CORRETOS, cada um exercitando um recurso (declaração, se/senao, enquanto, escreva, expressões).
-    2) Escreva 5 programas ERRADOS, com UM erro cada: léxico, sintático, não declarado, tipo errado, redeclaração.
-    3) Ao lado de cada um, anote a saída esperada. Parabéns: você acabou de começar a bateria de testes.
+    · Escreva 5 programas Byteiro CORRETOS, cada um exercitando um recurso (declaração, se/senao, enquanto, escreva, expressões).
+    · Escreva 5 programas ERRADOS, com UM erro cada: léxico, sintático, não declarado, tipo errado, redeclaração.
+    · Ao lado de cada um, anote a saída esperada. Parabéns: você acabou de começar a bateria de testes.
 - LEXI: Tabela de tokens pronta? Então me passa a katana. Próximo capítulo eu fatio tudo.
+- PASSOS (Na sua linguagem):
+    · Quais tipos e comandos o seu enunciado exige? Monte a ficha técnica, como a da Byteiro.
+    · Como se escrevem a atribuição e a comparação de igualdade? Se forem parecidas (`=` e `==`), o léxico vai precisar do maior casamento.
+    · Qual é a precedência dos seus operadores, do mais fraco ao mais forte?
+- TEXTO: **Teste desta etapa:** os 10 programas-exemplo (5 certos e 5 com um erro cada) estão na pasta `testes/`, e cada um tem a saída esperada anotada ao lado. Eles são a bateria do capítulo 9 começando.
 
 ## Capítulo 3: Do regex ao AFD: o analisador léxico [REGEX_DFA]
-Resumo: Cada token é uma regex, cada regex é um AFD, todos viram UM autômato, escrito em Java com switch.
+Cada token é uma regex, cada regex é um AFD, todos viram UM autômato, escrito em Java com switch.
+
 - LEXI: Meu segredo: cada categoria de token é uma **expressão regular**; cada regex vira um **AFD**; e todos os AFDs são colados num autômato grande, com um estado inicial só.
 - CÓDIGO (As regex da Byteiro):
 ```
@@ -553,11 +625,11 @@ public Token proximo() {
 - CAIXA [Cuidado!]: Contagem de linhas: incremente `linha` em TODO lugar que consome '\n', inclusive dentro do comentário de bloco (estado 7). E não conte '\r': arquivo salvo no Windows tem '\r\n' no fim de cada linha; contar os dois dobra o número da linha nas mensagens.
 - CAIXA [Cuidado!]: `Character.isLetter` aceita 'ç', 'é', 'π'… Se a especificação diz que identificador é só ASCII, troque por `(c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')`. Detalhe pequeno, mas teste de correção adora.
 - PASSOS (Os erros léxicos da Byteiro (sempre com a linha!)):
-    1) Caractere inválido: `x <- 3 # 2;` → linha N: erro léxico: caractere inválido '#'
-    2) Número malformado: `12abc` → número malformado '12a'
-    3) Caractere vazio ou sem fechar: `''` ou `'A`
-    4) String que atravessa a linha: `"olá` + Enter
-    5) Comentário `/*` sem `*/` até o fim do arquivo
+    · Caractere inválido: `x <- 3 # 2;` → linha N: erro léxico: caractere inválido '#'
+    · Número malformado: `12abc` → número malformado '12a'
+    · Caractere vazio ou sem fechar: `''` ou `'A`
+    · String que atravessa a linha: `"olá` + Enter
+    · Comentário `/*` sem `*/` até o fim do arquivo
 - CAIXA [No mundo real]: Muitos enunciados pedem palavras-chave que ignoram maiúsculas (`SE`, `Se`, `se`). É UMA linha: `RESERVADAS.getOrDefault(s.toLowerCase(), TipoToken.ID)`. Decida também se identificadores ignoram maiúsculas (`Soma` = `soma`?), e documente.
 - CÓDIGO (TesteLexico.java: rode ANTES de escrever uma linha do parser):
 ```
@@ -596,14 +668,25 @@ public class TesteLexico {
 - REVELAR: Por que `proximo()` devolve um token por vez em vez de uma lista com todos?
     → Porque o parser de uma passada pede tokens sob demanda, e um erro léxico aparece exatamente quando o parser chega lá. Gerar a lista inteira antes também funciona (e permite espiar vários tokens à frente); só garanta que o erro léxico continue saindo com a linha certa.
 - LEXI: Fatiado! Agora alguém precisa conferir se os pedaços estão na ORDEM certa. Chama a Profª Gramática.
+- PASSOS (Na sua linguagem):
+    · Quais tokens seus começam com o mesmo caractere? Cada grupo vira um estado, como o do `<`.
+    · Como são os seus comentários e strings? Onde cada um termina?
+    · Que mensagem o seu léxico dá para um caractere que não pertence à linguagem?
+- TEXTO: **Teste desta etapa:** troque a linha do `TesteLexico` por uma da SUA linguagem, com um comentário, um operador de dois caracteres e uma quebra de linha. Confira token a token, como na saída esperada acima: o comentário some, o operador de dois caracteres sai como um token só, e o número da linha muda no lugar certo.
+- CÓDIGO (Teste desta etapa: o comando e o que deve sair):
+```
+javac -d out src/*.java
+java -cp out TesteLexico
+```
 
 ## Capítulo 4: A gramática LL(1) da Byteiro [LL1_TABLE]
-Resumo: Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token basta para decidir.
+Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token basta para decidir.
+
 - PROF: A gramática informal do capítulo 2 é ótima para humanos. Para virar descida recursiva, ela precisa ser **LL(1)**: olhando UM token, o parser sabe qual regra usar, sem voltar atrás, sem adivinhar.
 - PASSOS (As três checagens antes de programar):
-    1) 1. **Sem recursão à esquerda**: nenhum `A -> A …`. (Em Java isso é recursão infinita.)
-    2) 2. **Fatorada**: duas alternativas do mesmo não-terminal não podem começar igual.
-    3) 3. **FIRST/FOLLOW sem cruzamento**: os FIRST das alternativas são disjuntos; e se uma alternativa pode sumir (ε), os FIRST das outras não cruzam com o FOLLOW.
+    · 1. **Sem recursão à esquerda**: nenhum `A -> A …`. (Em Java isso é recursão infinita.)
+    · 2. **Fatorada**: duas alternativas do mesmo não-terminal não podem começar igual.
+    · 3. **FIRST/FOLLOW sem cruzamento**: os FIRST das alternativas são disjuntos; e se uma alternativa pode sumir (ε), os FIRST das outras não cruzam com o FOLLOW.
 - CÓDIGO (Primeira tentativa: precedência certinha… e recursão à esquerda em quatro lugares):
 ```
 Expr  -> Expr ou ExprE | ExprE
@@ -648,21 +731,82 @@ E -> id | num
 - CAIXA [Cuidado!]: Se a sua linguagem permitir `se (c) comando senao comando` SEM chaves, a célula [Senao, senao] ganha duas produções: é o dangling else, e a gramática não é LL(1). Solução prática no parser: sempre casar o `senao` com o `se` mais próximo (o `if` guloso), e documentar essa decisão.
 - REVELAR: Calcule FIRST(comando) da Byteiro completa.
     → { ID, se, enquanto, escreva, leia, `{`, inteiro, logico, caractere }, declarações começam pelo tipo, e um bloco solto começa por `{`. Esse conjunto vira o método `comecaComando()` no capítulo 5.
-- REVELAR: FOLLOW de `{ comando }` dentro do bloco: quando a repetição para?
+- REVELAR: No bloco, `{ comando }` repete. Quando a repetição para?
     → Quando o token não está em FIRST(comando). Na gramática certa, ele só pode ser `}`: qualquer outra coisa faz o `casaToken(FECHA_CHAVE)` reclamar com uma mensagem precisa.
+- TEXTO: O relatório pede FIRST e FOLLOW como prova de que a gramática é LL(1). As contas da aula usam BNF, e a Byteiro está em EBNF. A ponte é uma regra só: cada `{ α }` vira um não-terminal novo `X -> α X | ε`, e cada `[ α ]` vira `Y -> α | ε`. Abaixo está a Byteiro inteira assim, do `programa` ao `primario`.
+- CÓDIGO (A Byteiro inteira em BNF. Cmds, Ids, Args, Ou, E2, AddR e MulR vêm de { }; Senao e RelR vêm de [ ]):
+```
+Programa -> programa id Bloco
+Bloco -> { Cmds }
+Cmds -> Cmd Cmds | ε
+Cmd -> Decl | id <- Expr ; | Bloco
+    | se ( Expr ) Bloco Senao
+    | enquanto ( Expr ) Bloco
+    | escreva ( Arg Args ) ;
+    | leia ( id ) ;
+Decl -> Tipo id Ids ;
+Ids -> , id Ids | ε
+Tipo -> inteiro | logico | caractere
+Senao -> senao Bloco | ε
+Args -> , Arg Args | ε
+Arg -> string | Expr
+Expr -> ExprE Ou
+Ou -> ou ExprE Ou | ε
+ExprE -> Rel E2
+E2 -> e Rel E2 | ε
+Rel -> Add RelR
+RelR -> oprel Add | ε
+Add -> Mul AddR
+AddR -> + Mul AddR | - Mul AddR | ε
+Mul -> Un MulR
+MulR -> * Un MulR | / Un MulR | % Un MulR | ε
+Un -> nao Un | - Un | Prim
+Prim -> ( Expr ) | id | num | char
+    | verdadeiro | falso
+```
+- PASSOS (FIRST e FOLLOW de cada não-terminal (calculados pelo motor do jogo)):
+    · **Programa**: FIRST = { `programa` }; FOLLOW = { `$` }
+    · **Bloco**: FIRST = { `{` }; FOLLOW = { `$` `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` `}` `senao` }
+    · **Cmds**: FIRST = { `ε` `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` }; FOLLOW = { `}` }
+    · **Cmd**: FIRST = { `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` }; FOLLOW = { `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` `}` }
+    · **Decl**: FIRST = { `inteiro` `logico` `caractere` }; FOLLOW = { `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` `}` }
+    · **Ids**: FIRST = { `,` `ε` }; FOLLOW = { `;` }
+    · **Tipo**: FIRST = { `inteiro` `logico` `caractere` }; FOLLOW = { `id` }
+    · **Senao**: FIRST = { `senao` `ε` }; FOLLOW = { `id` `{` `se` `enquanto` `escreva` `leia` `inteiro` `logico` `caractere` `}` }
+    · **Args**: FIRST = { `,` `ε` }; FOLLOW = { `)` }
+    · **Arg**: FIRST = { `string` `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `,` `)` }
+    · **Expr**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `;` `)` `,` }
+    · **Ou**: FIRST = { `ou` `ε` }; FOLLOW = { `;` `)` `,` }
+    · **ExprE**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `ou` `;` `)` `,` }
+    · **E2**: FIRST = { `e` `ε` }; FOLLOW = { `ou` `;` `)` `,` }
+    · **Rel**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `e` `ou` `;` `)` `,` }
+    · **RelR**: FIRST = { `oprel` `ε` }; FOLLOW = { `e` `ou` `;` `)` `,` }
+    · **Add**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `oprel` `e` `ou` `;` `)` `,` }
+    · **AddR**: FIRST = { `+` `-` `ε` }; FOLLOW = { `oprel` `e` `ou` `;` `)` `,` }
+    · **Mul**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `+` `-` `oprel` `e` `ou` `;` `)` `,` }
+    · **MulR**: FIRST = { `*` `/` `%` `ε` }; FOLLOW = { `+` `-` `oprel` `e` `ou` `;` `)` `,` }
+    · **Un**: FIRST = { `nao` `-` `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `*` `/` `%` `+` `-` `oprel` `e` `ou` `;` `)` `,` }
+    · **Prim**: FIRST = { `(` `id` `num` `char` `verdadeiro` `falso` }; FOLLOW = { `*` `/` `%` `+` `-` `oprel` `e` `ou` `;` `)` `,` }
+- CAIXA [Dica de prova]: Como escrever a prova: para cada não-terminal com mais de uma regra, os FIRST das regras não se cruzam. Para cada um que pode sumir (tem ε), o FIRST dele não cruza o FOLLOW. Exemplo: `Senao` tem FIRST { senao, ε } e o FOLLOW não tem `senao`, então o parser sabe quando o senão acabou. Com essa gramática, nenhuma casa da tabela LL(1) recebe duas regras.
 - CAIXA [Não existem perguntas idiotas]: P: Preciso entregar a tabela LL(1) inteira? R: Depende do enunciado. Para descida recursiva, o que importa é a PROVA de que não há conflito: em cada ponto de decisão do código, os conjuntos de tokens testados são disjuntos. FIRST/FOLLOW no relatório é exatamente essa prova.
 - CAIXA [Dica de prova]: O trio que cai em prova e no TP: recursão à esquerda → **while**; opcional `[ ]` → **if**; repetição `{ }` → **while**. Decore e você traduz qualquer EBNF para Java em minutos.
 - PILHA: Gramática… LL(1)… pronta. Agora… me deem métodos… para empilhar.
+- PASSOS (Na sua linguagem):
+    · Quais regras da sua gramática têm recursão à esquerda?
+    · Quais alternativas começam com o mesmo token?
+    · Onde você usou `{ }` e `[ ]`? Em cada um, o FIRST de dentro cruza com o que pode vir depois?
+- TEXTO: **Teste desta etapa:** a tabela FIRST e FOLLOW da sua gramática inteira, como a da Byteiro acima, com as duas condições conferidas: os FIRST das alternativas não se cruzam, e cada parte que pode sumir não cruza com o FOLLOW. Nenhuma casa da tabela LL(1) fica com duas regras. Essa tabela vai para o relatório.
 
 ## Capítulo 5: O parser descendente recursivo [RECURSIVE_DESCENT]
-Resumo: Um método por não-terminal, casaToken para terminais, if/while no token atual, e erros com linha.
+Um método por não-terminal, casaToken para terminais, if/while no token atual, e erros com linha.
+
 - PILHA: Eu sou… a pilha de chamadas do Java. Cada método que você chama… eu empilho. Quando ele retorna… desempilho. A árvore sintática… é o caminho que eu faço.
 - PASSOS (A receita (decore!)):
-    1) Um método Java para cada não-terminal: `bloco()`, `comando()`, `expr()`…
-    2) Terminal no lado direito → `casaToken(TIPO)`: confere e avança.
-    3) Não-terminal no lado direito → chama o método dele.
-    4) Várias alternativas → `if`/`switch` olhando o token atual (os FIRST que você calculou).
-    5) `{ … }` → `while`; `[ … ]` → `if`.
+    · Um método Java para cada não-terminal: `bloco()`, `comando()`, `expr()`…
+    · Terminal no lado direito → `casaToken(TIPO)`: confere e avança.
+    · Não-terminal no lado direito → chama o método dele.
+    · Várias alternativas → `if`/`switch` olhando o token atual (os FIRST que você calculou).
+    · `{ … }` → `while`; `[ … ]` → `if`.
 - WIDGET DESCENT_CODE gramática=«E -> T E' ⏎ E' -> + T E' | ε ⏎ T -> F T' ⏎ T' -> * F T' | ε ⏎ F -> ( E ) | id | num» entrada=«id + num * id» legenda: O código que o motor gera para a cascata de dois níveis, e a pilha de chamadas para `id + num * id`.
 - CÓDIGO (Sintatico.java (1/4), a infraestrutura. Só `avanca()` mexe em `tok`!):
 ```
@@ -854,12 +998,12 @@ private void leia() {                     // leia ( ID ) ;
 - REVELAR: Por que `exprRel` usa `if` e `exprAdd` usa `while`?
     → Porque `a + b + c` é permitido (repetição → while), mas `a < b < c` não é (relacionais são NÃO associativos → no máximo um → if). Com o if, o `<` extra sobra e o parser reclama dele.
 - PASSOS (A pilha de chamadas para `x <- a + 2 * b;`):
-    1) `atribuicao()` casa ID(x) e `<-`, depois chama `expr()`.
-    2) `expr` → `exprE` → `exprRel` → `exprAdd` → `exprMul` → `exprUn` → `primario()` casa `a`. Volta tudo até `exprAdd`.
-    3) `exprAdd` vê `+`: avança e chama `exprMul()`.
-    4) `exprMul` → `exprUn` → `primario` casa `2`. De volta em `exprMul`, vê `*`: avança, `exprUn` → `primario` casa `b`.
-    5) `exprMul` não vê mais `*`: retorna. `exprAdd` não vê mais `+`: retorna. Sobe até `atribuicao()`.
-    6) `atribuicao()` casa `;`. Repare: `2 * b` terminou ANTES do `+`: a precedência saiu de graça da ordem das chamadas.
+    · `atribuicao()` casa ID(x) e `<-`, depois chama `expr()`.
+    · `expr` → `exprE` → `exprRel` → `exprAdd` → `exprMul` → `exprUn` → `primario()` casa `a`. Volta tudo até `exprAdd`.
+    · `exprAdd` vê `+`: avança e chama `exprMul()`.
+    · `exprMul` → `exprUn` → `primario` casa `2`. De volta em `exprMul`, vê `*`: avança, `exprUn` → `primario` casa `b`.
+    · `exprMul` não vê mais `*`: retorna. `exprAdd` não vê mais `+`: retorna. Sobe até `atribuicao()`.
+    · `atribuicao()` casa `;`. Repare: `2 * b` terminou ANTES do `+`: a precedência saiu de graça da ordem das chamadas.
 - CÓDIGO (erro_falta_pv.byt — esqueceram o ';' da linha 2):
 ```
 programa t {
@@ -877,9 +1021,26 @@ programa t {
 - WIDGET PANIC gramática=«Cmds -> Cmd Cmds | ε ⏎ Cmd -> id <- E ; | escreva ( E ) ; ⏎ E -> id | num» entrada=«id <- ; escreva ( id ) ;» legenda: Atribuição sem expressão: o parser reclama, pula até um token de sincronização e segue para o escreva.
 - CAIXA [No mundo real]: Os parsers do GCC (C/C++), do Clang, do javac e do Go são descida recursiva escrita à mão, exatamente a técnica do seu TP. Ela dá controle total sobre as mensagens de erro, e é por isso que os compiladores profissionais voltaram a ela.
 - CAIXA [Dica de prova]: Questão clássica: 'escreva o procedimento da descida recursiva para o não-terminal X'. Siga a receita: um if por alternativa (com os FIRST), casaToken nos terminais, chamada nos não-terminais, e um else com erro.
+- PASSOS (Na sua linguagem):
+    · Qual método corresponde a cada não-terminal da sua gramática?
+    · Onde entram os `while` (de cada `{ }`) e os `if` (de cada `[ ]`)?
+    · Que mensagem o seu parser dá quando falta o terminador de um comando?
+- TEXTO: **Teste desta etapa:** todos os programas de `testes/ok/` passam sem erro, e o que falta um `;` para na linha do token seguinte:
+- CÓDIGO (Teste desta etapa: o comando e o que deve sair):
+```
+# testes/erro/falta_ponto_virgula.byt
+programa t {
+    inteiro x
+    x <- 1;
+}
+
+java -cp out Main testes/erro/falta_ponto_virgula.byt
+linha 3: erro sintático: esperava ';', encontrou 'x'
+```
 
 ## Capítulo 6: Tabela de símbolos e escopos [SCOPE_SYMBOLS]
-Resumo: Uma pilha de HashMaps: abre bloco = push, declara = put no topo, usa = busca do topo para baixo.
+Uma pilha de HashMaps: abre bloco = push, declara = put no topo, usa = busca do topo para baixo.
+
 - BYTE: Meu parser aceita `x <- 1;` mesmo sem nenhum `inteiro x;`. Ele não lembra de NADA!
 - PROF: Ele precisa de memória: a **tabela de símbolos**. E como a Byteiro tem blocos dentro de blocos, essa memória precisa de **escopos**.
 - CÓDIGO (escopos.byt: leia de cima para baixo e acompanhe cada x):
@@ -902,10 +1063,10 @@ programa escopos {
     opções: Nada: y foi declarado no programa | ✔linha 11: erro semântico: 'y' não foi declarado | linha 7: erro semântico: y declarado depois de x | Erro sintático
     explicação: Quando o bloco interno fechou, o escopo dele (com o y) foi DESEMPILHADO. A busca na linha 11 só encontra o escopo de fora, onde não há y.
 - PASSOS (A pilha de HashMaps em quatro operações):
-    1) `{` → **abreEscopo**: empilha um HashMap vazio.
-    2) `inteiro x;` → **declara**: põe x no HashMap do TOPO (se já estiver lá: erro de redeclaração).
-    3) uso de `x` → **busca**: procura do topo para baixo; o primeiro que achar ganha (é isso que faz o x de dentro esconder o de fora).
-    4) `}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.
+    · `{` → **abreEscopo**: empilha um HashMap vazio.
+    · `inteiro x;` → **declara**: põe x no HashMap do TOPO (se já estiver lá: erro de redeclaração).
+    · uso de `x` → **busca**: procura do topo para baixo; o primeiro que achar ganha (é isso que faz o x de dentro esconder o de fora).
+    · `}` → **fechaEscopo**: desempilha — tudo que foi declarado no bloco morre junto.
 - CÓDIGO (TipoDado.java e Simbolo.java):
 ```
 public enum TipoDado { INTEIRO, LOGICO, CARACTERE }
@@ -1004,21 +1165,34 @@ private Simbolo usa(Token id) {           // toda vez que um ID aparece numa exp
 ```
 - TEXTO: Onde chamar `usa(...)`? Em todo lugar que um ID aparece sem ser declaração: em `atribuicao()` (o destino), em `leia()` e em `primario()`. No capítulo 7 o `Simbolo` devolvido vai dizer o TIPO; no 8, o RÓTULO de memória.
 - PASSOS (A tabela durante escopos.byt):
-    1) Linha 1, `{` do programa: pilha = [ {} ]
-    2) Linha 2: pilha = [ {x→x_0 inteiro} ]
-    3) Linha 4, `{`: pilha = [ {}, {x→x_0} ] (topo à esquerda)
-    4) Linhas 5 e 7: topo = {x→x_1 caractere, y→y_2 inteiro}
-    5) Linha 6: busca(x) acha x_1 no topo, o caractere.
-    6) Linha 9, `}`: desempilha. Pilha = [ {x→x_0} ]
-    7) Linha 10: busca(x) acha x_0. Linha 11: busca(y) → null → erro semântico!
+    · Linha 1, `{` do programa: pilha = [ {} ]
+    · Linha 2: pilha = [ {x→x_0 inteiro} ]
+    · Linha 4, `{`: pilha = [ {}, {x→x_0} ] (topo à esquerda)
+    · Linhas 5 e 7: topo = {x→x_1 caractere, y→y_2 inteiro}
+    · Linha 6: busca(x) acha x_1 no topo, o caractere.
+    · Linha 9, `}`: desempilha. Pilha = [ {x→x_0} ]
+    · Linha 10: busca(x) acha x_0. Linha 11: busca(y) → null → erro semântico!
 - CAIXA [Não existem perguntas idiotas]: P: Pode declarar um x no bloco interno se já existe um x fora? R: Depende da linguagem! C permite (sombreamento). Java PROÍBE redeclarar uma variável local num bloco interno. A Byteiro permite. Qualquer escolha vale, desde que esteja escrita no relatório e o compilador faça o que está escrito.
 - CAIXA [Dica de prova]: Questão clássica: dado um programa com blocos aninhados, diga a qual declaração cada uso se refere (e quais usos são erro). O jogo Esconde-Esconde do Escopo treina exatamente isso.
 - CAIXA [No mundo real]: Compiladores reais guardam bem mais no Simbolo: tamanho, deslocamento no registro de ativação (offset relativo ao frame pointer), se é parâmetro, se foi usado (é daí que vem o aviso 'unused variable').
 - REVELAR: E se a Byteiro ganhasse funções com variáveis locais?
     → Cada função abriria um escopo para parâmetros e locais, e as locais morariam na PILHA de execução (offset do frame), não no `.data`, para que cada chamada recursiva tenha a sua cópia. Veja a região de registros de ativação na Forja do Código.
+- PASSOS (Na sua linguagem):
+    · Que construções abrem escopo na sua linguagem: blocos, funções, laços?
+    · Pode declarar o mesmo nome num bloco de dentro (sombrear)?
+    · Pode usar uma variável antes de declarar? E declarar duas vezes no mesmo bloco?
+- TEXTO: **Teste desta etapa:** variável sem declaração e declaração repetida param com a linha certa:
+- CÓDIGO (Teste desta etapa: o comando e o que deve sair):
+```
+programa t { x <- 1; }
+  -> linha 1: erro semântico: 'x' não foi declarado
+programa t { inteiro a; caractere a; }
+  -> linha 1: erro semântico: 'a' já foi declarado neste escopo (linha 1)
+```
 
 ## Capítulo 7: Verificação de tipos [ATTRIBUTES_TYPES]
-Resumo: Cada método de expressão devolve o TIPO do que reconheceu; atribuição e condição conferem as regras.
+Cada método de expressão devolve o TIPO do que reconheceu; atribuição e condição conferem as regras.
+
 - BYTE: Olha isso: `logico ok; ok <- 3 * 'A';` passa no meu parser! Não deveria dar erro?
 - PROF: Deveria. A forma está certa; o SENTIDO não. A ideia: cada método de expressão para de ser `void` e passa a **devolver o tipo** do pedaço que reconheceu. O tipo sobe da folha para a raiz, é um **atributo sintetizado**.
 - WIDGET ATTR_TREE entrada=«a + 1 > b && ok» legenda: O tipo subindo pela árvore (no widget a sintaxe é de C: `&&` é o nosso `e`; a e b são inteiros, ok é lógico).
@@ -1161,12 +1335,12 @@ private void condicao() {                     // ( expr ), usado por se e enquan
 ```
 - CAIXA [Cuidado!]: Bug campeão: em `exprRel`, esquecer o `t = TipoDado.LOGICO`. Aí `a < b` 'tem tipo' inteiro, `se (a < b)` dá erro de condição e `x <- a < b` passa para um inteiro. Comparação SEMPRE produz logico, não importa o tipo dos lados.
 - PASSOS (Os tipos subindo em `ok <- c + 1 > n e nao ok;` (c caractere, n inteiro, ok logico)):
-    1) `primario` de c → CARACTERE; de 1 → INTEIRO.
-    2) `exprAdd`: numérico + numérico → INTEIRO.
-    3) `primario` de n → INTEIRO. `exprRel`: INTEIRO > INTEIRO → LOGICO.
-    4) `exprUn`: nao LOGICO → LOGICO.
-    5) `exprE`: LOGICO e LOGICO → LOGICO.
-    6) `atribuicao`: podeAtribuir(LOGICO, LOGICO) → ✓.
+    · `primario` de c → CARACTERE; de 1 → INTEIRO.
+    · `exprAdd`: numérico + numérico → INTEIRO.
+    · `primario` de n → INTEIRO. `exprRel`: INTEIRO > INTEIRO → LOGICO.
+    · `exprUn`: nao LOGICO → LOGICO.
+    · `exprE`: LOGICO e LOGICO → LOGICO.
+    · `atribuicao`: podeAtribuir(LOGICO, LOGICO) → ✓.
 - PREVEJA: `inteiro n; … se (n) { … }` na Byteiro:
     opções: Compila: n diferente de 0 é verdadeiro, como em C | ✔Erro semântico: a condição precisa ser logico | Erro sintático: esperava comparação | Compila com aviso
     explicação: A Byteiro é 'estilo Java': condição tem que ser logico. Sintaticamente `(n)` é uma expressão perfeita; quem barra é a checagem de tipo do `condicao()`. Escreva `se (n <> 0)`.
@@ -1188,9 +1362,15 @@ programa t { inteiro a; caractere a; }
 - CAIXA [Dica de prova]: Atributo **sintetizado** sobe (o tipo da expressão, calculado a partir dos filhos). Atributo **herdado** desce: em `inteiro a, b, c;` o tipo é passado como parâmetro para `declaraUm(t)` de cada ID. Seu TP tem os dois: cite isso no relatório!
 - REVELAR: A verificação de tipos precisa ser uma fase separada, com uma árvore?
     → Não necessariamente. No esquema de uma passada ela vive DENTRO do parser (tradução dirigida pela sintaxe). Construir uma AST e depois visitá-la também é válido, e facilita otimizações maiores, mas dá mais código. Para o TP, uma passada é o caminho mais curto.
+- PASSOS (Na sua linguagem):
+    · Quais tipos podem se misturar numa conta?
+    · A condição do se e do enquanto precisa ser lógica, ou número vale?
+    · Guardar um tipo numa variável de outro tipo converte ou é erro?
+- TEXTO: **Teste desta etapa:** os cinco testes semânticos acima, cada um em `testes/erro/`, imprimem exatamente a mensagem ao lado deles.
 
 ## Capítulo 8: Gerando MIPS para o MARS [CODEGEN_MIPS]
-Resumo: Expressões em registradores temporários, variáveis no .data, rótulos para se/enquanto, syscalls para escrever.
+Expressões em registradores temporários, variáveis no .data, rótulos para se/enquanto, syscalls para escrever.
+
 - PROF: Hora da Forja. Cada método, além de conferir tipos, agora **emite** o seu pedaço de assembly. Primeiro, o kit mínimo de MIPS que o gerador usa.
 - CÓDIGO (Cola de MIPS do TP: só isto já compila a Byteiro inteira):
 ```
@@ -1202,6 +1382,7 @@ main:
     li   $t0, 42              # $t0 = 42                     (load immediate)
     lw   $t0, n_0             # $t0 = memória[n_0]           (load word)
     sw   $t0, n_0             # memória[n_0] = $t0           (store word)
+    move $a0, $t0             # $a0 = $t0                    (copia registrador)
     add  $t0, $t0, $t1        # também sub, mul, div, rem, and, or
     slt  $t0, $t0, $t1        # $t0 = ($t0 < $t1) ? 1 : 0    (e sgt, sle, sge, seq, sne)
     xori $t0, $t0, 1          # troca 0 <-> 1: o nosso 'nao'
@@ -1357,12 +1538,12 @@ private Res exprE() {
     opções: 1 | 2 | ✔3 | 5
     explicação: a → $t0; o `+` chama exprMul: b → $t1, c → $t2 (pico: 3!). `mul $t1, $t1, $t2` libera o $t2; `add $t0, $t0, $t1` libera o $t1. Sobra só o $t0 com o resultado.
 - PASSOS (`soma <- soma + n * 2;` virando MIPS):
-    1) `primario(soma)` → `lw $t0, soma_1`
-    2) `+` → exprMul → `primario(n)` → `lw $t1, n_0`
-    3) `*` → `primario(2)` → `li $t2, 2`
-    4) binaria → `mul $t1, $t1, $t2` (libera $t2)
-    5) binaria → `add $t0, $t0, $t1` (libera $t1)
-    6) atribuicao → `sw $t0, soma_1` (libera $t0 — de volta a zero registradores ocupados)
+    · `primario(soma)` → `lw $t0, soma_1`
+    · `+` → exprMul → `primario(n)` → `lw $t1, n_0`
+    · `*` → `primario(2)` → `li $t2, 2`
+    · binaria → `mul $t1, $t1, $t2` (libera $t2)
+    · binaria → `add $t0, $t0, $t1` (libera $t1)
+    · atribuicao → `sw $t0, soma_1` (libera $t0 — de volta a zero registradores ocupados)
 - CÓDIGO (Atribuição, se e enquanto: o esquema de tradução com rótulos):
 ```
 private void atribuicao() {
@@ -1469,7 +1650,7 @@ private void leia() {
     casaToken(TipoToken.PONTO_VIRGULA);
 }
 ```
-- CAIXA [Cuidado!]: `div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`.
+- CAIXA [Cuidado!]: `div` com três operandos, `rem`, `seq`, `sne`, `sgt`, `sle` e `sge` são **pseudo-instruções**: o MARS as expande em instruções reais. Funcionam perfeitamente no MARS, mas se o enunciado proibir pseudo-instruções, troque por `div`+`mflo`/`mfhi` e por combinações de `slt` com `xori`. Também são pseudo-instruções `li`, `la`, `move` e o `lw`/`sw` com rótulo: o MARS troca `move` por `addu` e monta `li`, `la` e o rótulo com `lui` e `ori`. Se o enunciado proibir, escreva essas trocas à mão.
 - CÓDIGO (De novo o contagem.byt do capítulo 2…):
 ```
 programa contagem {
@@ -1559,12 +1740,12 @@ fimse3:
     syscall
 ```
 - PASSOS (Rodando no MARS):
-    1) Baixe o MARS (um .jar, ex.: `Mars4_5.jar`), precisa de Java instalado.
-    2) Gráfico: `java -jar Mars4_5.jar` → File › Open → `saida.asm`.
-    3) Run › Assemble (F3). Erro aqui = o SEU gerador emitiu algo que não é MIPS válido.
-    4) Run › Go (F5). A saída aparece na aba **Run I/O**: `soma = 30`.
-    5) Linha de comando (ótimo para testes automáticos): `java -jar Mars4_5.jar nc saida.asm` (nc = sem o aviso de copyright).
-    6) Depurando: use Step (F7) e olhe a aba Registers — dá para ver $t0 mudar a cada instrução.
+    · Baixe o MARS (um .jar, ex.: `Mars4_5.jar`), precisa de Java instalado.
+    · Gráfico: `java -jar Mars4_5.jar` → File › Open → `saida.asm`.
+    · Run › Assemble (F3). Erro aqui = o SEU gerador emitiu algo que não é MIPS válido.
+    · Run › Go (F5). A saída aparece na aba **Run I/O**: `soma = 30`.
+    · Linha de comando (ótimo para testes automáticos): `java -jar Mars4_5.jar nc saida.asm` (nc = sem o aviso de copyright).
+    · Depurando: use Step (F7) e olhe a aba Registers — dá para ver $t0 mudar a cada instrução.
 - CAIXA [Cuidado!]: Esqueceu o `li $v0, 10` + `syscall` no final? O processador continua executando o que estiver depois do seu código, e o MARS termina com um aviso de 'dropped off bottom'. Encerre sempre explicitamente.
 - PREVEJA: Se `novoRotulo` devolvesse sempre `"fimse"`, sem o contador, o que aconteceria num programa com dois `se`?
     opções: Nada: rótulos podem repetir | ✔O MARS recusa na montagem: rótulo definido duas vezes | O segundo se pularia para o primeiro fimse | O Java dá erro de compilação
@@ -1573,9 +1754,21 @@ fimse3:
 - CAIXA [No mundo real]: Esse estilo: toda variável na memória, carrega, opera, guarda, é parecido com o que o GCC faz com `-O0`. Os compiladores de verdade só ficam espertos (variáveis morando em registradores) quando você liga a otimização.
 - REVELAR: Uma expressão aninhada à direita com 11 operandos (`a + (b + (c + …))`) esgota $t0–$t9. Como resolver?
     → Opções: (1) **derramar** (spill) para a pilha: `addi $sp, $sp, -4` + `sw $t9, 0($sp)` e desempilhar depois; (2) usar também $s0–$s7; (3) avaliar primeiro o lado que precisa de mais registradores (numeração de Sethi-Ullman). Para o TP, documentar o limite já costuma bastar.
+- PASSOS (Na sua linguagem):
+    · Como a sua linguagem escreve na tela, e qual syscall do MARS faz isso?
+    · Onde ficam as suas variáveis: no `.data` ou na pilha?
+    · Quantos rótulos cada comando de desvio seu precisa (se, enquanto, para)?
+- TEXTO: **Teste desta etapa:** o `contagem.byt` do capítulo 2 compila, roda no MARS e imprime a saída que você anotou para ele:
+- CÓDIGO (Teste desta etapa: o comando e o que deve sair):
+```
+javac -d out src/*.java
+java -cp out Main testes/ok/contagem.byt
+java -jar Mars4_5.jar nc saida.asm
+```
 
 ## Capítulo 9: Otimizações simples e bateria de testes [OPTIMIZATION]
-Resumo: Dobrar constantes, cortar código morto, um peephole de leve, e testes que provam que nada quebrou.
+Dobrar constantes, cortar código morto, um peephole de leve, e testes que provam que nada quebrou.
+
 - BYTE: `x <- 2 * 60 + 1;` vira li, li, mul, li, add, sw. O processador vai calcular 121 TODA vez que passar por ali?
 - PROF: Vai: a não ser que o compilador calcule antes. Isso é **dobramento de constantes** (constant folding): se os dois lados de uma operação são conhecidos na compilação, faça a conta no Java e emita só o resultado.
 - WIDGET TAC entrada=«a + 2 * 3» legenda: Repare na instrução de `2 * 3`: os dois operandos são constantes. O compilador pode fazer essa conta sozinho.
@@ -1698,13 +1891,13 @@ private void se() {
 - CAIXA [Cuidado!]: Peephole nunca atravessa um RÓTULO. Em `sw $t0, n_0` / `enquanto0:` / `lw $t0, n_0`, alguém pode pular para `enquanto0` vindo de outro lugar, com outro valor em $t0. Remover aquele `lw` quebra o laço.
 - PILHA: Otimizou? Então… prove… que nada… quebrou.
 - PASSOS (Bateria de testes que pega bug de verdade):
-    1) **Precedência e associatividade**: `escreva(2 + 3 * 4);` → 14; `escreva((2 + 3) * 4);` → 20; `escreva(10 - 3 - 2);` → 5 (e não 9!).
-    2) **Negativos e resto**: `escreva(-7 / 2, " ", -7 % 2);` → -3 -1.
-    3) **Laços**: `enquanto` que roda 0 vezes, 1 vez e N vezes.
-    4) **Aninhamento**: `se` dentro de `se` dentro de `enquanto` (rótulos únicos!).
-    5) **Escopos**: sombreamento (x interno e externo com valores diferentes, imprima os dois).
-    6) **Erros**: um arquivo por mensagem de erro, léxico, sintático, cada regra semântica.
-    7) **Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, `'A' + 1` impresso como número.
+    · **Precedência e associatividade**: `escreva(2 + 3 * 4);` → 14; `escreva((2 + 3) * 4);` → 20; `escreva(10 - 3 - 2);` → 5 (e não 9!).
+    · **Negativos e resto**: `escreva(-7 / 2, " ", -7 % 2);` → -3 -1.
+    · **Laços**: `enquanto` que roda 0 vezes, 1 vez e N vezes.
+    · **Aninhamento**: `se` dentro de `se` dentro de `enquanto` (rótulos únicos!).
+    · **Escopos**: sombreamento (x interno e externo com valores diferentes, imprima os dois).
+    · **Erros**: um arquivo por mensagem de erro, léxico, sintático, cada regra semântica.
+    · **Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, `'A' + 1` impresso como número.
 - WIDGET MIPS entrada=«(a + b) * (c - d)» legenda: Treine a conferência à mão: com a=4, b=2, c=3, d=5, o resultado tem que ser -12. Calcule ANTES de rodar.
 - CÓDIGO (Testes de regressão automáticos (Linux/macOS/Git Bash). Gere cada .esperado UMA vez, confira à mão, e congele.):
 ```
@@ -1729,28 +1922,39 @@ echo "$passou passaram, $falhou falharam"
 - CAIXA [Dica de prova]: Prova adora: 'aplique dobramento de constantes e eliminação de código morto neste código de três endereços'. Primeiro dobre, depois veja quais desvios ficaram com condição constante, depois corte o que nunca é alcançado.
 - REVELAR: Por que gerar o `.esperado` rodando o próprio compilador é perigoso?
     → Porque se o compilador está errado, você congela o erro como 'resposta certa'. Confira cada `.esperado` à mão (ou calcule antes de rodar) na primeira vez, depois ele protege contra regressões.
+- PASSOS (Na sua linguagem):
+    · Que otimização simples cabe na sua linguagem: dobrar constantes, cortar código morto?
+    · A sua bateria tem pelo menos um teste certo e um com erro para cada comando?
+    · Qual é o formato exato de mensagem de erro que o enunciado pede?
+- TEXTO: **Teste desta etapa:** a bateria inteira passa:
+- CÓDIGO (Teste desta etapa: o comando e o que deve sair):
+```
+./roda_testes.sh
+10 passaram, 0 falharam      # com a sua contagem de testes
+```
 
 ## Capítulo 10: Checklist de entrega e erros que tiram ponto [ERROR_RECOVERY]
-Resumo: O que conferir na véspera, o que vai no relatório e as perguntas da arguição.
+O que conferir na véspera, o que vai no relatório e as perguntas da arguição.
+
 - NARRADOR: Véspera da entrega. 23h47. A geladeira faz um barulho estranho. O cursor pisca.
 - BYTE: Tá tudo funcionando! …Eu acho.
 - PROF: 'Eu acho' não é teste. Vamos passar o checklist, item por item.
 - PASSOS (Checklist do código):
-    1) Compila do zero, fora da IDE: `javac -d bin src/*.java` sem erros nem avisos estranhos.
-    2) Roda exatamente como o enunciado manda (ex.: `java Main programa.byt`).
-    3) Nenhum caminho absoluto (`C:\Users\…`) e nenhum `System.out.println` de depuração esquecido.
-    4) Mensagens de erro no formato pedido, com a linha certa, e o programa PARA no primeiro erro (se for o pedido).
-    5) Toda a bateria de testes passa, rode o script uma última vez.
-    6) O `.asm` gerado monta e roda no MARS sem nenhuma edição manual.
-    7) README com: como compilar, como rodar, versão do Java.
+    · Compila do zero, fora da IDE: `javac -d bin src/*.java` sem erros nem avisos estranhos.
+    · Roda exatamente como o enunciado manda (ex.: `java Main programa.byt`).
+    · Nenhum caminho absoluto (`C:\Users\…`) e nenhum `System.out.println` de depuração esquecido.
+    · Mensagens de erro no formato pedido, com a linha certa, e o programa PARA no primeiro erro (se for o pedido).
+    · Toda a bateria de testes passa, rode o script uma última vez.
+    · O `.asm` gerado monta e roda no MARS sem nenhuma edição manual.
+    · README com: como compilar, como rodar, versão do Java.
 - PASSOS (Checklist do relatório):
-    1) Especificação da linguagem: tokens (com regex), precedência, gramática.
-    2) O AFD do léxico desenhado + a lista de erros léxicos.
-    3) Gramática LL(1) em EBNF + FIRST/FOLLOW como prova de que não há conflitos.
-    4) Decisões de projeto: maiúsculas, sombreamento, conversões implícitas, `<-` vs `<` `-`.
-    5) Esquemas de tradução: o molde MIPS de cada comando (se, enquanto, escreva…).
-    6) Otimizações implementadas, com exemplo antes/depois.
-    7) Testes: tabela com programa, saída esperada e saída obtida. E as limitações conhecidas (ex.: 10 registradores).
+    · Especificação da linguagem: tokens (com regex), precedência, gramática.
+    · O AFD do léxico desenhado + a lista de erros léxicos.
+    · Gramática LL(1) em EBNF + FIRST/FOLLOW como prova de que não há conflitos.
+    · Decisões de projeto: maiúsculas, sombreamento, conversões implícitas, `<-` vs `<` `-`.
+    · Esquemas de tradução: o molde MIPS de cada comando (se, enquanto, escreva…).
+    · Otimizações implementadas, com exemplo antes/depois.
+    · Testes: tabela com programa, saída esperada e saída obtida. E as limitações conhecidas (ex.: 10 registradores).
 - CAIXA [Cuidado!]: **Linha errada nas mensagens.** O erro mais comum de todos. Causas: não contar '\n' dentro de comentário de bloco, contar '\r' também, ou usar a linha do token ANTERIOR quando o enunciado quer a do token encontrado (ou vice-versa). Tenha um teste de erro DEPOIS de um comentário de várias linhas.
 - CAIXA [Cuidado!]: **Registradores vazando.** Esquecer um `liberaTemp()` não quebra programas pequenos… até o 11º comando, quando aparece 'faltaram registradores' do nada. Teste com um programa de 30 atribuições seguidas.
 - CÓDIGO (Uma linha de 'assert' que economiza uma noite de depuração):
@@ -1781,13 +1985,18 @@ private void comando() {
 - REVELAR: Arguição: 'O que acontece com a pilha de escopos quando o bloco do enquanto fecha?'
     → `fechaEscopo()` desempilha o HashMap do bloco: os nomes declarados lá deixam de ser visíveis. Mas o `.word` continua no `.data`: escopo é uma regra de COMPILAÇÃO, não de memória.
 - PASSOS (Plano para as últimas 48 horas):
-    1) 48h: congele funcionalidades. Nada de recurso novo, só correção de bug.
-    2) 36h: rode a bateria inteira, conserte o que falhar, rode de novo.
-    3) 24h: relatório: figuras do AFD, gramática, moldes MIPS, tabela de testes.
-    4) 12h: clone o repositório numa pasta limpa e siga o README como se fosse o professor.
-    5) 2h: entregue. Sim, antes do prazo. O Canvas também cai.
+    · 48h: congele funcionalidades. Nada de recurso novo, só correção de bug.
+    · 36h: rode a bateria inteira, conserte o que falhar, rode de novo.
+    · 24h: relatório: figuras do AFD, gramática, moldes MIPS, tabela de testes.
+    · 12h: clone o repositório numa pasta limpa e siga o README como se fosse o professor.
+    · 2h: entregue. Sim, antes do prazo. O Canvas também cai.
 - LEXI: Tokens cortados.
 - PILHA: Gramática… empilhada.
 - PROF: Tipos conferidos, MIPS rodando, testes passando. Você não 'fez um trabalho de compiladores', você **construiu um compilador**. Pouca gente pode dizer isso.
 - REVELAR: Última recuperação: recite as fases do seu compilador e a classe Java de cada uma.
     → Léxico → `Lexico` (AFD com switch). Sintático → `Sintatico` (descida recursiva, casaToken). Semântico → `TabelaSimbolos` + checagens no `Sintatico`. Geração → métodos do `Sintatico` emitindo MIPS. Otimização → dobramento de constantes e código morto no gerador. E o `Main` costurando tudo.
+- PASSOS (Na sua linguagem):
+    · O enunciado pede relatório? Com quais seções?
+    · Como o professor vai rodar o seu compilador: que comando, em que pasta?
+    · Que três perguntas da arguição você treinaria sobre a SUA gramática?
+- TEXTO: **Teste desta etapa:** numa pasta nova, clone o repositório e siga só o README: compilar, rodar um teste e abrir no MARS. Se faltar qualquer passo que não está escrito, o README está incompleto.

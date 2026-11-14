@@ -35,11 +35,11 @@ F → ( E ) | id
 ```
 - WIDGET LR_TRACE gramática=«E → E + T | T ⏎ T → T * F | F ⏎ F → ( E ) | id» entrada=«id + id * id» legenda: Avance passo a passo. Repare quando ele reduz e quando ele espera.
 - PASSOS (Momentos-chave):
-    1) Empilha id e reduz F → id, T → F, E → T: o primeiro operando já virou E.
-    2) Empilha + e o segundo id; reduz F → id e T → F.
-    3) Agora o topo é E + T e vem '*': ele EMPILHA em vez de reduzir E → E + T. A multiplicação precisa ser montada antes.
-    4) Monta T * F, reduz T → T * F e só então E → E + T.
-    5) Pilha com E e entrada $: aceita.
+    · Empilha id e reduz F → id, T → F, E → T: o primeiro operando já virou E.
+    · Empilha + e o segundo id; reduz F → id e T → F.
+    · Agora o topo é E + T e vem '*': ele EMPILHA em vez de reduzir E → E + T. A multiplicação precisa ser montada antes.
+    · Monta T * F, reduz T → T * F e só então E → E + T.
+    · Pilha com E e entrada $: aceita.
 - PREVEJA: Com 'E + T' no topo e '*' na entrada, por que NÃO reduzir E → E + T?
     opções: ✔Porque T * F ainda precisa ser montado (o * tem precedência) | Porque a pilha está cheia | Porque E + T não é produção | Porque é proibido reduzir com * na entrada
     explicação: Se reduzisse, ficaria E * …, que não existe na gramática. O analisador espera montar T * F primeiro: a precedência sai naturalmente da gramática.
@@ -61,15 +61,15 @@ T → T * F | F
 F → ( E ) | id
 ```
 - PASSOS (Resolução):
-    1) $ | id * id $ | empilhar
-    2) $ id | * id $ | reduzir F → id
-    3) $ F | * id $ | reduzir T → F
-    4) $ T | * id $ | empilhar (não reduza E → T: * não pode seguir E)
-    5) $ T * | id $ | empilhar
-    6) $ T * id | $ | reduzir F → id
-    7) $ T * F | $ | reduzir T → T * F
-    8) $ T | $ | reduzir E → T
-    9) $ E | $ | aceitar
+    · $ | id * id $ | empilhar
+    · $ id | * id $ | reduzir F → id
+    · $ F | * id $ | reduzir T → F
+    · $ T | * id $ | empilhar (não reduza E → T: * não pode seguir E)
+    · $ T * | id $ | empilhar
+    · $ T * id | $ | reduzir F → id
+    · $ T * F | $ | reduzir T → T * F
+    · $ T | $ | reduzir E → T
+    · $ E | $ | aceitar
 - WIDGET LR_TRACE gramática=«E → E + T | T ⏎ T → T * F | F ⏎ F → ( E ) | id» entrada=«id * id» legenda: Confira com o motor (ele mostra também os números dos estados).
 - BYTE: No passo 4 eu teria reduzido pra E. Tô ferrado?
 - PROF: De jeito nenhum: é O erro mais comum, e é exatamente por isso que existem as tabelas LR. A pista aqui: '*' não está em FOLLOW(E) = {+, ), $}.
@@ -119,19 +119,19 @@ B → d
 - PROF: Definições de prova, sem enrolação.
 - TEXTO: **Análise empilha-reduz**: análise ascendente (bottom-up) com uma pilha de símbolos gramaticais e um buffer de entrada. Configuração inicial: pilha $, entrada w$. Sucesso: pilha $ S, entrada $.
 - PASSOS (As quatro ações):
-    1) **Empilhar (shift)**: move o próximo símbolo da entrada para o topo da pilha.
-    2) **Reduzir (reduce)**: o topo contém um lado direito β (o handle); desempilha β e empilha A, para A → β.
-    3) **Aceitar (accept)**: anuncia o término com sucesso.
-    4) **Erro (error)**: detecta um erro de sintaxe e chama a rotina de recuperação.
+    · **Empilhar (shift)**: move o próximo símbolo da entrada para o topo da pilha.
+    · **Reduzir (reduce)**: o topo contém um lado direito β (o handle); desempilha β e empilha A, para A → β.
+    · **Aceitar (accept)**: anuncia o término com sucesso.
+    · **Erro (error)**: detecta um erro de sintaxe e chama a rotina de recuperação.
 - TEXTO: **Handle.** Se S ⇒*rm α A w ⇒rm α β w, então a produção A → β na posição logo após α é um handle de α β w. (w só tem terminais; 'rm' = mais à direita.)
 - TEXTO: **Prefixo viável**: prefixo de uma forma sentencial direita que não ultrapassa o fim do handle. O conteúdo da pilha é sempre um prefixo viável.
 - PREVEJA: A sequência de reduções de um analisador empilha-reduz, lida de trás para frente, corresponde a:
     opções: Uma derivação mais à esquerda | ✔Uma derivação mais à direita | Uma árvore ambígua | A tabela LL(1)
     explicação: Bottom-up = derivação mais à direita (rightmost) ao contrário. É o R de LR.
 - PASSOS (Conflitos):
-    1) **shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else pendurado).
-    2) **reduce/reduce**: não dá para decidir qual redução fazer.
-    3) Gramáticas com conflito para um método não pertencem à classe dele (ex.: não são SLR(1)). Gramáticas ambíguas sempre geram conflito.
+    · **shift/reduce**: não dá para decidir entre empilhar e reduzir (ex.: o else pendurado).
+    · **reduce/reduce**: não dá para decidir qual redução fazer.
+    · Gramáticas com conflito para um método não pertencem à classe dele (ex.: não são SLR(1)). Gramáticas ambíguas sempre geram conflito.
 - WIDGET LR_TRACE gramática=«E → E + T | T ⏎ T → T * F | F ⏎ F → ( E ) | id» entrada=«( id )» legenda: Siga as definições na análise de ( id ).
 - CAIXA [Dica de prova]: A resposta-padrão é a tabela Pilha | Entrada | Ação, com a produção usada em cada 'reduzir'. E saiba de cor: o handle está sempre no topo; LR = Left-to-right, Rightmost derivation (ao contrário).
 - REVELAR: Defina handle em uma frase.
@@ -144,10 +144,10 @@ B → d
 - CAIXA [Gancho de memória]: **LR = 'Lê da esquerda, Reconstrói a mais à direita… de trás pra frente.'** Bottom-up = rightmost ao contrário.
 - CAIXA [Gancho de memória]: **Reduzir = 'tira o lado direito, põe o lado esquerdo'.** Como trocar um punhado de moedinhas por uma nota.
 - PASSOS (Top-down × bottom-up):
-    1) Top-down (Templo): começa pela raiz S e prevê. Bottom-up (Fortaleza): começa pelas folhas e monta.
-    2) LL: derivação mais à esquerda, na ordem. LR: derivação mais à direita, invertida.
-    3) Pilha LL: o que falta (futuro). Pilha LR: o que já foi visto (passado).
-    4) Recursão à esquerda: proibida no LL, tranquila no LR.
+    · Top-down (Templo): começa pela raiz S e prevê. Bottom-up (Fortaleza): começa pelas folhas e monta.
+    · LL: derivação mais à esquerda, na ordem. LR: derivação mais à direita, invertida.
+    · Pilha LL: o que falta (futuro). Pilha LR: o que já foi visto (passado).
+    · Recursão à esquerda: proibida no LL, tranquila no LR.
 - BYTE: E 'shift' é empilhar ou é deslocar?
 - PROF: Os dois! O token se desloca da entrada para a pilha. No português do Livro do Dragão: **empilhar** (shift) e **reduzir** (reduce).
 - PREVEJA: Qual ação consome um token da entrada?
@@ -191,12 +191,12 @@ C → c C | d
 ```
 - WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Toque em cada estado para ver seus itens. As setas são os desvios (goto).
 - PASSOS (Roteiro de exploração):
-    1) I0: o estado inicial, fechamento de { S' → • S }.
-    2) I0 --S--> I1 = { S' → S • }: o estado de aceitação.
-    3) I0 --C--> I2 = { S → C • C, C → • c C, C → • d }: o ponto passou pelo primeiro C, e o segundo C convidou suas produções.
-    4) I0 --c--> I3 = { C → c • C, C → • c C, C → • d }. Repare em I3 --c--> I3: um laço!
-    5) I0 --d--> I4 = { C → d • }: item completo → redução.
-    6) I5 = { S → C C • } e I6 = { C → c C • }: mais dois estados de redução.
+    · I0: o estado inicial, fechamento de { S' → • S }.
+    · I0 --S--> I1 = { S' → S • }: o estado de aceitação.
+    · I0 --C--> I2 = { S → C • C, C → • c C, C → • d }: o ponto passou pelo primeiro C, e o segundo C convidou suas produções.
+    · I0 --c--> I3 = { C → c • C, C → • c C, C → • d }. Repare em I3 --c--> I3: um laço!
+    · I0 --d--> I4 = { C → d • }: item completo → redução.
+    · I5 = { S → C C • } e I6 = { C → c C • }: mais dois estados de redução.
 - PREVEJA: De I2, lendo d, vamos para qual estado?
     opções: Um estado novo | ✔I4 | I3 | I6
     explicação: goto(I2, d) = { C → d • } = I4. Se o conjunto de itens já existe, reaproveitamos o estado: por isso o autômato é finito.
@@ -215,13 +215,13 @@ S → C C
 C → c C | d
 ```
 - PASSOS (Resolução):
-    1) Passo 0, aumente a gramática: 0) S' → S, 1) S → C C, 2) C → c C, 3) C → d.
-    2) I0 = closure({ S' → • S }) = { S' → • S, S → • C C, C → • c C, C → • d }.
-    3) goto(I0, S) = { S' → S • } = I1.
-    4) goto(I0, C) = closure({ S → C • C }) = { S → C • C, C → • c C, C → • d } = I2.
-    5) goto(I0, c) = closure({ C → c • C }) = { C → c • C, C → • c C, C → • d } = I3.
-    6) goto(I0, d) = { C → d • } = I4.
-    7) goto(I2, C) = { S → C C • } = I5. goto(I2, c) = I3 e goto(I2, d) = I4: já existem!
+    · Passo 0, aumente a gramática: 0) S' → S, 1) S → C C, 2) C → c C, 3) C → d.
+    · I0 = closure({ S' → • S }) = { S' → • S, S → • C C, C → • c C, C → • d }.
+    · goto(I0, S) = { S' → S • } = I1.
+    · goto(I0, C) = closure({ S → C • C }) = { S → C • C, C → • c C, C → • d } = I2.
+    · goto(I0, c) = closure({ C → c • C }) = { C → c • C, C → • c C, C → • d } = I3.
+    · goto(I0, d) = { C → d • } = I4.
+    · goto(I2, C) = { S → C C • } = I5. goto(I2, c) = I3 e goto(I2, d) = I4: já existem!
 - WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Confira os estados I0 a I5 com o motor.
 - BYTE: Falta o I3, né?
 - PROF: Falta! Essa parte é sua. Lembre: goto = passar o ponto e depois fechar.
@@ -233,7 +233,7 @@ C → c C | d
     → { C → d • } = I4.
 - REVELAR: Quantos estados ao todo, e quais são de redução?
     → 7 estados (I0 a I6). Itens completos: I1 (aceita), I4 (C → d), I5 (S → C C), I6 (C → c C). Nenhum estado mistura item completo com outro item: a gramática é LR(0)!
-- CAIXA [Dica de prova]: Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com o núcleo (kernel) separado dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.
+- CAIXA [Dica de prova]: Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.
 
 #### ESTILO SOCRATIC (Perguntas guiadas): "Por que itens, closure e goto?"
 - PROF: Vamos redescobrir itens, closure e goto só com perguntas.
@@ -293,11 +293,11 @@ ITENS(G'):
           adicione GOTO(I, X) a C
   até nenhum conjunto ser adicionado
 ```
-- TEXTO: **Itens de núcleo (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais são **não-núcleo** e podem ser recalculados pelo fechamento.
-- PREVEJA: Qual destes é item de núcleo?
+- TEXTO: **Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fechamento: dá para recalcular a partir do kernel.
+- PREVEJA: Qual destes é item de base (kernel)?
     opções: C → • c C | S → • C C | ✔C → c • C | C → • d
     explicação: C → c • C tem o ponto depois do início. Os outros têm o ponto na extremidade esquerda (e não são S' → • S): vieram do fechamento.
-- WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Identifique, em cada estado, quais itens são de núcleo.
+- WIDGET LR0_AUTOMATON gramática=«S → C C ⏎ C → c C | d» legenda: Identifique, em cada estado, quais itens são de base (kernel).
 - CAIXA [Dica de prova]: Pergunta típica: 'calcule CLOSURE({…})' ou 'GOTO(I, X)'. Não esqueça: GOTO = avançar o ponto **e depois** fechar. E A → ε gera só o item A → •, que já nasce completo.
 - REVELAR: Qual a relação entre o autômato LR(0) e os prefixos viáveis?
     → O autômato reconhece exatamente os prefixos viáveis: γ é viável se e somente se existe o caminho GOTO(I0, γ) a partir do estado inicial.
@@ -308,11 +308,11 @@ ITENS(G'):
 - CAIXA [Gancho de memória]: **CLOSURE = 'convida a família'.** Ponto antes de um não-terminal B? Chama todas as produções de B, com o ponto no começo. A família de B convida as próprias famílias.
 - CAIXA [Gancho de memória]: **GOTO = 'gol': chuta o ponto um passo pra frente e depois comemora com a família (closure).**
 - PASSOS (Confusões clássicas):
-    1) O closure só adiciona itens com o ponto NO COMEÇO (B → • γ).
-    2) O goto avança o ponto só nos itens com • antes de X; os outros ficam de fora.
-    3) Esquecer de fechar depois do goto.
-    4) Criar estado repetido: conjunto igual = mesmo estado.
-    5) Item completo (ponto no fim) = hora de reduzir; não sai goto dele.
+    · O closure só adiciona itens com o ponto NO COMEÇO (B → • γ).
+    · O goto avança o ponto só nos itens com • antes de X; os outros ficam de fora.
+    · Esquecer de fechar depois do goto.
+    · Criar estado repetido: conjunto igual = mesmo estado.
+    · Item completo (ponto no fim) = hora de reduzir; não sai goto dele.
 - PREVEJA: Byte calculou goto(I0, c) = { C → c • C } e parou. O que faltou?
     opções: Nada | ✔Fechar: C → • c C e C → • d | Adicionar S → • C C | Remover o ponto
     explicação: Goto = avançar + fechar. Como o ponto ficou antes de C, a família de C precisa ser convidada.
@@ -331,12 +331,12 @@ ITENS(G'):
 - TEXTO: A atendente monta copos de açaí. Ela **coloca ingredientes no copo** um a um (empilha). Quando o copo tem uma combinação completa, açaí + granola + banana,, ela **troca tudo por um nome**: 'Combo Clássico' (reduz).
 - TEXTO: Ela não pensa: olha **onde está no pedido** (o estado) e **o próximo pedido do cliente** (o token), e obedece o quadro da parede.
 - PASSOS (O mapa da analogia):
-    1) Momento do pedido (o que já está no copo) → **estado** do autômato LR(0)
-    2) Próximo pedido do cliente → **token de lookahead**
-    3) 'Põe no copo e vai para o momento 7' → **shift 7** (s7)
-    4) 'Troca açaí+granola+banana por Clássico' → **reduce** por Clássico → açaí granola banana
-    5) 'Com um Clássico na mão, vá para o momento 4' → **GOTO**[estado, Clássico] = 4
-    6) 'O que pode vir DEPOIS de um Clássico' → **FOLLOW(Clássico)**
+    · Momento do pedido (o que já está no copo) → **estado** do autômato LR(0)
+    · Próximo pedido do cliente → **token de lookahead**
+    · 'Põe no copo e vai para o momento 7' → **shift 7** (s7)
+    · 'Troca açaí+granola+banana por Clássico' → **reduce** por Clássico → açaí granola banana
+    · 'Com um Clássico na mão, vá para o momento 4' → **GOTO**[estado, Clássico] = 4
+    · 'O que pode vir DEPOIS de um Clássico' → **FOLLOW(Clássico)**
 - PILHA: Eu sou... a pilha. Só vejo... meu topo. O quadro diz... o resto. Gosto de quadros.
 - PREVEJA: O copo tem açaí + granola + banana (um Clássico completo). O próximo pedido é 'leite condensado'. Na regra SLR, quando ela fecha o Clássico?
     opções: Sempre: copo completo = fecha na hora | ✔Só se 'leite condensado' puder vir DEPOIS de um Clássico (está no FOLLOW) | Nunca: ela só empilha
@@ -351,10 +351,10 @@ ITENS(G'):
 - PROF: Hoje a gente constrói a tabela olhando o autômato LR(0). Primeiro, os estados.
 - WIDGET LR0_AUTOMATON gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» legenda: Coleção canônica LR(0) da gramática de expressões (aumentada com E' → E).
 - PASSOS (Quatro regras para encher a tabela):
-    1) Seta com **terminal** a de Ii para Ij → ACTION[i, a] = **sj**
-    2) Seta com **não-terminal** A de Ii para Ij → GOTO[i, A] = **j**
-    3) Item completo **A → α •** em Ii → **rN** em ACTION[i, a] para cada a em **FOLLOW(A)**
-    4) Item **E' → E •** em Ii → ACTION[i, $] = **acc**
+    · Seta com **terminal** a de Ii para Ij → ACTION[i, a] = **sj**
+    · Seta com **não-terminal** A de Ii para Ij → GOTO[i, A] = **j**
+    · Item completo **A → α •** em Ii → **rN** em ACTION[i, a] para cada a em **FOLLOW(A)**
+    · Item **E' → E •** em Ii → ACTION[i, $] = **acc**
 - WIDGET FIRST_FOLLOW gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» legenda: Vamos precisar do FOLLOW: FOLLOW(E) = { +, ), $ } e FOLLOW(T) = FOLLOW(F) = { +, *, ), $ }.
 - WIDGET SLR_TABLE gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» legenda: A tabela pronta. Procure a linha do estado 2.
 - BYTE: Peraí! O estado 2 tem E → T • (quer reduzir) e T → T • * F (quer empilhar). Isso não dá briga?
@@ -385,13 +385,13 @@ I9: E → E + T •   T → T • * F          (* → I7)
 ```
 - TEXTO: FOLLOW(E) = { +, ), $ }    FOLLOW(T) = { +, *, ), $ }
 - PASSOS (Linha do estado 1):
-    1) E' → E • está completo e é o item aumentado → ACTION[1, $] = **acc**
-    2) E → E • + T tem terminal depois do ponto, e há seta + → I6 → ACTION[1, +] = **s6**
-    3) Todo o resto da linha fica vazio = **erro**
+    · E' → E • está completo e é o item aumentado → ACTION[1, $] = **acc**
+    · E → E • + T tem terminal depois do ponto, e há seta + → I6 → ACTION[1, +] = **s6**
+    · Todo o resto da linha fica vazio = **erro**
 - PASSOS (Linha do estado 2):
-    1) E → T • completo → **r2** nas colunas de FOLLOW(E): +, ) e $
-    2) T → T • * F com seta * → I7 → ACTION[2, *] = **s7**
-    3) Alguma célula com duas ações? Não: '*' ∉ FOLLOW(E). Linha limpa!
+    · E → T • completo → **r2** nas colunas de FOLLOW(E): +, ) e $
+    · T → T • * F com seta * → I7 → ACTION[2, *] = **s7**
+    · Alguma célula com duas ações? Não: '*' ∉ FOLLOW(E). Linha limpa!
 - WIDGET SLR_TABLE gramática=«E -> E + T | T ⏎ T -> T * F | F ⏎ F -> ( E ) | id» legenda: Confira as linhas 1 e 2 na tabela gerada pelo motor.
 - BYTE: Deixa eu tentar! Eu consigo, eu consigo...
 - REVELAR: Sua vez: estado 9 = { E → E + T • ; T → T • * F } com seta * → I7. Preencha a linha.
@@ -442,8 +442,8 @@ células não preenchidas := erro
 ```
 - TEXTO: **Definição.** G é SLR(1) se e somente se nenhuma célula de ACTION recebe mais de uma ação.
 - PASSOS (Os dois tipos de conflito):
-    1) **Empilhar/reduzir:** Ii contém [A → α • a β] e [B → γ •] com a ∈ FOLLOW(B)
-    2) **Reduzir/reduzir:** Ii contém [A → α •] e [B → β •] com FOLLOW(A) ∩ FOLLOW(B) ≠ ∅
+    · **Empilhar/reduzir:** Ii contém [A → α • a β] e [B → γ •] com a ∈ FOLLOW(B)
+    · **Reduzir/reduzir:** Ii contém [A → α •] e [B → β •] com FOLLOW(A) ∩ FOLLOW(B) ≠ ∅
 - CÓDIGO (Algoritmo do analisador LR (o mesmo para SLR, LALR e LR(1), só a tabela muda)):
 ```
 empilha o estado 0;  a := primeiro token
@@ -496,11 +496,11 @@ seta com NÃO-terminal       →  GOTO (número puro)
 - TEXTO: Cada **item** é um passageiro numa **linha** (a produção com o ponto). O SLR desce passageiros em qualquer ponto que **alguma** linha da cidade use, é o FOLLOW global.
 - TEXTO: O **LR(1)** cola na testa de cada passageiro o **ponto exato** onde ele vai descer: o **lookahead**. Item LR(1) = [linha, destino], ex.: [R → L •, $].
 - PASSOS (O mapa da analogia):
-    1) Linha do ônibus → **núcleo** do item (A → α • β)
-    2) Ponto de descida na testa → **lookahead** (um terminal)
-    3) Descer do ônibus → **reduzir**, só quando o próximo token é o lookahead
-    4) Frota enorme, um ônibus por combinação linha+destinos → **LR(1) canônico** (muitos estados)
-    5) Fundir ônibus com as mesmas linhas, somando destinos → **LALR(1)**
+    · Linha do ônibus → **núcleo** do item (A → α • β)
+    · Ponto de descida na testa → **lookahead** (um terminal)
+    · Descer do ônibus → **reduzir**, só quando o próximo token é o lookahead
+    · Frota enorme, um ônibus por combinação linha+destinos → **LR(1) canônico** (muitos estados)
+    · Fundir ônibus com as mesmas linhas, somando destinos → **LALR(1)**
 - PILHA: Mais ônibus... mais estados... mais memória. A empresa... reclamou.
 - TEXTO: Então a empresa funde ônibus que fazem exatamente as **mesmas linhas** (mesmo núcleo) e junta as listas de destinos. A frota volta ao tamanho do LR(0)/SLR!
 - PREVEJA: Ônibus 1: passageiro A desce em d, B desce em e. Ônibus 2 (mesmas linhas): A desce em e, B desce em d. Fundindo os dois, o que acontece no ponto d?
@@ -552,17 +552,17 @@ LALR:   I6+I9 = { [A → c •, d/e]  [B → c •, d/e] }  ← R/R em d e em e!
 #### ESTILO WORKED (Exemplo resolvido): "Closure LR(1) e fusão, passo a passo"
 - PROF: Vamos calcular I0 da gramática S → L = R | R; L → * R | id; R → L, com lookaheads.
 - PASSOS (closure({ [S' → • S, $] })):
-    1) Começa com [S' → • S, $]
-    2) Ponto antes de S; o que vem depois de S é ε, então o lookahead é FIRST($) = { $ } → [S → • L = R, $] e [S → • R, $]
-    3) De [S → • L = R, $]: depois de L vem '= R', FIRST = { = } → [L → • * R, =] e [L → • id, =]
-    4) De [S → • R, $]: depois de R vem nada → FIRST($) → [R → • L, $]
-    5) De [R → • L, $]: → [L → • * R, $] e [L → • id, $]
-    6) Nada novo? Pronto. Compactando: [L → • * R, =/$] e [L → • id, =/$]
+    · Começa com [S' → • S, $]
+    · Ponto antes de S; o que vem depois de S é ε, então o lookahead é FIRST($) = { $ } → [S → • L = R, $] e [S → • R, $]
+    · De [S → • L = R, $]: depois de L vem '= R', FIRST = { = } → [L → • * R, =] e [L → • id, =]
+    · De [S → • R, $]: depois de R vem nada → FIRST($) → [R → • L, $]
+    · De [R → • L, $]: → [L → • * R, $] e [L → • id, $]
+    · Nada novo? Pronto. Compactando: [L → • * R, =/$] e [L → • id, =/$]
 - CAIXA [Cuidado!]: A regra é FIRST(β a), onde β é o que vem DEPOIS do não-terminal no item e a é o lookahead do item. Não é FOLLOW!
 - PASSOS (GOTO(I0, L) = I2):
-    1) Avança o ponto sobre L: [S → L • = R, $] e [R → L •, $]
-    2) Closure não acrescenta nada (ponto antes de terminal ou no fim)
-    3) Tabela: '=' → shift; R → L • reduz SÓ em $ → sem conflito!
+    · Avança o ponto sobre L: [S → L • = R, $] e [R → L •, $]
+    · Closure não acrescenta nada (ponto antes de terminal ou no fim)
+    · Tabela: '=' → shift; R → L • reduz SÓ em $ → sem conflito!
 - BYTE: Agora eu! Agora eu!
 - REVELAR: Calcule GOTO(I0, *).
     → [L → * • R, =/$] e, fechando: [R → • L, =/$], [L → • * R, =/$], [L → • id, =/$]. Os lookaheads de L → * R são herdados por R → • L porque R está no fim.
@@ -624,10 +624,10 @@ LALR(1):
      (bem definido: mesmos núcleos → mesmos destinos)
 ```
 - PASSOS (Propriedades que caem em prova):
-    1) Nº de estados LALR(1) = nº de estados LR(0) = nº de estados SLR(1)
-    2) Fusão nunca introduz conflito empilhar/reduzir; pode introduzir reduzir/reduzir
-    3) Gramáticas: SLR(1) ⊂ LALR(1) ⊂ LR(1); nenhuma gramática ambígua é LR(1)
-    4) Lookaheads LALR ⊆ FOLLOW: por isso todo SLR(1) é LALR(1)
+    · Nº de estados LALR(1) = nº de estados LR(0) = nº de estados SLR(1)
+    · Fusão nunca introduz conflito empilhar/reduzir; pode introduzir reduzir/reduzir
+    · Gramáticas: SLR(1) ⊂ LALR(1) ⊂ LR(1); nenhuma gramática ambígua é LR(1)
+    · Lookaheads LALR ⊆ FOLLOW: por isso todo SLR(1) é LALR(1)
 - PREVEJA: Em [A → α • B β, a], quais lookaheads ganham os itens de B?
     opções: FOLLOW(B) | ✔FIRST(β a) | FIRST(B)
     explicação: FIRST(β a): se β não deriva ε, o a nem aparece; se deriva, o lookahead do pai 'atravessa'. FOLLOW(B) seria voltar ao SLR.

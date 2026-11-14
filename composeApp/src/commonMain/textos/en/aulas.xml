@@ -105,7 +105,7 @@
     <string name="epclipes_gramatica_ambigua_quando_mesma_frase">A grammar is ambiguous when the same sentence has two trees.</string>
     <string name="epclipes_duas_arvores_dao_dois_sentidos">Two trees give two meanings, and the compiler needs one.</string>
     <string name="epclipes_na_regra_vai_para_mais">In the rule E goes to E plus T, the parser swaps E for E. It reads nothing.</string>
-    <string name="epclipes_ele_repete_isso_para_sempre">It repeats that forever. That's why LL(1) doesn't accept it.</string>
+    <string name="epclipes_ele_repete_isso_para_sempre">It repeats that forever. That is why the top-down parser, the Temple one, does not accept it.</string>
     <string name="epclipes_quando_duas_opcoes_comecam_igual">When two options start the same way, the parser doesn't know which to take.</string>
     <string name="epclipes_fatorar_le_comeco_igual_vez">Factoring reads the shared start once and decides later.</string>
     <string name="epclipes_first_que_pode_aparecer_primeiro">FIRST is what can show up first when you expand a symbol.</string>
@@ -267,7 +267,7 @@
     <string name="epgramatica_faco_como_na_matematica_ponho">I do as in math: I factor out the common prefix. That is left factoring.</string>
     <string name="epgramatica_escolha_fica_para_depois_ai">The choice is left for after the a, in a new nonterminal. Then looking at the next token is enough.</string>
     <string name="epgramatica_fatorada">Factored</string>
-    <string name="epgramatica_com_simbolo_so_olhada_parser">With a single token of lookahead, the parser always knows what to do. That is what an LL(1) grammar requires.</string>
+    <string name="epgramatica_com_simbolo_so_olhada_parser">With a single token of lookahead, the parser always knows what to do. In the Temple, a grammar like that is called LL(1).</string>
     <string name="epgramatica_com_que_isso_comeca">What does this start with?</string>
     <string name="epgramatica_comece_pelo_facil_t_comeca">Start with T. Both of its rules begin with a terminal: id and open paren. Both go straight in.</string>
     <string name="epgramatica_x_ele_tem_duas_regras">Now X. One rule starts with plus, the other is just epsilon. Tap the two items of FIRST of X.</string>
@@ -616,7 +616,7 @@
     <string name="eppegadinhas1_regra_das_linguagens_else_fica">The rule in languages: the else goes with the nearest if. Tap that if.</string>
     <string name="eppegadinhas1_ande_para_tras_partir_else">Walk back from the else. Which if shows up first?</string>
     <string name="eppegadinhas1_isso_else_fica_com_if">The else goes with the inner if.</string>
-    <string name="eppegadinhas1_bison_resolve_empilhando_else_assim">Bison resolves it by shifting the else. That way it sticks to the inner if.</string>
+    <string name="eppegadinhas1_bison_resolve_empilhando_else_assim">In practice, tools pick the tree where the else sticks to the inner if. You see how in the Bison Workshop.</string>
     <string name="eppegadinhas1_se_quiser_if_fora_use">If you want the outer if, use braces. They close the inner if.</string>
     <string name="eppegadinhas1_duas_derivacoes_arvore">Two derivations, one tree</string>
     <string name="eppegadinhas1_olhe_esta_gramatica_pequena_frase">Look at this small grammar. The sentence is a b.</string>
@@ -855,7 +855,7 @@
     <string name="eppratica_essa_escolha_saiu_frase_comece">That choice left the sentence. Start over.</string>
     <string name="eppratica_chegou_isso_derivacao_mais_esquerda">You got there. That's a leftmost derivation.</string>
     <string name="eppratica_chegue_em_id_id">Reach id + id</string>
-    <string name="eppratica_quando_voce_escolhe_certo_sem">When you pick right without thinking, the LL(1) table is already in your head.</string>
+    <string name="eppratica_quando_voce_escolhe_certo_sem">When you pick right without thinking, you already do the Temple parser's job. It looks at the next token and picks the rule.</string>
     <string name="eppratica_olhe_topo_ele_terminal_ou">Look at the top. Is it a terminal or a nonterminal?</string>
     <string name="eppratica_leve_pilha_ate_fim">Take the stack to the end</string>
     <string name="eppratica_opere_pilha">Run the stack</string>

@@ -9,13 +9,13 @@
 - PROF: Tem: você escreve a **receita** (a gramática) e uma fábrica constrói a **máquina** (o analisador em C). Essa fábrica é o Bison, um compilador de compiladores.
 - TEXTO: Pense numa padaria industrial. Você entrega uma ficha de pedido em **três partes**, separadas por %%: **ingredientes** (declarações), **modo de preparo** (regras) e **observações** (código C extra).
 - PASSOS (O mapa da analogia):
-    1) Ficha do pedido → arquivo **calc.y**
-    2) Lista de ingredientes (%token NUM, %left '+') → **declarações**
-    3) Modo de preparo (expr : expr '+' expr) → **regras** da gramática
-    4) 'Quando terminar esta etapa, anote o total' → **ação semântica** { $$ = $1 + $3; }
-    5) Fornecedor que entrega um ingrediente por vez → **yylex** (a Lexi, ou o Flex)
-    6) O robô confeiteiro que segue a tabela → **yyparse**
-    7) Alarme de fumaça → **yyerror**
+    · Ficha do pedido → arquivo **calc.y**
+    · Lista de ingredientes (%token NUM, %left '+') → **declarações**
+    · Modo de preparo (expr : expr '+' expr) → **regras** da gramática
+    · 'Quando terminar esta etapa, anote o total' → **ação semântica** { $$ = $1 + $3; }
+    · Fornecedor que entrega um ingrediente por vez → **yylex** (a Lexi, ou o Flex)
+    · O robô confeiteiro que segue a tabela → **yyparse**
+    · Alarme de fumaça → **yyerror**
 - LEXI: Eu sou o fornecedor! Corto '12+3' em NUM, '+', NUM e entrego um por vez quando o yyparse pede.
 - CÓDIGO (A ficha de pedido mais famosa: a calculadora (versão que o jogo entende)):
 ```
@@ -49,10 +49,10 @@ expr : expr '+' expr { $$ = $1 + $3; }
 - PILHA: Eu tinha 2*3... vi o '+'... o padrão mandou empilhar. Eu... obedeci.
 - WIDGET BISON gramática=«%token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %right UMINUS ⏎ %% ⏎ expr : expr '+' expr { $$ = $1 + $3; } ⏎      | expr '-' expr { $$ = $1 - $3; } ⏎      | expr '*' expr { $$ = $1 * $3; } ⏎      | expr '/' expr { $$ = $1 / $3; } ⏎      | '-' expr %prec UMINUS { $$ = -$2; } ⏎      | '(' expr ')' { $$ = $2; } ⏎      | NUM ⏎      ; ⏎ » entrada=«2*3+4» legenda: COM %left: na célula (estado de 'expr * expr', token '+'), a regra de '*' é mais forte que '+' → reduce. Resultado 10.
 - PASSOS (Como o Bison decide cada conflito empilhar/reduzir):
-    1) Precedência da **regra** = a do último terminal dela (ou a do %prec)
-    2) Precedência do **token** de lookahead = a linha onde ele foi declarado
-    3) Token mais forte → **shift**; regra mais forte → **reduce**
-    4) Empate: %left → reduce; %right → shift; %nonassoc → erro de sintaxe
+    · Precedência da **regra** = a do último terminal dela (ou a do %prec)
+    · Precedência do **token** de lookahead = a linha onde ele foi declarado
+    · Token mais forte → **shift**; regra mais forte → **reduce**
+    · Empate: %left → reduce; %right → shift; %nonassoc → erro de sintaxe
 - WIDGET BISON gramática=«%token NUM ⏎ %right '-' ⏎ %% ⏎ expr : expr '-' expr { $$ = $1 - $3; } ⏎      | NUM ⏎      ; ⏎ » entrada=«8-3-2» legenda: %right '-' por engano: 8-3-2 vira 8-(3-2) = 7. Subtração tem que ser %left.
 - PREVEJA: E com %right '^' para potência, quanto dá 2^3^2?
     opções: 64, ou seja (2^3)^2 | ✔512, ou seja 2^(3^2) | Erro de sintaxe
@@ -108,12 +108,12 @@ int main(void) { return yyparse(); }
 
 ```
 - PASSOS (Lendo o arquivo por partes):
-    1) %{ ... %}: código C copiado literalmente para o topo do analisador gerado
-    2) %token NUM: um token com nome; o Bison numera a partir de 258 (caracteres como '+' usam o próprio código ASCII)
-    3) %left / %right: precedência, linhas mais embaixo ligam mais forte
-    4) %%: começam as regras. $$ é o valor do lado esquerdo; $1, $2, $3 os do lado direito
-    5) %%: começa o código C do usuário: yylex, yyerror e main
-    6) yylex devolve o código do token e coloca o valor em yylval; devolver 0 = fim da entrada
+    · %{ ... %}: código C copiado literalmente para o topo do analisador gerado
+    · %token NUM: um token com nome; o Bison numera a partir de 258 (caracteres como '+' usam o próprio código ASCII)
+    · %left / %right: precedência, linhas mais embaixo ligam mais forte
+    · %%: começam as regras. $$ é o valor do lado esquerdo; $1, $2, $3 os do lado direito
+    · %%: começa o código C do usuário: yylex, yyerror e main
+    · yylex devolve o código do token e coloca o valor em yylval; devolver 0 = fim da entrada
 - CÓDIGO (calc.l: o mesmo léxico gerado pelo Flex (aí você apaga o yylex do calc.y)):
 ```
 %{
@@ -138,9 +138,9 @@ echo "2+3*4" | ./calc     # imprime: = 14
 ```
 - LEXI: O calc.tab.h é o contrato entre mim e o bisão: ali está escrito que NUM vale 258.
 - PASSOS (Rastreando 2+3*4 (só as decisões importantes)):
-    1) Pilha 'expr + expr', próximo token '*': regra de '+' (nível 1) < token '*' (nível 2) → **shift**
-    2) Pilha 'expr + expr * expr', fim da linha: reduz expr * expr → $$ = 3 * 4 = 12
-    3) Pilha 'expr + expr': reduz → $$ = 2 + 12 = 14
+    · Pilha 'expr + expr', próximo token '*': regra de '+' (nível 1) < token '*' (nível 2) → **shift**
+    · Pilha 'expr + expr * expr', fim da linha: reduz expr * expr → $$ = 3 * 4 = 12
+    · Pilha 'expr + expr': reduz → $$ = 2 + 12 = 14
 - WIDGET BISON gramática=«%token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %right UMINUS ⏎ %% ⏎ expr : expr '+' expr { $$ = $1 + $3; } ⏎      | expr '-' expr { $$ = $1 - $3; } ⏎      | expr '*' expr { $$ = $1 * $3; } ⏎      | expr '/' expr { $$ = $1 / $3; } ⏎      | '-' expr %prec UMINUS { $$ = -$2; } ⏎      | '(' expr ')' { $$ = $2; } ⏎      | NUM ⏎      ; ⏎ » entrada=«-5+2» legenda: No jogo, a mesma calculadora (sem o prólogo C). Veja o menos unário com %prec UMINUS.
 - BYTE: Minha vez!
 - REVELAR: Com %left '-', quanto vale 8-3-2? E se fosse %right '-'?
@@ -182,11 +182,11 @@ regras de tradução
 funções auxiliares em C
 ```
 - PASSOS (Declarações):
-    1) %{ código C %}: copiado para o início do analisador
-    2) %token NOME — declara terminais com nome
-    3) %left / %right / %nonassoc t1 t2, mesma precedência na linha; linhas posteriores têm precedência maior
-    4) %start s: símbolo inicial (padrão: lado esquerdo da primeira regra)
-    5) %union / %type <campo>, tipos dos valores semânticos (padrão: int, via YYSTYPE)
+    · %{ código C %}: copiado para o início do analisador
+    · %token NOME — declara terminais com nome
+    · %left / %right / %nonassoc t1 t2, mesma precedência na linha; linhas posteriores têm precedência maior
+    · %start s: símbolo inicial (padrão: lado esquerdo da primeira regra)
+    · %union / %type <campo>, tipos dos valores semânticos (padrão: int, via YYSTYPE)
 - TEXTO: **Regra:** cabeça : corpo1 { ação1 } | corpo2 { ação2 } ;, na ação, $$ é o atributo sintetizado da cabeça e $i o do i-ésimo símbolo do corpo. Ação omitida equivale a { $$ = $1; }.
 - CÓDIGO (Regras de desambiguação do Yacc/Bison):
 ```
@@ -203,10 +203,10 @@ conflito em ACTION[s, a] entre shift e reduce por A → β:
 conflito reduce/reduce:     reduce pela regra que aparece primeiro (+ aviso)
 ```
 - PASSOS (Interface com o resto do programa):
-    1) int yyparse(void) — o analisador LALR(1); retorna 0 em sucesso e 1 em erro de sintaxe
-    2) int yylex(void): chamado pelo yyparse; retorna o código do token (0 = fim) e põe o valor em yylval
-    3) void yyerror(const char *s), chamado em erro de sintaxe
-    4) bison -d gera o cabeçalho .tab.h com os códigos dos tokens, que o Flex inclui
+    · int yyparse(void) — o analisador LALR(1); retorna 0 em sucesso e 1 em erro de sintaxe
+    · int yylex(void): chamado pelo yyparse; retorna o código do token (0 = fim) e põe o valor em yylval
+    · void yyerror(const char *s), chamado em erro de sintaxe
+    · bison -d gera o cabeçalho .tab.h com os códigos dos tokens, que o Flex inclui
 - PREVEJA: Declarações: %left '+' '-'  e, abaixo, %left '*' '/'. Em 'expr - expr' com lookahead '-', o Bison...
     opções: Empilha (shift) | ✔Reduz (reduce) | Dá erro
     explicação: Mesma precedência (mesma linha) e %left → reduce: (a - b) - c.

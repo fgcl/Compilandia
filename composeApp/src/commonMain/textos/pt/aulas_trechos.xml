@@ -46,4 +46,24 @@
     <string name="rt_l_q1">O fat de dois vai chamar o fat de um. Enquanto o fat de um roda, quantos registros de fat ficam na pilha? Toque.</string>
     <string name="rt_l_q1_dica">O fat de dois ainda não terminou.</string>
     <string name="rt_l_q1_ok">Dois. O registro do fat de dois continua lá, esperando a volta.</string>
+    <!-- Prática "Torne LL(1)": tirar a recursão, depois fatorar. -->
+    <string name="tll_titulo">Torne LL(1)</string>
+    <string name="tll_01">Esta gramática tem os dois defeitos da Ponte. O parser do Templo engasga nela. Vamos consertar na ordem do livro.</string>
+    <string name="tll_02">Primeiro a recursão. Qual linha começa com o próprio não-terminal? Toque.</string>
+    <string name="tll_02_dica">Procure a regra em que o lado direito começa com o mesmo nome do lado esquerdo.</string>
+    <string name="tll_02_ok">A do L. L vai para L ponto e vírgula C começa com o próprio L.</string>
+    <string name="tll_passo1">1. sem recursão à esquerda</string>
+    <string name="tll_03">O L agora vai para C e L linha. O L linha repete o ponto e vírgula C, ou some. As frases são as mesmas.</string>
+    <string name="tll_04">Agora o prefixo comum. Qual linha tem duas regras com o mesmo começo? Toque.</string>
+    <string name="tll_04_dica">Olhe o primeiro símbolo de cada regra, linha por linha.</string>
+    <string name="tll_04_ok">A do C. As duas regras começam com id.</string>
+    <string name="tll_passo2">2. fatorada</string>
+    <string name="tll_05">Fatorado: C vai para id e C linha. O C linha recebe o resto de cada regra: o igual com E, ou os parênteses.</string>
+    <string name="tll_06">Quantas casas da tabela LL(1) desta gramática ficam com duas regras? Toque.</string>
+    <string name="tll_06_dica">Sem recursão e sem começo repetido, o parser sempre escolhe pelo próximo token.</string>
+    <string name="tll_06_ok">Nenhuma. A gramática agora é LL(1).</string>
+    <string name="tll_nenhuma">nenhuma</string>
+    <string name="tll_uma">uma</string>
+    <string name="tll_duas">duas</string>
+    <string name="tll_07">Primeiro tirar a recursão, depois fatorar. Na prova, mostre as duas gramáticas e diga qual defeito cada passo resolveu.</string>
 </resources>

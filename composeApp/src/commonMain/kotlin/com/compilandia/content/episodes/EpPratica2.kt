@@ -33,6 +33,12 @@ val TABELA_SLR_PRATICA = listOf(
 /** A pilha de estados antes de cada passo, na entrada n + n. */
 val PILHAS_SLR_PRATICA = listOf("0", "0 2", "0 1", "0 1 3", "0 1 3 4", "0 1")
 
+/** A gramática do "torne LL(1)": recursão à esquerda em L e prefixo comum em C. Conferida em AulasConsertadasTest. */
+val GRAMATICA_TORNE_LL1 = listOf("L -> L ; C | C", "C -> id = E | id ( )", "E -> n")
+
+/** As linhas de uma gramática do motor, com -> no lugar da seta. */
+internal fun linhasDaGramatica(g: com.compilandia.engine.Grammar) = g.toText().lines().map { it.replace("→", "->") }
+
 /** O if com else em três endereços. */
 val TAC_IF = listOf("    t1 = a < b", "    ifFalse t1 goto L1", "    x = 1", "    goto L2", "L1: x = 2", "L2:")
 
@@ -169,6 +175,43 @@ val praticasNovas by lazy {
                 add(tecla("q1", tx("her_op_s"), 96f, 340f, 160f), tecla("q2", tx("her_op_l"), 266f, 340f, 160f))
             }
             cena(tx("her_09"), mood = EpMood.HAPPY) { drop("q1", "q2") }
+        },
+        // ─────────────────────────────── TORNE LL(1): RECURSÃO, DEPOIS FATORAÇÃO ───────────────────────────────
+        // Exercício integrado da Ponte (revisor professor do bloco 2): o motor faz cada transformação.
+        episodio(Skill.LEFT_FACTORING, tx("tll_titulo"), PRATICA) {
+            val g0 = com.compilandia.engine.Grammar.parse(GRAMATICA_TORNE_LL1.joinToString("\n"))
+            val g1 = com.compilandia.engine.GrammarTransform.eliminateImmediateLeftRecursion(g0)
+            val g2 = com.compilandia.engine.GrammarTransform.leftFactor(g1)
+            val l1 = linhasDaGramatica(g1)
+            val l2 = linhasDaGramatica(g2)
+            val linhaC = "g${l1.indexOfFirst { it.startsWith("C ") }}"
+            val casasComConflito = com.compilandia.engine.LL1Table(g2).conflicts.size
+            cena(tx("tll_01"), mood = EpMood.THINK) {
+                add(titulo(tx("tll_titulo"), size = 22f))
+                add(codigo("g", GRAMATICA_TORNE_LL1, 80f, x = 70f, passo = 34f, size = 17f))
+            }
+            pergunta(tx("tll_02"), setOf("g0"), setOf("g1", "g2"), tx("tll_02_dica"), tx("tll_02_ok")) {}
+            cena(tx("tll_03")) {
+                dropAll("g")
+                add(codigo("g", l1, 80f, x = 50f, passo = 34f, size = 16f))
+                add(rotulo("passo", tx("tll_passo1"), 180f, 260f, Tint.TEAL, 15f))
+            }
+            pergunta(tx("tll_04"), setOf(linhaC), l1.indices.map { "g$it" }.toSet() - linhaC, tx("tll_04_dica"), tx("tll_04_ok")) { drop("passo") }
+            cena(tx("tll_05")) {
+                dropAll("g")
+                add(codigo("g", l2, 80f, x = 50f, passo = 34f, size = 16f))
+                add(rotulo("passo", tx("tll_passo2"), 180f, 300f, Tint.TEAL, 15f))
+            }
+            val certa = "k$casasComConflito"
+            pergunta(tx("tll_06"), setOf(certa), setOf("k0", "k1", "k2") - certa, tx("tll_06_dica"), tx("tll_06_ok")) {
+                drop("passo")
+                add(
+                    Box("k0", tx("tll_nenhuma"), 90f, 360f, 100f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f),
+                    Box("k1", tx("tll_uma"), 180f, 360f, 70f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f),
+                    Box("k2", tx("tll_duas"), 270f, 360f, 90f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f),
+                )
+            }
+            cena(tx("tll_07"), mood = EpMood.HAPPY) { drop("k0", "k1", "k2") }
         },
     )
 }

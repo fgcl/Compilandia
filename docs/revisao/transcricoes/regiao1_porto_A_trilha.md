@@ -15,140 +15,152 @@ BYTE: "Antes da aula: qual fase vem no meio?"
 Opções: ✔sintática | otimização | geração
 Depois: "A sintática. Os tokens viram árvore antes de checar o sentido."
 
-#### AULA ANIMADA BÁSICA: "A linha de montagem" (22 cenas, ~177s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A linha de montagem" (24 cenas, ~195s) [1º exemplo começa na cena 4]
 
-1. TELA: # Para que serve? ⏎ conta = preco + 2 lw  add  sw ⏎ seu código processador
+1. TELA: # Para que serve? ⏎ conta = preco + 2 ⏎ lw  add  sw ⏎ seu código ⏎ processador
    BYTE: "Você escreve conta igual a preço mais dois. O processador não entende isso: ele só executa instruções simples."
 
-2. TELA: # Para que serve? ⏎ conta = preco + 2 lw  add  sw ⏎ seu código processador
+2. TELA: # Para que serve? ⏎ conta = preco + 2 ⏎ lw  add  sw ⏎ seu código ⏎ processador
    BYTE: "Qual dos dois o processador entende? Toque nele."
    PERGUNTA (toque): certo = lw  add  sw ; errado = conta = preco + 2
    se errar: "Ele só lê instruções curtas, como carregar, somar e guardar."
-   se acertar: "Isso. Código de máquina. O compilador é o programa que traduz o seu código para aquilo."
+   se acertar: "Código de máquina. O compilador é o programa que traduz o seu código para aquilo."
 
-3. TELA: # Para que serve? ⏎ conta = preco + 2 ? lw  add  sw ⏎ seu código processador
+3. TELA: # Para que serve? ⏎ conta = preco + 2 ⏎ lw  add  sw ⏎ seu código ⏎ processador ⏎ ?
    BYTE: "Traduzir tudo de uma vez seria difícil de fazer e de conferir. Então o trabalho é dividido."
 
 4. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "O compilador trabalha em seis fases, uma depois da outra. O que sai de uma fase é a entrada da seguinte."
 
-5. TELA: # Seis fases ⏎ Léxica x = a + 2 ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+5. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ x = a + 2
    BYTE: "Entra o seu código-fonte. Para a máquina, ele ainda é só uma fila de caracteres."
 
-6. TELA: # Seis fases ⏎ *Léxica* x  =  a  +  2 ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+6. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ *x = a + 2*
+   BYTE: "Esta fila de caracteres entra no compilador. Qual fase trabalha com ela primeiro? Toque."
+   PERGUNTA (toque): certo = Léxica ; errado = Sintática | Semântica | Intermediário | Otimização | Geração
+   se errar: "É a fase que junta letras em palavras."
+   se acertar: "A léxica. Ela é a primeira da esteira, e a saída dela alimenta a sintática."
+
+7. TELA: # Seis fases ⏎ *Léxica* ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ x  =  a  +  2
    BYTE: "A análise léxica junta os caracteres em tokens: nomes, números, operadores. Espaços e comentários ficam para trás."
 
-7. TELA: # Seis fases ⏎ Léxica ⏎ *Sintática* árvore ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+8. TELA: # Seis fases ⏎ Léxica ⏎ *Sintática* ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ árvore
    BYTE: "A análise sintática confere se os tokens formam frases válidas da linguagem e monta a árvore sintática."
 
-8. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ *Semântica* árvore com tipos ⏎ Intermediário ⏎ Otimização ⏎ Geração
+9. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ *Semântica* ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ árvore com tipos
    BYTE: "A análise semântica confere o sentido: se a variável foi declarada e se os tipos combinam."
 
-9. TELA: # Seis fases ⏎ Léxica ⏎ int x = "oi"; ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+10. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ int x = "oi";
    BYTE: "Em int x igual a oi, entre aspas, o texto não cabe num inteiro. Qual fase reclama? Toque nela."
    PERGUNTA (toque): certo = Semântica ; errado = Léxica | Sintática | Intermediário | Otimização | Geração
    se errar: "A escrita está certa e a frase tem forma de comando. O problema é o sentido."
-   se acertar: "Isso. A frase está bem formada, mas o tipo não combina. É erro semântico."
+   se acertar: "Certo. A frase está bem formada, mas o tipo não combina. É erro semântico."
 
-10. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ *Intermediário* t1 = a + 2 ⏎ Otimização ⏎ Geração
-   BYTE: "As três primeiras fases são a análise. Agora começa a síntese. O código intermediário escreve uma conta por linha, sem depender da máquina."
+11. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ *Intermediário* ⏎ Otimização ⏎ Geração ⏎ t1 = a + 2
+   BYTE: "A análise termina no código intermediário. Ele escreve uma conta por linha, sem depender da máquina."
 
-11. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário t1 = a + 2 ⏎ *Otimização* ⏎ *Geração* lw  add  sw
-   BYTE: "A otimização melhora esse código sem mudar o resultado. A geração escreve o código de máquina final."
+12. TELA: # Seis fases ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ *Otimização* ⏎ *Geração* ⏎ t1 = a + 2 ⏎ lw  add  sw
+   BYTE: "Daqui em diante é a síntese. A otimização melhora esse código sem mudar o resultado. A geração escreve o código de máquina final."
 
-12. TELA: # O que sai de cada fase ⏎ Léxica → tokens ⏎ Sintática → árvore ⏎ Semântica → árvore com tipos ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
+13. TELA: # O que sai de cada fase ⏎ Léxica → tokens ⏎ Sintática → árvore ⏎ Semântica → árvore com tipos ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
    BYTE: "A receita é o que sai de cada fase. Guarde a ordem, porque ela cai em prova."
 
-13. TELA: # O que sai de cada fase ⏎ *Léxica → tokens* ⏎ *Sintática → árvore* ⏎ Semântica → árvore com tipos ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
+14. TELA: # O que sai de cada fase ⏎ *Léxica → tokens* ⏎ *Sintática → árvore* ⏎ Semântica → árvore com tipos ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
    BYTE: "Cada fase pega um tipo de erro. Caractere que não forma token é erro léxico. Token fora de ordem é erro sintático."
 
-14. TELA: # O que sai de cada fase ⏎ Léxica → tokens ⏎ Sintática → árvore ⏎ *Semântica → árvore com tipos* ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
+15. TELA: # O que sai de cada fase ⏎ Léxica → tokens ⏎ Sintática → árvore ⏎ Semântica → árvore com tipos ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
+   BYTE: "O programa usa uma variável que ninguém declarou. Qual fase acusa esse erro? Toque."
+   PERGUNTA (toque): certo = Semântica → árvore com tipos ; errado = Léxica → tokens | Sintática → árvore
+   se errar: "Os tokens existem e a ordem está certa. Falta o sentido."
+   se acertar: "A semântica. A frase tem a forma certa, mas o nome não existe."
+
+16. TELA: # O que sai de cada fase ⏎ Léxica → tokens ⏎ Sintática → árvore ⏎ *Semântica → árvore com tipos* ⏎ Intermediário → uma conta por linha ⏎ Otimização → menos contas ⏎ Geração → código de máquina
    BYTE: "Frase bem formada sem sentido, como tipo trocado ou variável não declarada, é erro semântico."
 
-15. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica Sintática ⏎ Semântica Intermediário ⏎ Otimização Geração
+17. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Agora este while passa pelas mesmas fases."
 
-16. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica Sintática ⏎ Semântica Intermediário ⏎ Otimização Geração
+18. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Quem corta o while em tokens? Toque na fase."
    PERGUNTA (toque): certo = Léxica ; errado = Sintática | Semântica | Intermediário | Otimização | Geração
    se errar: "É a primeira fase. Ela só olha as letras."
-   se acertar: "Isso. A léxica corta e dá nome a cada pedaço."
+   se acertar: "A léxica corta e dá nome a cada pedaço."
 
-17. TELA: # Outro código ⏎ while (i < 10 i = i + 1; ⏎ Léxica Sintática ⏎ Semântica Intermediário ⏎ Otimização Geração
+19. TELA: # Outro código ⏎ while (i < 10 i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Se faltar o fecha parêntese, qual fase reclama?"
    PERGUNTA (toque): certo = Sintática ; errado = Léxica | Semântica | Intermediário | Otimização | Geração
    se errar: "As letras estão certas. O que falta é a forma do comando."
-   se acertar: "Isso. Parêntese sem par quebra a árvore. É a sintática."
+   se acertar: "Parêntese sem par quebra a árvore. É a sintática."
 
-18. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica Sintática ⏎ Semântica Intermediário ⏎ Otimização Geração
+20. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Em qual fase o laço vira desvios, com uma conta por linha?"
    PERGUNTA (toque): certo = Intermediário ; errado = Léxica | Sintática | Semântica | Otimização | Geração
    se errar: "Vem depois da semântica e antes da otimização."
-   se acertar: "Isso. O código intermediário escreve o laço com desvios."
+   se acertar: "Exato. O código intermediário escreve o laço com desvios."
 
-19. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica Sintática ⏎ Semântica Intermediário ⏎ Otimização Geração
-   BYTE: "Seis fases em ordem: três de análise, três de síntese. O mapa do jogo segue esse mesmo caminho."
+21. TELA: # Outro código ⏎ while (i < 10) i = i + 1; ⏎ Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+   BYTE: "Seis fases em ordem. A análise vai até o código intermediário, e a síntese parte dele. O mapa do jogo segue esse mesmo caminho."
 
-20. TELA: # Erros comuns ⏎ Variável usada sem declarar é erro sintático. ⏎ certo errado
+22. TELA: # Erros comuns ⏎ Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ certo ⏎ errado
    BYTE: "Em que fase cai este erro? Um colega respondeu assim. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
-   se errar: "A gramática aceita o comando. O problema é o que o nome significa."
-   se acertar: "Isso. A sintática só olha a forma. Saber se o nome foi declarado é trabalho da análise semântica."
+   PERGUNTA (toque): certo = certo ; errado = errado
+   se errar: "A gramática aceita o comando mesmo sem a declaração. Quem confere o que o nome significa?"
+   se acertar: "A sintática só olha a forma. Quem confere se o nome tem declaração é a análise semântica."
 
-21. TELA: # Erros comuns ⏎ Certo: Variável não declarada é erro semântico: a forma está certa. ⏎ *Errado: O compilador executa o programa.* ⏎ *Certo: O compilador só traduz. Quem executa é o processador, ou um interpretador.*
-   BYTE: "Outro erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo."
+23. TELA: # Erros comuns ⏎ Certo: Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ *Errado: O compilador executa o programa.* ⏎ *Certo: O compilador só traduz. Quem executa é o processador, ou um interpretador.*
+   BYTE: "Um erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo."
 
-22. TELA: # Resumo ⏎ Análise: léxica → tokens; sintática → árvore; semântica → árvore com tipos. ⏎ Síntese: código intermediário, otimização e geração de código. ⏎ Erro léxico: caractere. Sintático: forma. Semântico: sentido.
+24. TELA: # Resumo ⏎ Análise: léxica → tokens; sintática → árvore; semântica → tipos; e o código intermediário. ⏎ Síntese: otimização e geração do código da máquina. ⏎ Erro léxico: caractere. Sintático: forma. Semântico: sentido.
    BYTE: "Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro."
+
+#### PEGADINHA: "Quem pega este erro?" (5 cenas, ~36s)
+
+1. TELA: # Quem pega? ⏎ léxico ⏎ sintático ⏎ semântico
+   BYTE: "Três erros parecidos caem na prova. Cada um é pego por uma fase diferente."
+
+2. TELA: # Quem pega? ⏎ léxico ⏎ sintático ⏎ semântico ⏎ *int x@ = 2;*
+   BYTE: "Primeiro: int x arroba igual a dois. Esse caractere não existe na linguagem. Quem reclama?"
+   PERGUNTA (toque): certo = léxico ; errado = sintático | semântico
+   se errar: "Nenhum token começa com arroba. Quem monta os tokens?"
+   se acertar: "O scanner para antes de qualquer outra fase."
+
+3. TELA: # Quem pega? ⏎ léxico ⏎ sintático ⏎ semântico ⏎ *x = 2  y = 3;*
+   BYTE: "Agora falta o ponto e vírgula. Os tokens estão certos. Quem reclama?"
+   PERGUNTA (toque): certo = sintático ; errado = léxico | semântico
+   se errar: "Toda palavra existe. O que falta é uma peça na frase."
+   se acertar: "Sintática. A forma do comando está errada."
+
+4. TELA: # Quem pega? ⏎ léxico ⏎ sintático ⏎ semântico ⏎ *x = y + 1;*
+   BYTE: "Por último, y mais um, com y nunca declarado. A frase tem forma certa. Quem reclama?"
+   PERGUNTA (toque): certo = semântico ; errado = léxico | sintático
+   se errar: "O problema não é a forma. É o nome y, que não existe."
+   se acertar: "Semântica. É ela que procura o y na tabela de símbolos. Sem declaração, o y não está lá."
+
+5. TELA: # Quem pega? ⏎ léxico ⏎ sintático ⏎ semântico ⏎ x = y + 1;
+   PROF: "Na prova, pergunte primeiro: o erro está na letra, na forma ou no sentido?"
 
 #### PRATICA: "A câmera entra na máquina" (6 cenas, ~33s)
 
 1. TELA: Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Esta é a linha de montagem inteira. Vamos entrar na primeira máquina."
 
-2. TELA: x > = 1 ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+2. TELA: Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ x ⏎ > ⏎ = ⏎ 1
    BYTE: "Dentro da fase léxica, a linha chega letra por letra."
 
-3. TELA: x > = 1 ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
+3. TELA: Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração ⏎ x ⏎ > ⏎ = ⏎ 1
    BYTE: "Dois destes caracteres formam um token só. Toque nos dois."
    PERGUNTA (toque): certo = > | = ; errado = x | 1
    se errar: "Procure o operador de comparação."
-   se acertar: "Isso. Maior ou igual é um token só."
+   se acertar: "Maior ou igual é um token só."
 
 4. TELA: Léxica ⏎ *Sintática* ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    BYTE: "Os tokens saem daqui e seguem para a próxima máquina."
 
-5. TELA: >= ⏎ x 1 ⏎ Intermediário ⏎ Otimização ⏎ Geração
+5. TELA: Intermediário ⏎ Otimização ⏎ Geração ⏎ >= ⏎ x ⏎ 1
    BYTE: "Dentro da sintática, os mesmos tokens viram uma árvore."
 
 6. TELA: Léxica ⏎ Sintática ⏎ Semântica ⏎ Intermediário ⏎ Otimização ⏎ Geração
    PROF: "Cada máquina recebe o trabalho da anterior e entrega para a próxima."
-
-#### PEGADINHA: "Quem pega este erro?" (5 cenas, ~36s)
-
-1. TELA: # Quem pega? ⏎ léxico sintático semântico
-   BYTE: "Três erros parecidos caem na prova. Cada um é pego por uma fase diferente."
-
-2. TELA: # Quem pega? ⏎ *int x@ = 2;* ⏎ léxico sintático semântico
-   BYTE: "Primeiro: int x arroba igual a dois. Esse caractere não existe na linguagem. Quem reclama?"
-   PERGUNTA (toque): certo = léxico ; errado = sintático | semântico
-   se errar: "Nenhum token começa com arroba. Quem monta os tokens?"
-   se acertar: "Isso. O scanner para antes de qualquer outra fase."
-
-3. TELA: # Quem pega? ⏎ *x = 2  y = 3;* ⏎ léxico sintático semântico
-   BYTE: "Agora falta o ponto e vírgula. Os tokens estão certos. Quem reclama?"
-   PERGUNTA (toque): certo = sintático ; errado = léxico | semântico
-   se errar: "Toda palavra existe. O que falta é uma peça na frase."
-   se acertar: "Sintática. A forma do comando está errada."
-
-4. TELA: # Quem pega? ⏎ *x = y + 1;* ⏎ léxico sintático semântico
-   BYTE: "Por último, y mais um, com y nunca declarado. A frase tem forma certa. Quem reclama?"
-   PERGUNTA (toque): certo = semântico ; errado = léxico | sintático
-   se errar: "O problema não é a forma. É o nome y, que não existe."
-   se acertar: "Semântica. Só ela consulta a tabela de símbolos."
-
-5. TELA: # Quem pega? ⏎ x = y + 1; ⏎ léxico sintático semântico
-   PROF: "Na prova, pergunte primeiro: o erro está na letra, na forma ou no sentido?"
 
 #### CLIPE 30s: "O que um compilador faz" (2 cenas, ~13s)
 
@@ -160,10 +172,10 @@ Depois: "A sintática. Os tokens viram árvore antes de checar o sentido."
 
 #### CLIPE 30s: "Compilador ou interpretador" (2 cenas, ~11s)
 
-1. TELA: # Tudo de uma vez ⏎ linha 1 linha 2 linha 3
+1. TELA: # Tudo de uma vez ⏎ linha 1 ⏎ linha 2 ⏎ linha 3
    BYTE: "O compilador traduz tudo antes e entrega um programa pronto."
 
-2. TELA: # Uma de cada vez ⏎ *linha 1* linha 2 linha 3
+2. TELA: # Uma de cada vez ⏎ *linha 1* ⏎ linha 2 ⏎ linha 3
    BYTE: "O interpretador lê e executa na hora, linha por linha."
 
 #### BUGS DO ÁLBUM (julgar verdade/mentira)

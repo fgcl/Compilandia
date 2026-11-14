@@ -403,4 +403,51 @@
     <string name="tpguided_tipos_conferidos_mips_rodando_testes">Tipos conferidos, MIPS rodando, testes passando. Você não 'fez um trabalho de compiladores', você **construiu um compilador**. Pouca gente pode dizer isso.</string>
     <string name="tpguided_ultima_recuperacao_recite_fases_seu">Última recuperação: recite as fases do seu compilador e a classe Java de cada uma.</string>
     <string name="tpguided_lexico_lexico_afd_com_switch">Léxico → `Lexico` (AFD com switch). Sintático → `Sintatico` (descida recursiva, casaToken). Semântico → `TabelaSimbolos` + checagens no `Sintatico`. Geração → métodos do `Sintatico` emitindo MIPS. Otimização → dobramento de constantes e código morto no gerador. E o `Main` costurando tudo.</string>
+    <!-- Fim de cada capítulo: "Na sua linguagem" e "Teste desta etapa" (TpGuideFechamento.kt). -->
+    <string name="tp_nsl_titulo">Na sua linguagem</string>
+    <string name="tp_teste_titulo">Teste desta etapa: o comando e o que deve sair</string>
+    <string name="tp_nsl_1_1">Qual é o nome da sua linguagem e a extensão dos arquivos-fonte?</string>
+    <string name="tp_nsl_1_2">Em que linguagem o compilador deve ser escrito, e o que ele deve gerar (MIPS para o MARS, ou outra coisa)?</string>
+    <string name="tp_nsl_1_3">Quantas semanas faltam para a entrega? Escolha o cronograma de 8 ou o de 3 semanas.</string>
+    <string name="tp_nsl_2_1">Quais tipos e comandos o seu enunciado exige? Monte a ficha técnica, como a da Byteiro.</string>
+    <string name="tp_nsl_2_2">Como se escrevem a atribuição e a comparação de igualdade? Se forem parecidas (`=` e `==`), o léxico vai precisar do maior casamento.</string>
+    <string name="tp_nsl_2_3">Qual é a precedência dos seus operadores, do mais fraco ao mais forte?</string>
+    <string name="tp_teste_2">**Teste desta etapa:** os 10 programas-exemplo (5 certos e 5 com um erro cada) estão na pasta `testes/`, e cada um tem a saída esperada anotada ao lado. Eles são a bateria do capítulo 9 começando.</string>
+    <string name="tp_nsl_3_1">Quais tokens seus começam com o mesmo caractere? Cada grupo vira um estado, como o do `&lt;`.</string>
+    <string name="tp_nsl_3_2">Como são os seus comentários e strings? Onde cada um termina?</string>
+    <string name="tp_nsl_3_3">Que mensagem o seu léxico dá para um caractere que não pertence à linguagem?</string>
+    <string name="tp_teste_3">**Teste desta etapa:** troque a linha do `TesteLexico` por uma da SUA linguagem, com um comentário, um operador de dois caracteres e uma quebra de linha. Confira token a token, como na saída esperada acima: o comentário some, o operador de dois caracteres sai como um token só, e o número da linha muda no lugar certo.</string>
+    <string name="tp_nsl_4_1">Quais regras da sua gramática têm recursão à esquerda?</string>
+    <string name="tp_nsl_4_2">Quais alternativas começam com o mesmo token?</string>
+    <string name="tp_nsl_4_3">Onde você usou `{ }` e `[ ]`? Em cada um, o FIRST de dentro cruza com o que pode vir depois?</string>
+    <string name="tp_teste_4">**Teste desta etapa:** a tabela FIRST e FOLLOW da sua gramática inteira, como a da Byteiro acima, com as duas condições conferidas: os FIRST das alternativas não se cruzam, e cada parte que pode sumir não cruza com o FOLLOW. Nenhuma casa da tabela LL(1) fica com duas regras. Essa tabela vai para o relatório.</string>
+    <string name="tp_nsl_5_1">Qual método corresponde a cada não-terminal da sua gramática?</string>
+    <string name="tp_nsl_5_2">Onde entram os `while` (de cada `{ }`) e os `if` (de cada `[ ]`)?</string>
+    <string name="tp_nsl_5_3">Que mensagem o seu parser dá quando falta o terminador de um comando?</string>
+    <string name="tp_teste_5">**Teste desta etapa:** todos os programas de `testes/ok/` passam sem erro, e o que falta um `;` para na linha do token seguinte:</string>
+    <string name="tp_nsl_6_1">Que construções abrem escopo na sua linguagem: blocos, funções, laços?</string>
+    <string name="tp_nsl_6_2">Pode declarar o mesmo nome num bloco de dentro (sombrear)?</string>
+    <string name="tp_nsl_6_3">Pode usar uma variável antes de declarar? E declarar duas vezes no mesmo bloco?</string>
+    <string name="tp_teste_6">**Teste desta etapa:** variável sem declaração e declaração repetida param com a linha certa:</string>
+    <string name="tp_nsl_7_1">Quais tipos podem se misturar numa conta?</string>
+    <string name="tp_nsl_7_2">A condição do se e do enquanto precisa ser lógica, ou número vale?</string>
+    <string name="tp_nsl_7_3">Guardar um tipo numa variável de outro tipo converte ou é erro?</string>
+    <string name="tp_teste_7">**Teste desta etapa:** os cinco testes semânticos acima, cada um em `testes/erro/`, imprimem exatamente a mensagem ao lado deles.</string>
+    <string name="tp_nsl_8_1">Como a sua linguagem escreve na tela, e qual syscall do MARS faz isso?</string>
+    <string name="tp_nsl_8_2">Onde ficam as suas variáveis: no `.data` ou na pilha?</string>
+    <string name="tp_nsl_8_3">Quantos rótulos cada comando de desvio seu precisa (se, enquanto, para)?</string>
+    <string name="tp_teste_8">**Teste desta etapa:** o `contagem.byt` do capítulo 2 compila, roda no MARS e imprime a saída que você anotou para ele:</string>
+    <string name="tp_nsl_9_1">Que otimização simples cabe na sua linguagem: dobrar constantes, cortar código morto?</string>
+    <string name="tp_nsl_9_2">A sua bateria tem pelo menos um teste certo e um com erro para cada comando?</string>
+    <string name="tp_nsl_9_3">Qual é o formato exato de mensagem de erro que o enunciado pede?</string>
+    <string name="tp_teste_9">**Teste desta etapa:** a bateria inteira passa:</string>
+    <string name="tp_nsl_10_1">O enunciado pede relatório? Com quais seções?</string>
+    <string name="tp_nsl_10_2">Como o professor vai rodar o seu compilador: que comando, em que pasta?</string>
+    <string name="tp_nsl_10_3">Que três perguntas da arguição você treinaria sobre a SUA gramática?</string>
+    <string name="tp_teste_10">**Teste desta etapa:** numa pasta nova, clone o repositório e siga só o README: compilar, rodar um teste e abrir no MARS. Se faltar qualquer passo que não está escrito, o README está incompleto.</string>
+    <string name="tp_teste_codigo_3" translatable="false">javac -d out src/*.java\njava -cp out TesteLexico</string>
+    <string name="tp_teste_codigo_5" translatable="false"># testes/erro/falta_ponto_virgula.byt\nprograma t {\n    inteiro x\n    x &lt;- 1;\n}\n\njava -cp out Main testes/erro/falta_ponto_virgula.byt\nlinha 3: erro sintático: esperava ';', encontrou 'x'</string>
+    <string name="tp_teste_codigo_6" translatable="false">programa t { x &lt;- 1; }\n  -&gt; linha 1: erro semântico: 'x' não foi declarado\nprograma t { inteiro a; caractere a; }\n  -&gt; linha 1: erro semântico: 'a' já foi declarado neste escopo (linha 1)</string>
+    <string name="tp_teste_codigo_8" translatable="false">javac -d out src/*.java\njava -cp out Main testes/ok/contagem.byt\njava -jar Mars4_5.jar nc saida.asm</string>
+    <string name="tp_teste_codigo_9" translatable="false">./roda_testes.sh\n10 passaram, 0 falharam      # com a sua contagem de testes</string>
 </resources>

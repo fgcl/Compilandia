@@ -14,11 +14,11 @@ t1 = b * c
 t2 = a + t1
 ```
 - PASSOS (O mapa da analogia):
-    1) Uma operação por vez, dois ingredientes → **instrução de três endereços**: x = y op z
-    2) Tigelas com etiqueta t1, t2... → **temporários** gerados pelo compilador
-    3) Ordem da receita → **pós-ordem** da árvore: filhos antes do pai
-    4) Ficha com 4 campos (operação, ingr. 1, ingr. 2, tigela) → **quádrupla**
-    5) Ficha sem tigela: 'use o resultado do passo 0' → **tripla**
+    · Uma operação por vez, dois ingredientes → **instrução de três endereços**: x = y op z
+    · Tigelas com etiqueta t1, t2... → **temporários** gerados pelo compilador
+    · Ordem da receita → **pós-ordem** da árvore: filhos antes do pai
+    · Ficha com 4 campos (operação, ingr. 1, ingr. 2, tigela) → **quádrupla**
+    · Ficha sem tigela: 'use o resultado do passo 0' → **tripla**
 - PREVEJA: Quantas instruções (sem contar a atribuição final) para a + b * c - a?
     opções: 2 | ✔3 | 4
     explicação: Três operadores → três instruções: t1 = b * c; t2 = a + t1; t3 = t2 - a.
@@ -33,10 +33,10 @@ t2 = a + t1
 - WIDGET ATTR_TREE entrada=«a + b * c» legenda: A árvore: '*' está embaixo, '+' na raiz.
 - WIDGET TAC entrada=«a + b * c» legenda: Pós-ordem: b * c gera t1; depois a + t1 gera t2.
 - PASSOS (A regra do gerador):
-    1) Folha (variável ou número): o 'endereço' é o próprio nome
-    2) Nó operador: gera o código do filho esquerdo, depois o do direito
-    3) Cria um temporário novo tN e emite: tN = esq op dir
-    4) O endereço do nó passa a ser tN
+    · Folha (variável ou número): o 'endereço' é o próprio nome
+    · Nó operador: gera o código do filho esquerdo, depois o do direito
+    · Cria um temporário novo tN e emite: tN = esq op dir
+    · O endereço do nó passa a ser tN
 - WIDGET TAC entrada=«(a + b) * (a + b)» legenda: Repare: a + b é calculado DUAS vezes (t1 e t2). O gerador ingênuo não percebe, a otimização vai.
 - BYTE: E com comparação e lógica? Funciona igual?
 - WIDGET TAC entrada=«a < b && ok» legenda: Aqui, como valores: t1 = a < b; t2 = t1 && ok. (Compiladores reais costumam usar desvios — curto-circuito.)
@@ -55,10 +55,10 @@ t2 = a + t1
 #### ESTILO WORKED (Exemplo resolvido): "Expressões, quádruplas, triplas e um if"
 - PROF: Exercício 1: gere TAC para x = (a + b) * (a - c).
 - PASSOS (Pós-ordem, com calma):
-    1) Subárvore esquerda a + b → t1 = a + b
-    2) Subárvore direita a - c → t2 = a - c
-    3) Raiz * → t3 = t1 * t2
-    4) Atribuição → x = t3
+    · Subárvore esquerda a + b → t1 = a + b
+    · Subárvore direita a - c → t2 = a - c
+    · Raiz * → t3 = t1 * t2
+    · Atribuição → x = t3
 - CÓDIGO (Duas representações das mesmas instruções):
 ```
 quádruplas                      triplas
@@ -71,7 +71,8 @@ quádruplas                      triplas
 - PROF: Exercício 2: comandos com desvio. if (a < b) x = 1; else x = 2;
 - CÓDIGO (Rótulos e desvios: o if vira 'pule se for falso'):
 ```
-    ifFalse a < b goto L1
+    t1 = a < b
+    ifFalse t1 goto L1
     x = 1
     goto L2
 L1: x = 2
@@ -83,7 +84,7 @@ L2: ...
 - REVELAR: As triplas de y = a * b + a * b.
     → (0) * a b; (1) * a b; (2) + (0) (1); (3) = y (2).
 - REVELAR: TAC de while (a < b) a = a + 1;
-    → L1: ifFalse a < b goto L2;  t1 = a + 1;  a = t1;  goto L1;  L2: ...
+    → L1: t1 = a < b;  ifFalse t1 goto L2;  t2 = a + 1;  a = t2;  goto L1;  L2: ...
 - WIDGET TAC entrada=«a * b + a * b» legenda: Confira a primeira resposta.
 - CAIXA [Dica de prova]: Em triplas, o resultado é referenciado pela POSIÇÃO: (2) * (0) (1). Na prova, numere as linhas desde o começo, senão as referências viram bagunça.
 
@@ -132,10 +133,10 @@ E → ( E1 )     E.addr := E1.addr;  E.code := E1.code
 E → id         E.addr := top.get(id.lexeme);  E.code := ''
 ```
 - PASSOS (Representações):
-    1) **Quádruplas:** (op, arg1, arg2, resultado), resultado nomeado; fácil de reordenar
-    2) **Triplas:** (op, arg1, arg2), o resultado é a posição da instrução; economiza espaço
-    3) **Triplas indiretas:** lista de ponteiros para triplas; reordena-se a lista
-    4) **SSA:** cada variável é atribuída uma única vez (x1, x2...), com funções φ nas junções
+    · **Quádruplas:** (op, arg1, arg2, resultado), resultado nomeado; fácil de reordenar
+    · **Triplas:** (op, arg1, arg2), o resultado é a posição da instrução; economiza espaço
+    · **Triplas indiretas:** lista de ponteiros para triplas; reordena-se a lista
+    · **SSA:** cada variável é atribuída uma única vez (x1, x2...), com funções φ nas junções
 - PREVEJA: Qual NÃO é uma instrução de três endereços válida?
     opções: t1 = a + b | ✔t2 = a + b * c | if t1 goto L3
     explicação: t2 = a + b * c tem dois operadores. Precisa virar t1 = b * c; t2 = a + t1.
@@ -170,11 +171,11 @@ E → id         E.addr := top.get(id.lexeme);  E.code := ''
 - TEXTO: A lista diz 'comprar leite' duas vezes, e nada mudou entre uma e outra. Você compra uma vez só e usa as duas. Isso é eliminar **subexpressão comum**.
 - TEXTO: A lista tem 'comprar fermento', mas nenhuma receita usa. Corta! Isso é eliminar **código morto**.
 - PASSOS (O mapa da analogia):
-    1) Fazer a conta em casa → **dobra de constantes** (2 * 6 vira 12)
-    2) Anotar 'ovos = 12' e usar 12 dali em diante → **propagação de constantes**
-    3) Comprar leite uma vez só → **eliminação de subexpressões comuns**
-    4) Riscar o fermento que ninguém usa → **eliminação de código morto**
-    5) Trecho do mercado sem desvios, entra e sai por um lugar só → **bloco básico**
+    · Fazer a conta em casa → **dobra de constantes** (2 * 6 vira 12)
+    · Anotar 'ovos = 12' e usar 12 dali em diante → **propagação de constantes**
+    · Comprar leite uma vez só → **eliminação de subexpressões comuns**
+    · Riscar o fermento que ninguém usa → **eliminação de código morto**
+    · Trecho do mercado sem desvios, entra e sai por um lugar só → **bloco básico**
 - PREVEJA: Qual linha pode ser calculada inteiramente pelo compilador?
     opções: t1 = a * 2 | ✔t1 = 2 * 3 | t1 = x * y
     explicação: Só 2 * 3 depende apenas de constantes. Vira t1 = 6 antes do programa rodar.
@@ -231,12 +232,12 @@ x = t2
 (6) y = x
 ```
 - PASSOS (Uma passada de cada vez):
-    1) **Dobra:** (1) t1 = 4 * 2 → t1 = 8
-    2) **Propagação de constantes:** t1 vale 8 → (2) t2 = a + 8 e (3) t3 = a + 8
-    3) **Subexpressão comum:** (3) calcula o mesmo que (2), sem redefinir a no meio → t3 = t2 (cópia)
-    4) **Propagação de cópias:** (4) x = t2 * t2
-    5) **Código morto:** t1 e t3 não são mais usados → remove (1) e (3)
-    6) **Código morto:** (5) y = 0 é sobrescrito em (6) sem uso → remove (5)
+    · **Dobra:** (1) t1 = 4 * 2 → t1 = 8
+    · **Propagação de constantes:** t1 vale 8 → (2) t2 = a + 8 e (3) t3 = a + 8
+    · **Subexpressão comum:** (3) calcula o mesmo que (2), sem redefinir a no meio → t3 = t2 (cópia)
+    · **Propagação de cópias:** (4) x = t2 * t2
+    · **Código morto:** t1 e t3 não são mais usados → remove (1) e (3)
+    · **Código morto:** (5) y = 0 é sobrescrito em (6) sem uso → remove (5)
 - CÓDIGO (Resultado: de 6 instruções para 3):
 ```
 t2 = a + 8
@@ -286,12 +287,12 @@ BLOCOS:
   anterior ao próximo líder (ou até o fim)
 ```
 - PASSOS (Transformações clássicas):
-    1) **Dobra de constantes:** avaliar em compilação operações com operandos constantes (2 * 3 → 6)
-    2) **Propagação de constantes:** após x = 6, substituir usos de x por 6 enquanto x não for redefinido
-    3) **Subexpressões comuns:** E já calculada e operandos não redefinidos desde então → reutilizar o valor
-    4) **Propagação de cópias:** após x = y, usar y no lugar de x
-    5) **Código morto:** remover instruções cujo resultado não está vivo (nunca usado depois)
-    6) **Redução de força / movimentação de código invariante de laço:** trocar ops caras; tirar do laço o que não muda nele
+    · **Dobra de constantes:** avaliar em compilação operações com operandos constantes (2 * 3 → 6)
+    · **Propagação de constantes:** após x = 6, substituir usos de x por 6 enquanto x não for redefinido
+    · **Subexpressões comuns:** E já calculada e operandos não redefinidos desde então → reutilizar o valor
+    · **Propagação de cópias:** após x = y, usar y no lugar de x
+    · **Código morto:** remover instruções cujo resultado não está vivo (nunca usado depois)
+    · **Redução de força / movimentação de código invariante de laço:** trocar ops caras; tirar do laço o que não muda nele
 - TEXTO: **Local** = dentro de um bloco básico (ex.: via DAG do bloco). **Global** = sobre o grafo de fluxo, com análise de fluxo de dados (variáveis vivas, definições que alcançam, expressões disponíveis).
 - PREVEJA: Qual transformação exige saber quais variáveis estão VIVAS?
     opções: Dobra de constantes | ✔Eliminação de código morto | Redução de força
@@ -317,271 +318,6 @@ BLOCOS:
 - CAIXA [Conversa ao pé da lareira]: Dobra de constantes: 'Eu faço as contas antes do show começar.' Código morto: 'E eu tiro do palco quem não tem fala.' Subexpressão comum: 'E eu não deixo ninguém repetir a mesma piada.'
 
 
-## ASSUNTO RUNTIME: Ambientes de execução (registros de ativação)
-
-#### ESTILO STORY (História / Analogia): "A pilha de pratos da cozinha"
-- NARRADOR: Forja do Código, fim de expediente. O código já foi gerado... mas, quando ele RODA, onde moram as variáveis de cada função?
-- BYTE: Na memória, ué. Cada variável tem o seu lugarzinho fixo, não tem?
-- PROF: Quase! Pense na cozinha de um restaurante em dia de movimento. Cada pedido que começa vira um prato na pilha da bancada, com um bilhete grudado.
-- TEXTO: O bilhete diz: **quais ingredientes** vieram no pedido, **para qual mesa** devolver o prato pronto e tem um espaço para os **rascunhos** do cozinheiro. E ele só mexe no prato do **topo**.
-- TEXTO: Se, no meio de um prato, ele precisa de um molho que é outra receita, põe um **prato novo em cima**, faz o molho, tira esse prato e volta para o de baixo exatamente de onde parou.
-- PASSOS (O mapa da analogia):
-    1) Cada pedido em preparo → uma **ativação** (uma chamada de função em andamento)
-    2) Prato com bilhete → **registro de ativação** (ou **quadro**, *frame*)
-    3) Ingredientes do pedido → **parâmetros**
-    4) Para qual mesa devolver → **endereço de retorno** (no MIPS, o registrador `$ra`)
-    5) Rascunhos do cozinheiro → **variáveis locais** e **temporários**
-    6) Pilha de pratos na bancada → **pilha de execução**: só o topo trabalha
-    7) Molho que precisa de outro molho da MESMA receita → **recursão**: vários pratos iguais empilhados
-- PILHA: Prato novo... vai em cima. Prato pronto... sai de cima. Eu nunca... tiro do meio.
-- CÓDIGO (O fatorial recursivo: uma receita que pede a si mesma):
-```
-1 int fat(int n) {
-2   if (n <= 1) return 1;
-3   return n * fat(n - 1);
-4 }
-5 int main() {
-6   return fat(3);
-7 }
-```
-- PREVEJA: Rodando fat(3), quantos pratos (registros de ativação) ficam empilhados no momento MAIS alto, contando o de main?
-    opções: 2 | 3 | ✔4 | 6
-    explicação: main → fat(3) → fat(2) → fat(1): quatro quadros ao mesmo tempo. Só quando fat(1) devolve 1 a pilha começa a baixar. Se você chutou 3, esqueceu do prato do main, erro supercomum!
-- WIDGET CALL_STACK entrada=«fat3» legenda: Empilhe e desempilhe: cada fat(n) tem o SEU próprio n no bilhete.
-- CAIXA [Não existem perguntas idiotas]: 'Se todos os quadros são da mesma função fat, por que o n não se mistura?' Porque cada chamada ganha um prato NOVO, com o seu próprio n. O n=3 fica guardadinho embaixo enquanto o n=1 trabalha no topo.
-- TEXTO: E o resto da cozinha? O **cardápio** pregado na parede é o **código**; as **placas fixas** (nome da casa, horário) são a **área estática** (variáveis globais); o **depósito**, de onde se pega e devolve caixa a qualquer hora, é o **heap** (`new`, `malloc`).
-- REVELAR: Por que o depósito (heap) existe, se a pilha já funciona tão bem?
-    → Porque o prato da pilha é jogado fora quando a função termina. Se você precisa de algo que viva DEPOIS do retorno, um objeto criado com `new`, uma lista que cresce, ele vai para o heap.
-- CAIXA [No mundo real]: Recursão sem caso base = pratos empilhados até o teto. Em Java isso é o famoso `StackOverflowError`; em C, geralmente um *segmentation fault*. É o prato batendo no lustre.
-
-#### ESTILO VISUAL (Passo a passo visual): "A pilha de chamadas, quadro a quadro"
-- PROF: Hoje a gente assiste à memória durante a execução. Primeiro, um programa sem recursão: main chama f, que chama g, que chama h.
-- CÓDIGO (f chama g, g chama h... e f ainda chama h de novo):
-```
-1 int h(int a) {
-2   return a + 1;
-3 }
-4 int g(int b) {
-5   return h(b * 2);
-6 }
-7 int f(int c) {
-8   return g(c) + h(c);
-9 }
-10 int main() {
-11  return f(1);
-12 }
-```
-- WIDGET CALL_STACK entrada=«chain1» legenda: Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA.
-- PASSOS (O que você acabou de ver):
-    1) main chama f(1): pilha [main, f]
-    2) f chama g(1): [main, f, g]
-    3) g chama h(2): [main, f, g, h], o ponto mais alto, 4 quadros
-    4) h devolve 3 e sai; g devolve 3 e sai: [main, f]
-    5) f chama h(1) DE NOVO: [main, f, h], o mesmo h, um quadro novinho
-    6) h devolve 2; f devolve 3 + 2 = 5; main devolve 5
-- BYTE: O h apareceu duas vezes, em alturas diferentes da pilha!
-- PROF: Exato. O quadro depende de QUEM chamou e QUANDO, não só do nome da função. Por isso cada quadro guarda o seu próprio endereço de retorno.
-- PREVEJA: Agora fat(4). Qual a altura máxima da pilha, contando main?
-    opções: 4 | ✔5 | 8
-    explicação: main + fat(4) + fat(3) + fat(2) + fat(1) = 5. Regra prática: profundidade da recursão + 1 (o main).
-- WIDGET CALL_STACK entrada=«fat4» legenda: Confira: a pilha sobe até fat(1) e depois desce devolvendo 1, 2, 6, 24.
-- TEXTO: Agora uma recursão que **ramifica**: fib(3) chama fib(2) e fib(1). O desenho de TODAS as chamadas forma a **árvore de ativação**.
-- CÓDIGO (Árvore de ativação de fib(3): 6 ativações no total (com main)):
-```
-          main
-           |
-         fib(3)
-        /      \
-    fib(2)    fib(1)
-    /    \
-fib(1)  fib(0)
-```
-- WIDGET CALL_STACK entrada=«fib3» legenda: Repare: em cada instante, a pilha é o CAMINHO da raiz até o nó que está executando.
-- PREVEJA: Em fib(3), no instante em que fib(0) executa, quem está na pilha?
-    opções: main, fib(3), fib(2), fib(1), fib(0) | ✔main, fib(3), fib(2), fib(0) | Só fib(0)
-    explicação: O fib(1) da esquerda já terminou e saiu. A pilha guarda só os ancestrais vivos: main → fib(3) → fib(2) → fib(0). Altura máxima de fib3: 4.
-- CAIXA [Poder do cérebro]: A árvore de ativação conta a história inteira; a pilha mostra só o 'agora'. Percorrer a árvore em profundidade (desce = chama, sobe = retorna) é exatamente o que a pilha faz.
-
-#### ESTILO WORKED (Exemplo resolvido): "fat(3) na mão: e em MIPS"
-- PROF: Exercício clássico: rode fat(3) à mão, mostrando a pilha de registros de ativação e os valores devolvidos.
-- CÓDIGO (O programa):
-```
-1 int fat(int n) {
-2   if (n <= 1) return 1;
-3   return n * fat(n - 1);
-4 }
-5 int main() {
-6   return fat(3);
-7 }
-```
-- PASSOS (Resolvido, chamada por chamada):
-    1) 1. main chama fat(3): quadro {n=3, volta para: main, linha 6}
-    2) 2. 3 > 1, então fat(3) precisa de fat(2): quadro {n=2, volta para: fat, linha 3}
-    3) 3. fat(2) chama fat(1): quadro {n=1, volta para: fat, linha 3}. Pilha: main, fat(3), fat(2), fat(1) — 4 quadros
-    4) 4. fat(1) cai no caso base, devolve 1 e o seu quadro é desempilhado
-    5) 5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai
-    6) 6. fat(3) retoma: 3 * 2 = 6; devolve 6 e sai
-    7) 7. main recebe 6
-- TEXTO: Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.
-- CÓDIGO (fat.asm: prólogo abre o quadro, epílogo fecha):
-```
-        .text
-main:   li   $a0, 3            # argumento: n = 3
-        jal  fat               # chama fat; $ra = endereço da linha de baixo
-        move $a0, $v0          # o resultado chega em $v0
-        li   $v0, 1            # syscall 1: imprimir inteiro
-        syscall                # imprime 6
-        li   $v0, 10           # syscall 10: encerrar
-        syscall
-
-fat:    addi $sp, $sp, -8      # PRÓLOGO: abre o quadro (2 palavras)
-        sw   $ra, 4($sp)       # guarda o endereço de retorno
-        sw   $a0, 0($sp)       # guarda n
-        slti $t0, $a0, 2       # $t0 = (n < 2)
-        beq  $t0, $zero, REC   # n >= 2? vai para a recursão
-        li   $v0, 1            # caso base: devolve 1
-        addi $sp, $sp, 8       # fecha o quadro
-        jr   $ra
-REC:    addi $a0, $a0, -1      # argumento n - 1
-        jal  fat               # $v0 = fat(n - 1)
-        lw   $a0, 0($sp)       # recupera o SEU n
-        lw   $ra, 4($sp)       # recupera o SEU endereço de retorno
-        addi $sp, $sp, 8       # EPÍLOGO: fecha o quadro
-        mul  $v0, $a0, $v0     # n * fat(n - 1)
-        jr   $ra               # volta para quem chamou
-```
-- PASSOS (Quem faz o quê na chamada):
-    1) **Chamador:** põe o argumento em `$a0` e executa `jal fat` (que guarda o endereço de volta em `$ra`)
-    2) **Chamado, na entrada (prólogo):** `addi $sp, $sp, -8` abre o quadro; salva `$ra` e `$a0` nele
-    3) **Chamado, na saída (epílogo):** põe o resultado em `$v0`, restaura `$ra`, `addi $sp, $sp, 8` fecha o quadro e `jr $ra` volta
-    4) **Chamador, depois:** usa o valor que chegou em `$v0`
-- BYTE: Deixa eu tentar um sozinho? Acho que eu consigo.
-- CÓDIGO (Sua vez: main chama f(2)):
-```
-1 int h(int a) {
-2   return a + 1;
-3 }
-4 int g(int b) {
-5   return h(b * 2);
-6 }
-7 int f(int c) {
-8   return g(c) + h(c);
-9 }
-10 int main() {
-11  return f(2);
-12 }
-```
-- REVELAR: Qual a pilha no ponto mais alto?
-    → [main, f(c=2), g(b=2), h(a=4)], 4 quadros. h recebeu 4 porque g passou b * 2.
-- REVELAR: Que valor cada chamada devolve?
-    → h(4) = 5; g(2) = 5; depois f chama h(2) = 3; f devolve 5 + 3 = 8; main devolve 8.
-- REVELAR: Para onde volta o SEGUNDO h, o h(2)?
-    → Para f, na linha 8 (a soma). Esse endereço de retorno está no quadro dele, não é o do primeiro h, que voltava para g, linha 5.
-- WIDGET CALL_STACK entrada=«chain2» legenda: Confira as suas três respostas.
-- CAIXA [Cuidado!]: Esqueceu de salvar `$ra` antes do `jal` interno? A chamada recursiva sobrescreve `$ra`, e o `jr $ra` final volta para o lugar errado — o programa entra em laço. Função que chama outra SEMPRE salva `$ra` na pilha.
-- CAIXA [Dica de prova]: Na prova, desenhe a pilha como uma coluna de caixas, uma por chamada, com os parâmetros e o 'volta para'. Risque (não apague) as caixas que saem: o professor quer ver a ordem.
-
-#### ESTILO SOCRATIC (Perguntas guiadas): "Por que uma PILHA?"
-- PROF: Vamos reinventar o ambiente de execução só com perguntas. Responda de cabeça antes de tocar, errar aqui é parte do método.
-- REVELAR: Ideia mais simples: cada variável de cada função ganha um endereço fixo (alocação estática). O que dá errado com fat(3)?
-    → Só existe UM n para a função fat. Quando fat(2) escreve n=2, destrói o n=3 que fat(3) ainda vai usar na volta. Alocação estática não suporta recursão (o FORTRAN antigo nem permitia recursão por isso).
-- REVELAR: Então cada CHAMADA precisa da sua própria cópia de n. Em que ordem essas cópias nascem e morrem?
-    → A última chamada a começar é a primeira a terminar (LIFO): fat(1) nasce por último e morre primeiro. Esse é exatamente o comportamento de uma pilha.
-- BYTE: Tá, mas além do n, o que mais o quadro precisa guardar?
-- REVELAR: Quando fat(1) termina, como a máquina sabe para onde voltar?
-    → Ela guardou o **endereço de retorno** na hora da chamada. No MIPS, `jal` coloca esse endereço em `$ra`; como a próxima chamada sobrescreveria `$ra`, ele é salvo no quadro.
-- REVELAR: E como devolver o resultado e voltar a usar o quadro de quem chamou?
-    → O resultado vai num lugar combinado (no MIPS, `$v0`). Para reencontrar o quadro anterior, guarda-se o **vínculo de controle** (link dinâmico), um ponteiro para o quadro do chamador — ou, no MIPS simples, basta desfazer o `$sp`.
-- PREVEJA: Quem deve ABRIR o espaço das variáveis LOCAIS de uma função?
-    opções: O chamador, porque ele sabe quantos parâmetros passa | ✔O chamado, porque só ele sabe quantas locais e temporários tem | O sistema operacional
-    explicação: O tamanho das locais é 'segredo' do chamado (o chamador pode até ter sido compilado antes). Regra geral: o chamador cuida do que conhece (parâmetros, endereço de retorno); o chamado cuida do resto.
-- REVELAR: Uma função cria uma lista e a devolve para quem chamou. A lista pode morar no quadro dela?
-    → Não! O quadro é desempilhado no retorno, e quem chamou ficaria com um ponteiro para lixo (ponteiro pendente). Coisas que precisam sobreviver à chamada vão para o **heap**.
-- REVELAR: Recursão infinita: o que acontece com a pilha?
-    → Cada chamada empilha um quadro e nenhuma sai. A pilha cresce até invadir uma área proibida: **estouro de pilha** (stack overflow).
-- BYTE: E passar parâmetro por referência? Muda alguma coisa no quadro?
-- REVELAR: Em swap(x, y) por VALOR, o que vai para o quadro? E por REFERÊNCIA?
-    → Por valor: CÓPIAS de x e y, trocar as cópias não muda nada lá fora. Por referência: os ENDEREÇOS de x e y, o chamado escreve direto nas variáveis do chamador, e a troca acontece de verdade.
-- WIDGET CALL_STACK entrada=«fib3» legenda: Teste: antes de cada passo, preveja se a pilha sobe ou desce.
-- CAIXA [Poder do cérebro]: Repare no que você acabou de deduzir: pilha (por causa do LIFO), endereço de retorno, vínculo de controle, heap e passagem de parâmetros. É isso que o capítulo 7 do Livro do Dragão formaliza. Você não é 'burro': você acabou de reinventar um ambiente de execução.
-
-#### ESTILO FORMAL (Definição de prova): "Organização da memória e registros de ativação"
-- TEXTO: **Ambiente de execução** (*run-time environment*): o conjunto de estruturas que o código gerado usa para rodar, organização da memória, registros de ativação, sequências de chamada e passagem de parâmetros.
-- CÓDIGO (Subdivisão típica da memória em tempo de execução (Livro do Dragão, seção 7.1)):
-```
-endereços altos
-+----------------------+
-|        PILHA         |  topo em $sp; cresce para BAIXO
-|          v           |
-|                      |
-|          ^           |
-|         HEAP         |  cresce para CIMA (new, malloc)
-+----------------------+
-|  ESTÁTICO  (.data)   |  globais e constantes; tamanho fixo
-+----------------------+
-|  CÓDIGO    (.text)   |  as instruções do programa
-+----------------------+
-endereços baixos
-```
-- CÓDIGO (Registro de ativação (quadro): campos típicos (seção 7.2.2)):
-```
-+--------------------------------+
-| parâmetros reais               |  preenchidos pelo CHAMADOR
-| valor de retorno               |
-| vínculo de controle (dinâmico) |  -> quadro do chamador
-| vínculo de acesso (estático)   |  -> quadro do escopo envolvente
-| estado salvo da máquina        |  endereço de retorno, registradores
-| dados locais                   |  preenchidos pelo CHAMADO
-| temporários                    |
-+--------------------------------+
-```
-- PASSOS (Sequência de chamada e de retorno):
-    1) **Chamador:** avalia os parâmetros reais e os coloca onde o chamado espera (no quadro, ou em `$a0`–`$a3`)
-    2) **Chamador:** registra o endereço de retorno e o vínculo de controle; desvia para o chamado (`jal`)
-    3) **Chamado (prólogo):** aloca o quadro (`$sp` -= tamanho), salva registradores (incluindo `$ra`) e inicializa as locais
-    4) **Chamado (retorno):** põe o valor de retorno no lugar combinado (`$v0`), restaura registradores e `$sp`, desvia para o endereço de retorno (`jr $ra`)
-    5) **Chamador:** recupera o valor devolvido e continua
-- TEXTO: **Árvore de ativação:** cada nó é uma ativação; os filhos de um nó são as ativações que ele chamou, da esquerda para a direita, na ordem das chamadas. **Propriedade:** a pilha de controle, num dado instante, contém exatamente o caminho da raiz até o nó em execução.
-- PASSOS (Três estratégias de alocação):
-    1) **Estática:** endereço fixo em tempo de compilação; não permite recursão nem tamanho dinâmico (globais; FORTRAN 77)
-    2) **Em pilha:** um quadro por ativação, LIFO; permite recursão; o quadro morre no retorno (locais em C e Java)
-    3) **Em heap:** blocos com tempo de vida arbitrário; liberação manual (`free`) ou por coleta de lixo
-- CÓDIGO (Convenção de chamada do MIPS):
-```
-$a0–$a3   argumentos           $v0–$v1  valores de retorno
-$ra       endereço de retorno  $sp      topo da pilha
-$fp       base do quadro atual (opcional)
-$t0–$t9   temporários: o CHAMADOR salva se precisar deles depois
-$s0–$s7   salvos: o CHAMADO salva antes de usar
-
-jal f     # $ra := PC + 4;  PC := f
-jr  $ra   # PC := $ra
-```
-- PREVEJA: Qual vínculo aponta para o quadro de QUEM CHAMOU a função?
-    opções: Vínculo de acesso (estático) | ✔Vínculo de controle (dinâmico) | Endereço de retorno
-    explicação: Controle/dinâmico = cadeia de CHAMADAS. Acesso/estático = cadeia de ANINHAMENTO no texto (útil em linguagens com funções aninhadas, como Pascal). O endereço de retorno aponta para uma INSTRUÇÃO, não para um quadro.
-- WIDGET CALL_STACK entrada=«fat3» legenda: A definição em ação: 4 ativações simultâneas no pico (main + 3 de fat).
-- CAIXA [Dica de prova]: Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. Liste de cima para baixo nessa ordem.
-- CAIXA [Cuidado!]: Endereço de retorno ≠ vínculo de controle. O primeiro diz para qual INSTRUÇÃO voltar; o segundo, qual QUADRO volta a ser o atual.
-
-#### ESTILO MNEMONIC (Truque de memória): "O prédio da memória e o café da manhã do quadro"
-- NARRADOR: Palácio da Memória: Forja do Código, penúltima sala. Um prédio de quatro andares; do telhado, uma pilha de caixas desce sozinha.
-- CAIXA [Gancho de memória]: **O prédio, de baixo para cima: C-E-H-P (leia 'CEP', o endereço de tudo).** **C**ódigo no térreo, **E**stático no 1º andar, **H**eap subindo do 2º, **P**ilha descendo do telhado.
-- CAIXA [Gancho de memória]: **'Heap sobe, pilha desce; se os dois se encontram, o prédio cai.'** É o estouro de memória.
-- CAIXA [Gancho de memória]: **Controle Chama, Acesso Aninha.** Vínculo de **c**ontrole → quem me **c**hamou (cadeia dinâmica). Vínculo de **a**cesso → onde estou **a**ninhado no texto (cadeia estática).
-- CAIXA [Gancho de memória]: **O café da manhã do quadro: Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada** → **P**arâmetros, **V**alor de retorno, vínculo de **C**ontrole, vínculo de **A**cesso, **E**stado salvo (endereço de retorno), **L**ocais, **T**emporários.
-- CAIXA [Gancho de memória]: **jal = Jump And Link**: pula e deixa um bilhete de volta em `$ra` (**r**eturn **a**ddress). **jr $ra = Jump Register**: volta seguindo o bilhete.
-- BYTE: E pra lembrar quem faz o quê na chamada? Eu sempre troco.
-- PROF: Recepção de hotel! O **hóspede** (chamador) chega com a bagagem e diz quando volta para casa: parâmetros e endereço de retorno. O **hotel** (chamado) arruma o quarto e o frigobar: locais e registradores salvos. Na saída, o hotel entrega a conta (valor de retorno) e libera o quarto.
-- PREVEJA: Em main → f → g → h (h chamado por g), pelo gancho 'Controle Chama', o vínculo de controle de h aponta para o quadro de...
-    opções: main | f | ✔g | h
-    explicação: Controle = quem CHAMOU. Quem chamou h foi g. (E quando f chama h direto, o vínculo de controle desse OUTRO quadro de h aponta para f.)
-- WIDGET CALL_STACK entrada=«chain1» legenda: Suba e desça o prédio: cada andar da pilha é um quadro.
-- REVELAR: Recite os 7 campos do quadro pelo café da manhã.
-    → Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada → parâmetros, valor de retorno, vínculo de controle, vínculo de acesso, estado salvo (endereço de retorno), locais, temporários.
-- CAIXA [Conversa ao pé da lareira]: Pilha: 'Eu sou rápida e organizada: entrou, saiu, tudo limpinho.' Heap: 'E eu sou flexível: guardo o que você quiser pelo tempo que quiser.' Pilha: 'E esquece de devolver...' Heap: 'Por isso inventaram o coletor de lixo!'
-
-
 ## ASSUNTO CODEGEN_MIPS: Geração de código MIPS
 
 #### ESTILO STORY (História / Analogia): "A bancada pequena e a despensa enorme"
@@ -590,13 +326,13 @@ jr  $ra   # PC := $ra
 - PROF: Fica tranquilo: é uma cozinha. O processador é um cozinheiro com uma **bancada pequenininha** e uma **despensa enorme** no fim do corredor.
 - TEXTO: Na bancada cabem só 32 potinhos com etiqueta (`$t0`, `$t1`, ...). Ele **só cozinha o que está na bancada**: para usar a farinha, vai à despensa buscar (**lw**) e, quando termina, leva o resultado de volta (**sw**).
 - PASSOS (O mapa da analogia):
-    1) Potinhos da bancada → **registradores** (`$t0`–`$t9`, `$s0`–`$s7`, ...): rápidos e poucos
-    2) Prateleiras da despensa → **memória**, declarada na seção **.data** (`x: .word 0`)
-    3) Buscar na despensa → **lw** (*load word*); guardar de volta → **sw** (*store word*)
-    4) 'Use 2 ovos' (não precisa buscar nada) → **li** (*load immediate*: uma constante)
-    5) Misturar dois potinhos num terceiro → **add / sub / mul / div**
-    6) O caderno de passos → seção **.text**, começando no rótulo **main:**
-    7) Post-it 'se faltou ovo, pule para L0' → **desvios** (beq, bne, j) e **rótulos**
+    · Potinhos da bancada → **registradores** (`$t0`–`$t9`, `$s0`–`$s7`, ...): rápidos e poucos
+    · Prateleiras da despensa → **memória**, declarada na seção **.data** (`x: .word 0`)
+    · Buscar na despensa → **lw** (*load word*); guardar de volta → **sw** (*store word*)
+    · 'Use 2 ovos' (não precisa buscar nada) → **li** (*load immediate*: uma constante)
+    · Misturar dois potinhos num terceiro → **add / sub / mul / div**
+    · O caderno de passos → seção **.text**, começando no rótulo **main:**
+    · Post-it 'se faltou ovo, pule para L0' → **desvios** (beq, bne, j) e **rótulos**
 - CÓDIGO (A receita traduzida, uma ficha TAC por bloco):
 ```
 # x = a + b * 2     (TAC: t1 = b * 2 ; t2 = a + t1 ; x = t2)
@@ -628,10 +364,10 @@ sw   $t0, x
 - WIDGET TAC entrada=«(a + b) * c» legenda: Pós-ordem: t1 = a + b; t2 = t1 * c.
 - WIDGET MIPS entrada=«(a + b) * c» legenda: Cada linha TAC vira um bloquinho. Avance e veja $t1, $t2, $t3 e a memória.
 - PASSOS (Lendo o que aconteceu (a=4, b=2, c=3)):
-    1) lw $t1, a → $t1 = 4;  lw $t2, b → $t2 = 2
-    2) add $t3, $t1, $t2 → $t3 = 6;  sw $t3, t1 → memória t1 = 6
-    3) lw $t1, t1 → 6;  lw $t2, c → 3;  mul → $t3 = 18;  sw → memória t2 = 18
-    4) Cópia final: lw $t0, t2;  sw $t0, r → o resultado r = 18
+    · lw $t1, a → $t1 = 4;  lw $t2, b → $t2 = 2
+    · add $t3, $t1, $t2 → $t3 = 6;  sw $t3, t1 → memória t1 = 6
+    · lw $t1, t1 → 6;  lw $t2, c → 3;  mul → $t3 = 18;  sw → memória t2 = 18
+    · Cópia final: lw $t0, t2;  sw $t0, r → o resultado r = 18
 - PREVEJA: Para a * b + c * d (a=4, b=2, c=3, d=5), qual valor fica no resultado r?
     opções: ✔23 | 70 | 34
     explicação: t1 = 4 * 2 = 8; t2 = 3 * 5 = 15; t3 = 8 + 15 = 23. A precedência já veio resolvida da árvore: os dois * antes do +.
@@ -650,11 +386,11 @@ L0:     sw   $t2, x            # else:  x = b
 L1:                            # as duas pistas se encontram aqui
 ```
 - PASSOS (O caminho da execução com a=4, b=2):
-    1) sgt: 4 > 2 → $t3 = 1
-    2) beq $t3, $zero, L0: 1 ≠ 0, então NÃO pula
-    3) sw $t1, x → x = 4 (o then)
-    4) j L1 → salta por cima do else
-    5) Com a=1, b=2: $t3 = 0, o beq pula para L0 e x = b
+    · sgt: 4 > 2 → $t3 = 1
+    · beq $t3, $zero, L0: 1 ≠ 0, então NÃO pula
+    · sw $t1, x → x = 4 (o then)
+    · j L1 → salta por cima do else
+    · Com a=1, b=2: $t3 = 0, o beq pula para L0 e x = b
 - PREVEJA: Se você esquecer o `j L1`, o que acontece com a=4, b=2?
     opções: Nada muda | ✔Executa o then e DEPOIS cai no else: x termina valendo b | Erro de montagem no MARS
     explicação: O processador não conhece chaves: ele segue linha a linha. Sem o j, ele 'escorrega' do then para dentro de L0 e sobrescreve x com 2. O MARS monta numa boa, o erro é de lógica.
@@ -664,11 +400,11 @@ L1:                            # as duas pistas se encontram aqui
 #### ESTILO WORKED (Exemplo resolvido): "Programas .asm completos: expressão, if/else e while"
 - PROF: Exercício 1, com cara de trabalho prático: gere o programa MIPS completo para `x = a + b * 2; print(x);`, com a = 4 e b = 2.
 - PASSOS (A receita da tradução):
-    1) 1. TAC: t1 = b * 2;  t2 = a + t1;  x = t2
-    2) 2. .data: uma `.word` para cada variável E cada temporário
-    3) 3. .text: cada instrução TAC vira lw/li, lw/li, operação, sw
-    4) 4. print: `li $v0, 1`, `lw $a0, x`, `syscall`
-    5) 5. fim: `li $v0, 10`, `syscall`
+    · 1. TAC: t1 = b * 2;  t2 = a + t1;  x = t2
+    · 2. .data: uma `.word` para cada variável E cada temporário
+    · 3. .text: cada instrução TAC vira lw/li, lw/li, operação, sw
+    · 4. print: `li $v0, 1`, `lw $a0, x`, `syscall`
+    · 5. fim: `li $v0, 10`, `syscall`
 - CÓDIGO (expr.asm: rode no MARS: o console mostra 8):
 ```
 # x = a + b * 2;  print(x);
@@ -860,6 +596,302 @@ Lfim:
 - CAIXA [Conversa ao pé da lareira]: Memória: 'Eu guardo tudo, sou enorme!' Registrador: 'E eu sou muito mais rápido.' Memória: 'Mas só cabem 32 de vocês...' Alocador de registradores: 'Calma, gente, é para isso que eu existo.'
 
 
+## ASSUNTO RUNTIME: Ambientes de execução (registros de ativação)
+
+#### ESTILO STORY (História / Analogia): "A pilha de pratos da cozinha"
+- NARRADOR: Forja do Código, fim de expediente. O código já foi gerado... mas, quando ele RODA, onde moram as variáveis de cada função?
+- BYTE: Na memória, ué. Cada variável tem o seu lugarzinho fixo, não tem?
+- PROF: Quase! Pense na cozinha de um restaurante em dia de movimento. Cada pedido que começa vira um prato na pilha da bancada, com um bilhete grudado.
+- TEXTO: O bilhete diz: **quais ingredientes** vieram no pedido, **para qual mesa** devolver o prato pronto e tem um espaço para os **rascunhos** do cozinheiro. E ele só mexe no prato do **topo**.
+- TEXTO: Se, no meio de um prato, ele precisa de um molho que é outra receita, põe um **prato novo em cima**, faz o molho, tira esse prato e volta para o de baixo exatamente de onde parou.
+- PASSOS (O mapa da analogia):
+    · Cada pedido em preparo → uma **ativação** (uma chamada de função em andamento)
+    · Prato com bilhete → **registro de ativação** (ou **quadro**, *frame*)
+    · Ingredientes do pedido → **parâmetros**
+    · Para qual mesa devolver → **endereço de retorno** (no MIPS, o registrador `$ra`)
+    · Rascunhos do cozinheiro → **variáveis locais** e **temporários**
+    · Pilha de pratos na bancada → **pilha de execução**: só o topo trabalha
+    · Molho que precisa de outro molho da MESMA receita → **recursão**: vários pratos iguais empilhados
+- PILHA: Prato novo... vai em cima. Prato pronto... sai de cima. Eu nunca... tiro do meio.
+- CÓDIGO (O fatorial recursivo: uma receita que pede a si mesma):
+```
+1 int fat(int n) {
+2   if (n <= 1) return 1;
+3   return n * fat(n - 1);
+4 }
+5 int main() {
+6   return fat(3);
+7 }
+```
+- PREVEJA: Rodando fat(3), quantos pratos (registros de ativação) ficam empilhados no momento MAIS alto, contando o de main?
+    opções: 2 | 3 | ✔4 | 6
+    explicação: main → fat(3) → fat(2) → fat(1): quatro quadros ao mesmo tempo. Só quando fat(1) devolve 1 a pilha começa a baixar. Se você chutou 3, esqueceu do prato do main, erro supercomum!
+- WIDGET CALL_STACK entrada=«fat3» legenda: Empilhe e desempilhe: cada fat(n) tem o SEU próprio n no bilhete.
+- CAIXA [Não existem perguntas idiotas]: 'Se todos os quadros são da mesma função fat, por que o n não se mistura?' Porque cada chamada ganha um prato NOVO, com o seu próprio n. O n=3 fica guardadinho embaixo enquanto o n=1 trabalha no topo.
+- TEXTO: E o resto da cozinha? O **cardápio** pregado na parede é o **código**; as **placas fixas** (nome da casa, horário) são a **área estática** (variáveis globais); o **depósito**, de onde se pega e devolve caixa a qualquer hora, é o **heap** (`new`, `malloc`).
+- REVELAR: Por que o depósito (heap) existe, se a pilha já funciona tão bem?
+    → Porque o prato da pilha é jogado fora quando a função termina. Se você precisa de algo que viva DEPOIS do retorno, um objeto criado com `new`, uma lista que cresce, ele vai para o heap.
+- CAIXA [No mundo real]: Recursão sem caso base = pratos empilhados até o teto. Em Java isso é o famoso `StackOverflowError`; em C, geralmente um *segmentation fault*. É o prato batendo no lustre.
+
+#### ESTILO VISUAL (Passo a passo visual): "A pilha de chamadas, quadro a quadro"
+- PROF: Hoje a gente assiste à memória durante a execução. Primeiro, um programa sem recursão: main chama f, que chama g, que chama h.
+- CÓDIGO (f chama g, g chama h... e f ainda chama h de novo):
+```
+1 int h(int a) {
+2   return a + 1;
+3 }
+4 int g(int b) {
+5   return h(b * 2);
+6 }
+7 int f(int c) {
+8   return g(c) + h(c);
+9 }
+10 int main() {
+11  return f(1);
+12 }
+```
+- WIDGET CALL_STACK entrada=«chain1» legenda: Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA.
+- PASSOS (O que você acabou de ver):
+    · main chama f(1): pilha [main, f]
+    · f chama g(1): [main, f, g]
+    · g chama h(2): [main, f, g, h], o ponto mais alto, 4 quadros
+    · h devolve 3 e sai; g devolve 3 e sai: [main, f]
+    · f chama h(1) DE NOVO: [main, f, h], o mesmo h, um quadro novinho
+    · h devolve 2; f devolve 3 + 2 = 5; main devolve 5
+- BYTE: O h apareceu duas vezes, em alturas diferentes da pilha!
+- PROF: Exato. O quadro depende de QUEM chamou e QUANDO, não só do nome da função. Por isso cada quadro guarda o seu próprio endereço de retorno.
+- PREVEJA: Agora fat(4). Qual a altura máxima da pilha, contando main?
+    opções: 4 | ✔5 | 8
+    explicação: main + fat(4) + fat(3) + fat(2) + fat(1) = 5. Regra prática: profundidade da recursão + 1 (o main).
+- WIDGET CALL_STACK entrada=«fat4» legenda: Confira: a pilha sobe até fat(1) e depois desce devolvendo 1, 2, 6, 24.
+- TEXTO: Agora uma recursão que **ramifica**: fib(3) chama fib(2) e fib(1). O desenho de TODAS as chamadas forma a **árvore de ativação**.
+- CÓDIGO (Árvore de ativação de fib(3): 6 ativações no total (com main)):
+```
+          main
+           |
+         fib(3)
+        /      \
+    fib(2)    fib(1)
+    /    \
+fib(1)  fib(0)
+```
+- WIDGET CALL_STACK entrada=«fib3» legenda: Repare: em cada instante, a pilha é o CAMINHO da raiz até o nó que está executando.
+- PREVEJA: Em fib(3), no instante em que fib(0) executa, quem está na pilha?
+    opções: main, fib(3), fib(2), fib(1), fib(0) | ✔main, fib(3), fib(2), fib(0) | Só fib(0)
+    explicação: O fib(1) da esquerda já terminou e saiu. A pilha guarda só os ancestrais vivos: main → fib(3) → fib(2) → fib(0). Altura máxima de fib3: 4.
+- CAIXA [Poder do cérebro]: A árvore de ativação conta a história inteira; a pilha mostra só o 'agora'. Percorrer a árvore em profundidade (desce = chama, sobe = retorna) é exatamente o que a pilha faz.
+
+#### ESTILO WORKED (Exemplo resolvido): "fat(3) na mão: e em MIPS"
+- PROF: Exercício clássico: rode fat(3) à mão, mostrando a pilha de registros de ativação e os valores devolvidos.
+- CÓDIGO (O programa):
+```
+1 int fat(int n) {
+2   if (n <= 1) return 1;
+3   return n * fat(n - 1);
+4 }
+5 int main() {
+6   return fat(3);
+7 }
+```
+- PASSOS (Resolvido, chamada por chamada):
+    · 1. main chama fat(3): quadro {n=3, volta para: main, linha 6}
+    · 2. 3 > 1, então fat(3) precisa de fat(2): quadro {n=2, volta para: fat, linha 3}
+    · 3. fat(2) chama fat(1): quadro {n=1, volta para: fat, linha 3}. Pilha: main, fat(3), fat(2), fat(1) — 4 quadros
+    · 4. fat(1) cai no caso base, devolve 1 e o seu quadro é desempilhado
+    · 5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai
+    · 6. fat(3) retoma: 3 * 2 = 6; devolve 6 e sai
+    · 7. main recebe 6
+- TEXTO: Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.
+- TEXTO: Antes do programa inteiro, as quatro peças novas, uma de cada vez.
+- CÓDIGO ($sp: o topo da pilha):
+```
+addi $sp, $sp, -8  # abre 8 bytes
+```
+- TEXTO: `$sp` (stack pointer, ponteiro da pilha) guarda o endereço do topo da pilha. No MIPS, a pilha cresce para endereços menores: subtrair 8 do `$sp` abre 8 bytes, duas palavras de 4 bytes. Somar 8 fecha esse espaço.
+- CÓDIGO (4($sp): o deslocamento):
+```
+sw $ra, 4($sp)  # em $sp + 4
+sw $a0, 0($sp)  # em $sp + 0
+```
+- TEXTO: `4($sp)` quer dizer: o endereço que está em `$sp`, mais 4. O número antes do parêntese é o deslocamento, em bytes. `0($sp)` é a primeira palavra do quadro, e `4($sp)` é a segunda. `sw` grava um registrador nesse endereço, e `lw` lê de volta.
+- PREVEJA: Se `$sp` vale 1000, em que endereço `sw $ra, 4($sp)` grava?
+    opções: 4 | 996 | 1000 | ✔1004
+    explicação: 1004: o endereço do `$sp` mais o deslocamento 4. O `$sp` não muda; quem muda o `$sp` é o `addi`.
+- CÓDIGO (jal: chamar a função):
+```
+jal fat         # $ra = linha de baixo
+move $a0, $v0   # a volta é aqui
+```
+- TEXTO: `jal` (jump and link, pular e ligar) faz duas coisas: pula para o rótulo `fat` e guarda em `$ra` o endereço da instrução logo abaixo do `jal`. É por ali que o programa continua quando `fat` terminar.
+- CÓDIGO ($ra: o endereço de volta):
+```
+jr $ra  # pula para o endereço em $ra
+```
+- TEXTO: `$ra` (return address, endereço de retorno) é o registrador da volta. `jr $ra` pula para esse endereço: é o `return` do C. Cada `jal` escreve por cima do `$ra`. Por isso, uma função que chama outra guarda o seu `$ra` na pilha antes, com `sw $ra, 4($sp)`.
+- PREVEJA: Dentro de `fat(3)`, o `jal fat` da recursão acabou de rodar. O que está no `$ra` agora?
+    opções: A volta para o `main` | ✔A volta para a linha logo depois desse `jal`, dentro de `fat` | Zero, porque a função ainda não terminou
+    explicação: A linha depois desse `jal`, dentro de `fat`. A volta para o `main` foi apagada, e só não se perdeu porque estava guardada em `4($sp)`. No fim, `lw $ra, 4($sp)` a traz de volta antes do `jr $ra`.
+- CÓDIGO (fat.asm: prólogo abre o quadro, epílogo fecha):
+```
+        .text
+main:   li   $a0, 3            # argumento: n = 3
+        jal  fat               # chama fat; $ra = endereço da linha de baixo
+        move $a0, $v0          # o resultado chega em $v0
+        li   $v0, 1            # syscall 1: imprimir inteiro
+        syscall                # imprime 6
+        li   $v0, 10           # syscall 10: encerrar
+        syscall
+
+fat:    addi $sp, $sp, -8      # PRÓLOGO: abre o quadro (2 palavras)
+        sw   $ra, 4($sp)       # guarda o endereço de retorno
+        sw   $a0, 0($sp)       # guarda n
+        slti $t0, $a0, 2       # $t0 = (n < 2)
+        beq  $t0, $zero, REC   # n >= 2? vai para a recursão
+        li   $v0, 1            # caso base: devolve 1
+        addi $sp, $sp, 8       # fecha o quadro
+        jr   $ra
+REC:    addi $a0, $a0, -1      # argumento n - 1
+        jal  fat               # $v0 = fat(n - 1)
+        lw   $a0, 0($sp)       # recupera o SEU n
+        lw   $ra, 4($sp)       # recupera o SEU endereço de retorno
+        addi $sp, $sp, 8       # EPÍLOGO: fecha o quadro
+        mul  $v0, $a0, $v0     # n * fat(n - 1)
+        jr   $ra               # volta para quem chamou
+```
+- PASSOS (Quem faz o quê na chamada):
+    · **Chamador:** põe o argumento em `$a0` e executa `jal fat` (que guarda o endereço de volta em `$ra`)
+    · **Chamado, na entrada (prólogo):** `addi $sp, $sp, -8` abre o quadro; salva `$ra` e `$a0` nele
+    · **Chamado, na saída (epílogo):** põe o resultado em `$v0`, restaura `$ra`, `addi $sp, $sp, 8` fecha o quadro e `jr $ra` volta
+    · **Chamador, depois:** usa o valor que chegou em `$v0`
+- BYTE: Deixa eu tentar um sozinho? Acho que eu consigo.
+- CÓDIGO (Sua vez: main chama f(2)):
+```
+1 int h(int a) {
+2   return a + 1;
+3 }
+4 int g(int b) {
+5   return h(b * 2);
+6 }
+7 int f(int c) {
+8   return g(c) + h(c);
+9 }
+10 int main() {
+11  return f(2);
+12 }
+```
+- REVELAR: Qual a pilha no ponto mais alto?
+    → [main, f(c=2), g(b=2), h(a=4)], 4 quadros. h recebeu 4 porque g passou b * 2.
+- REVELAR: Que valor cada chamada devolve?
+    → h(4) = 5; g(2) = 5; depois f chama h(2) = 3; f devolve 5 + 3 = 8; main devolve 8.
+- REVELAR: Para onde volta o SEGUNDO h, o h(2)?
+    → Para f, na linha 8 (a soma). Esse endereço de retorno está no quadro dele, não é o do primeiro h, que voltava para g, linha 5.
+- WIDGET CALL_STACK entrada=«chain2» legenda: Confira as suas três respostas.
+- CAIXA [Cuidado!]: Esqueceu de salvar `$ra` antes do `jal` interno? A chamada recursiva sobrescreve `$ra`, e o `jr $ra` final volta para o lugar errado — o programa entra em laço. Função que chama outra SEMPRE salva `$ra` na pilha.
+- CAIXA [Dica de prova]: Na prova, desenhe a pilha como uma coluna de caixas, uma por chamada, com os parâmetros e o 'volta para'. Risque (não apague) as caixas que saem: o professor quer ver a ordem.
+
+#### ESTILO SOCRATIC (Perguntas guiadas): "Por que uma PILHA?"
+- PROF: Vamos reinventar o ambiente de execução só com perguntas. Responda de cabeça antes de tocar, errar aqui é parte do método.
+- REVELAR: Ideia mais simples: cada variável de cada função ganha um endereço fixo (alocação estática). O que dá errado com fat(3)?
+    → Só existe UM n para a função fat. Quando fat(2) escreve n=2, destrói o n=3 que fat(3) ainda vai usar na volta. Alocação estática não suporta recursão (o FORTRAN antigo nem permitia recursão por isso).
+- REVELAR: Então cada CHAMADA precisa da sua própria cópia de n. Em que ordem essas cópias nascem e morrem?
+    → A última chamada a começar é a primeira a terminar (LIFO): fat(1) nasce por último e morre primeiro. Esse é exatamente o comportamento de uma pilha.
+- BYTE: Tá, mas além do n, o que mais o quadro precisa guardar?
+- REVELAR: Quando fat(1) termina, como a máquina sabe para onde voltar?
+    → Ela guardou o **endereço de retorno** na hora da chamada. No MIPS, `jal` coloca esse endereço em `$ra`; como a próxima chamada sobrescreveria `$ra`, ele é salvo no quadro.
+- REVELAR: E como devolver o resultado e voltar a usar o quadro de quem chamou?
+    → O resultado vai num lugar combinado (no MIPS, `$v0`). Para reencontrar o quadro anterior, guarda-se o **vínculo de controle** (link dinâmico), um ponteiro para o quadro do chamador — ou, no MIPS simples, basta desfazer o `$sp`.
+- PREVEJA: Quem deve ABRIR o espaço das variáveis LOCAIS de uma função?
+    opções: O chamador, porque ele sabe quantos parâmetros passa | ✔O chamado, porque só ele sabe quantas locais e temporários tem | O sistema operacional
+    explicação: O tamanho das locais é 'segredo' do chamado (o chamador pode até ter sido compilado antes). Regra geral: o chamador cuida do que conhece (parâmetros, endereço de retorno); o chamado cuida do resto.
+- REVELAR: Uma função cria uma lista e a devolve para quem chamou. A lista pode morar no quadro dela?
+    → Não! O quadro é desempilhado no retorno, e quem chamou ficaria com um ponteiro para lixo (ponteiro pendente). Coisas que precisam sobreviver à chamada vão para o **heap**.
+- REVELAR: Recursão infinita: o que acontece com a pilha?
+    → Cada chamada empilha um quadro e nenhuma sai. A pilha cresce até invadir uma área proibida: **estouro de pilha** (stack overflow).
+- BYTE: E passar parâmetro por referência? Muda alguma coisa no quadro?
+- REVELAR: Em swap(x, y) por VALOR, o que vai para o quadro? E por REFERÊNCIA?
+    → Por valor: CÓPIAS de x e y, trocar as cópias não muda nada lá fora. Por referência: os ENDEREÇOS de x e y, o chamado escreve direto nas variáveis do chamador, e a troca acontece de verdade.
+- WIDGET CALL_STACK entrada=«fib3» legenda: Teste: antes de cada passo, preveja se a pilha sobe ou desce.
+- CAIXA [Poder do cérebro]: Repare no que você acabou de deduzir: pilha (por causa do LIFO), endereço de retorno, vínculo de controle, heap e passagem de parâmetros. É isso que o capítulo 7 do Livro do Dragão formaliza. Você não é 'burro': você acabou de reinventar um ambiente de execução.
+
+#### ESTILO FORMAL (Definição de prova): "Organização da memória e registros de ativação"
+- TEXTO: **Ambiente de execução** (*run-time environment*): o conjunto de estruturas que o código gerado usa para rodar, organização da memória, registros de ativação, sequências de chamada e passagem de parâmetros.
+- CÓDIGO (Subdivisão típica da memória em tempo de execução (Livro do Dragão, seção 7.1)):
+```
+endereços altos
++----------------------+
+|        PILHA         |  topo em $sp; cresce para BAIXO
+|          v           |
+|                      |
+|          ^           |
+|         HEAP         |  cresce para CIMA (new, malloc)
++----------------------+
+|  ESTÁTICO  (.data)   |  globais e constantes; tamanho fixo
++----------------------+
+|  CÓDIGO    (.text)   |  as instruções do programa
++----------------------+
+endereços baixos
+```
+- CÓDIGO (Registro de ativação (quadro): campos típicos (seção 7.2.2)):
+```
++--------------------------------+
+| parâmetros reais               |  preenchidos pelo CHAMADOR
+| valor de retorno               |
+| vínculo de controle (dinâmico) |  -> quadro do chamador
+| vínculo de acesso (estático)   |  -> quadro do escopo envolvente
+| estado salvo da máquina        |  endereço de retorno, registradores
+| dados locais                   |  preenchidos pelo CHAMADO
+| temporários                    |
++--------------------------------+
+```
+- PASSOS (Sequência de chamada e de retorno):
+    · **Chamador:** avalia os parâmetros reais e os coloca onde o chamado espera (no quadro, ou em `$a0`–`$a3`)
+    · **Chamador:** registra o endereço de retorno e o vínculo de controle; desvia para o chamado (`jal`)
+    · **Chamado (prólogo):** aloca o quadro (`$sp` -= tamanho), salva registradores (incluindo `$ra`) e inicializa as locais
+    · **Chamado (retorno):** põe o valor de retorno no lugar combinado (`$v0`), restaura registradores e `$sp`, desvia para o endereço de retorno (`jr $ra`)
+    · **Chamador:** recupera o valor devolvido e continua
+- TEXTO: **Árvore de ativação:** cada nó é uma ativação; os filhos de um nó são as ativações que ele chamou, da esquerda para a direita, na ordem das chamadas. **Propriedade:** a pilha de controle, num dado instante, contém exatamente o caminho da raiz até o nó em execução.
+- PASSOS (Três estratégias de alocação):
+    · **Estática:** endereço fixo em tempo de compilação; não permite recursão nem tamanho dinâmico (globais; FORTRAN 77)
+    · **Em pilha:** um quadro por ativação, LIFO; permite recursão; o quadro morre no retorno (locais em C e Java)
+    · **Em heap:** blocos com tempo de vida arbitrário; liberação manual (`free`) ou por coleta de lixo
+- CÓDIGO (Convenção de chamada do MIPS):
+```
+$a0–$a3   argumentos           $v0–$v1  valores de retorno
+$ra       endereço de retorno  $sp      topo da pilha
+$fp       base do quadro atual (opcional)
+$t0–$t9   temporários: o CHAMADOR salva se precisar deles depois
+$s0–$s7   salvos: o CHAMADO salva antes de usar
+
+PC        contador de programa: o endereço da instrução que roda agora
+
+jal f     # $ra := PC + 4 (a instrução de baixo);  PC := f
+jr  $ra   # PC := $ra
+```
+- PREVEJA: Qual vínculo aponta para o quadro de QUEM CHAMOU a função?
+    opções: Vínculo de acesso (estático) | ✔Vínculo de controle (dinâmico) | Endereço de retorno
+    explicação: Controle/dinâmico = cadeia de CHAMADAS. Acesso/estático = cadeia de ANINHAMENTO no texto (útil em linguagens com funções aninhadas, como Pascal). O endereço de retorno aponta para uma INSTRUÇÃO, não para um quadro.
+- WIDGET CALL_STACK entrada=«fat3» legenda: A definição em ação: 4 ativações simultâneas no pico (main + 3 de fat).
+- CAIXA [Dica de prova]: Questão clássica: 'desenhe o registro de ativação e diga quem preenche cada campo'. Parâmetros, valor de retorno (espaço) e endereço de retorno: o chamador. Locais, temporários e registradores salvos: o chamado. Liste de cima para baixo nessa ordem.
+- CAIXA [Cuidado!]: Endereço de retorno ≠ vínculo de controle. O primeiro diz para qual INSTRUÇÃO voltar; o segundo, qual QUADRO volta a ser o atual.
+
+#### ESTILO MNEMONIC (Truque de memória): "O prédio da memória e o café da manhã do quadro"
+- NARRADOR: Palácio da Memória: Forja do Código, penúltima sala. Um prédio de quatro andares; do telhado, uma pilha de caixas desce sozinha.
+- CAIXA [Gancho de memória]: **O prédio, de baixo para cima: C-E-H-P (leia 'CEP', o endereço de tudo).** **C**ódigo no térreo, **E**stático no 1º andar, **H**eap subindo do 2º, **P**ilha descendo do telhado.
+- CAIXA [Gancho de memória]: **'Heap sobe, pilha desce; se os dois se encontram, o prédio cai.'** É o estouro de memória.
+- CAIXA [Gancho de memória]: **Controle Chama, Acesso Aninha.** Vínculo de **c**ontrole → quem me **c**hamou (cadeia dinâmica). Vínculo de **a**cesso → onde estou **a**ninhado no texto (cadeia estática).
+- CAIXA [Gancho de memória]: **O café da manhã do quadro: Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada** → **P**arâmetros, **V**alor de retorno, vínculo de **C**ontrole, vínculo de **A**cesso, **E**stado salvo (endereço de retorno), **L**ocais, **T**emporários.
+- CAIXA [Gancho de memória]: **jal = Jump And Link**: pula e deixa um bilhete de volta em `$ra` (**r**eturn **a**ddress). **jr $ra = Jump Register**: volta seguindo o bilhete.
+- BYTE: E pra lembrar quem faz o quê na chamada? Eu sempre troco.
+- PROF: Recepção de hotel! O **hóspede** (chamador) chega com a bagagem e diz quando volta para casa: parâmetros e endereço de retorno. O **hotel** (chamado) arruma o quarto e o frigobar: locais e registradores salvos. Na saída, o hotel entrega a conta (valor de retorno) e libera o quarto.
+- PREVEJA: Em main → f → g → h (h chamado por g), pelo gancho 'Controle Chama', o vínculo de controle de h aponta para o quadro de...
+    opções: main | f | ✔g | h
+    explicação: Controle = quem CHAMOU. Quem chamou h foi g. (E quando f chama h direto, o vínculo de controle desse OUTRO quadro de h aponta para f.)
+- WIDGET CALL_STACK entrada=«chain1» legenda: Suba e desça o prédio: cada andar da pilha é um quadro.
+- REVELAR: Recite os 7 campos do quadro pelo café da manhã.
+    → Pão, Vitamina, Café, Açúcar, Esfirra, Leite, Torrada → parâmetros, valor de retorno, vínculo de controle, vínculo de acesso, estado salvo (endereço de retorno), locais, temporários.
+- CAIXA [Conversa ao pé da lareira]: Pilha: 'Eu sou rápida e organizada: entrou, saiu, tudo limpinho.' Heap: 'E eu sou flexível: guardo o que você quiser pelo tempo que quiser.' Pilha: 'E esquece de devolver...' Heap: 'Por isso inventaram o coletor de lixo!'
+
+
 ## ASSUNTO REG_ALLOC: Alocação de registradores
 
 #### ESTILO STORY (História / Analogia): "Poucas bancadas na cozinha"
@@ -868,12 +900,12 @@ Lfim:
 - PROF: Isso. E o chef novo faz uma burrice: termina o molho, LEVA para a despensa, e cinco minutos depois desce de novo para BUSCAR o mesmo molho. É o código ingênuo: `sw` seguido de `lw` do mesmo temporário.
 - PROF: O chef experiente pensa diferente: 'O molho vai ser usado logo, fica numa bancada. Quando o molho for usado pela última vez, a bancada fica LIVRE para outra preparação.'
 - PASSOS (Cozinha → alocação de registradores):
-    1) Cada preparação intermediária (molho, massa) é um **temporário** (t1, t2, ...).
-    2) Cada bancada é um **registrador**. Só há k bancadas.
-    3) Do momento em que a preparação fica pronta até seu ÚLTIMO uso, ela está **viva** e ocupa uma bancada: esse é o seu **intervalo de vida**.
-    4) Duas preparações vivas AO MESMO TEMPO não podem dividir bancada: elas **interferem**.
-    5) Dar uma bancada a cada preparação, sem que vizinhas briguem, é **colorir um grafo**: cada cor é um registrador.
-    6) Se não houver bancadas suficientes, alguma preparação desce para a despensa e é buscada de novo quando precisar: é o **spill** (derramamento).
+    · Cada preparação intermediária (molho, massa) é um **temporário** (t1, t2, ...).
+    · Cada bancada é um **registrador**. Só há k bancadas.
+    · Do momento em que a preparação fica pronta até seu ÚLTIMO uso, ela está **viva** e ocupa uma bancada: esse é o seu **intervalo de vida**.
+    · Duas preparações vivas AO MESMO TEMPO não podem dividir bancada: elas **interferem**.
+    · Dar uma bancada a cada preparação, sem que vizinhas briguem, é **colorir um grafo**: cada cor é um registrador.
+    · Se não houver bancadas suficientes, alguma preparação desce para a despensa e é buscada de novo quando precisar: é o **spill** (derramamento).
 - CAIXA [No mundo real]: É o mesmo problema de pintar o mapa do Brasil: estados que fazem fronteira não podem ter a mesma cor. Na alocação, a 'fronteira' é estar vivo ao mesmo tempo. Quatro cores bastam para qualquer mapa plano, mas o grafo de um programa não é um mapa: às vezes precisa de mais.
 - PREVEJA: Em r = a * b + c * d: t1 = a * b fica pronto; depois t2 = c * d; depois t3 = t1 + t2. Quais temporários precisam de bancadas diferentes?
     opções: ✔t1 e t2 | t1 e t3 | t2 e t3 | Todos os três
@@ -930,18 +962,18 @@ Arestas (quem é definido × quem está vivo DEPOIS):
 Triângulo t1-t2-t3 ⇒ precisa de 3 cores (χ = 3)
 ```
 - PASSOS (Como a tabela foi preenchida):
-    1) Comece no FIM: depois da última instrução, nada está vivo (out = { }). As variáveis a..d e r ficam na memória, então só contamos temporários.
-    2) i=5 (r = t5): usa t5 → in = {t5}.
-    3) i=4 (t5 = t1 + t4): out = {t5}; tira o def t5 e põe os usos t1, t4 → in = {t1, t4}.
-    4) i=3 (t4 = t2 + t3): out = {t1, t4}; tira t4, põe t2, t3 → in = {t1, t2, t3}.
-    5) i=2 (t3 = a * c): out = {t1, t2, t3}; tira t3 → in = {t1, t2}. Aqui há 3 vivos juntos: o pico.
-    6) Arestas: em cada instrução, o temporário DEFINIDO liga-se a todos os outros do out. Isso dá t2—t1, t3—t1, t3—t2, t4—t1.
+    · Comece no FIM: depois da última instrução, nada está vivo (out = { }). As variáveis a..d e r ficam na memória, então só contamos temporários.
+    · i=5 (r = t5): usa t5 → in = {t5}.
+    · i=4 (t5 = t1 + t4): out = {t5}; tira o def t5 e põe os usos t1, t4 → in = {t1, t4}.
+    · i=3 (t4 = t2 + t3): out = {t1, t4}; tira t4, põe t2, t3 → in = {t1, t2, t3}.
+    · i=2 (t3 = a * c): out = {t1, t2, t3}; tira t3 → in = {t1, t2}. Aqui há 3 vivos juntos: o pico.
+    · Arestas: em cada instrução, o temporário DEFINIDO liga-se a todos os outros do out. Isso dá t2—t1, t3—t1, t3—t2, t4—t1.
 - PASSOS (Chaitin com k = 3 (simplificar, empilhar, colorir)):
-    1) Graus: t1 = 3, t2 = 2, t3 = 2, t4 = 1, t5 = 0. Só tira quem tem grau < 3.
-    2) Tira t2 (grau 2) → empilha. Agora t1 tem grau 2: tira t1. Depois t3, t4, t5 (graus 0).
-    3) Pilha (topo primeiro): t5, t4, t3, t1, t2.
-    4) Desempilha e dá a menor cor livre: t5 → 0, t4 → 0, t3 → 0, t1 → 1 (vizinhos t3, t4 têm 0), t2 → 2 (vizinhos t1 = 1, t3 = 0).
-    5) Resultado: $s0 = {t3, t4, t5}, $s1 = t1, $s2 = t2. Nenhum spill.
+    · Graus: t1 = 3, t2 = 2, t3 = 2, t4 = 1, t5 = 0. Só tira quem tem grau < 3.
+    · Tira t2 (grau 2) → empilha. Agora t1 tem grau 2: tira t1. Depois t3, t4, t5 (graus 0).
+    · Pilha (topo primeiro): t5, t4, t3, t1, t2.
+    · Desempilha e dá a menor cor livre: t5 → 0, t4 → 0, t3 → 0, t1 → 1 (vizinhos t3, t4 têm 0), t2 → 2 (vizinhos t1 = 1, t3 = 0).
+    · Resultado: $s0 = {t3, t4, t5}, $s1 = t1, $s2 = t2. Nenhum spill.
 - WIDGET REGALLOC entrada=«a * b + ( c * d + a * c )» legenda: Confira os vivos, o grafo, χ = 3 e o MIPS. Acessos à memória: 17 no ingênuo, 7 alocado.
 - CAIXA [Cuidado!]: Erro clássico: fazer a vivacidade de CIMA para BAIXO. Não dá: para saber se t1 está vivo agora, você precisa saber se ele será usado DEPOIS. A informação vem do futuro, então a análise anda para trás.
 - TEXTO: Agora é com você (exemplo esmaecido): **r = ( a + b ) * ( c - d )**. TAC: t1 = a + b; t2 = c - d; t3 = t1 * t2; r = t3.

@@ -46,4 +46,24 @@
     <string name="rt_l_q1">fat of two is about to call fat of one. While fat of one runs, how many fat records are on the stack? Tap it.</string>
     <string name="rt_l_q1_dica">fat of two has not finished yet.</string>
     <string name="rt_l_q1_ok">Two. The record of fat of two is still there, waiting for the return.</string>
+    <!-- Prática "Torne LL(1)": tirar a recursão, depois fatorar. -->
+    <string name="tll_titulo">Make it LL(1)</string>
+    <string name="tll_01">This grammar has both defects from the Bridge. The Temple parser chokes on it. Let us fix it in the textbook order.</string>
+    <string name="tll_02">First the recursion. Which line starts with its own nonterminal? Tap it.</string>
+    <string name="tll_02_dica">Look for the rule whose right side starts with the same name as the left side.</string>
+    <string name="tll_02_ok">The L line. L goes to L semicolon C starts with L itself.</string>
+    <string name="tll_passo1">1. no left recursion</string>
+    <string name="tll_03">L now goes to C and L prime. L prime repeats semicolon C, or vanishes. The sentences are the same.</string>
+    <string name="tll_04">Now the common prefix. Which line has two rules with the same start? Tap it.</string>
+    <string name="tll_04_dica">Look at the first symbol of each rule, line by line.</string>
+    <string name="tll_04_ok">The C line. Both rules start with id.</string>
+    <string name="tll_passo2">2. factored</string>
+    <string name="tll_05">Factored: C goes to id and C prime. C prime gets the rest of each rule: the equals with E, or the parentheses.</string>
+    <string name="tll_06">How many cells of the LL(1) table for this grammar get two rules? Tap it.</string>
+    <string name="tll_06_dica">With no recursion and no repeated start, the parser always picks by the next token.</string>
+    <string name="tll_06_ok">None. The grammar is now LL(1).</string>
+    <string name="tll_nenhuma">none</string>
+    <string name="tll_uma">one</string>
+    <string name="tll_duas">two</string>
+    <string name="tll_07">First remove the recursion, then factor. In the exam, show both grammars and say which defect each step fixed.</string>
 </resources>

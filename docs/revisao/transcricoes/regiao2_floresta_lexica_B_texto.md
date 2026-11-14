@@ -8,9 +8,9 @@
 - LEXI: Bip! 'Guaraná 2L'. Bip! 'Pão francês'. Bip! 'Guaraná lata'. Pra mim, cada produto vai para uma CATEGORIA no cupom fiscal.
 - PROF: Repare em três coisas diferentes: o produto concreto na mão dela, a categoria impressa no cupom e a regra que diz qual produto vai em qual categoria.
 - PASSOS (Supermercado → compilador):
-    1) O produto concreto ('Guaraná 2L') → **lexema**: o pedaço de texto real do programa, como `contador` ou `42`.
-    2) A categoria no cupom (BEBIDA) → **token**: o nome da classe, como `id` ou `num`.
-    3) A regra ('todo líquido engarrafado é BEBIDA') → **padrão**: a descrição de quais lexemas pertencem ao token, como 'letra seguida de letras ou dígitos'.
+    · O produto concreto ('Guaraná 2L') → **lexema**: o pedaço de texto real do programa, como `contador` ou `42`.
+    · A categoria no cupom (BEBIDA) → **token**: o nome da classe, como `id` ou `num`.
+    · A regra ('todo líquido engarrafado é BEBIDA') → **padrão**: a descrição de quais lexemas pertencem ao token, como 'letra seguida de letras ou dígitos'.
 - BYTE: Então 'Guaraná 2L' e 'Guaraná lata' são lexemas diferentes do MESMO token?
 - PROF: Exatamente! Como `x` e `total`: lexemas diferentes, mesmo token `id`.
 - TEXTO: Mas no cupom a categoria sozinha não basta: precisa saber QUAL bebida foi. Por isso o token carrega um **atributo**: ⟨id, ponteiro para `total` na tabela de símbolos⟩.
@@ -51,16 +51,16 @@
 if (x >= 10) total += x;
 ```
 - PASSOS (Resolvido):
-    1) `if` → palavra-chave **if**. Também casa com id, mas palavra reservada vence. Sem atributo.
-    2) `(` → delimitador **(**.
-    3) `x` → **id**, atributo: ponteiro para x na tabela de símbolos.
-    4) `>=` → **relop**, atributo GE. Maior casamento: não é `>` + `=`.
-    5) `10` → **num**, atributo: o valor 10.
-    6) `)` → delimitador **)**.
-    7) `total` → **id**, ponteiro para total.
-    8) `+=` → operador de atribuição composta **+=**.
-    9) `x` → **id**, o MESMO ponteiro do primeiro x.
-    10) `;` → delimitador **;**. Total: 10 tokens.
+    · `if` → palavra-chave **if**. Também casa com id, mas palavra reservada vence. Sem atributo.
+    · `(` → delimitador **(**.
+    · `x` → **id**, atributo: ponteiro para x na tabela de símbolos.
+    · `>=` → **relop**, atributo GE. Maior casamento: não é `>` + `=`.
+    · `10` → **num**, atributo: o valor 10.
+    · `)` → delimitador **)**.
+    · `total` → **id**, ponteiro para total.
+    · `+=` → operador de atribuição composta **+=**.
+    · `x` → **id**, o MESMO ponteiro do primeiro x.
+    · `;` → delimitador **;**. Total: 10 tokens.
 - WIDGET TOKENIZE entrada=«if (x >= 10) total += x;» legenda: Confira com a Lexi.
 - CAIXA [Cuidado!]: Os dois `x` geram dois TOKENS, mas a tabela de símbolos tem UMA só entrada para x. Token se repete; entrada na tabela, não.
 - TEXTO: Sua vez (exemplo esmaecido): `while (i <= n1) i++;`
@@ -160,10 +160,10 @@ função getNextToken():
 - PROF: Aí é um **AFN** (não determinístico): um trem mágico que se divide e segue TODOS os caminhos ao mesmo tempo, como num multiverso. E ainda tem trilhos ε, que ele pega sem ler letra nenhuma.
 - CAIXA [Conversa ao pé da lareira]: AFN: 'Eu sou fácil de construir a partir da expressão regular!' AFD: 'Mas eu sou rápido: um passo por letra, sem dúvida nenhuma.' Os dois reconhecem exatamente as mesmas linguagens: as regulares.
 - PASSOS (A fábrica de trens):
-    1) **Expressão regular**: o desenho do trajeto, como `(a|b)*abb`.
-    2) **Construção de Thompson**: transforma a ER num AFN, peça por peça (união, concatenação, fecho).
-    3) **Construção de subconjuntos**: cada estação do AFD é um CESTO de estações do AFN onde o trem mágico poderia estar.
-    4) **Minimização**: junta estações que se comportam igual. O AFD de `(a|b)*abb` fica com 4 estados.
+    · **Expressão regular**: o desenho do trajeto, como `(a|b)*abb`.
+    · **Construção de Thompson**: transforma a ER num AFN, peça por peça (união, concatenação, fecho).
+    · **Construção de subconjuntos**: cada estação do AFD é um CESTO de estações do AFN onde o trem mágico poderia estar.
+    · **Minimização**: junta estações que se comportam igual. O AFD de `(a|b)*abb` fica com 4 estados.
 - PREVEJA: Um AFN com 3 estados vira um AFD com, NO MÁXIMO, quantos estados?
     opções: 3 | 6 | ✔8 | 9
     explicação: Cada estado do AFD é um SUBCONJUNTO dos estados do AFN: 2³ = 8 subconjuntos possíveis. Na prática, quase sempre são bem menos.
@@ -199,13 +199,13 @@ estados: 0 (inicial), 1, 2 (final)
 ```
 - TEXTO: Regra do jogo: cada estado do AFD é um **conjunto** de estados do AFN, e Dtran[T, x] = ε-fecho(move(T, x)). Este AFN não tem transições ε, então o ε-fecho não acrescenta nada.
 - PASSOS (Resolvido):
-    1) Início: A = ε-fecho({0}) = {0}.
-    2) A com a: move({0}, a) = {0, 1} → novo estado **B**.
-    3) A com b: move({0}, b) = {0} → é o próprio **A**.
-    4) B com a: move({0, 1}, a) = {0, 1} → **B**.
-    5) B com b: move({0, 1}, b) = {0, 2} → novo estado **C**.
-    6) C com a: {0, 1} = **B**. C com b: {0} = **A**.
-    7) Finais: os conjuntos que contêm o estado 2 → só **C**. Pronto: AFD com 3 estados.
+    · Início: A = ε-fecho({0}) = {0}.
+    · A com a: move({0}, a) = {0, 1} → novo estado **B**.
+    · A com b: move({0}, b) = {0} → é o próprio **A**.
+    · B com a: move({0, 1}, a) = {0, 1} → **B**.
+    · B com b: move({0, 1}, b) = {0, 2} → novo estado **C**.
+    · C com a: {0, 1} = **B**. C com b: {0} = **A**.
+    · Finais: os conjuntos que contêm o estado 2 → só **C**. Pronto: AFD com 3 estados.
 - CÓDIGO (Tabela de transição do AFD (→ inicial, * final)):
 ```
       a    b
@@ -312,12 +312,12 @@ Construção de subconjuntos (AFN → AFD):
 - PROF: Um **AFN** faz diferente: ele não escolhe. A turma se DIVIDE e cada um vai para uma possibilidade. E tem os corredores livres, sem catraca: quem está num ponto pode atravessar de graça. Esses são os trilhos **ε**.
 - PROF: Agora o truque: em vez de acompanhar cada amigo, você só olha o **grupo do WhatsApp** e anota: 'neste momento a turma está em {1, 3, 4}'. Esse conjunto inteiro vira UM estado de um **AFD**.
 - PASSOS (Rodoviária → construção de subconjuntos):
-    1) Cada plataforma é um **estado do AFN**.
-    2) Corredor livre (sem ler letra nenhuma) é uma **transição ε**. Juntar todo mundo que dá para alcançar a pé é o **ε-fecho**.
-    3) Usar uma passagem com a letra 'a' é o **move(T, a)**: para onde cada amigo pode ir lendo 'a'.
-    4) A lista do grupo ('estamos em {0, 1}') é um **estado do AFD**: um CONJUNTO de estados do AFN.
-    5) Se ninguém da turma tem para onde ir, o grupo fica vazio: é o **estado morto ∅**.
-    6) Se pelo menos UM amigo chegou ao destino, a turma toda comemora: o conjunto é **final** se contém algum final do AFN.
+    · Cada plataforma é um **estado do AFN**.
+    · Corredor livre (sem ler letra nenhuma) é uma **transição ε**. Juntar todo mundo que dá para alcançar a pé é o **ε-fecho**.
+    · Usar uma passagem com a letra 'a' é o **move(T, a)**: para onde cada amigo pode ir lendo 'a'.
+    · A lista do grupo ('estamos em {0, 1}') é um **estado do AFD**: um CONJUNTO de estados do AFN.
+    · Se ninguém da turma tem para onde ir, o grupo fica vazio: é o **estado morto ∅**.
+    · Se pelo menos UM amigo chegou ao destino, a turma toda comemora: o conjunto é **final** se contém algum final do AFN.
 - BYTE: Então o AFD é só o diário do grupo: 'estávamos aqui, lemos tal letra, fomos parar ali'?
 - PROF: Exatamente. E como o diário é anotado ANTES da viagem, na hora de ler a entrada não existe mais dúvida: um passo por letra.
 - PREVEJA: No AFN de '(a|b)*ab' a turma começa em {0}. De 0, lendo 'a', dá para ficar em 0 ou ir para 1. Lendo 'a', onde a turma fica?
@@ -363,14 +363,14 @@ AFN de (ab | a)c: inicial 0, final 5
 ```
 - TEXTO: A receita tem um passo só, repetido: **Dtran[T, x] = ε-fecho(move(T, x))**. Primeiro anda com a letra (move), depois anda de graça pelos ε (fecho).
 - PASSOS (Resolvido):
-    1) Início: A = ε-fecho({0}) = {0}. Do 0 não sai nenhum ε.
-    2) A com a: move = {1, 3}. Fecho: 3 --ε--> 4, então **B = {1, 3, 4}**.
-    3) A com b e A com c: move = ∅ → estado morto.
-    4) B com b: move = {2}. Fecho: 2 --ε--> 4, então **C = {2, 4}**.
-    5) B com c: move = {5} → **D = {5}**. B com a: ∅.
-    6) C com c: move = {5} = D. C com a e com b: ∅.
-    7) D com qualquer letra: ∅. Nenhum estado novo: terminou!
-    8) Finais: quem contém o 5 → só **D**. AFD com 4 estados (sem contar o morto).
+    · Início: A = ε-fecho({0}) = {0}. Do 0 não sai nenhum ε.
+    · A com a: move = {1, 3}. Fecho: 3 --ε--> 4, então **B = {1, 3, 4}**.
+    · A com b e A com c: move = ∅ → estado morto.
+    · B com b: move = {2}. Fecho: 2 --ε--> 4, então **C = {2, 4}**.
+    · B com c: move = {5} → **D = {5}**. B com a: ∅.
+    · C com c: move = {5} = D. C com a e com b: ∅.
+    · D com qualquer letra: ∅. Nenhum estado novo: terminou!
+    · Finais: quem contém o 5 → só **D**. AFD com 4 estados (sem contar o morto).
 - CÓDIGO (Tabela Dtran (→ inicial, * final, ∅ = estado morto)):
 ```
         a    b    c
@@ -497,12 +497,12 @@ Dtran   a   b
 - BYTE: Ué, demite quem trabalha menos?
 - PROF: Não é bem isso. Ele faz um teste: dá a mesma sequência de pedidos para dois atendentes. Se, para QUALQUER sequência, os dois acabam do mesmo jeito (entregando o lanche ou não), eles são **intercambiáveis**. Dá para juntar os dois num cargo só.
 - PASSOS (Lanchonete → minimização de AFD):
-    1) Cada atendente é um **estado** do AFD.
-    2) Cada pedido do cliente ('a', 'b') é um **símbolo** da entrada: o atendente repassa você para alguém.
-    3) 'Entregar o lanche' no fim da fila de pedidos é terminar num **estado final**.
-    4) Dois atendentes que SEMPRE terminam igual são **equivalentes** (indistinguíveis).
-    5) Se existe UMA sequência de pedidos em que um entrega e o outro não, eles são **distinguíveis**.
-    6) Juntar todos os equivalentes dá o **AFD mínimo**: mesmo serviço, folha de pagamento menor.
+    · Cada atendente é um **estado** do AFD.
+    · Cada pedido do cliente ('a', 'b') é um **símbolo** da entrada: o atendente repassa você para alguém.
+    · 'Entregar o lanche' no fim da fila de pedidos é terminar num **estado final**.
+    · Dois atendentes que SEMPRE terminam igual são **equivalentes** (indistinguíveis).
+    · Se existe UMA sequência de pedidos em que um entrega e o outro não, eles são **distinguíveis**.
+    · Juntar todos os equivalentes dá o **AFD mínimo**: mesmo serviço, folha de pagamento menor.
 - LEXI: E na Floresta Léxica isso importa muito: meu analisador léxico é um AFD gigante. Menos estados = tabela menor = léxico mais leve.
 - PREVEJA: Atendente X entrega o lanche quando a fila de pedidos acaba nele; atendente Y nunca entrega. Eles podem ser equivalentes?
     opções: Sim, se repassarem os pedidos para as mesmas pessoas | ✔Não: com a fila VAZIA um entrega e o outro não | Depende do tamanho do alfabeto
@@ -524,10 +524,10 @@ Dtran   a   b
     explicação: A rodada 1 marca só final × não-final. Sobram final com final ({q0,q2}) e não-final com não-final ({q1,q3}). Como nenhuma rodada seguinte marca mais nada, eles se fundem: o AFD mínimo tem 2 estados (par / ímpar).
 - WIDGET MINIMIZE entrada=«0» legenda: O clássico do livro. Agora há 3 rodadas de marcação: veja o dominó caindo.
 - PASSOS (O que você acabou de ver no exemplo do livro):
-    1) Rodada 1: 4 pares marcados, todos com q4, o único final.
-    2) Rodada 2: {q0,q3}, {q1,q3} e {q2,q3}. Com 'b', cada um vai para um par que contém q4 e já estava marcado.
-    3) Rodada 3: {q0,q1} e {q1,q2}. Com 'b', vão para pares marcados na rodada 2.
-    4) Rodada 4: nada novo. Fim. 9 dos 10 pares marcados; só {q0,q2} sobrou.
+    · Rodada 1: 4 pares marcados, todos com q4, o único final.
+    · Rodada 2: {q0,q3}, {q1,q3} e {q2,q3}. Com 'b', cada um vai para um par que contém q4 e já estava marcado.
+    · Rodada 3: {q0,q1} e {q1,q2}. Com 'b', vão para pares marcados na rodada 2.
+    · Rodada 4: nada novo. Fim. 9 dos 10 pares marcados; só {q0,q2} sobrou.
 - LEXI: Agora um AFD que veio da construção de subconjuntos SEM estado morto. Olha o que o widget faz primeiro.
 - WIDGET MINIMIZE entrada=«5» legenda: a*b*: falta a transição de q2 com 'a'. O widget completa com o estado morto ∅ antes de montar a tabela.
 - PREVEJA: Em a*b*, q0, q1 e q2 são TODOS finais. Sem o estado morto, a rodada 1 não marcaria nada. O que o ∅ muda?
@@ -589,12 +589,12 @@ Rodada 4: nada mudou → PARE.
 Sobrou {q0,q2} sem marca → q0 ≡ q2 (A ≡ C no livro).
 ```
 - PASSOS (Os detalhes que valem ponto):
-    1) Rodada 1: marque TODA casa da linha/coluna de q4 (final × não-final).
-    2) Rodada 2: para cada casa vazia {p,q}, olhe {δ(p,a), δ(q,a)} e {δ(p,b), δ(q,b)}. Se algum destino é casa marcada, marque {p,q}.
-    3) Se os destinos são o MESMO estado (como {q1,q1}), esse símbolo não diz nada.
-    4) Na rodada 2, {q0,q1} vai com 'b' para {q2,q3}, que ainda estava vazio. Não marque ainda: anote e volte depois.
-    5) Rodada 3: {q2,q3} agora está marcado, então {q0,q1} e {q1,q2} caem.
-    6) Rodada 4: nenhuma casa nova. Pare. A casa vazia {q0,q2} diz: q0 ≡ q2.
+    · Rodada 1: marque TODA casa da linha/coluna de q4 (final × não-final).
+    · Rodada 2: para cada casa vazia {p,q}, olhe {δ(p,a), δ(q,a)} e {δ(p,b), δ(q,b)}. Se algum destino é casa marcada, marque {p,q}.
+    · Se os destinos são o MESMO estado (como {q1,q1}), esse símbolo não diz nada.
+    · Na rodada 2, {q0,q1} vai com 'b' para {q2,q3}, que ainda estava vazio. Não marque ainda: anote e volte depois.
+    · Rodada 3: {q2,q3} agora está marcado, então {q0,q1} e {q1,q2} caem.
+    · Rodada 4: nenhuma casa nova. Pare. A casa vazia {q0,q2} diz: q0 ≡ q2.
 - CÓDIGO (Funda q0 e q2. Cada classe vira um estado; a classe com o inicial é inicial; a com final é final.):
 ```
 AFD mínimo (4 estados)
@@ -671,10 +671,10 @@ MinimizaPorPartições(D):        // Moore; Hopcroft é a versão otimizada
     até Π não mudar
 ```
 - PASSOS (Partições no AFD do livro ((a|b)*abb)):
-    1) Π₀ = { {q0,q1,q2,q3}, {q4} }
-    2) Com 'b', q3 vai para {q4} e os outros ficam no grupo grande: Π₁ = { {q0,q1,q2}, {q3}, {q4} }
-    3) Com 'b', q1 vai para {q3} e q0, q2 vão para o grupo grande: Π₂ = { {q0,q2}, {q1}, {q3}, {q4} }
-    4) q0 e q2 têm destinos idênticos: Π não muda mais. Mesmo resultado da tabela: q0 ≡ q2.
+    · Π₀ = { {q0,q1,q2,q3}, {q4} }
+    · Com 'b', q3 vai para {q4} e os outros ficam no grupo grande: Π₁ = { {q0,q1,q2}, {q3}, {q4} }
+    · Com 'b', q1 vai para {q3} e q0, q2 vão para o grupo grande: Π₂ = { {q0,q2}, {q1}, {q3}, {q4} }
+    · q0 e q2 têm destinos idênticos: Π não muda mais. Mesmo resultado da tabela: q0 ≡ q2.
 - TEXTO: **Teorema (Myhill–Nerode)**: para cada linguagem regular existe um AFD com o número mínimo de estados, e ele é **único a menos de renomear os estados**. Por isso dois alunos que minimizam certo chegam ao mesmo autômato, só com nomes diferentes.
 - PREVEJA: Qual afirmação é FALSA?
     opções: O AFD mínimo é único a menos de nomes | A tabela e as partições dão o mesmo AFD mínimo | ✔Um par que ficou sem marca numa rodada nunca mais pode ser marcado | Estados inalcançáveis devem ser removidos antes
@@ -709,11 +709,11 @@ MinimizaPorPartições(D):        // Moore; Hopcroft é a versão otimizada
 - NARRADOR: Centro de triagem dos Correios, madrugada. Uma esteira infinita de caracteres passa na frente de um robô. A Lexi segura uma folha plastificada cheia de regras.
 - LEXI: Eu não separo nada na mão. Eu escrevo a FOLHA DE REGRAS, entrego para a fábrica, e a fábrica monta o robô que faz a triagem sozinho.
 - PASSOS (Correios → Lex/Flex):
-    1) A folha de regras ('pacote assim → carimbo tal') é o **arquivo .l**: cada linha é um **padrão** (expressão regular) e uma **ação** em C.
-    2) A fábrica que lê a folha e monta o robô é o programa **lex** (ou **flex**): ele gera o arquivo **lex.yy.c**.
-    3) O robô é a função **yylex()**: cada vez que alguém chama, ela pega o próximo pacote e devolve o carimbo.
-    4) O pacote que o robô pegou é o **lexema**: fica em **yytext**, e o tamanho dele em **yyleng**.
-    5) O carimbo é o **return TOKEN;** da ação. Ação vazia **{ }** é a lixeira: espaço e comentário somem.
+    · A folha de regras ('pacote assim → carimbo tal') é o **arquivo .l**: cada linha é um **padrão** (expressão regular) e uma **ação** em C.
+    · A fábrica que lê a folha e monta o robô é o programa **lex** (ou **flex**): ele gera o arquivo **lex.yy.c**.
+    · O robô é a função **yylex()**: cada vez que alguém chama, ela pega o próximo pacote e devolve o carimbo.
+    · O pacote que o robô pegou é o **lexema**: fica em **yytext**, e o tamanho dele em **yyleng**.
+    · O carimbo é o **return TOKEN;** da ação. Ação vazia **{ }** é a lixeira: espaço e comentário somem.
 - PROF: O robô obedece a DUAS regras de ouro. Primeira: ele é **guloso**: sempre pega o MAIOR pacote que alguma regra aceita. Segunda: se duas regras aceitam pacotes do mesmo tamanho, vence a que está **mais acima na folha**.
 - WIDGET FLEX gramática=«%% ⏎ [ \t\n]+                { } ⏎ "if"                    { return IF; } ⏎ "while"                 { return WHILE; } ⏎ [a-z][a-z0-9]*          { return ID; } ⏎ [0-9]+                  { return NUM; } ⏎ "=="                    { return EQ; } ⏎ "="                     { return ATRIB; } ⏎ "("                     { return ABRE; } ⏎ ")"                     { return FECHA; } ⏎ ";"                     { return PV; } ⏎ %%» entrada=«if (x1 == 10) y = 2;» legenda: Veja qual regra carimbou cada lexema. Edite a entrada e teste!
 - PREVEJA: Com essa folha ("if" acima da regra de identificador), o que vira 'iffy'?
@@ -790,21 +790,21 @@ int main(void) {
 }
 ```
 - PASSOS (Lendo o arquivo, parte por parte):
-    1) **%{ … %}**: código C copiado literalmente para o topo de lex.yy.c, includes, a enumeração dos tokens e o contador de linha.
-    2) **DIGITO [0-9]** e **LETRA [a-zA-Z_]**: definições nomeadas. Nas regras, usamos {DIGITO} e {LETRA} como apelidos.
-    3) Primeiro **%%**: começam as regras. Cada linha: padrão, espaço, ação entre chaves.
-    4) Espaços e comentários: ação sem return → são descartados. O **\n** só soma 1 em `linha`.
-    5) Palavras-chave ("int", "float", "if", "else") ANTES da regra de identificador: ganham o empate.
-    6) REAL antes de NUM por clareza (o maior casamento já resolveria). "<=" antes de "<", também por clareza.
-    7) A regra **.** por último: qualquer caractere que sobrou é erro léxico, com o número da linha.
-    8) Segundo **%%**: código C do usuário. **yywrap** devolvendo 1 avisa que não há outro arquivo; o **main** chama yylex() até ela devolver 0 (fim da entrada).
+    · **%{ … %}**: código C copiado literalmente para o topo de lex.yy.c, includes, a enumeração dos tokens e o contador de linha.
+    · **DIGITO [0-9]** e **LETRA [a-zA-Z_]**: definições nomeadas. Nas regras, usamos {DIGITO} e {LETRA} como apelidos.
+    · Primeiro **%%**: começam as regras. Cada linha: padrão, espaço, ação entre chaves.
+    · Espaços e comentários: ação sem return → são descartados. O **\n** só soma 1 em `linha`.
+    · Palavras-chave ("int", "float", "if", "else") ANTES da regra de identificador: ganham o empate.
+    · REAL antes de NUM por clareza (o maior casamento já resolveria). "<=" antes de "<", também por clareza.
+    · A regra **.** por último: qualquer caractere que sobrou é erro léxico, com o número da linha.
+    · Segundo **%%**: código C do usuário. **yywrap** devolvendo 1 avisa que não há outro arquivo; o **main** chama yylex() até ela devolver 0 (fim da entrada).
 - TEXTO: Agora vamos 'rodar de cabeça' a linha `float media = 3.14; // comentario`.
 - PASSOS (Resolvido: tokens da linha):
-    1) 'float' → empate entre "float" e ID (5 caracteres): vence "float", que vem antes → **FLOAT**.
-    2) ' ' → regra de espaços, ação vazia: nada.
-    3) 'media' → só ID casa → **ID**, yytext = "media", yyleng = 5.
-    4) '=' → **ATRIB**. '3.14' → REAL casa 4 caracteres, NUM só 1 → **REAL**.
-    5) ';' → **PV**. '// comentario' → "//".* engole até o fim da linha → nada.
+    · 'float' → empate entre "float" e ID (5 caracteres): vence "float", que vem antes → **FLOAT**.
+    · ' ' → regra de espaços, ação vazia: nada.
+    · 'media' → só ID casa → **ID**, yytext = "media", yyleng = 5.
+    · '=' → **ATRIB**. '3.14' → REAL casa 4 caracteres, NUM só 1 → **REAL**.
+    · ';' → **PV**. '// comentario' → "//".* engole até o fim da linha → nada.
 - WIDGET FLEX gramática=«%{ ⏎ #include "y.tab.h" ⏎ int linha = 1; ⏎ %} ⏎ %% ⏎ [ \t]+                  { } ⏎ \n                      { linha++; } ⏎ "//".*                  { } ⏎ "int"                   { return INT; } ⏎ "float"                 { return FLOAT; } ⏎ "if"                    { return IF; } ⏎ "else"                  { return ELSE; } ⏎ [a-zA-Z_][a-zA-Z0-9_]*  { yylval.nome = strdup(yytext); return ID; } ⏎ [0-9]+"."[0-9]+         { yylval.real = atof(yytext); return REAL; } ⏎ [0-9]+                  { yylval.inteiro = atoi(yytext); return NUM; } ⏎ "<="                    { return LE; } ⏎ "<"                     { return LT; } ⏎ "="                     { return ATRIB; } ⏎ "+"                     { return MAIS; } ⏎ ";"                     { return PV; } ⏎ "("                     { return ABRE; } ⏎ ")"                     { return FECHA; } ⏎ .                       { printf("Erro lexico na linha %d: '%s'\n", linha, yytext); } ⏎ %% ⏎ int yywrap(void) { return 1; }» entrada=«float media = 3.14; // comentario» legenda: Confira: FLOAT ID ATRIB REAL PV.
 - TEXTO: Sua vez (exemplo esmaecido), com o mesmo scanner.
 - REVELAR: Tokens de `intx = 3.5;`?
@@ -872,10 +872,10 @@ r1/r2      r1, se seguido de r2             abc/123
 ```
 - TEXTO: **Resolução de conflitos** (Dragão, 3.5.3): (1) prefira sempre o **prefixo mais longo** da entrada que casa com algum padrão; (2) se o prefixo mais longo casa com dois ou mais padrões, prefira o **listado primeiro**.
 - PASSOS (Interface do analisador gerado):
-    1) **yylex()**: devolve o código do próximo token; devolve 0 no fim da entrada.
-    2) **yytext**: ponteiro para o início do lexema reconhecido; **yyleng**: seu comprimento.
-    3) **yylval**: variável global com o valor de atributo do token, compartilhada com o analisador sintático (Yacc/Bison).
-    4) **yyin**: arquivo de entrada (padrão: stdin). **yywrap()**: chamada no fim do arquivo; devolver 1 significa 'acabou'.
+    · **yylex()**: devolve o código do próximo token; devolve 0 no fim da entrada.
+    · **yytext**: ponteiro para o início do lexema reconhecido; **yyleng**: seu comprimento.
+    · **yylval**: variável global com o valor de atributo do token, compartilhada com o analisador sintático (Yacc/Bison).
+    · **yyin**: arquivo de entrada (padrão: stdin). **yywrap()**: chamada no fim do arquivo; devolver 1 significa 'acabou'.
 - TEXTO: **Implementação**: o Lex constrói um AFN para cada padrão pᵢ, cria um novo estado inicial com transições ε para cada um, e converte o AFN combinado em AFD. Ao ler a entrada, o AFD segue até não haver transição; então recua até o último estado de aceitação visto. Se esse estado contém finais de vários padrões, vale o de menor índice.
 - PREVEJA: Com as regras `"if" {…}` e `[a-z]+ {…}` nessa ordem, a entrada 'ifa' produz:
     opções: o token de "if" e depois o lexema 'a' | ✔um único lexema 'ifa', da regra [a-z]+ | erro: conflito

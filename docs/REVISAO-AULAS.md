@@ -91,6 +91,13 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (décima oitava rodada)
+
+1. **Transcrições geradas de novo, e o gerador volta ao projeto.** O teste que gerava `docs/revisao/transcricoes/` tinha sido apagado. O `TranscricoesTest` refaz os 20 arquivos no mesmo formato: trilha, abertura, cada aula animada cena a cena, Bugs, ficha, glossário, as aulas de texto, a série Em C e o Guia do TP. Ele roda com a suíte e grava em `build/transcricoes`. Para atualizar os de `docs/`, rode `TRANSCRICOES=docs ./gradlew :composeApp:desktopTest --tests '*TranscricoesTest*'`.
+2. **Vale e Ponte sem termos do Templo e da Fortaleza antes da hora.** Sete pontos: "a tabela LL(1) já está na sua cabeça" (prática do Vale), "o Bison resolve empilhando o else" (pegadinha e Bug), "por isso o LL(1) não aceita" (clipe), "parser LR aceita recursão" e "recursão à direita trava o LL(1)" (Bugs), "LR precisa eliminar recursão?" (ficha) e "conflito com FOLLOW" (Bug). Agora dizem "o parser de cima para baixo, o do Templo" ou "de baixo para cima (LR, da Fortaleza)". A aula de fatoração apresenta o nome: "No Templo, gramática assim se chama LL(1)".
+3. **Prática "Torne LL(1)" na Ponte.** `L -> L ; C | C`, `C -> id = E | id ( )`, `E -> n`: o aluno acha a linha com recursão, o motor tira, o aluno acha a linha com prefixo comum, o motor fatora, e o aluno diz quantas casas da tabela LL(1) ficam com duas regras (nenhuma). O motor confere cada passo.
+4. **"Na sua linguagem" e "Teste desta etapa" no fim de cada capítulo do Guia do TP.** Três perguntas que levam a Byteiro para a linguagem do enunciado, e o que rodar e o que deve sair. As mensagens de erro citadas são as do próprio guia (a previsão do `;` no cap. 5, os testes semânticos do cap. 7, o resumo do `roda_testes.sh`); um teste confere.
+
 ## Feito em 14/11 (décima sétima rodada)
 
 1. **Revisão só conta com acerto.** Antes, errar uma revisão gravava a data e a memória voltava a 100%: o assunto saía da lista de revisão mesmo com a resposta errada, e a missão "Revisar 1 assunto" contava o erro. Agora um erro numa revisão devida deixa o assunto pendente até a próxima acertar (`Memory.reaprender`). Errar na primeira vez que se estuda continua sendo só aprender. A missão diária conta só revisão com acerto, e a sugestão do dia diz "a última revisão não deu certo". O save antigo continua valendo (o campo novo começa falso).
@@ -219,4 +226,4 @@ O que funciona, segundo os revisores: a aula de Tokens, a pegadinha do `ifa`, a 
 1. Rode **um revisor por vez**. Cada um gasta perto de 200 mil tokens.
 2. Use o prompt de [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md), seção "Revisor", trocando papel, arquivos e nome do relatório.
 3. Faltam os professores dos blocos 5 e 6.
-4. Depois de mudar aulas, gere as transcrições de novo (o teste que as gerava foi apagado; o formato está descrito em `docs/revisao/transcricoes/00_indice.md`).
+4. Depois de mudar aulas, gere as transcrições de novo: `TRANSCRICOES=docs ./gradlew :composeApp:desktopTest --tests '*TranscricoesTest*'`.

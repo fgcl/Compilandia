@@ -63,14 +63,14 @@ T -> T * F | F
 F -> ( E ) | id
 ```
 - PASSOS (Mais à esquerda (⇒lm): troque sempre o NT mais à esquerda):
-    1) E ⇒ E + T
-    2) ⇒ T + T
-    3) ⇒ F + T
-    4) ⇒ id + T
-    5) ⇒ id + T * F
-    6) ⇒ id + F * F
-    7) ⇒ id + id * F
-    8) ⇒ id + id * id ✔ (8 passos)
+    · E ⇒ E + T
+    · ⇒ T + T
+    · ⇒ F + T
+    · ⇒ id + T
+    · ⇒ id + T * F
+    · ⇒ id + F * F
+    · ⇒ id + id * F
+    · ⇒ id + id * id ✔ (8 passos)
 - TEXTO: Agora mais à direita (⇒rm): troque sempre o NT mais à DIREITA. Eu começo:
 - CÓDIGO:
 ```
@@ -216,17 +216,17 @@ S -> i S | i S e S | x
 E -> E + E | E * E | ( E ) | id
 ```
 - PASSOS (Derivação mais à esquerda nº 1 (+ na raiz)):
-    1) E ⇒ E + E
-    2) ⇒ id + E
-    3) ⇒ id + E * E
-    4) ⇒ id + id * E
-    5) ⇒ id + id * id
+    · E ⇒ E + E
+    · ⇒ id + E
+    · ⇒ id + E * E
+    · ⇒ id + id * E
+    · ⇒ id + id * id
 - PASSOS (Derivação mais à esquerda nº 2 (* na raiz)):
-    1) E ⇒ E * E
-    2) ⇒ E + E * E
-    3) ⇒ id + E * E
-    4) ⇒ id + id * E
-    5) ⇒ id + id * id
+    · E ⇒ E * E
+    · ⇒ E + E * E
+    · ⇒ id + E * E
+    · ⇒ id + id * E
+    · ⇒ id + id * id
 - TEXTO: Duas derivações mais à esquerda distintas para a mesma sentença ⇒ duas árvores ⇒ **gramática ambígua**. ∎
 - CAIXA [Cuidado!]: Uma derivação ⇒lm e outra ⇒rm diferentes NÃO provam nada: a mesma árvore tem as duas! Compare sempre lm com lm (ou rm com rm), ou compare árvores.
 - TEXTO: Sua vez, esmaecido: mostre que `id * id + id` também tem duas árvores.

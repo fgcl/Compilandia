@@ -121,7 +121,7 @@
     <string name="lessonspart1_trocar_na_receita">Swapping α and β in the recipe.</string>
     <string name="lessonspart1_esquecer_colocar_no_fim_cada">Forgetting to put A' at the end of each β.</string>
     <string name="lessonspart1_ignorar_recursao_indireta_b">Ignoring indirect recursion (S → A a, A → S b).</string>
-    <string name="lessonspart1_achar_que_analisadores_lr_tambem">Thinking LR parsers also need to remove left recursion.</string>
+    <string name="lessonspart1_achar_que_analisadores_lr_tambem">Thinking bottom-up parsers (LR, from the Fortress) also need to remove left recursion.</string>
     <string name="lessonspart1_quando_g_recursiva_esquerda">When is G left recursive?</string>
     <string name="lessonspart1_quando_existe_com">When there's an A with A ⇒⁺ Aα</string>
     <string name="lessonspart1_linguagem">Language of A → Aα | β?</string>
@@ -130,8 +130,8 @@
     <string name="lessonspart1_pre_condicoes_algoritmo_geral">Preconditions of the general algorithm?</string>
     <string name="lessonspart1_sem_ciclos_sem_producoes">No cycles and no ε-productions</string>
     <string name="lessonspart1_exemplo_recursao_indireta">Example of indirect recursion?</string>
-    <string name="lessonspart1_lr_precisa_eliminar_recursao_esquerda">Does LR need to remove left recursion?</string>
-    <string name="lessonspart1_nao_lr_lida_bem_com">No, LR handles it well</string>
+    <string name="lessonspart1_lr_precisa_eliminar_recursao_esquerda">Does the bottom-up parser (LR, from the Fortress) need to remove left recursion?</string>
+    <string name="lessonspart1_nao_lr_lida_bem_com">No, it handles it well</string>
     <string name="lessonspart1_quando_duas_alternativas_comecam_com">When two alternatives start with the same prefix α, pull α out: A → αA' and A' → β₁ | β₂, putting off the predictive parser's decision.</string>
     <string name="lessonspart1_ab_ac_b_c_coloque">ab + ac = a(b + c): pull out the common prefix.</string>
     <string name="lessonspart1_achar_que_fatoracao_elimina_ambiguidade">Thinking factoring removes ambiguity.</string>

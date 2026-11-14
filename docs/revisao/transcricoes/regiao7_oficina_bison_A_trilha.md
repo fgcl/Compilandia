@@ -4,27 +4,28 @@
 
 ## ASSUNTO YACC_BISON: Yacc/Bison: especificação e precedência
 Pré-requisitos no jogo: Empilha-reduz (shift-reduce), Árvores e ambiguidade
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «A fábrica de parsers» → Prática: você pilota «Por que o vezes espera» → Pegadinha «Quem fica embaixo manda» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «A fábrica de parsers» → Prática: você pilota «Por que o vezes espera» → Pegadinha «Quem fica embaixo manda» → Pegadinha «O menos que troca o sinal» → Desafio
 Jogos que treinam: Caça-Conflitos (achar e explicar conflitos), Oficina Bison (programar o Bison até os testes passarem)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug trocou os left
-Na tela: %left '*' / %left '+'
+Na tela: %left '*'
+%left '+'
 BYTE: "Antes da aula: quem liga mais forte aqui?"
 Opções: ✔+ | * | empate
 Depois: "O mais. Quanto mais embaixo, mais forte."
 
-#### AULA ANIMADA BÁSICA: "A fábrica de parsers" (23 cenas, ~177s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A fábrica de parsers" (27 cenas, ~211s) [1º exemplo começa na cena 4]
 
 1. TELA: # LALR(1) ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr | expr '-' expr ⏎     | expr '*' expr | expr '/' expr ⏎     | '(' expr ')' | NUM ; ⏎ 14 estados × 8 tokens
    BYTE: "Uma calculadora com parênteses já vira uma tabela LALR de 14 estados."
 
-2. TELA: # LALR(1) ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr | expr '-' expr ⏎     | expr '*' expr | expr '/' expr ⏎     | '(' expr ')' | NUM ; ⏎ *14 estados × 8 tokens* ⏎ 22 112 1000
+2. TELA: # LALR(1) ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr | expr '-' expr ⏎     | expr '*' expr | expr '/' expr ⏎     | '(' expr ')' | NUM ; ⏎ *14 estados × 8 tokens* ⏎ 22 ⏎ 112 ⏎ 1000
    BYTE: "Cada estado tem 8 colunas de token. Quantas casas você confere à mão? Toque."
    PERGUNTA (toque): certo = 112 ; errado = 22 | 1000
    se errar: "Multiplique os estados pelas colunas."
-   se acertar: "Isso. E cada regra nova muda muitas delas."
+   se acertar: "E cada regra nova muda muitas delas."
 
 3. TELA: !!BISON!!
    BYTE: "O Bison monta essa tabela sozinho, a partir da gramática. Ele é a versão livre do Yacc e gera um parser LALR(1) em C."
@@ -32,112 +33,144 @@ Depois: "O mais. Quanto mais embaixo, mais forte."
 4. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
    BYTE: "Você escreve a gramática num arquivo ponto y. O Bison lê esse arquivo e escreve o código do parser."
 
-5. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ *expr: expr '+' expr { $$ = $1 + $3; }* ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
+5. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ *expr: expr '+' expr { $$ = $1 + $3; }* ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ; ⏎ $1 ⏎ $2 ⏎ $3
+   BYTE: "Na regra expr mais expr, cada símbolo tem um número: cifrão um, dois e três. Qual é o do segundo expr? Toque."
+   PERGUNTA (toque): certo = $3 ; errado = $1 | $2
+   se errar: "Conte o mais também: ele é um símbolo."
+   se acertar: "Cifrão três. O primeiro expr é o um, e o mais é o dois. O outro expr é o três."
+
+6. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ *expr: expr '+' expr { $$ = $1 + $3; }* ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
    BYTE: "Cada regra pode ter uma ação entre chaves, que roda na hora da redução. Cifrão um é o valor do primeiro símbolo. Cifrão três, do terceiro."
 
-6. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎ *    | expr '-' expr { $$ = $1 - $3; }* ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
+7. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎ *    | expr '-' expr { $$ = $1 - $3; }* ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
    BYTE: "Cifrão cifrão é o valor do lado esquerdo. Ele fica na pilha e sobe pela árvore, de redução em redução."
 
-7. TELA: # Arquivo .y ⏎ %token NUM ⏎ *%left '+' '-'* ⏎ *%left '*' '/'* ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
+8. TELA: # Arquivo .y ⏎ %token NUM ⏎ *%left '+' '-'* ⏎ *%left '*' '/'* ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
    BYTE: "Essa gramática é ambígua, e a tabela teria conflitos. Quem desempata são as linhas de precedência, lá em cima."
 
-8. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
+9. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ;
    BYTE: "Quanto mais abaixo no arquivo, maior a precedência. Quem ganha? Toque na linha."
    PERGUNTA (toque): certo = %left '*' '/' ; errado = %left '+' '-'
    se errar: "Procure a linha mais perto das regras."
-   se acertar: "Isso. O vezes está mais abaixo, então ele vem antes do mais."
+   se acertar: "Acertou. O vezes está mais abaixo, então ele vem antes do mais."
 
-9. TELA: # Arquivo .y ⏎ %token NUM ⏎ *%left '+' '-'* ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ; ⏎ 1 + 2 * 3 = 7 ⏎ 5 - 2 - 1 = 2
+10. TELA: # Arquivo .y ⏎ %token NUM ⏎ *%left '+' '-'* ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ; ⏎ 1 + 2 * 3 = 7 ⏎ 5 - 2 - 1 = 2
    BYTE: "O left diz que o operador associa à esquerda: contas iguais em fila juntam da esquerda para a direita."
 
-10. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ; ⏎ 1 + 2 * 3 = 7 ⏎ 5 - 2 - 1 = 2
+11. TELA: # Arquivo .y ⏎ %token NUM ⏎ %left '+' '-' ⏎ %left '*' '/' ⏎ %% ⏎ expr: expr '+' expr { $$ = $1 + $3; } ⏎     | expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎     | NUM ; ⏎ 1 + 2 * 3 = 7 ⏎ 5 - 2 - 1 = 2
    BYTE: "Se o Bison não avisa nenhum conflito, toda casa da tabela ficou com uma ação só."
 
-11. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ 3. Rode bison calc.y e leia os avisos.
+12. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ 3. Rode bison calc.y e leia os avisos.
    BYTE: "A receita do arquivo .y tem três passos."
 
-12. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ 3. Rode bison calc.y e leia os avisos. ⏎ %left '-'
+13. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ 3. Rode bison calc.y e leia os avisos. ⏎ %left '-'
    BYTE: "Onde vai a linha do left com o menos? Toque na parte certa."
    PERGUNTA (toque): certo = 1. Antes do %%: %token e a precedência. ; errado = 2. Depois do %%: as regras e suas ações. | 3. Rode bison calc.y e leia os avisos.
    se errar: "Precedência é declaração. Ela não é regra."
-   se acertar: "Isso. Precedência fica nas declarações, lá em cima."
+   se acertar: "Precedência fica nas declarações, lá em cima."
 
-13. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ *3. Rode bison calc.y e leia os avisos.*
+14. TELA: # Receita ⏎ 1. Antes do %%: %token e a precedência. ⏎ 2. Depois do %%: as regras e suas ações. ⏎ *3. Rode bison calc.y e leia os avisos.*
    BYTE: "Conflito avisado não trava o Bison. No shift-reduce ele empilha; no reduce-reduce, usa a regra que vem primeiro. E pode errar a sua conta."
 
-14. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ;
+15. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ;
    BYTE: "Uma calculadora só de menos, sem nenhuma linha de precedência."
 
-15. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 0 1 2
+16. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 0 ⏎ 1 ⏎ 2
    BYTE: "Rodo o Bison neste arquivo. Quantos conflitos ele avisa? Toque."
    PERGUNTA (toque): certo = 1 ; errado = 0 | 2
    se errar: "Em cinco menos dois menos um, quem junta primeiro?"
-   se acertar: "Isso. Um conflito de empilha-reduz, no menos."
+   se acertar: "Um conflito de empilha-reduz, no menos."
 
-16. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict*
+17. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict*
    BYTE: "O aviso confirma. Sem precedência, o Bison prefere empilhar."
 
-17. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict* ⏎ 5 - 2 - 1 ⏎ 2 4
+18. TELA: # calc.y ⏎ %token NUM ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ *calc.y: warning: 1 shift/reduce conflict* ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4
    BYTE: "Empilhar primeiro junta pela direita. Quanto dá cinco menos dois menos um? Toque."
    PERGUNTA (toque): certo = 4 ; errado = 2
    se errar: "Faça dois menos um primeiro. Depois, cinco menos o resultado."
-   se acertar: "Isso. Dá quatro, mas a conta certa seria dois."
+   se acertar: "É isso. Dá quatro, mas a conta certa seria dois."
 
-18. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ;
+19. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ;
    BYTE: "Uma linha resolve: left no menos. Agora o Bison reduz primeiro."
 
-19. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 5 - 2 - 1 ⏎ 2 4
+20. TELA: # calc.y ⏎ %token NUM ⏎ *%left '-'* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 5 - 2 - 1 ⏎ 2 ⏎ 4
    BYTE: "Com essa linha, quanto dá cinco menos dois menos um? Toque."
    PERGUNTA (toque): certo = 2 ; errado = 4
    se errar: "Agora junta pela esquerda: cinco menos dois, depois menos um."
-   se acertar: "Isso. E o Bison não avisa mais nenhum conflito."
+   se acertar: "E o Bison não avisa mais nenhum conflito."
 
-20. TELA: # calc.y ⏎ %token NUM ⏎ %left '-' ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ $ bison calc.y ⏎ 5 - 2 - 1 ⏎ *2*
+21. TELA: # calc.y ⏎ %token NUM ⏎ %left '-' ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | NUM ; ⏎ 5 - 2 - 1 ⏎ *2* ⏎ $ bison calc.y
    BYTE: "Saída limpa e conta certa. A calculadora está pronta."
 
-21. TELA: # Erros comuns ⏎ No Bison, o operador declarado primeiro tem a maior precedência. ⏎ certo errado
+22. TELA: # pot.y ⏎ %token NUM ⏎ *%right '^'* ⏎ %% ⏎ expr: expr '^' expr { $$ = pow($1, $3); } ⏎     | NUM ;
+   BYTE: "Agora a potência. Na matemática, dois elevado a três elevado a dois junta pela direita. Para isso existe o right. Em C, a potência é a função pow."
+
+23. TELA: # pot.y ⏎ %token NUM ⏎ *%right '^'* ⏎ %% ⏎ expr: expr '^' expr { $$ = pow($1, $3); } ⏎     | NUM ; ⏎ 2 ^ 3 ^ 2 ⏎ 64 ⏎ 512 ⏎ 36
+   BYTE: "Com o right, quanto dá dois elevado a três elevado a dois? Toque."
+   PERGUNTA (toque): certo = 512 ; errado = 64 | 36
+   se errar: "Pela direita: três ao quadrado primeiro, que dá nove. Depois, dois elevado a nove."
+   se acertar: "Quinhentos e doze. Com left, seria oito ao quadrado, sessenta e quatro."
+
+24. TELA: # pot.y ⏎ %token NUM ⏎ *%right '^'* ⏎ %% ⏎ expr: expr '^' expr { $$ = pow($1, $3); } ⏎     | NUM ; ⏎ 2 ^ 3 ^ 2 ⏎ 512 ⏎ %left: 64     %right: 512
+   BYTE: "Left manda reduzir, e right manda empilhar. Na potência, empilhar é o certo."
+
+25. TELA: # Erros comuns ⏎ No Bison, a linha de precedência que vem por último liga mais forte. ⏎ certo ⏎ errado
    BYTE: "A ordem das linhas de precedência importa. Um colega disse isto. Certo ou errado?"
-   PERGUNTA (toque): certo = errado ; errado = certo
-   se errar: "Na calculadora, o vezes foi declarado depois do mais."
-   se acertar: "Isso. É o contrário: quem é declarado por último tem a maior precedência."
+   PERGUNTA (toque): certo = certo ; errado = errado
+   se errar: "Na calculadora, o vezes foi declarado depois do mais, e o vezes liga mais forte."
+   se acertar: "A última linha tem a maior precedência. Por isso o vezes vem depois do mais."
 
-22. TELA: # Erros comuns ⏎ Certo: A última linha de %left tem a maior precedência. ⏎ *Errado: Ignorar o aviso de conflito porque o parser foi gerado.* ⏎ *Certo: Conflito sem tratar é o Bison escolhendo por você. Use %left ou reescreva a regra.*
-   BYTE: "Outro erro: ignorar o aviso de conflito. O parser sai, mas a escolha padrão do Bison pode montar a árvore errada."
+26. TELA: # Erros comuns ⏎ Certo: No Bison, a linha de precedência que vem por último liga mais forte. ⏎ *Errado: Ignorar o aviso de conflito porque o parser foi gerado.* ⏎ *Certo: Conflito sem tratar é o Bison escolhendo por você. Use %left ou reescreva a regra.*
+   BYTE: "Um erro comum: ignorar o aviso de conflito. O parser sai, mas a escolha padrão do Bison pode montar a árvore errada."
 
-23. TELA: # Resumo ⏎ Arquivo .y: declarações, %%, e as regras com suas ações. ⏎ $$ é o valor do lado esquerdo; $1, $2 e $3 são os do lado direito. ⏎ %left e %right resolvem conflitos. A última linha tem mais precedência.
+27. TELA: # Resumo ⏎ Arquivo .y: declarações, %%, e as regras com suas ações. ⏎ $$ é o valor do lado esquerdo; $1, $2 e $3 são os do lado direito. ⏎ %left e %right resolvem conflitos. A última linha tem mais precedência.
    BYTE: "Resumindo: o Bison gera a tabela LALR a partir do arquivo ponto y. As ações calculam valores na redução, e as linhas de precedência resolvem os conflitos."
 
-#### TABELAS: "Lendo o bison -v" (9 cenas, ~56s)
+#### PEGADINHA: "Quem fica embaixo manda" (5 cenas, ~31s)
 
-1. TELA: # calc.output ⏎ %token NUM ⏎ %left '+' ⏎ %left '*' ⏎ %% ⏎ e: e '+' e { $$ = $1 + $3; } ⏎  | e '*' e { $$ = $1 * $3; } ⏎  | NUM ;
-   BYTE: "Com a opção -v, o Bison escreve um relatório: o arquivo output."
+1. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ %left '+'
+   BYTE: "Esta especificação tem dois left. A ordem deles decide a conta."
 
-2. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1}
-   BYTE: "Cada estado do relatório vira uma caixa. Este é o estado zero."
+2. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ *%left '+'*
+   BYTE: "Quanto mais embaixo no arquivo, mais forte. Aqui o mais ficou embaixo."
 
-3. TELA: # calc.output ⏎ Estado 0{e' → • e; »NUM empilha → 2«; e vai → 1}
-   BYTE: "Em cima ficam os itens. Embaixo, o que fazer com cada token."
+3. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ %left '+' ⏎ 14 ⏎ 20
+   BYTE: "Com essa ordem, quanto dá dois mais três vezes quatro? Toque."
+   PERGUNTA (toque): certo = 20 ; errado = 14
+   se errar: "Quem liga mais forte roda primeiro. Quem ficou embaixo?"
+   se acertar: "Acertou. vinte. O mais rodou primeiro, e a conta saiu errada."
 
-4. TELA: # calc.output ⏎ Estado 0{e' → • e; »NUM empilha → 2«; e vai → 1} ⏎ Estado 2{e → NUM •; $default reduz e → NUM}
-   BYTE: "Chegou NUM. A linha manda empilhar e ir para outro estado."
+4. TELA: # 2 + 3 * 4 ⏎ %left '+' ⏎ *%left '*'* ⏎ 14
+   BYTE: "Troque as linhas: mais em cima, vezes embaixo. Agora dá catorze."
 
-5. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1} ⏎ *Estado 2{e → NUM •; »$default reduz e → NUM«}*
-   BYTE: "Nesse estado o item já terminou. Com qualquer token, ele reduz."
+5. TELA: !!PRECEDÊNCIA!!
+   PROF: "A pegadinha é achar que o primeiro manda. Quem manda é o último."
 
-6. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; »e vai → 1«} ⏎ Estado 1{e' → e •; e → e • '+' e; e → e • '*' e; '+' empilha → 3; '*' empilha → 4; $end aceita} ⏎ *Estado 2{e → NUM •; $default reduz e → NUM}*
-   BYTE: "Depois de reduzir, a pilha volta ao estado zero com um e. Toque no destino."
-   PERGUNTA (toque): certo = Estado 1 ; errado = Estado 0 | Estado 2
-   se errar: "Procure a linha do e dentro do estado zero."
-   se acertar: "Isso. A linha do e no estado zero aponta para essa caixa."
+#### PEGADINHA: "O menos que troca o sinal" (6 cenas, ~51s)
 
-7. TELA: # calc.output ⏎ Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; »'*' empilha → 4«; $default reduz e → e '+' e} ⏎ conflito resolvido: vezes empilha
-   BYTE: "Agora o estado do conflito. O mais já leu os dois lados e chegou um vezes."
+1. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr { $$ = -$2; }* ⏎     | NUM ;
+   BYTE: "O mesmo menos faz dois papéis. Entre dois números, ele subtrai. Na frente de um só, troca o sinal. Olhe a regra do menos sozinho."
 
-8. TELA: # calc.output ⏎ *Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; »'*' empilha → 4«; $default reduz e → e '+' e}* ⏎ conflito resolvido: vezes empilha
-   PROF: "O vezes está mais abaixo no arquivo. Por isso a linha dele empilha."
+2. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr { $$ = -$2; }* ⏎     | NUM ; ⏎ A do vezes, a mais forte ⏎ A do menos, a mais fraca ⏎ Nenhuma: ele avisa conflito
+   BYTE: "Essa regra não tem linha de precedência própria. Que força o Bison dá a ela? Toque."
+   PERGUNTA (toque): certo = A do menos, a mais fraca ; errado = A do vezes, a mais forte | Nenhuma: ele avisa conflito
+   se errar: "Sem aviso, a regra fica com a precedência do último token dela."
+   se acertar: "A do menos, o último token da regra. Em menos dois vezes três, o vezes ganha e roda antes."
 
-9. TELA: # calc.output ⏎ *Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; »'*' empilha → 4«; $default reduz e → e '+' e}* ⏎ 0 conflitos · 7 estados
-   BYTE: "Sem conflito sobrando, o relatório fica limpo. Agora é rodar."
+3. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ *%left UMINUS* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr %prec UMINUS { $$ = -$2; }* ⏎     | NUM ;
+   BYTE: "Para o sinal ligar mais forte que tudo, o prec troca a força da regra. UMINUS é um nome inventado, declarado na última linha."
+
+4. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ *%left UMINUS* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr %prec UMINUS { $$ = -$2; }* ⏎     | NUM ; ⏎ - 2 ⏎ 2 * 3
+   BYTE: "Com o prec, em menos dois vezes três, o que o Bison reduz primeiro? Toque."
+   PERGUNTA (toque): certo = - 2 ; errado = 2 * 3
+   se errar: "UMINUS está abaixo do vezes no arquivo, então liga mais forte."
+   se acertar: "O menos dois. A regra agora tem a força do UMINUS, maior que a do vezes."
+
+5. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ %left UMINUS ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr %prec UMINUS { $$ = -$2; }* ⏎     | NUM ; ⏎ - 2
+   BYTE: "Aqui as duas ordens dão menos seis, mas a árvore muda. Com potência, a conta mudaria."
+
+6. TELA: # - 2 * 3 ⏎ %token NUM ⏎ %left '-' ⏎ %left '*' ⏎ *%left UMINUS* ⏎ %% ⏎ expr: expr '-' expr { $$ = $1 - $3; } ⏎     | expr '*' expr { $$ = $1 * $3; } ⏎ *    | '-' expr %prec UMINUS { $$ = -$2; }* ⏎     | NUM ; ⏎ - 2
+   PROF: "Na prova: a regra tem a precedência do último token dela. O prec troca essa precedência."
 
 #### PRATICA: "Por que o vezes espera" (5 cenas, ~30s)
 
@@ -150,34 +183,44 @@ Depois: "O mais. Quanto mais embaixo, mais forte."
 3. TELA: # id + id * id ⏎ E -> E + T | T ⏎ *T -> T * F | F* ⏎ F -> id
    PROF: "Com Bison, o left faz o mesmo sem esses níveis."
 
-4. TELA: *id* + id * id $ ⏎ pilha
+4. TELA: pilha ⏎ *id* ⏎ + ⏎ id ⏎ * ⏎ id ⏎ $
    BYTE: "Rode a esteira. Repare quando o vezes faz a máquina esperar."
-   BRINQUEDO interativo: meta = "Reduza até sobrar E" ; teclas = [Empilhar, Reduzir]
-   se errar: "Antes de reduzir, olhe o que vem na entrada."
-   ao conseguir: "Aceito. O vezes reduziu antes do mais."
+   BRINQUEDO: dica "Antes de reduzir, olhe o que vem na entrada." / acerto "Aceito. O vezes reduziu antes do mais."
 
 5. TELA: # id + id * id ⏎ E -> E + T | T ⏎ *T -> T * F | F* ⏎ F -> id
    BYTE: "Esperar é empilhar. Foi por isso que a conta saiu na ordem certa."
 
-#### PEGADINHA: "Quem fica embaixo manda" (5 cenas, ~31s)
+#### DIAGRAMAS DE TABELA: "Lendo o bison -v" (9 cenas, ~60s)
 
-1. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ %left '+'
-   BYTE: "Esta especificação tem dois left. A ordem deles decide a conta."
+1. TELA: # calc.output ⏎ %token NUM ⏎ %left '+' ⏎ %left '*' ⏎ %% ⏎ e: e '+' e { $$ = $1 + $3; } ⏎  | e '*' e { $$ = $1 * $3; } ⏎  | NUM ;
+   BYTE: "Com a opção -v, o Bison escreve um relatório: o arquivo output."
 
-2. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ *%left '+'*
-   BYTE: "Quanto mais embaixo no arquivo, mais forte. Aqui o mais ficou embaixo."
+2. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1}
+   BYTE: "Cada estado do relatório vira uma caixa. Este é o estado zero."
 
-3. TELA: # 2 + 3 * 4 ⏎ %left '*' ⏎ %left '+' ⏎ 14 20
-   BYTE: "Com essa ordem, quanto dá dois mais três vezes quatro? Toque."
-   PERGUNTA (toque): certo = 20 ; errado = 14
-   se errar: "Quem liga mais forte roda primeiro. Quem ficou embaixo?"
-   se acertar: "Isso: vinte. O mais rodou primeiro, e a conta saiu errada."
+3. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1}
+   BYTE: "Em cima ficam os itens. Embaixo, o que fazer com cada token."
 
-4. TELA: # 2 + 3 * 4 ⏎ %left '+' ⏎ *%left '*'* ⏎ 14
-   BYTE: "Troque as linhas: mais em cima, vezes embaixo. Agora dá catorze."
+4. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1} ⏎ Estado 2{e → NUM •; $default reduz e → NUM}
+   BYTE: "Chegou NUM. A linha manda empilhar e ir para outro estado."
 
-5. TELA: !!PRECEDÊNCIA!!
-   PROF: "A pegadinha é achar que o primeiro manda. Quem manda é o último."
+5. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1} ⏎ *Estado 2{e → NUM •; $default reduz e → NUM}*
+   BYTE: "Nesse estado o item já terminou. A linha default é a redução padrão: com qualquer token, ele reduz, sem olhar qual veio."
+
+6. TELA: # calc.output ⏎ Estado 0{e' → • e; NUM empilha → 2; e vai → 1} ⏎ *Estado 2{e → NUM •; $default reduz e → NUM}* ⏎ Estado 1{e' → e •; e → e • '+' e; e → e • '*' e; '+' empilha → 3; '*' empilha → 4; $end aceita}
+   BYTE: "Depois de reduzir, a pilha volta ao estado zero com um e. Toque no destino."
+   PERGUNTA (toque): certo = Estado 1{e' → e •; e → e • '+' e; e → e • '*' e; '+' empilha → 3; '*' empilha → 4; $end aceita} ; errado = Estado 0{e' → • e; NUM empilha → 2; e vai → 1} | *Estado 2{e → NUM •; $default reduz e → NUM}*
+   se errar: "Procure a linha do e dentro do estado zero."
+   se acertar: "A linha do e no estado zero aponta para essa caixa."
+
+7. TELA: # calc.output ⏎ Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; '*' empilha → 4; $default reduz e → e '+' e} ⏎ conflito resolvido: vezes empilha
+   BYTE: "Agora o estado do conflito. O mais já leu os dois lados e chegou um vezes."
+
+8. TELA: # calc.output ⏎ *Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; '*' empilha → 4; $default reduz e → e '+' e}* ⏎ conflito resolvido: vezes empilha
+   PROF: "O vezes está mais abaixo no arquivo. Por isso a linha dele empilha."
+
+9. TELA: # calc.output ⏎ *Estado 5{e → e '+' e •; e → e • '+' e; e → e • '*' e; '*' empilha → 4; $default reduz e → e '+' e}* ⏎ 0 conflitos · 7 estados
+   BYTE: "Sem conflito sobrando, o relatório fica limpo. Agora é rodar."
 
 #### CLIPE 30s: "Precedência no Bison" (2 cenas, ~11s)
 

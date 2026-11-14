@@ -357,4 +357,46 @@
     <string name="tpguided_tipos_conferidos_mips_rodando_testes">Types checked, MIPS running, tests passing. You didn't 'do a compilers project', you **built a compiler**. Few people can say that.</string>
     <string name="tpguided_ultima_recuperacao_recite_fases_seu">Last retrieval: recite the phases of your compiler and the Java class for each one.</string>
     <string name="tpguided_lexico_lexico_afd_com_switch">Lexical → `Lexico` (DFA with switch). Syntactic → `Sintatico` (recursive descent, casaToken). Semantic → `TabelaSimbolos` + checks in `Sintatico`. Generation → `Sintatico` methods emitting MIPS. Optimization → constant folding and dead code in the generator. And `Main` stitching it all together.</string>
+    <!-- Fim de cada capítulo: "Na sua linguagem" e "Teste desta etapa" (TpGuideFechamento.kt). -->
+    <string name="tp_nsl_titulo">In your language</string>
+    <string name="tp_teste_titulo">Test for this step: the command and what should come out</string>
+    <string name="tp_nsl_1_1">What is the name of your language and the extension of its source files?</string>
+    <string name="tp_nsl_1_2">In which language must the compiler be written, and what must it generate (MIPS for MARS, or something else)?</string>
+    <string name="tp_nsl_1_3">How many weeks are left until the deadline? Pick the 8-week or the 3-week schedule.</string>
+    <string name="tp_nsl_2_1">Which types and commands does your assignment require? Build the spec sheet, like the Byteiro one.</string>
+    <string name="tp_nsl_2_2">How do you write assignment and equality comparison? If they look alike (`=` and `==`), the scanner will need longest match.</string>
+    <string name="tp_nsl_2_3">What is the precedence of your operators, from weakest to strongest?</string>
+    <string name="tp_teste_2">**Test for this step:** the 10 example programs (5 correct and 5 with one error each) are in the `testes/` folder, each with its expected output written next to it. They are the chapter 9 test suite getting started.</string>
+    <string name="tp_nsl_3_1">Which of your tokens start with the same character? Each group becomes a state, like the one for `&lt;`.</string>
+    <string name="tp_nsl_3_2">What do your comments and strings look like? Where does each one end?</string>
+    <string name="tp_nsl_3_3">What message does your scanner give for a character that does not belong to the language?</string>
+    <string name="tp_teste_3">**Test for this step:** replace the `TesteLexico` line with one from YOUR language, with a comment, a two-character operator and a line break. Check token by token, as in the expected output above: the comment disappears, the two-character operator comes out as a single token, and the line number changes in the right place.</string>
+    <string name="tp_nsl_4_1">Which rules of your grammar have left recursion?</string>
+    <string name="tp_nsl_4_2">Which alternatives start with the same token?</string>
+    <string name="tp_nsl_4_3">Where did you use `{ }` and `[ ]`? In each one, does the FIRST inside overlap what can come after?</string>
+    <string name="tp_teste_4">**Test for this step:** the FIRST and FOLLOW table for your whole grammar, like the Byteiro one above, with both conditions checked: the FIRST sets of the alternatives do not overlap, and each part that can vanish does not overlap its FOLLOW. No cell of the LL(1) table gets two rules. This table goes into the report.</string>
+    <string name="tp_nsl_5_1">Which method matches each nonterminal of your grammar?</string>
+    <string name="tp_nsl_5_2">Where do the `while` loops (from each `{ }`) and the `if`s (from each `[ ]`) go?</string>
+    <string name="tp_nsl_5_3">What message does your parser give when a command terminator is missing?</string>
+    <string name="tp_teste_5">**Test for this step:** every program in `testes/ok/` passes with no error, and the one missing a `;` stops at the line of the next token:</string>
+    <string name="tp_nsl_6_1">Which constructs open a scope in your language: blocks, functions, loops?</string>
+    <string name="tp_nsl_6_2">Can you declare the same name in an inner block (shadowing)?</string>
+    <string name="tp_nsl_6_3">Can you use a variable before declaring it? And declare it twice in the same block?</string>
+    <string name="tp_teste_6">**Test for this step:** an undeclared variable and a repeated declaration stop at the right line:</string>
+    <string name="tp_nsl_7_1">Which types can be mixed in an operation?</string>
+    <string name="tp_nsl_7_2">Must the condition of if and while be logical, or does a number work?</string>
+    <string name="tp_nsl_7_3">Storing one type in a variable of another type: does it convert or is it an error?</string>
+    <string name="tp_teste_7">**Test for this step:** the five semantic tests above, each in `testes/erro/`, print exactly the message next to them.</string>
+    <string name="tp_nsl_8_1">How does your language write to the screen, and which MARS syscall does that?</string>
+    <string name="tp_nsl_8_2">Where do your variables live: in `.data` or on the stack?</string>
+    <string name="tp_nsl_8_3">How many labels does each of your branching commands need (if, while, for)?</string>
+    <string name="tp_teste_8">**Test for this step:** `contagem.byt` from chapter 2 compiles, runs on MARS and prints the output you wrote down for it:</string>
+    <string name="tp_nsl_9_1">Which simple optimization fits your language: constant folding, dead code removal?</string>
+    <string name="tp_nsl_9_2">Does your suite have at least one correct test and one error test for each command?</string>
+    <string name="tp_nsl_9_3">What is the exact error message format the assignment asks for?</string>
+    <string name="tp_teste_9">**Test for this step:** the whole suite passes:</string>
+    <string name="tp_nsl_10_1">Does the assignment ask for a report? With which sections?</string>
+    <string name="tp_nsl_10_2">How will the professor run your compiler: which command, in which folder?</string>
+    <string name="tp_nsl_10_3">Which three oral-exam questions about YOUR grammar would you practice?</string>
+    <string name="tp_teste_10">**Test for this step:** in a new folder, clone the repository and follow only the README: compile, run a test and open it in MARS. If you need any step that is not written there, the README is incomplete.</string>
 </resources>

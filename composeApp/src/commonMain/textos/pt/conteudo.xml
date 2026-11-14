@@ -79,7 +79,7 @@
     <string name="bugs_else_if_fora">O else é do if de fora.</string>
     <string name="bugs_else_fica_com_if_mais">O else fica com o if mais perto.</string>
     <string name="bugs_if_then_if_b_then">if a then if b then x else y tem duas árvores nessa gramática.</string>
-    <string name="bugs_bison_resolve_esse_caso_empilhando">O Bison resolve esse caso empilhando o else.</string>
+    <string name="bugs_bison_resolve_esse_caso_empilhando">Na prática, o else fica com o if mais perto dele.</string>
     <string name="bugs_reescrever_gramatica_nunca_resolve_else">Reescrever a gramática nunca resolve o else solto.</string>
     <string name="bugs_para_reescrever_separando_comandos_fechados">Dá para reescrever separando comandos fechados e abertos.</string>
     <string name="bugs_bug_das_duas_contas">Bug das Duas Contas</string>
@@ -92,15 +92,15 @@
     <string name="bugs_bug_laco_eterno">Bug do Laço Eterno</string>
     <string name="bugs_recursao_esquerda_so_deixa_parser">Recursão à esquerda só deixa o parser lento.</string>
     <string name="bugs_ela_trava_parser_descendente_ele">Ela trava o parser descendente: ele chama a mesma regra sem ler nada.</string>
-    <string name="bugs_parser_lr_aceita_recursao_esquerda">Parser LR aceita recursão à esquerda.</string>
-    <string name="bugs_recursao_direita_trava_ll_1">Recursão à direita trava o LL(1).</string>
+    <string name="bugs_parser_lr_aceita_recursao_esquerda">O parser de baixo para cima, que você vê na Fortaleza, aceita recursão à esquerda.</string>
+    <string name="bugs_recursao_direita_trava_ll_1">Recursão à direita trava o parser de cima para baixo.</string>
     <string name="bugs_direita_ele_le_token_antes">À direita, ele lê um token antes de voltar.</string>
     <string name="bugs_bug_comeco_igual">Bug do Começo Igual</string>
     <string name="bugs_fatorar_muda_linguagem">Fatorar muda a linguagem.</string>
     <string name="bugs_linguagem_mesma_so_adia_escolha">A linguagem é a mesma. Só adia a escolha.</string>
     <string name="bugs_fatorar_acrescenta_nivel_na_arvore">Fatorar acrescenta um nível na árvore.</string>
     <string name="bugs_fatorar_resolve_qualquer_conflito_ll">Fatorar resolve qualquer conflito LL(1).</string>
-    <string name="bugs_conflito_com_follow_por_exemplo">Conflito com FOLLOW, por exemplo, continua lá.</string>
+    <string name="bugs_conflito_com_follow_por_exemplo">Fatorar só tira o começo igual. O else solto, por exemplo, continua com duas regras possíveis.</string>
     <string name="bugs_bug_primeiro_so">Bug do Primeiro Só</string>
     <string name="bugs_first_so_primeiro_simbolo_regra">FIRST é só o primeiro símbolo da regra.</string>
     <string name="bugs_se_ele_nao_terminal_vale">Se ele é não terminal, vale o FIRST dele. Se ele some, olha o próximo.</string>
