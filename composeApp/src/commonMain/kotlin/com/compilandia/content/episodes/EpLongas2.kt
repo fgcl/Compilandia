@@ -69,6 +69,10 @@ val AFD_LIVRO = com.compilandia.engine.DFA(
 /** AFD de a*b* sem o estado morto: o Minimizer completa com ele (estado 2) antes de montar a tabela. */
 val AFD_ASBS = com.compilandia.engine.DFA(2, 0, setOf(0, 1), listOf('a', 'b'), mapOf((0 to 'a') to 0, (0 to 'b') to 1, (1 to 'b') to 1))
 
+/** Os ponteiros de C: SLR tem conflito no estado depois do L; o LR(1) dá ao R -> L • só o $. Conferidos em AulasConsertadasTest. */
+val GRAMATICA_PONTEIROS = listOf("S -> L = R | R", "L -> * R | id", "R -> L")
+val LALR_ESTADO_L = listOf("S -> L • = R , $", "R -> L • , $")
+
 /** Gramática do segundo exemplo de LR(0) e SLR. */
 val GRAMATICA_LR_2 = listOf("S -> ( S ) | id")
 
@@ -438,6 +442,27 @@ val aulasLongas2 by lazy {
             cena(tx("lalr_l_11"), mood = EpMood.HAPPY) {
                 drop("e1", "e2", "e3", "o2", "o3")
                 move("o1", 180f, 160f); tint("o1", Tint.GREEN); hot("o1")
+            }
+            // De onde vem o lookahead, nos ponteiros da pegadinha do SLR (professor do bloco 4).
+            cena(tx("lalr_l_12")) {
+                clear()
+                add(titulo(tx("lalr_l_titulo_ponteiros"), size = 20f))
+                add(codigo("g", GRAMATICA_PONTEIROS, 66f, x = 110f, passo = 28f, size = 16f))
+                add(cx("s1", LALR_ESTADO_L[0], 100f, 200f, Tint.ORANGE), cx("s2", LALR_ESTADO_L[1], 266f, 200f, Tint.ORANGE))
+                add(rotulo("sl", "SLR: s ? r ?", 180f, 252f, Tint.RED, 16f))
+            }
+            pergunta(tx("lalr_l_13"), setOf("la1"), setOf("la2", "la3"), tx("lalr_l_13_dica"), tx("lalr_l_13_ok")) {
+                drop("s1", "s2", "sl")
+                add(Box("pai", "S -> • L = R , $", 180f, 200f, 240f, 42f, Look.TOKEN, Tint.TEAL, size = 15f))
+                add(Box("fi", "L -> • id , ?", 180f, 254f, 240f, 42f, Look.TOKEN, Tint.NONE, size = 15f))
+                add(opcao("la2", "$", 110f, 320f), opcao("la1", "=", 180f, 320f), opcao("la3", "R", 250f, 320f))
+                hot("pai")
+            }
+            cena(tx("lalr_l_14"), mood = EpMood.HAPPY) {
+                drop("pai", "fi", "la1", "la2", "la3")
+                add(cx("s1", LALR_ESTADO_L[0], 100f, 200f, Tint.TEAL), cx("s2", LALR_ESTADO_L[1], 266f, 200f, Tint.TEAL))
+                add(rotulo("sl", "= : s     $ : r", 180f, 252f, Tint.GREEN, 16f))
+                hot("s2")
             }
             fecho(Fecho(
                 tx("lalr_f_af"), true, tx("lalr_f_q"), tx("lalr_f_dica"), tx("lalr_f_ok"), tx("lalr_f_af"),

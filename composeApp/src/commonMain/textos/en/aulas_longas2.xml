@@ -127,6 +127,12 @@
     <string name="lalr_l_10_dica">Join the tokens of both.</string>
     <string name="lalr_l_10_ok">Closing parenthesis and dollar sign in the same item.</string>
     <string name="lalr_l_11">That is how LALR stays the size of SLR and keeps the precision of the lookahead.</string>
+    <string name="lalr_l_titulo_ponteiros">The pointers, again</string>
+    <string name="lalr_l_12">The pointers from the SLR trap. After L, SLR has a conflict on equals. Shift, or reduce R goes to L?</string>
+    <string name="lalr_l_13">In LR(1), the closure of this item creates L goes to dot id. What lookahead does it get from this item? Tap it.</string>
+    <string name="lalr_l_13_dica">The lookahead is what comes right after L in the item that created it.</string>
+    <string name="lalr_l_13_ok">Equals. After L comes equals, and that is what L can meet next.</string>
+    <string name="lalr_l_14">The same way, R goes to L dot keeps only dollar. On equals, the parser only shifts. The conflict is gone.</string>
     <string name="lalr_l_r1">1. Build the LR(1) states, with lookahead.</string>
     <string name="lalr_l_r2">2. Merge equal cores and union the lookaheads.</string>
     <string name="lalr_l_r3">Result: SLR size, fewer conflicts.</string>

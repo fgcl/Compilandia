@@ -69,6 +69,13 @@
     <string name="afn_l_02_dica">Lendo a letra a, o estado zero vai para zero e um. O dois não anda.</string>
     <string name="afn_l_02_ok">Volta para o conjunto zero e um, que já existe.</string>
     <string name="afn_l_03">As transições que faltam caem em conjuntos que já existem. Quando não surge conjunto novo, a construção acabou.</string>
+    <string name="afn_l_titulo_thompson">De onde vem o AFN</string>
+    <string name="afn_l_th1">Esse AFN vem da expressão regular, peça por peça: é a construção de Thompson. Cada letra vira dois estados e uma seta.</string>
+    <string name="afn_l_th2">Para a ou b, um estado novo no começo abre dois caminhos com épsilon, e um estado novo no fim junta os dois. São seis estados.</string>
+    <string name="afn_l_th3">Agora a estrela em volta de tudo. Ela também põe um estado novo no começo e outro no fim. Quantos estados ficam? Toque.</string>
+    <string name="afn_l_th3_dica">Some dois estados aos seis da união.</string>
+    <string name="afn_l_th3_ok">Oito. As setas épsilon da estrela deixam repetir e deixam pular tudo.</string>
+    <string name="afn_l_th4">Por isso o AFN de Thompson tem tantas setas épsilon. E por isso o fecho depois do move faz tanta diferença.</string>
     <string name="afn_l_04">Esse método é a construção de subconjuntos. Ela tem quatro passos.</string>
     <string name="afn_l_vazio">vazio</string>
     <string name="afn_l_12">Agora um caso que cai em prova: a b c, ou a c. O fecho do zero já está pronto: zero, um e quatro.</string>
@@ -107,6 +114,12 @@
     <string name="flex_l_02">Qual linha começa o teste dos números? Toque nela.</string>
     <string name="flex_l_02_dica">Procure o teste de dígito.</string>
     <string name="flex_l_02_ok">Cada classe pede um teste, e a ordem fica por sua conta.</string>
+    <string name="flex_l_titulo_ultimo">O último final</string>
+    <string name="flex_l_u1">O AFD da aula de autômatos só aceita se a cadeia inteira acabar num final. O scanner não espera o fim: ele anda enquanto dá.</string>
+    <string name="flex_l_u2">A regra do NUM lê o 3, que é final, e o ponto, que ainda não é. No x, o autômato trava. Qual token sai? Toque.</string>
+    <string name="flex_l_u_erro">erro</string>
+    <string name="flex_l_u2_dica">Quando trava, o scanner volta ao último estado final por onde passou.</string>
+    <string name="flex_l_u2_ok">NUM com o 3. O scanner lembra o último final e devolve o ponto à entrada. O próximo token começa no ponto. É assim que ele acha o maior casamento.</string>
     <string name="flex_l_03">Para cada pedaço da entrada, o scanner do Flex faz quatro passos.</string>
     <string name="flex_l_r1">1. Teste todas as regras no ponto atual.</string>
     <string name="flex_l_r2">2. Vence o casamento mais longo.</string>

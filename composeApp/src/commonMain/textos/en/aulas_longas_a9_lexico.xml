@@ -69,6 +69,13 @@
     <string name="afn_l_02_dica">Reading a, zero goes to zero and one. Two goes nowhere.</string>
     <string name="afn_l_02_ok">Back to the set zero and one, which already exists.</string>
     <string name="afn_l_03">The missing transitions land on sets that already exist. When no new set appears, the construction is over.</string>
+    <string name="afn_l_titulo_thompson">Where the NFA comes from</string>
+    <string name="afn_l_th1">That NFA comes from the regular expression, piece by piece: it is Thompson's construction. Each letter becomes two states and one arrow.</string>
+    <string name="afn_l_th2">For a or b, a new state at the start opens two paths with epsilon, and a new state at the end joins them. That makes six states.</string>
+    <string name="afn_l_th3">Now the star around all of it. It also adds a new state at the start and another at the end. How many states are there? Tap it.</string>
+    <string name="afn_l_th3_dica">Add two states to the six of the union.</string>
+    <string name="afn_l_th3_ok">Eight. The epsilon arrows of the star let you repeat and let you skip everything.</string>
+    <string name="afn_l_th4">That is why Thompson's NFA has so many epsilon arrows. And that is why the closure after the move matters so much.</string>
     <string name="afn_l_04">This method is the subset construction. It has four steps.</string>
     <string name="afn_l_vazio">empty</string>
     <string name="afn_l_12">Now a case that shows up on exams: a b c, or a c. The closure of zero is ready: zero, one and four.</string>
@@ -107,6 +114,12 @@
     <string name="flex_l_02">Which line starts the test for numbers? Tap it.</string>
     <string name="flex_l_02_dica">Look for the digit test.</string>
     <string name="flex_l_02_ok">Each class needs a test, and the order is up to you.</string>
+    <string name="flex_l_titulo_ultimo">The last final state</string>
+    <string name="flex_l_u1">The DFA from the automata lesson accepts only if the whole string ends in a final state. The scanner does not wait for the end: it moves while it can.</string>
+    <string name="flex_l_u2">The NUM rule reads 3, which is final, and the dot, which is not yet. On x, the automaton gets stuck. Which token comes out? Tap it.</string>
+    <string name="flex_l_u_erro">error</string>
+    <string name="flex_l_u2_dica">When it gets stuck, the scanner goes back to the last final state it passed.</string>
+    <string name="flex_l_u2_ok">NUM with the 3. The scanner remembers the last final state and gives the dot back to the input. The next token starts at the dot. That is how it finds the longest match.</string>
     <string name="flex_l_03">For each piece of the input, the Flex scanner does four steps.</string>
     <string name="flex_l_r1">1. Try every rule at the current point.</string>
     <string name="flex_l_r2">2. The longest match wins.</string>

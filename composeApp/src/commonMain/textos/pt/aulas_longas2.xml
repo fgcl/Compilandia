@@ -127,6 +127,12 @@
     <string name="lalr_l_10_dica">Junte os tokens dos dois.</string>
     <string name="lalr_l_10_ok">Fecha parêntese e cifrão no mesmo item.</string>
     <string name="lalr_l_11">É assim que o LALR fica do tamanho da SLR e guarda a precisão do lookahead.</string>
+    <string name="lalr_l_titulo_ponteiros">Os ponteiros, de novo</string>
+    <string name="lalr_l_12">Os ponteiros da pegadinha do SLR. Depois do L, o SLR tem conflito no igual. Empilha, ou reduz R vai para L?</string>
+    <string name="lalr_l_13">No LR(1), o fecho deste item cria L vai para ponto id. Que lookahead ele ganha deste item? Toque.</string>
+    <string name="lalr_l_13_dica">O lookahead é o que vem logo depois do L no item que o criou.</string>
+    <string name="lalr_l_13_ok">O igual. Depois do L vem o igual, e é ele que o L pode encontrar em seguida.</string>
+    <string name="lalr_l_14">Do mesmo jeito, R vai para L ponto fica só com o cifrão. No igual, o parser só empilha. O conflito sumiu.</string>
     <string name="lalr_l_r1">1. Monte os estados LR(1), com lookahead.</string>
     <string name="lalr_l_r2">2. Junte núcleos iguais e una os lookaheads.</string>
     <string name="lalr_l_r3">Resultado: tamanho da SLR, menos conflitos.</string>

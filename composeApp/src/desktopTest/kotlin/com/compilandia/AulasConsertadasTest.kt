@@ -20,6 +20,7 @@ import com.compilandia.content.episodes.tabelaSlrDaAula
 import com.compilandia.engine.FirstFollow
 import com.compilandia.engine.Grammar
 import com.compilandia.engine.ParseNode
+import com.compilandia.engine.render
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -313,5 +314,36 @@ class AulasConsertadasTest {
             // reductions[0] é expr -> NUM do 2; a segunda é o sinal (com %prec) ou o NUM do 3 (sem).
             assertEquals(sinalPrimeiro, "'-' expr" in r.reductions[1].substringBefore("⇒"), r.reductions.toString())
         }
+    }
+
+    /** Ponteiros: o SLR tem conflito; no LR(1), L -> • id ganha = de S -> • L = R, $, e o estado depois do L tem os dois itens da tela. LALR sem conflito. */
+    @Test fun lookaheadDosPonteiros() {
+        val g = Grammar.parse(com.compilandia.content.episodes.GRAMATICA_PONTEIROS.joinToString("\n"))
+        assertTrue(com.compilandia.engine.LRTable(g, com.compilandia.engine.LRKind.SLR1).conflicts.isNotEmpty())
+        assertTrue(com.compilandia.engine.LRTable(g, com.compilandia.engine.LRKind.LALR1).conflicts.isEmpty())
+        val aut = com.compilandia.engine.LRAutomaton.lr1(g)
+        val ga = aut.grammar
+        fun txt(i: com.compilandia.engine.LRItem) = i.render(ga).replace("→", "->")
+        val s0 = aut.states[0].items.map(::txt)
+        assertTrue("L -> • id, =" in s0, s0.toString())
+        val depoisDoL = aut.states[aut.transitions.getValue(0 to "L")].items.map(::txt).toSet()
+        assertEquals(com.compilandia.content.episodes.LALR_ESTADO_L.map { it.replace(" , ", ", ") }.toSet(), depoisDoL)
+    }
+
+    /** Último final: com 3.x, a regra do NUM passa pelo ponto, trava no x e volta ao 3; com 3.5, leva tudo. */
+    @Test fun scannerVoltaAoUltimoFinal() {
+        val f = com.compilandia.engine.MiniFlex.parseSpec(com.compilandia.content.episodes.FLEX_ULTIMO.joinToString("\n"))
+        assertEquals(listOf("NUM" to "3", "PONTO" to ".", "ID" to "x"), f.scan(com.compilandia.content.episodes.FLEX_ULTIMO_ENTRADA).tokens.map { it.token to it.text })
+        assertEquals(listOf("NUM" to "3.5"), f.scan("3.5").tokens.map { it.token to it.text })
+    }
+
+    /** Thompson: a|b dá 6 estados e 4 setas ε, como a fala diz; com a estrela, 8. */
+    @Test fun thompsonDaUniao() {
+        val u = com.compilandia.engine.NFA.thompson(com.compilandia.engine.Regex0.parse(com.compilandia.content.episodes.THOMPSON_UNIAO))
+        assertEquals(6, u.stateCount)
+        assertEquals(setOf(0 to 1, 0 to 3, 2 to 5, 4 to 5), u.edges.filter { it.second == null }.map { it.first to it.third }.toSet())
+        assertEquals(4, u.edges.count { it.second == null })
+        assertEquals(5, u.accept)
+        assertEquals(8, com.compilandia.engine.NFA.thompson(com.compilandia.engine.Regex0.parse("(${com.compilandia.content.episodes.THOMPSON_UNIAO})*")).stateCount)
     }
 }

@@ -91,6 +91,12 @@ Todos os 10 relatórios gravados estão completos (cada um termina em "As 5 cois
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (décima quarta rodada)
+
+1. **LALR: de onde vem o lookahead.** Três cenas no fim da Sua vez voltam aos ponteiros da pegadinha do SLR (`S → L = R | R`). O SLR tem conflito no igual depois do L. O aluno descobre que `L → • id` ganha o `=` do item `S → • L = R, $` que o criou, e vê que `R → L •` fica só com o `$`: o conflito some. O motor confere os itens LR(1) e que o LALR não tem conflito. A fusão desenhada com estados completos continua pendente.
+2. **O scanner volta ao último final.** Duas cenas no Flex, depois do maior casamento: o AFD da aula de autômatos aceita só se a cadeia inteira acabar num final, e o scanner anda enquanto dá. Com `3.x`, a regra do NUM passa pelo ponto, trava no x e volta ao 3. O MiniFlex confere os tokens.
+3. **Thompson desenhado.** Quatro cenas no fim de AFN→AFD: o AFN de `a|b` sai do motor (6 estados, 4 setas ε), e o aluno calcula que a estrela em volta dá 8 estados.
+
 ## Feito em 14/11 (décima terceira rodada)
 
 1. **Minimização: o segundo X e a contradição com o Cuidado.** A cena dizia "se os destinos são diferentes, as origens também são", e o Cuidado do fim chamava essa frase de erro. Agora a cena diz "os destinos formam um par marcado". O aluno acha o segundo X (A com C, que com b vão para C e D), e a fala explica por que B com C não cai. O Cuidado usa A e C do AFD do livro: estados diferentes no desenho, mas equivalentes.

@@ -82,6 +82,13 @@ val FLEX_2_CERTO = listOf(FLEX_2[1], FLEX_2[0]) + FLEX_2.drop(2)
 /** Entrada do segundo exemplo da aula do Flex. */
 val FLEX_2_ENTRADA = "while x==10"
 
+/** A união do exemplo de Thompson. Conferida em AulasConsertadasTest: 6 estados, 4 setas ε; com a estrela, 8 estados. */
+const val THOMPSON_UNIAO = "a|b"
+
+/** O último final: NUM lê 3 (final) e o ponto (não final), trava no x e volta ao 3. Conferido em AulasConsertadasTest. */
+val FLEX_ULTIMO = listOf("[0-9]+(\\.[0-9]+)?  return NUM;", "\".\"              return PONTO;", "[a-z]+             return ID;")
+const val FLEX_ULTIMO_ENTRADA = "3.x"
+
 private fun tintOf(c: TokenClass) = when (c) {
     TokenClass.ID -> Tint.TEAL
     TokenClass.NUM -> Tint.YELLOW
@@ -480,6 +487,23 @@ val lexicos by lazy {
                 wire("d0", "d1", "a")
                 hot("q6", "d1")
             }
+            // 6. De onde vem o AFN: Thompson, peça por peça (professor do bloco 1). O desenho sai do motor.
+            val uniao = com.compilandia.engine.NFA.thompson(com.compilandia.engine.Regex0.parse(THOMPSON_UNIAO))
+            cena(tx("afn_l_th1")) {
+                clear()
+                add(titulo(tx("afn_l_titulo_thompson"), size = 20f))
+                add(Box("re", THOMPSON_UNIAO, 180f, 74f, 100f, 40f, Look.CELL, size = 17f))
+                add(estados(listOf(40f to 190f, 130f to 140f, 230f to 140f, 130f to 240f, 230f to 240f, 320f to 190f), finais = setOf(uniao.accept), nomes = (0 until uniao.stateCount).map { "$it" }))
+                for ((de, c, para) in uniao.edges) wire("q$de", "q$para", c?.toString() ?: "ε")
+                hot("q1", "q2")
+            }
+            cena(tx("afn_l_th2")) { hot("q0", "q5") }
+            pergunta(tx("afn_l_th3"), setOf("n8"), setOf("n6", "n7"), tx("afn_l_th3_dica"), tx("afn_l_th3_ok")) {
+                hot()
+                add(Box("re2", "($THOMPSON_UNIAO)*", 180f, 310f, 120f, 40f, Look.CELL, size = 17f))
+                add(opcao("n6", "6", 110f, 370f), opcao("n7", "7", 180f, 370f), opcao("n8", "8", 250f, 370f))
+            }
+            cena(tx("afn_l_th4"), mood = EpMood.HAPPY) { drop("n6", "n7"); tint("n8", Tint.GREEN); hot("n8") }
             fecho(Fecho(
                 tx("afn_f_af"), true, tx("afn_f_q"), tx("afn_f_dica"), tx("afn_f_ok"), tx("afn_f_af"),
                 tx("afn_f_erro2"), tx("afn_f_certo2"), tx("afn_f_fala2"),
@@ -526,6 +550,20 @@ val lexicos by lazy {
                 hot()
             }
             cena(tx("eplexico_por_isso_palavras_reservadas_vem"), mood = EpMood.HAPPY) { hot("r0") }
+            // A ponte entre o AFD que aceita a cadeia inteira e o scanner que volta ao último final (professor do bloco 1).
+            cena(tx("flex_l_u1"), mood = EpMood.THINK) {
+                clear()
+                add(titulo(tx("flex_l_titulo_ultimo")))
+                add(codigo("r", FLEX_ULTIMO, 80f, x = 30f, passo = 34f, size = 14f))
+                add(fita(FLEX_ULTIMO_ENTRADA, 240f, cell = 40f))
+            }
+            pergunta(tx("flex_l_u2"), setOf("u1"), setOf("u2", "u3"), tx("flex_l_u2_dica"), tx("flex_l_u2_ok")) {
+                tint("c0", Tint.GREEN); tint("c1", Tint.YELLOW); tint("c2", Tint.RED)
+                add(Box("u2", "NUM 3.", 76f, 330f, 84f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("u1", "NUM 3", 180f, 330f, 84f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("u3", tx("flex_l_u_erro"), 284f, 330f, 84f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                hot("r0")
+            }
             // 3. A receita
             cena(tx("flex_l_03")) {
                 clear()

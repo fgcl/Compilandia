@@ -70,9 +70,9 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 
 **Porto e Floresta**
 - [ ] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
-- [ ] Thompson com um exemplo desenhado, ou tirar da ficha
+- [x] Thompson com um exemplo desenhado, ou tirar da ficha
 - [x] Minimização: cena 8 × cena 18; justificar o segundo X
-- [ ] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
+- [x] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
 
 **Vale e Ponte**
 - [x] Associatividade: a árvore de `9 - 5 - 2` nas duas gramáticas, e a pergunta "o menos passou a ser da direita?"
@@ -91,7 +91,8 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 **Fortaleza e Oficina**
 - [x] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
 - [x] SLR: a tabela nasce das caixas de itens
-- [ ] LALR: origem do lookahead; fusão desenhada com estados completos; kernel × core
+- [x] LALR: origem do lookahead (ponteiros `S → L = R`, conflito do SLR some no LR(1))
+- [ ] LALR: fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [x] Bison: `%right` com `2^3^2`; "reduz com qualquer token" é a redução padrão
 - [x] Bison: precedência da regra × do token, `%prec` no menos unário
