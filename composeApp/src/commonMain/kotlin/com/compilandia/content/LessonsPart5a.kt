@@ -22,10 +22,10 @@ private val P5_FAT_ASM: String = p5Asm(
 )
 
 /** As peças do fat.asm, uma por vez. O MipsVM confere o que cada uma faz em AulasConsertadasTest. */
-internal const val P5_PECA_SP = "addi §sp, §sp, -8      # abre 8 bytes na pilha"
-internal const val P5_PECA_DESLOCAMENTO = "sw   §ra, 4(§sp)       # grava no endereço §sp + 4\nsw   §a0, 0(§sp)       # grava no endereço §sp + 0"
-internal const val P5_PECA_JAL = "jal  fat               # pula para fat e guarda a volta em §ra\nmove §a0, §v0          # a volta é aqui"
-internal const val P5_PECA_RA = "jr   §ra               # pula para o endereço em §ra"
+internal const val P5_PECA_SP = "addi §sp, §sp, -8  # abre 8 bytes"
+internal const val P5_PECA_DESLOCAMENTO = "sw §ra, 4(§sp)  # em §sp + 4\nsw §a0, 0(§sp)  # em §sp + 0"
+internal const val P5_PECA_JAL = "jal fat         # §ra = linha de baixo\nmove §a0, §v0   # a volta é aqui"
+internal const val P5_PECA_RA = "jr §ra  # pula para o endereço em §ra"
 
 internal val p5RuntimeLessons: List<Lesson> = listOf(
     // ───────────────────────────── STORY ─────────────────────────────

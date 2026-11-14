@@ -3505,7 +3505,7 @@
     <string name="lessonspart5a_estatica_endereco_fixo_em_tempo">**Estática:** endereço fixo em tempo de compilação; não permite recursão nem tamanho dinâmico (globais; FORTRAN 77)</string>
     <string name="lessonspart5a_em_pilha_quadro_por_ativacao">**Em pilha:** um quadro por ativação, LIFO; permite recursão; o quadro morre no retorno (locais em C e Java)</string>
     <string name="lessonspart5a_em_heap_blocos_com_tempo">**Em heap:** blocos com tempo de vida arbitrário; liberação manual (`free`) ou por coleta de lixo</string>
-    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   argumentos           §v0–§v1  valores de retorno\n                    §ra       endereço de retorno  §sp      topo da pilha\n                    §fp       base do quadro atual (opcional)\n                    §t0–§t9   temporários: o CHAMADOR salva se precisar deles depois\n                    §s0–§s7   salvos: o CHAMADO salva antes de usar\n\n                    jal f     # §ra := PC + 4;  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
+    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   argumentos           §v0–§v1  valores de retorno\n                    §ra       endereço de retorno  §sp      topo da pilha\n                    §fp       base do quadro atual (opcional)\n                    §t0–§t9   temporários: o CHAMADOR salva se precisar deles depois\n                    §s0–§s7   salvos: o CHAMADO salva antes de usar\n\n                    PC        contador de programa: o endereço da instrução que roda agora\n\n                    jal f     # §ra := PC + 4 (a instrução de baixo);  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
     <string name="lessonspart5a_convencao_chamada_mips">Convenção de chamada do MIPS</string>
     <string name="lessonspart5a_qual_vinculo_aponta_para_quadro">Qual vínculo aponta para o quadro de QUEM CHAMOU a função?</string>
     <string name="lessonspart5a_vinculo_acesso_estatico">Vínculo de acesso (estático)</string>
@@ -4200,7 +4200,7 @@
     <string name="solta_lessonspart4c_3">E em `id num ; id = num ;`, o que muda?</string>
     <string name="solta_lessonspart4c_4">Em `id = num num ; id = id ;`, em qual token o parser LL(1) PERCEBE o erro?</string>
     <string name="solta_lessonspart5_1">Não salvar $ra na pilha antes de um jal dentro de uma função que chama outra</string>
-    <string name="solta_lessonspart5_2">Guarda PC + 4 em $ra e desvia para a função</string>
+    <string name="solta_lessonspart5_2">Guarda em $ra o endereço da instrução logo abaixo do jal (PC + 4; PC é o contador de programa) e desvia para a função</string>
     <string name="solta_lessonspart5_3">Esquecer de declarar os temporários na .data ou de encerrar com li $v0, 10 + syscall</string>
     <string name="solta_lessonspart5_4">Confundir t1 (variável na memória) com $t1 (registrador)</string>
     <string name="solta_lessonspart5_5">Para que serve $zero?</string>
@@ -4209,15 +4209,15 @@
     <string name="solta_lessonspart5a_3">5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai</string>
     <string name="solta_lessonspart5a_4">Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.</string>
     <string name="lessonspart5a_pecas_uma_por_vez">Antes do programa inteiro, as quatro peças novas, uma de cada vez.</string>
-    <string name="lessonspart5a_peca_sp_titulo">1. `$sp`, o topo da pilha</string>
+    <string name="lessonspart5a_peca_sp_titulo">$sp: o topo da pilha</string>
     <string name="lessonspart5a_peca_sp">`$sp` (stack pointer, ponteiro da pilha) guarda o endereço do topo da pilha. No MIPS, a pilha cresce para endereços menores: subtrair 8 do `$sp` abre 8 bytes, duas palavras de 4 bytes. Somar 8 fecha esse espaço.</string>
-    <string name="lessonspart5a_peca_desloc_titulo">2. `4($sp)`, o deslocamento</string>
+    <string name="lessonspart5a_peca_desloc_titulo">4($sp): o deslocamento</string>
     <string name="lessonspart5a_peca_desloc">`4($sp)` quer dizer: o endereço que está em `$sp`, mais 4. O número antes do parêntese é o deslocamento, em bytes. `0($sp)` é a primeira palavra do quadro, e `4($sp)` é a segunda. `sw` grava um registrador nesse endereço, e `lw` lê de volta.</string>
     <string name="lessonspart5a_peca_desloc_q">Se `$sp` vale 1000, em que endereço `sw $ra, 4($sp)` grava?</string>
     <string name="lessonspart5a_peca_desloc_r">1004: o endereço do `$sp` mais o deslocamento 4. O `$sp` não muda; quem muda o `$sp` é o `addi`.</string>
-    <string name="lessonspart5a_peca_jal_titulo">3. `jal`, chamar a função</string>
+    <string name="lessonspart5a_peca_jal_titulo">jal: chamar a função</string>
     <string name="lessonspart5a_peca_jal">`jal` (jump and link, pular e ligar) faz duas coisas: pula para o rótulo `fat` e guarda em `$ra` o endereço da instrução logo abaixo do `jal`. É por ali que o programa continua quando `fat` terminar.</string>
-    <string name="lessonspart5a_peca_ra_titulo">4. `$ra`, o endereço de volta</string>
+    <string name="lessonspart5a_peca_ra_titulo">$ra: o endereço de volta</string>
     <string name="lessonspart5a_peca_ra">`$ra` (return address, endereço de retorno) é o registrador da volta. `jr $ra` pula para esse endereço: é o `return` do C. Cada `jal` escreve por cima do `$ra`. Por isso, uma função que chama outra guarda o seu `$ra` na pilha antes, com `sw $ra, 4($sp)`.</string>
     <string name="lessonspart5a_peca_ra_q">Dentro de `fat(3)`, o `jal fat` da recursão acabou de rodar. O que está no `$ra` agora?</string>
     <string name="lessonspart5a_peca_ra_o1">A volta para o `main`</string>

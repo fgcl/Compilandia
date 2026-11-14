@@ -98,14 +98,14 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Bison: precedência da regra × do token, `%prec` no menos unário
 
 **Cidade e Forja**
-- [ ] Ambientes de execução depois de Geração de código MIPS
+- [x] Ambientes de execução depois de Geração de código MIPS
 - [x] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
-- [ ] "PC" sem definição no FORMAL de Ambientes e na aula de texto de MIPS (`jal f  # $ra := PC + 4`)
-- [ ] Cena de transição na abertura da região 8
+- [x] "PC" sem definição no FORMAL de Ambientes e no cartão do `jal`
+- [x] Cena de transição na abertura da região 8
 - [ ] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto
 
 **Seu compilador**
-- [ ] Por que há duas linguagens, com tabela de equivalência de nomes
+- [x] Por que há duas linguagens, com tabela de equivalência de nomes
 - [ ] "Na sua linguagem" e "Teste desta etapa" no fim de cada capítulo
 - [ ] Algo rodando no capítulo 1; cronograma de 3 semanas
 - [ ] Capítulo 4: FIRST/FOLLOW da Byteiro inteira

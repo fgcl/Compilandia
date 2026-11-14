@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Textos do Compilândia em inglês. Mesmas chaves de textos/pt/aulas_longas_a9_backend.xml. -->
 <resources>
+    <string name="attr_l_titulo_transicao">Right form, wrong meaning</string>
+    <string name="attr_l_forma">name + name: the parser accepts</string>
+    <string name="attr_l_semantica">semantics</string>
+    <string name="attr_l_t1">Until now, the parser checked the form. A plus ok has the right form: name, plus, name. But ok is a bool, true or false.</string>
+    <string name="attr_l_t2">Adding a number to true or false makes no sense. Who reports this error? Tap it.</string>
+    <string name="attr_l_t2_dica">The scanner and the parser only look at the form. The form here is right.</string>
+    <string name="attr_l_t2_ok">Semantic analysis. It checks the meaning, and it is the subject of this region. The first step is knowing the type of each piece.</string>
+    <string name="attr_l_enxuta">Look at the tree: the operator sits in the node, and there is no E, T or F. It is the lean tree, with only operations and values. You learn to build it two lessons from now.</string>
     <string name="attr_l_01">On the machine, adding integers and adding reals are different instructions.</string>
     <string name="attr_l_01q">If a and x are float, which instruction does this addition? Tap it.</string>
     <string name="attr_l_01q_dica">Read what is under each instruction. Look for adding floats.</string>

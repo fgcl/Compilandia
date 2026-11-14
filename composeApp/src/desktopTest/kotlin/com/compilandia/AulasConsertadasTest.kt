@@ -395,4 +395,30 @@ class AulasConsertadasTest {
         assertEquals(1L, chamada.regs["\$t1"]) // a instrução logo abaixo do jal
         assertEquals(5L, chamada.regs["\$a0"]) // o move depois do jal rodou: o jr $ra voltou para ele
     }
+
+    /** Região 8 abre com a + ok: o parser aceita (a forma está certa), e o TypeChecker acusa erro na raiz. */
+    @Test fun transicaoDaRegiao8() {
+        val e = com.compilandia.engine.ExprParser.parse(com.compilandia.content.episodes.ATTR_TRANSICAO)
+        val at = com.compilandia.engine.TypeChecker.evaluate(e, com.compilandia.engine.ExprGenerator.env)
+        assertEquals(com.compilandia.engine.Type.ERROR, at.getValue(e.id).type)
+    }
+
+    /** Ambientes vem depois de MIPS no mapa (mesma região) e pede MIPS antes. */
+    @Test fun ambientesDepoisDeMips() {
+        assertTrue(Skill.RUNTIME.ordinal > Skill.CODEGEN_MIPS.ordinal)
+        assertTrue(Skill.CODEGEN_MIPS in Skill.RUNTIME.prereqs)
+        assertEquals(Skill.CODEGEN_MIPS.region, Skill.RUNTIME.region)
+    }
+
+    /** A tabela de equivalência do Guia do TP: os nomes de C estão no código da série, e os de Java no código do guia. */
+    @Test fun tabelaDeEquivalencia() {
+        val tabela = com.compilandia.content.TP_EQUIVALENCIA.lines().drop(1).take(5).map { it.trim().split(Regex("\\s{2,}")) }
+        val codigoC = com.compilandia.content.episodes.serieEmC.flatMap { ep -> ep.passos.flatMap { p -> p.shot.boxes.map { it.text } } }.joinToString("\n")
+        val codigoJava = com.compilandia.textos.tx("tpguideb_public_class_sintatico_private_final") + com.compilandia.textos.tx("tpguideb_private_void_expr_expre_ou")
+        for (linha in tabela) {
+            assertTrue(linha[0] in codigoC, "C: ${linha[0]}")
+            assertTrue(linha[1].substringBefore("(") + "(" in codigoJava, "Java: ${linha[1]}")
+        }
+        assertTrue("struct Node" in codigoC && "gera(" in codigoC)
+    }
 }

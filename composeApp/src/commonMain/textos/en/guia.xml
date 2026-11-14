@@ -15,6 +15,9 @@
     <string name="tpguidea_otimizacao_opcional_bonus_dobrar_constantes">**Optimization** (optional/bonus): fold constants, cut dead code.</string>
     <string name="tpguidea_testes_pasta_programas_que_devem">**Tests**: one folder of programs that MUST compile and another of programs that MUST fail.</string>
     <string name="tpguidea_repare_num_detalhe_semantico_gerador">Notice a detail: semantic and generator live **inside** the syntactic phase. It's **one-pass syntax-directed translation**: the parser asks the scanner for a token when it needs one, checks the semantics on the spot and spits out MIPS right away. No giant tree in memory, no second pass. It's the shape that fits a one-semester project.</string>
+    <string name="tpguidea_duas_linguagens">**Why two languages?** In the regions, the **In C** series writes a compiler in C and builds the tree (`struct Node`) before generating code. This guide does the project in **Java** and builds no tree: each parser function checks and emits MIPS in the same pass. The idea is one: **one function per grammar rule**. For the project, follow this guide. Use the series to see the tree from the inside. The table below translates the names.</string>
+    <string name="tpguidea_equivalencia_titulo">The same roles, with different names</string>
+    <string name="tpguidea_equivalencia_tabela">C (In C series) Java (guide)\nexpr()          exprAdd()\ntermo()         exprMul()\nfator()         primario()\ntok == '+'      eh(MAIS)\ncasa('+')       casaToken(MAIS)\nstruct Node     no tree\ngera()          emite() right away\n\nMAIS = TipoToken.MAIS</string>
     <string name="tpguidea_estrutura_pastas_sugerida">Suggested folder structure</string>
     <string name="tpguidea_errocompilacao_java_todo_erro_compilador">ErroCompilacao.java: EVERY compiler error goes through here, always with the line</string>
     <string name="tpguidea_main_java_maestro_java_17">Main.java: the conductor (Java 17)</string>

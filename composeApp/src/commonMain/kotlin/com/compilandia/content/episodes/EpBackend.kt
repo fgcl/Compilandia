@@ -55,6 +55,9 @@ private fun semNumero(code: String) = code.lines().map { it.replace(Regex("^\\d+
 
 /** Atributos: a conta do segundo exemplo, com c int e y float em [ExprGenerator.env]. */
 const val ATTR_EXEMPLO_2 = "c * 2 + y"
+
+/** A transição para a região 8: o parser aceita a + ok, e o TypeChecker acusa erro (ok é bool). Conferido em AulasConsertadasTest. */
+const val ATTR_TRANSICAO = "a + ok"
 /** A mesma conta com uma variável bool no lugar do y. */
 const val ATTR_EXEMPLO_2_ERRO = "c * 2 + ok"
 /** Escopo: semente do programa que [ScopeGen.random] gera para o segundo exemplo. */
@@ -92,8 +95,22 @@ val semantica by lazy {
     listOf(
         // ─────────────────────────────── ATRIBUTOS ───────────────────────────────
         episodio(Skill.ATTRIBUTES_TYPES, tx("epbackend_tipos_sobem_pela_arvore")) {
+            // 0. A transição para a região 8: a forma está certa, o sentido não (revisor aluno do bloco 5).
+            cena(tx("attr_l_t1"), mood = EpMood.THINK) {
+                add(titulo(tx("attr_l_titulo_transicao")))
+                add(Box("src", ATTR_TRANSICAO, 180f, 110f, 160f, 50f, Look.CELL, size = 20f))
+                add(rotulo("ta", "a: int", 120f, 170f, Tint.TEAL, 16f), rotulo("tok", "ok: bool", 240f, 170f, Tint.ORANGE, 16f))
+                add(rotulo("forma", tx("attr_l_forma"), 180f, 210f, Tint.GREEN, 16f))
+            }
+            pergunta(tx("attr_l_t2"), setOf("qs"), setOf("qsc", "qp"), tx("attr_l_t2_dica"), tx("attr_l_t2_ok")) {
+                add(Box("qsc", "scanner", 72f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("qp", "parser", 180f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("qs", tx("attr_l_semantica"), 288f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                hot("src")
+            }
             // 1. Por que existe
             cena(tx("attr_l_01"), mood = EpMood.THINK) {
+                clear()
                 add(titulo(tx("epbackend_tipos_sobem_pela_arvore")))
                 add(Box("src", "a + x", 180f, 110f, 120f, 46f, Look.CELL, size = 18f))
                 add(Box("ii", "add", 100f, 220f, 120f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("ff", "add.s", 260f, 220f, 120f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
@@ -120,6 +137,8 @@ val semantica by lazy {
                 add(b); for (x in w) wire(x)
                 add(rotulo("info", tx("epbackend_int_x_float"), 180f, 330f, size = 17f))
             }
+            // A árvore mudou de cara: avisar que é a enxuta, ensinada na aula de AST (revisor aluno do bloco 5).
+            cena(tx("attr_l_enxuta")) { hot(node.getValue("+").id, node.getValue("*").id) }
             cena(tx("epbackend_comeco_pelas_folhas_inteiro_x")) {
                 add(tipo("ta", "int", node.getValue("a")), tipo("tx", "float", node.getValue("x")), tipo("t2", "int", node.getValue("2")))
             }

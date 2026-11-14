@@ -30,6 +30,9 @@ internal const val TP_PROGRAMA_CONTAGEM = """programa contagem {
 
 // ───────────────────────────── Capítulo 1 ─────────────────────────────
 
+/** Os nomes da série Em C e os do guia, lado a lado. Os dois lados são conferidos em AulasConsertadasTest. */
+internal val TP_EQUIVALENCIA: String get() = tx("tpguidea_equivalencia_tabela")
+
 internal val tpCap1 = GuideChapter(
     1, tx("tpguidea_visao_geral_planejamento"),
     tx("tpguidea_tp_compilador_inteiro_mas_sao"),
@@ -51,6 +54,9 @@ internal val tpCap1 = GuideChapter(
             ),
         ),
         Text(tx("tpguidea_repare_num_detalhe_semantico_gerador")),
+        // Por que há duas linguagens (revisor aluno do bloco 6): o guia em Java sem árvore, a série Em C com árvore.
+        Callout(NO_DUMB_QUESTIONS, tx("tpguidea_duas_linguagens")),
+        Code(TP_EQUIVALENCIA, tx("tpguidea_equivalencia_titulo")),
         Code(
             tx("tpguidea_byteiro_src_main_java_le"),
             tx("tpguidea_estrutura_pastas_sugerida"),
