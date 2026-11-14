@@ -166,6 +166,11 @@
     <!-- EpEmC.kt -->
     <string name="epemc_em_c_1_laco_getchar">Em C 1: o laço do getchar</string>
     <string name="epemc_variaveis">variáveis</string>
+    <string name="epemc_titulo_duas">Em C aqui, Java no TP</string>
+    <string name="epemc_serie_c">série: C, com árvore</string>
+    <string name="epemc_guia_java">Guia do TP: Java, sem árvore</string>
+    <string name="epemc_uma_funcao_por_regra">uma função por regra</string>
+    <string name="epemc_duas_linguagens">Esta série escreve o compilador em C e monta a árvore. O Guia do TP faz o trabalho em Java, sem árvore. A ideia é a mesma: uma função por regra. O guia traz a tabela dos nomes.</string>
     <string name="epemc_vamos_escrever_analisador_lexico_em">Vamos escrever o analisador léxico em C, na mão.</string>
     <string name="epemc_getchar_le_caractere_por_vez">O getchar lê um caractere por vez. Chegou o 4.</string>
     <string name="epemc_digito_entra_no_if_valor">É dígito. Entra no if, e o valor começa em zero.</string>
@@ -350,7 +355,6 @@
     <string name="eplexico_juntar_gemeos">Juntar os gêmeos</string>
     <string name="eplexico_tabela_pares">Tabela de pares</string>
     <string name="eplexico_d_unico_final">D é o único final</string>
-    <string name="eplexico_primeira_rodada_final_nao_final">Primeira rodada: um estado final nunca é equivalente a um não final. Marco todo par que tem o D.</string>
     <string name="eplexico_agora_olho_para_onde_cada">Agora olho para onde cada par vai. Com b, A vai para C, e B vai para D. O par C e D já tem X, então A e B também se separam.</string>
     <string name="eplexico_c_d_ja_tem_x">(C,D) já tem X</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">Sobrou uma casa em branco. Toque nela: esses dois são gêmeos.</string>

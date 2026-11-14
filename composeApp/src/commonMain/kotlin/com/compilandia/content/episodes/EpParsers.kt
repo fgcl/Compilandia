@@ -249,6 +249,8 @@ val topDown by lazy {
                 add(codigo("g", GRAMATICA_EXPR, 58f, x = 100f, passo = 22f, size = 14f))
                 add(codigo("c", src, 128f, passo = 23f, size = 12f))
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("desc_l_q1"), setOf("c0"), setOf("c1", "c6"), tx("desc_l_q1_dica"), tx("desc_l_q1_ok")) { hot("g0") }
             cena(tx("epparsers_regra_pede_t_depois_x")) { hot("c0", "g0") }
             cena(tx("epparsers_terminal_vira_casa_ele_confere")) { hot("c3", "g1") }
             pergunta(
@@ -446,7 +448,13 @@ val bottomUp by lazy {
                 esteira(listOf(1 to "+", 2 to "n", 3 to "$"))
                 add(pilha("p", listOf("n"), 300f, 340f, h = 34f))
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("sr_l_q1"), setOf("bR"), setOf("bE", "bA"), tx("sr_l_q1_dica"), tx("sr_l_q1_ok")) {
+                add(botao("bE", tx("slr_l_empilha"), 60f, 290f, 84f), botao("bR", tx("slr_l_reduz"), 150f, 290f, 84f), botao("bA", tx("sims_aceita"), 240f, 290f, 84f))
+                hot("p0")
+            }
             cena(tx("epparsers_no_topo_tem_n_lado")) {
+                drop("bE", "bR", "bA")
                 dropAll("p")
                 add(pilha("p", listOf("E"), 300f, 340f, h = 34f, tint = Tint.ORANGE))
                 hot("p0")
@@ -558,7 +566,12 @@ val bottomUp by lazy {
                 add(titulo(tx("epparsers_arquivo_y")))
                 add(codigo("s", BISON_SPEC_1, 66f, passo = 28f, size = 13f))
             }
-            cena(tx("epparsers_cada_regra_tem_acao_cifrao")) { hot("s4") }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("bison_l_q1"), setOf("d3"), setOf("d1", "d2"), tx("bison_l_q1_dica"), tx("bison_l_q1_ok")) {
+                add(botao("d1", "$1", 100f, 370f), botao("d2", "$2", 180f, 370f), botao("d3", "$3", 260f, 370f))
+                hot("s4")
+            }
+            cena(tx("epparsers_cada_regra_tem_acao_cifrao")) { drop("d1", "d2", "d3"); hot("s4") }
             cena(tx("epparsers_cifrao_cifrao_resultado_regra_ele")) { hot("s5") }
             cena(tx("epparsers_essa_gramatica_ambigua_quem_resolve"), mood = EpMood.THINK) { hot("s1", "s2") }
             pergunta(

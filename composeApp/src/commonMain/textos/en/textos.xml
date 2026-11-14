@@ -3425,7 +3425,7 @@
     <string name="lessonspart5a_estatica_endereco_fixo_em_tempo">**Static:** a fixed address at compile time; allows neither recursion nor dynamic size (globals; FORTRAN 77)</string>
     <string name="lessonspart5a_em_pilha_quadro_por_ativacao">**Stack:** one frame per activation, LIFO; allows recursion; the frame dies on return (locals in C and Java)</string>
     <string name="lessonspart5a_em_heap_blocos_com_tempo">**Heap:** blocks with arbitrary lifetimes; manual freeing (`free`) or garbage collection</string>
-    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   arguments            §v0–§v1  return values\n                    §ra       return address       §sp      top of the stack\n                    §fp       base of the current frame (optional)\n                    §t0–§t9   temporaries: the CALLER saves them if needed later\n                    §s0–§s7   saved: the CALLEE saves them before using\n\n                    jal f     # §ra := PC + 4;  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
+    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   arguments            §v0–§v1  return values\n                    §ra       return address       §sp      top of the stack\n                    §fp       base of the current frame (optional)\n                    §t0–§t9   temporaries: the CALLER saves them if needed later\n                    §s0–§s7   saved: the CALLEE saves them before using\n\n                    PC        program counter: the address of the instruction running now\n\n                    jal f     # §ra := PC + 4 (the next instruction);  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
     <string name="lessonspart5a_convencao_chamada_mips">MIPS calling convention</string>
     <string name="lessonspart5a_qual_vinculo_aponta_para_quadro">Which link points to the frame of WHOEVER CALLED the function?</string>
     <string name="lessonspart5a_vinculo_acesso_estatico">Access link (static)</string>
@@ -4102,7 +4102,7 @@
     <string name="solta_lessonspart4c_3">And in `id num ; id = num ;`, what changes?</string>
     <string name="solta_lessonspart4c_4">In `id = num num ; id = id ;`, at which token does the LL(1) parser NOTICE the error?</string>
     <string name="solta_lessonspart5_1">Not saving $ra on the stack before a jal inside a function that calls another</string>
-    <string name="solta_lessonspart5_2">Stores PC + 4 in $ra and jumps to the function</string>
+    <string name="solta_lessonspart5_2">Stores in $ra the address of the instruction right below the jal (PC + 4; PC is the program counter) and jumps to the function</string>
     <string name="solta_lessonspart5_3">Forgetting to declare the temporaries in .data or to finish with li $v0, 10 + syscall</string>
     <string name="solta_lessonspart5_4">Mixing up t1 (a variable in memory) with $t1 (a register)</string>
     <string name="solta_lessonspart5_5">What is $zero for?</string>
@@ -4110,6 +4110,22 @@
     <string name="solta_lessonspart5a_2">Move step by step: each call PUSHES a frame; each return POPS it.</string>
     <string name="solta_lessonspart5a_3">5. fat(2) resumes on line 3: 2 * 1 = 2; returns 2 and leaves</string>
     <string name="solta_lessonspart5a_4">Now the same factorial in MIPS, the way MARS runs it. Each call's frame has 2 words (8 bytes): the `$ra` and the `n`.</string>
+    <string name="lessonspart5a_pecas_uma_por_vez">Before the whole program, the four new pieces, one at a time.</string>
+    <string name="lessonspart5a_peca_sp_titulo">$sp: the top of the stack</string>
+    <string name="lessonspart5a_peca_sp">`$sp` (stack pointer) holds the address of the top of the stack. In MIPS, the stack grows toward lower addresses: subtracting 8 from `$sp` opens 8 bytes, two 4-byte words. Adding 8 closes that space.</string>
+    <string name="lessonspart5a_peca_desloc_titulo">4($sp): the offset</string>
+    <string name="lessonspart5a_peca_desloc">`4($sp)` means: the address held in `$sp`, plus 4. The number before the parenthesis is the offset, in bytes. `0($sp)` is the first word of the frame, and `4($sp)` is the second. `sw` stores a register at that address, and `lw` loads it back.</string>
+    <string name="lessonspart5a_peca_desloc_q">If `$sp` is 1000, at which address does `sw $ra, 4($sp)` store?</string>
+    <string name="lessonspart5a_peca_desloc_r">1004: the address in `$sp` plus the offset 4. `$sp` does not change; `addi` is what changes `$sp`.</string>
+    <string name="lessonspart5a_peca_jal_titulo">jal: calling the function</string>
+    <string name="lessonspart5a_peca_jal">`jal` (jump and link) does two things: it jumps to the label `fat` and stores in `$ra` the address of the instruction right below the `jal`. That is where the program continues when `fat` is done.</string>
+    <string name="lessonspart5a_peca_ra_titulo">$ra: the return address</string>
+    <string name="lessonspart5a_peca_ra">`$ra` (return address) is the register for the way back. `jr $ra` jumps to that address: it is C's `return`. Every `jal` overwrites `$ra`. That is why a function that calls another saves its own `$ra` on the stack first, with `sw $ra, 4($sp)`.</string>
+    <string name="lessonspart5a_peca_ra_q">Inside `fat(3)`, the recursive `jal fat` has just run. What is in `$ra` now?</string>
+    <string name="lessonspart5a_peca_ra_o1">The way back to `main`</string>
+    <string name="lessonspart5a_peca_ra_o2">The way back to the line right after that `jal`, inside `fat`</string>
+    <string name="lessonspart5a_peca_ra_o3">Zero, because the function has not finished yet</string>
+    <string name="lessonspart5a_peca_ra_r">The line after that `jal`, inside `fat`. The way back to `main` was overwritten, and it is only not lost because it was saved at `4($sp)`. At the end, `lw $ra, 4($sp)` brings it back before `jr $ra`.</string>
     <string name="solta_lessonspart5a_5">**Caller:** puts the argument in `$a0` and runs `jal fat` (which stores the return address in `$ra`)</string>
     <string name="solta_lessonspart5a_6">**Callee, on the way out (epilogue):** puts the result in `$v0`, restores `$ra`, `addi $sp, $sp, 8` closes the frame and `jr $ra` returns</string>
     <string name="solta_lessonspart5a_7">**Caller, afterward:** uses the value that arrived in `$v0`</string>

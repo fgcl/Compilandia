@@ -95,6 +95,8 @@ val aulasLongas by lazy {
             cena(tx("eplexico_entra_seu_codigo_para_maquina")) {
                 add(Box("p", tx("eplexico_x_2"), 270f, 86f, 150f, 42f, Look.CELL, size = 14f))
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("fases_l_q1"), setOf("f0"), setOf("f1", "f2", "f3", "f4", "f5"), tx("fases_l_q1_dica"), tx("fases_l_q1_ok")) { hot("p") }
             cena(tx("eplexico_fase_lexica_corta_letras_em")) {
                 hot("f0"); tint("f0", Tint.TEAL)
                 text("p", tx("eplexico_x_2_2"))
@@ -141,6 +143,8 @@ val aulasLongas by lazy {
                 ).forEachIndexed { i, t -> add(Box("r$i", t, 180f, 86f + i * 50f, 320f, 40f, Look.CELL, if (i < 3) Tint.TEAL else Tint.NONE, size = 14f)) }
             }
             cena(tx("fases_l_08")) { hot("r0", "r1") }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("fases_l_q2"), setOf("r2"), setOf("r0", "r1"), tx("fases_l_q2_dica"), tx("fases_l_q2_ok")) { hot() }
             cena(tx("fases_l_09")) { hot("r2") }
             // 4. Segundo exemplo, com perguntas
             cena(tx("fases_l_10")) {
@@ -294,7 +298,13 @@ val aulasLongas by lazy {
                 add(ficha("e1", "$", 46f))
                 hot("e1")
             }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("follow_l_q1"), setOf("fo1"), setOf("fo2", "fo3"), tx("follow_l_q1_dica"), tx("follow_l_q1_ok")) {
+                add(opcao("fo2", "+", 110f, 380f), opcao("fo1", ")", 180f, 380f), opcao("fo3", "id", 250f, 380f))
+                hot("g2")
+            }
             cena(tx("epgramatica_em_abre_parentese_fecha_parentese")) {
+                drop("fo1", "fo2", "fo3")
                 add(ficha("e2", ")", 82f))
                 hot("g2", "e2")
             }

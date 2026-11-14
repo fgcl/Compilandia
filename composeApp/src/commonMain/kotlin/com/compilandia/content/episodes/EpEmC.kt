@@ -50,7 +50,15 @@ val serieEmC by lazy {
                 "}",
             )
             fun vars(cc: String, v: String) = registro("vars", tx("epemc_variaveis"), listOf("c = $cc", "v = $v"), 95f, 352f, 130f, Tint.NONE, 13f)
+            // Por que há duas linguagens (revisor aluno do bloco 6): aqui C com árvore, no Guia do TP Java sem árvore.
+            cena(tx("epemc_duas_linguagens"), who = PROF) {
+                add(titulo(tx("epemc_titulo_duas")))
+                add(Box("c", tx("epemc_serie_c"), 180f, 130f, 320f, 50f, Look.TOKEN, Tint.TEAL, size = 15f))
+                add(Box("j", tx("epemc_guia_java"), 180f, 196f, 320f, 50f, Look.TOKEN, Tint.ORANGE, size = 15f))
+                add(rotulo("mesma", tx("epemc_uma_funcao_por_regra"), 180f, 258f, Tint.YELLOW, 16f))
+            }
             cena(tx("epemc_vamos_escrever_analisador_lexico_em")) {
+                clear()
                 add(titulo("lexer.c"))
                 add(codigo("s", c, 58f, passo = 21f, size = 12f))
                 add(fita(linha, 290f, 30f))

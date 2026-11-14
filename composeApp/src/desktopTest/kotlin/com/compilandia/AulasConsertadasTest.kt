@@ -346,4 +346,104 @@ class AulasConsertadasTest {
         assertEquals(5, u.accept)
         assertEquals(8, com.compilandia.engine.NFA.thompson(com.compilandia.engine.Regex0.parse("(${com.compilandia.content.episodes.THOMPSON_UNIAO})*")).stateCount)
     }
+
+    /** Fusão do LALR: em S -> C C, I3 e I6 têm o mesmo kernel sem lookahead e o mesmo núcleo; I2 divide duas linhas do fecho com I3, mas não o kernel. 10 estados viram 7. */
+    @Test fun fusaoComEstadosInteiros() {
+        val lr1 = com.compilandia.engine.LRAutomaton.lr1(Grammar.parse(com.compilandia.content.episodes.GRAMATICA_FUSAO.joinToString("\n")))
+        assertEquals(10, lr1.states.size)
+        assertEquals(7, lr1.mergeLALR().states.size)
+        assertEquals(7, com.compilandia.engine.LRAutomaton.lr0(Grammar.parse(com.compilandia.content.episodes.GRAMATICA_FUSAO.joinToString("\n"))).states.size)
+        fun nucleo(sid: Int) = lr1.states[sid].items.map { it.core() }.toSet()
+        fun kernel(sid: Int) = lr1.states[sid].kernel.map { it.core() }.toSet()
+        assertEquals(nucleo(3), nucleo(6)); assertEquals(kernel(3), kernel(6))
+        assertTrue(nucleo(3) != nucleo(2) && nucleo(3) != nucleo(4))
+        assertEquals(2, (nucleo(3) intersect nucleo(2)).size)
+        assertTrue((kernel(3) intersect kernel(2)).isEmpty())
+        // O c do primeiro C leva a I3 e o do segundo, a I6, como a fala diz.
+        assertEquals(3, lr1.transitions[0 to "c"]); assertEquals(6, lr1.transitions[2 to "c"])
+        val i3 = com.compilandia.content.episodes.itensAgrupados(lr1, lr1.states[3].items)
+        assertEquals(listOf("C -> c • C , c d", "C -> • c C , c d", "C -> • d , c d"), i3)
+        val juntos = com.compilandia.content.episodes.itensAgrupados(lr1, lr1.states[3].items + lr1.states[6].items)
+        assertTrue(juntos.all { it.endsWith(", c d $") }, juntos.toString())
+        // Os outros pares da fala: I4 com I7 e I8 com I9.
+        assertEquals(nucleo(4), nucleo(7)); assertEquals(nucleo(8), nucleo(9))
+    }
+
+    /** Operadores da aula de regex: cada expressão casa o que a cena mostra, e só a classe do meio separa o 1x. */
+    @Test fun operadoresDaRegex() {
+        fun casa(r: String, s: String) = com.compilandia.engine.DFA.fromRegex(r).accepts(s)
+        assertTrue(casa(com.compilandia.content.episodes.REGEX_SEQ, "ab") && !casa(com.compilandia.content.episodes.REGEX_SEQ, "a") && !casa(com.compilandia.content.episodes.REGEX_SEQ, "ba"))
+        assertTrue(listOf("", "b", "bb", "bbb").all { casa(com.compilandia.content.episodes.REGEX_ESTRELA, it) })
+        assertEquals(setOf("a", "bc"), com.compilandia.content.episodes.casamRegex(com.compilandia.content.episodes.REGEX_BARRA, com.compilandia.content.episodes.REGEX_BARRA_OPCOES).map { com.compilandia.content.episodes.REGEX_BARRA_OPCOES[it] }.toSet())
+        assertTrue(casa(com.compilandia.content.episodes.REGEX_PARENTESES, "ac") && casa(com.compilandia.content.episodes.REGEX_PARENTESES, "bc") && !casa(com.compilandia.content.episodes.REGEX_PARENTESES, "a"))
+        assertEquals(setOf("abb", "babb"), com.compilandia.content.episodes.casamRegex(com.compilandia.content.episodes.REGEX_LIVRO, com.compilandia.content.episodes.REGEX_LIVRO_OPCOES).map { com.compilandia.content.episodes.REGEX_LIVRO_OPCOES[it] }.toSet())
+        assertEquals(1, com.compilandia.content.episodes.classeDosNomes())
+        fun classe(i: Int) = Regex(com.compilandia.engine.MiniFlex.toKotlinRegex(com.compilandia.content.episodes.REGEX_CLASSES[i]))
+        assertTrue(classe(0).matches("1x"))
+        assertTrue(!classe(2).matches("conta"))
+    }
+
+    /** As peças do fat.asm no MipsVM: addi abre 8 bytes, 4($sp) é $sp + 4, jal guarda a linha de baixo em $ra e jr $ra volta para ela. */
+    @Test fun pecasDoFatAsm() {
+        fun asm(s: String) = com.compilandia.content.p5Asm(s)
+        val vm = com.compilandia.engine.MipsVM(".text\nmain:\nli \$sp, 1008\n" + asm(com.compilandia.content.P5_PECA_SP) +
+            "\nli \$ra, 77\nli \$a0, 3\n" + asm(com.compilandia.content.P5_PECA_DESLOCAMENTO) + "\nli \$v0, 10\nsyscall").run()
+        assertEquals(1000L, vm.regs["\$sp"])
+        assertEquals(77L, vm.mem[1004L]); assertEquals(3L, vm.mem[1000L])
+        val chamada = com.compilandia.engine.MipsVM(".text\nmain:\n" + asm(com.compilandia.content.P5_PECA_JAL) +
+            "\nli \$v0, 10\nsyscall\nfat:\nmove \$t1, \$ra\nli \$v0, 5\n" + asm(com.compilandia.content.P5_PECA_RA)).run()
+        assertEquals(1L, chamada.regs["\$t1"]) // a instrução logo abaixo do jal
+        assertEquals(5L, chamada.regs["\$a0"]) // o move depois do jal rodou: o jr $ra voltou para ele
+    }
+
+    /** Região 8 abre com a + ok: o parser aceita (a forma está certa), e o TypeChecker acusa erro na raiz. */
+    @Test fun transicaoDaRegiao8() {
+        val e = com.compilandia.engine.ExprParser.parse(com.compilandia.content.episodes.ATTR_TRANSICAO)
+        val at = com.compilandia.engine.TypeChecker.evaluate(e, com.compilandia.engine.ExprGenerator.env)
+        assertEquals(com.compilandia.engine.Type.ERROR, at.getValue(e.id).type)
+    }
+
+    /** Ambientes vem depois de MIPS no mapa (mesma região) e pede MIPS antes. */
+    @Test fun ambientesDepoisDeMips() {
+        assertTrue(Skill.RUNTIME.ordinal > Skill.CODEGEN_MIPS.ordinal)
+        assertTrue(Skill.CODEGEN_MIPS in Skill.RUNTIME.prereqs)
+        assertEquals(Skill.CODEGEN_MIPS.region, Skill.RUNTIME.region)
+    }
+
+    /** A tabela de equivalência do Guia do TP: os nomes de C estão no código da série, e os de Java no código do guia. */
+    @Test fun tabelaDeEquivalencia() {
+        val tabela = com.compilandia.content.TP_EQUIVALENCIA.lines().drop(1).take(5).map { it.trim().split(Regex("\\s{2,}")) }
+        val codigoC = com.compilandia.content.episodes.serieEmC.flatMap { ep -> ep.passos.flatMap { p -> p.shot.boxes.map { it.text } } }.joinToString("\n")
+        val codigoJava = com.compilandia.textos.tx("tpguideb_public_class_sintatico_private_final") + com.compilandia.textos.tx("tpguideb_private_void_expr_expre_ou")
+        for (linha in tabela) {
+            assertTrue(linha[0] in codigoC, "C: ${linha[0]}")
+            assertTrue(linha[1].substringBefore("(") + "(" in codigoJava, "Java: ${linha[1]}")
+        }
+        assertTrue("struct Node" in codigoC && "gera(" in codigoC)
+    }
+
+    /** Cap. 4 do guia: a Byteiro inteira em BNF é LL(1), o Senao não tem senao no FOLLOW, e a tabela tem uma linha por não-terminal. */
+    @Test fun byteiroInteiraEhLl1() {
+        val g = Grammar.parse(com.compilandia.content.TP_BYTEIRO_BNF)
+        assertTrue(LL1Table(g).isLL1, LL1Table(g).conflicts.toString())
+        val ff = FirstFollow(g)
+        assertTrue("senao" !in ff.follow.getValue("Senao"))
+        assertEquals(g.nonTerminals.size, com.compilandia.content.tabelaFirstFollowByteiro().size)
+        // Toda palavra reservada e todo comando da EBNF do capítulo 2 estão na BNF.
+        for (t in listOf("programa", "inteiro", "logico", "caractere", "se", "senao", "enquanto", "escreva", "leia", "ou", "e", "nao", "verdadeiro", "falso", "<-", "string"))
+            assertTrue(t in g.terminals, t)
+    }
+
+    /** Cap. 1 do guia: o asm do teste da etapa é o que o Sintatico provisório devolve, e roda no MipsVM até o fim. */
+    @Test fun esqueletoDoPrimeiroDia() {
+        val teste = com.compilandia.textos.tx("tpguidea_teste_codigo")
+        val asm = teste.substringAfter("# o saida.asm:\n")
+        val esqueleto = com.compilandia.textos.tx("tpguidea_esqueleto_codigo")
+        val literais = Regex("\"((?:[^\"\\\\]|\\\\.)*)\"").findAll(esqueleto.substringAfter("return")).map { it.groupValues[1].replace("\\n", "\n") }.toList()
+        val devolvido = literais.first() + 3 + literais.drop(1).joinToString("")
+        assertEquals(asm.trim(), devolvido.trim())
+        assertEquals(3, teste.substringAfter("(3 linhas):\n").substringBefore("\n\n").lines().size)
+        val vm = com.compilandia.engine.MipsVM(asm).run()
+        assertTrue(vm.regs["\$v0"] == 10L)
+    }
 }

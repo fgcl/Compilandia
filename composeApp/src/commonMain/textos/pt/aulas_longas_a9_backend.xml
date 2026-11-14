@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Aulas básicas longas de semântica e back-end (A9): atributos, escopo, TAC, otimização, registros de ativação e alocação. -->
 <resources>
+    <string name="attr_l_titulo_transicao">Forma certa, sentido errado</string>
+    <string name="attr_l_forma">nome + nome: o parser aceita</string>
+    <string name="attr_l_semantica">semântica</string>
+    <string name="attr_l_t1">Até aqui, o parser conferia a forma. A mais ok tem a forma certa: nome, mais, nome. Mas ok é um bool, verdadeiro ou falso.</string>
+    <string name="attr_l_t2">Somar número com verdadeiro ou falso não faz sentido. Quem acusa esse erro? Toque.</string>
+    <string name="attr_l_t2_dica">O scanner e o parser só olham a forma. A forma aqui está certa.</string>
+    <string name="attr_l_t2_ok">A análise semântica. Ela confere o sentido, e é o assunto desta região. O primeiro passo é saber o tipo de cada pedaço.</string>
+    <string name="attr_l_enxuta">Repare na árvore: o operador fica no nó, e não há E, T nem F. É a árvore enxuta, só com operações e valores. Você aprende a montá-la daqui a duas aulas.</string>
     <string name="attr_l_01">Na máquina, somar inteiros e somar reais são instruções diferentes.</string>
     <string name="attr_l_01q">Se a e x forem float, qual instrução faz essa soma? Toque.</string>
     <string name="attr_l_01q_dica">Leia o que está embaixo de cada instrução. Procure soma de float.</string>

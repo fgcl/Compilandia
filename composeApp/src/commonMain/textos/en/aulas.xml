@@ -159,6 +159,11 @@
     <string name="epclipes_isso_spill_funciona_mas_fica">That's a spill. It works, but it's slower.</string>
     <string name="epemc_em_c_1_laco_getchar">In C 1: the getchar loop</string>
     <string name="epemc_variaveis">variables</string>
+    <string name="epemc_titulo_duas">C here, Java in the project</string>
+    <string name="epemc_serie_c">series: C, with a tree</string>
+    <string name="epemc_guia_java">Project guide: Java, no tree</string>
+    <string name="epemc_uma_funcao_por_regra">one function per rule</string>
+    <string name="epemc_duas_linguagens">This series writes the compiler in C and builds the tree. The project guide does the work in Java, with no tree. The idea is the same: one function per rule. The guide has the table of names.</string>
     <string name="epemc_vamos_escrever_analisador_lexico_em">Let's write the scanner in C, by hand.</string>
     <string name="epemc_getchar_le_caractere_por_vez">getchar reads one character at a time. In comes the 4.</string>
     <string name="epemc_digito_entra_no_if_valor">It's a digit. It enters the if, and the value starts at zero.</string>
@@ -331,7 +336,6 @@
     <string name="eplexico_juntar_gemeos">Merging the twins</string>
     <string name="eplexico_tabela_pares">Table of pairs</string>
     <string name="eplexico_d_unico_final">D is the only final state</string>
-    <string name="eplexico_primeira_rodada_final_nao_final">First round: a final state is never equivalent to a non-final one. I mark every pair that has D.</string>
     <string name="eplexico_agora_olho_para_onde_cada">Now I look at where each pair goes. With b, A goes to C, and B goes to D. The pair C and D already has an X, so A and B split too.</string>
     <string name="eplexico_c_d_ja_tem_x">(C,D) already has an X</string>
     <string name="eplexico_sobrou_casa_em_branco_toque">One blank cell is left. Tap it: these two are twins.</string>

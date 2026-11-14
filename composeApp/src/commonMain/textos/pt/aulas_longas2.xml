@@ -133,6 +133,15 @@
     <string name="lalr_l_13_dica">O lookahead é o que vem logo depois do L no item que o criou.</string>
     <string name="lalr_l_13_ok">O igual. Depois do L vem o igual, e é ele que o L pode encontrar em seguida.</string>
     <string name="lalr_l_14">Do mesmo jeito, R vai para L ponto fica só com o cifrão. No igual, o parser só empilha. O conflito sumiu.</string>
+    <string name="lalr_l_titulo_fusao">A fusão, com estados inteiros</string>
+    <string name="lalr_l_15">Agora estados inteiros, na gramática do livro. Ler o c no primeiro C leva ao estado três. Ler o c no segundo C leva ao seis.</string>
+    <string name="lalr_l_kernel">kernel: itens de base</string>
+    <string name="lalr_l_16">A primeira linha de cada caixa veio do goto, ao ler o c. São os itens de base, o kernel. As outras linhas, o fecho acrescentou.</string>
+    <string name="lalr_l_17">O núcleo é o estado inteiro sem os lookaheads. Qual estado tem o mesmo núcleo do três? Toque.</string>
+    <string name="lalr_l_17_dica">Compare os itens de base, sem o lookahead. O resto do estado sai deles pelo fecho.</string>
+    <string name="lalr_l_17_ok">O seis. Os itens de base são iguais, então o fecho também é. O dois tem duas linhas iguais às do três, mas outro kernel: o núcleo é outro.</string>
+    <string name="lalr_l_18">O LALR junta os dois num estado só. Cada item fica com c, d e cifrão. Para achar os pares, basta comparar os kernels sem o lookahead.</string>
+    <string name="lalr_l_19">O quatro junta com o sete, e o oito com o nove. Os dez estados do LR(1) viram sete, o mesmo número do LR(0).</string>
     <string name="lalr_l_r1">1. Monte os estados LR(1), com lookahead.</string>
     <string name="lalr_l_r2">2. Junte núcleos iguais e una os lookaheads.</string>
     <string name="lalr_l_r3">Resultado: tamanho da SLR, menos conflitos.</string>

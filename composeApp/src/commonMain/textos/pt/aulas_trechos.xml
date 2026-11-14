@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Toques no meio dos trechos longos só de ouvir (nenhum trecho passa de 4 cenas). -->
+<resources>
+    <string name="fases_l_q1">Esta fila de caracteres entra no compilador. Qual fase trabalha com ela primeiro? Toque.</string>
+    <string name="fases_l_q1_dica">É a fase que junta letras em palavras.</string>
+    <string name="fases_l_q1_ok">A léxica. Ela é a primeira da esteira, e a saída dela alimenta a sintática.</string>
+    <string name="fases_l_q2">O programa usa uma variável que ninguém declarou. Qual fase acusa esse erro? Toque.</string>
+    <string name="fases_l_q2_dica">Os tokens existem e a ordem está certa. Falta o sentido.</string>
+    <string name="fases_l_q2_ok">A semântica. A frase tem a forma certa, mas o nome não existe.</string>
+    <string name="follow_l_q1">Agora procure E do lado direito das regras. Que terminal vem logo depois dele? Toque.</string>
+    <string name="follow_l_q1_dica">Olhe a regra de T. Onde aparece o E?</string>
+    <string name="follow_l_q1_ok">O fecha parêntese. Em abre parêntese, E, fecha parêntese, ele vem logo depois do E.</string>
+    <string name="ll_l_q1">X vai para mais T X. Em que casa da linha de X essa regra entra? Toque.</string>
+    <string name="ll_l_q1_dica">Olhe o primeiro símbolo do lado direito.</string>
+    <string name="ll_l_q1_ok">Na coluna do mais, o FIRST desse lado direito.</string>
+    <string name="slr_l_q1">Toque em todas as casas que mandam empilhar.</string>
+    <string name="slr_l_q1_dica">Empilhar é a letra s com o número do estado.</string>
+    <string name="slr_l_q1_ok">Essas três. Cada s vem de uma seta do autômato com um terminal.</string>
+    <string name="min_l_q1">Primeira rodada: final e não final nunca são equivalentes. Toque nas casas que ganham X agora.</string>
+    <string name="min_l_q1_dica">O único final é o D. Procure os pares com o D.</string>
+    <string name="min_l_q1_ok">Os três pares com o D. O D é final, e os outros não são.</string>
+    <string name="tok_l_q1">Qual destes tokens é um número? Toque.</string>
+    <string name="tok_l_q1_dica">O x1 tem dígito, mas começa com letra.</string>
+    <string name="tok_l_q1_ok">O dez. O x1 é um nome, porque começa com letra.</string>
+    <string name="cfg_l_q1">Nesta gramática, qual símbolo as regras ainda trocam por outra coisa? Toque.</string>
+    <string name="cfg_l_q1_dica">É o símbolo que aparece do lado esquerdo das regras.</string>
+    <string name="cfg_l_q1_ok">O E. Ele está do lado esquerdo, então uma regra pode trocá-lo.</string>
+    <string name="amb_l_q1">Na árvore, a conta mais funda sai primeiro. Toque no operador que o compilador calcula primeiro.</string>
+    <string name="amb_l_q1_dica">Procure o operador mais longe da raiz.</string>
+    <string name="amb_l_q1_ok">O vezes. Ele está mais fundo, então sai primeiro.</string>
+    <string name="desc_l_q1">A regra E vai para T X vira uma função. Toque na linha do código que começa essa função.</string>
+    <string name="desc_l_q1_dica">A função tem o nome do não-terminal.</string>
+    <string name="desc_l_q1_ok">O void E. Ela chama T e depois X, na ordem da regra.</string>
+    <string name="sr_l_q1">No topo está n, e existe a regra E vai para n. O que o parser faz agora? Toque.</string>
+    <string name="sr_l_q1_dica">O topo já é o lado direito inteiro de uma regra.</string>
+    <string name="sr_l_q1_ok">Reduz. O n no topo é um handle: sai o n e entra o E.</string>
+    <string name="bison_l_q1">Na regra expr mais expr, cada símbolo tem um número: cifrão um, dois e três. Qual é o do segundo expr? Toque.</string>
+    <string name="bison_l_q1_dica">Conte o mais também: ele é um símbolo.</string>
+    <string name="bison_l_q1_ok">Cifrão três. O primeiro expr é o um, e o mais é o dois. O outro expr é o três.</string>
+    <string name="attr_l_q1">O a é int, e o x é float. E o dois, sem ponto? Toque no tipo dele.</string>
+    <string name="attr_l_q1_dica">Número sem ponto não tem parte decimal.</string>
+    <string name="attr_l_q1_ok">Inteiro. Um número escrito sem ponto é do tipo int.</string>
+    <string name="tac_l_q1">Quantos nomes aparecem na linha t2 igual a mais t1? Toque.</string>
+    <string name="tac_l_q1_dica">Conte o resultado e os dois operandos.</string>
+    <string name="tac_l_q1_ok">Três: t2, a e t1. O resultado e dois operandos.</string>
+    <string name="rt_l_q1">O fat de dois vai chamar o fat de um. Enquanto o fat de um roda, quantos registros de fat ficam na pilha? Toque.</string>
+    <string name="rt_l_q1_dica">O fat de dois ainda não terminou.</string>
+    <string name="rt_l_q1_ok">Dois. O registro do fat de dois continua lá, esperando a volta.</string>
+</resources>

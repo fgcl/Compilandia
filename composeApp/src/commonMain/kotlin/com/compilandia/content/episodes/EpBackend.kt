@@ -55,6 +55,9 @@ private fun semNumero(code: String) = code.lines().map { it.replace(Regex("^\\d+
 
 /** Atributos: a conta do segundo exemplo, com c int e y float em [ExprGenerator.env]. */
 const val ATTR_EXEMPLO_2 = "c * 2 + y"
+
+/** A transição para a região 8: o parser aceita a + ok, e o TypeChecker acusa erro (ok é bool). Conferido em AulasConsertadasTest. */
+const val ATTR_TRANSICAO = "a + ok"
 /** A mesma conta com uma variável bool no lugar do y. */
 const val ATTR_EXEMPLO_2_ERRO = "c * 2 + ok"
 /** Escopo: semente do programa que [ScopeGen.random] gera para o segundo exemplo. */
@@ -92,8 +95,22 @@ val semantica by lazy {
     listOf(
         // ─────────────────────────────── ATRIBUTOS ───────────────────────────────
         episodio(Skill.ATTRIBUTES_TYPES, tx("epbackend_tipos_sobem_pela_arvore")) {
+            // 0. A transição para a região 8: a forma está certa, o sentido não (revisor aluno do bloco 5).
+            cena(tx("attr_l_t1"), mood = EpMood.THINK) {
+                add(titulo(tx("attr_l_titulo_transicao")))
+                add(Box("src", ATTR_TRANSICAO, 180f, 110f, 160f, 50f, Look.CELL, size = 20f))
+                add(rotulo("ta", "a: int", 120f, 170f, Tint.TEAL, 16f), rotulo("tok", "ok: bool", 240f, 170f, Tint.ORANGE, 16f))
+                add(rotulo("forma", tx("attr_l_forma"), 180f, 210f, Tint.GREEN, 16f))
+            }
+            pergunta(tx("attr_l_t2"), setOf("qs"), setOf("qsc", "qp"), tx("attr_l_t2_dica"), tx("attr_l_t2_ok")) {
+                add(Box("qsc", "scanner", 72f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("qp", "parser", 180f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("qs", tx("attr_l_semantica"), 288f, 280f, 94f, 42f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                hot("src")
+            }
             // 1. Por que existe
             cena(tx("attr_l_01"), mood = EpMood.THINK) {
+                clear()
                 add(titulo(tx("epbackend_tipos_sobem_pela_arvore")))
                 add(Box("src", "a + x", 180f, 110f, 120f, 46f, Look.CELL, size = 18f))
                 add(Box("ii", "add", 100f, 220f, 120f, 46f, Look.TOKEN, Tint.TEAL, size = 17f), Box("ff", "add.s", 260f, 220f, 120f, 46f, Look.TOKEN, Tint.ORANGE, size = 17f))
@@ -120,7 +137,15 @@ val semantica by lazy {
                 add(b); for (x in w) wire(x)
                 add(rotulo("info", tx("epbackend_int_x_float"), 180f, 330f, size = 17f))
             }
+            // A árvore mudou de cara: avisar que é a enxuta, ensinada na aula de AST (revisor aluno do bloco 5).
+            cena(tx("attr_l_enxuta")) { hot(node.getValue("+").id, node.getValue("*").id) }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("attr_l_q1"), setOf("yi"), setOf("yf", "yb"), tx("attr_l_q1_dica"), tx("attr_l_q1_ok")) {
+                add(Box("yf", "float", 100f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f), Box("yi", "int", 180f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f), Box("yb", "bool", 260f, 380f, 72f, 42f, Look.TOKEN, Tint.YELLOW, size = 16f))
+                hot(node.getValue("2").id)
+            }
             cena(tx("epbackend_comeco_pelas_folhas_inteiro_x")) {
+                drop("yi", "yf", "yb")
                 add(tipo("ta", "int", node.getValue("a")), tipo("tx", "float", node.getValue("x")), tipo("t2", "int", node.getValue("2")))
             }
             pergunta(
@@ -327,7 +352,12 @@ val backend by lazy {
                 add(codigo("d", listOf(code[1].toString()), 332f, x = 110f, size = 18f))
                 hot("d0", "t")
             }
-            cena(tx("epbackend_cada_linha_tem_no_maximo"), who = PROF) { hot() }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("tac_l_q1"), setOf("e3"), setOf("e2", "e4"), tx("tac_l_q1_dica"), tx("tac_l_q1_ok")) {
+                add(opcao("e2", "2", 110f, 390f), opcao("e3", "3", 180f, 390f), opcao("e4", "4", 250f, 390f))
+                hot("d0")
+            }
+            cena(tx("epbackend_cada_linha_tem_no_maximo"), who = PROF) { drop("e2", "e3", "e4"); hot() }
             cena(tx("epbackend_ordem_saiu_arvore_parser_ja"), mood = EpMood.HAPPY) {}
             // 3. A receita
             cena(tx("tac_l_05")) {
@@ -505,7 +535,13 @@ val backend by lazy {
                 add(reg("r0", tx("epbackend_fat_n_2_volta_main"), 0, Tint.TEAL))
             }
             cena(tx("epbackend_ali_moram_parametros_variaveis_locais")) { hot("r0") }
+            // Toque no meio do trecho: nenhum trecho passa de 4 cenas só ouvindo (TrechosSoOuvindoTest).
+            pergunta(tx("rt_l_q1"), setOf("h2"), setOf("h1", "h3"), tx("rt_l_q1_dica"), tx("rt_l_q1_ok")) {
+                add(opcao("h1", "1", 110f, 170f), opcao("h2", "2", 180f, 170f), opcao("h3", "3", 250f, 170f))
+                hot("r0")
+            }
             cena(tx("epbackend_fat_dois_chama_fat_outro")) {
+                drop("h1", "h2", "h3")
                 add(reg("r1", tx("epbackend_fat_n_1_volta_fat"), 1, Tint.ORANGE))
                 hot("r1")
             }

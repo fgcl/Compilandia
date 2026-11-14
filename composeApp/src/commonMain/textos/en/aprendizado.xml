@@ -54,6 +54,7 @@
     <string name="learner_revisar_1_assunto">Review 1 topic</string>
     <string name="learner_3_acertos_seguidos">3 right in a row</string>
     <string name="learner_revisao_sua_memoria_1_esta">Review: your memory of "%1$s" is at %2$s%. Reviewing now makes it stick.</string>
+    <string name="learner_revisao_falta_acertar">Review: your last review of "%1$s" did not go well. Get it right once to count it as reviewed.</string>
     <string name="learner_novo_territorio_1">New ground: "%1$s"</string>
     <string name="learner_fronteira_1_esta_quase_la">Frontier: "%1$s" is almost there (%2$s%)</string>
     <string name="learner_ainda_faltam_bases_para_1">"%1$s" still needs some basics first</string>

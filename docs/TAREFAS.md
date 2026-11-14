@@ -35,7 +35,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] Menos perguntas de duas opções (92 de 192)
 - [x] Primeira interação na cena 2 em FIRST, FOLLOW, tabela LL(1), descida, itens LR(0) e SLR
 - [x] Primeira interação antes da cena 4 em ERROR_RECOVERY, ATTRIBUTES_TYPES, SCOPE_SYMBOLS, CODEGEN_MIPS, LALR, AST_BUILD e OPTIMIZATION (hoje na 5 ou 6)
-- [ ] Nenhum trecho com mais de 4 cenas só ouvindo
+- [x] Nenhum trecho com mais de 4 cenas só ouvindo (`TrechosSoOuvindoTest`)
 - [ ] Um nome por conceito (lista em REVISAO-AULAS.md, padrão 8) e o glossário com os sinônimos
 - [ ] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [ ] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto"
@@ -50,7 +50,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [ ] "Fazer com ajuda" para LR0_ITEMS, AMBIGUITY, LEFT_RECURSION e LEFT_FACTORING
 - [ ] Exercício integrado "torne LL(1)": tirar a recursão, depois fatorar
 - [ ] Um "diga por quê" depois de cada "Sua vez" (autoexplicação)
-- [ ] Revisão espaçada exige acerto antes de dar o assunto por revisado
+- [x] Revisão espaçada exige acerto antes de dar o assunto por revisado
 
 ## 4. O segundo exemplo traz o caso difícil
 
@@ -69,7 +69,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 ## 5. Por região
 
 **Porto e Floresta**
-- [ ] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
+- [x] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
 - [x] Thompson com um exemplo desenhado, ou tirar da ficha
 - [x] Minimização: cena 8 × cena 18; justificar o segundo X
 - [x] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
@@ -92,22 +92,23 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
 - [x] SLR: a tabela nasce das caixas de itens
 - [x] LALR: origem do lookahead (ponteiros `S → L = R`, conflito do SLR some no LR(1))
-- [ ] LALR: fusão desenhada com estados completos; kernel × core
+- [x] LALR: fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [x] Bison: `%right` com `2^3^2`; "reduz com qualquer token" é a redução padrão
 - [x] Bison: precedência da regra × do token, `%prec` no menos unário
 
 **Cidade e Forja**
-- [ ] Ambientes de execução depois de Geração de código MIPS
-- [ ] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
-- [ ] Cena de transição na abertura da região 8
+- [x] Ambientes de execução depois de Geração de código MIPS
+- [x] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
+- [x] "PC" sem definição no FORMAL de Ambientes e no cartão do `jal`
+- [x] Cena de transição na abertura da região 8
 - [ ] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto
 
 **Seu compilador**
-- [ ] Por que há duas linguagens, com tabela de equivalência de nomes
+- [x] Por que há duas linguagens, com tabela de equivalência de nomes
 - [ ] "Na sua linguagem" e "Teste desta etapa" no fim de cada capítulo
-- [ ] Algo rodando no capítulo 1; cronograma de 3 semanas
-- [ ] Capítulo 4: FIRST/FOLLOW da Byteiro inteira
+- [x] Algo rodando no capítulo 1; cronograma de 3 semanas
+- [x] Capítulo 4: FIRST/FOLLOW da Byteiro inteira
 
 ## 6. Revisão e documentação
 

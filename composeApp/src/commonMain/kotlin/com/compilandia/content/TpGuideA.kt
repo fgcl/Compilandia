@@ -30,6 +30,9 @@ internal const val TP_PROGRAMA_CONTAGEM = """programa contagem {
 
 // ───────────────────────────── Capítulo 1 ─────────────────────────────
 
+/** Os nomes da série Em C e os do guia, lado a lado. Os dois lados são conferidos em AulasConsertadasTest. */
+internal val TP_EQUIVALENCIA: String get() = tx("tpguidea_equivalencia_tabela")
+
 internal val tpCap1 = GuideChapter(
     1, tx("tpguidea_visao_geral_planejamento"),
     tx("tpguidea_tp_compilador_inteiro_mas_sao"),
@@ -51,6 +54,9 @@ internal val tpCap1 = GuideChapter(
             ),
         ),
         Text(tx("tpguidea_repare_num_detalhe_semantico_gerador")),
+        // Por que há duas linguagens (revisor aluno do bloco 6): o guia em Java sem árvore, a série Em C com árvore.
+        Callout(NO_DUMB_QUESTIONS, tx("tpguidea_duas_linguagens")),
+        Code(TP_EQUIVALENCIA, tx("tpguidea_equivalencia_titulo")),
         Code(
             tx("tpguidea_byteiro_src_main_java_le"),
             tx("tpguidea_estrutura_pastas_sugerida"),
@@ -72,6 +78,10 @@ internal val tpCap1 = GuideChapter(
             tx("tpguidea_import_java_nio_file_files"),
             tx("tpguidea_main_java_maestro_java_17"),
         ),
+        // Algo rodando já no capítulo 1, com o teste da etapa (revisor aluno do bloco 6). Conferido com javac e no MipsVM.
+        Text(tx("tpguidea_esqueleto_hoje")),
+        Code(tx("tpguidea_esqueleto_codigo"), tx("tpguidea_esqueleto_titulo")),
+        Code(tx("tpguidea_teste_codigo"), tx("tpguidea_teste_titulo")),
         Predict(
             tx("tpguidea_qual_ordem_implementacao_menos_dor"),
             listOf(
@@ -93,6 +103,10 @@ internal val tpCap1 = GuideChapter(
                 tx("tpguidea_semanas_6_7_geracao_mips"),
                 tx("tpguidea_semana_8_otimizacao_bateria_testes"),
             ),
+        ),
+        Steps(
+            tx("tpguidea_cronograma_3_semanas"),
+            listOf(tx("tpguidea_3sem_1"), tx("tpguidea_3sem_2"), tx("tpguidea_3sem_3")),
         ),
         Code(
             tx("tpguidea_git_init_byteiro_cd_byteiro"),

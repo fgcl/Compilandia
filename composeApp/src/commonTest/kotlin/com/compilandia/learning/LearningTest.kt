@@ -31,6 +31,22 @@ class LearningTest {
         assertTrue(m.retrievability(t + (30 * day)) < 0.9)
     }
 
+    /** Revisão só conta com acerto: errar uma revisão devida deixa o assunto pendente até acertar; errar na primeira vez, não. */
+    @Test fun revisaoExigeAcerto() {
+        var t = 0L
+        val primeiroErro = Memory().review(t, 0.0)
+        assertTrue(!primeiroErro.isDue(t + 1000))
+        var m = Memory().review(t, 1.0)
+        t += (40 * day).toLong()
+        assertTrue(m.isDue(t))
+        m = m.review(t, 0.2)
+        assertTrue(m.isDue(t + 1000), "errou a revisão: continua pendente")
+        m = m.review(t + 2000, 0.1)
+        assertTrue(m.isDue(t + 3000), "errou de novo: continua pendente")
+        m = m.review(t + 4000, 1.0)
+        assertTrue(!m.isDue(t + 5000), "acertou: revisado")
+    }
+
     @Test fun tinyNetLearnsPattern() {
         var n = TinyNet.init(1)
         val rnd = Random(3)

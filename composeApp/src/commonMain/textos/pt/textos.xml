@@ -1053,7 +1053,7 @@
     <string name="lessonspart2_reducao">Redução.</string>
     <string name="lessonspart2_quantos_estados_lr_0_tem">Quantos estados LR(0) tem S → C C, C → c C | d?</string>
     <string name="lessonspart2_7_i0_i6">7 (I0 a I6).</string>
-    <string name="lessonspart2_item_nucleo_kernel">Item de núcleo (kernel)?</string>
+    <string name="lessonspart2_item_nucleo_kernel">Item de base (kernel)?</string>
     <!-- LessonsPart2a.kt -->
     <string name="lessonspart2a_fila_bandejao_quem_pode_abrir">A fila do bandejão: quem pode abrir a fila?</string>
     <string name="lessonspart2a_templo_top_down_primeira_sala">Templo Top-Down, primeira sala. Na parede, um mural: a fila do bandejão do RU ao meio-dia, todo mundo com fome.</string>
@@ -1820,7 +1820,7 @@
     <string name="lessonspart2c_goto_i3_d">goto(I3, d) = ?</string>
     <string name="lessonspart2c_quantos_estados_ao_todo_quais">Quantos estados ao todo, e quais são de redução?</string>
     <string name="lessonspart2c_7_estados_i0_i6_itens">7 estados (I0 a I6). Itens completos: I1 (aceita), I4 (C → d), I5 (S → C C), I6 (C → c C). Nenhum estado mistura item completo com outro item: a gramática é LR(0)!</string>
-    <string name="lessonspart2c_numere_producoes_gramatica_aumentada_desenhe">Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com o núcleo (kernel) separado dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.</string>
+    <string name="lessonspart2c_numere_producoes_gramatica_aumentada_desenhe">Numere as produções da gramática aumentada, desenhe cada estado como uma caixinha com os itens de base (kernel) separados dos itens do fechamento e, antes de criar um estado novo, verifique se aquele conjunto já existe.</string>
     <string name="lessonspart2c_por_que_itens_closure_goto">Por que itens, closure e goto?</string>
     <string name="lessonspart2c_vamos_redescobrir_itens_closure_goto">Vamos redescobrir itens, closure e goto só com perguntas.</string>
     <string name="lessonspart2c_num_analisador_empilha_reduz_que">Num analisador empilha-reduz, o que precisamos saber a cada momento?</string>
@@ -1868,9 +1868,9 @@
     <string name="lessonspart2c_desvio_avanca_ponto_sobre_x">Desvio: avança o ponto sobre X e fecha.</string>
     <string name="lessonspart2c_itens_g_c_closure_repita">ITENS(G'):\n  C := { CLOSURE({ S' → • S }) }\n  repita\n    para cada conjunto I em C:\n      para cada símbolo gramatical X:\n        se GOTO(I, X) ≠ ∅ e GOTO(I, X) ∉ C:\n          adicione GOTO(I, X) a C\n  até nenhum conjunto ser adicionado</string>
     <string name="lessonspart2c_colecao_canonica_conjuntos_itens_lr">Coleção canônica de conjuntos de itens LR(0).</string>
-    <string name="lessonspart2c_itens_nucleo_kernel_todos_itens">**Itens de núcleo (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais são **não-núcleo** e podem ser recalculados pelo fechamento.</string>
-    <string name="lessonspart2c_qual_destes_item_nucleo">Qual destes é item de núcleo?</string>
-    <string name="lessonspart2c_identifique_em_cada_estado_quais">Identifique, em cada estado, quais itens são de núcleo.</string>
+    <string name="lessonspart2c_itens_nucleo_kernel_todos_itens">**Itens de base (kernel)**: S' → • S e todos os itens com o ponto fora da extremidade esquerda. Os demais vêm do fechamento: dá para recalcular a partir do kernel.</string>
+    <string name="lessonspart2c_qual_destes_item_nucleo">Qual destes é item de base (kernel)?</string>
+    <string name="lessonspart2c_identifique_em_cada_estado_quais">Identifique, em cada estado, quais itens são de base (kernel).</string>
     <string name="lessonspart2c_pergunta_tipica_calcule_closure_ou">Pergunta típica: 'calcule CLOSURE({…})' ou 'GOTO(I, X)'. Não esqueça: GOTO = avançar o ponto **e depois** fechar. E A → ε gera só o item A → •, que já nasce completo.</string>
     <string name="lessonspart2c_qual_relacao_entre_automato_lr">Qual a relação entre o autômato LR(0) e os prefixos viáveis?</string>
     <string name="lessonspart2c_automato_reconhece_exatamente_prefixos_viave">O autômato reconhece exatamente os prefixos viáveis: γ é viável se e somente se existe o caminho GOTO(I0, γ) a partir do estado inicial.</string>
@@ -3505,7 +3505,7 @@
     <string name="lessonspart5a_estatica_endereco_fixo_em_tempo">**Estática:** endereço fixo em tempo de compilação; não permite recursão nem tamanho dinâmico (globais; FORTRAN 77)</string>
     <string name="lessonspart5a_em_pilha_quadro_por_ativacao">**Em pilha:** um quadro por ativação, LIFO; permite recursão; o quadro morre no retorno (locais em C e Java)</string>
     <string name="lessonspart5a_em_heap_blocos_com_tempo">**Em heap:** blocos com tempo de vida arbitrário; liberação manual (`free`) ou por coleta de lixo</string>
-    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   argumentos           §v0–§v1  valores de retorno\n                    §ra       endereço de retorno  §sp      topo da pilha\n                    §fp       base do quadro atual (opcional)\n                    §t0–§t9   temporários: o CHAMADOR salva se precisar deles depois\n                    §s0–§s7   salvos: o CHAMADO salva antes de usar\n\n                    jal f     # §ra := PC + 4;  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
+    <string name="lessonspart5a_a0_a3_argumentos_v0_v1">\n                    §a0–§a3   argumentos           §v0–§v1  valores de retorno\n                    §ra       endereço de retorno  §sp      topo da pilha\n                    §fp       base do quadro atual (opcional)\n                    §t0–§t9   temporários: o CHAMADOR salva se precisar deles depois\n                    §s0–§s7   salvos: o CHAMADO salva antes de usar\n\n                    PC        contador de programa: o endereço da instrução que roda agora\n\n                    jal f     # §ra := PC + 4 (a instrução de baixo);  PC := f\n                    jr  §ra   # PC := §ra\n                    </string>
     <string name="lessonspart5a_convencao_chamada_mips">Convenção de chamada do MIPS</string>
     <string name="lessonspart5a_qual_vinculo_aponta_para_quadro">Qual vínculo aponta para o quadro de QUEM CHAMOU a função?</string>
     <string name="lessonspart5a_vinculo_acesso_estatico">Vínculo de acesso (estático)</string>
@@ -4200,7 +4200,7 @@
     <string name="solta_lessonspart4c_3">E em `id num ; id = num ;`, o que muda?</string>
     <string name="solta_lessonspart4c_4">Em `id = num num ; id = id ;`, em qual token o parser LL(1) PERCEBE o erro?</string>
     <string name="solta_lessonspart5_1">Não salvar $ra na pilha antes de um jal dentro de uma função que chama outra</string>
-    <string name="solta_lessonspart5_2">Guarda PC + 4 em $ra e desvia para a função</string>
+    <string name="solta_lessonspart5_2">Guarda em $ra o endereço da instrução logo abaixo do jal (PC + 4; PC é o contador de programa) e desvia para a função</string>
     <string name="solta_lessonspart5_3">Esquecer de declarar os temporários na .data ou de encerrar com li $v0, 10 + syscall</string>
     <string name="solta_lessonspart5_4">Confundir t1 (variável na memória) com $t1 (registrador)</string>
     <string name="solta_lessonspart5_5">Para que serve $zero?</string>
@@ -4208,6 +4208,22 @@
     <string name="solta_lessonspart5a_2">Avance passo a passo: cada chamada EMPILHA um quadro; cada return DESEMPILHA.</string>
     <string name="solta_lessonspart5a_3">5. fat(2) retoma na linha 3: 2 * 1 = 2; devolve 2 e sai</string>
     <string name="solta_lessonspart5a_4">Agora o mesmo fatorial em MIPS, do jeito que o MARS roda. O quadro de cada chamada tem 2 palavras (8 bytes): o `$ra` e o `n`.</string>
+    <string name="lessonspart5a_pecas_uma_por_vez">Antes do programa inteiro, as quatro peças novas, uma de cada vez.</string>
+    <string name="lessonspart5a_peca_sp_titulo">$sp: o topo da pilha</string>
+    <string name="lessonspart5a_peca_sp">`$sp` (stack pointer, ponteiro da pilha) guarda o endereço do topo da pilha. No MIPS, a pilha cresce para endereços menores: subtrair 8 do `$sp` abre 8 bytes, duas palavras de 4 bytes. Somar 8 fecha esse espaço.</string>
+    <string name="lessonspart5a_peca_desloc_titulo">4($sp): o deslocamento</string>
+    <string name="lessonspart5a_peca_desloc">`4($sp)` quer dizer: o endereço que está em `$sp`, mais 4. O número antes do parêntese é o deslocamento, em bytes. `0($sp)` é a primeira palavra do quadro, e `4($sp)` é a segunda. `sw` grava um registrador nesse endereço, e `lw` lê de volta.</string>
+    <string name="lessonspart5a_peca_desloc_q">Se `$sp` vale 1000, em que endereço `sw $ra, 4($sp)` grava?</string>
+    <string name="lessonspart5a_peca_desloc_r">1004: o endereço do `$sp` mais o deslocamento 4. O `$sp` não muda; quem muda o `$sp` é o `addi`.</string>
+    <string name="lessonspart5a_peca_jal_titulo">jal: chamar a função</string>
+    <string name="lessonspart5a_peca_jal">`jal` (jump and link, pular e ligar) faz duas coisas: pula para o rótulo `fat` e guarda em `$ra` o endereço da instrução logo abaixo do `jal`. É por ali que o programa continua quando `fat` terminar.</string>
+    <string name="lessonspart5a_peca_ra_titulo">$ra: o endereço de volta</string>
+    <string name="lessonspart5a_peca_ra">`$ra` (return address, endereço de retorno) é o registrador da volta. `jr $ra` pula para esse endereço: é o `return` do C. Cada `jal` escreve por cima do `$ra`. Por isso, uma função que chama outra guarda o seu `$ra` na pilha antes, com `sw $ra, 4($sp)`.</string>
+    <string name="lessonspart5a_peca_ra_q">Dentro de `fat(3)`, o `jal fat` da recursão acabou de rodar. O que está no `$ra` agora?</string>
+    <string name="lessonspart5a_peca_ra_o1">A volta para o `main`</string>
+    <string name="lessonspart5a_peca_ra_o2">A volta para a linha logo depois desse `jal`, dentro de `fat`</string>
+    <string name="lessonspart5a_peca_ra_o3">Zero, porque a função ainda não terminou</string>
+    <string name="lessonspart5a_peca_ra_r">A linha depois desse `jal`, dentro de `fat`. A volta para o `main` foi apagada, e só não se perdeu porque estava guardada em `4($sp)`. No fim, `lw $ra, 4($sp)` a traz de volta antes do `jr $ra`.</string>
     <string name="solta_lessonspart5a_5">**Chamador:** põe o argumento em `$a0` e executa `jal fat` (que guarda o endereço de volta em `$ra`)</string>
     <string name="solta_lessonspart5a_6">**Chamado, na saída (epílogo):** põe o resultado em `$v0`, restaura `$ra`, `addi $sp, $sp, 8` fecha o quadro e `jr $ra` volta</string>
     <string name="solta_lessonspart5a_7">**Chamador, depois:** usa o valor que chegou em `$v0`</string>
