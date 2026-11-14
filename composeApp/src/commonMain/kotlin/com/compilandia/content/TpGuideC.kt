@@ -215,7 +215,7 @@ internal val tpCap8 = GuideChapter(
                 private void declaraUm(TipoDado t) {
                     Token id = casaToken(TipoToken.ID);
                     Simbolo s = tabela.declara(id.lexema, t, id.linha);
-                    dados.append(s.rotulo).append(": .word 0\n");             // toda variável ganha um .word
+                    dados.append(s.rotulo).append(": .word 0\n");             // um .word por variável: num laço, ele NÃO volta a zero
                 }
             """.trimIndent(),
             tx("tpguidec_infraestrutura_gerador_dentro_sintatico_java"),

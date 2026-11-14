@@ -228,6 +228,12 @@
     <string name="epemc_monte_mips_1">Monte o MIPS de %1$s.</string>
     <string name="epemc_em_c_5_flex_bison">Em C 5: flex, bison e o main</string>
     <string name="epemc_0_9_num" translatable="false">[0-9]+  NUM</string>
+    <string name="epemc_novo_cria_no">Quem cria cada nó é a função novo. Ela pede memória e liga os dois filhos.</string>
+    <string name="epemc_while_monta_no">No parser, cada volta do while cria um nó. O e antigo vira o filho da esquerda, e a soma junta pela esquerda.</string>
+    <string name="epemc_acao_monta_no">Num compilador de verdade, a ação do Bison monta o nó. Depois, o gera da aula quatro escreve o MIPS.</string>
+    <string name="epemc_titulo_acao_no">A ação monta a árvore</string>
+    <string name="epemc_qual_linha_cria_no">Este é o expr da aula dois, agora devolvendo a árvore. Qual linha cria o nó do mais? Toque.</string>
+    <string name="epemc_qual_linha_cria_no_dica">Procure a chamada da função novo.</string>
     <string name="epemc_calc_l_inteiro">Na tela, os arquivos estavam resumidos. Este é o calc.l inteiro, que compila.</string>
     <string name="epemc_calc_y_falta">No calc.y, faltam o cabeçalho, a regra que imprime a conta e o yyerror.</string>
     <string name="epemc_yylval_atoi_yytext" translatable="false">yylval = atoi(yytext)</string>

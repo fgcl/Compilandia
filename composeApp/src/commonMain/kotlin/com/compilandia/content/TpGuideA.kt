@@ -163,6 +163,13 @@ internal val tpCap2 = GuideChapter(
             1,
             tx("tpguidea_quem_esta_mais_embaixo_na"),
         ),
+        // Revisor professor do bloco 6: o nao liga mais forte que as comparações.
+        Predict(
+            tx("tpguidea_nao_x_maior_q"),
+            listOf("(nao x) > 0", "nao (x > 0)", tx("tpguidea_nao_x_maior_erro_sint")),
+            0,
+            tx("tpguidea_nao_x_maior_porque"),
+        ),
         Callout(WATCH_OUT, tx("tpguidea_por_que_para_atribuir_assim")),
         Visual(VK.TOKENIZE, input = "if (x<-1) y = 0; // C de verdade", caption = tx("tpguidea_lexi_app_conhece_c_em")),
         Code(

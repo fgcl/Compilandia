@@ -40,6 +40,26 @@ private val CALC_L_INTEIRO = listOf(
     "[ \\t]   ;",
 )
 
+/** A função que cria um nó: pede memória e liga os dois filhos. */
+private val CODIGO_NOVO = listOf(
+    "Node *novo(char op, Node *e, Node *d) {",
+    "  Node *n = malloc(sizeof(Node));",
+    "  n->op = op; n->esq = e; n->dir = d;",
+    "  return n;",
+    "}",
+)
+
+/** O expr da aula 2, agora devolvendo a árvore: o e antigo vira o filho da esquerda. */
+private val CODIGO_EXPR_ARVORE = listOf(
+    "Node *expr(void) {",
+    "  Node *e = termo();",
+    "  while (tok.tipo == '+') {",
+    "    casa('+'); e = novo('+', e, termo());",
+    "  }",
+    "  return e;",
+    "}",
+)
+
 /** O que falta no calc.y da tela: o cabeçalho, a regra que imprime o resultado e o yyerror. */
 private val CALC_Y_FALTA = listOf(
     "%{",
@@ -196,6 +216,16 @@ val serieEmC by lazy {
             }
             cena(tx("epemc_op_guarda_operador_val_guarda")) { hot("s1", "s2", "s3") }
             cena(tx("epemc_esq_dir_sao_ponteiros_eles")) { hot("s4") }
+            // Revisor professor do bloco 6: o código que cria os nós, e de onde vem a associatividade à esquerda.
+            cena(tx("epemc_novo_cria_no")) {
+                dropAll("s")
+                add(codigo("s", CODIGO_NOVO, 96f, x = 14f, passo = 26f, size = 12f))
+                hot("s1", "s2")
+            }
+            pergunta(tx("epemc_qual_linha_cria_no"), setOf("s3"), setOf("s1", "s2", "s5"), tx("epemc_qual_linha_cria_no_dica"), tx("epemc_while_monta_no")) {
+                dropAll("s")
+                add(codigo("s", CODIGO_EXPR_ARVORE, 96f, x = 14f, passo = 26f, size = 12f))
+            }
             cena(tx("epemc_para_dois_mais_tres_vezes")) {
                 dropAll("s")
                 add(titulo("2 + 3 * 4"))
@@ -313,6 +343,12 @@ val serieEmC by lazy {
                 add(titulo("calc.y"))
                 add(codigo("y", CALC_Y_FALTA, 60f, passo = 23f, size = 11f))
                 hot("y9")
+            }
+            cena(tx("epemc_acao_monta_no"), who = PROF, mood = EpMood.HAPPY) {
+                clear()
+                add(titulo(tx("epemc_titulo_acao_no")))
+                add(codigo("a", listOf("%union { Node *no; }", "%type <no> e", "e: e '+' e  { \$\$ = novo('+', \$1, \$3); }", "gera(raiz);"), 120f, x = 14f, passo = 40f, size = 12f))
+                hot("a2")
             }
         },
     )

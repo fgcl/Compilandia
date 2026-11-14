@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (vigésima terceira rodada)
+
+Quatro pedidos do professor do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):
+
+1. **Em C 3 mostra o código que cria os nós.** Uma cena com a função `novo`, que pede memória e liga os dois filhos, e uma pergunta com o `expr` da aula 2 devolvendo a árvore: qual linha cria o nó do mais? A fala de acerto diz que o `e` antigo vira o filho da esquerda, e por isso a soma junta pela esquerda.
+2. **Em C 5 fecha ligando o Bison à aula 4.** A última cena mostra `%union`, `%type` e a ação `$$ = novo('+', $1, $3)`: a ação monta o nó, e o `gera` da aula 4 escreve o MIPS.
+3. **O `compila()` dos capítulos 5 a 7 devolve um `.asm` que termina** (`li $v0, 10` e `syscall`), e não um texto vazio. Assim o "o resto continua rodando" vale também antes do capítulo 8.
+4. **Acertos pequenos no guia.** O capítulo 7 diz que o esquema de uma passada é L-atribuído. O capítulo 2 ganhou um "Preveja" com `nao x > 0`, que agrupa como `(nao x) > 0` e dá erro de tipo. O rastro da tabela do capítulo 6 segue as linhas na ordem (5, 6, 7). O `declaraUm` do capítulo 8 avisa que, num laço, o `.word` não volta a zero.
+
 ## Feito em 14/11 (vigésima segunda rodada)
 
 1. **Revisor professor do bloco 5** (`relatorios/professor_5_semantica_forja.md`). Refez tipos, TAC, MIPS, pilhas de ativação, vivacidade e coloração, e não achou conta errada. Achou três regras que contradiziam a própria trilha, agora consertadas:

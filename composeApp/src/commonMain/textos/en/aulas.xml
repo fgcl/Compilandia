@@ -196,6 +196,12 @@
     <string name="epemc_em_c_3_struct_node">In C 3: the Node struct</string>
     <string name="epemc_na_ast_em_c_cada">In an AST in C, each tree node is a struct.</string>
     <string name="epemc_op_guarda_operador_val_guarda">op holds the operator, val holds the number, and nome holds the variable.</string>
+    <string name="epemc_novo_cria_no">The function novo creates each node. It asks for memory and links the two children.</string>
+    <string name="epemc_while_monta_no">In the parser, each turn of the while creates a node. The old e becomes the left child, so the sum groups to the left.</string>
+    <string name="epemc_acao_monta_no">In a real compiler, the Bison action builds the node. Then the gera from lesson four writes the MIPS.</string>
+    <string name="epemc_titulo_acao_no">The action builds the tree</string>
+    <string name="epemc_qual_linha_cria_no">This is the expr from lesson two, now returning the tree. Which line creates the plus node? Tap it.</string>
+    <string name="epemc_qual_linha_cria_no_dica">Look for the call to the function novo.</string>
     <string name="epemc_calc_l_inteiro">On screen, the files were shortened. This is the whole calc.l, and it compiles.</string>
     <string name="epemc_calc_y_falta">In calc.y, the header, the rule that prints the result and yyerror are missing.</string>
     <string name="epemc_esq_dir_sao_ponteiros_eles">esq and dir are pointers. They point to the children.</string>

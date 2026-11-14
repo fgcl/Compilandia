@@ -69,7 +69,7 @@
    BYTE: "Agora você é o processador. Chame, case e volte, na ordem certa."
    BRINQUEDO: dica "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou." / acerto "Você rodou a descida recursiva inteira, igual ao programa em C."
 
-#### EM_C / AST_BUILD: "Em C 3: o struct Node" (8 cenas, ~44s)
+#### EM_C / AST_BUILD: "Em C 3: o struct Node" (10 cenas, ~59s)
 
 1. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎   char *nome; ⏎   struct Node *esq, *dir; ⏎ } Node;
    BYTE: "Na AST em C, cada nó da árvore é um struct."
@@ -80,22 +80,31 @@
 3. TELA: # struct Node ⏎ typedef struct Node { ⏎   char op; ⏎   int val; ⏎   char *nome; ⏎ *  struct Node *esq, *dir;* ⏎ } Node;
    BYTE: "esq e dir são ponteiros. Eles apontam para os filhos."
 
-4. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4}
+4. TELA: # struct Node ⏎ Node *novo(char op, Node *e, Node *d) { ⏎ *  Node *n = malloc(sizeof(Node));* ⏎ *  n->op = op; n->esq = e; n->dir = d;* ⏎   return n; ⏎ }
+   BYTE: "Quem cria cada nó é a função novo. Ela pede memória e liga os dois filhos."
+
+5. TELA: # struct Node ⏎ Node *expr(void) { ⏎   Node *e = termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); e = novo('+', e, termo()); ⏎   } ⏎   return e; ⏎ }
+   BYTE: "Este é o expr da aula dois, agora devolvendo a árvore. Qual linha cria o nó do mais? Toque."
+   PERGUNTA (toque): certo =     casa('+'); e = novo('+', e, termo()); ; errado =   Node *e = termo(); |   while (tok.tipo == '+') { |   return e;
+   se errar: "Procure a chamada da função novo."
+   se acertar: "No parser, cada volta do while cria um nó. O e antigo vira o filho da esquerda, e a soma junta pela esquerda."
+
+6. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4}
    BYTE: "Para dois mais três vezes quatro, o parser cria os nós de baixo para cima."
 
-5. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ *Node{op: '*'; esq ●; dir ●}*
+7. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ *Node{op: '*'; esq ●; dir ●}*
    BYTE: "Primeiro as folhas, um nó para cada número. Depois vem o vezes."
 
-6. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ *Node{op: '+'; esq ●; dir ●}*
+8. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ *Node{op: '+'; esq ●; dir ●}*
    BYTE: "Por último o mais, que vira a raiz da árvore."
 
-7. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
+9. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    BYTE: "Para qual nó aponta o ponteiro dir da raiz? Toque nele."
    PERGUNTA (toque): certo = Node{op: '*'; esq ●; dir ●} ; errado = Node{val: 2} | Node{val: 3} | Node{val: 4}
    se errar: "Siga o fio que sai da linha dir."
    se acertar: "O dir da raiz aponta para o vezes."
 
-8. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
+10. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    PROF: "A árvore é isso: structs ligados por ponteiros."
 
 #### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~45s)
@@ -125,7 +134,7 @@
    BYTE: "Agora monte o MIPS na ordem certa, instrução por instrução."
    BRINQUEDO: dica "Antes de calcular, os dois valores precisam estar nos registradores." / acerto "É exatamente o que o seu gerador em C escreveria."
 
-#### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (9 cenas, ~50s)
+#### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (10 cenas, ~59s)
 
 1. TELA: # flex + bison + C ⏎ calc.l{[0-9]+  NUM; yylval = atoi(yytext)} ⏎ calc.y{%left '+'; %left '*'; e: e '+' e { $$ = $1 + $3; };  | e '*' e { $$ = $1 * $3; };  | NUM ;} ⏎ main.c{int yyparse(void);; int main(void) {;   return yyparse();; }}
    BYTE: "Um compilador em C de verdade costuma ter três arquivos."
@@ -156,6 +165,9 @@
 
 9. TELA: # calc.y ⏎ %{ ⏎ #include <stdio.h> ⏎ int yylex(void); ⏎ void yyerror(const char *s); ⏎ %} ⏎ %token NUM ⏎ %left '+' ⏎ %left '*' ⏎ %% ⏎ *linha: e '\n'  { printf("= %d\n", $1); } ;* ⏎ e: ... ; ⏎ %% ⏎ void yyerror(const char *s) { ⏎   fprintf(stderr, "%s\n", s); ⏎ }
    PROF: "No calc.y, faltam o cabeçalho, a regra que imprime a conta e o yyerror."
+
+10. TELA: # A ação monta a árvore ⏎ %union { Node *no; } ⏎ %type <no> e ⏎ *e: e '+' e  { $$ = novo('+', $1, $3); }* ⏎ gera(raiz);
+   PROF: "Num compilador de verdade, a ação do Bison monta o nó. Depois, o gera da aula quatro escreve o MIPS."
 
 
 # Guia do Trabalho Prático (capítulos de texto)
@@ -387,6 +399,9 @@ Precedência (da MAIS FRACA para a MAIS FORTE)
 - PREVEJA: Na Byteiro, como é agrupado `a + b * 2 > 10 e ok`?
     opções: ((a + b) * 2) > (10 e ok) | ✔((a + (b * 2)) > 10) e ok | a + ((b * 2) > (10 e ok)) | Erro: misturar aritmética e lógica é proibido
     explicação: Quem está mais EMBAIXO na tabela gruda mais forte: primeiro `*`, depois `+`, depois `>`, e por último `e`. É exatamente a ordem que o parser vai seguir no capítulo 5.
+- PREVEJA: Com x inteiro, como a Byteiro agrupa `nao x > 0`?
+    opções: ✔(nao x) > 0 | nao (x > 0) | erro de sintaxe
+    explicação: `nao` liga mais forte que `>`: fica `(nao x) > 0`. A sintaxe passa, mas o semântico reclama, porque `nao` pede um lógico e x é inteiro. Para negar a comparação, escreva `nao (x > 0)`.
 - CAIXA [Cuidado!]: Por que `<-` para atribuir? Assim `=` fica livre para COMPARAR e ninguém escreve `se (x = 1)` achando que atribui. Mas tem pegadinha: `a<-1` agora é `a <- 1` (atribuição), e não `a < -1`. É a regra do **maior lexema**: o léxico sempre pega o token mais comprido possível. Documente isso no relatório!
 - WIDGET TOKENIZE entrada=«if (x<-1) y = 0; // C de verdade» legenda: O Lexi do app conhece C: em C, `x<-1` é `x < -1`. Na Byteiro o MESMO texto vira `x <- 1`. Quem define os tokens é a especificação da linguagem.
 - CÓDIGO (Gramática informal (EBNF): { } = repete 0+ vezes, [ ] = opcional. As expressões ficam para o capítulo 4.):
@@ -848,9 +863,9 @@ public class Sintatico {
         return new ErroCompilacao(tok.linha, "erro sintático: esperava " + oQue + ", encontrou " + achou);
     }
 
-    public String compila() {                  // o capítulo 8 faz isto devolver o MIPS
+    public String compila() {                  // por ora, um .asm que só termina; o capítulo 8 gera o resto
         programa();
-        return "";
+        return ".text\nmain:\n    li $v0, 10\n    syscall\n";
     }
 ```
 - CÓDIGO (Sintatico.java (2/4), programa, bloco e o 'despachante' comando()):
@@ -1176,8 +1191,9 @@ private Simbolo usa(Token id) {           // toda vez que um ID aparece numa exp
     · Linha 1, `{` do programa: pilha = [ {} ]
     · Linha 2: pilha = [ {x→x_0 inteiro} ]
     · Linha 4, `{`: pilha = [ {}, {x→x_0} ] (topo à esquerda)
-    · Linhas 5 e 7: topo = {x→x_1 caractere, y→y_2 inteiro}
+    · Linha 5: topo = {x→x_1 caractere}
     · Linha 6: busca(x) acha x_1 no topo, o caractere.
+    · Linha 7: topo = {x→x_1 caractere, y→y_2 inteiro}
     · Linha 9, `}`: desempilha. Pilha = [ {x→x_0} ]
     · Linha 10: busca(x) acha x_0. Linha 11: busca(y) → null → erro semântico!
 - CAIXA [Não existem perguntas idiotas]: P: Pode declarar um x no bloco interno se já existe um x fora? R: Depende da linguagem! C permite (sombreamento). Java PROÍBE redeclarar uma variável local num bloco interno. A Byteiro permite. Qualquer escolha vale, desde que esteja escrita no relatório e o compilador faça o que está escrito.
@@ -1367,7 +1383,7 @@ programa t { x <- 1; }
 programa t { inteiro a; caractere a; }
   -> linha 1: erro semântico: 'a' já foi declarado neste escopo (linha 1)
 ```
-- CAIXA [Dica de prova]: Atributo **sintetizado** sobe (o tipo da expressão, calculado a partir dos filhos). Atributo **herdado** desce: em `inteiro a, b, c;` o tipo é passado como parâmetro para `declaraUm(t)` de cada ID. Seu TP tem os dois: cite isso no relatório!
+- CAIXA [Dica de prova]: Atributo **sintetizado** sobe (o tipo da expressão, calculado a partir dos filhos). Atributo **herdado** desce: em `inteiro a, b, c;` o tipo é passado como parâmetro para `declaraUm(t)` de cada ID. Seu TP tem os dois: cite isso no relatório! Um parser de uma passada só consegue isso porque o herdado vem da esquerda: é uma definição **L-atribuída**.
 - REVELAR: A verificação de tipos precisa ser uma fase separada, com uma árvore?
     → Não necessariamente. No esquema de uma passada ela vive DENTRO do parser (tradução dirigida pela sintaxe). Construir uma AST e depois visitá-la também é válido, e facilita otimizações maiores, mas dá mais código. Para o TP, uma passada é o caminho mais curto.
 - PASSOS (Na sua linguagem):
@@ -1435,7 +1451,7 @@ public String compila() {
 private void declaraUm(TipoDado t) {
     Token id = casaToken(TipoToken.ID);
     Simbolo s = tabela.declara(id.lexema, t, id.linha);
-    dados.append(s.rotulo).append(": .word 0\n");             // toda variável ganha um .word
+    dados.append(s.rotulo).append(": .word 0\n");             // um .word por variável: num laço, ele NÃO volta a zero
 }
 ```
 - CÓDIGO (As folhas e os unários: cada folha ocupa UM registrador novo):

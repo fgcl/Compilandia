@@ -66,6 +66,9 @@
     <string name="tpguidea_tabela_precedencia_byteiro">Byteiro precedence table</string>
     <string name="tpguidea_na_byteiro_como_agrupado_b">In Byteiro, how is `a + b * 2 &gt; 10 e ok` grouped?</string>
     <string name="tpguidea_erro_misturar_aritmetica_logica_proibido">Error: mixing arithmetic and logic is forbidden</string>
+    <string name="tpguidea_nao_x_maior_q">With x an integer, how does Byteiro group `nao x > 0`?</string>
+    <string name="tpguidea_nao_x_maior_erro_sint">syntax error</string>
+    <string name="tpguidea_nao_x_maior_porque">`nao` binds tighter than `>`: it becomes `(nao x) > 0`. The syntax passes, but the semantic phase complains, because `nao` needs a logical value and x is an integer. To negate the comparison, write `nao (x > 0)`.</string>
     <string name="tpguidea_quem_esta_mais_embaixo_na">Whatever is LOWER in the table binds tighter: first `*`, then `+`, then `&gt;`, and last `e`. It's exactly the order the parser will follow in chapter 5.</string>
     <string name="tpguidea_por_que_para_atribuir_assim">Why `&lt;-` for assignment? That way `=` is free to COMPARE and nobody writes `se (x = 1)` thinking it assigns. But there's a catch: `a&lt;-1` is now `a &lt;- 1` (assignment), not `a &lt; -1`. It's the **longest lexeme** rule: the scanner always takes the longest possible token. Document that in the report!</string>
     <string name="tpguidea_lexi_app_conhece_c_em">The app's Lexi knows C: in C, `x&lt;-1` is `x &lt; -1`. In Byteiro the SAME text becomes `x &lt;- 1`. The language specification is what defines the tokens.</string>
@@ -211,6 +214,8 @@
     <string name="tpguideb_onde_chamar_usa_em_todo">Where to call `usa(...)`? Everywhere an ID shows up without being a declaration: in `atribuicao()` (the target), in `leia()` and in `primario()`. In chapter 7 the returned `Simbolo` will tell the TYPE; in chapter 8, the memory LABEL.</string>
     <string name="tpguideb_tabela_durante_escopos_byt">The table during escopos.byt</string>
     <string name="tpguideb_linha_4_pilha_x_x">Line 4, `{`: stack = [ {}, {x→x_0} ] (top on the left)</string>
+    <string name="tpguideb_linha_5_topo">Line 5: top = {x→x_1 caractere}</string>
+    <string name="tpguideb_linha_7_topo">Line 7: top = {x→x_1 caractere, y→y_2 inteiro}</string>
     <string name="tpguideb_linha_6_busca_x_acha">Line 6: lookup(x) finds x_1 on top, the caractere.</string>
     <string name="tpguideb_linha_10_busca_x_acha">Line 10: lookup(x) finds x_0. Line 11: lookup(y) → null → semantic error!</string>
     <string name="tpguideb_p_pode_declarar_x_no">Q: Can you declare an x in the inner block if an x already exists outside? A: It depends on the language! C allows it (shadowing). Java FORBIDS redeclaring a local variable in an inner block. Byteiro allows it. Either choice is fine, as long as it's written in the report and the compiler does what's written.</string>
@@ -244,7 +249,7 @@
     <string name="tpguidec_cada_linguagem_escolhe_c_converte">Each language chooses. C converts integers to booleans without asking; JavaScript makes `'5' * 2` give 10; Java requires a boolean in the if. None of them is 'right'; what matters is that the rule is written down and the compiler obeys it.</string>
     <string name="tpguidec_p_conversao_caractere_inteiro_gera">Q: Does the caractere → inteiro conversion generate any instruction? A: No! The character already lives in memory as a number (65). The 'conversion' exists only in the type table. In C, though, int → float generates a real MIPS instruction (`cvt.s.w`), because the representation changes.</string>
     <string name="tpguidec_cinco_testes_semanticos_com_saida">Five semantic tests with the expected output; copy them into testes/erro/</string>
-    <string name="tpguidec_atributo_sintetizado_sobe_tipo_expressao">A **synthesized** attribute goes up (the expression's type, computed from the children). An **inherited** attribute goes down: in `inteiro a, b, c;` the type is passed as a parameter to `declaraUm(t)` for each ID. Your project has both: mention it in the report!</string>
+    <string name="tpguidec_atributo_sintetizado_sobe_tipo_expressao">A **synthesized** attribute goes up (the expression's type, computed from the children). An **inherited** attribute goes down: in `inteiro a, b, c;` the type is passed as a parameter to `declaraUm(t)` for each ID. Your project has both: mention it in the report! A one-pass parser can only do this because the inherited attribute comes from the left: it is an **L-attributed** definition.</string>
     <string name="tpguidec_verificacao_tipos_precisa_ser_fase">Does type checking need to be a separate phase, with a tree?</string>
     <string name="tpguidec_nao_necessariamente_no_esquema_passada">Not necessarily. In the one-pass scheme it lives INSIDE the parser (syntax-directed translation). Building an AST and then visiting it is also valid, and makes bigger optimizations easier, but it takes more code. For the project, one pass is the shortest path.</string>
     <string name="tpguidec_gerando_mips_para_mars">Generating MIPS for MARS</string>
