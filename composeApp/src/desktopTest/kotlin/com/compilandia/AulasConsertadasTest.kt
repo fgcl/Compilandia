@@ -410,6 +410,12 @@ class AulasConsertadasTest {
         assertEquals(Skill.CODEGEN_MIPS.region, Skill.RUNTIME.region)
     }
 
+    /** Região 8 na ordem AST, Escopo, Atributos: os tipos sobem numa árvore já montada e leem a tabela de símbolos. */
+    @Test fun regiao8NaOrdem() {
+        val regiao = Skill.entries.filter { it.region == Skill.AST_BUILD.region }
+        assertEquals(listOf(Skill.AST_BUILD, Skill.SCOPE_SYMBOLS, Skill.ATTRIBUTES_TYPES), regiao)
+    }
+
     /** A tabela de equivalência do Guia do TP: os nomes de C estão no código da série, e os de Java no código do guia. */
     @Test fun tabelaDeEquivalencia() {
         val tabela = com.compilandia.content.TP_EQUIVALENCIA.lines().drop(1).take(5).map { it.trim().split(Regex("\\s{2,}")) }

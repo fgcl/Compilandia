@@ -7,7 +7,7 @@
     <string name="epbackend_int_x_float">a é int, x é float</string>
     <string name="epbackend_comeco_pelas_folhas_inteiro_x">Começo pelas folhas. O tipo de a e de x vem da declaração. O dois, sem ponto, é inteiro.</string>
     <string name="epbackend_real_vezes_inteiro_que_toque">Real vezes inteiro dá o quê? Toque no tipo.</string>
-    <string name="epbackend_tipo_maior_ganha_para_nao">O tipo maior ganha, para não perder a parte quebrada.</string>
+    <string name="epbackend_tipo_maior_ganha_para_nao">Inteiro com real: qual dos dois guarda a parte quebrada?</string>
     <string name="epbackend_isso_real_com_inteiro_real">Inteiro com real dá real.</string>
     <string name="epbackend_dois_convertido_para_real_resultado">O dois é convertido para real antes da conta. Essa conversão automática se chama coerção. O tipo real sobe para o nó do vezes.</string>
     <string name="epbackend_na_raiz_inteiro_mais_real">Na raiz, inteiro mais real também dá real. Atributo que o nó calcula a partir dos filhos é um atributo sintetizado.</string>

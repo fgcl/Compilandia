@@ -316,7 +316,7 @@
     <string name="rt_f_af">In a recursion, each call has its own n, in its own activation record.</string>
     <string name="rt_f_q">Where does the n of each call to fat live? A classmate said this. Right or wrong?</string>
     <string name="rt_f_dica">How many activation records were on the stack while fat of one was running?</string>
-    <string name="rt_f_ok">You got it. Each call pushes a record with its own n. If there were only one, recursion would destroy the values.</string>
+    <string name="rt_f_ok">You got it. Each call pushes a record with its own n. The n arrives in $a0, but the next call writes over it. So it goes to the frame.</string>
     <string name="rt_f_erro2">Functions return in the order they were called.</string>
     <string name="rt_f_certo2">It is a stack: the last call is the first to return.</string>
     <string name="rt_f_fala2">A common mistake: thinking whoever was called first returns first. It is the opposite. The stack returns in the reverse order of the calls.</string>

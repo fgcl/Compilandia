@@ -638,7 +638,7 @@ Depois: "F de dois. O último a entrar sai primeiro."
    BYTE: "Onde mora o n de cada chamada do fat? Um colega disse isto. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: cada chamada empilha um registro. ; errado = Certo: o n fica num registrador fixo. | Errado: o n mora num lugar só, global.
    se errar: "Quantos registros de ativação havia na pilha quando o fat de um rodava?"
-   se acertar: "Acertou. Cada chamada empilha um registro com o seu n. Se fosse um só, a recursão destruiria os valores."
+   se acertar: "Acertou. Cada chamada empilha um registro com o seu n. O n chega em $a0, mas a próxima chamada escreve por cima. Por isso ele vai para o quadro."
 
 24. TELA: # Erros comuns ⏎ Certo: Numa recursão, cada chamada tem o seu próprio n, no seu registro de ativação. ⏎ *Errado: As funções retornam na ordem em que foram chamadas.* ⏎ *Certo: É uma pilha: a última chamada é a primeira a retornar.*
    BYTE: "Um erro comum: achar que a primeira chamada retorna primeiro. É o contrário. A pilha devolve na ordem inversa das chamadas."

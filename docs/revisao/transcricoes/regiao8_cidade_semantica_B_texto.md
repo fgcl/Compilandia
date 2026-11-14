@@ -1,348 +1,6 @@
 # Região 8: Cidade Semântica — aulas de texto "Ler com calma" (6 estilos por assunto)
 
 
-## ASSUNTO ATTRIBUTES_TYPES: Atributos e verificação de tipos
-
-#### ESTILO STORY (História / Analogia): "Notas que sobem, sobrenomes que descem"
-- NARRADOR: Cidade Semântica. A árvore sintática já está pronta... mas ela ainda não sabe o que significa.
-- BYTE: Como assim? A árvore de 'a + x * 2' tá certinha!
-- PROF: Ela está certa na FORMA. Agora precisamos pendurar informação em cada nó: tipo, valor, código... Esses penduricalhos são os **atributos**.
-- TEXTO: Pense na sua média do semestre: a nota final é calculada a partir das notas das provas, que vêm dos exercícios. A informação **sobe**. Isso é um atributo **sintetizado**.
-- TEXTO: Agora pense no sobrenome: você o recebe dos pais e repassa aos irmãos mais novos. A informação **desce** (ou vem do lado). Isso é um atributo **herdado**.
-- PASSOS (O mapa da analogia):
-    · Nota final calculada das parciais → **sintetizado** (do filho para o pai)
-    · Sobrenome vindo dos pais → **herdado** (do pai ou irmão para o filho)
-    · Regulamento de como calcular a média → **regra semântica** (E.tipo = ...)
-    · Gramática + atributos + regras → **definição dirigida pela sintaxe (SDD)**
-- TEXTO: O fiscal da balança da feira é o **verificador de tipos**: não deixa somar banana com bool. Mas int com float pode, é só converter o int, como trocar reais por dólares antes de somar. Isso é **coerção**.
-- PREVEJA: a é int e x é float. Qual o tipo de a + x * 2?
-    opções: int | ✔float, com coerção de int para float | erro de tipo
-    explicação: x * 2 é float (2 é convertido). a + float também vira float: o compilador converte a com inttofloat.
-- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Os tipos sobem das folhas até a raiz: int + float → float.
-- REVELAR: Em 'int a, b, c;', o tipo int é sintetizado ou herdado para cada variável?
-    → Herdado: ele desce do nó do tipo para a lista de nomes, como um sobrenome passado aos irmãos.
-- CAIXA [Não existem perguntas idiotas]: 'Atributo é só uma variável no nó?' Basicamente, sim! O que importa é DE ONDE vem o valor dela: dos filhos (sintetizado) ou do pai/irmãos (herdado).
-
-#### ESTILO VISUAL (Passo a passo visual): "Assistindo os tipos subirem pela árvore"
-- PROF: Vamos ver o verificador de tipos trabalhando nó por nó, em pós-ordem: filhos primeiro, pai depois.
-- WIDGET ATTR_TREE entrada=«(a + b) * c» legenda: Tudo int: as folhas consultam a tabela de símbolos, os operadores combinam. Valor 18 com a=4, b=2, c=3.
-- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Aqui aparece a coerção: no '+', o int encontra um float e é alargado.
-- BYTE: Então o tipo do pai é só 'o maior' dos tipos dos filhos?
-- PROF: Nas aritméticas, sim: int < float, e o resultado é o maior. Para comparações e lógica, as regras são outras.
-- WIDGET ATTR_TREE entrada=«a < b && ok» legenda: Comparação sempre produz bool; && exige dois bool.
-- PREVEJA: E ok + 1, com ok sendo bool?
-    opções: int (true vale 1) | ✔erro de tipo | bool
-    explicação: Nesta linguagem (como em Java), não dá para fazer aritmética com bool. E o erro se propaga para cima.
-- WIDGET ATTR_TREE entrada=«ok + 1» legenda: O nó '+' marca erro: bool não entra em aritmética.
-- WIDGET PARSE_TREE gramática=«D -> T L ; ⏎ T -> int | float ⏎ L -> id R ⏎ R -> , id R | ε» entrada=«int id , id ;» legenda: Atributo herdado: T.tipo = int é passado para L.in e desce para cada id da lista.
-- PASSOS (O que você viu):
-    · Folhas: o tipo vem do literal ou da tabela de símbolos
-    · Nós internos: tipo calculado dos filhos → sintetizado
-    · Ordem de avaliação: pós-ordem (como o $$ do Bison, numa redução)
-    · Na declaração, o tipo desce pela lista → herdado
-- CAIXA [Poder do cérebro]: Um analisador LR calcula atributos sintetizados de graça: em cada redução, os valores dos filhos estão na pilha. É exatamente o $$ = $1 + $3 do Bison.
-
-#### ESTILO WORKED (Exemplo resolvido): "Árvore anotada com valor e com tipo"
-- PROF: Primeiro, valores. A SDD clássica da calculadora:
-- CÓDIGO (SDD S-atribuída (só atributos sintetizados)):
-```
-E → E1 + T    E.val = E1.val + T.val
-E → T         E.val = T.val
-T → T1 * F    T.val = T1.val * F.val
-T → F         T.val = F.val
-F → ( E )     F.val = E.val
-F → num       F.val = num.lexval
-```
-- PASSOS (Anotando 3 * 5 + 4 de baixo para cima):
-    · Folhas: num.lexval = 3, 5, 4 → F.val = 3, 5, 4
-    · T → F: T.val = 3
-    · T → T1 * F: T.val = 3 * 5 = 15
-    · E → T: E.val = 15
-    · E → E1 + T (com T.val = 4): E.val = 15 + 4 = **19**
-- PROF: Agora, tipos, com coerção. Regra: se algum operando é float, o resultado é float e o int é convertido.
-- PASSOS (Tipando a + x * 2 (a: int, x: float)):
-    · a → int (tabela de símbolos); x → float; 2 → int (literal)
-    · x * 2: float * int → **float**, converte 2 para 2.0
-    · a + (x * 2): int + float → **float**, gera inttofloat(a)
-- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Confira: raiz float, com a coerção marcada.
-- BYTE: Deixa comigo agora.
-- REVELAR: Tipo de (a + b) * c, com a, b, c int?
-    → int em todos os nós internos; nenhuma coerção.
-- REVELAR: Tipo de x * 2 + 3 * 4?
-    → x * 2 é float; 3 * 4 é int; float + int → float (o 12 é convertido).
-- REVELAR: Tipo de a < b && ok?
-    → a < b → bool; bool && bool (ok) → bool.
-- WIDGET ATTR_TREE entrada=«x * 2 + 3 * 4» legenda: Confira a segunda resposta.
-- CAIXA [Dica de prova]: Em 'desenhe a árvore anotada', escreva o atributo ao lado de CADA nó (até os T → F chatos). O professor quer ver a ordem de avaliação, não só o resultado.
-
-#### ESTILO SOCRATIC (Perguntas guiadas): "De onde vem a informação de cada nó?"
-- PROF: Pergunta-guia de hoje: para calcular este atributo, eu preciso olhar PARA BAIXO ou PARA CIMA?
-- REVELAR: O valor de E em E → E1 + T depende de quê?
-    → De E1.val e T.val: dos filhos. É sintetizado.
-- REVELAR: Se TODOS os atributos são sintetizados, em que ordem dá para avaliar?
-    → Pós-ordem (de baixo para cima). Uma SDD assim é **S-atribuída** e combina perfeitamente com um analisador LR: avalia na hora da redução.
-- REVELAR: E em D → T L, com 'int a, b, c', como cada id descobre seu tipo?
-    → Pelo atributo herdado L.in = T.tipo, que desce pela lista. O id está abaixo e à direita de quem sabe o tipo.
-- BYTE: Então herdado pode vir de qualquer lugar?
-- REVELAR: Se um atributo herdado pudesse depender de um irmão à DIREITA, um analisador que lê da esquerda para a direita conseguiria calcular na hora?
-    → Não: o irmão da direita ainda não foi analisado. Daí a restrição L-atribuída.
-- PREVEJA: Numa SDD **L-atribuída**, o atributo herdado de Xi em A → X1 X2 ... Xn pode depender de...
-    opções: Qualquer atributo de qualquer filho | ✔Atributos herdados de A e atributos de X1 ... Xi-1 (irmãos à esquerda) | Apenas atributos sintetizados de A
-    explicação: L de Left: só o pai (herdados dele) e os irmãos à esquerda. Assim uma passada em profundidade, da esquerda para a direita, resolve tudo, perfeito para descida recursiva.
-- REVELAR: Toda SDD S-atribuída é L-atribuída?
-    → Sim! Ela não tem herdados, então a restrição é satisfeita trivialmente.
-- REVELAR: Por que o verificador de tipos precisa da tabela de símbolos?
-    → Porque nas folhas só há nomes. O tipo de 'a' foi decidido lá na declaração; a tabela é a memória que liga uso e declaração.
-- WIDGET ATTR_TREE entrada=«a + b * c» legenda: Pós-ordem em ação: b * c primeiro, depois a soma.
-- CAIXA [Poder do cérebro]: Se o grafo de dependências entre atributos tiver um ciclo, não existe ordem de avaliação. S-atribuída e L-atribuída são duas classes que garantem: sem ciclos.
-
-#### ESTILO FORMAL (Definição de prova): "SDD, atributos e sistema de tipos"
-- TEXTO: **Definição dirigida pela sintaxe (SDD):** gramática livre de contexto + atributos associados aos símbolos + regras semânticas associadas às produções.
-- PASSOS (Tipos de atributo (para um não-terminal A num nó N)):
-    · **Sintetizado:** definido por regra da produção em que A é a CABEÇA, usando atributos dos filhos de N e do próprio N
-    · **Herdado:** definido por regra da produção em que A está no CORPO (no pai de N), usando atributos do pai, dos irmãos e do próprio N
-    · Terminais só têm atributos sintetizados, fornecidos pelo léxico (ex.: num.lexval)
-- PASSOS (Classes de SDD):
-    · **S-atribuída:** só atributos sintetizados → avaliação em pós-ordem; implementável durante a análise LR
-    · **L-atribuída:** em A → X1...Xn, cada herdado de Xi depende só de herdados de A e de atributos de X1...Xi-1 (e de Xi, sem ciclo) → uma passada em profundidade, esquerda para direita
-    · **Esquema de tradução (SDT):** gramática com fragmentos de programa {ações} embutidos no corpo; em SDD S-atribuída, as ações vão no fim (SDT pós-fixo)
-- CÓDIGO (SDD L-atribuída clássica: declarações (in é herdado)):
-```
-D → T L ;        L.in = T.tipo
-T → int          T.tipo = int
-T → float        T.tipo = float
-L → L1 , id      L1.in = L.in ;  addType(id.entrada, L.in)
-L → id           addType(id.entrada, L.in)
-```
-- CÓDIGO (Verificação de tipos com coerção (alargamento)):
-```
-E → E1 op E2   (op aritmético):
-  se E1.tipo = bool ou E2.tipo = bool: erro de tipo
-  E.tipo := max(E1.tipo, E2.tipo)      // int < float
-  E.addr1 := widen(E1.addr, E1.tipo, E.tipo)   // insere inttofloat se preciso
-  E.addr2 := widen(E2.addr, E2.tipo, E.tipo)
-E → E1 relop E2:  numéricos → E.tipo := bool
-E → E1 && E2:     ambos bool → E.tipo := bool
-```
-- PREVEJA: Uma coerção int → float inserida pelo compilador é chamada de...
-    opções: Conversão explícita (cast) | ✔Coerção implícita (alargamento) | Estreitamento
-    explicação: Coerção = conversão implícita feita pelo compilador. int → float é alargamento (não perde a ordem de grandeza). float → int seria estreitamento e costuma exigir cast explícito.
-- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Instância da regra acima: max(int, float) = float, com widen em a.
-- CAIXA [Dica de prova]: Ao classificar uma SDD, verifique CADA regra que define um herdado: ela usa algum irmão à direita? Se sim, não é L-atribuída. Sem herdados → S-atribuída (e também L).
-- CAIXA [Cuidado!]: Verificação de tipos é estática (em tempo de compilação). Divisão por zero com valores de variáveis só aparece em tempo de execução, não é erro de tipo.
-
-#### ESTILO MNEMONIC (Truque de memória): "S sobe, H desce"
-- NARRADOR: Palácio da Memória: Cidade Semântica, prédio dos Tipos. Um elevador só sobe (sintetizado); a escada só desce (herdado).
-- CAIXA [Gancho de memória]: **S↑ H↓**: **S**intetizado **S**obe (dos filhos para o pai); **H**erdado desce (do pai/irmãos para o filho).
-- CAIXA [Gancho de memória]: **S-atribuída = Só Sintetizado.** **L-atribuída = Left**: herda só do pai e dos irmãos da esquerda.
-- CAIXA [Gancho de memória]: Coerção é **copo pequeno no copo grande**: int cabe em float (alargamento). O contrário derrama (estreitamento).
-- CÓDIGO (Tabela de bolso dos tipos (⊕ = + - * /)):
-```
-int   ⊕ int    → int
-int   ⊕ float  → float   (inttofloat no int)
-float ⊕ float  → float
-num  relop num → bool
-bool  &&  bool → bool
-bool  ⊕  num   → ERRO   (e o erro sobe)
-```
-- BYTE: Tipo é que nem fofoca: começa na folha e todo mundo acima fica sabendo!
-- PREVEJA: Bison: $$ = $1 + $3; calcula um atributo...
-    opções: Herdado | ✔Sintetizado | Global
-    explicação: $$ é o pai, calculado dos filhos $1 e $3: sobe. O Bison é uma máquina de SDD S-atribuída.
-- WIDGET ATTR_TREE entrada=«ok + 1» legenda: O erro também sobe: um bool numa soma contamina a raiz.
-- REVELAR: Diga em uma frase: sintetizado vs herdado.
-    → Sintetizado: calculado a partir dos filhos (sobe). Herdado: calculado a partir do pai e dos irmãos (desce/vem do lado).
-- CAIXA [Conversa ao pé da lareira]: Sintetizado: 'Eu sou prático: espero meus filhos terminarem e resumo tudo.' Herdado: 'E eu levo o contexto que você não vê lá de baixo, tipo o int de int a, b, c.'
-
-
-## ASSUNTO SCOPE_SYMBOLS: Escopo e tabela de símbolos
-
-#### ESTILO STORY (História / Analogia): "O porteiro do condomínio"
-- NARRADOR: Cidade Semântica, bairro dos Escopos. Prédios dentro de condomínios, apartamentos dentro de prédios.
-- BYTE: Tem dois 'x' no meu programa. Como o compilador sabe de qual eu estou falando?
-- PROF: Do mesmo jeito que o porteiro acha o 'João' certo. Imagine: alguém chega no seu apartamento e pergunta pelo João.
-- TEXTO: O porteiro procura primeiro **no seu apartamento**. Não achou? Procura **no prédio**. Depois **no condomínio inteiro**. O primeiro João encontrado, de dentro para fora, é o João certo.
-- TEXTO: Se tem um João no seu apê e outro no condomínio, o do apê **esconde** o de fora enquanto você está lá dentro. Isso é **sombreamento** (shadowing).
-- PASSOS (O mapa da analogia):
-    · Apartamento, prédio, condomínio → **blocos aninhados** { { { } } }
-    · Lista de moradores de cada lugar → **uma tabela de símbolos por escopo**
-    · Procurar de dentro para fora → **regra do aninhamento mais próximo** (escopo estático)
-    · Mudou-se do apê → **sair do bloco**: a lista dele é descartada
-    · Nenhum João em lugar nenhum → erro **'variável não declarada'**
-- PILHA: As listas... ficam empilhadas. Entrou num bloco... empilha. Saiu... desempilha. Eu adoro... esse trabalho.
-- CÓDIGO (Um condomínio de código):
-```
-{                        // bloco 0
-  int x;  int y;         // (1) x    (2) y
-  x = 1;
-  {                      // bloco 1
-    float x;             // (3) x
-    x = y + 1;
-    {                    // bloco 2
-      int y;             // (4) y
-      print(x + y);
-    }
-    print(y);
-  }
-  print(x);
-}
-```
-- PREVEJA: Na linha print(x + y), dentro do bloco 2, quais declarações são usadas?
-    opções: x (1) e y (2) | ✔x (3) e y (4) | x (3) e y (2)
-    explicação: De dentro para fora: y está no próprio bloco 2 (4); x não está no bloco 2, mas está no bloco 1 (3). O x (1) fica escondido.
-- WIDGET SCOPE legenda: Ligue cada uso à sua declaração, como o porteiro faria.
-- CAIXA [Não existem perguntas idiotas]: 'E o léxico não resolve isso?' Não: a Lexi só sabe que 'x' é um ID. Quem decide QUAL x é a análise semântica, com a tabela de símbolos.
-
-#### ESTILO VISUAL (Passo a passo visual): "A pilha de tabelas, quadro a quadro"
-- PROF: Vamos assistir a pilha de tabelas enquanto o compilador lê o programa de cima para baixo.
-- CÓDIGO (O programa):
-```
-{                        // bloco 0
-  int x;  int y;         // (1) x    (2) y
-  x = 1;
-  {                      // bloco 1
-    float x;             // (3) x
-    x = y + 1;
-    {                    // bloco 2
-      int y;             // (4) y
-      print(x + y);
-    }
-    print(y);
-  }
-  print(x);
-}
-```
-- PASSOS (A pilha em cada momento (topo à direita)):
-    · Abre bloco 0 → [ {} ]
-    · int x; int y; → [ {x:int(1), y:int(2)} ]
-    · Abre bloco 1 → [ {x(1), y(2)} | {} ]
-    · float x; → [ {x(1), y(2)} | {x:float(3)} ] — o x(3) sombreia o x(1)
-    · x = y + 1 → x acha (3) no topo; y não está no topo, desce e acha (2)
-    · Abre bloco 2, int y; → [ ... | {x(3)} | {y:int(4)} ]
-    · print(x + y) → x: (3), y: (4)
-    · Fecha bloco 2 → a tabela {y(4)} é descartada
-    · print(y) → y: (2)   •   Fecha bloco 1   •   print(x) → x: (1)
-- WIDGET SCOPE legenda: Agora com outro programa: para cada uso, qual declaração vence?
-- LEXI: Para mim, todos esses x são iguais. Olha só:
-- WIDGET TOKENIZE entrada=«int x = 1; { float x = 2.5; print(x); }» legenda: O léxico vê ID, ID, ID... sem saber a qual declaração cada um pertence.
-- PREVEJA: Depois de fechar o bloco 1, alguém ainda consegue achar o x (3)?
-    opções: Sim, ele fica na tabela global | ✔Não, a tabela do bloco 1 foi desempilhada | Só se for float
-    explicação: Saiu do bloco, a tabela daquele escopo sai do topo. O próximo print(x) só enxerga o x (1).
-- WIDGET ATTR_TREE entrada=«a + z» legenda: E se o nome não está em tabela nenhuma? A busca falha: 'z' não foi declarada, e o erro sobe pela árvore.
-- CAIXA [Poder do cérebro]: Repare: a busca percorre a pilha do TOPO para a BASE. Isso é toda a regra de escopo estático, em uma frase.
-
-#### ESTILO WORKED (Exemplo resolvido): "Ligando cada uso à sua declaração"
-- PROF: Exercício típico: para cada uso de variável, diga qual declaração ele referencia.
-- CÓDIGO (Programa (declarações numeradas de 1 a 4)):
-```
-{                        // bloco 0
-  int x;  int y;         // (1) x    (2) y
-  x = 1;
-  {                      // bloco 1
-    float x;             // (3) x
-    x = y + 1;
-    {                    // bloco 2
-      int y;             // (4) y
-      print(x + y);
-    }
-    print(y);
-  }
-  print(x);
-}
-```
-- PASSOS (Resolvendo os usos, de dentro para fora):
-    · x = 1 (bloco 0): x está no bloco 0 → **(1)**
-    · x = y + 1 (bloco 1): x está no bloco 1 → **(3)**; y não está no bloco 1, sobe para o 0 → **(2)**
-    · print(x + y) (bloco 2): x não está no 2, está no 1 → **(3)**; y está no 2 → **(4)**
-- BYTE: Peraí, deixa os últimos comigo.
-- REVELAR: print(y), depois que o bloco 2 fechou.
-    → (2). A tabela do bloco 2, onde estava o y (4), já foi desempilhada; no bloco 1 não há y; no bloco 0 há o (2).
-- REVELAR: print(x), na última linha.
-    → (1). Estamos de volta ao bloco 0; o x float (3) saiu de vista com o bloco 1.
-- REVELAR: Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?
-    → Erro de redeclaração: o mesmo nome declarado duas vezes no MESMO escopo. Sombrear é declarar num escopo DIFERENTE.
-- REVELAR: Qual o tipo da expressão x + y em print(x + y)?
-    → x (3) é float e y (4) é int → float + int = float. A tabela de símbolos alimenta a verificação de tipos!
-- WIDGET SCOPE legenda: Pratique com um programa sorteado.
-- CAIXA [Dica de prova]: Na prova, desenhe a pilha de tabelas ao lado do código e atualize a cada { e }. É mais rápido e evita confundir quem já 'morreu'.
-
-#### ESTILO SOCRATIC (Perguntas guiadas): "Uma tabela só não bastaria?"
-- PROF: Vamos desenhar a tabela de símbolos juntos, com perguntas.
-- REVELAR: Que informação guardar para cada nome?
-    → Pelo menos: nome, tipo, categoria (variável, função, parâmetro...) e, mais tarde, endereço/deslocamento na memória. Às vezes a linha da declaração, para mensagens de erro.
-- REVELAR: Por que um único mapa global nome → informação não funciona?
-    → Porque o mesmo nome pode ter declarações diferentes em blocos diferentes (x int e x float). E ao sair de um bloco, os nomes dele precisam sumir.
-- REVELAR: Então, o que fazer ao entrar num bloco? E ao sair?
-    → Entrar: criar uma tabela nova, ligada à anterior. Sair: voltar para a anterior, descartando a nova. Uma pilha de tabelas!
-- BYTE: E pra procurar um nome, eu começo por onde?
-- REVELAR: Por onde começa a busca, e quando ela para?
-    → Começa na tabela do topo (bloco mais interno) e vai descendo; para no primeiro achado. Se chegar ao fundo sem achar: 'não declarada'.
-- PREVEJA: Declarar 'int x' quando já existe 'x' num bloco EXTERNO é...
-    opções: Erro de redeclaração | ✔Permitido: o novo x sombreia o externo | Ignorado
-    explicação: A verificação de redeclaração olha só a tabela do TOPO. Em blocos diferentes, o novo x sombreia o antigo (C e C++ permitem; Java, por escolha de projeto, proíbe uma local sombrear outra local, mas a tabela funciona igual).
-- REVELAR: Escopo estático (léxico) vs dinâmico: qual a diferença?
-    → Estático: o x certo é decidido pelo TEXTO do programa (aninhamento). Dinâmico: pela ordem de CHAMADAS em tempo de execução (a declaração mais recente ativa). C, Java e Kotlin usam estático.
-- REVELAR: Em qual fase o compilador usa e preenche a tabela?
-    → O léxico pode inserir os nomes; a análise sintática/semântica insere declarações e resolve usos; a geração de código usa os endereços. Ela acompanha todas as fases.
-- WIDGET SCOPE legenda: Teste suas respostas.
-- CAIXA [Poder do cérebro]: Se o compilador inserisse 'x' do bloco interno na MESMA tabela do externo, o que aconteceria com o x externo ao sair do bloco? (Ele teria sido sobrescrito, perdido para sempre.)
-
-#### ESTILO FORMAL (Definição de prova): "Escopo estático e ambientes encadeados"
-- TEXTO: **Escopo** de uma declaração: a região do programa em que um uso daquele nome se refere a ela. **Regra do aninhamento mais próximo:** um uso de x refere-se à declaração de x no bloco mais interno que contém o uso.
-- CÓDIGO (Tabela de símbolos encadeada (Livro do Dragão, seção 2.7)):
-```
-classe Env:
-  tabela:   Mapa<nome, Simbolo>
-  anterior: Env?                      // escopo envolvente
-
-  put(nome, s): tabela[nome] := s
-  get(nome):
-    e := este
-    enquanto e ≠ nulo:
-      se nome ∈ e.tabela: retorne e.tabela[nome]
-      e := e.anterior
-    retorne nulo
-```
-- CÓDIGO (Esquema de tradução usando a pilha de ambientes):
-```
-bloco  → '{'       { salvo := topo; topo := new Env(topo) }
-           decls stmts
-           '}'       { topo := salvo }
-decl   → tipo id ;   { se id ∈ topo.tabela: erro "redeclaração"
-                       senão topo.put(id, Simbolo(tipo)) }
-fator  → id          { s := topo.get(id)
-                       se s = nulo: erro "não declarada"
-                       senão fator.tipo := s.tipo }
-```
-- PASSOS (Operações e custos (com tabela hash por escopo)):
-    · entrar no escopo: O(1)
-    · inserir: O(1) esperado, só no escopo do topo
-    · buscar: O(profundidade do aninhamento) no pior caso
-    · sair do escopo: O(1), descarta a tabela do topo
-- PREVEJA: Escopo dinâmico: f usa x sem declarar; g declara x=2 e chama f; o global tem x=1. Com escopo DINÂMICO, f vê x =
-    opções: 1 | ✔2 | erro
-    explicação: Dinâmico segue a cadeia de CHAMADAS: a ativação mais recente com x é a de g. No escopo estático, f veria o global (1).
-- WIDGET SCOPE legenda: Escopo estático: a resposta vem só do texto.
-- CAIXA [Dica de prova]: Ao responder 'qual declaração', justifique com a regra: 'pelo aninhamento mais próximo, o uso na linha N refere-se à declaração do bloco B'. E diferencie redeclaração (mesmo escopo, erro) de sombreamento (escopo interno, permitido).
-- CAIXA [Cuidado!]: Escopo é sobre ONDE um nome é visível (estático, no texto). Tempo de vida é sobre QUANDO a variável existe na memória (dinâmico, na execução). Não são a mesma coisa.
-
-#### ESTILO MNEMONIC (Truque de memória): "A cebola dos escopos"
-- NARRADOR: Palácio da Memória: Cidade Semântica, bairro dos Escopos. Cada casa é uma cebola: camadas dentro de camadas.
-- CAIXA [Gancho de memória]: **Escopo é cebola: procure de dentro para fora.** A primeira camada que tiver o nome vence.
-- CAIXA [Gancho de memória]: **'Abre chave, empilha; fecha chave, desempilha.'** A pilha de tabelas segue as chaves do programa.
-- CAIXA [Gancho de memória]: **E-I-B-S**: as quatro operações: **E**ntrar no escopo, **I**nserir, **B**uscar, **S**air. ('É I Bem Simples.')
-- CAIXA [Gancho de memória]: Sombreamento: **'quem está mais perto faz sombra em quem está longe'**. O x de fora não morreu; só está na sombra.
-- BYTE: E se eu declarar o mesmo nome duas vezes na mesma camada?
-- PROF: Aí não é sombra, é briga: **redeclaração**, erro. Sombra só existe entre camadas diferentes.
-- PREVEJA: Busca na pilha de tabelas: de onde para onde?
-    opções: Da base para o topo | ✔Do topo para a base | Só no topo
-    explicação: Topo = bloco mais interno. Descer a pilha = ir para fora na cebola. (Só no topo é a regra para checar REDECLARAÇÃO, não para buscar usos.)
-- WIDGET SCOPE legenda: Descasque a cebola: para cada uso, ache a camada certa.
-- REVELAR: Recite a regra do escopo estático numa frase.
-    → Um uso de x refere-se à declaração de x no bloco mais interno (mais próximo) que contém o uso.
-- CAIXA [Conversa ao pé da lareira]: Escopo estático: 'Me lê o código e você sabe quem eu sou.' Escopo dinâmico: 'Comigo depende de quem me chamou... é mais emocionante.' Programador cansado às 3 da manhã: 'Eu fico com o estático.'
-
-
 ## ASSUNTO AST_BUILD: Árvore sintática abstrata (AST) com classes
 
 #### ESTILO STORY (História / Analogia): "O resumo e o livro inteiro"
@@ -563,3 +221,345 @@ class BinOp extends Expr {
     → Fora: correntes, parênteses/pontuação, ε. Fica: operadores (BinOp) e operandos (Var, Num), e construções (Atrib, Se, Enquanto, Bloco). Precedência e associatividade moram na FORMA da árvore.
 - REVELAR: Por que vale a pena montar a AST no TP em vez de gerar código direto no parser?
     → Porque aí o compilador pode percorrer o programa várias vezes (tipos, depois código), com cada fase separada e testável, e otimizar mexendo na árvore. Tradução direta é uma passada só, sem volta.
+
+
+## ASSUNTO SCOPE_SYMBOLS: Escopo e tabela de símbolos
+
+#### ESTILO STORY (História / Analogia): "O porteiro do condomínio"
+- NARRADOR: Cidade Semântica, bairro dos Escopos. Prédios dentro de condomínios, apartamentos dentro de prédios.
+- BYTE: Tem dois 'x' no meu programa. Como o compilador sabe de qual eu estou falando?
+- PROF: Do mesmo jeito que o porteiro acha o 'João' certo. Imagine: alguém chega no seu apartamento e pergunta pelo João.
+- TEXTO: O porteiro procura primeiro **no seu apartamento**. Não achou? Procura **no prédio**. Depois **no condomínio inteiro**. O primeiro João encontrado, de dentro para fora, é o João certo.
+- TEXTO: Se tem um João no seu apê e outro no condomínio, o do apê **esconde** o de fora enquanto você está lá dentro. Isso é **sombreamento** (shadowing).
+- PASSOS (O mapa da analogia):
+    · Apartamento, prédio, condomínio → **blocos aninhados** { { { } } }
+    · Lista de moradores de cada lugar → **uma tabela de símbolos por escopo**
+    · Procurar de dentro para fora → **regra do aninhamento mais próximo** (escopo estático)
+    · Mudou-se do apê → **sair do bloco**: a lista dele é descartada
+    · Nenhum João em lugar nenhum → erro **'variável não declarada'**
+- PILHA: As listas... ficam empilhadas. Entrou num bloco... empilha. Saiu... desempilha. Eu adoro... esse trabalho.
+- CÓDIGO (Um condomínio de código):
+```
+{                        // bloco 0
+  int x;  int y;         // (1) x    (2) y
+  x = 1;
+  {                      // bloco 1
+    float x;             // (3) x
+    x = y + 1;
+    {                    // bloco 2
+      int y;             // (4) y
+      print(x + y);
+    }
+    print(y);
+  }
+  print(x);
+}
+```
+- PREVEJA: Na linha print(x + y), dentro do bloco 2, quais declarações são usadas?
+    opções: x (1) e y (2) | ✔x (3) e y (4) | x (3) e y (2)
+    explicação: De dentro para fora: y está no próprio bloco 2 (4); x não está no bloco 2, mas está no bloco 1 (3). O x (1) fica escondido.
+- WIDGET SCOPE legenda: Ligue cada uso à sua declaração, como o porteiro faria.
+- CAIXA [Não existem perguntas idiotas]: 'E o léxico não resolve isso?' Não: a Lexi só sabe que 'x' é um ID. Quem decide QUAL x é a análise semântica, com a tabela de símbolos.
+
+#### ESTILO VISUAL (Passo a passo visual): "A pilha de tabelas, quadro a quadro"
+- PROF: Vamos assistir a pilha de tabelas enquanto o compilador lê o programa de cima para baixo.
+- CÓDIGO (O programa):
+```
+{                        // bloco 0
+  int x;  int y;         // (1) x    (2) y
+  x = 1;
+  {                      // bloco 1
+    float x;             // (3) x
+    x = y + 1;
+    {                    // bloco 2
+      int y;             // (4) y
+      print(x + y);
+    }
+    print(y);
+  }
+  print(x);
+}
+```
+- PASSOS (A pilha em cada momento (topo à direita)):
+    · Abre bloco 0 → [ {} ]
+    · int x; int y; → [ {x:int(1), y:int(2)} ]
+    · Abre bloco 1 → [ {x(1), y(2)} | {} ]
+    · float x; → [ {x(1), y(2)} | {x:float(3)} ] — o x(3) sombreia o x(1)
+    · x = y + 1 → x acha (3) no topo; y não está no topo, desce e acha (2)
+    · Abre bloco 2, int y; → [ ... | {x(3)} | {y:int(4)} ]
+    · print(x + y) → x: (3), y: (4)
+    · Fecha bloco 2 → a tabela {y(4)} é descartada
+    · print(y) → y: (2)   •   Fecha bloco 1   •   print(x) → x: (1)
+- WIDGET SCOPE legenda: Agora com outro programa: para cada uso, qual declaração vence?
+- LEXI: Para mim, todos esses x são iguais. Olha só:
+- WIDGET TOKENIZE entrada=«int x = 1; { float x = 2.5; print(x); }» legenda: O léxico vê ID, ID, ID... sem saber a qual declaração cada um pertence.
+- PREVEJA: Depois de fechar o bloco 1, alguém ainda consegue achar o x (3)?
+    opções: Sim, ele fica na tabela global | ✔Não, a tabela do bloco 1 foi desempilhada | Só se for float
+    explicação: Saiu do bloco, a tabela daquele escopo sai do topo. O próximo print(x) só enxerga o x (1).
+- WIDGET ATTR_TREE entrada=«a + z» legenda: E se o nome não está em tabela nenhuma? A busca falha: 'z' não foi declarada, e o erro sobe pela árvore.
+- CAIXA [Poder do cérebro]: Repare: a busca percorre a pilha do TOPO para a BASE. Isso é toda a regra de escopo estático, em uma frase.
+
+#### ESTILO WORKED (Exemplo resolvido): "Ligando cada uso à sua declaração"
+- PROF: Exercício típico: para cada uso de variável, diga qual declaração ele referencia.
+- CÓDIGO (Programa (declarações numeradas de 1 a 4)):
+```
+{                        // bloco 0
+  int x;  int y;         // (1) x    (2) y
+  x = 1;
+  {                      // bloco 1
+    float x;             // (3) x
+    x = y + 1;
+    {                    // bloco 2
+      int y;             // (4) y
+      print(x + y);
+    }
+    print(y);
+  }
+  print(x);
+}
+```
+- PASSOS (Resolvendo os usos, de dentro para fora):
+    · x = 1 (bloco 0): x está no bloco 0 → **(1)**
+    · x = y + 1 (bloco 1): x está no bloco 1 → **(3)**; y não está no bloco 1, sobe para o 0 → **(2)**
+    · print(x + y) (bloco 2): x não está no 2, está no 1 → **(3)**; y está no 2 → **(4)**
+- BYTE: Peraí, deixa os últimos comigo.
+- REVELAR: print(y), depois que o bloco 2 fechou.
+    → (2). A tabela do bloco 2, onde estava o y (4), já foi desempilhada; no bloco 1 não há y; no bloco 0 há o (2).
+- REVELAR: print(x), na última linha.
+    → (1). Estamos de volta ao bloco 0; o x float (3) saiu de vista com o bloco 1.
+- REVELAR: Se dentro do bloco 2 houvesse 'int y;' duas vezes, o que aconteceria?
+    → Erro de redeclaração: o mesmo nome declarado duas vezes no MESMO escopo. Sombrear é declarar num escopo DIFERENTE.
+- REVELAR: Qual o tipo da expressão x + y em print(x + y)?
+    → x (3) é float e y (4) é int → float + int = float. A tabela de símbolos alimenta a verificação de tipos!
+- WIDGET SCOPE legenda: Pratique com um programa sorteado.
+- CAIXA [Dica de prova]: Na prova, desenhe a pilha de tabelas ao lado do código e atualize a cada { e }. É mais rápido e evita confundir quem já 'morreu'.
+
+#### ESTILO SOCRATIC (Perguntas guiadas): "Uma tabela só não bastaria?"
+- PROF: Vamos desenhar a tabela de símbolos juntos, com perguntas.
+- REVELAR: Que informação guardar para cada nome?
+    → Pelo menos: nome, tipo, categoria (variável, função, parâmetro...) e, mais tarde, endereço/deslocamento na memória. Às vezes a linha da declaração, para mensagens de erro.
+- REVELAR: Por que um único mapa global nome → informação não funciona?
+    → Porque o mesmo nome pode ter declarações diferentes em blocos diferentes (x int e x float). E ao sair de um bloco, os nomes dele precisam sumir.
+- REVELAR: Então, o que fazer ao entrar num bloco? E ao sair?
+    → Entrar: criar uma tabela nova, ligada à anterior. Sair: voltar para a anterior, descartando a nova. Uma pilha de tabelas!
+- BYTE: E pra procurar um nome, eu começo por onde?
+- REVELAR: Por onde começa a busca, e quando ela para?
+    → Começa na tabela do topo (bloco mais interno) e vai descendo; para no primeiro achado. Se chegar ao fundo sem achar: 'não declarada'.
+- PREVEJA: Declarar 'int x' quando já existe 'x' num bloco EXTERNO é...
+    opções: Erro de redeclaração | ✔Permitido: o novo x sombreia o externo | Ignorado
+    explicação: A verificação de redeclaração olha só a tabela do TOPO. Em blocos diferentes, o novo x sombreia o antigo (C e C++ permitem; Java, por escolha de projeto, proíbe uma local sombrear outra local, mas a tabela funciona igual).
+- REVELAR: Escopo estático (léxico) vs dinâmico: qual a diferença?
+    → Estático: o x certo é decidido pelo TEXTO do programa (aninhamento). Dinâmico: pela ordem de CHAMADAS em tempo de execução (a declaração mais recente ativa). C, Java e Kotlin usam estático.
+- REVELAR: Em qual fase o compilador usa e preenche a tabela?
+    → O léxico pode inserir os nomes; a análise sintática/semântica insere declarações e resolve usos; a geração de código usa os endereços. Ela acompanha todas as fases.
+- WIDGET SCOPE legenda: Teste suas respostas.
+- CAIXA [Poder do cérebro]: Se o compilador inserisse 'x' do bloco interno na MESMA tabela do externo, o que aconteceria com o x externo ao sair do bloco? (Ele teria sido sobrescrito, perdido para sempre.)
+
+#### ESTILO FORMAL (Definição de prova): "Escopo estático e ambientes encadeados"
+- TEXTO: **Escopo** de uma declaração: a região do programa em que um uso daquele nome se refere a ela. **Regra do aninhamento mais próximo:** um uso de x refere-se à declaração de x no bloco mais interno que contém o uso.
+- CÓDIGO (Tabela de símbolos encadeada (Livro do Dragão, seção 2.7)):
+```
+classe Env:
+  tabela:   Mapa<nome, Simbolo>
+  anterior: Env?                      // escopo envolvente
+
+  put(nome, s): tabela[nome] := s
+  get(nome):
+    e := este
+    enquanto e ≠ nulo:
+      se nome ∈ e.tabela: retorne e.tabela[nome]
+      e := e.anterior
+    retorne nulo
+```
+- CÓDIGO (Esquema de tradução usando a pilha de ambientes):
+```
+bloco  → '{'       { salvo := topo; topo := new Env(topo) }
+           decls stmts
+           '}'       { topo := salvo }
+decl   → tipo id ;   { se id ∈ topo.tabela: erro "redeclaração"
+                       senão topo.put(id, Simbolo(tipo)) }
+fator  → id          { s := topo.get(id)
+                       se s = nulo: erro "não declarada"
+                       senão fator.tipo := s.tipo }
+```
+- PASSOS (Operações e custos (com tabela hash por escopo)):
+    · entrar no escopo: O(1)
+    · inserir: O(1) esperado, só no escopo do topo
+    · buscar: O(profundidade do aninhamento) no pior caso
+    · sair do escopo: O(1), descarta a tabela do topo
+- PREVEJA: Escopo dinâmico: f usa x sem declarar; g declara x=2 e chama f; o global tem x=1. Com escopo DINÂMICO, f vê x =
+    opções: 1 | ✔2 | erro
+    explicação: Dinâmico segue a cadeia de CHAMADAS: a ativação mais recente com x é a de g. No escopo estático, f veria o global (1).
+- WIDGET SCOPE legenda: Escopo estático: a resposta vem só do texto.
+- CAIXA [Dica de prova]: Ao responder 'qual declaração', justifique com a regra: 'pelo aninhamento mais próximo, o uso na linha N refere-se à declaração do bloco B'. E diferencie redeclaração (mesmo escopo, erro) de sombreamento (escopo interno, permitido).
+- CAIXA [Cuidado!]: Escopo é sobre ONDE um nome é visível (estático, no texto). Tempo de vida é sobre QUANDO a variável existe na memória (dinâmico, na execução). Não são a mesma coisa.
+
+#### ESTILO MNEMONIC (Truque de memória): "A cebola dos escopos"
+- NARRADOR: Palácio da Memória: Cidade Semântica, bairro dos Escopos. Cada casa é uma cebola: camadas dentro de camadas.
+- CAIXA [Gancho de memória]: **Escopo é cebola: procure de dentro para fora.** A primeira camada que tiver o nome vence.
+- CAIXA [Gancho de memória]: **'Abre chave, empilha; fecha chave, desempilha.'** A pilha de tabelas segue as chaves do programa.
+- CAIXA [Gancho de memória]: **E-I-B-S**: as quatro operações: **E**ntrar no escopo, **I**nserir, **B**uscar, **S**air. ('É I Bem Simples.')
+- CAIXA [Gancho de memória]: Sombreamento: **'quem está mais perto faz sombra em quem está longe'**. O x de fora não morreu; só está na sombra.
+- BYTE: E se eu declarar o mesmo nome duas vezes na mesma camada?
+- PROF: Aí não é sombra, é briga: **redeclaração**, erro. Sombra só existe entre camadas diferentes.
+- PREVEJA: Busca na pilha de tabelas: de onde para onde?
+    opções: Da base para o topo | ✔Do topo para a base | Só no topo
+    explicação: Topo = bloco mais interno. Descer a pilha = ir para fora na cebola. (Só no topo é a regra para checar REDECLARAÇÃO, não para buscar usos.)
+- WIDGET SCOPE legenda: Descasque a cebola: para cada uso, ache a camada certa.
+- REVELAR: Recite a regra do escopo estático numa frase.
+    → Um uso de x refere-se à declaração de x no bloco mais interno (mais próximo) que contém o uso.
+- CAIXA [Conversa ao pé da lareira]: Escopo estático: 'Me lê o código e você sabe quem eu sou.' Escopo dinâmico: 'Comigo depende de quem me chamou... é mais emocionante.' Programador cansado às 3 da manhã: 'Eu fico com o estático.'
+
+
+## ASSUNTO ATTRIBUTES_TYPES: Atributos e verificação de tipos
+
+#### ESTILO STORY (História / Analogia): "Notas que sobem, sobrenomes que descem"
+- NARRADOR: Cidade Semântica. A árvore sintática já está pronta... mas ela ainda não sabe o que significa.
+- BYTE: Como assim? A árvore de 'a + x * 2' tá certinha!
+- PROF: Ela está certa na FORMA. Agora precisamos pendurar informação em cada nó: tipo, valor, código... Esses penduricalhos são os **atributos**.
+- TEXTO: Pense na sua média do semestre: a nota final é calculada a partir das notas das provas, que vêm dos exercícios. A informação **sobe**. Isso é um atributo **sintetizado**.
+- TEXTO: Agora pense no sobrenome: você o recebe dos pais e repassa aos irmãos mais novos. A informação **desce** (ou vem do lado). Isso é um atributo **herdado**.
+- PASSOS (O mapa da analogia):
+    · Nota final calculada das parciais → **sintetizado** (do filho para o pai)
+    · Sobrenome vindo dos pais → **herdado** (do pai ou irmão para o filho)
+    · Regulamento de como calcular a média → **regra semântica** (E.tipo = ...)
+    · Gramática + atributos + regras → **definição dirigida pela sintaxe (SDD)**
+- TEXTO: O fiscal da balança da feira é o **verificador de tipos**: não deixa somar banana com bool. Mas int com float pode, é só converter o int, como trocar reais por dólares antes de somar. Isso é **coerção**.
+- PREVEJA: a é int e x é float. Qual o tipo de a + x * 2?
+    opções: int | ✔float, com coerção de int para float | erro de tipo
+    explicação: x * 2 é float (2 é convertido). a + float também vira float: o compilador converte a com inttofloat.
+- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Os tipos sobem das folhas até a raiz: int + float → float.
+- REVELAR: Em 'int a, b, c;', o tipo int é sintetizado ou herdado para cada variável?
+    → Herdado: ele desce do nó do tipo para a lista de nomes, como um sobrenome passado aos irmãos.
+- CAIXA [Não existem perguntas idiotas]: 'Atributo é só uma variável no nó?' Basicamente, sim! O que importa é DE ONDE vem o valor dela: dos filhos (sintetizado) ou do pai/irmãos (herdado).
+
+#### ESTILO VISUAL (Passo a passo visual): "Assistindo os tipos subirem pela árvore"
+- PROF: Vamos ver o verificador de tipos trabalhando nó por nó, em pós-ordem: filhos primeiro, pai depois.
+- WIDGET ATTR_TREE entrada=«(a + b) * c» legenda: Tudo int: as folhas consultam a tabela de símbolos, os operadores combinam. Valor 18 com a=4, b=2, c=3.
+- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Aqui aparece a coerção: no '+', o int encontra um float e é alargado.
+- BYTE: Então o tipo do pai é só 'o maior' dos tipos dos filhos?
+- PROF: Nas aritméticas, sim: int < float, e o resultado é o maior. Para comparações e lógica, as regras são outras.
+- WIDGET ATTR_TREE entrada=«a < b && ok» legenda: Comparação sempre produz bool; && exige dois bool.
+- PREVEJA: E ok + 1, com ok sendo bool?
+    opções: int (true vale 1) | ✔erro de tipo | bool
+    explicação: Nesta linguagem (como em Java), não dá para fazer aritmética com bool. E o erro se propaga para cima.
+- WIDGET ATTR_TREE entrada=«ok + 1» legenda: O nó '+' marca erro: bool não entra em aritmética.
+- WIDGET PARSE_TREE gramática=«D -> T L ; ⏎ T -> int | float ⏎ L -> id R ⏎ R -> , id R | ε» entrada=«int id , id ;» legenda: Atributo herdado: T.tipo = int é passado para L.in e desce para cada id da lista.
+- PASSOS (O que você viu):
+    · Folhas: o tipo vem do literal ou da tabela de símbolos
+    · Nós internos: tipo calculado dos filhos → sintetizado
+    · Ordem de avaliação: pós-ordem (como o $$ do Bison, numa redução)
+    · Na declaração, o tipo desce pela lista → herdado
+- CAIXA [Poder do cérebro]: Um analisador LR calcula atributos sintetizados de graça: em cada redução, os valores dos filhos estão na pilha. É exatamente o $$ = $1 + $3 do Bison.
+
+#### ESTILO WORKED (Exemplo resolvido): "Árvore anotada com valor e com tipo"
+- PROF: Primeiro, valores. A SDD clássica da calculadora:
+- CÓDIGO (SDD S-atribuída (só atributos sintetizados)):
+```
+E → E1 + T    E.val = E1.val + T.val
+E → T         E.val = T.val
+T → T1 * F    T.val = T1.val * F.val
+T → F         T.val = F.val
+F → ( E )     F.val = E.val
+F → num       F.val = num.lexval
+```
+- PASSOS (Anotando 3 * 5 + 4 de baixo para cima):
+    · Folhas: num.lexval = 3, 5, 4 → F.val = 3, 5, 4
+    · T → F: T.val = 3
+    · T → T1 * F: T.val = 3 * 5 = 15
+    · E → T: E.val = 15
+    · E → E1 + T (com T.val = 4): E.val = 15 + 4 = **19**
+- PROF: Agora, tipos, com coerção. Regra: se algum operando é float, o resultado é float e o int é convertido.
+- PASSOS (Tipando a + x * 2 (a: int, x: float)):
+    · a → int (tabela de símbolos); x → float; 2 → int (literal)
+    · x * 2: float * int → **float**, converte 2 para 2.0
+    · a + (x * 2): int + float → **float**, gera inttofloat(a)
+- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Confira: raiz float, com a coerção marcada.
+- BYTE: Deixa comigo agora.
+- REVELAR: Tipo de (a + b) * c, com a, b, c int?
+    → int em todos os nós internos; nenhuma coerção.
+- REVELAR: Tipo de x * 2 + 3 * 4?
+    → x * 2 é float; 3 * 4 é int; float + int → float (o 12 é convertido).
+- REVELAR: Tipo de a < b && ok?
+    → a < b → bool; bool && bool (ok) → bool.
+- WIDGET ATTR_TREE entrada=«x * 2 + 3 * 4» legenda: Confira a segunda resposta.
+- CAIXA [Dica de prova]: Em 'desenhe a árvore anotada', escreva o atributo ao lado de CADA nó (até os T → F chatos). O professor quer ver a ordem de avaliação, não só o resultado.
+
+#### ESTILO SOCRATIC (Perguntas guiadas): "De onde vem a informação de cada nó?"
+- PROF: Pergunta-guia de hoje: para calcular este atributo, eu preciso olhar PARA BAIXO ou PARA CIMA?
+- REVELAR: O valor de E em E → E1 + T depende de quê?
+    → De E1.val e T.val: dos filhos. É sintetizado.
+- REVELAR: Se TODOS os atributos são sintetizados, em que ordem dá para avaliar?
+    → Pós-ordem (de baixo para cima). Uma SDD assim é **S-atribuída** e combina perfeitamente com um analisador LR: avalia na hora da redução.
+- REVELAR: E em D → T L, com 'int a, b, c', como cada id descobre seu tipo?
+    → Pelo atributo herdado L.in = T.tipo, que desce pela lista. O id está abaixo e à direita de quem sabe o tipo.
+- BYTE: Então herdado pode vir de qualquer lugar?
+- REVELAR: Se um atributo herdado pudesse depender de um irmão à DIREITA, um analisador que lê da esquerda para a direita conseguiria calcular na hora?
+    → Não: o irmão da direita ainda não foi analisado. Daí a restrição L-atribuída.
+- PREVEJA: Numa SDD **L-atribuída**, o atributo herdado de Xi em A → X1 X2 ... Xn pode depender de...
+    opções: Qualquer atributo de qualquer filho | ✔Atributos herdados de A e atributos de X1 ... Xi-1 (irmãos à esquerda) | Apenas atributos sintetizados de A
+    explicação: L de Left: só o pai (herdados dele) e os irmãos à esquerda. Assim uma passada em profundidade, da esquerda para a direita, resolve tudo, perfeito para descida recursiva.
+- REVELAR: Toda SDD S-atribuída é L-atribuída?
+    → Sim! Ela não tem herdados, então a restrição é satisfeita trivialmente.
+- REVELAR: Por que o verificador de tipos precisa da tabela de símbolos?
+    → Porque nas folhas só há nomes. O tipo de 'a' foi decidido lá na declaração; a tabela é a memória que liga uso e declaração.
+- WIDGET ATTR_TREE entrada=«a + b * c» legenda: Pós-ordem em ação: b * c primeiro, depois a soma.
+- CAIXA [Poder do cérebro]: Se o grafo de dependências entre atributos tiver um ciclo, não existe ordem de avaliação. S-atribuída e L-atribuída são duas classes que garantem: sem ciclos.
+
+#### ESTILO FORMAL (Definição de prova): "SDD, atributos e sistema de tipos"
+- TEXTO: **Definição dirigida pela sintaxe (SDD):** gramática livre de contexto + atributos associados aos símbolos + regras semânticas associadas às produções.
+- PASSOS (Tipos de atributo (para um não-terminal A num nó N)):
+    · **Sintetizado:** definido por regra da produção em que A é a CABEÇA, usando atributos dos filhos de N e do próprio N
+    · **Herdado:** definido por regra da produção em que A está no CORPO (no pai de N), usando atributos do pai, dos irmãos e do próprio N
+    · Terminais só têm atributos sintetizados, fornecidos pelo léxico (ex.: num.lexval)
+- PASSOS (Classes de SDD):
+    · **S-atribuída:** só atributos sintetizados → avaliação em pós-ordem; implementável durante a análise LR
+    · **L-atribuída:** em A → X1...Xn, cada herdado de Xi depende só de herdados de A e de atributos de X1...Xi-1 (e de Xi, sem ciclo) → uma passada em profundidade, esquerda para direita
+    · **Esquema de tradução (SDT):** gramática com fragmentos de programa {ações} embutidos no corpo; em SDD S-atribuída, as ações vão no fim (SDT pós-fixo)
+- CÓDIGO (SDD L-atribuída clássica: declarações (in é herdado)):
+```
+D → T L ;        L.in = T.tipo
+T → int          T.tipo = int
+T → float        T.tipo = float
+L → L1 , id      L1.in = L.in ;  addType(id.entrada, L.in)
+L → id           addType(id.entrada, L.in)
+```
+- CÓDIGO (Verificação de tipos com coerção (alargamento)):
+```
+E → E1 op E2   (op aritmético):
+  se E1.tipo = bool ou E2.tipo = bool: erro de tipo
+  E.tipo := max(E1.tipo, E2.tipo)      // int < float
+  E.addr1 := widen(E1.addr, E1.tipo, E.tipo)   // insere inttofloat se preciso
+  E.addr2 := widen(E2.addr, E2.tipo, E.tipo)
+E → E1 relop E2:  numéricos → E.tipo := bool
+E → E1 && E2:     ambos bool → E.tipo := bool
+```
+- PREVEJA: Uma coerção int → float inserida pelo compilador é chamada de...
+    opções: Conversão explícita (cast) | ✔Coerção implícita (alargamento) | Estreitamento
+    explicação: Coerção = conversão implícita feita pelo compilador. int → float é alargamento (não perde a ordem de grandeza). float → int seria estreitamento e costuma exigir cast explícito.
+- WIDGET ATTR_TREE entrada=«a + x * 2» legenda: Instância da regra acima: max(int, float) = float, com widen em a.
+- CAIXA [Dica de prova]: Ao classificar uma SDD, verifique CADA regra que define um herdado: ela usa algum irmão à direita? Se sim, não é L-atribuída. Sem herdados → S-atribuída (e também L).
+- CAIXA [Cuidado!]: Verificação de tipos é estática (em tempo de compilação). Divisão por zero com valores de variáveis só aparece em tempo de execução, não é erro de tipo.
+
+#### ESTILO MNEMONIC (Truque de memória): "S sobe, H desce"
+- NARRADOR: Palácio da Memória: Cidade Semântica, prédio dos Tipos. Um elevador só sobe (sintetizado); a escada só desce (herdado).
+- CAIXA [Gancho de memória]: **S↑ H↓**: **S**intetizado **S**obe (dos filhos para o pai); **H**erdado desce (do pai/irmãos para o filho).
+- CAIXA [Gancho de memória]: **S-atribuída = Só Sintetizado.** **L-atribuída = Left**: herda só do pai e dos irmãos da esquerda.
+- CAIXA [Gancho de memória]: Coerção é **copo pequeno no copo grande**: int cabe em float (alargamento). O contrário derrama (estreitamento).
+- CÓDIGO (Tabela de bolso dos tipos (⊕ = + - * /)):
+```
+int   ⊕ int    → int
+int   ⊕ float  → float   (inttofloat no int)
+float ⊕ float  → float
+num  relop num → bool
+bool  &&  bool → bool
+bool  ⊕  num   → ERRO   (e o erro sobe)
+```
+- BYTE: Tipo é que nem fofoca: começa na folha e todo mundo acima fica sabendo!
+- PREVEJA: Bison: $$ = $1 + $3; calcula um atributo...
+    opções: Herdado | ✔Sintetizado | Global
+    explicação: $$ é o pai, calculado dos filhos $1 e $3: sobe. O Bison é uma máquina de SDD S-atribuída.
+- WIDGET ATTR_TREE entrada=«ok + 1» legenda: O erro também sobe: um bool numa soma contamina a raiz.
+- REVELAR: Diga em uma frase: sintetizado vs herdado.
+    → Sintetizado: calculado a partir dos filhos (sobe). Herdado: calculado a partir do pai e dos irmãos (desce/vem do lado).
+- CAIXA [Conversa ao pé da lareira]: Sintetizado: 'Eu sou prático: espero meus filhos terminarem e resumo tudo.' Herdado: 'E eu levo o contexto que você não vê lá de baixo, tipo o int de int a, b, c.'

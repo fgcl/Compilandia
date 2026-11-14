@@ -131,10 +131,10 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [ ] Booleanos com curto-circuito: `if (a < b && c < d)` em TAC e em MIPS (`sgt` + `beq $zero`), e o `bge` da pegadinha de MIPS no mesmo esquema
 - [ ] MIPS: levar o if e o while da aula até o MIPS, com um esquema de desvio só na trilha
 - [ ] Atributos: uma cena com a regra escrita (`E.val = E1.val + T.val`) ao lado da árvore, e a questão "é S-atribuída ou L-atribuída?"
-- [ ] Atributos: dica da cena 11 "Inteiro com real: qual dos dois guarda a parte quebrada?" no lugar de "O tipo maior ganha"
-- [ ] Região 8 na ordem AST, Escopo, Atributos
-- [ ] Escopo: perguntar sobre redeclaração no mesmo bloco
-- [ ] Ambientes: na fala de acerto do colega, "o n chega em `$a0`, mas a próxima chamada escreve por cima"
+- [x] Atributos: dica da cena 11 "Inteiro com real: qual dos dois guarda a parte quebrada?" no lugar de "O tipo maior ganha"
+- [x] Região 8 na ordem AST, Escopo, Atributos
+- [x] Escopo: perguntar sobre redeclaração no mesmo bloco
+- [x] Ambientes: na fala de acerto do colega, "o n chega em `$a0`, mas a próxima chamada escreve por cima"
 - [ ] Alocação: "Fazer com ajuda" ou prática com a tabela de vivacidade
 - [ ] Otimização: blocos básicos, líderes e código morto numa aula animada (hoje só nos textos)
 - [ ] Lacunas: acesso a vetor (`t = i * 4`, `la`/`sll`), verificação de tipos em comandos (atribuição, condição do if, chamada, return), tabela de símbolos com funções, vivacidade com laço, ação no meio da regra e herdado como parâmetro na descida, DAG de bloco básico

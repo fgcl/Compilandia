@@ -283,6 +283,17 @@ val semantica by lazy {
             }
             pergunta(tx("esc_l_06"), setOf("r3"), setOf("r1", "r2", "r4"), tx("esc_l_06_dica"), tx("esc_l_06_ok")) { hot() }
             cena(tx("esc_l_07")) { hot("r4") }
+            // Redeclaração no mesmo bloco: a regra dois acusa (professor do bloco 5).
+            pergunta(tx("esc_l_rd_q"), setOf("rdE"), setOf("rdS", "rdT"), tx("esc_l_rd_dica"), tx("esc_l_rd_ok")) {
+                drop("r1", "r3", "r4")
+                move("r2", 180f, 100f)
+                add(codigo("rc", listOf("{", "  int y;", "  float y;", "}"), 150f, x = 110f, passo = 28f, size = 16f))
+                add(Box("rdP", tx("esc_l_rd_topo"), 180f, 286f, 220f, 36f, Look.TOKEN, Tint.TEAL, size = 14f))
+                add(Box("rdE", tx("comum_erro"), 64f, 360f, 104f, 44f, Look.TOKEN, Tint.YELLOW, size = 15f))
+                add(Box("rdS", tx("esc_l_rd_esconde"), 180f, 360f, 104f, 44f, Look.TOKEN, Tint.YELLOW, size = 12f))
+                add(Box("rdT", tx("esc_l_rd_troca"), 296f, 360f, 104f, 44f, Look.TOKEN, Tint.YELLOW, size = 12f))
+                hot("rc2", "r2")
+            }
             // 4. Segundo exemplo: o programa e as respostas saem do ScopeGen do motor
             val ex = escopoExemplo2()
             fun tab(id: String, t: String, y: Float, c: Tint) = Box(id, t, 180f, y, 250f, 36f, Look.TOKEN, c, size = 14f)

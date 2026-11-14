@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (vigésima quarta rodada)
+
+Quatro pedidos do professor do bloco 5, da seção 7 de [TAREFAS.md](TAREFAS.md):
+
+1. **Região 8 na ordem AST, Escopo, Atributos.** Os tipos agora sobem numa árvore que a pessoa já montou, e o passo 2 da receita de Atributos usa a tabela de símbolos depois da aula de Escopo. A fala que remendava ("você aprende a montá-la daqui a duas aulas") virou "é a árvore enxuta que você montou na aula de AST". A abertura de Atributos diz "O parser confere a forma", sem o "até aqui". O save não muda, porque guarda o nome do assunto, e não a posição.
+2. **Escopo pergunta sobre redeclaração.** Depois da receita, um bloco com `int y;` e `float y;` e três opções: erro, "esconde o int", "y vira float". A regra 2 da receita agora diz "Repetido ali: erro".
+3. **Atributos, cena 11.** A dica "O tipo maior ganha" virou "Inteiro com real: qual dos dois guarda a parte quebrada?", para não preparar o distrator "real ganha de qualquer tipo".
+4. **Ambientes, fala de acerto do colega.** Aproveita o distrator do registrador fixo: "O n chega em `$a0`, mas a próxima chamada escreve por cima. Por isso ele vai para o quadro." O léxico da voz lê `$a0` como "dólar a zero".
+
 ## Feito em 14/11 (vigésima terceira rodada)
 
 Quatro pedidos do professor do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):

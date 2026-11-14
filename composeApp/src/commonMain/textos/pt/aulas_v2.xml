@@ -316,7 +316,7 @@
     <string name="rt_f_af">Numa recursão, cada chamada tem o seu próprio n, no seu registro de ativação.</string>
     <string name="rt_f_q">Onde mora o n de cada chamada do fat? Um colega disse isto. Certo ou errado?</string>
     <string name="rt_f_dica">Quantos registros de ativação havia na pilha quando o fat de um rodava?</string>
-    <string name="rt_f_ok">Acertou. Cada chamada empilha um registro com o seu n. Se fosse um só, a recursão destruiria os valores.</string>
+    <string name="rt_f_ok">Acertou. Cada chamada empilha um registro com o seu n. O n chega em $a0, mas a próxima chamada escreve por cima. Por isso ele vai para o quadro.</string>
     <string name="rt_f_erro2">As funções retornam na ordem em que foram chamadas.</string>
     <string name="rt_f_certo2">É uma pilha: a última chamada é a primeira a retornar.</string>
     <string name="rt_f_fala2">Um erro comum: achar que a primeira chamada retorna primeiro. É o contrário. A pilha devolve na ordem inversa das chamadas.</string>

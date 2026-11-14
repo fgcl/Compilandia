@@ -6,7 +6,7 @@
     <string name="epbackend_int_x_float">a is int, x is float</string>
     <string name="epbackend_comeco_pelas_folhas_inteiro_x">I start at the leaves. The type of a and of x comes from the declaration. The two, with no decimal point, is an integer.</string>
     <string name="epbackend_real_vezes_inteiro_que_toque">Real times integer gives what? Tap the type.</string>
-    <string name="epbackend_tipo_maior_ganha_para_nao">The bigger type wins, so the fractional part isn't lost.</string>
+    <string name="epbackend_tipo_maior_ganha_para_nao">An int with a float: which of the two keeps the fractional part?</string>
     <string name="epbackend_isso_real_com_inteiro_real">Integer with real gives real.</string>
     <string name="epbackend_dois_convertido_para_real_resultado">The two is converted to real before the operation. That automatic conversion is called coercion. The real type goes up to the times node.</string>
     <string name="epbackend_na_raiz_inteiro_mais_real">At the root, integer plus real also gives real. An attribute a node computes from its children is a synthesized attribute.</string>
