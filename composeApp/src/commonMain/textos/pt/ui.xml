@@ -170,7 +170,7 @@
     <string name="gameslr_abaixo_tabela_slr_inteira">Abaixo, a tabela SLR inteira.</string>
     <string name="gameslr_empilhar_1">Empilhar %1$s</string>
     <string name="gameslr_reduzir_1">Reduzir %1$s</string>
-    <string name="gameslr_nucleo_kernel_estado">Núcleo (kernel) do estado:</string>
+    <string name="gameslr_nucleo_kernel_estado">Itens de base (kernel) do estado:</string>
     <string name="gameslr_quais_itens_fechamento_acrescenta">Quais itens o fechamento acrescenta?</string>
     <string name="gameslr_para_cada_item_com_antes">Para cada item com • antes de um NÃO-TERMINAL B, adicione B → •γ para TODA produção de B. Repita para os novos itens!</string>
     <string name="gameslr_itens_com_no_meio_como">Itens com o • no meio (como X → a • b) nunca são adicionados pelo fechamento.</string>
@@ -705,7 +705,7 @@
     <string name="visuals_pilha_topo_direita">Pilha (topo à direita)</string>
     <string name="visuals_gramatica_aumentada_1">Gramática aumentada: %1$s</string>
     <string name="visuals_estado_i_1">Estado I%1$s</string>
-    <string name="visuals_nucleo_kernel_resto_veio_fechamento">★ = núcleo (kernel). O resto veio do fechamento (closure).</string>
+    <string name="visuals_nucleo_kernel_resto_veio_fechamento">★ = item de base (kernel). O resto veio do fechamento (closure).</string>
     <string name="visuals_goto_i_1_2_i">goto(I%1$s, %2$s) = I%3$s</string>
     <string name="visuals_item_completo_1_reduzir">item completo: %1$s → reduzir</string>
     <string name="visuals_producoes_numeradas">Produções numeradas: </string>

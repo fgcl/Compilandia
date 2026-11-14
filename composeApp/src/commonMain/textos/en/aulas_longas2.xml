@@ -133,6 +133,15 @@
     <string name="lalr_l_13_dica">The lookahead is what comes right after L in the item that created it.</string>
     <string name="lalr_l_13_ok">Equals. After L comes equals, and that is what L can meet next.</string>
     <string name="lalr_l_14">The same way, R goes to L dot keeps only dollar. On equals, the parser only shifts. The conflict is gone.</string>
+    <string name="lalr_l_titulo_fusao">Merging whole states</string>
+    <string name="lalr_l_15">Now whole states, with the textbook grammar. Reading c in the first C leads to state three. Reading c in the second C leads to six.</string>
+    <string name="lalr_l_kernel">kernel: base items</string>
+    <string name="lalr_l_16">The first line of each box came from goto, on reading c. Those are the base items, the kernel. Closure added the other lines.</string>
+    <string name="lalr_l_17">The core is the whole state without the lookaheads. Which state has the same core as three? Tap it.</string>
+    <string name="lalr_l_17_dica">Compare the base items, without the lookahead. The rest of the state comes from them by closure.</string>
+    <string name="lalr_l_17_ok">Six. The base items are the same, so the closure is too. State two shares two lines with three, but has another kernel: the core is different.</string>
+    <string name="lalr_l_18">LALR merges the two into one state. Each item gets c, d and dollar. To find the pairs, just compare the kernels without the lookahead.</string>
+    <string name="lalr_l_19">Four merges with seven, and eight with nine. The ten LR(1) states become seven, the same number as LR(0).</string>
     <string name="lalr_l_r1">1. Build the LR(1) states, with lookahead.</string>
     <string name="lalr_l_r2">2. Merge equal cores and union the lookaheads.</string>
     <string name="lalr_l_r3">Result: SLR size, fewer conflicts.</string>

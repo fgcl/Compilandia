@@ -45,6 +45,29 @@ val REGEX_NOMES = listOf("x1", "conta", "1x", "total2")
 /** Expressão do segundo exemplo da aula de expressões regulares. */
 val REGEX_2 = "ab*c"
 
+/** Os operadores, um por cena. Cada expressão e o que ela casa são conferidos em AulasConsertadasTest. */
+const val REGEX_SEQ = "a b"
+const val REGEX_ESTRELA = "b*"
+const val REGEX_BARRA = "a | b c"
+val REGEX_BARRA_OPCOES = listOf("ac", "a", "bc")
+const val REGEX_PARENTESES = "(a|b) c"
+const val REGEX_LIVRO = "(a|b)* abb"
+val REGEX_LIVRO_OPCOES = listOf("abb", "abba", "babb")
+/** A classe do Flex: só a do meio descreve os nomes da abertura (REGEX_NOMES); as outras erram 1x ou conta. */
+val REGEX_CLASSES = listOf("[a-z0-9]*", "[a-z][a-z0-9]*", "[0-9][a-z]*")
+
+/** As opções de uma pergunta de expressão: quais casam a expressão inteira, pelo motor. */
+internal fun casamRegex(regex: String, opcoes: List<String>): Set<Int> {
+    val d = DFA.fromRegex(regex)
+    return opcoes.indices.filter { d.accepts(opcoes[it]) }.toSet()
+}
+
+/** Qual classe do Flex aceita exatamente os nomes válidos da abertura (todos menos o 1x). */
+internal fun classeDosNomes(): Int = REGEX_CLASSES.indexOfFirst { c ->
+    val r = Regex(MiniFlex.toKotlinRegex(c))
+    REGEX_NOMES.all { n -> r.matches(n) == (n != "1x") }
+}
+
 /** AFN do primeiro exemplo da aula de subconjuntos: cadeias que terminam em ab. */
 val AFN_1: SmallNFA by lazy { SmallNFA.bank.first { it.id == "ab" } }
 
@@ -295,6 +318,49 @@ val lexicos by lazy {
                 drop("sim", "nao")
                 actor(null)
             }
+            // Um operador por cena, com | e parênteses antes de (a|b)*abb, e a classe do Flex (revisores do bloco 1).
+            fun expressao(e: String, w: Float = 220f) = Box("ex", e, 180f, 100f, w, 50f, Look.CELL, size = 20f)
+            cena(tx("regex_l_op1")) {
+                clear()
+                add(titulo(tx("regex_l_titulo_ops")))
+                add(expressao(REGEX_SEQ), rotulo("casa", "ab", 180f, 160f, Tint.YELLOW, 18f))
+            }
+            cena(tx("regex_l_op2")) {
+                add(expressao(REGEX_ESTRELA), rotulo("casa", "ε, b, bb, bbb...", 180f, 160f, Tint.YELLOW, 18f))
+                hot("ex")
+            }
+            val idsBarra = REGEX_BARRA_OPCOES.indices.map { "b$it" }
+            val barraCerta = casamRegex(REGEX_BARRA, REGEX_BARRA_OPCOES).map { idsBarra[it] }.toSet()
+            pergunta(tx("regex_l_op3"), barraCerta, idsBarra.toSet() - barraCerta, tx("regex_l_op3_dica"), tx("regex_l_op3_ok")) {
+                drop("casa")
+                add(expressao(REGEX_BARRA))
+                REGEX_BARRA_OPCOES.forEachIndexed { i, o -> add(opcao(idsBarra[i], o, 110f + 70f * i, 190f)) }
+            }
+            cena(tx("regex_l_op4")) {
+                drop(*idsBarra.toTypedArray())
+                add(expressao(REGEX_PARENTESES), rotulo("casa", "ac, bc", 180f, 160f, Tint.YELLOW, 18f))
+                hot("ex")
+            }
+            val idsLivro = REGEX_LIVRO_OPCOES.indices.map { "l$it" }
+            val livroFora = idsLivro.toSet() - casamRegex(REGEX_LIVRO, REGEX_LIVRO_OPCOES).map { idsLivro[it] }.toSet()
+            pergunta(tx("regex_l_op5"), livroFora, idsLivro.toSet() - livroFora, tx("regex_l_op5_dica"), tx("regex_l_op5_ok")) {
+                drop("casa")
+                add(expressao(REGEX_LIVRO))
+                REGEX_LIVRO_OPCOES.forEachIndexed { i, o -> add(Box("l$i", o, 90f + 90f * i, 190f, 76f, 42f, Look.TOKEN, Tint.YELLOW, size = 17f)) }
+            }
+            cena(tx("regex_l_op6")) {
+                drop(*idsLivro.toTypedArray())
+                add(expressao("[a-z]"), rotulo("casa", "a | b | c | ... | z", 180f, 160f, Tint.YELLOW, 18f))
+                add(rotulo("dig", "[0-9]  ->  0 | 1 | ... | 9", 180f, 200f, Tint.YELLOW, 18f))
+                hot("ex")
+            }
+            val idsClasse = REGEX_CLASSES.indices.map { "k$it" }
+            val classeCerta = idsClasse[classeDosNomes()]
+            pergunta(tx("regex_l_op7"), setOf(classeCerta), idsClasse.toSet() - classeCerta, tx("regex_l_op7_dica"), tx("regex_l_op7_ok")) {
+                drop("casa", "dig")
+                add(expressao(REGEX_NOMES.joinToString("  "), w = 320f))
+                REGEX_CLASSES.forEachIndexed { i, c -> add(Box("k$i", c, 180f, 170f + 54f * i, 230f, 42f, Look.TOKEN, Tint.YELLOW, size = 17f)) }
+            }
             // 3. A receita
             cena(tx("regex_l_04")) {
                 clear()
@@ -307,10 +373,6 @@ val lexicos by lazy {
             pergunta(tx("regex_l_05"), setOf("r3"), setOf("r1", "r2", "r4"), tx("regex_l_05_dica"), tx("regex_l_05_ok")) {
                 add(fita("aba", 330f, cell = 40f))
                 tint("c2", Tint.RED)
-            }
-            cena(tx("regex_l_06")) {
-                dropAll("c")
-                add(rotulo("est", "b*  →  ε, b, bb, bbb...", 180f, 330f, Tint.YELLOW, 17f))
             }
             // 4. Segundo exemplo, com perguntas
             val pos2 = listOf(70f to 170f, 180f to 170f, 290f to 170f)

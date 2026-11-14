@@ -73,6 +73,17 @@ val AFD_ASBS = com.compilandia.engine.DFA(2, 0, setOf(0, 1), listOf('a', 'b'), m
 val GRAMATICA_PONTEIROS = listOf("S -> L = R | R", "L -> * R | id", "R -> L")
 val LALR_ESTADO_L = listOf("S -> L • = R , $", "R -> L • , $")
 
+/** A gramática do livro para a fusão: LR(1) tem 10 estados, e I3 com I6, I4 com I7, I8 com I9 se juntam (7 no LALR). */
+val GRAMATICA_FUSAO = listOf("S -> C C", "C -> c C | d")
+
+/** Um estado LR(1) como na prova: um item por núcleo, com os lookaheads juntos ("C -> d • , c d"). Kernel primeiro. */
+internal fun itensAgrupados(aut: LRAutomaton, items: Collection<com.compilandia.engine.LRItem>): List<String> {
+    val g = aut.grammar
+    val porNucleo = LinkedHashMap<com.compilandia.engine.LRItem, MutableList<String>>()
+    for (i in items) porNucleo.getOrPut(i.core()) { mutableListOf() } += i.lookahead!!
+    return porNucleo.map { (n, las) -> n.render(g).replace("→", "->") + " , " + las.joinToString(" ") }
+}
+
 /** Gramática do segundo exemplo de LR(0) e SLR. */
 val GRAMATICA_LR_2 = listOf("S -> ( S ) | id")
 
@@ -463,6 +474,37 @@ val aulasLongas2 by lazy {
                 add(cx("s1", LALR_ESTADO_L[0], 100f, 200f, Tint.TEAL), cx("s2", LALR_ESTADO_L[1], 266f, 200f, Tint.TEAL))
                 add(rotulo("sl", "= : s     $ : r", 180f, 252f, Tint.GREEN, 16f))
                 hot("s2")
+            }
+            // A fusão com estados inteiros, e kernel (itens de base) separado de núcleo (professor do bloco 4).
+            val lr1 = LRAutomaton.lr1(Grammar.parse(GRAMATICA_FUSAO.joinToString("\n")))
+            fun estado(id: String, sid: Int, x: Float, y: Float, w: Float = 164f) =
+                com.compilandia.content.registro(id, "I$sid", itensAgrupados(lr1, lr1.states[sid].items), x, y, w, size = 13f)
+            cena(tx("lalr_l_15")) {
+                clear()
+                add(titulo(tx("lalr_l_titulo_fusao"), size = 20f))
+                add(codigo("g", GRAMATICA_FUSAO, 62f, x = 120f, passo = 26f, size = 16f))
+                add(estado("e3", 3, 92f, 160f), estado("e6", 6, 268f, 160f))
+            }
+            cena(tx("lalr_l_16")) {
+                add(estado("e3", 3, 92f, 160f).copy(lit = 0), estado("e6", 6, 268f, 160f).copy(lit = 0))
+                add(rotulo("k", tx("lalr_l_kernel"), 180f, 214f, Tint.YELLOW, 15f))
+            }
+            pergunta(tx("lalr_l_17"), setOf("e6"), setOf("e2", "e4"), tx("lalr_l_17_dica"), tx("lalr_l_17_ok")) {
+                drop("k")
+                add(estado("e3", 3, 92f, 160f).copy(lit = 0, tint = Tint.TEAL))
+                add(estado("e6", 6, 268f, 160f))
+                add(estado("e2", 2, 92f, 290f), estado("e4", 4, 268f, 276f))
+                hot("e3")
+            }
+            cena(tx("lalr_l_18"), mood = EpMood.HAPPY) {
+                drop("e2", "e4", "e6")
+                val juntos = itensAgrupados(lr1, lr1.states[3].items + lr1.states[6].items)
+                add(com.compilandia.content.registro("e3", "I36", juntos, 180f, 180f, 220f, Tint.GREEN, 13f))
+                hot("e3")
+            }
+            cena(tx("lalr_l_19")) {
+                add(rotulo("n", "LR(1): ${lr1.states.size}     LALR: ${lr1.mergeLALR().states.size}", 180f, 270f, Tint.YELLOW, 16f))
+                hot("n")
             }
             fecho(Fecho(
                 tx("lalr_f_af"), true, tx("lalr_f_q"), tx("lalr_f_dica"), tx("lalr_f_ok"), tx("lalr_f_af"),

@@ -69,7 +69,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 ## 5. Por região
 
 **Porto e Floresta**
-- [ ] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
+- [x] Regex: uma cena por operador, `|` e parênteses antes de `(a|b)*abb`, classes `[a-z]`
 - [x] Thompson com um exemplo desenhado, ou tirar da ficha
 - [x] Minimização: cena 8 × cena 18; justificar o segundo X
 - [x] Ponte "AFD aceita a cadeia inteira" × "o scanner fica com o último final"
@@ -92,14 +92,15 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Itens LR(0): autômato completo de `S → ( S ) | id`, `S' → S` como passo 0
 - [x] SLR: a tabela nasce das caixas de itens
 - [x] LALR: origem do lookahead (ponteiros `S → L = R`, conflito do SLR some no LR(1))
-- [ ] LALR: fusão desenhada com estados completos; kernel × core
+- [x] LALR: fusão desenhada com estados completos; kernel × core
 - [x] Pegadinha do handle: "beco sem saída" no lugar de "ordem da conta"
 - [x] Bison: `%right` com `2^3^2`; "reduz com qualquer token" é a redução padrão
 - [x] Bison: precedência da regra × do token, `%prec` no menos unário
 
 **Cidade e Forja**
 - [ ] Ambientes de execução depois de Geração de código MIPS
-- [ ] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
+- [x] `$ra`, `$sp`, `jal`, `4($sp)` um por cena antes do `fat.asm`
+- [ ] "PC" sem definição no FORMAL de Ambientes e na aula de texto de MIPS (`jal f  # $ra := PC + 4`)
 - [ ] Cena de transição na abertura da região 8
 - [ ] Segunda aula animada para Otimização, MIPS e Alocação, ou ficha marcando o que é do texto
 

@@ -4110,6 +4110,22 @@
     <string name="solta_lessonspart5a_2">Move step by step: each call PUSHES a frame; each return POPS it.</string>
     <string name="solta_lessonspart5a_3">5. fat(2) resumes on line 3: 2 * 1 = 2; returns 2 and leaves</string>
     <string name="solta_lessonspart5a_4">Now the same factorial in MIPS, the way MARS runs it. Each call's frame has 2 words (8 bytes): the `$ra` and the `n`.</string>
+    <string name="lessonspart5a_pecas_uma_por_vez">Before the whole program, the four new pieces, one at a time.</string>
+    <string name="lessonspart5a_peca_sp_titulo">1. `$sp`, the top of the stack</string>
+    <string name="lessonspart5a_peca_sp">`$sp` (stack pointer) holds the address of the top of the stack. In MIPS, the stack grows toward lower addresses: subtracting 8 from `$sp` opens 8 bytes, two 4-byte words. Adding 8 closes that space.</string>
+    <string name="lessonspart5a_peca_desloc_titulo">2. `4($sp)`, the offset</string>
+    <string name="lessonspart5a_peca_desloc">`4($sp)` means: the address held in `$sp`, plus 4. The number before the parenthesis is the offset, in bytes. `0($sp)` is the first word of the frame, and `4($sp)` is the second. `sw` stores a register at that address, and `lw` loads it back.</string>
+    <string name="lessonspart5a_peca_desloc_q">If `$sp` is 1000, at which address does `sw $ra, 4($sp)` store?</string>
+    <string name="lessonspart5a_peca_desloc_r">1004: the address in `$sp` plus the offset 4. `$sp` does not change; `addi` is what changes `$sp`.</string>
+    <string name="lessonspart5a_peca_jal_titulo">3. `jal`, calling the function</string>
+    <string name="lessonspart5a_peca_jal">`jal` (jump and link) does two things: it jumps to the label `fat` and stores in `$ra` the address of the instruction right below the `jal`. That is where the program continues when `fat` is done.</string>
+    <string name="lessonspart5a_peca_ra_titulo">4. `$ra`, the return address</string>
+    <string name="lessonspart5a_peca_ra">`$ra` (return address) is the register for the way back. `jr $ra` jumps to that address: it is C's `return`. Every `jal` overwrites `$ra`. That is why a function that calls another saves its own `$ra` on the stack first, with `sw $ra, 4($sp)`.</string>
+    <string name="lessonspart5a_peca_ra_q">Inside `fat(3)`, the recursive `jal fat` has just run. What is in `$ra` now?</string>
+    <string name="lessonspart5a_peca_ra_o1">The way back to `main`</string>
+    <string name="lessonspart5a_peca_ra_o2">The way back to the line right after that `jal`, inside `fat`</string>
+    <string name="lessonspart5a_peca_ra_o3">Zero, because the function has not finished yet</string>
+    <string name="lessonspart5a_peca_ra_r">The line after that `jal`, inside `fat`. The way back to `main` was overwritten, and it is only not lost because it was saved at `4($sp)`. At the end, `lw $ra, 4($sp)` brings it back before `jr $ra`.</string>
     <string name="solta_lessonspart5a_5">**Caller:** puts the argument in `$a0` and runs `jal fat` (which stores the return address in `$ra`)</string>
     <string name="solta_lessonspart5a_6">**Callee, on the way out (epilogue):** puts the result in `$v0`, restores `$ra`, `addi $sp, $sp, 8` closes the frame and `jr $ra` returns</string>
     <string name="solta_lessonspart5a_7">**Caller, afterward:** uses the value that arrived in `$v0`</string>
