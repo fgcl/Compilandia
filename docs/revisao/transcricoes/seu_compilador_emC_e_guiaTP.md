@@ -36,7 +36,7 @@
    BYTE: "Agora corte uma linha inteira, como o seu lexer em C faria."
    BRINQUEDO: dica "Maior casamento: estique o pedaço enquanto ele ainda for o mesmo token." / acerto "Os tokens que você cortou são os que o seu lexer devolveria."
 
-#### EM_C / RECURSIVE_DESCENT: "Em C 2: uma função por regra" (9 cenas, ~51s)
+#### EM_C / RECURSIVE_DESCENT: "Em C 2: uma função por regra" (10 cenas, ~60s)
 
 1. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
    BYTE: "Na descida recursiva em C, cada regra da gramática vira uma função."
@@ -44,28 +44,31 @@
 2. TELA: # parser.c ⏎ void expr(void) { ⏎ *  termo();* ⏎ *  while (tok.tipo == '+') {* ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ }
    BYTE: "expr chama termo. O while repete enquanto vier um mais."
 
-3. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ } ⏎ void termo(void) { ⏎ *  fator(); while (tok.tipo == '*') ...* ⏎ } ⏎ *void fator(void) { casa(NUM); }*
-   BYTE: "termo é igual, com o vezes. E fator só casa um número."
+3. TELA: # parser.c ⏎ void expr(void) { ⏎   termo(); ⏎   while (tok.tipo == '+') { ⏎     casa('+'); ⏎     termo(); ⏎   } ⏎ } ⏎ void termo(void) { ⏎   fator(); while (tok.tipo == '*') ... ⏎ } ⏎ void fator(void) { ⏎ *  if (tok.tipo == '(') {* ⏎ *    casa('('); expr(); casa(')');* ⏎   } else casa(NUM); ⏎ }
+   BYTE: "termo é igual, com o vezes. O fator casa um número ou abre um parêntese."
 
-4. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
-   BYTE: "Vamos rodar com dois mais três vezes quatro. O main chama expr."
+4. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM | '(' expr ')' ⏎ main() ⏎ expr() ⏎ 2 ⏎ * ⏎ ( ⏎ 3 ⏎ + ⏎ 4 ⏎ )
+   BYTE: "Vamos rodar dois vezes, abre parêntese, três mais quatro, fecha parêntese."
 
-5. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ termo() ⏎ fator() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
+5. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM | '(' expr ')' ⏎ main() ⏎ expr() ⏎ termo() ⏎ fator() ⏎ 2 ⏎ * ⏎ ( ⏎ 3 ⏎ + ⏎ 4 ⏎ )
    BYTE: "expr chama termo, e termo chama fator. A pilha cresce."
 
-6. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
-   BYTE: "fator casa o 2 e volta. Depois termo volta também."
-
-7. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
-   BYTE: "Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque."
-   PERGUNTA (toque): certo = expr() ; errado = main()
-   se errar: "Quem tem o while do mais?"
-   se acertar: "O while do mais mora dentro de expr."
-
-8. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM ⏎ main() ⏎ expr() ⏎ termo() ⏎ 2 ⏎ + ⏎ 3 ⏎ * ⏎ 4
+6. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM | '(' expr ')' ⏎ main() ⏎ expr() ⏎ termo() ⏎ 2 ⏎ * ⏎ ( ⏎ 3 ⏎ + ⏎ 4 ⏎ )
    PROF: "No vezes, quem casa é termo. Cada função cuida do seu operador."
 
-9. TELA: *1* ⏎ * ⏎ 2 ⏎ + ⏎ 3 ⏎ *main()* ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM
+7. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM | '(' expr ')' ⏎ main() ⏎ expr() ⏎ termo() ⏎ fator() ⏎ expr() ⏎ 2 ⏎ * ⏎ ( ⏎ 3 ⏎ + ⏎ 4 ⏎ )
+   BYTE: "Abriu o parêntese. Quem chamou o expr do topo da pilha? Toque."
+   PERGUNTA (toque): certo = fator() ; errado = expr() | termo()
+   se errar: "Qual função tem o parêntese no código?"
+   se acertar: "Isso. O fator chamou expr. Agora expr aparece duas vezes na pilha."
+
+8. TELA: # parser.c ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM | '(' expr ')' ⏎ main() ⏎ expr() ⏎ termo() ⏎ fator() ⏎ 2 ⏎ * ⏎ ( ⏎ 3 ⏎ + ⏎ 4 ⏎ )
+   BYTE: "O fator casa o fecha parêntese. O expr de dentro já saiu da pilha."
+
+9. TELA: # Ponte com o Templo ⏎ *E' → + T E' | ε* ⏎ *while (tok.tipo == '+') {* ⏎   casa('+'); termo(); ⏎ }
+   PROF: "No Templo, E linha chamava a si mesma. O while repete sem chamar."
+
+10. TELA: *1* ⏎ * ⏎ 2 ⏎ + ⏎ 3 ⏎ *main()* ⏎ pilha de chamadas ⏎ expr:  termo ('+' termo)* ⏎ termo: fator ('*' fator)* ⏎ fator: NUM
    BYTE: "Agora você é o processador. Chame, case e volte, na ordem certa."
    BRINQUEDO: dica "Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou." / acerto "Você rodou a descida recursiva inteira, igual ao programa em C."
 
@@ -1631,6 +1634,30 @@ senaoK:                                  j enquantoN
     <código de B>                    fimenqM:
 fimseL:
 ```
+- CÓDIGO (O TAC da prova ao lado do MIPS do gerador. Nosso gerador pula o TAC e escreve o MIPS direto, mas faz as contas na mesma ordem: primeiro `n * 2`, depois a soma. Cada `t` do TAC fica num registrador `$t`.):
+```
+# soma <- soma + n * 2;
+# TAC             # MIPS (saida.asm)
+                  lw   $t0, soma_1
+                  lw   $t1, n_0
+                  li   $t2, 2
+t1 = n * 2        mul  $t1, $t1, $t2
+t2 = soma + t1    add  $t0, $t0, $t1
+soma = t2         sw   $t0, soma_1
+```
+- CÓDIGO (O `enquanto` do contagem.byt nos dois códigos. `ifFalse t goto L` vira `beq $t0, $zero, L`, e `goto L` vira `j L`. O `se` usa a mesma troca: desenhe os dois no relatório.):
+```
+# enquanto (n > 0) { ... }
+# TAC                      # MIPS
+enquanto0:                 enquanto0:
+                             lw   $t0, n_0
+                             li   $t1, 0
+  t1 = n > 0                 sgt  $t0, $t0, $t1
+  ifFalse t1 goto fimenq1    beq  $t0, $zero, fimenq1
+  ...                        ...
+  goto enquanto0             j    enquanto0
+fimenq1:                   fimenq1:
+```
 - CÓDIGO (Entrada e saída com syscall):
 ```
 private void escreva() {
@@ -1771,6 +1798,17 @@ fimse3:
     · Linha de comando (ótimo para testes automáticos): `java -jar Mars4_5.jar nc saida.asm` (nc = sem o aviso de copyright).
     · Depurando: use Step (F7) e olhe a aba Registers — dá para ver $t0 mudar a cada instrução.
 - CAIXA [Cuidado!]: Esqueceu o `li $v0, 10` + `syscall` no final? O processador continua executando o que estiver depois do seu código, e o MARS termina com um aviso de 'dropped off bottom'. Encerre sempre explicitamente.
+- CAIXA [Cuidado!]: **Bordas do MARS.** Uma barra no fim da string, como em `escreva("c:\");`, vira `.asciiz "c:\"`. O MARS lê `\"` como aspa dentro da string, e a montagem falha. Acento no nome: `inteiro média;` vira o rótulo `média_0`. Conforme o Java e o sistema, o MARS pode ler o arquivo em outra codificação: aí ele vê `mÃ©dia_0` e recusa o rótulo. Acento dentro do `.asciiz` pode sair trocado pelo mesmo motivo: ponha `escreva("média");` nos testes e rode no MARS de quem corrige.
+- CÓDIGO (Os dois consertos, um em cada arquivo):
+```
+// argumento(): dobre a barra, para o \ do fim não engolir a aspa
+String texto = s.lexema.replace("\\", "\\\\");
+strings.append(r).append(": .asciiz \"").append(texto).append("\"\n");
+
+// declara(), na TabelaSimbolos: rótulo só com ASCII; o _N continua deixando ele único
+String base = nome.replaceAll("[^A-Za-z0-9_]", "_");          // média -> m_dia
+Simbolo s = new Simbolo(nome, tipo, base + "_" + (contador++), linha);
+```
 - PREVEJA: Se `novoRotulo` devolvesse sempre `"fimse"`, sem o contador, o que aconteceria num programa com dois `se`?
     opções: Nada: rótulos podem repetir | ✔O MARS recusa na montagem: rótulo definido duas vezes | O segundo se pularia para o primeiro fimse | O Java dá erro de compilação
     explicação: Rótulo é um NOME de endereço: dois iguais é ambiguidade, e o montador recusa. Por isso o contador global, e por isso todo teste do TP deve ter `se` dentro de `se` e `enquanto` dentro de `enquanto`.
@@ -1926,7 +1964,7 @@ private void se() {
     · **Aninhamento**: `se` dentro de `se` dentro de `enquanto` (rótulos únicos!).
     · **Escopos**: sombreamento (x interno e externo com valores diferentes, imprima os dois).
     · **Erros**: um arquivo por mensagem de erro, léxico, sintático, cada regra semântica.
-    · **Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, `'A' + 1` impresso como número.
+    · **Bordas**: arquivo vazio, só comentário, comentário sem fechar, string com espaço, string com barra no fim, nome com acento, `'A' + 1` impresso como número.
 - WIDGET MIPS entrada=«(a + b) * (c - d)» legenda: Treine a conferência à mão: com a=4, b=2, c=3, d=5, o resultado tem que ser -12. Calcule ANTES de rodar.
 - CÓDIGO (Testes de regressão automáticos (Linux/macOS/Git Bash). Gere cada .esperado UMA vez, confira à mão, e congele.):
 ```

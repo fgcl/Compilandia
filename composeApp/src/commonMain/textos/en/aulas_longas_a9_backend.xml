@@ -35,7 +35,24 @@
     <string name="attr_l_11">Now ok, which is bool, took the place of y. What type goes up?</string>
     <string name="attr_l_11_dica">Rule four: bool does not go into arithmetic.</string>
     <string name="attr_l_11_ok">Exactly. The root gets a type error.</string>
-    <string name="attr_l_12">The error goes up to the root, and the compiler reports it. In the practice step, you see the other kind of attribute: the inherited one, which goes down.</string>
+    <string name="attr_l_12">The error goes up to the root, and the compiler reports it.</string>
+    <string name="attr_sdd_titulo">The written rule</string>
+    <string name="attr_sdd_d1">D → T L       L.type = T.type</string>
+    <string name="attr_sdd_d2">T → int       T.type = int</string>
+    <string name="attr_sdd_d3">L → id        addtype(id, L.type)</string>
+    <string name="attr_sdd_op_s">S-attributed</string>
+    <string name="attr_sdd_op_l">only L-attributed</string>
+    <string name="attr_sdd_op_n">neither</string>
+    <string name="attr_sdd_01">On the exam, each grammar rule comes with its own calculation beside it.</string>
+    <string name="attr_sdd_q1">The lower E is worth two and T is worth three. What is the root worth? Tap it.</string>
+    <string name="attr_sdd_q1_dica">Use the first line: the val of the lower E plus the val of T.</string>
+    <string name="attr_sdd_q1_ok">Right. Two plus three is five. The value went up from the children to the parent.</string>
+    <string name="attr_sdd_q2">Every calculation here uses only the children. What does the exam call this definition? Tap it.</string>
+    <string name="attr_sdd_q2_dica">There are only synthesized attributes. The S in the name comes from that.</string>
+    <string name="attr_sdd_q2_ok">Right, S-attributed. And every S-attributed definition is also L-attributed.</string>
+    <string name="attr_sdd_q3">Here L inherits the type of its sibling T. What is the definition called? Tap it.</string>
+    <string name="attr_sdd_q3_dica">Inherited from the left sibling still lets you evaluate from left to right.</string>
+    <string name="attr_sdd_q3_ok">Right. It has an inherited attribute, so it isn't S. It comes from the left, so it's L-attributed.</string>
 
     <string name="esc_l_01">Two functions each declare a variable i. Each one wants its own.</string>
     <string name="esc_l_01q">A use of i inside g refers to which declaration? Tap it.</string>

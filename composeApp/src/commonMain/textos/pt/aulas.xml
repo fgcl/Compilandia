@@ -190,14 +190,17 @@
     <string name="epemc_em_c_2_funcao_por">Em C 2: uma função por regra</string>
     <string name="epemc_na_descida_recursiva_em_c">Na descida recursiva em C, cada regra da gramática vira uma função.</string>
     <string name="epemc_expr_chama_termo_while_repete">expr chama termo. O while repete enquanto vier um mais.</string>
-    <string name="epemc_termo_igual_com_vezes_fator">termo é igual, com o vezes. E fator só casa um número.</string>
-    <string name="epemc_vamos_rodar_com_dois_mais">Vamos rodar com dois mais três vezes quatro. O main chama expr.</string>
+    <string name="epemc_termo_igual_com_vezes_fator">termo é igual, com o vezes. O fator casa um número ou abre um parêntese.</string>
     <string name="epemc_expr_chama_termo_termo_chama">expr chama termo, e termo chama fator. A pilha cresce.</string>
-    <string name="epemc_fator_casa_2_volta_depois">fator casa o 2 e volta. Depois termo volta também.</string>
-    <string name="epemc_agora_vem_mais_qual_funcao">Agora vem o mais. Qual função está no topo da pilha na hora de casar? Toque.</string>
-    <string name="epemc_quem_tem_while_mais">Quem tem o while do mais?</string>
-    <string name="epemc_isso_while_mais_mora_dentro">O while do mais mora dentro de expr.</string>
     <string name="epemc_no_vezes_quem_casa_termo">No vezes, quem casa é termo. Cada função cuida do seu operador.</string>
+    <string name="emc2p_rodar">Vamos rodar dois vezes, abre parêntese, três mais quatro, fecha parêntese.</string>
+    <string name="emc2p_g_fator" translatable="false">fator: NUM | '(' expr ')'</string>
+    <string name="emc2p_q">Abriu o parêntese. Quem chamou o expr do topo da pilha? Toque.</string>
+    <string name="emc2p_q_dica">Qual função tem o parêntese no código?</string>
+    <string name="emc2p_q_ok">Isso. O fator chamou expr. Agora expr aparece duas vezes na pilha.</string>
+    <string name="emc2p_fecha">O fator casa o fecha parêntese. O expr de dentro já saiu da pilha.</string>
+    <string name="emc2p_titulo_ponte">Ponte com o Templo</string>
+    <string name="emc2p_ponte">No Templo, E linha chamava a si mesma. O while repete sem chamar.</string>
     <string name="epemc_agora_voce_processador_chame_case">Agora você é o processador. Chame, case e volte, na ordem certa.</string>
     <string name="epemc_chame_quando_topo_precisa_outra">Chame quando o topo precisa de outra regra. Case quando o token bate. Volte quando a função acabou.</string>
     <string name="epemc_voce_rodou_descida_recursiva_inteira">Você rodou a descida recursiva inteira, igual ao programa em C.</string>

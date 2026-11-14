@@ -58,7 +58,7 @@ object PassoDaReceita {
         Skill.ERROR_RECOVERY to "0122300",
         Skill.SHIFT_REDUCE to "01221230",
         Skill.YACC_BISON to "03311001300",
-        Skill.ATTRIBUTES_TYPES to "033440",
+        Skill.ATTRIBUTES_TYPES to "0334400000",
         Skill.SCOPE_SYMBOLS to "033430",
         Skill.TAC to "0123400",
         Skill.OPTIMIZATION to "012300",

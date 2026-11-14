@@ -262,6 +262,10 @@
     <string name="tpguidec_quantos_registradores_t_ficam_ocupados">How many $t registers are busy AT THE SAME TIME, at the peak, when generating `a + b * c`?</string>
     <string name="tpguidec_atribuicao_se_enquanto_esquema_traducao">Assignment, se and enquanto: the translation scheme with labels</string>
     <string name="tpguidec_dois_moldes_templates_que_voce">The two templates you'll draw in the report</string>
+    <string name="tptac_legenda_expr">The exam's TAC next to the generator's MIPS. Our generator skips TAC and writes MIPS directly, but it does the math in the same order: first `n * 2`, then the sum. Each TAC `t` lives in a `$t` register.</string>
+    <string name="tptac_legenda_enquanto">The `enquanto` loop from contagem.byt in both codes. `ifFalse t goto L` becomes `beq $t0, $zero, L`, and `goto L` becomes `j L`. The `se` uses the same swap: draw both in the report.</string>
+    <string name="tptac_bordas_mars">**MARS edge cases.** A backslash at the end of a string, as in `escreva("c:\\");`, becomes `.asciiz "c:\\"`. MARS reads `\\"` as a quote inside the string, and assembly fails. Accents in names: `inteiro média;` becomes the label `média_0`. Depending on Java and the system, MARS may read the file in another encoding: then it sees `mÃ©dia_0` and rejects the label. Accents inside `.asciiz` can come out garbled for the same reason: put `escreva("média");` in your tests and run it in the grader's MARS.</string>
+    <string name="tptac_legenda_conserto">The two fixes, one in each file</string>
     <string name="tpguidec_entrada_saida_com_syscall">Input and output with syscall</string>
     <string name="tpguidec_div_com_tres_operandos_rem">`div` with three operands, `rem`, `seq`, `sne`, `sgt`, `sle` and `sge` are **pseudo-instructions**: MARS expands them into real instructions. They work perfectly on MARS, but if the assignment forbids pseudo-instructions, swap them for `div`+`mflo`/`mfhi` and for combinations of `slt` with `xori`. `li`, `la`, `move` and `lw`/`sw` with a label are pseudo-instructions too: MARS turns `move` into `addu`; `la` becomes `lui` + `ori`; `lw` with a label becomes `lui` + `lw` with an offset; and `li` with a small value becomes `addiu`. If the assignment forbids them, write those replacements by hand.</string>
     <string name="tpguidec_novo_contagem_byt_capitulo_2">contagem.byt from chapter 2 again…</string>
@@ -304,7 +308,7 @@
     <string name="tpguided_aninhamento_se_dentro_se_dentro">**Nesting**: `se` inside `se` inside `enquanto` (unique labels!).</string>
     <string name="tpguided_escopos_sombreamento_x_interno_externo">**Scopes**: shadowing (inner and outer x with different values; print both).</string>
     <string name="tpguided_erros_arquivo_por_mensagem_erro">**Errors**: one file per error message: lexical, syntactic, each semantic rule.</string>
-    <string name="tpguided_bordas_arquivo_vazio_so_comentario">**Edge cases**: empty file, comment only, unclosed comment, string with a space, `'A' + 1` printed as a number.</string>
+    <string name="tpguided_bordas_arquivo_vazio_so_comentario">**Edge cases**: empty file, comment only, unclosed comment, string with a space, string ending in a backslash, name with an accent, `'A' + 1` printed as a number.</string>
     <string name="tpguided_treine_conferencia_mao_com_4">Practice checking by hand: with a=4, b=2, c=3, d=5, the result must be -12. Compute it BEFORE running.</string>
     <string name="tpguided_testes_regressao_automaticos_linux_macos">Automatic regression tests (Linux/macOS/Git Bash). Generate each .esperado (expected output) ONCE, check it by hand, and freeze it.</string>
     <string name="tpguided_isso_teste_regressao_depois_cada">That's **regression** testing: after each optimization or fix, run the whole suite. That's exactly how GCC and LLVM work, with thousands of test programs running on every change.</string>

@@ -359,6 +359,7 @@ internal val tpCap8 = GuideChapter(
             """.trimIndent(),
             tx("tpguidec_dois_moldes_templates_que_voce"),
         ),
+        tpCap8TacExpr, tpCap8TacEnquanto,
         Code(
             $$"""
                 private void escreva() {
@@ -419,6 +420,7 @@ internal val tpCap8 = GuideChapter(
             ),
         ),
         Callout(WATCH_OUT, tx("solta_tpguidec_7")),
+        tpCap8BordasMars, tpCap8BordasConserto,
         Predict(
             tx("tpguidec_se_novorotulo_devolvesse_sempre_fimse"),
             listOf(

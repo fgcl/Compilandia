@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 14/11 (vigésima quinta rodada)
+
+Dois pedidos do professor do bloco 5 e dois do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):
+
+1. **Atributos com a regra escrita.** No fim do segundo exemplo, a SDD `E → E1 + T  E.val = E1.val + T.val` fica ao lado da árvore de `2 + 3`. A pessoa calcula o valor da raiz (o motor dá 5) e diz que nome a definição tem: S-atribuída, só L-atribuída ou nenhuma. Depois vem `D → T L  L.tipo = T.tipo` com `int a`, e a mesma pergunta dá só L-atribuída. O acerto lembra que toda S-atribuída também é L-atribuída. A fala `attr_l_12` perdeu o "na prática você vê o herdado", porque o herdado agora aparece logo depois.
+2. **Em C 2 com `( expr )`.** O fator aceita parêntese e chama `expr` de novo. A aula agora roda `2 * ( 3 + 4 )` no lugar de `2 + 3 * 4`, pergunta quem chamou o segundo `expr` (o fator) e fecha com a ponte: "No Templo, E linha chamava a si mesma. O while repete sem chamar." A aula da série só pode ter 10 cenas, então saíram a pergunta "quem tem o while do mais" e a cena "fator casa o 2 e volta". O `rastroDescida` do motor ganhou o parêntese.
+3. **Guia do TP, cap. 8: TAC ao lado do MIPS.** `soma <- soma + n * 2` em TAC (o mesmo do `TacGen`) e no MIPS do `saida.asm`, linha com linha, e o `enquanto` do `contagem.byt` com `ifFalse t goto L` ao lado do `beq $t0, $zero, L`.
+4. **Guia do TP, cap. 8: bordas do MARS.** Barra no fim da string engole a aspa do `.asciiz`; `inteiro média;` vira um rótulo que o MARS pode recusar. Os dois consertos vêm em Java (barra dobrada, rótulo só com ASCII), e as duas bordas entraram na lista de testes do cap. 9.
+
 ## Feito em 14/11 (vigésima quarta rodada)
 
 Quatro pedidos do professor do bloco 5, da seção 7 de [TAREFAS.md](TAREFAS.md):

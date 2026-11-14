@@ -169,8 +169,8 @@ fun structsDaExpr(e: com.compilandia.engine.Expr, y0: Float, passoY: Float = 112
 data class PassoDescida(val acao: String, val alvo: String, val pilha: List<String>, val lidos: Int)
 
 /**
- * Roda de verdade a descida recursiva de expr → termo ('+' termo)*, termo → fator ('*' fator)*, fator → NUM
- * e anota cada chamada, cada token casado e cada volta.
+ * Roda de verdade a descida recursiva de expr → termo ('+' termo)*, termo → fator ('*' fator)*,
+ * fator → NUM | '(' expr ')' e anota cada chamada, cada token casado e cada volta.
  */
 fun rastroDescida(tokens: List<String>): List<PassoDescida> {
     val out = mutableListOf<PassoDescida>()
@@ -179,9 +179,16 @@ fun rastroDescida(tokens: List<String>): List<PassoDescida> {
     fun tok() = tokens.getOrNull(k)
     fun chama(f: String, corpo: () -> Unit) { pilha += f; out += PassoDescida("chamar", f, pilha.toList(), k); corpo(); pilha.removeAt(pilha.lastIndex); out += PassoDescida("voltar", f, pilha.toList(), k) }
     fun casa() { val t = tok() ?: error("faltou token"); k++; out += PassoDescida("casar", t, pilha.toList(), k) }
-    fun fator() = chama("fator") { if (tok()?.first()?.isDigit() == true) casa() else error("esperava número em ${tok()}") }
+    lateinit var expr: () -> Unit                   // o fator do parêntese chama expr de novo
+    fun fator() = chama("fator") {
+        when {
+            tok() == "(" -> { casa(); expr(); check(tok() == ")") { "esperava ) em ${tok()}" }; casa() }
+            tok()?.first()?.isDigit() == true -> casa()
+            else -> error("esperava número em ${tok()}")
+        }
+    }
     fun termo() = chama("termo") { fator(); while (tok() == "*") { casa(); fator() } }
-    fun expr() = chama("expr") { termo(); while (tok() == "+") { casa(); termo() } }
+    expr = { chama("expr") { termo(); while (tok() == "+") { casa(); termo() } } }
     expr()
     return out
 }

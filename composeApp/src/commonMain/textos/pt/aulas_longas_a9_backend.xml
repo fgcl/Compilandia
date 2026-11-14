@@ -35,7 +35,27 @@
     <string name="attr_l_11">Agora o y deu lugar ao ok, que é bool. Que tipo sobe?</string>
     <string name="attr_l_11_dica">Regra quatro: bool não entra em conta.</string>
     <string name="attr_l_11_ok">Exato. A raiz fica com erro de tipo.</string>
-    <string name="attr_l_12">O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce.</string>
+    <string name="attr_l_12">O erro sobe até a raiz, e o compilador avisa.</string>
+    <string name="attr_sdd_titulo">A regra escrita</string>
+    <string name="attr_sdd_e1" translatable="false">E → E1 + T    E.val = E1.val + T.val</string>
+    <string name="attr_sdd_e2" translatable="false">E → T         E.val = T.val</string>
+    <string name="attr_sdd_e3" translatable="false">T → num       T.val = num.val</string>
+    <string name="attr_sdd_d1">D → T L       L.tipo = T.tipo</string>
+    <string name="attr_sdd_d2">T → int       T.tipo = int</string>
+    <string name="attr_sdd_d3">L → id        addtipo(id, L.tipo)</string>
+    <string name="attr_sdd_op_s">S-atribuída</string>
+    <string name="attr_sdd_op_l">só L-atribuída</string>
+    <string name="attr_sdd_op_n">nenhuma</string>
+    <string name="attr_sdd_01">Na prova, cada regra da gramática vem com a sua conta ao lado.</string>
+    <string name="attr_sdd_q1">O E de baixo vale dois e o T vale três. Quanto vale a raiz? Toque.</string>
+    <string name="attr_sdd_q1_dica">Use a primeira linha: o val do E de baixo mais o val do T.</string>
+    <string name="attr_sdd_q1_ok">Isso. Dois mais três dá cinco. O valor subiu dos filhos para o pai.</string>
+    <string name="attr_sdd_q2">Toda conta aqui usa só os filhos. Como a prova chama essa definição? Toque.</string>
+    <string name="attr_sdd_q2_dica">Só há atributo sintetizado. O S do nome vem dele.</string>
+    <string name="attr_sdd_q2_ok">Isso, S-atribuída. E toda S-atribuída também é L-atribuída.</string>
+    <string name="attr_sdd_q3">Aqui o L herda o tipo do irmão T. Que nome a definição ganha? Toque.</string>
+    <string name="attr_sdd_q3_dica">Herdado do irmão da esquerda ainda deixa avaliar da esquerda para a direita.</string>
+    <string name="attr_sdd_q3_ok">Isso. Tem herdado, então não é S. Vem da esquerda, então é L-atribuída.</string>
 
     <string name="esc_l_01">Duas funções declaram uma variável i. Cada uma quer a sua.</string>
     <string name="esc_l_01q">Um uso de i dentro de g fala de qual declaração? Toque.</string>

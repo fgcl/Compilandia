@@ -229,6 +229,7 @@ val semantica by lazy {
                 add(tipoDe("kt", at3.getValue(e3.id).type.label, box2.getValue("t"), Tint.RED))
                 hot("t")
             }
+            attrRegraEscrita()
             fecho(Fecho(
                 tx("attr_f_af"), false, tx("attr_f_q"), tx("attr_f_dica"), tx("attr_f_ok"), tx("attr_f_certo"),
                 tx("attr_f_erro2"), tx("attr_f_certo2"), tx("attr_f_fala2"),

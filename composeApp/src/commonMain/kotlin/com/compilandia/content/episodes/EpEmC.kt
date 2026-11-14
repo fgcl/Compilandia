@@ -6,15 +6,12 @@ import com.compilandia.content.Look
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.content.Temporada.EM_C
 import com.compilandia.content.Tint
-import com.compilandia.content.ToyChamadas
 import com.compilandia.content.ToyCorte
 import com.compilandia.content.ToyMips
 import com.compilandia.content.Wire
 import com.compilandia.content.codigo
 import com.compilandia.content.episodio
 import com.compilandia.content.fita
-import com.compilandia.content.pilha
-import com.compilandia.content.rastroDescida
 import com.compilandia.content.registro
 import com.compilandia.content.rotulo
 import com.compilandia.content.structsDaExpr
@@ -147,61 +144,7 @@ val serieEmC by lazy {
         },
 
         // ─────────────────────────────── 2. Uma função por regra ───────────────────────────────
-        episodio(Skill.RECURSIVE_DESCENT, tx("epemc_em_c_2_funcao_por"), EM_C) {
-            val toks = listOf("2", "+", "3", "*", "4")
-            val rastro = rastroDescida(toks)
-            val codigoExpr = listOf(
-                "void expr(void) {",
-                "  termo();",
-                "  while (tok.tipo == '+') {",
-                "    casa('+');",
-                "    termo();",
-                "  }",
-                "}",
-            )
-            fun pilhaEm(k: Int): List<Box> {
-                val p = rastro[k].pilha
-                return pilha("f", p.map { "$it()" }, 100f, 370f, 140f, 34f, Tint.ORANGE).mapIndexed { i, b -> if (i == p.lastIndex) b.copy(tint = Tint.YELLOW) else b }
-            }
-            fun fitaEm(k: Int): List<Box> = toks.mapIndexed { i, t ->
-                Box("e$i", t, 180f + (i - 2) * 52f, 70f, 46f, 36f, Look.TOKEN, if (i < rastro[k].lidos) Tint.DARK else Tint.NONE, size = 16f)
-            }
-            fun mostra(k: Int) { dropAll("f"); add(pilhaEm(k)); dropAll("e"); add(fitaEm(k)) }
-            val casaMais = rastro.indexOfFirst { it.acao == "casar" && it.alvo == "+" }
-            cena(tx("epemc_na_descida_recursiva_em_c")) {
-                add(titulo("parser.c"))
-                add(codigo("s", codigoExpr, 70f, x = 40f, passo = 26f, size = 14f))
-            }
-            cena(tx("epemc_expr_chama_termo_while_repete")) { hot("s1", "s2") }
-            cena(tx("epemc_termo_igual_com_vezes_fator")) {
-                add(codigo("t", listOf("void termo(void) {", "  fator(); while (tok.tipo == '*') ...", "}", "void fator(void) { casa(NUM); }"), 270f, x = 14f, passo = 24f, size = 13f))
-                hot("t1", "t3")
-            }
-            cena(tx("epemc_vamos_rodar_com_dois_mais")) {
-                dropAll("s"); dropAll("t")
-                add(rotulo("rp", tx("comum_pilha_chamadas"), 100f, 400f))
-                add(codigo("g", listOf(tx("comum_expr_termo_termo"), tx("comum_termo_fator_fator"), tx("comum_fator_num")), 180f, x = 180f, passo = 30f, size = 11f))
-                mostra(0)
-            }
-            cena(tx("epemc_expr_chama_termo_termo_chama")) { mostra(2) }
-            cena(tx("epemc_fator_casa_2_volta_depois")) {
-                mostra(rastro.indexOfFirst { it.acao == "voltar" && it.alvo == "termo" })
-            }
-            pergunta(
-                tx("epemc_agora_vem_mais_qual_funcao"),
-                setOf("f${rastro[casaMais].pilha.lastIndex}"), setOf("f0"),
-                tx("epemc_quem_tem_while_mais"),
-                tx("epemc_isso_while_mais_mora_dentro"),
-            ) { mostra(casaMais) }
-            cena(tx("epemc_no_vezes_quem_casa_termo"), who = PROF) {
-                mostra(rastro.indexOfFirst { it.acao == "casar" && it.alvo == "*" })
-            }
-            brinquedo(
-                tx("epemc_agora_voce_processador_chame_case"),
-                tx("epemc_chame_quando_topo_precisa_outra"),
-                tx("epemc_voce_rodou_descida_recursiva_inteira"),
-            ) { ToyChamadas(listOf("1", "*", "2", "+", "3"), tx("epemc_rode_1_2_3_ate")) }
-        },
+        emC2,
 
         // ─────────────────────────────── 3. O struct Node ───────────────────────────────
         episodio(Skill.AST_BUILD, tx("epemc_em_c_3_struct_node"), EM_C) {

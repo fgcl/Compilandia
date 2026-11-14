@@ -130,7 +130,7 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [ ] Questão de prova na Forja: TAC → quádruplas → triplas, e vivacidade (use/def/out/in) → arestas → cores, com as respostas do `TacGen` e do `RegAlloc`
 - [ ] Booleanos com curto-circuito: `if (a < b && c < d)` em TAC e em MIPS (`sgt` + `beq $zero`), e o `bge` da pegadinha de MIPS no mesmo esquema
 - [ ] MIPS: levar o if e o while da aula até o MIPS, com um esquema de desvio só na trilha
-- [ ] Atributos: uma cena com a regra escrita (`E.val = E1.val + T.val`) ao lado da árvore, e a questão "é S-atribuída ou L-atribuída?"
+- [x] Atributos: uma cena com a regra escrita (`E.val = E1.val + T.val`) ao lado da árvore, e a questão "é S-atribuída ou L-atribuída?"
 - [x] Atributos: dica da cena 11 "Inteiro com real: qual dos dois guarda a parte quebrada?" no lugar de "O tipo maior ganha"
 - [x] Região 8 na ordem AST, Escopo, Atributos
 - [x] Escopo: perguntar sobre redeclaração no mesmo bloco
@@ -142,12 +142,12 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 **Seu compilador (bloco 6)**
 - [ ] Guia do TP: um "Estenda a Byteiro" por capítulo, com a resposta escondida (`==`, `repita … ate`, o método `repita()`, os tipos de `^`, o molde MIPS de `para`)
 - [ ] Guia do TP: capítulo opcional de funções e vetores (`jal`/`$ra`, quadro na pilha, `.space`, base + 4·i)
-- [ ] Guia do TP: o TAC de cada molde ao lado do MIPS no cap. 8
+- [x] Guia do TP: o TAC de cada molde ao lado do MIPS no cap. 8
 - [ ] Guia do TP: recuperação de erro implementada (modo pânico no FOLLOW, com um teste); hoje o cap. 10 é só checklist
 - [x] Guia do TP: `compila()` dos caps. 5 a 7 devolver `li $v0, 10` / `syscall`, e não `""`
 - [x] Guia do TP: cap. 7 dizer que o esquema de uma passada é L-atribuído; cap. 2 com um PREVEJA sobre `nao x > 0`; cap. 6 com "linha 6" antes de "linhas 5 e 7"; o aviso "variável em laço não reinicia" no `declaraUm` do cap. 8
-- [ ] Guia do TP: bordas do MARS (`\` e acento no `.asciiz`, identificador acentuado virando rótulo)
-- [ ] Em C 2 com `( expr )`, para a descida chamar a si mesma, e a ponte com `X -> + T X | ε` do Templo
+- [x] Guia do TP: bordas do MARS (`\` e acento no `.asciiz`, identificador acentuado virando rótulo)
+- [x] Em C 2 com `( expr )`, para a descida chamar a si mesma, e a ponte com `X -> + T X | ε` do Templo
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
 - [ ] Série Em C: segundo exemplo e erro comum em cada aula; na Em C 4, pedir o MIPS de `a * b + c`; a pergunta da Em C 2, cena 7, com três opções
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison

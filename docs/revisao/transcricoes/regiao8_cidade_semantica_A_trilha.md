@@ -345,7 +345,7 @@ BYTE: "Antes da aula: qual é o tipo do resultado?"
 Opções: int | ✔float | erro
 Depois: "Float. O compilador converte o inteiro antes da conta."
 
-#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (26 cenas, ~200s) [1º exemplo começa na cena 7]
+#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (30 cenas, ~220s) [1º exemplo começa na cena 7]
 
 1. TELA: # Forma certa, sentido errado ⏎ a + ok ⏎ a: int ⏎ ok: bool ⏎ nome + nome: o parser aceita
    BYTE: "O parser confere a forma. A mais ok tem a forma certa: nome, mais, nome. Mas ok é um bool, verdadeiro ou falso."
@@ -435,24 +435,45 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
    se acertar: "Exato. A raiz fica com erro de tipo."
 
 22. TELA: # c * 2 + y ⏎ *+* ⏎ * ⏎ c ⏎ 2 ⏎ ok ⏎ int ⏎ int ⏎ bool ⏎ int ⏎ erro
-   BYTE: "O erro sobe até a raiz, e o compilador avisa. Na etapa de prática, você vê o outro tipo de atributo: o herdado, que desce."
+   BYTE: "O erro sobe até a raiz, e o compilador avisa."
 
-23. TELA: # Diga por quê ⏎ int + float → float ⏎ O compilador ignora o tipo da soma. ⏎ O inteiro vira real antes da soma. ⏎ Real ganha de qualquer outro tipo.
+23. TELA: # A regra escrita ⏎ *E → E1 + T    E.val = E1.val + T.val* ⏎ E → T         E.val = T.val ⏎ T → num       T.val = num.val ⏎ E ⏎ E ⏎ T ⏎ 2 ⏎ + ⏎ T ⏎ 3 ⏎ = 2 ⏎ = 3
+   BYTE: "Na prova, cada regra da gramática vem com a sua conta ao lado."
+
+24. TELA: # A regra escrita ⏎ *E → E1 + T    E.val = E1.val + T.val* ⏎ E → T         E.val = T.val ⏎ T → num       T.val = num.val ⏎ *E* ⏎ E ⏎ T ⏎ 2 ⏎ + ⏎ T ⏎ 3 ⏎ = 2 ⏎ = 3 ⏎ = 2 ⏎ 5 ⏎ 6 ⏎ 23
+   BYTE: "O E de baixo vale dois e o T vale três. Quanto vale a raiz? Toque."
+   PERGUNTA (toque): certo = 5 ; errado = 6 | 23
+   se errar: "Use a primeira linha: o val do E de baixo mais o val do T."
+   se acertar: "Isso. Dois mais três dá cinco. O valor subiu dos filhos para o pai."
+
+25. TELA: # A regra escrita ⏎ *E → E1 + T    E.val = E1.val + T.val* ⏎ *E → T         E.val = T.val* ⏎ *T → num       T.val = num.val* ⏎ E ⏎ E ⏎ T ⏎ 2 ⏎ + ⏎ T ⏎ 3 ⏎ = 2 ⏎ = 3 ⏎ = 2 ⏎ = 5 ⏎ S-atribuída ⏎ só L-atribuída ⏎ nenhuma
+   BYTE: "Toda conta aqui usa só os filhos. Como a prova chama essa definição? Toque."
+   PERGUNTA (toque): certo = S-atribuída ; errado = só L-atribuída | nenhuma
+   se errar: "Só há atributo sintetizado. O S do nome vem dele."
+   se acertar: "Isso, S-atribuída. E toda S-atribuída também é L-atribuída."
+
+26. TELA: # A regra escrita ⏎ *D → T L       L.tipo = T.tipo* ⏎ T → int       T.tipo = int ⏎ L → id        addtipo(id, L.tipo) ⏎ D ⏎ T ⏎ int ⏎ *L* ⏎ a ⏎ int ⏎ int ⏎ S-atribuída ⏎ só L-atribuída ⏎ nenhuma
+   BYTE: "Aqui o L herda o tipo do irmão T. Que nome a definição ganha? Toque."
+   PERGUNTA (toque): certo = só L-atribuída ; errado = S-atribuída | nenhuma
+   se errar: "Herdado do irmão da esquerda ainda deixa avaliar da esquerda para a direita."
+   se acertar: "Isso. Tem herdado, então não é S. Vem da esquerda, então é L-atribuída."
+
+27. TELA: # Diga por quê ⏎ int + float → float ⏎ O compilador ignora o tipo da soma. ⏎ O inteiro vira real antes da soma. ⏎ Real ganha de qualquer outro tipo.
    BYTE: "Inteiro mais real deu real, sem erro. Por quê?"
    PERGUNTA (toque): certo = O inteiro vira real antes da soma. ; errado = Real ganha de qualquer outro tipo. | O compilador ignora o tipo da soma.
    se errar: "O inteiro vira real sem estragar a conta?"
    se acertar: "O real guarda a ordem de grandeza do inteiro. O compilador converte, e a soma vira real."
 
-24. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: sintetizado sobe dos filhos. ⏎ Errado: sintetizado vem dos irmãos. ⏎ Certo: o pai passa o tipo para os filhos.
+28. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: sintetizado sobe dos filhos. ⏎ Errado: sintetizado vem dos irmãos. ⏎ Certo: o pai passa o tipo para os filhos.
    BYTE: "De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: sintetizado sobe dos filhos. ; errado = Errado: sintetizado vem dos irmãos. | Certo: o pai passa o tipo para os filhos.
    se errar: "Nesta aula, os tipos subiram ou desceram pela árvore?"
    se acertar: "Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado."
 
-25. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
+29. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
    BYTE: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
 
-26. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
+30. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
    BYTE: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
 
 #### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~34s)
