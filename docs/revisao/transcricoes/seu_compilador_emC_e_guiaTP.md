@@ -2158,3 +2158,291 @@ private void comando() {
 - TEXTO: **Teste desta etapa:** numa pasta nova, clone o repositório e siga só o README: compilar, rodar um teste e abrir no MARS. Se faltar qualquer passo que não está escrito, o README está incompleto.
 - REVELAR: **Estenda a Byteiro.** Com a recuperação deste capítulo, quantas mensagens saem para `repita { x <- ; } ate (x > 3);`?
     → Uma. O erro é no `;` do `x <- ;`. O comando de dentro do bloco registra a mensagem e consome esse `;`. O bloco fecha no `}`, e o `ate (x > 3);` é lido normalmente.
+
+## Capítulo 11: Opcional: vetores e funções [RUNTIME]
+Para quando o enunciado pede: vetor com .space e base + 4·i, função com jal, $ra e o quadro na pilha.
+
+- PROF: Este capítulo é opcional. Faça depois do capítulo 8, e só se o seu enunciado pedir vetor ou função.
+- TEXTO: **Vetores.** `inteiro v[5];` reserva 5 inteiros seguidos na memória. Cada inteiro ocupa 4 bytes, então o `.data` ganha `v_0: .space 20`. O elemento `v[i]` mora no endereço **base + 4·i**: o endereço do começo do vetor mais 4 vezes o índice.
+- CÓDIGO (O que muda na gramática (cada [ ] da EBNF ainda vira um if no parser)):
+```
+declaracao → tipo ID [ "[" NUM "]" ] { , ID [ "[" NUM "]" ] } ;
+comando    → ID [ "[" expr "]" ] <- expr ;      (atribuição, agora com índice)
+primario   → ID [ "[" expr "]" ] | ...
+```
+- PREVEJA: Se v_0 começa no endereço 1000, onde fica v[3]?
+    opções: 1003 | ✔1012 | 1016 | 1004
+    explicação: 1000 + 4 · 3 = 1012. O 1003 esquece que cada inteiro tem 4 bytes. O 1016 conta a partir do 1, como se v[0] não existisse.
+- CÓDIGO (Vetores no gerador do capítulo 8: o .space, o endereço com sll e o lw/sw no endereço):
+```
+    // Simbolo ganha: public int tamanho = 0;   (0 = variável comum)
+    // Lexico: '[' e ']' viram ABRE_COL e FECHA_COL no simples()
+
+    private void declaraUm(TipoDado t) {
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = tabela.declara(id.lexema, t, id.linha);
+        if (eh(TipoToken.ABRE_COL)) {                     // inteiro v[5];
+            avanca();
+            s.tamanho = Integer.parseInt(casaToken(TipoToken.NUM).lexema);
+            casaToken(TipoToken.FECHA_COL);
+            dados.append(s.rotulo).append(": .space ").append(4 * s.tamanho).append('\n');
+        } else {
+            dados.append(s.rotulo).append(": .word 0\n");
+        }
+    }
+
+    private String endereco(Simbolo s) {                  // [ expr ]: devolve o registrador com base + 4·i
+        casaToken(TipoToken.ABRE_COL);
+        int linha = tok.linha;
+        Res i = expr();
+        exige(i.tipo() == TipoDado.INTEIRO, linha, "o índice de '" + s.nome + "' precisa ser inteiro");
+        casaToken(TipoToken.FECHA_COL);
+        String base = novoTemp();
+        emite("sll " + i.reg() + ", " + i.reg() + ", 2");   // i * 4: cada inteiro ocupa 4 bytes
+        emite("la " + base + ", " + s.rotulo);              // o endereço do começo do vetor
+        emite("add " + i.reg() + ", " + base + ", " + i.reg());
+        liberaTemp();                                       // a base já foi somada
+        return i.reg();
+    }
+
+    // primario(), no caso do ID:            v[i] lê a memória no endereço
+    //     if (s.tamanho > 0) { String r = endereco(s); emite("lw " + r + ", 0(" + r + ")"); return new Res(s.tipo, r); }
+    // atribuicao(), logo depois do usa(id): o endereço primeiro, o valor depois
+    //     String end = s.tamanho > 0 ? endereco(s) : null;
+    //     ... casaToken(ATRIB); Res v = expr(); ...
+    //     emite(end != null ? "sw " + v.reg() + ", 0(" + end + ")" : "sw " + v.reg() + ", " + s.rotulo);
+    //     liberaTemp(); if (end != null) liberaTemp();
+```
+- CAIXA [Cuidado!]: O MARS não confere o índice. `v[5]` num vetor de 5 escreve por cima da variável seguinte do `.data`, sem erro nenhum. Se o enunciado pedir, compare o índice com o tamanho antes do `sw` e pule para uma mensagem de erro. O `sll $t0, $t0, 2` desloca 2 bits para a esquerda: é o mesmo que multiplicar por 4, e mais barato que o `mul`.
+- CÓDIGO (vetor.byt: guarda os quadrados de 0 a 4 e soma tudo):
+```
+programa vetor {
+    inteiro v[5], i, soma;
+    i <- 0;
+    enquanto (i < 5) { v[i] <- i * i; i <- i + 1; }
+    i <- 0;
+    soma <- 0;
+    enquanto (i < 5) { soma <- soma + v[i]; i <- i + 1; }
+    escreva("soma = ", soma);
+}
+```
+- CÓDIGO (O .asm que o gerador escreve. No MARS, imprime soma = 30):
+```
+# gerado pelo compilador Byteiro
+.data
+v_0: .space 20
+i_1: .word 0
+soma_2: .word 0
+str0: .asciiz "soma = "
+.text
+main:
+    li $t0, 0
+    sw $t0, i_1
+enquanto0:
+    lw $t0, i_1
+    li $t1, 5
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimenq1
+    lw $t0, i_1
+    sll $t0, $t0, 2
+    la $t1, v_0
+    add $t0, $t1, $t0
+    lw $t1, i_1
+    lw $t2, i_1
+    mul $t1, $t1, $t2
+    sw $t1, 0($t0)
+    lw $t0, i_1
+    li $t1, 1
+    add $t0, $t0, $t1
+    sw $t0, i_1
+    j enquanto0
+fimenq1:
+    li $t0, 0
+    sw $t0, i_1
+    li $t0, 0
+    sw $t0, soma_2
+enquanto2:
+    lw $t0, i_1
+    li $t1, 5
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimenq3
+    lw $t0, soma_2
+    lw $t1, i_1
+    sll $t1, $t1, 2
+    la $t2, v_0
+    add $t1, $t2, $t1
+    lw $t1, 0($t1)
+    add $t0, $t0, $t1
+    sw $t0, soma_2
+    lw $t0, i_1
+    li $t1, 1
+    add $t0, $t0, $t1
+    sw $t0, i_1
+    j enquanto2
+fimenq3:
+    la $a0, str0
+    li $v0, 4
+    syscall
+    lw $t0, soma_2
+    move $a0, $t0
+    li $v0, 1
+    syscall
+    li $a0, 10
+    li $v0, 11
+    syscall
+    li $v0, 10
+    syscall
+```
+- TEXTO: **Funções.** O `jal f_fat` pula para a função e guarda em `$ra` o endereço da linha de baixo. O `jr $ra` volta para lá. O problema: uma função que chama outra (ou a si mesma) escreve outro valor em `$ra`. Por isso cada chamada ganha um **quadro** na pilha, com o `$ra` e o parâmetro.
+- CÓDIGO (O que muda na gramática (cada [ ] da EBNF ainda vira um if no parser)):
+```
+programa → programa ID { funcao } bloco
+funcao   → funcao ID ( inteiro ID ) bloco
+comando  → retorne expr ; | ...
+primario → ID ( expr ) | ID [ "[" expr "]" ] | ...
+```
+- PASSOS (A combinação entre quem chama e a função (a convenção de chamada)):
+    · **Quem chama** põe o argumento em `$a0`, guarda na pilha os `$t` ocupados e faz `jal`.
+    · **A função** abre o quadro: `addi $sp, $sp, -8`, guarda o `$ra` em `4($sp)` e o parâmetro em `0($sp)`. Dentro dela, o parâmetro é lido com `lw $t0, 0($sp)`.
+    · **O retorne** põe o resultado em `$v0` e pula para o fim da função, que lê o `$ra` de volta, fecha o quadro e faz `jr $ra`.
+    · **Quem chama** devolve os `$t` guardados e copia o `$v0` para um registrador seu.
+- CÓDIGO (Funções no gerador: o código delas vai para depois do main. A TabelaSimbolos ganha um declaraComRotulo(nome, tipo, linha, rotulo), igual ao declara mas com o rótulo dado):
+```
+    private final StringBuilder funcoes = new StringBuilder();   // vai depois do main, no compila()
+    private StringBuilder saida = codigo;                         // emite() e rotulo() escrevem em 'saida'
+    private final Set<String> nomesDeFuncao = new HashSet<>();
+    private String fimDaFuncao = null;                            // null: estamos no main
+
+    private void funcao() {                       // funcao id ( inteiro id ) bloco
+        casaToken(TipoToken.FUNCAO);
+        Token nome = casaToken(TipoToken.ID);
+        nomesDeFuncao.add(nome.lexema);           // antes do corpo: a função pode chamar a si mesma
+        casaToken(TipoToken.ABRE_PAR);
+        casaToken(TipoToken.INTEIRO);
+        Token p = casaToken(TipoToken.ID);
+        casaToken(TipoToken.FECHA_PAR);
+        saida = funcoes;
+        fimDaFuncao = "fim_" + nome.lexema;
+        rotulo("f_" + nome.lexema);
+        emite("addi $sp, $sp, -8");               // o quadro: o parâmetro e o $ra
+        emite("sw $ra, 4($sp)");
+        emite("sw $a0, 0($sp)");
+        tabela.abreEscopo();
+        tabela.declaraComRotulo(p.lexema, TipoDado.INTEIRO, p.linha, "0($sp)");   // o n mora na pilha
+        bloco();
+        tabela.fechaEscopo();
+        rotulo(fimDaFuncao);
+        emite("lw $ra, 4($sp)");
+        emite("addi $sp, $sp, 8");
+        emite("jr $ra");
+        saida = codigo;
+        fimDaFuncao = null;
+    }
+
+    private void retorne() {                      // retorne expr ;
+        Token r = casaToken(TipoToken.RETORNE);
+        exige(fimDaFuncao != null, r.linha, "'retorne' fora de função");
+        Res v = expr();
+        emite("move $v0, " + v.reg());            // o resultado volta em $v0
+        liberaTemp();
+        emite("j " + fimDaFuncao);
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+
+    private Res chamada(Token nome) {             // id ( expr ), chamada pelo primario() quando vem '('
+        exige(nomesDeFuncao.contains(nome.lexema), nome.linha, "'" + nome.lexema + "' não é função");
+        casaToken(TipoToken.ABRE_PAR);
+        Res arg = expr();
+        casaToken(TipoToken.FECHA_PAR);
+        emite("move $a0, " + arg.reg());
+        int ocupados = proxTemp;                  // a função vai usar os $t: guarde os que estão ocupados
+        emite("addi $sp, $sp, " + (-4 * ocupados));
+        for (int k = 0; k < ocupados; k++) emite("sw $t" + k + ", " + (4 * k) + "($sp)");
+        emite("jal f_" + nome.lexema);            // pula e guarda em $ra a linha de baixo
+        for (int k = 0; k < ocupados; k++) emite("lw $t" + k + ", " + (4 * k) + "($sp)");
+        emite("addi $sp, $sp, " + (4 * ocupados));
+        emite("move " + arg.reg() + ", $v0");     // o resultado ocupa o registrador do argumento
+        return new Res(TipoDado.INTEIRO, arg.reg());
+    }
+```
+- PREVEJA: Por que a função guarda o $ra na pilha logo que começa?
+    opções: Porque o MARS exige | ✔Porque um jal dentro dela escreve outro endereço em $ra | Para liberar o $ra para as contas
+    explicação: O `jal f_fat` de dentro do `fat` troca o `$ra` pelo endereço de volta da chamada nova. Sem a cópia na pilha, a primeira chamada nunca acharia o caminho para o `main`.
+- CÓDIGO (fatorial.byt: a função vem antes do bloco principal):
+```
+programa fatorial
+funcao fat(inteiro n) {
+    se (n <= 1) { retorne 1; }
+    retorne n * fat(n - 1);
+}
+{
+    escreva("fat(5) = ", fat(5));
+}
+```
+- CÓDIGO (O .asm gerado. No MARS, imprime fat(5) = 120, e o $sp volta ao valor do começo):
+```
+# gerado pelo compilador Byteiro
+.data
+str0: .asciiz "fat(5) = "
+.text
+main:
+    la $a0, str0
+    li $v0, 4
+    syscall
+    li $t0, 5
+    move $a0, $t0
+    addi $sp, $sp, -4
+    sw $t0, 0($sp)
+    jal f_fat
+    lw $t0, 0($sp)
+    addi $sp, $sp, 4
+    move $t0, $v0
+    move $a0, $t0
+    li $v0, 1
+    syscall
+    li $a0, 10
+    li $v0, 11
+    syscall
+    li $v0, 10
+    syscall
+f_fat:
+    addi $sp, $sp, -8
+    sw $ra, 4($sp)
+    sw $a0, 0($sp)
+    lw $t0, 0($sp)
+    li $t1, 1
+    sle $t0, $t0, $t1
+    beq $t0, $zero, senao0
+    li $t0, 1
+    move $v0, $t0
+    j fim_fat
+senao0:
+    lw $t0, 0($sp)
+    lw $t1, 0($sp)
+    li $t2, 1
+    sub $t1, $t1, $t2
+    move $a0, $t1
+    addi $sp, $sp, -8
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    jal f_fat
+    lw $t0, 0($sp)
+    lw $t1, 4($sp)
+    addi $sp, $sp, 8
+    move $t1, $v0
+    mul $t0, $t0, $t1
+    move $v0, $t0
+    j fim_fat
+fim_fat:
+    lw $ra, 4($sp)
+    addi $sp, $sp, 8
+    jr $ra
+```
+- CAIXA [Cuidado!]: Neste esquema, só o parâmetro mora na pilha. Uma variável declarada dentro da função continua no `.data`, e numa função recursiva cada chamada escreveria por cima dela. Se o enunciado pedir recursão com variável local, guarde as locais no quadro também, cada uma com o seu deslocamento.
+- REVELAR: Em n * fat(n - 1), o $t0 guarda o n quando o jal acontece. Quem garante que ele volta intacto?
+    → Quem chama. A `chamada()` guarda na pilha os `$t` ocupados (`$t0` com o n e `$t1` com o argumento), faz o `jal` e lê os dois de volta. A função usa os `$t` à vontade.
+- PASSOS (Na sua linguagem):
+    · O seu enunciado pede vetor? De que tamanho, e o índice começa em 0 ou em 1?
+    · As funções recebem quantos parâmetros, e de quais tipos? Cada um ganha um deslocamento no quadro.
+    · Pode haver recursão? Se pode, onde ficam as variáveis locais?
+- TEXTO: **Teste desta etapa:** o `vetor.byt` imprime `soma = 30`, e o `fatorial.byt` imprime `fat(5) = 120`. Teste também `v[5]` num vetor de 5, para ver o que o seu compilador faz.

@@ -61,7 +61,7 @@ object PassoDaReceita {
         Skill.ATTRIBUTES_TYPES to "0334400000",
         Skill.SCOPE_SYMBOLS to "033430",
         Skill.TAC to "0123400",
-        Skill.OPTIMIZATION to "012300",
+        Skill.OPTIMIZATION to "0123000000000",
         Skill.RUNTIME to "11112130",
         Skill.REG_ALLOC to "011300",
     )

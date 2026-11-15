@@ -516,6 +516,7 @@ val backend by lazy {
                 move("d0", 180f, 310f); tint("d0", Tint.GREEN)
                 hot("d0")
             }
+            otimBlocos()
             fecho(Fecho(
                 tx("otim_f_af"), false, tx("otim_f_q"), tx("otim_f_dica"), tx("otim_f_ok"), tx("otim_f_certo"),
                 tx("otim_f_erro2"), tx("otim_f_certo2"), tx("otim_f_fala2"),

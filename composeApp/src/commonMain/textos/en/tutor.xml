@@ -213,4 +213,35 @@
     <string name="prova_min_nenhum">None</string>
     <string name="prova_min_fim">The blank pairs merge: %1$s. The minimal DFA has %2$s states.</string>
     <string name="prova_min_fim_nada">Every cell fell. No states merge.</string>
+    <string name="prova_tac_abre">The exam asks for the TAC of %1$s, then the quadruples and the triples.</string>
+    <string name="prova_tac_proxima">What is line (%1$s)?</string>
+    <string name="prova_tac_linha">Postorder: children come before the parent. %1$s becomes one line, and the result goes into %2$s.</string>
+    <string name="prova_tac_copia">Last, the result goes to the variable: %2$s = %1$s.</string>
+    <string name="prova_quad_q_res">Quadruple (0): what goes in the res column?</string>
+    <string name="prova_quad_res">In a quadruple, the result has a name: %1$s goes in the res column.</string>
+    <string name="prova_quad_q_copia">Quadruple (%1$s), the copy: what goes in arg1?</string>
+    <string name="prova_quad_copia">The copy has op =, the value %1$s in arg1 and the variable in res. arg2 stays empty.</string>
+    <string name="prova_trip_q_ref">Triple (%1$s): what goes in place of %2$s?</string>
+    <string name="prova_trip_ref">In a triple, the result has no name. Whoever uses %1$s points to the line that computed it: %2$s.</string>
+    <string name="prova_trip_q_copia">Triple (%1$s), the copy: what goes in arg2?</string>
+    <string name="prova_trip_copia">The copy becomes = %1$s %2$s: the variable and the line of the value.</string>
+    <string name="prova_tac_reordena">The optimizer wants to reorder the lines. In which form does it not have to touch the others?</string>
+    <string name="prova_tac_quad">In quadruples</string>
+    <string name="prova_tac_trip">In triples</string>
+    <string name="prova_tac_as_duas">Both, it makes no difference</string>
+    <string name="prova_tac_reordena_porque">In quadruples, each result has a name. In triples, users point to the position; change the order and the references break.</string>
+    <string name="prova_viva_titulo">Liveness and colors</string>
+    <string name="prova_viva_abre">The exam asks for the liveness table. Go from bottom to top: out is the in of the line below, and in = use ∪ (out − def).</string>
+    <string name="prova_viva_q">Line (%1$s): what is in?</string>
+    <string name="prova_viva_in">Line (%1$s): use %2$s, out %3$s, def %4$s. Remove def from out and add use: in = %5$s.</string>
+    <string name="prova_viva_q_aresta">In the graph, which temporaries does %1$s interfere with?</string>
+    <string name="prova_viva_aresta">Whatever is born on a line interferes with whatever is live after it. %1$s interferes with %2$s.</string>
+    <string name="prova_viva_q_cores">How many registers are enough to color the graph?</string>
+    <string name="prova_viva_cores">Neighbors can't share a color. The smallest number of colors is %1$s.</string>
+    <string name="prova_viva_fim">Each color is a register: %1$s are enough, with nothing stored in memory.</string>
+    <string name="prova_quad_abre">Now the quadruples: op, arg1, arg2 and res, one row for each TAC line.</string>
+    <string name="prova_quad_copia_abre">The last quadruple is the copy to the variable.</string>
+    <string name="prova_trip_abre">Now the triples: the same rows, without the res column.</string>
+    <string name="prova_trip_copia_abre">In the copy triple, the variable goes in arg1.</string>
+    <string name="prova_viva_grafo">Now the interference graph: an edge links two temporaries that are live at the same time.</string>
 </resources>

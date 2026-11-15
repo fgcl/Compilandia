@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 15/11 (vigésima sétima rodada)
+
+Três pedidos do professor do bloco 5 e um do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):
+
+1. **Questão de prova na Forja.** TAC e Alocação ganharam a etapa (`tutor/ProvaForja.kt`). No TAC, a pessoa escreve o TAC linha por linha (as erradas são a conta inteira numa linha só e outra conta fora da vez), preenche uma casa das quádruplas e uma das triplas, e diz em qual das duas o otimizador troca a ordem sem renumerar. As expressões vão de `a + b * c` a `a * b + a * b`, em que as triplas mostram as duas contas iguais. Na Alocação, a tabela use, def, out e in é preenchida de baixo para cima, depois vêm com quem o temporário que mais briga interfere e quantos registradores bastam. A terceira questão precisa de três. As respostas saem do `TacGen` e do `RegAlloc`.
+2. **"Fazer com ajuda" da Alocação.** A mesma tabela de vivacidade, com expressões sorteadas. Antes a Alocação não tinha essa etapa.
+3. **Blocos básicos, líderes e código morto na aula animada de Otimização.** Sete cenas no fim da Sua vez (`EpOtimBlocos.kt`): o TAC de um laço, as três regras do líder, a pessoa toca nos quatro líderes e vê os blocos coloridos. Depois um bloco com `t2 = a * b` que ninguém lê: ela toca na linha morta. O motor novo `engine/BlocosBasicos.kt` dá os líderes, os blocos e as linhas mortas. Bloco básico e líder saíram das marcas "vem do texto" da ficha.
+4. **Guia do TP, cap. 11 (opcional): vetores e funções.** Vetor com `.space`, endereço base + 4·i com `sll`, e o aviso de que o MARS não confere o índice. Função com `jal`, `$ra`, o quadro na pilha (parâmetro em `0($sp)`, `$ra` em `4($sp)`) e os `$t` ocupados guardados por quem chama. O código Java estende o gerador do cap. 8, e os dois programas completos (`vetor.byt` e `fatorial.byt`) vêm com o `.asm` gerado. O teste roda os dois no MipsVM: `soma = 30` e `fat(5) = 120`, com o `$sp` de volta ao começo. O MipsVM passou a entender `sll` e `srl`.
+
 ## Feito em 15/11 (vigésima sexta rodada)
 
 Dois pedidos do professor do bloco 5 e dois do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):

@@ -4,7 +4,7 @@
 
 ## ASSUNTO TAC: Código de três endereços
 Pré-requisitos no jogo: Árvore sintática abstrata (AST) com classes, Atributos e verificação de tipos
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Uma conta por linha» → Fazer com ajuda → Prática: você pilota «if e while viram desvios» → Pegadinha «A ordem dos temporários» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Uma conta por linha» → Fazer com ajuda → Prática: você pilota «if e while viram desvios» → Pegadinha «A ordem dos temporários» → Questão de prova → Desafio
 Jogos que treinam: Árvore Anotada (calcular atributos de baixo para cima), Linha de Montagem TAC (montar código de três endereços)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -221,7 +221,7 @@ BYTE: "Antes da aula: o compilador pode fazer essa conta sozinho?"
 Opções: ✔sim | não | só em C
 Depois: "Pode. Ele já escreve seis no código."
 
-#### AULA ANIMADA BÁSICA: "Conta feita antes" (21 cenas, ~150s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Conta feita antes" (28 cenas, ~205s) [1º exemplo começa na cena 5]
 
 1. TELA: # Otimização ⏎ for (i = 0; i < 1000; i++) ⏎ *  x = 2 * 3 + y;*
    BYTE: "Esta linha roda mil vezes dentro de um laço."
@@ -292,22 +292,49 @@ Depois: "Pode. Ele já escreve seis no código."
 17. TELA: # ( 10 - 2 * 3 ) * x ⏎ * ⏎ 4 ⏎ x ⏎ *t1 = 4 * x*
    BYTE: "O resultado é o mesmo para qualquer x. Só o caminho encurtou. Outras otimizações clássicas: propagar cópias e eliminar código morto."
 
-18. TELA: # Diga por quê ⏎ 10 - 2 * 3   →   10 - 6   →   4 ⏎ O menos sempre espera o vezes. ⏎ O compilador dobra da direita para a esquerda. ⏎ Antes, no lugar do seis havia uma conta.
+18. TELA: # Blocos básicos ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   BYTE: "A dobra olha uma conta só. Para ir além, o compilador corta o TAC em blocos básicos: trechos sem desvio no meio."
+
+19. TELA: # Blocos básicos ⏎ *i = 0* ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   PROF: "Um bloco começa num líder. A primeira linha é líder. Um rótulo é líder, porque alguém pode pular para ele. E a linha logo depois de um desvio também é."
+
+20. TELA: # Blocos básicos ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   BYTE: "Toque nas quatro linhas que são líderes."
+   PERGUNTA (toque): certo = i = 0 | enquanto0: | t2 = s + i | fimenq0: ; errado = s = 0 | t1 = i < n | ifFalse t1 goto fimenq0 | s = t2 | t3 = i + 1 | i = t3 | goto enquanto0
+   se errar: "Procure a primeira linha e os rótulos. Depois, a linha logo abaixo de um goto ou de um ifFalse."
+   se acertar: "Cada líder abre um bloco, que vai até a linha antes do próximo líder."
+
+21. TELA: # Blocos básicos ⏎ *i = 0* ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ *t2 = s + i* ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ *fimenq0:*
+   BYTE: "Quatro blocos. Dentro de um bloco, as linhas rodam sempre todas, em ordem. Por isso a otimização ali é segura."
+
+22. TELA: # Código morto ⏎ t1 = a + b ⏎ t2 = a * b ⏎ x = t1
+   BYTE: "Agora um bloco sem desvio. Depois dele, o programa só lê o x."
+
+23. TELA: # Código morto ⏎ t1 = a + b ⏎ t2 = a * b ⏎ x = t1
+   BYTE: "Qual linha pode sair sem mudar o x? Toque nela."
+   PERGUNTA (toque): certo = t2 = a * b ; errado = t1 = a + b | x = t1
+   se errar: "Procure um resultado que nenhuma linha de baixo lê."
+   se acertar: "O t2 nasce e ninguém lê. É código morto: a linha sai, e o x fica igual."
+
+24. TELA: # Código morto ⏎ t1 = a + b ⏎ x = t1
+   PROF: "Para achar o código morto, ande de baixo para cima, como na vivacidade. Na prova, comece pelos líderes."
+
+25. TELA: # Diga por quê ⏎ 10 - 2 * 3   →   10 - 6   →   4 ⏎ O menos sempre espera o vezes. ⏎ O compilador dobra da direita para a esquerda. ⏎ Antes, no lugar do seis havia uma conta.
    BYTE: "Dez menos seis só deu para dobrar depois do dois vezes três. Por quê?"
    PERGUNTA (toque): certo = Antes, no lugar do seis havia uma conta. ; errado = O menos sempre espera o vezes. | O compilador dobra da direita para a esquerda.
    se errar: "Antes da primeira dobra, o que estava no lugar do seis?"
    se acertar: "Antes, no lugar do seis havia uma conta. Só número com número se dobra."
 
-19. TELA: # Erros comuns ⏎ Com x lido do teclado, o compilador dobra x * 2 para um número. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o x só tem valor quando o programa roda. ⏎ Errado: multiplicação nunca se dobra. ⏎ Certo: o 2 já é constante, então a conta dobra.
+26. TELA: # Erros comuns ⏎ Com x lido do teclado, o compilador dobra x * 2 para um número. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o x só tem valor quando o programa roda. ⏎ Errado: multiplicação nunca se dobra. ⏎ Certo: o 2 já é constante, então a conta dobra.
    BYTE: "Dá para dobrar esta conta? Um colega disse que sim. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o x só tem valor quando o programa roda. ; errado = Errado: multiplicação nunca se dobra. | Certo: o 2 já é constante, então a conta dobra.
    se errar: "O valor de x já existe na hora de compilar?"
    se acertar: "O valor de x só aparece quando o programa roda. A dobra de constantes só vale para o que o compilador já conhece."
 
-20. TELA: # Erros comuns ⏎ Certo: Só se dobra conta com constantes conhecidas na compilação. ⏎ *Errado: Aceitar uma otimização que muda o resultado em algum caso.* ⏎ *Certo: Otimização válida dá o mesmo resultado para toda entrada.*
+27. TELA: # Erros comuns ⏎ Certo: Só se dobra conta com constantes conhecidas na compilação. ⏎ *Errado: Aceitar uma otimização que muda o resultado em algum caso.* ⏎ *Certo: Otimização válida dá o mesmo resultado para toda entrada.*
    BYTE: "Outro erro: achar que vale ganhar velocidade mudando o resultado em algum caso raro. Não vale. A otimização tem que preservar o resultado sempre."
 
-21. TELA: # Resumo ⏎ Otimizar: código mais rápido ou menor, com o mesmo resultado. ⏎ Dobra de constantes: conta só com constantes é feita na compilação. ⏎ Com variável, a conta fica para o tempo de execução.
+28. TELA: # Resumo ⏎ Otimizar: código mais rápido ou menor, com o mesmo resultado. ⏎ Dobra de constantes: conta só com constantes é feita na compilação. ⏎ Com variável, a conta fica para o tempo de execução.
    BYTE: "Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável."
 
 #### PEGADINHA: "Otimizar sem mudar o resultado" (5 cenas, ~26s)
@@ -767,9 +794,9 @@ Flashcards:
 
 ## ASSUNTO REG_ALLOC: Alocação de registradores
 Pré-requisitos no jogo: Geração de código MIPS
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Pegadinha «Quem vive junto briga» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Fazer com ajuda → Pegadinha «Quem vive junto briga» → Questão de prova → Desafio
 Jogos que treinam: Montadora MIPS (traduzir TAC para assembly e rodar), Coloração de Registradores (vivacidade + colorir o grafo de interferência)
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug sumiu com um registrador

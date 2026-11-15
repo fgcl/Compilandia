@@ -7,7 +7,7 @@ import com.compilandia.textos.tx
  *
  * Suporta: seções .data (.word, .asciiz, .space) e .text, rótulos, comentários (#),
  * li la lw sw move add addi addu addiu sub subu mul div(2 e 3 operandos) mflo mfhi rem
- * and or xor nor not neg slt slti sltu sgt sge sle seq sne
+ * sll srl and or xor nor not neg slt slti sltu sgt sge sle seq sne
  * beq bne blt bgt ble bge beqz bnez b j jal jr nop syscall (1 int, 4 string, 10 exit, 11 char).
  * Memória por palavras; $sp começa no topo de uma pilha simulada.
  */
@@ -166,6 +166,8 @@ class MipsVM(source: String, private val maxSteps: Int = 20_000) {
             "add", "addu" -> { need(3); set(a[0], get(a[1], ln) + value(a[2], ln), ln) }
             "addi", "addiu" -> { need(3); set(a[0], get(a[1], ln) + parseImm(a[2], ln), ln) }
             "sub", "subu" -> { need(3); set(a[0], get(a[1], ln) - value(a[2], ln), ln) }
+            "sll" -> { need(3); set(a[0], get(a[1], ln) shl parseImm(a[2], ln).toInt(), ln) }
+            "srl" -> { need(3); set(a[0], (get(a[1], ln).toInt() ushr parseImm(a[2], ln).toInt()).toLong(), ln) }
             "mul" -> { need(3); set(a[0], get(a[1], ln) * value(a[2], ln), ln) }
             "mult" -> { need(2); lo = get(a[0], ln) * get(a[1], ln); hi = 0 }
             "div" -> {

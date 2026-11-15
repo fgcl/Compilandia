@@ -491,4 +491,38 @@
     <string name="tprec_preveja_3">Três: uma para cada token pulado</string>
     <string name="tprec_preveja_exp">O erro está no `)`. O modo pânico pula o `)` e para no `x`, que começa um comando. Esse `x` sem `&lt;-` gera um segundo erro, que não existe de verdade. É o preço do modo pânico: às vezes um erro puxa outro. Por isso, conserte de cima para baixo.</string>
     <string name="tprec_cuidado">Erro léxico e fim de arquivo ainda param a compilação: o léxico não sabe pular o caractere ruim, e no fim do arquivo não há onde se segurar. E o `proxTemp = 0` no `catch` devolve os registradores que a expressão quebrada não liberou.</string>
+    <string name="tpfun_titulo">Opcional: vetores e funções</string>
+    <string name="tpfun_resumo">Para quando o enunciado pede: vetor com .space e base + 4·i, função com jal, $ra e o quadro na pilha.</string>
+    <string name="tpfun_abre">Este capítulo é opcional. Faça depois do capítulo 8, e só se o seu enunciado pedir vetor ou função.</string>
+    <string name="tpfun_vetor_texto">**Vetores.** `inteiro v[5];` reserva 5 inteiros seguidos na memória. Cada inteiro ocupa 4 bytes, então o `.data` ganha `v_0: .space 20`. O elemento `v[i]` mora no endereço **base + 4·i**: o endereço do começo do vetor mais 4 vezes o índice.</string>
+    <string name="tpfun_vetor_gramatica" translatable="false">declaracao → tipo ID [ "[" NUM "]" ] { , ID [ "[" NUM "]" ] } ;\ncomando    → ID [ "[" expr "]" ] &lt;- expr ;      (atribuição, agora com índice)\nprimario   → ID [ "[" expr "]" ] | ...</string>
+    <string name="tpfun_gramatica_legenda">O que muda na gramática (cada [ ] da EBNF ainda vira um if no parser)</string>
+    <string name="tpfun_vetor_preveja">Se v_0 começa no endereço 1000, onde fica v[3]?</string>
+    <string name="tpfun_vetor_preveja_exp">1000 + 4 · 3 = 1012. O 1003 esquece que cada inteiro tem 4 bytes. O 1016 conta a partir do 1, como se v[0] não existisse.</string>
+    <string name="tpfun_vetor_java_legenda">Vetores no gerador do capítulo 8: o .space, o endereço com sll e o lw/sw no endereço</string>
+    <string name="tpfun_vetor_cuidado">O MARS não confere o índice. `v[5]` num vetor de 5 escreve por cima da variável seguinte do `.data`, sem erro nenhum. Se o enunciado pedir, compare o índice com o tamanho antes do `sw` e pule para uma mensagem de erro. O `sll $t0, $t0, 2` desloca 2 bits para a esquerda: é o mesmo que multiplicar por 4, e mais barato que o `mul`.</string>
+    <string name="tpfun_vetor_byt_legenda">vetor.byt: guarda os quadrados de 0 a 4 e soma tudo</string>
+    <string name="tpfun_vetor_asm_legenda">O .asm que o gerador escreve. No MARS, imprime soma = 30</string>
+    <string name="tpfun_funcao_texto">**Funções.** O `jal f_fat` pula para a função e guarda em `$ra` o endereço da linha de baixo. O `jr $ra` volta para lá. O problema: uma função que chama outra (ou a si mesma) escreve outro valor em `$ra`. Por isso cada chamada ganha um **quadro** na pilha, com o `$ra` e o parâmetro.</string>
+    <string name="tpfun_funcao_gramatica" translatable="false">programa → programa ID { funcao } bloco\nfuncao   → funcao ID ( inteiro ID ) bloco\ncomando  → retorne expr ; | ...\nprimario → ID ( expr ) | ID [ "[" expr "]" ] | ...</string>
+    <string name="tpfun_convencao_titulo">A combinação entre quem chama e a função (a convenção de chamada)</string>
+    <string name="tpfun_convencao_1">**Quem chama** põe o argumento em `$a0`, guarda na pilha os `$t` ocupados e faz `jal`.</string>
+    <string name="tpfun_convencao_2">**A função** abre o quadro: `addi $sp, $sp, -8`, guarda o `$ra` em `4($sp)` e o parâmetro em `0($sp)`. Dentro dela, o parâmetro é lido com `lw $t0, 0($sp)`.</string>
+    <string name="tpfun_convencao_3">**O retorne** põe o resultado em `$v0` e pula para o fim da função, que lê o `$ra` de volta, fecha o quadro e faz `jr $ra`.</string>
+    <string name="tpfun_convencao_4">**Quem chama** devolve os `$t` guardados e copia o `$v0` para um registrador seu.</string>
+    <string name="tpfun_funcao_java_legenda">Funções no gerador: o código delas vai para depois do main. A TabelaSimbolos ganha um declaraComRotulo(nome, tipo, linha, rotulo), igual ao declara mas com o rótulo dado</string>
+    <string name="tpfun_ra_preveja">Por que a função guarda o $ra na pilha logo que começa?</string>
+    <string name="tpfun_ra_op_1">Porque o MARS exige</string>
+    <string name="tpfun_ra_op_2">Porque um jal dentro dela escreve outro endereço em $ra</string>
+    <string name="tpfun_ra_op_3">Para liberar o $ra para as contas</string>
+    <string name="tpfun_ra_preveja_exp">O `jal f_fat` de dentro do `fat` troca o `$ra` pelo endereço de volta da chamada nova. Sem a cópia na pilha, a primeira chamada nunca acharia o caminho para o `main`.</string>
+    <string name="tpfun_fat_byt_legenda">fatorial.byt: a função vem antes do bloco principal</string>
+    <string name="tpfun_fat_asm_legenda">O .asm gerado. No MARS, imprime fat(5) = 120, e o $sp volta ao valor do começo</string>
+    <string name="tpfun_funcao_cuidado">Neste esquema, só o parâmetro mora na pilha. Uma variável declarada dentro da função continua no `.data`, e numa função recursiva cada chamada escreveria por cima dela. Se o enunciado pedir recursão com variável local, guarde as locais no quadro também, cada uma com o seu deslocamento.</string>
+    <string name="tpfun_reveal_q">Em n * fat(n - 1), o $t0 guarda o n quando o jal acontece. Quem garante que ele volta intacto?</string>
+    <string name="tpfun_reveal_r">Quem chama. A `chamada()` guarda na pilha os `$t` ocupados (`$t0` com o n e `$t1` com o argumento), faz o `jal` e lê os dois de volta. A função usa os `$t` à vontade.</string>
+    <string name="tp_nsl_11_1">O seu enunciado pede vetor? De que tamanho, e o índice começa em 0 ou em 1?</string>
+    <string name="tp_nsl_11_2">As funções recebem quantos parâmetros, e de quais tipos? Cada um ganha um deslocamento no quadro.</string>
+    <string name="tp_nsl_11_3">Pode haver recursão? Se pode, onde ficam as variáveis locais?</string>
+    <string name="tp_teste_11">**Teste desta etapa:** o `vetor.byt` imprime `soma = 30`, e o `fatorial.byt` imprime `fat(5) = 120`. Teste também `v[5]` num vetor de 5, para ver o que o seu compilador faz.</string>
 </resources>

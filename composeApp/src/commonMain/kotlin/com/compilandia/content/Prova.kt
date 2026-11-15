@@ -6,6 +6,7 @@ import com.compilandia.engine.Minimizer
 import com.compilandia.engine.SmallNFA
 import com.compilandia.learning.Skill
 import com.compilandia.tutor.ProvaAutomatos
+import com.compilandia.tutor.ProvaForja
 import com.compilandia.tutor.ProvaSlr
 import com.compilandia.tutor.QuestaoDeProva
 import com.compilandia.tutor.Sim
@@ -14,12 +15,13 @@ import kotlin.random.Random
 /**
  * Questão de prova (seção 3 da revisão): a pessoa produz a resposta inteira, e não só reconhece.
  * Três questões: a primeira resolvida pelo Byte, a segunda pela metade, a terceira sem ajuda e com conflito.
- * LL(1), SLR(1), AFN→AFD (tabela Dtran) e minimização (escadinha de pares).
+ * LL(1), SLR(1), AFN→AFD (tabela Dtran), minimização (escadinha de pares), TAC (quádruplas e triplas)
+ * e alocação (vivacidade, arestas e cores).
  */
 object Prova {
     const val PROBLEMAS = 3
 
-    private val assuntos = setOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION)
+    private val assuntos = setOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION, Skill.TAC, Skill.REG_ALLOC)
 
     fun disponivel(s: Skill): Boolean = s in assuntos
 
@@ -32,6 +34,8 @@ object Prova {
             Skill.SLR_TABLE -> ProvaSlr.GRAMATICAS.map { ProvaSlr.questao(Grammar.parse(it)) }
             Skill.NFA_TO_DFA -> AFNS.map { id -> ProvaAutomatos.subconjuntos(SmallNFA.bank.first { it.id == id }) }
             Skill.DFA_MINIMIZATION -> afdsDaMinimizacao().map { ProvaAutomatos.minimizacao(it) }
+            Skill.TAC -> ProvaForja.TAC.map { ProvaForja.tac(it) }
+            Skill.REG_ALLOC -> ProvaForja.ALOCACAO.map { ProvaForja.vivacidade(it) }
             else -> emptyList()
         }
     }

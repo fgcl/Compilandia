@@ -440,4 +440,36 @@
     <string name="tprec_preveja_3">Three: one for each skipped token</string>
     <string name="tprec_preveja_exp">The error is at `)`. Panic mode skips the `)` and stops at `x`, which starts a command. That `x` without `&lt;-` produces a second error that doesn't really exist. That is the price of panic mode: sometimes one error drags another along. So fix them from the top down.</string>
     <string name="tprec_cuidado">Lexical errors and end of file still stop the compilation: the lexer can't skip the bad character, and at the end of the file there is nothing to hold on to. And `proxTemp = 0` in the `catch` frees the registers the broken expression didn't release.</string>
+    <string name="tpfun_titulo">Optional: arrays and functions</string>
+    <string name="tpfun_resumo">For when the assignment asks: arrays with .space and base + 4·i, functions with jal, $ra and the frame on the stack.</string>
+    <string name="tpfun_abre">This chapter is optional. Do it after chapter 8, and only if your assignment asks for arrays or functions.</string>
+    <string name="tpfun_vetor_texto">**Arrays.** `inteiro v[5];` reserves 5 integers in a row in memory. Each integer takes 4 bytes, so `.data` gets `v_0: .space 20`. The element `v[i]` lives at address **base + 4·i**: the start address of the array plus 4 times the index.</string>
+    <string name="tpfun_gramatica_legenda">What changes in the grammar (each [ ] in the EBNF still becomes an if in the parser)</string>
+    <string name="tpfun_vetor_preveja">If v_0 starts at address 1000, where is v[3]?</string>
+    <string name="tpfun_vetor_preveja_exp">1000 + 4 · 3 = 1012. 1003 forgets that each integer has 4 bytes. 1016 counts from 1, as if v[0] didn't exist.</string>
+    <string name="tpfun_vetor_java_legenda">Arrays in the chapter 8 generator: the .space, the address with sll, and lw/sw at the address</string>
+    <string name="tpfun_vetor_cuidado">MARS doesn't check the index. `v[5]` in an array of 5 writes over the next variable in `.data`, with no error at all. If the assignment asks, compare the index with the size before the `sw` and jump to an error message. `sll $t0, $t0, 2` shifts 2 bits to the left: the same as multiplying by 4, and cheaper than `mul`.</string>
+    <string name="tpfun_vetor_byt_legenda">vetor.byt: stores the squares from 0 to 4 and adds them up</string>
+    <string name="tpfun_vetor_asm_legenda">The .asm the generator writes. In MARS, it prints soma = 30</string>
+    <string name="tpfun_funcao_texto">**Functions.** `jal f_fat` jumps to the function and stores in `$ra` the address of the line below. `jr $ra` goes back there. The problem: a function that calls another (or itself) writes another value into `$ra`. So each call gets a **frame** on the stack, with `$ra` and the parameter.</string>
+    <string name="tpfun_convencao_titulo">The agreement between the caller and the function (the calling convention)</string>
+    <string name="tpfun_convencao_1">**The caller** puts the argument in `$a0`, saves the busy `$t` registers on the stack and does `jal`.</string>
+    <string name="tpfun_convencao_2">**The function** opens the frame: `addi $sp, $sp, -8`, stores `$ra` at `4($sp)` and the parameter at `0($sp)`. Inside it, the parameter is read with `lw $t0, 0($sp)`.</string>
+    <string name="tpfun_convencao_3">**retorne** puts the result in `$v0` and jumps to the end of the function, which reads `$ra` back, closes the frame and does `jr $ra`.</string>
+    <string name="tpfun_convencao_4">**The caller** restores the saved `$t` registers and copies `$v0` into one of its own registers.</string>
+    <string name="tpfun_funcao_java_legenda">Functions in the generator: their code goes after main. TabelaSimbolos gets a declaraComRotulo(nome, tipo, linha, rotulo), like declara but with the given label</string>
+    <string name="tpfun_ra_preveja">Why does the function save $ra on the stack as soon as it starts?</string>
+    <string name="tpfun_ra_op_1">Because MARS requires it</string>
+    <string name="tpfun_ra_op_2">Because a jal inside it writes another address into $ra</string>
+    <string name="tpfun_ra_op_3">To free $ra for calculations</string>
+    <string name="tpfun_ra_preveja_exp">The `jal f_fat` inside `fat` replaces `$ra` with the return address of the new call. Without the copy on the stack, the first call would never find its way back to `main`.</string>
+    <string name="tpfun_fat_byt_legenda">fatorial.byt: the function comes before the main block</string>
+    <string name="tpfun_fat_asm_legenda">The generated .asm. In MARS, it prints fat(5) = 120, and $sp returns to its starting value</string>
+    <string name="tpfun_funcao_cuidado">In this scheme, only the parameter lives on the stack. A variable declared inside the function stays in `.data`, and in a recursive function each call would write over it. If the assignment asks for recursion with local variables, keep the locals in the frame too, each with its own offset.</string>
+    <string name="tpfun_reveal_q">In n * fat(n - 1), $t0 holds n when the jal happens. Who makes sure it comes back intact?</string>
+    <string name="tpfun_reveal_r">The caller. `chamada()` saves the busy `$t` registers on the stack (`$t0` with n and `$t1` with the argument), does the `jal` and reads both back. The function uses the `$t` registers freely.</string>
+    <string name="tp_nsl_11_1">Does your assignment ask for arrays? Of what size, and does the index start at 0 or 1?</string>
+    <string name="tp_nsl_11_2">How many parameters do functions take, and of which types? Each one gets an offset in the frame.</string>
+    <string name="tp_nsl_11_3">Is recursion allowed? If so, where do local variables live?</string>
+    <string name="tp_teste_11">**Test for this stage:** `vetor.byt` prints `soma = 30`, and `fatorial.byt` prints `fat(5) = 120`. Also test `v[5]` in an array of 5, to see what your compiler does.</string>
 </resources>

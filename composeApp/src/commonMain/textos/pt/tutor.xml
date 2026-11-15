@@ -218,4 +218,35 @@
     <string name="prova_min_nenhum">Nenhum</string>
     <string name="prova_min_fim">Os pares em branco se juntam: %1$s. O AFD mínimo fica com %2$s estados.</string>
     <string name="prova_min_fim_nada">Toda casa caiu. Nenhum estado se junta.</string>
+    <string name="prova_tac_abre">A prova pede o TAC de %1$s, depois as quádruplas e as triplas.</string>
+    <string name="prova_tac_proxima">Qual é a linha (%1$s)?</string>
+    <string name="prova_tac_linha">Pós-ordem: os filhos saem antes do pai. %1$s vira uma linha, e o resultado fica em %2$s.</string>
+    <string name="prova_tac_copia">Por último, o resultado vai para a variável: %2$s = %1$s.</string>
+    <string name="prova_quad_q_res">Quádrupla (0): o que vai na coluna res?</string>
+    <string name="prova_quad_res">Na quádrupla, o resultado tem nome: %1$s fica na coluna res.</string>
+    <string name="prova_quad_q_copia">Quádrupla (%1$s), a cópia: o que vai em arg1?</string>
+    <string name="prova_quad_copia">A cópia tem op =, o valor %1$s em arg1 e a variável em res. O arg2 fica vazio.</string>
+    <string name="prova_trip_q_ref">Tripla (%1$s): o que entra no lugar de %2$s?</string>
+    <string name="prova_trip_ref">Na tripla, o resultado não tem nome. Quem usa %1$s aponta a linha que o calculou: %2$s.</string>
+    <string name="prova_trip_q_copia">Tripla (%1$s), a cópia: o que vai em arg2?</string>
+    <string name="prova_trip_copia">A cópia vira = %1$s %2$s: a variável e a linha do valor.</string>
+    <string name="prova_tac_reordena">O otimizador quer mudar a ordem das linhas. Em qual forma ele não precisa mexer nas outras?</string>
+    <string name="prova_tac_quad">Nas quádruplas</string>
+    <string name="prova_tac_trip">Nas triplas</string>
+    <string name="prova_tac_as_duas">Nas duas, tanto faz</string>
+    <string name="prova_tac_reordena_porque">Nas quádruplas, cada resultado tem nome. Nas triplas, quem usa aponta a posição; mudou a ordem, as referências quebram.</string>
+    <string name="prova_viva_titulo">Vivacidade e cores</string>
+    <string name="prova_viva_abre">A prova pede a tabela de vivacidade. Ande de baixo para cima: out é o in da linha de baixo, e in = use ∪ (out − def).</string>
+    <string name="prova_viva_q">Linha (%1$s): qual é o in?</string>
+    <string name="prova_viva_in">Linha (%1$s): use %2$s, out %3$s, def %4$s. Tira o def do out e junta o use: in = %5$s.</string>
+    <string name="prova_viva_q_aresta">No grafo, com quem %1$s interfere?</string>
+    <string name="prova_viva_aresta">Quem nasce numa linha interfere com quem está vivo depois dela. %1$s interfere com %2$s.</string>
+    <string name="prova_viva_q_cores">Quantos registradores bastam para colorir o grafo?</string>
+    <string name="prova_viva_cores">Vizinhos não podem ter a mesma cor. O menor número de cores é %1$s.</string>
+    <string name="prova_viva_fim">Cada cor é um registrador: %1$s bastam, sem guardar nada na memória.</string>
+    <string name="prova_quad_abre">Agora as quádruplas: op, arg1, arg2 e res, uma linha para cada linha do TAC.</string>
+    <string name="prova_quad_copia_abre">A última quádrupla é a cópia para a variável.</string>
+    <string name="prova_trip_abre">Agora as triplas: as mesmas linhas, sem a coluna res.</string>
+    <string name="prova_trip_copia_abre">Na tripla da cópia, a variável vai em arg1.</string>
+    <string name="prova_viva_grafo">Agora o grafo de interferência: uma aresta liga dois temporários vivos ao mesmo tempo.</string>
 </resources>

@@ -23,6 +23,7 @@ private fun fechamentos() = mapOf(
     8 to Fechamento(listOf(tx("tp_nsl_8_1"), tx("tp_nsl_8_2"), tx("tp_nsl_8_3")), tx("tp_teste_8"), tx("tp_teste_codigo_8")),
     9 to Fechamento(listOf(tx("tp_nsl_9_1"), tx("tp_nsl_9_2"), tx("tp_nsl_9_3")), tx("tp_teste_9"), tx("tp_teste_codigo_9")),
     10 to Fechamento(listOf(tx("tp_nsl_10_1"), tx("tp_nsl_10_2"), tx("tp_nsl_10_3")), tx("tp_teste_10"), null),
+    11 to Fechamento(listOf(tx("tp_nsl_11_1"), tx("tp_nsl_11_2"), tx("tp_nsl_11_3")), tx("tp_teste_11"), null),
 )
 
 internal fun fechamentoDoCapitulo(n: Int): List<Beat> = buildList {

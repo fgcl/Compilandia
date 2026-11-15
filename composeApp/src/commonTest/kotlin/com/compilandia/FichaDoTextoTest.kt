@@ -44,7 +44,9 @@ class FichaDoTextoTest {
     @Test fun aMarcaApareceNosCartoesCertos() {
         val ficha = Library.card(Skill.OPTIMIZATION)!!.flashcards
         val marcados = ficha.filter { (p, r) -> FichaDoTexto.doTexto(Skill.OPTIMIZATION, p, r) }
-        assertTrue(marcados.any { "líder" in it.first }, "o cartão do líder vem do texto")
+        // Desde a 27ª rodada, blocos básicos e líderes estão na aula animada; redução de força continua só no texto.
+        assertTrue(marcados.none { "líder" in it.first }, "o líder agora está na aula animada")
+        assertTrue(marcados.isNotEmpty(), "ainda há cartão de Otimização que vem do texto")
         assertTrue(marcados.none { it.first.startsWith("Dobra") }, "dobra de constantes está na aula animada")
         val total = Library.cards.sumOf { c -> c.flashcards.count { (p, r) -> FichaDoTexto.doTexto(c.skill, p, r) } }
         println("Cartões marcados: $total de ${Library.cards.sumOf { it.flashcards.size }}")

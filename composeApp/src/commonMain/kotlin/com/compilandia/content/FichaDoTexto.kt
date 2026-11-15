@@ -35,7 +35,7 @@ object FichaDoTexto {
         Skill.SCOPE_SYMBOLS to m("sombreamento", "dinâmico"),
         Skill.AST_BUILD to listOf(Marca("2n + 1", "2 × (nº de operadores) + 1"), Marca("Enquanto")),
         Skill.TAC to m("quádrupla", "tripla"),
-        Skill.OPTIMIZATION to m("bloco básico", "líder", "redução de força", "propagação", "subexpressão comum"),
+        Skill.OPTIMIZATION to m("redução de força", "propagação", "subexpressão comum"),
         Skill.CODEGEN_MIPS to m("syscall"),
         Skill.RUNTIME to m("vínculo", "heap", "\$ra"),
         Skill.REG_ALLOC to m("Chaitin", "use ∪", "callee", "caller", "ingênuo"),
