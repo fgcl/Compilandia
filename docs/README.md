@@ -6,6 +6,7 @@
 | [REVISAO-AULAS.md](REVISAO-AULAS.md) | O que os revisores acharam nas aulas e o que já foi consertado |
 | [PESQUISA.md](PESQUISA.md) | As fontes por trás de cada decisão do jogo |
 | [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md) | Como pedir trabalho ao Claude neste projeto, com o molde pronto. |
+| [LACUNAS.md](LACUNAS.md) | O que faltava em cada mudança e o que foi feito |
 | [CURRICULO.md](CURRICULO.md) | A disciplina da PUC Minas e onde cada assunto está no jogo |
 | `revisao/` | Roteiros dos revisores, relatórios completos e transcrições das aulas |
 | `licenses/` | Licenças dos assets de terceiros |

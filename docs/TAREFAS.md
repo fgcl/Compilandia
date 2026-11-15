@@ -151,3 +151,8 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
 - [ ] Série Em C: segundo exemplo e erro comum em cada aula; na Em C 4, pedir o MIPS de `a * b + c`; a pergunta da Em C 2, cena 7, com três opções
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison
+
+## 8. Ferramentas do agente (15/11/2026)
+
+- [ ] Sala desenhada por código, sem imagem renderizada: o Blender saiu do projeto (`scripts/art/room.py` apagado) e móvel
+  novo hoje não tem como entrar na sala. O visual aprovado (Oficina do Byte) continua a referência; a troca passa pela Bancada.
