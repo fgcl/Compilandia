@@ -2690,6 +2690,16 @@
     <string name="lessonspart3c_exercicio_2_comandos_com_desvio">Exercício 2: comandos com desvio. if (a &lt; b) x = 1; else x = 2;</string>
     <string name="lessonspart3c_iffalse_b_goto_l1_x" translatable="false">    t1 = a &lt; b\n    ifFalse t1 goto L1\n    x = 1\n    goto L2\nL1: x = 2\nL2: ...</string>
     <string name="lessonspart3c_rotulos_desvios_if_vira_pule">Rótulos e desvios: o if vira 'pule se for falso'</string>
+    <string name="tac_curto_exercicio">Exercício 3: e com curto-circuito. if (a &lt; b &amp;&amp; c &lt; d) x = 1;</string>
+    <string name="tac_curto_legenda_tac">TAC: um ifFalse para cada comparação, os dois para o mesmo rótulo</string>
+    <string name="tac_curto_legenda_mips">O mesmo em MIPS: cada ifFalse vira slt e beq com $zero</string>
+    <string name="tac_curto_preveja">Com a = 9 e b = 2, a linha t2 = c &lt; d chega a rodar?</string>
+    <string name="tac_curto_op_nao">Não: o primeiro ifFalse já pula para fimse0</string>
+    <string name="tac_curto_op_sim_antes">Sim: o TAC calcula as duas comparações antes de decidir</string>
+    <string name="tac_curto_op_sim_ignora">Sim, mas o resultado dela é jogado fora</string>
+    <string name="tac_curto_explica">É o **curto-circuito**: com a &lt; b falso, o e já é falso, e o c &lt; d nem roda. Em C e em Java, &amp;&amp; e || funcionam assim. Isso importa quando o lado direito pode dar erro, como em `p != 0 &amp;&amp; 10 / p &gt; 1`. A Byteiro do Guia do TP calcula os dois lados com `and`, e a ficha dela avisa.</string>
+    <string name="tac_curto_ou">E com ou? Gere o TAC de if (a &lt; b || c &lt; d) x = 1;</string>
+    <string name="tac_curto_ou_resp">%1$s. No ou, o primeiro lado verdadeiro já basta: o `if t1 goto` pula direto para o corpo, e o c &lt; d só roda quando a &lt; b é falso.</string>
     <string name="lessonspart3c_agora_eu_faco">Agora eu faço!</string>
     <string name="lessonspart3c_tac_y_b_b">TAC de y = a * b + a * b.</string>
     <string name="lessonspart3c_t1_b_t2_b_t3">t1 = a * b; t2 = a * b; t3 = t1 + t2; y = t3. (Sim, a * b duas vezes, o gerador ingênuo não otimiza.)</string>

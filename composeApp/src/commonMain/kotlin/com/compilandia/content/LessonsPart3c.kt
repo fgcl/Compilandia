@@ -295,6 +295,7 @@ internal val tacLessonsP3: List<Lesson> = listOf(
                 tx("lessonspart3c_iffalse_b_goto_l1_x"),
                 tx("lessonspart3c_rotulos_desvios_if_vira_pule"),
             ),
+            *tacCurtoCircuito().toTypedArray(),
             Say(BYTE, tx("lessonspart3c_agora_eu_faco")),
             Reveal(tx("lessonspart3c_tac_y_b_b"), tx("lessonspart3c_t1_b_t2_b_t3")),
             Reveal(tx("lessonspart3c_triplas_y_b_b"), "(0) * a b; (1) * a b; (2) + (0) (1); (3) = y (2)."),

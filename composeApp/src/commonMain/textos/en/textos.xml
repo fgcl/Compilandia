@@ -2631,6 +2631,16 @@
     <string name="lessonspart3c_duas_representacoes_das_mesmas_instrucoes">Two representations of the same instructions</string>
     <string name="lessonspart3c_exercicio_2_comandos_com_desvio">Exercise 2: statements with jumps. if (a &lt; b) x = 1; else x = 2;</string>
     <string name="lessonspart3c_rotulos_desvios_if_vira_pule">Labels and jumps: the if becomes 'jump if false'</string>
+    <string name="tac_curto_exercicio">Exercise 3: and with short-circuit. if (a &lt; b &amp;&amp; c &lt; d) x = 1;</string>
+    <string name="tac_curto_legenda_tac">TAC: one ifFalse for each comparison, both to the same label</string>
+    <string name="tac_curto_legenda_mips">The same in MIPS: each ifFalse becomes slt and beq with $zero</string>
+    <string name="tac_curto_preveja">With a = 9 and b = 2, does the line t2 = c &lt; d run at all?</string>
+    <string name="tac_curto_op_nao">No: the first ifFalse already jumps to fimse0</string>
+    <string name="tac_curto_op_sim_antes">Yes: TAC computes both comparisons before deciding</string>
+    <string name="tac_curto_op_sim_ignora">Yes, but its result is thrown away</string>
+    <string name="tac_curto_explica">This is **short-circuit**: with a &lt; b false, the and is already false, and c &lt; d doesn't even run. In C and Java, &amp;&amp; and || work this way. It matters when the right side can fail, as in `p != 0 &amp;&amp; 10 / p &gt; 1`. The Byteiro language in the Project Guide computes both sides with `and`, and its card warns about it.</string>
+    <string name="tac_curto_ou">And with or? Generate the TAC for if (a &lt; b || c &lt; d) x = 1;</string>
+    <string name="tac_curto_ou_resp">%1$s. In or, the first true side is enough: `if t1 goto` jumps straight into the body, and c &lt; d only runs when a &lt; b is false.</string>
     <string name="lessonspart3c_agora_eu_faco">Now I'll do it!</string>
     <string name="lessonspart3c_tac_y_b_b">TAC for y = a * b + a * b.</string>
     <string name="lessonspart3c_t1_b_t2_b_t3">t1 = a * b; t2 = a * b; t3 = t1 + t2; y = t3. (Yes, a * b twice; the naive generator doesn't optimize.)</string>

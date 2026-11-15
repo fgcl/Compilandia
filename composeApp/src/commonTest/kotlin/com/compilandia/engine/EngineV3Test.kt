@@ -88,7 +88,7 @@ class EngineV3Test {
     }
 
     @Test fun miniLangToMips() {
-        val expected = listOf(1L, 7L, 6L, 24L, 0L)
+        val expected = listOf(1L, 7L, 6L, 24L, 0L, 1L)
         MiniLang.samples.forEachIndexed { i, src ->
             val asm = MiniLang.asmText(MiniLang.compile(src, MiniLang.sampleEnv))
             val vm = MipsVM(asm).run()

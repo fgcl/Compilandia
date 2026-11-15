@@ -373,7 +373,7 @@ BYTE: "Antes da aula: essa instrução vale em MIPS?"
 Opções: sim | ✔não | só com sw
 Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 
-#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (19 cenas, ~136s)
+#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (28 cenas, ~213s)
 
 1. TELA: # MIPS ⏎ total ⏎ $t0
    BYTE: "O processador não conhece variáveis. Ele só conhece registradores, que são poucos e rápidos, e posições de memória."
@@ -435,43 +435,79 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 15. TELA: # preco + taxa ⏎ add $t3, $t1, $t2 ⏎ lw $t1, preco ⏎ sw $t3, total ⏎ lw $t2, taxa
    BYTE: "Agora você traduz qualquer linha de três endereços para MIPS: dois lw, a conta e um sw."
 
-16. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O add lê a memória, mas devagar.
+16. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ *slt $t0, $t0, $t1* ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "E o if? O MIPS não tem if. A comparação vira conta. O slt deixa 1 em $t0 se a for menor que b. Se não for, deixa 0."
+
+17. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Qual linha pula o x = 1 quando a conta deu 0? Toque nela."
+   PERGUNTA (toque): certo = beq $t0, $zero, fimse0 ; errado = slt $t0, $t0, $t1 | li $t0, 1 | sw $t0, x
+   se errar: "Procure a linha que compara $t0 com zero."
+   se acertar: "Exato. O beq pula quando $t0 vale zero. Isso acontece quando a menor que b é falso. Ele cai em fimse0, depois do corpo."
+
+18. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ *slt $t0, $t0, $t1* ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0: ⏎ TAC ⏎ *t1 = a < b* ⏎ *ifFalse t1 goto fimse0*
+   PROF: "Esse é o esquema de toda a trilha. A condição vira 0 ou 1, e o beq com zero pula quando ela é falsa. No TAC, o mesmo par se chama ifFalse."
+
+19. TELA: # while (i < n) i = i + 1; ⏎ *enquanto0:* ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimenq0 ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ j enquanto0 ⏎ fimenq0:
+   BYTE: "O while usa o mesmo par. O rótulo enquanto0 marca o teste, no topo do laço."
+
+20. TELA: # while (i < n) i = i + 1; ⏎ enquanto0: ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimenq0 ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ *j enquanto0* ⏎ fimenq0:
+   BYTE: "No fim do corpo, o j pula sempre. Para qual linha ele volta? Toque nela."
+   PERGUNTA (toque): certo = enquanto0: ; errado = fimenq0: | lw $t0, i | beq $t0, $zero, fimenq0
+   se errar: "A cada volta, a condição precisa ser testada de novo."
+   se acertar: "O j volta para enquanto0, e o teste roda outra vez."
+
+21. TELA: # while (i < n) i = i + 1; ⏎ enquanto0: ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimenq0* ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ j enquanto0 ⏎ *fimenq0:*
+   BYTE: "Quando i chega a n, o slt dá 0. Aí o beq sai do laço para fimenq0."
+
+22. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ lw $t0, c ⏎ lw $t1, d ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Agora uma condição com e. Cada comparação ganha o seu par de slt e beq. Os dois beq pulam para o mesmo fimse0."
+
+23. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ lw $t0, c ⏎ lw $t1, d ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0: ⏎ 0 ⏎ 2 ⏎ 4
+   BYTE: "Com a valendo 9 e b valendo 2, a menor que b dá 0. Quantas linhas da conta c menor que d chegam a rodar?"
+   PERGUNTA (toque): certo = 0 ; errado = 2 | 4
+   se errar: "Siga o primeiro beq: para onde ele pula?"
+   se acertar: "Nenhuma. O primeiro beq já pula para fimse0. As quatro linhas de c menor que d ficam para trás."
+
+24. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ *lw $t0, c* ⏎ *lw $t1, d* ⏎ *slt $t0, $t0, $t1* ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   PROF: "Isso se chama curto-circuito. Com um lado falso, o e já é falso, e o resto nem roda. No TAC, são dois ifFalse seguidos, para o mesmo rótulo."
+
+25. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O add lê a memória, mas devagar.
    BYTE: "Os dois lw vêm antes do add. Por quê?"
    PERGUNTA (toque): certo = O add só faz conta entre registradores. ; errado = O add lê a memória, mas devagar. | A ordem tanto faz. É só costume.
    se errar: "Onde o add pode buscar os números dele?"
    se acertar: "No MIPS, a conta só acontece entre registradores. O lw traz cada variável para um deles."
 
-17. TELA: # Erros comuns ⏎ Para somar a e b, basta: add a, b direto na memória. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só o sw no fim. ⏎ Certo: o add busca as variáveis sozinho. ⏎ Errado: o add só soma registradores.
+26. TELA: # Erros comuns ⏎ Para somar a e b, basta: add a, b direto na memória. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só o sw no fim. ⏎ Certo: o add busca as variáveis sozinho. ⏎ Errado: o add só soma registradores.
    BYTE: "No MIPS, dá para somar duas variáveis direto na memória? Um colega escreveu assim. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o add só soma registradores. ; errado = Errado: falta só o sw no fim. | Certo: o add busca as variáveis sozinho.
    se errar: "O add do MIPS só aceita registradores."
    se acertar: "É isso. Primeiro o lw carrega cada variável num registrador. Só então o add faz a conta."
 
-18. TELA: # Erros comuns ⏎ Certo: lw, lw, add, sw: a conta acontece só entre registradores. ⏎ *Errado: Terminar no add e esquecer o sw.* ⏎ *Certo: Sem sw, a variável na memória continua com o valor antigo.*
+27. TELA: # Erros comuns ⏎ Certo: lw, lw, add, sw: a conta acontece só entre registradores. ⏎ *Errado: Terminar no add e esquecer o sw.* ⏎ *Certo: Sem sw, a variável na memória continua com o valor antigo.*
    BYTE: "Outro erro: parar na conta. O resultado está no registrador, mas a variável mora na memória. Sem o sw, ela não muda."
 
-19. TELA: # Resumo ⏎ lw: da memória para o registrador. sw: do registrador para a memória. ⏎ add, sub e mul operam só entre registradores. ⏎ Cada linha de três endereços vira: carrega, opera, guarda.
+28. TELA: # Resumo ⏎ lw: da memória para o registrador. sw: do registrador para a memória. ⏎ add, sub e mul operam só entre registradores. ⏎ Cada linha de três endereços vira: carrega, opera, guarda.
    BYTE: "Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw."
 
-#### PEGADINHA: "O if vira desvio" (5 cenas, ~28s)
+#### PEGADINHA: "O if vira desvio" (5 cenas, ~36s)
 
-1. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "MIPS não tem if. Tem pulo. O teste sai ao contrário."
+1. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "MIPS não tem if. Tem pulo. E o pulo acontece quando a condição é falsa."
 
-2. TELA: # if (a < b) x = 1; ⏎ *lw  $t0, a* ⏎ *lw  $t1, b* ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "Carrega a e b nos registradores."
+2. TELA: # if (a < b) x = 1; ⏎ *lw $t0, a* ⏎ *lw $t1, b* ⏎ *slt $t0, $t0, $t1* ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Carrega a e b nos registradores. O slt deixa 1 em $t0 se a for menor que b. Se não for, deixa 0."
 
-3. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ *bge $t0, $t1, fim* ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "Aqui está o truque. O if pede a menor que b, e o desvio testa a maior ou igual."
+3. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Aqui está o truque. O beq compara com zero. Ele pula quando a conta deu 0: a menor que b é falso."
 
-4. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
+4. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
    BYTE: "Se a for maior ou igual a b, para onde o programa pula? Toque."
-   PERGUNTA (toque): certo = fim: ; errado = li  $t2, 1 | sw  $t2, x
+   PERGUNTA (toque): certo = fimse0: ; errado = li $t0, 1 | sw $t0, x
    se errar: "Com a condição falsa, o corpo do if não pode rodar."
-   se acertar: "Ele pula o corpo e cai em fim."
+   se acertar: "Ele pula o corpo e cai em fimse0."
 
-5. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ *bge $t0, $t1, fim* ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ *fim:*
-   PROF: "Teste invertido: o desvio descreve quando pular o corpo."
+5. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ *fimse0:*
+   PROF: "Um esquema só. A condição vira 0 ou 1. Se der 0, o beq com zero pula o corpo."
 
 #### PRATICA: "Monte o MIPS" (5 cenas, ~27s)
 

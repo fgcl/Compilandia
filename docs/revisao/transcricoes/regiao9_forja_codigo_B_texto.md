@@ -78,6 +78,35 @@ quádruplas                      triplas
 L1: x = 2
 L2: ...
 ```
+- PROF: Exercício 3: e com curto-circuito. if (a < b && c < d) x = 1;
+- CÓDIGO (TAC: um ifFalse para cada comparação, os dois para o mesmo rótulo):
+```
+    t1 = a < b
+    ifFalse t1 goto fimse0
+    t2 = c < d
+    ifFalse t2 goto fimse0
+    x = 1
+fimse0:
+```
+- CÓDIGO (O mesmo em MIPS: cada ifFalse vira slt e beq com $zero):
+```
+    lw $t0, a
+    lw $t1, b
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimse0
+    lw $t0, c
+    lw $t1, d
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimse0
+    li $t0, 1
+    sw $t0, x
+fimse0:
+```
+- PREVEJA: Com a = 9 e b = 2, a linha t2 = c < d chega a rodar?
+    opções: ✔Não: o primeiro ifFalse já pula para fimse0 | Sim: o TAC calcula as duas comparações antes de decidir | Sim, mas o resultado dela é jogado fora
+    explicação: É o **curto-circuito**: com a < b falso, o e já é falso, e o c < d nem roda. Em C e em Java, && e || funcionam assim. Isso importa quando o lado direito pode dar erro, como em `p != 0 && 10 / p > 1`. A Byteiro do Guia do TP calcula os dois lados com `and`, e a ficha dela avisa.
+- REVELAR: E com ou? Gere o TAC de if (a < b || c < d) x = 1;
+    → t1 = a < b; if t1 goto entra1; t2 = c < d; ifFalse t2 goto fimse0; entra1:; x = 1; fimse0:. No ou, o primeiro lado verdadeiro já basta: o `if t1 goto` pula direto para o corpo, e o c < d só roda quando a < b é falso.
 - BYTE: Agora eu faço!
 - REVELAR: TAC de y = a * b + a * b.
     → t1 = a * b; t2 = a * b; t3 = t1 + t2; y = t3. (Sim, a * b duas vezes, o gerador ingênuo não otimiza.)

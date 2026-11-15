@@ -164,6 +164,7 @@ internal val tpCap10 = GuideChapter(
                 tx("tpguided_testes_tabela_com_programa_saida"),
             ),
         ),
+        *tpCap10Recuperacao().toTypedArray(),
         Callout(WATCH_OUT, tx("tpguided_linha_errada_nas_mensagens_erro")),
         Callout(WATCH_OUT, tx("tpguided_registradores_vazando_esquecer_liberatemp_na")),
         Code(
