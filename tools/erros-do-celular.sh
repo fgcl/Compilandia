@@ -10,6 +10,7 @@ ARQ=docs/ERROS_DO_CELULAR.md
 command -v adb >/dev/null || { echo "erros-do-celular: adb não instalado"; exit 2; }
 serial=${ANDROID_SERIAL:-$(adb devices | awk 'NR > 1 && $2 == "device" {print $1; exit}')}
 [ -n "$serial" ] || { echo "erros-do-celular: nenhum celular no adb"; exit 2; }
+mkdir -p "$(dirname "$ARQ")"
 [ -f "$ARQ" ] || printf '# Erros do celular\n\nTravamentos do app lidos pelo adb (tools/erros-do-celular.sh), o mais novo no topo.\nQuando um for consertado, troque "aberto" por "consertado (commit)".\n\n' > "$ARQ"
 adb -s "$serial" logcat -b crash -d -v time 2>/dev/null | python3 -I -c '
 import hashlib, re, sys

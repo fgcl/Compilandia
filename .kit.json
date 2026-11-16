@@ -11,10 +11,10 @@
       }
     },
     "erros-do-celular": {
-      "versao": 1,
+      "versao": 2,
       "arquivos": {
         "AGENTS.md#erros-do-celular": "26179e16494792d2",
-        "tools/erros-do-celular.sh": "adccacf8b6473db4"
+        "tools/erros-do-celular.sh": "03593b9f01e0b5cd"
       }
     }
   },
