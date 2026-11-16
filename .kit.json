@@ -30,6 +30,14 @@
         "tools/pendencias.sh": "54989243236bfebd",
         ".claude/settings.json": "mescla"
       }
+    },
+    "gradle": {
+      "versao": 2,
+      "arquivos": {
+        "AGENTS.md#gradle": "ca49dcc2867a162e",
+        "AGENTS.md#gradle@kit": "ca49dcc2867a162e",
+        "scripts/parar-gradle.sh": "5684904f442b1423"
+      }
     }
   },
   "stack": "kmp",
