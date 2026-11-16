@@ -21,6 +21,15 @@
         "tools/erros-do-celular.sh@kit": "03593b9f01e0b5cd",
         "tools/erros-do-celular.sh": "03593b9f01e0b5cd"
       }
+    },
+    "pendencias": {
+      "versao": 1,
+      "arquivos": {
+        "AGENTS.md#pendencias": "8ed2c27f276f546d",
+        "AGENTS.md#pendencias@kit": "8ed2c27f276f546d",
+        "tools/pendencias.sh": "54989243236bfebd",
+        ".claude/settings.json": "mescla"
+      }
     }
   },
   "stack": "kmp",
