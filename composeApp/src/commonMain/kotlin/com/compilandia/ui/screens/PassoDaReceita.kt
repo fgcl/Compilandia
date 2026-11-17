@@ -44,7 +44,7 @@ object PassoDaReceita {
         Skill.LALR to "1223110112230",
         Skill.DFA_MINIMIZATION to "01301223300120",
         Skill.AST_BUILD to "01130110",
-        Skill.CODEGEN_MIPS to "01200",
+        Skill.CODEGEN_MIPS to "01202000000000",
         Skill.TOKENS to "032000",
         Skill.REGEX_DFA to "044300",
         Skill.NFA_TO_DFA to "012340032300000",
@@ -61,7 +61,7 @@ object PassoDaReceita {
         Skill.ATTRIBUTES_TYPES to "0334400000",
         Skill.SCOPE_SYMBOLS to "033430",
         Skill.TAC to "0123400",
-        Skill.OPTIMIZATION to "012300",
+        Skill.OPTIMIZATION to "0123000000000",
         Skill.RUNTIME to "11112130",
         Skill.REG_ALLOC to "011300",
     )

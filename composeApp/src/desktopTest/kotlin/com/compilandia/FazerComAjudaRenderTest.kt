@@ -14,7 +14,7 @@ import kotlin.test.Test
 
 /** Fotos do "Fazer com ajuda" dos quatro assuntos novos, da Questão de prova e do cartão marcado da revisão relâmpago. */
 class FazerComAjudaRenderTest : RenderBase() {
-    private val assuntos = listOf(Skill.LR0_ITEMS, Skill.AMBIGUITY, Skill.LEFT_RECURSION, Skill.LEFT_FACTORING)
+    private val assuntos = listOf(Skill.LR0_ITEMS, Skill.AMBIGUITY, Skill.LEFT_RECURSION, Skill.LEFT_FACTORING, Skill.REG_ALLOC)
 
     @Test fun perguntasEmTelaEstreita() {
         for (s in assuntos) {
@@ -30,7 +30,7 @@ class FazerComAjudaRenderTest : RenderBase() {
     }
 
     @Test fun questaoDeProva() {
-        for (s in listOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION)) {
+        for (s in listOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION, Skill.TAC, Skill.REG_ALLOC)) {
             val nome = s.name.lowercase()
             shot("prova_${nome}_tela", w = 360, h = 760) { App(stateWith(Screen.FazerComAjuda(s, semente = 42, prova = true))) }
             val ps = com.compilandia.content.Prova.problemas(s, 42)

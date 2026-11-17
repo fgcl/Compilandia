@@ -107,3 +107,13 @@ s4	ésse quatro
 r1	érre um
 r2	érre dois
 $a0	dólar a zero
+$t0	dólar tê zero
+$zero	dólar zero
+slt	ésse éle tê
+beq	bê é quê
+bne	bê ene é
+fimse0	fim se zero
+enquanto0	enquanto zero
+fimenq0	fim enquanto zero
+ifFalse	ífe fólsi
+while	uáiou

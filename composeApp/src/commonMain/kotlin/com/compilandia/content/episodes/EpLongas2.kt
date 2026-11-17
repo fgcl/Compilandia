@@ -772,6 +772,7 @@ val aulasLongas2 by lazy {
                 mips2.indices.forEach { i -> move("l$i", 180f, 120f + i * 54f); tint("l$i", Tint.TEAL) }
                 hot()
             }
+            mipsDesvios()
             fecho(Fecho(
                 tx("mips_f_af"), false, tx("mips_f_q"), tx("mips_f_dica"), tx("mips_f_ok"), tx("mips_f_certo"),
                 tx("mips_f_erro2"), tx("mips_f_certo2"), tx("mips_f_fala2"),

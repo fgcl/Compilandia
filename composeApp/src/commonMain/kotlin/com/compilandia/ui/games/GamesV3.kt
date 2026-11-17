@@ -286,8 +286,11 @@ fun BranchMazeGame(ctx: GameCtx) {
         val opts = mutableSetOf(right)
         if (parts[0] == "j") for (l in labels) opts += "j $l"
         else {
-            val rest = right.substringAfter(" ")
-            for (op in listOf("blt", "bge", "bgt", "ble", "beq", "bne").shuffled(ctx.rnd)) { if (opts.size >= 4) break; opts += "$op $rest" }
+            // beq $t0, $zero, L: o engano é trocar beq por bne, ou pular para o rótulo errado
+            val reg = right.substringAfter(" ").substringBefore(",")
+            val alvo = right.substringAfterLast(" ")
+            opts += (if (parts[0] == "beq") "bne" else "beq") + " $reg, \$zero, $alvo"
+            for (l in labels.shuffled(ctx.rnd)) { if (opts.size >= 4) break; opts += "${parts[0]} $reg, \$zero, $l" }
         }
         opts.toList().take(4).shuffled(ctx.rnd)
     }

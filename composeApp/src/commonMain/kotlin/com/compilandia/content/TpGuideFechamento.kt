@@ -23,6 +23,7 @@ private fun fechamentos() = mapOf(
     8 to Fechamento(listOf(tx("tp_nsl_8_1"), tx("tp_nsl_8_2"), tx("tp_nsl_8_3")), tx("tp_teste_8"), tx("tp_teste_codigo_8")),
     9 to Fechamento(listOf(tx("tp_nsl_9_1"), tx("tp_nsl_9_2"), tx("tp_nsl_9_3")), tx("tp_teste_9"), tx("tp_teste_codigo_9")),
     10 to Fechamento(listOf(tx("tp_nsl_10_1"), tx("tp_nsl_10_2"), tx("tp_nsl_10_3")), tx("tp_teste_10"), null),
+    11 to Fechamento(listOf(tx("tp_nsl_11_1"), tx("tp_nsl_11_2"), tx("tp_nsl_11_3")), tx("tp_teste_11"), null),
 )
 
 internal fun fechamentoDoCapitulo(n: Int): List<Beat> = buildList {
@@ -30,4 +31,22 @@ internal fun fechamentoDoCapitulo(n: Int): List<Beat> = buildList {
     add(Beat.Steps(tx("tp_nsl_titulo"), f.perguntas))
     f.teste?.let { add(Beat.Text(it)) }
     f.codigo?.let { add(Beat.Code(it, tx("tp_teste_titulo"))) }
+    estendaByteiro()[n]?.let { (pergunta, resposta) -> add(Beat.Reveal(pergunta, resposta)) }
 }
+
+/**
+ * "Estenda a Byteiro" (professor do bloco 6): o mesmo comando novo, `repita ... ate`, atravessa os capítulos,
+ * um passo por capítulo, com a resposta escondida. PedidosProfessoresTest confere a gramática, o molde e a contagem de erros.
+ */
+private fun estendaByteiro() = mapOf(
+    1 to (tx("tp_estenda_1") to tx("tp_estenda_1_r")),
+    2 to (tx("tp_estenda_2") to tx("tp_estenda_2_r")),
+    3 to (tx("tp_estenda_3") to tx("tp_estenda_3_r")),
+    4 to (tx("tp_estenda_4") to tx("tp_estenda_4_r")),
+    5 to (tx("tp_estenda_5") to tx("tp_estenda_5_r")),
+    6 to (tx("tp_estenda_6") to tx("tp_estenda_6_r")),
+    7 to (tx("tp_estenda_7") to tx("tp_estenda_7_r")),
+    8 to (tx("tp_estenda_8") to tx("tp_estenda_8_r")),
+    9 to (tx("tp_estenda_9") to tx("tp_estenda_9_r")),
+    10 to (tx("tp_estenda_10") to tx("tp_estenda_10_r")),
+)

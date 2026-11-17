@@ -334,7 +334,7 @@ Flashcards:
 
 ## ASSUNTO ATTRIBUTES_TYPES: Atributos e verificação de tipos
 Pré-requisitos no jogo: Gramáticas e derivações
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Tipos sobem pela árvore» → Fazer com ajuda → Prática: você pilota «Suba os tipos» → Prática: você pilota «O tipo que desce» → Pegadinha «Sintetizado sobe, herdado desce» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Tipos sobem pela árvore» → Fazer com ajuda → Prática: você pilota «Suba os tipos» → Prática: você pilota «O tipo que desce» → Prática: você pilota «Tipos nos comandos» → Pegadinha «Sintetizado sobe, herdado desce» → Desafio
 Jogos que treinam: Detetive de Erros (classificar quem pega cada erro), Árvore Anotada (calcular atributos de baixo para cima), Fábrica de AST (montar a AST com new BinOp(...))
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -551,6 +551,41 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 
 9. TELA: # int a, b ⏎ D ⏎ T ⏎ L ⏎ int ⏎ L ⏎ , ⏎ id b ⏎ id a ⏎ T.tipo = int ⏎ L.her = int ⏎ L.her = int
    BYTE: "Sintetizado sobe, herdado desce. Toda definição S-atribuída também é L-atribuída, mas não o contrário."
+
+#### PRATICA: "Tipos nos comandos" (8 cenas, ~64s)
+
+1. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool
+   BYTE: "A expressão já sabe subir o tipo. Agora o comando confere se esse tipo serve para ele."
+
+2. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ n = x * 2; ⏎ x = n + 1; ⏎ ok = n < x;
+   PROF: "Na atribuição, o tipo da direita precisa caber na variável. Um int cabe num float, com coerção. Um float não cabe num int, porque a parte quebrada se perderia."
+
+3. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ n = x * 2; ⏎ x = n + 1; ⏎ ok = n < x;
+   BYTE: "Qual atribuição o verificador recusa? Toque."
+   PERGUNTA (toque): certo = n = x * 2; ; errado = x = n + 1; | ok = n < x;
+   se errar: "Procure um float indo para um int."
+   se acertar: "O x vezes 2 sobe como float, e o n é int. Como em Java, é erro. Na segunda, o int vira float e passa."
+
+4. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ if (n < 10) ... ⏎ while (ok) ... ⏎ if (n) ...
+   BYTE: "No if e no while, a condição precisa ser bool. Na nossa linguagem é como em Java: número não serve de condição."
+
+5. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ if (n < 10) ... ⏎ while (ok) ... ⏎ if (n) ...
+   BYTE: "Qual condição o verificador recusa? Toque."
+   PERGUNTA (toque): certo = if (n) ... ; errado = if (n < 10) ... | while (ok) ...
+   se errar: "Qual delas sobe como int?"
+   se acertar: "Sozinho, o n sobe como int. Em C passaria, mas aqui a condição precisa ser bool. Para testar o número, compare: n maior que zero."
+
+6. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ float media(int a, int b) ⏎ return a + b; ⏎ media(x, 2); ⏎ media(1, 2);
+   PROF: "Na chamada, cada argumento precisa caber no parâmetro da mesma posição. No return, a expressão precisa caber no tipo que a função promete."
+
+7. TELA: # Tipos nos comandos ⏎ n: int    x: float    ok: bool ⏎ float media(int a, int b) ⏎ return a + b; ⏎ media(x, 2); ⏎ media(1, 2);
+   BYTE: "Qual linha o verificador recusa? Toque."
+   PERGUNTA (toque): certo = media(x, 2); ; errado = return a + b; | media(1, 2);
+   se errar: "Confira cada argumento com o parâmetro do mesmo lugar."
+   se acertar: "O primeiro parâmetro é int, e o x é float. Já o return de a mais b passa: o int vira float, como na atribuição."
+
+8. TELA: # Tipos nos comandos ⏎ *n: int    x: float    ok: bool* ⏎ float media(int a, int b) ⏎ return a + b; ⏎ media(x, 2); ⏎ media(1, 2);
+   BYTE: "Atribuição, condição, chamada e return. Em todos, o comando compara o tipo que subiu com o tipo que ele espera."
 
 #### CLIPE 30s: "Atributo sintetizado e herdado" (2 cenas, ~8s)
 
