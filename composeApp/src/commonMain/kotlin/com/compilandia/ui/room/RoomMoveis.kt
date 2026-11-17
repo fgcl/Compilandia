@@ -23,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
@@ -34,22 +36,35 @@ import com.compilandia.ui.Juice
 import com.compilandia.ui.LocalFonts
 import com.compilandia.ui.Palette
 import com.compilandia.ui.Screen
+import com.compilandia.ui.room.art.Iso
+import com.compilandia.ui.room.art.NaAula
+import com.compilandia.ui.room.art.P3
 
 /**
- * Um móvel que se toca: a área cobre o desenho do móvel na sala (ui/room/art), como fração do lado da sala.
- * A plaquinha fica presa no próprio móvel, em ([px], [py]).
+ * Um móvel que se toca: a área cobre a [caixa] do móvel no mundo da sala de aula (ui/room/art/SalaDeAulaMoveis.kt),
+ * projetada no quadrado. A plaquinha fica presa no ponto [placa] do mundo.
  */
-private data class Movel(val x: Float, val y: Float, val w: Float, val h: Float, val px: Float, val py: Float, val tag: String)
+private data class Movel(val caixa: Pair<P3, P3>, val placa: P3, val tag: String) {
+    private val iso get() = Iso.aula(1f)
+    val area: Rect get() {
+        val (o, t) = caixa
+        val us = listOf(0f, t.u)
+        val vs = listOf(0f, t.v)
+        val cantos = us.flatMap { du -> vs.flatMap { dv -> listOf(iso.p(o + P3(du, dv)), iso.p(o + P3(du, dv, t.z))) } }
+        return Rect(cantos.minOf { it.x }, cantos.minOf { it.y }, cantos.maxOf { it.x }, cantos.maxOf { it.y })
+    }
+    val ponto: Offset get() = iso.p(placa)
+}
 
-// Medido na arte aprovada da sala, que hoje é desenhada por código em ui/room/art: quadro de ferramentas, mesa com monitor, gaveteiro e caixas.
+// O quadro é o mapa de aulas, o computador da mesa é o Jogar, a tela de projeção o Laboratório e o mural a Loja.
 private val moveis = listOf(
-    Movel(0.10f, 0.20f, 0.20f, 0.27f, 0.20f, 0.23f, "movel-jogar"),
-    Movel(0.16f, 0.33f, 0.28f, 0.31f, 0.34f, 0.35f, "movel-lab"),
-    Movel(0.48f, 0.18f, 0.23f, 0.38f, 0.60f, 0.22f, "movel-mapa"),
-    Movel(0.35f, 0.70f, 0.21f, 0.18f, 0.46f, 0.74f, "movel-loja"),
+    Movel(NaAula.COMPUTADOR, P3(10.5f, 1.4f, 2.1f), "movel-jogar"),
+    Movel(NaAula.TELA, P3(9.0f, 0f, 4.45f), "movel-lab"),
+    Movel(NaAula.QUADRO, P3(2.5f, 0f, 3.5f), "movel-mapa"),
+    Movel(NaAula.MURAL, P3(0f, 3.1f, 3.15f), "movel-loja"),
 )
 
-/** Os móveis que abrem os lugares da oficina. Ficam por cima da arte e por baixo do Byte. */
+/** Os móveis que abrem os lugares da sala. Ficam por cima da arte e por baixo do professor. */
 @Composable
 internal fun MoveisDaSala(app: AppState, side: Dp, desafioPendente: Boolean, onJogar: () -> Unit) {
     val fontes = remember { moveis.map { MutableInteractionSource() } }
@@ -62,11 +77,13 @@ internal fun MoveisDaSala(app: AppState, side: Dp, desafioPendente: Boolean, onJ
     // primeiro as áreas, depois as plaquinhas: nenhuma área cobre a plaquinha de outro móvel
     moveis.forEachIndexed { i, m ->
         Box(
-            Modifier.offset(side * m.x, side * m.y).size(side * m.w, side * m.h).testTag(m.tag)
+            Modifier.offset(side * m.area.left, side * m.area.top).size(side * m.area.width,
+                side * m.area.height).testTag(m.tag)
                 .clickable(fontes[i], null, role = Role.Button) { Juice.click(); abre(m)() },
         )
     }
-    moveis.forEachIndexed { i, m -> Placa(side, m, fontes[i], nome(m), marca = m.tag == "movel-jogar" && desafioPendente, onClick = abre(m)) }
+    moveis.forEachIndexed { i, m -> Placa(side, m, fontes[i], nome(m),
+        marca = m.tag == "movel-jogar" && desafioPendente, onClick = abre(m)) }
 }
 
 @Composable
@@ -79,19 +96,25 @@ private fun nome(m: Movel): String = when (m.tag) {
 
 /** A plaquinha: uma palavra só, presa no móvel. Acende quando o dedo ou o mouse está no móvel. */
 @Composable
-private fun Placa(side: Dp, m: Movel, fonte: MutableInteractionSource, texto: String, marca: Boolean, onClick: () -> Unit) {
+private fun Placa(side: Dp, m: Movel, fonte: MutableInteractionSource, texto: String, marca: Boolean,
+    onClick: () -> Unit) {
     val apertado by fonte.collectIsPressedAsState()
     val passando by fonte.collectIsHoveredAsState()
     val escala by animateFloatAsState(if (apertado) 1.12f else if (passando) 1.06f else 1f)
     val acesa = apertado || passando
-    Box(Modifier.offset(side * m.px, side * m.py).size(0.dp).wrapContentSize(unbounded = true), contentAlignment = Alignment.Center) {
+    Box(Modifier.offset(side * m.ponto.x, side * m.ponto.y).size(0.dp).wrapContentSize(unbounded = true),
+        contentAlignment = Alignment.Center) {
         Box(
             Modifier.scale(escala).clip(RoundedCornerShape(6.dp)).background(if (acesa) Palette.hazard else Color(0xE6161A1D))
-                .border(1.5.dp, Palette.hazard, RoundedCornerShape(6.dp)).clickable(fonte, null) { Juice.click(); onClick() }
+                .border(1.5.dp, Palette.hazard, RoundedCornerShape(6.dp)).clickable(fonte,
+                    null) { Juice.click(); onClick() }
                 .padding(horizontal = 9.dp, vertical = 3.dp),
         ) {
-            Text(texto, color = if (acesa) Palette.hazardDark else Color(0xFFF2EEE3), fontFamily = LocalFonts.current.display, style = MaterialTheme.typography.labelLarge)
-            if (marca) Box(Modifier.align(Alignment.TopEnd).offset(8.dp, (-6).dp).size(9.dp).clip(CircleShape).background(Palette.hazard).border(1.5.dp, Color(0xFF161A1D), CircleShape))
+            Text(texto, color = if (acesa) Palette.hazardDark else Color(0xFFF2EEE3),
+                fontFamily = LocalFonts.current.display, style = MaterialTheme.typography.labelLarge)
+            if (marca) Box(Modifier.align(Alignment.TopEnd).offset(8.dp,
+                (-6).dp).size(9.dp).clip(CircleShape).background(Palette.hazard).border(1.5.dp, Color(0xFF161A1D),
+                    CircleShape))
         }
     }
 }

@@ -27,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import com.compilandia.platform.Sfx
 import com.compilandia.platform.Sound
@@ -34,6 +35,8 @@ import com.compilandia.platform.nowMs
 import com.compilandia.ui.AppState
 import com.compilandia.ui.ThemeState
 import com.compilandia.ui.cast.BugFigure
+import com.compilandia.ui.room.art.Iso
+import com.compilandia.ui.room.art.NaAula
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -41,52 +44,41 @@ import kotlin.random.Random
 import com.compilandia.textos.tx
 
 private val MONITOR = Color(0xFF8FF5E2)
-private val SOLDA = Color(0xFFF5B700)
 private val LAMPADA = Color(0xFFFFD98A)
 
-/** A oficina respira: monitor pisca, solda solta faísca, poeira sobe e um Bug passeia. */
+/** A sala respira: o monitor pisca, o projetor tremula, a poeira sobe na luz da porta e um Bug passeia. */
 @Composable
 fun SalaViva(app: AppState, side: Dp) {
     if (ThemeState.reduceMotion) return
     val inf = rememberInfiniteTransition()
     val t by inf.animateFloat(0f, 1f, infiniteRepeatable(tween(9000, easing = LinearEasing), RepeatMode.Restart))
-    val temLuz = "luminaria" in app.ls.roomItems
+    val temAbajur = "abajur" in app.ls.roomItems
     Canvas(Modifier.fillMaxSize()) {
+        val iso = Iso.aula(size.width)
         val w = size.width
-        // brilho do monitor, com o tremor de uma tela velha
         val tremor = 0.22f + 0.1f * sin(t * 90f) + 0.06f * sin(t * 241f)
-        val cm = Offset(w * 0.31f, w * 0.39f)
-        drawCircle(Brush.radialGradient(listOf(MONITOR.copy(alpha = tremor), Color.Transparent), cm, w * 0.13f), w * 0.13f, cm)
-        if (temLuz) {
-            val cl = Offset(w * 0.76f, w * 0.36f)
-            val a = 0.2f + 0.05f * sin(t * 30f)
-            drawCircle(Brush.radialGradient(listOf(LAMPADA.copy(alpha = a), Color.Transparent), cl, w * 0.17f), w * 0.17f, cl)
-        }
-        // solda: rajadas curtas no quadro de ferramentas
-        val ciclo = (t * 7f) % 1f
-        if (ciclo < 0.3f) {
-            val base = Offset(w * 0.215f, w * 0.335f)
-            val rnd = Random((t * 7f).toInt() + 1)
-            repeat(12) {
-                val a = 0.6f + rnd.nextFloat() * 2f
-                val v = (0.018f + rnd.nextFloat() * 0.05f) * w
-                val k = ciclo / 0.3f
-                val q = base + Offset(cos(a), sin(a)) * (v * k) + Offset(0f, w * 0.03f * k * k)
-                drawLine(SOLDA.copy(alpha = 1f - k), q, q + Offset(cos(a), sin(a)) * (w * 0.006f), w * 0.0022f)
-            }
-            drawCircle(Color.White.copy(alpha = 0.7f * (1f - ciclo / 0.3f)), w * 0.008f, base)
-        }
-        // poeira subindo devagar pela luz
-        val rnd = Random(5)
-        repeat(14) {
-            val x = 0.2f + rnd.nextFloat() * 0.62f
-            val y0 = 0.3f + rnd.nextFloat() * 0.45f
-            val fase = (t + rnd.nextFloat()) % 1f
-            val y = y0 - fase * 0.2f
-            drawCircle(Color.White.copy(alpha = 0.22f * sin(fase * 3.14f)), w * 0.0022f, Offset(w * (x + 0.012f * sin(fase * 8f + it)), w * y))
-        }
+        brilho(MONITOR.copy(alpha = tremor), iso.p(NaAula.TELA_DO_MONITOR), w * 0.07f)
+        brilho(LAMPADA.copy(alpha = 0.1f + 0.03f * sin(t * 50f)), iso.p(NaAula.CENTRO_DA_TELA), w * 0.12f)
+        if (temAbajur) brilho(LAMPADA.copy(alpha = 0.3f + 0.05f * sin(t * 30f)), iso.p(NaAula.ABAJUR), w * 0.08f)
+        poeira(iso, t)
     }
     BugPasseando(app, side)
+}
+
+private fun DrawScope.brilho(cor: Color, c: Offset, r: Float) =
+    drawCircle(Brush.radialGradient(listOf(cor, Color.Transparent), c, r), r, c)
+
+/** Poeira subindo devagar na luz que entra pela porta. */
+private fun DrawScope.poeira(iso: Iso, t: Float) {
+    val rnd = Random(5)
+    repeat(14) {
+        val u = rnd.nextFloat() * 3f
+        val v = 5.6f + rnd.nextFloat() * 1.6f
+        val fase = (t + rnd.nextFloat()) % 1f
+        val q = iso.p(u, v, 0.4f + fase * 2.4f)
+        val cor = Color.White.copy(alpha = 0.5f * sin(fase * 3.14f))
+        drawCircle(cor, size.width * 0.0022f, q + Offset(size.width * 0.01f * sin(fase * 8f + it), 0f))
+    }
 }
 
 /** De vez em quando um Bug atravessa o chão. Tocou, esmagou: uma engrenagem, até o limite do dia. */
@@ -105,17 +97,16 @@ private fun BugPasseando(app: AppState, side: Dp) {
             vivo = false
         }
     }
-    // caminho no chão, na direção das tábuas
-    val x0 = 0.26f
-    val y0 = 0.74f
-    val dx = 0.5f
-    val dy = -0.24f
-    val fx = x0 + dx * p.value
-    val fy = y0 + dy * p.value
+    // caminho no chão, na frente da última fileira de cadeiras
+    val iso = Iso.aula(1f)
+    val de = iso.p(0.6f, 7.6f)
+    val ate = iso.p(10.4f, 7.6f)
+    val fx = de.x + (ate.x - de.x) * p.value
+    val fy = de.y + (ate.y - de.y) * p.value
     val w = side * 0.075f
     if (vivo) {
         Box(
-            Modifier.offset(side * fx - w / 2, side * fy - w / 2).width(w).rotate(64f)
+            Modifier.offset(side * fx - w / 2, side * fy - w / 2).width(w).rotate(119f)
                 .clickable(remember { MutableInteractionSource() }, null) {
                     vivo = false
                     esmagado++

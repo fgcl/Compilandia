@@ -40,6 +40,12 @@ class Iso(private val ox: Float, private val oy: Float, val lado: Float) {
 
         fun sala(lado: Float) = Iso(CANTO_X * lado, CANTO_Y * lado, lado)
 
+        /** Onde fica o canto do fundo da sala de aula: o diorama inteiro, laje e paredes, cabe centrado no quadrado. */
+        private const val AULA_X = 0.433f
+        private const val AULA_Y = 0.354f
+
+        fun aula(lado: Float) = Iso(AULA_X * lado, AULA_Y * lado, lado)
+
         /** Uma projeção em que o ponto [c] do mundo cai em [alvo]: o ícone de um móvel, centrado. */
         fun centrada(c: P3, alvo: Offset, lado: Float) =
             Iso(alvo.x - (c.u - c.v) * DX * lado, alvo.y - ((c.u + c.v) * DY - c.z * DZ) * lado, lado)

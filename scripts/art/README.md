@@ -8,6 +8,9 @@ O render saía do Blender, que não é mais usado no projeto (pedido do dono, 15
 desenhada por código, em `composeApp/src/commonMain/kotlin/com/compilandia/ui/room/art`, e essas imagens não são mais
 usadas. Móvel novo entra em `MoveisArte.kt`: um desenho feito de caixas, discos e cilindros, um centro e um tamanho.
 
+A oficina virou uma sala de aula em diorama (`SalaDeAula.kt`), e a tela inicial abre no campus (`Campus.kt`), também
+desenhado por código. A luz do estilo (degradê nas faces, quina acesa, sombra macia) mora em `Luz.kt`.
+
 `layers.py` continua: ele recebe um render da sala vazia e um por móvel, e o que muda entre os dois (móvel, sombra e luz)
 vira a camada.
 

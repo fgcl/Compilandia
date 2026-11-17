@@ -164,3 +164,14 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 
 - [x] Sala desenhada por código, sem imagem renderizada (`ui/room/art`): a sala vazia, os quatro móveis-botão e os 12 móveis da loja em projeção isométrica, nos lugares da arte aprovada. Móvel novo entra com um desenho, um centro e um tamanho em `MoveisArte.kt`; `SalaDesenhadaTest` fotografa a sala e os ícones.
 - [ ] Apagar as imagens antigas da sala (`room_base`, `room_item_*`, `room_ghost_*`), o `RoomLayers.kt` e o `scripts/art/layers.py`, que não são mais usados (esperando o dono confirmar)
+
+## 9. Tela inicial: campus e sala de aula (17/11/2026)
+
+Decidido pelo dono no painel de propostas (campus nos tons do jogo, câmera que aproxima, abertura sempre ao abrir o app, sala igual à foto, Laboratório na tela de projeção, Loja no mural, Byte na mesa e só nas aulas, peças da loja trocadas, crucifixo igual à foto, outros prédios só paisagem) e no estilo diorama da imagem de referência.
+
+- [x] Sala de aula em diorama no lugar da oficina (`SalaDeAula.kt`, `SalaDeAulaMoveis.kt`, `Luz.kt`): laje flutuando, paredes grossas, luz da porta, cantos escurecidos, 18 cadeiras azul-piscina com prancheta, quadro branco com a trilha de aulas (abre o Mapa), tela de projeção (Laboratório), mural (Loja), computador da mesa (Jogar), crucifixo e porta com placa de saída
+- [x] Professor careca com volume (`ProfessorFigure`) de pé entre o quadro e a tela; o Byte fica pequeno na mesa, ao lado do computador, e segue narrando as aulas
+- [x] As 12 peças da loja viraram coisas de sala (ar-condicionado, relógio, estante, cartaz do autômato, garrafa de café...), com os mesmos ids e preços
+- [x] Campus da PUC Poços em diorama (`Campus.kt`, `CampusPredios.kt`), tirado do satélite e do OpenStreetMap; ao abrir o app a câmera desce no prédio das salas (`AberturaDoCampus`); tocar pula
+- [ ] Mais tarde (pedido do dono): o professor substitui o Byte no jogo inteiro, com falas e voz
+

@@ -12,18 +12,20 @@ import com.compilandia.ui.room.MovelIcone
 import com.compilandia.ui.room.MovelNaSala
 import com.compilandia.ui.room.SalaDesenhada
 import com.compilandia.ui.room.art.Iso
+import com.compilandia.ui.room.art.Campus
+import com.compilandia.ui.room.art.campus
 import com.compilandia.ui.room.art.moveisArte
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-/** A sala desenhada por código: todo item da loja tem desenho, e as fotos saem em build/screenshots/sala_*.png. */
+/** A sala e o campus desenhados por código: todo item da loja tem desenho; as fotos saem em build/screenshots. */
 class SalaDesenhadaTest : RenderBase() {
     @Test fun todoItemDaLojaTemDesenho() {
         assertEquals(RoomItem.entries.map { it.id }.toSet(), moveisArte.keys)
         // O centro de cada móvel cai dentro do quadrado da sala.
         for ((id, m) in moveisArte) {
-            val c = Iso.sala(1f).p(m.centro)
+            val c = Iso.aula(1f).p(m.centro)
             assertTrue(c.x in 0f..1f && c.y in 0f..1f, "$id fora da sala: $c")
         }
     }
@@ -36,6 +38,10 @@ class SalaDesenhadaTest : RenderBase() {
                 for (id in moveisArte.keys) MovelNaSala(id, popIn = false) {}
             }
         }
+        shot("campus", LADO, LADO) {
+            Box(Modifier.fillMaxSize()) { androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) { campus(Campus.iso(size.width)) } }
+        }
+        shot("campus_abertura") { com.compilandia.ui.room.AberturaDoCampus {} }
         shot("sala_icones", ICONE * 6, ICONE * 2) {
             Column {
                 for (linha in moveisArte.keys.chunked(6)) {

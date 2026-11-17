@@ -17,12 +17,12 @@ import androidx.compose.ui.semantics.semantics
 import com.compilandia.ui.Juice
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.moveisArte
-import com.compilandia.ui.room.art.salaVazia
+import com.compilandia.ui.room.art.salaDeAula
 
-/** A oficina sem os móveis da loja, desenhada por código (ui/room/art). */
+/** A sala de aula sem as peças da loja, desenhada por código (ui/room/art). */
 @Composable
 internal fun SalaDesenhada(descricao: String, modifier: Modifier = Modifier) {
-    Canvas(modifier.fillMaxSize().semantics { contentDescription = descricao }) { salaVazia(Iso.sala(size.width)) }
+    Canvas(modifier.fillMaxSize().semantics { contentDescription = descricao }) { salaDeAula(Iso.aula(size.width)) }
 }
 
 /** Um móvel comprado, no lugar dele na sala. Ao chegar ([popIn]), ele cresce a partir do próprio centro. */
@@ -38,13 +38,13 @@ internal fun MovelNaSala(id: String, popIn: Boolean, onDone: () -> Unit) {
         }
     }
     // O centro do móvel em fração da sala: é dali que ele cresce.
-    val c = Iso.sala(1f).p(arte.centro)
+    val c = Iso.aula(1f).p(arte.centro)
     val m = Modifier.fillMaxSize().graphicsLayer {
         scaleX = s.value
         scaleY = s.value
         transformOrigin = TransformOrigin(c.x, c.y)
     }
-    Canvas(m) { arte.desenha(this, Iso.sala(size.width)) }
+    Canvas(m) { arte.desenha(this, Iso.aula(size.width)) }
 }
 
 /** Um móvel sozinho, centrado e do tamanho do quadrado: o ícone da loja e da oferta. */
