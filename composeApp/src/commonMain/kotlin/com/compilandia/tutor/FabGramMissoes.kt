@@ -4,7 +4,8 @@ import com.compilandia.engine.Grammar
 import com.compilandia.tutor.FabGram.Cel
 import com.compilandia.tutor.FabGram.Dir
 import com.compilandia.tutor.FabGram.Planta
-import com.compilandia.tutor.FabGram.TipoBloco
+import com.compilandia.fabrica.BlocoTipo
+import com.compilandia.fabrica.Papel
 
 /**
  * O tutorial da fábrica, no jeito do Mindustry: um objetivo curto por vez, e o chão mostra onde mexer.
@@ -25,6 +26,10 @@ enum class Missao(val gramatica: String, val frase: String, val extras: List<Str
     VOLTA("S -> a S | b", "a b"),
     /** Duas letras: cada uma tem o seu separador. */
     LETRAS("S -> A b\nA -> a", "a b"),
+    /** A fábrica é sua: a prensa chegou sem regra, e quem escolhe é você. */
+    REGRA("S -> a b", "a b"),
+    /** Construir: a prensa não está lá. Pegue no menu, ponha no chão e ligue as esteiras. */
+    CONSTRUIR("S -> a b", "a b"),
 
     // Desafios: os blocos no lugar e nenhuma esteira. As estrelas contam quantas você gastou,
     // e o robô também testa as frases extras.
@@ -58,6 +63,10 @@ class MissaoPronta(
     val guiaEsteiras: Map<Cel, Dir>,
     /** O bloco fora do lugar e onde ele deve ficar. */
     val guiaBloco: Pair<Int, Cel>?,
+    /** O bloco que falta construir e onde. */
+    val guiaConstruir: Pair<BlocoTipo, Cel>? = null,
+    /** A máquina que espera a regra: o id dela e a regra certa. */
+    val guiaRegra: Pair<Int, String>? = null,
     /** Desafio: as esteiras da planta automática, a medida das três estrelas. */
     val orcamento: Int? = null,
 ) {
@@ -80,12 +89,12 @@ private fun Planta.celulasDaRota(de: FabGram.Bloco, para: FabGram.Bloco): List<C
 
 fun FabGram.prepara(m: Missao): MissaoPronta {
     val pl = planta(gramatica(m))
-    val maquinas = pl.blocos.filter { it.tipo == TipoBloco.MAQUINA }
+    val maquinas = pl.blocos.filter { it.tipo == Papel.MAQUINA }
     fun tira(cs: List<Cel>): MissaoPronta {
         val guia = cs.filter { it in pl.esteiras }.associateWith { pl.esteiras.getValue(it) }
-        return MissaoPronta(m, Planta(pl.g, pl.blocos, pl.esteiras - guia.keys), guia, null)
+        return MissaoPronta(m, Planta(pl.blocos, pl.esteiras - guia.keys), guia, null)
     }
-    if (m.desafio) return MissaoPronta(m, Planta(pl.g, pl.blocos, emptyMap()), emptyMap(), null, orcamento = pl.esteiras.size)
+    if (m.desafio) return MissaoPronta(m, Planta(pl.blocos, emptyMap()), emptyMap(), null, orcamento = pl.esteiras.size)
     return when (m) {
         Missao.LIGAR -> MissaoPronta(m, pl, emptyMap(), null)
         // o trecho logo depois da descida da prensa, com a curva para o coletor
@@ -96,13 +105,36 @@ fun FabGram.prepara(m: Missao): MissaoPronta {
             MissaoPronta(m, longe, emptyMap(), pr.id to Cel(pr.x, pr.y))
         }
         // a esteira de distribuição para antes da máquina 2
-        Missao.ESCOLHA -> pl.celulasDaRota(pl.separadorDe("S"), maquinas[1]).let { tira(it.takeLast(2)) }
+        Missao.ESCOLHA -> pl.celulasDaRota(pl.sep("S"), maquinas[1]).let { tira(it.takeLast(2)) }
         // um pedaço do elevador: a caixa S nova não volta
-        Missao.VOLTA -> pl.celulasDaRota(maquinas[0], pl.separadorDe("S")).let { tira(it.subList(it.size - 6, it.size - 2)) }
+        Missao.VOLTA -> pl.celulasDaRota(maquinas[0], pl.sep("S")).let { tira(it.subList(it.size - 6, it.size - 2)) }
         // o fim do elevador, colado no separador A
-        Missao.LETRAS -> pl.celulasDaRota(pl.maquinaDe(pl.g.productionsOf("S")[0]), pl.separadorDe("A")).let { tira(it.takeLast(3)) }
+        Missao.LETRAS -> pl.celulasDaRota(pl.maquinaDe(pl.g.productionsOf("S")[0]), pl.sep("A"))
+            .let { tira(it.takeLast(FIM_DO_ELEVADOR)) }
+        Missao.REGRA -> semRegra(m, pl, maquinas[0])
+        Missao.CONSTRUIR -> semMaquina(m, pl, maquinas[0])
         else -> error("desafio tratado acima")
     }
+}
+
+private const val FIM_DO_ELEVADOR = 3
+
+private fun Planta.sep(nt: String) = requireNotNull(separadorDe(nt)) { "a planta automática tem separador para $nt" }
+
+/** A regra da máquina em texto, "S -> a b". */
+private fun regraDe(maq: FabGram.Bloco): String {
+    val p = requireNotNull(maq.prod) { "máquina da planta automática sempre tem regra" }
+    return "${p.lhs} -> ${p.rhs.joinToString(" ")}"
+}
+
+/** A máquina está no lugar, mas sem regra: o jogador toca nela e escolhe. */
+private fun semRegra(m: Missao, pl: Planta, maq: FabGram.Bloco): MissaoPronta =
+    MissaoPronta(m, pl.configura(maq.id, null, null), emptyMap(), null, guiaRegra = maq.id to regraDe(maq))
+
+/** A máquina some e as esteiras ficam: o contorno no chão mostra onde construir, e a regra é do jogador. */
+private fun semMaquina(m: Missao, pl: Planta, maq: FabGram.Bloco): MissaoPronta {
+    val onde = maq.def to Cel(maq.x, maq.y)
+    return MissaoPronta(m, Planta(pl.blocos - maq, pl.esteiras), emptyMap(), null, guiaConstruir = onde, guiaRegra = -1 to regraDe(maq))
 }
 
 /**
@@ -128,7 +160,16 @@ fun FabGram.dica(p: MissaoPronta, atual: Planta, max: Int = 4): Map<Cel, Dir> {
 /** A planta resolvida: a missão com o fantasma preenchido. Serve para testar e para o botão de ajuda. */
 fun FabGram.resolve(p: MissaoPronta): Planta {
     if (p.missao.desafio) return planta(p.planta.g)
-    var pl = Planta(p.planta.g, p.planta.blocos, p.planta.esteiras + p.guiaEsteiras)
+    var pl = Planta(p.planta.blocos, p.planta.esteiras + p.guiaEsteiras)
     p.guiaBloco?.let { (id, c) -> pl = pl.move(id, c.x, c.y) ?: pl }
+    p.guiaConstruir?.let { (t, c) -> pl = pl.constroi(t, c) ?: pl }
+    p.guiaRegra?.let { (id, texto) -> pl = comRegra(pl, id, texto) }
     return pl
+}
+
+/** Configura a regra [texto] ("S -> a b") na máquina [id]; -1 é a última máquina construída. */
+private fun comRegra(pl: Planta, id: Int, texto: String): Planta {
+    val alvo = if (id >= 0) id else pl.blocos.last { it.tipo == Papel.MAQUINA }.id
+    val (nt, rhs) = texto.split("->").map { it.trim() }
+    return pl.configura(alvo, nt, rhs.split(" ").filter { it.isNotEmpty() })
 }

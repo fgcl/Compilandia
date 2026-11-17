@@ -39,6 +39,7 @@ import kotlin.math.sin
 internal fun tituloMissao(m: Missao) = when (m) {
     Missao.LIGAR -> tx("fabgram_m_ligar_titulo"); Missao.CONSERTAR -> tx("fabgram_m_consertar_titulo"); Missao.MOVER -> tx("fabgram_m_mover_titulo")
     Missao.ESCOLHA -> tx("fabgram_m_escolha_titulo"); Missao.VOLTA -> tx("fabgram_m_volta_titulo"); Missao.LETRAS -> tx("fabgram_m_letras_titulo")
+    Missao.REGRA -> tx("fabgram_m_regra_titulo"); Missao.CONSTRUIR -> tx("fabgram_m_construir_titulo")
     Missao.D_ANBN -> tx("fabgram_d_anbn_titulo"); Missao.D_PARENTESES -> tx("fabgram_d_parenteses_titulo"); Missao.D_EXPRESSAO -> tx("fabgram_d_expressao_titulo")
     Missao.D_LISTA -> tx("fabgram_d_lista_titulo"); Missao.D_DECLARACAO -> tx("fabgram_d_declaracao_titulo"); Missao.D_IFELSE -> tx("fabgram_d_ifelse_titulo")
 }
@@ -47,6 +48,7 @@ internal fun tituloMissao(m: Missao) = when (m) {
 internal fun objetivoMissao(m: Missao) = when (m) {
     Missao.LIGAR -> tx("fabgram_m_ligar_objetivo"); Missao.CONSERTAR -> tx("fabgram_m_consertar_objetivo"); Missao.MOVER -> tx("fabgram_m_mover_objetivo")
     Missao.ESCOLHA -> tx("fabgram_m_escolha_objetivo"); Missao.VOLTA -> tx("fabgram_m_volta_objetivo"); Missao.LETRAS -> tx("fabgram_m_letras_objetivo")
+    Missao.REGRA -> tx("fabgram_m_regra_objetivo"); Missao.CONSTRUIR -> tx("fabgram_m_construir_objetivo")
     else -> tx("fabgram_d_objetivo_1", m.extras.joinToString(" · "))
 }
 

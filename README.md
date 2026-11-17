@@ -90,6 +90,19 @@ Abertura com o Bug → aula animada → fazer com ajuda (o Byte ajuda cada vez m
 - **Álbum de Bugs:** 34 erros comuns de prova viram figurinhas.
 - **Corrida**, **Desafio do dia** (um Wordle de gramáticas), **30 segundos**, **chefões** e **data da prova**.
 - **Guia do Trabalho Prático**: um compilador completo, do léxico ao MIPS.
+- **Fábrica de Gramáticas:** um jogo de automação em que cada máquina no chão é uma regra da gramática.
+
+<details>
+<summary><b>Fábrica de Gramáticas</b></summary>
+
+Um jogo de automação no jeito do Mindustry em que **a fábrica é a gramática**: cada máquina no chão é uma regra que você escolhe, e a gramática do Laboratório é a soma delas.
+Uma caixa (letra) segue as esteiras até o separador, que manda para a máquina da regra; a máquina abre a caixa e as fichas da regra saltam para fora; as peças vão para a impressora, que monta a frase.
+
+- **Menu de construção e loja:** Mover, Esteira e Apagar no alto; embaixo, os blocos por aba. Braço e Armário se compram com engrenagens.
+- **Esteira cruzando esteira** vira junção sozinha, como no Mindustry.
+- **Tutorial de 8 missões** (as duas últimas pedem escolher a regra e construir a máquina) e 6 desafios com estrelas.
+- Arquitetura, regras do desenho e a receita para criar bloco novo em [docs/FABRICA.md](docs/FABRICA.md).
+</details>
 
 <details>
 <summary><b>Os 29 minijogos</b></summary>

@@ -1,8 +1,8 @@
 package com.compilandia.tutor
 
 import com.compilandia.engine.Grammar
-import com.compilandia.tutor.FabGram.Modelo
-import com.compilandia.tutor.FabGram.TipoBloco
+import com.compilandia.fabrica.Blocos
+import com.compilandia.fabrica.Papel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -16,7 +16,7 @@ class FabGramTest {
     @Test fun modeloSegueOPapelDaRegra() {
         val gr = g("S -> a S b | T | ε | c\nT -> if E then S else S\nE -> id x")
         val m = gr.productions.map { FabGram.modelo(it, gr) }
-        assertEquals(listOf(Modelo.PRENSA, Modelo.BRACO, Modelo.COFRE, Modelo.COFRE, Modelo.ARMARIO, Modelo.PRENSA), m)
+        assertEquals(listOf(Blocos.PRENSA, Blocos.BRACO, Blocos.COFRE, Blocos.COFRE, Blocos.ARMARIO, Blocos.PRENSA), m)
     }
 
     @Test fun blocosSoTemTamanhoFixo() {
@@ -25,8 +25,8 @@ class FabGramTest {
             val pl = FabGram.planta(gr)
             for (b in pl.blocos) when (b.tipo) {
                 // o separador tem uma saída por regra; o roteador, uma por letra mais a da montadora
-                TipoBloco.SEPARADOR -> assertEquals(1 to gr.productionsOf(b.nt!!).size, b.w to b.h)
-                TipoBloco.ROTEADOR -> assertEquals(FabGram.letras(gr).size + 1 to 1, b.w to b.h)
+                Papel.SEPARADOR -> assertEquals(1 to gr.productionsOf(b.nt!!).size, b.w to b.h)
+                Papel.ROTEADOR -> assertEquals(FabGram.letras(gr).size + 1 to 1, b.w to b.h)
                 else -> assertTrue((b.w to b.h) in setOf(1 to 1, 1 to 2, 2 to 2), "bloco ${b.tipo} ${b.w}x${b.h}")
             }
         }
@@ -35,7 +35,7 @@ class FabGramTest {
     @Test fun soEntraPelaFrente() {
         // a caixa que passa ao lado da máquina não entra: a esteira precisa apontar para ela
         val pl = FabGram.planta(g("S -> a b"))
-        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val prensa = pl.blocos.first { it.def == Blocos.PRENSA }
         val entrada = pl.esteiras.entries.first { (c, d) -> prensa.contem(c + d) }.key
         val deLado = pl.comEsteira(entrada, FabGram.Dir.DIREITA)!!.comEsteira(entrada + FabGram.Dir.DIREITA, FabGram.Dir.DIREITA)!!
         val c = FabGram.corrida(deLado, listOf("a", "b"))
@@ -62,7 +62,7 @@ class FabGramTest {
         for (t in todas) {
             val pl = FabGram.planta(g(t))
             for (b in pl.blocos) {
-                val precisa = b.tipo == TipoBloco.FONTE || b.tipo == TipoBloco.SEPARADOR || (b.tipo == TipoBloco.MAQUINA && b.prod!!.rhs.isNotEmpty())
+                val precisa = b.tipo == Papel.FONTE || b.tipo == Papel.SEPARADOR || (b.tipo == Papel.MAQUINA && b.prod!!.rhs.isNotEmpty())
                 if (precisa) assertNotNull(pl.saidaDe(b), "$t: ${b.tipo} ${b.prod} sem saída")
             }
         }
@@ -85,7 +85,7 @@ class FabGramTest {
         assertEquals(listOf("a", "a", "b", "b"), c.arvore!!.leaves())
         // cada peça cai na casa dela, mesmo chegando fora de ordem
         assertEquals(listOf("a", "a", "b", "b"), c.chegadas.sortedBy { it.casa }.map { it.simbolo })
-        val cofre = pl.blocos.first { it.modelo == Modelo.COFRE }
+        val cofre = pl.blocos.first { it.def == Blocos.COFRE }
         assertEquals(1, c.trabalhos.count { it.bloco == cofre.id })
         assertTrue(c.duracao > 0f)
     }
@@ -122,28 +122,28 @@ class FabGramTest {
 
     @Test fun esteiraCortadaTravaAFabrica() {
         val pl = FabGram.planta(g("S -> a S b | ε"))
-        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val prensa = pl.blocos.first { it.def == Blocos.PRENSA }
         // corta a volta da caixa S nova, já perto do separador
-        val volta = (pl.rota(prensa, pl.separadorDe("S")) as Rota.Chega).celulas.filter { it in pl.esteiras }
+        val volta = (pl.rota(prensa, pl.separadorDe("S")!!) as Rota.Chega).celulas.filter { it in pl.esteiras }
         val cortada = pl.semEsteira(volta[volta.size - 3])
         val c = FabGram.corrida(cortada, listOf("a", "a", "b", "b"))
         val q = assertNotNull(c.quebra)
         assertEquals(Motivo.ACABA, q.motivo)
-        assertEquals(TipoBloco.SEPARADOR, q.destino.tipo)
+        assertEquals(Papel.SEPARADOR, q.destino?.tipo)
         assertFalse(c.saiu)
     }
 
     @Test fun maquinaSemSaidaAvisa() {
         val pl = FabGram.planta(g("S -> a S b | ε"))
-        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
+        val prensa = pl.blocos.first { it.def == Blocos.PRENSA }
         val c = FabGram.corrida(pl.semEsteira(pl.saidaDe(prensa)!!), listOf("a", "b"))
         assertEquals(Motivo.SEM_SAIDA, c.quebra?.motivo)
     }
 
     @Test fun moverNaoDeixaEmpilhar() {
         val pl = FabGram.planta(g("S -> a S b | ε"))
-        val prensa = pl.blocos.first { it.modelo == Modelo.PRENSA }
-        val cofre = pl.blocos.first { it.modelo == Modelo.COFRE }
+        val prensa = pl.blocos.first { it.def == Blocos.PRENSA }
+        val cofre = pl.blocos.first { it.def == Blocos.COFRE }
         assertNull(pl.move(prensa.id, cofre.x, cofre.y))
         assertNull(pl.move(prensa.id, 0, 0, FabGram.Area(1, 1, 50, 50)))
         val longe = assertNotNull(pl.move(prensa.id, 20, 20))
@@ -163,10 +163,11 @@ class FabGramTest {
     @Test fun salvaECarregaAMesmaPlanta() {
         val gr = g("E -> E + T | T\nT -> id")
         val pl = FabGram.planta(gr).let { it.move(it.montadora.id, 30, 30)!! }.semEsteira(FabGram.Cel(1, 4))
-        val volta = assertNotNull(FabGram.carrega(gr, FabGram.salva(pl)))
+        val volta = assertNotNull(FabGram.carrega(FabGram.salva(pl)))
         assertEquals(pl.blocos, volta.blocos)
         assertEquals(pl.esteiras, volta.esteiras)
-        // a planta de outra gramática não serve
-        assertNull(FabGram.carrega(g("S -> a S b | ε\nA -> a"), FabGram.salva(pl)))
+        assertEquals(pl.g.toText(), volta.g.toText())
+        // o formato antigo (versão 2) não é lido: a tela refaz a planta pela gramática
+        assertNull(FabGram.carrega("2|abc|0,1,1|"))
     }
 }
