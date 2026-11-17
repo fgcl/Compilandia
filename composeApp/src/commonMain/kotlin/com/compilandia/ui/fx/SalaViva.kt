@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -34,9 +33,15 @@ import com.compilandia.platform.Sound
 import com.compilandia.platform.nowMs
 import com.compilandia.ui.AppState
 import com.compilandia.ui.ThemeState
-import com.compilandia.ui.cast.BugFigure
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.NaAula
+import com.compilandia.ui.room.art.P3
+import com.compilandia.ui.room.art.ambienteDaSala
+import com.compilandia.ui.room.art.besouro
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.dp
+import kotlin.math.PI
+import kotlin.math.atan2
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -46,13 +51,21 @@ import com.compilandia.textos.tx
 private val MONITOR = Color(0xFF8FF5E2)
 private val LAMPADA = Color(0xFFFFD98A)
 
-/** A sala respira: o monitor pisca, o projetor tremula, a poeira sobe na luz da porta e um Bug passeia. */
+/** Um ciclo longo para o relógio e o avião de papel: 10 minutos, múltiplo de 60 s e do voo. */
+private const val CICLO_S = 595f
+
+/**
+ * A sala respira: o monitor pisca, o projetor tremula, a poeira sobe na luz da porta, a aula de agora pulsa no quadro,
+ * passa um avião de papel, e as peças compradas se mexem (ventilador, relógio, café). E um besouro passeia.
+ */
 @Composable
 fun SalaViva(app: AppState, side: Dp) {
     if (ThemeState.reduceMotion) return
     val inf = rememberInfiniteTransition()
     val t by inf.animateFloat(0f, 1f, infiniteRepeatable(tween(9000, easing = LinearEasing), RepeatMode.Restart))
-    val temAbajur = "abajur" in app.ls.roomItems
+    val segundos by inf.animateFloat(0f, CICLO_S, infiniteRepeatable(tween((CICLO_S * 1000).toInt(), easing = LinearEasing)))
+    val itens = app.ls.roomItems
+    val temAbajur = "abajur" in itens
     Canvas(Modifier.fillMaxSize()) {
         val iso = Iso.aula(size.width)
         val w = size.width
@@ -61,6 +74,7 @@ fun SalaViva(app: AppState, side: Dp) {
         brilho(LAMPADA.copy(alpha = 0.1f + 0.03f * sin(t * 50f)), iso.p(NaAula.CENTRO_DA_TELA), w * 0.12f)
         if (temAbajur) brilho(LAMPADA.copy(alpha = 0.3f + 0.05f * sin(t * 30f)), iso.p(NaAula.ABAJUR), w * 0.08f)
         poeira(iso, t)
+        ambienteDaSala(iso, segundos) { it in itens }
     }
     BugPasseando(app, side)
 }
@@ -81,7 +95,35 @@ private fun DrawScope.poeira(iso: Iso, t: Float) {
     }
 }
 
-/** De vez em quando um Bug atravessa o chão. Tocou, esmagou: uma engrenagem, até o limite do dia. */
+/** O caminho do besouro no chão da sala: entra pela porta, passa na frente das carteiras e volta pelo corredor. */
+private val ROTA = listOf(
+    P3(0.3f, 6.3f), P3(1.6f, 7.6f), P3(6f, 7.7f), P3(10.5f, 7.4f),
+    P3(10.6f, 3.3f), P3(7f, 3.05f), P3(3f, 3.1f), P3(0.4f, 3f),
+)
+
+/** Raio do besouro em fração do lado da sala, e quantos passos ele dá na volta inteira. */
+private const val BESOURO = 0.011f
+private const val PASSOS = 260f
+
+/** Onde o besouro está em [k] (0 a 1 da rota), em fração do quadrado, e para onde aponta, em graus na tela. */
+private fun naRota(k: Float): Pair<Offset, Float> {
+    val iso = Iso.aula(1f)
+    val pts = ROTA.map { iso.p(it) }
+    val trechos = pts.zipWithNext { a, b -> (b - a).getDistance() }
+    var falta = trechos.sum() * k.coerceIn(0f, 1f)
+    for ((i, d) in trechos.withIndex()) {
+        val (a, b) = pts[i] to pts[i + 1]
+        if (falta <= d || i == trechos.lastIndex) {
+            val f = if (d > 0f) (falta / d).coerceIn(0f, 1f) else 0f
+            val rumo = (atan2(b.y - a.y, b.x - a.x) * 180f / PI).toFloat()
+            return (a + (b - a) * f) to rumo
+        }
+        falta -= d
+    }
+    return pts.last() to 0f
+}
+
+/** De vez em quando um besouro atravessa o chão. Tocou, esmagou: uma engrenagem, até o limite do dia. */
 @Composable
 private fun BugPasseando(app: AppState, side: Dp) {
     var vivo by remember { mutableStateOf(false) }
@@ -93,20 +135,18 @@ private fun BugPasseando(app: AppState, side: Dp) {
             delay(5000L + Random.nextLong(9000))
             vivo = true
             p.snapTo(0f)
-            p.animateTo(1f, tween(9000, easing = LinearEasing))
+            p.animateTo(1f, tween(16000, easing = LinearEasing))
             vivo = false
         }
     }
-    // caminho no chão, na frente da última fileira de cadeiras
-    val iso = Iso.aula(1f)
-    val de = iso.p(0.6f, 7.6f)
-    val ate = iso.p(10.4f, 7.6f)
-    val fx = de.x + (ate.x - de.x) * p.value
-    val fy = de.y + (ate.y - de.y) * p.value
-    val w = side * 0.075f
+    val (onde, rumo) = naRota(p.value)
+    val fx = onde.x
+    val fy = onde.y
+    val alvo = 44.dp
     if (vivo) {
+        Canvas(Modifier.fillMaxSize()) { besouro(onde * size.width, size.width * BESOURO, rumo, p.value * PASSOS) }
         Box(
-            Modifier.offset(side * fx - w / 2, side * fy - w / 2).width(w).rotate(119f)
+            Modifier.offset(side * fx - alvo / 2, side * fy - alvo / 2).size(alvo)
                 .clickable(remember { MutableInteractionSource() }, null) {
                     vivo = false
                     esmagado++
@@ -115,7 +155,7 @@ private fun BugPasseando(app: AppState, side: Dp) {
                     app.commit()
                     if (pagou > 0) app.say(tx("salaviva_bug_esmagado_1_engrenagem"))
                 },
-        ) { BugFigure(Modifier.width(w)) }
+        )
     }
     LaunchedEffect(esmagado) {
         if (esmagado > 0) { poca.snapTo(0f); poca.animateTo(1f, tween(600)) }

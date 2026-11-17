@@ -267,6 +267,7 @@
     <string name="contentmodel_pilha">Stack</string>
     <string name="contentmodel_narrador">Narrator</string>
     <string name="contentmodel_bug">Bug</string>
+    <string name="contentmodel_professor">Teacher</string>
     <string name="contentmodel_nao_existem_perguntas_idiotas">There are no dumb questions</string>
     <string name="contentmodel_poder_cerebro">Brain power</string>
     <string name="contentmodel_cuidado">Watch out!</string>

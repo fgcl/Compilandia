@@ -545,6 +545,7 @@
     <!-- SimPlayer.kt -->
     <string name="simplayer_prever">Prever</string>
     <!-- RoomScreen.kt -->
+    <string name="sala_prof_alegria">Alegria e contentamento!</string>
     <string name="campus_titulo">Campus de Poços de Caldas</string>
     <string name="campus_descricao">O campus visto de cima, com o prédio das salas marcado</string>
     <string name="campus_toque">Toque para entrar na sala</string>
