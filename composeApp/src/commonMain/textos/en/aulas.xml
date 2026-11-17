@@ -166,13 +166,9 @@
     <string name="epemc_duas_linguagens">This series writes the compiler in C and builds the tree. The project guide does the work in Java, with no tree. The idea is the same: one function per rule. The guide has the table of names.</string>
     <string name="epemc_vamos_escrever_analisador_lexico_em">Let's write the scanner in C, by hand.</string>
     <string name="epemc_getchar_le_caractere_por_vez">getchar reads one character at a time. In comes the 4.</string>
-    <string name="epemc_digito_entra_no_if_valor">It's a digit. It enters the if, and the value starts at zero.</string>
-    <string name="epemc_cada_volta_while_junta_digito">Each turn of the while adds a digit. Now v is four.</string>
     <string name="epemc_le_2_quatro_vezes_dez">It reads the 2. Four times ten, plus two, gives forty-two.</string>
     <string name="epemc_agora_chegou_mais_qual_linha">The plus arrived, and the while stops. Which line runs next? Tap it.</string>
     <string name="epemc_mais_nao_digito_while_para">The plus isn't a digit. The while stops.</string>
-    <string name="epemc_isso_laco_para_ungetc_devolve">The loop stops and ungetc gives the plus back.</string>
-    <string name="epemc_mais_foi_lido_mais_ungetc">The plus was read one too many. ungetc puts it back in the input.</string>
     <string name="epemc_sai_token_ele_struct_com">And out comes the token. It's a struct with the type and the value.</string>
     <string name="epemc_agora_corte_linha_inteira_como">Now cut a whole line, the way your lexer in C would.</string>
     <string name="epemc_maior_casamento_estique_pedaco_enquanto">Longest match: stretch the piece as long as it's still the same token.</string>

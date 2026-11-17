@@ -2,6 +2,7 @@ package com.compilandia.content.episodes
 
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
+import com.compilandia.content.EpisodeBuilder
 import com.compilandia.content.Look
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.content.Temporada.EM_C
@@ -17,12 +18,41 @@ import com.compilandia.content.rotulo
 import com.compilandia.content.structsDaExpr
 import com.compilandia.content.titulo
 import com.compilandia.engine.ExprParser
+import com.compilandia.engine.LexerC
 import com.compilandia.engine.MiniBison
 import com.compilandia.engine.MiniLexer
 import com.compilandia.engine.Mips
 import com.compilandia.engine.TacGen
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
+
+/** A segunda entrada da Em C 1, no erro comum de esquecer o ungetc. */
+internal const val EMC1_SEGUNDA = "7*13"
+
+/** As opções da pergunta do ungetc: com ele, sem ele (a certa) e o engano de achar que os números grudam. */
+internal fun emC1Opcoes(): List<List<String>> =
+    listOf(LexerC.tokens(EMC1_SEGUNDA), LexerC.tokens(EMC1_SEGUNDA, comUngetc = false), listOf("NUM 713"))
+
+/** Erro comum (professor do bloco 6): o mesmo lexer sem o ungetc, rodando numa entrada nova. */
+private fun EpisodeBuilder.emC1SemUngetc(c: List<String>) {
+    val opcoes = emC1Opcoes()
+    val certa = opcoes.indexOf(LexerC.tokens(EMC1_SEGUNDA, comUngetc = false))
+    cena(tx("emc1_erro")) {
+        clear()
+        add(titulo(tx("emc1_erro_titulo"), size = 22f))
+        add(codigo("e", c.filterNot { "ungetc" in it }, 58f, passo = 21f, size = 12f))
+        add(fita(EMC1_SEGUNDA, 300f, 30f))
+    }
+    val ids = opcoes.indices.map { "k$it" }
+    val erradas = ids.toSet() - "k$certa"
+    pergunta(tx("emc1_erro_q"), setOf("k$certa"), erradas, tx("emc1_erro_dica"), tx("emc1_erro_ok")) {
+        dropAll("e")
+        opcoes.forEachIndexed { k, o ->
+            val y = 110f + k * 52f
+            add(Box(ids[k], o.joinToString("   "), 180f, y, 300f, 40f, Look.TOKEN, Tint.YELLOW, size = 15f))
+        }
+    }
+}
 
 /** A segunda conta da Em C 4: agora o vezes é o filho da esquerda. */
 internal const val EMC4_SEGUNDA = "a * b + c"
@@ -119,11 +149,8 @@ val serieEmC by lazy {
                 hot("s0"); tint("c0", Tint.YELLOW)
                 add(vars("'4'", "?"))
             }
-            cena(tx("epemc_digito_entra_no_if_valor")) {
-                hot("s1", "s2"); add(vars("'4'", "0"))
-            }
-            cena(tx("epemc_cada_volta_while_junta_digito")) {
-                hot("s4"); add(vars("'4'", "4"))
+            cena(tx("emc1_digito")) {
+                hot("s1", "s2", "s4"); add(vars("'4'", "4"))
             }
             cena(tx("epemc_le_2_quatro_vezes_dez")) {
                 hot("s4", "s5"); tint("c1", Tint.YELLOW); add(vars("'2'", "42"))
@@ -132,13 +159,13 @@ val serieEmC by lazy {
                 tx("epemc_agora_chegou_mais_qual_linha"),
                 setOf("s7"), setOf("s4", "s5", "s1"),
                 tx("epemc_mais_nao_digito_while_para"),
-                tx("epemc_isso_laco_para_ungetc_devolve"),
+                tx("emc1_ungetc_ok"),
             ) { hot(); tint("c2", Tint.ORANGE); add(vars("'+'", "42")) }
-            cena(tx("epemc_mais_foi_lido_mais_ungetc")) { hot("s7"); tint("c2", Tint.NONE) }
             cena(tx("epemc_sai_token_ele_struct_com"), mood = EpMood.HAPPY) {
-                hot("s8")
+                hot("s8"); tint("c2", Tint.NONE)
                 add(registro("tok", tx("comum_token"), listOf(tx("epemc_tipo_num"), tx("epemc_valor_1", primeiro)), 265f, 352f, 140f, Tint.TEAL, 13f))
             }
+            emC1SemUngetc(c)
             brinquedo(
                 tx("epemc_agora_corte_linha_inteira_como"),
                 tx("epemc_maior_casamento_estique_pedaco_enquanto"),

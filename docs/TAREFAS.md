@@ -119,7 +119,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Prompt de trabalho para o Opus 5.5 em [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md)
 - [x] Revisor professor do bloco 5 (Semântica e Forja), e os erros técnicos dele consertados
 - [x] Revisor professor do bloco 6 (Seu compilador), e os erros técnicos dele consertados
-- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`) (de novo em 17/11, com as três práticas novas e a Em C 4)
+- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`) (de novo em 17/11, com as seis práticas novas, a Em C 1 e a Em C 4)
 - [ ] Teste com aluno de verdade: olhar o que o botão "Não entendi" guardou
 
 ## 7. O que os professores dos blocos 5 e 6 pediram e ainda falta
@@ -140,7 +140,9 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Lacunas: verificação de tipos em comandos (atribuição, condição do if, chamada, return), na prática "Tipos nos comandos"
 - [x] Lacunas: DAG de bloco básico, na prática "O DAG do bloco"
 - [x] Lacunas: vivacidade com laço, na prática "Vivas no laço"
-- [ ] Lacunas que faltam: acesso a vetor (`t = i * 4`, `la`/`sll`) nas aulas animadas, tabela de símbolos com funções, ação no meio da regra e herdado como parâmetro na descida
+- [x] Lacunas: herdado como parâmetro na descida e ação no meio da regra, na prática "O herdado na descida"
+- [x] Lacunas: tabela de símbolos com funções, na prática "Funções na tabela"
+- [x] Lacunas: acesso a vetor (`t1 = i * 4`, `la`/`sll`), na prática "Acesso a vetor"
 
 **Seu compilador (bloco 6)**
 - [x] Guia do TP: um "Estenda a Byteiro" por capítulo, com a resposta escondida (`==`, `repita … ate`, o método `repita()`, os tipos de `^`, o molde MIPS de `para`)
@@ -153,7 +155,8 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Em C 2 com `( expr )`, para a descida chamar a si mesma, e a ponte com `X -> + T X | ε` do Templo
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
 - [x] Em C 4: erro comum (pai antes dos filhos) e o MIPS de `a * b + c` no brinquedo; a pergunta da Em C 2, cena 7, já tem três opções
-- [ ] Série Em C: segundo exemplo e erro comum nas aulas 1, 2, 3 e 5 (as três últimas já têm 10 cenas, o teto da série)
+- [x] Em C 1: erro comum (esquecer o `ungetc`) com a segunda entrada `7*13`; duas cenas juntadas para caber nos 10 passos
+- [ ] Série Em C: segundo exemplo e erro comum nas aulas 2, 3 e 5 (todas no teto de 10 passos; será preciso juntar cenas, como na Em C 1)
 - [x] Em C 4, cena 6: o `gera` saiu de baixo da árvore e foi para o lugar do MIPS, com uma chamada por linha
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison
 

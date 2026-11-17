@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 17/11 (vigésima nona rodada)
+
+As três lacunas que sobravam do professor do bloco 5 viraram aulas de prática, e a Em C 1 ganhou o erro comum com uma segunda entrada. Cada fato vem de um motor novo, conferido em `PraticaLacunas2Test`.
+
+1. **O herdado na descida** (prática de Atributos, `engine/HerdadoNaDescida.kt`). A descida de `D → T L ;`, `L → id R`, `R → , id R | ε` em C: o T devolve o tipo no return, e o L e o R recebem o herdado `h` como parâmetro. A pessoa toca a linha que põe o b na tabela (o `addtipo` do R) e vê o rastro das chamadas com o mesmo float. Depois vem a ação no meio da regra: entre `{ L.h = T.tipo }` antes do T, depois do L ou entre os dois, só a do meio deixa os ids com tipo. O motor roda a descida com a ação em cada lugar.
+2. **Funções na tabela** (prática de Escopo, `engine/TabelaComFuncoes.kt`). A função `soma` entra na tabela global com o retorno e os tipos dos parâmetros; `a` e `b` entram na tabela da soma, filha da global. Do `main`, a busca pelo `a` sobe para a global e não acha nada. Entre três chamadas, o compilador recusa `soma(x)`, porque a quantidade de argumentos não bate. A aula fica na região 8 antes de Atributos, então não usa "verificador" nem "coerção".
+3. **Acesso a vetor** (prática de MIPS, `engine/AcessoVetor.kt`). O vetor `10 20 30 40` a partir do endereço 1000: v[2] mora no 1008. No TAC, `t1 = i * 4` e `t2 = v[t1]`, com a pergunta de onde vem o 4. No MIPS, `la`, `lw`, `sll $t1, $t1, 2`, `add` e `lw 0($t0)`: a pessoa acha a linha que multiplica por 4 sem `mul`. O MIPS roda na `MipsVM`, e o x fica com 30, como a fala diz.
+4. **Em C 1: esquecer o `ungetc`.** A aula estava no teto de 10 passos, então as cenas "entra no if" e "cada volta junta um dígito" viraram uma só, e o "lido a mais" foi para a fala de acerto da pergunta do `ungetc`. Nos dois passos que sobraram, o mesmo código sem o `ungetc` lê `7*13`, e a pessoa escolhe os tokens: `NUM 7  NUM 13` (o vezes some) contra `NUM 7  *  NUM 13` e `NUM 713` (`engine/LexerC.kt`).
+
 ## Feito em 17/11 (vigésima oitava rodada)
 
 Três lacunas do professor do bloco 5 viraram aulas de prática, e a Em C 4 ganhou o erro comum e o segundo exemplo. Cada fato vem de um motor novo, conferido em `PraticaLacunasTest`.

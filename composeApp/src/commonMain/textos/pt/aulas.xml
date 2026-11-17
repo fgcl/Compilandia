@@ -173,13 +173,9 @@
     <string name="epemc_duas_linguagens">Esta série escreve o compilador em C e monta a árvore. O Guia do TP faz o trabalho em Java, sem árvore. A ideia é a mesma: uma função por regra. O guia traz a tabela dos nomes.</string>
     <string name="epemc_vamos_escrever_analisador_lexico_em">Vamos escrever o analisador léxico em C, na mão.</string>
     <string name="epemc_getchar_le_caractere_por_vez">O getchar lê um caractere por vez. Chegou o 4.</string>
-    <string name="epemc_digito_entra_no_if_valor">É dígito. Entra no if, e o valor começa em zero.</string>
-    <string name="epemc_cada_volta_while_junta_digito">Cada volta do while junta um dígito. Agora v vale quatro.</string>
     <string name="epemc_le_2_quatro_vezes_dez">Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois.</string>
     <string name="epemc_agora_chegou_mais_qual_linha">Chegou o mais, e o while para. Qual linha roda em seguida? Toque nela.</string>
     <string name="epemc_mais_nao_digito_while_para">O mais não é dígito. O while para.</string>
-    <string name="epemc_isso_laco_para_ungetc_devolve">O laço para e o ungetc devolve o mais.</string>
-    <string name="epemc_mais_foi_lido_mais_ungetc">O mais foi lido a mais. O ungetc devolve ele para a entrada.</string>
     <string name="epemc_sai_token_ele_struct_com">E sai o token. Ele é um struct com o tipo e o valor.</string>
     <string name="epemc_tipo_num" translatable="false">tipo: NUM</string>
     <string name="epemc_valor_1" translatable="false">valor: %1$s</string>
