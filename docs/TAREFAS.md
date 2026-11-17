@@ -156,3 +156,8 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [ ] Série Em C: segundo exemplo e erro comum nas aulas 1, 2, 3 e 5 (as três últimas já têm 10 cenas, o teto da série)
 - [x] Em C 4, cena 6: o `gera` saiu de baixo da árvore e foi para o lugar do MIPS, com uma chamada por linha
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison
+
+## 8. Ferramentas do agente (15/11/2026)
+
+- [ ] Sala desenhada por código, sem imagem renderizada: o Blender saiu do projeto (`scripts/art/room.py` apagado) e móvel
+  novo hoje não tem como entrar na sala. O visual aprovado (Oficina do Byte) continua a referência; a troca passa pela Bancada.

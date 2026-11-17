@@ -1,0 +1,11 @@
+{
+  "arquivo": 400,
+  "funcao": 30,
+  "complexidade": 12,
+  "aninhamento": 3,
+  "parametros": 6,
+  "colunas": 120,
+  "returns": 4,
+  "condicao": 4,
+  "ramos_por_tipo": 5
+}
