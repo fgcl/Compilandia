@@ -118,7 +118,9 @@ internal fun DrawScope.placa(cena: Cena, b: Bloco) {
 }
 
 private fun textoDaPlaca(cena: Cena, b: Bloco): String? = when (b.tipo) {
-    Papel.MAQUINA -> b.prod?.let { it.lhs + "→" + it.rhs.joinToString(" ").ifEmpty { "ε" } }
+    // os desenhos novos (Variantes.kt) mostram a regra nas fichas; a plaquinha ficaria por cima
+    Papel.MAQUINA -> if (Variantes.escolhida(b.def.id) != null) null
+    else b.prod?.let { it.lhs + "→" + it.rhs.joinToString(" ").ifEmpty { "ε" } }
     Papel.FONTE -> cena.nomes.fonte
     Papel.SEPARADOR -> cena.nomes.separador(b.nt ?: "?")
     Papel.MONTADORA -> cena.nomes.montadora

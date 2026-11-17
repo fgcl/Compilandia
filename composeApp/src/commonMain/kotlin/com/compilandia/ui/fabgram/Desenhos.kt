@@ -84,8 +84,9 @@ internal object Desenhos {
         Blocos.ARMARIO.id to Desenho { p, b, x, y, w, h -> armario(p, b, x, y, w, h) },
     )
 
-    fun de(t: BlocoTipo): Desenho =
-        porTipo[t.id] ?: Desenho { p, _, x, y, w, h -> chassi(p, x, y, w, h, p.faixa(t)) }
+    /** O desenho do tipo: a variante escolhida (Variantes.kt), ou o desenho original. */
+    fun de(t: BlocoTipo): Desenho = Variantes.escolhida(t.id)?.desenho
+        ?: porTipo[t.id] ?: Desenho { p, _, x, y, w, h -> chassi(p, x, y, w, h, p.faixa(t)) }
 }
 
 /** A cor da faixa no pacote em uso: distribuição, produção ou núcleo. Para o menu e os cartões. */
