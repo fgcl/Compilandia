@@ -8,7 +8,8 @@ import com.compilandia.tutor.FabGram.Bloco
 import kotlin.math.sin
 
 /**
- * As máquinas da linha "diagrama" com o que acontece dentro delas. Parada, a máquina mostra a regra:
+ * As máquinas de regra, no desenho "diagrama" que o dono escolheu (inspirado no shapez), e o que acontece
+ * dentro delas. Parada, a máquina mostra a regra:
  * a caixa que entra embaixo e as fichas que saem em cima. Trabalhando ([Pincel.progresso] de 0 a 1),
  * a caixa sobe, treme, a tampa abre e as fichas saltam uma a uma para o lugar delas.
  */
@@ -59,7 +60,7 @@ private fun DrawScope.fichasSaltando(
     for ((i, s) in simbolos.withIndex()) {
         val k = suave(fase(f, inicio + i * cada, inicio + (i + 1) * cada))
         if (k <= 0f) { vaga(p, xs[i], alvoY, lado); continue }
-        val y = mistura(centro.y, alvoY, k) - sin(k * Math.PI.toFloat()) * 6 * p.u
+        val y = mistura(centro.y, alvoY, k) - sin(k * kotlin.math.PI.toFloat()) * 6 * p.u
         ficha(p, mistura(centro.x, xs[i], k), y, lado * (0.6f + 0.4f * k), s)
     }
 }
@@ -75,7 +76,7 @@ internal fun DrawScope.vaga(p: Pincel, cx: Float, cy: Float, lado: Float) =
 private fun Pincel.tremor(f: Float): Float = if (reduz || f !in 0.3f..0.5f) 0f else sin(relogio * 60f) * 1.2f * u
 
 /** Desempacotadora: a caixa sobe pelo funil, treme, abre a tampa e as fichas da regra saltam para fora. */
-internal fun DrawScope.prensaDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.prensa(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cx = x + w / 2
     laje(p, x, y, w, h, LAJE_2X2)
     val simbolos = simbolosDe(b, 3)
@@ -95,7 +96,7 @@ internal fun DrawScope.prensaDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w
 }
 
 /** Abridor: a caixa sobe e abre; sai uma peça, ou, na regra ε, ela vira fumaça. */
-internal fun DrawScope.cofreDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.cofre(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cx = x + w / 2
     laje(p, x, y, w, h, LAJE_1X1)
     val s = simbolosDe(b, 1)
@@ -120,7 +121,7 @@ private fun DrawScope.fumaca(p: Pincel, cx: Float, cy: Float, k: Float) {
 }
 
 /** Carimbadora: o carimbo desce, a etiqueta da caixa troca de letra e a caixa sobe para a saída. */
-internal fun DrawScope.bracoDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.braco(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cx = x + w / 2
     laje(p, x, y, w, h, LAJE_1X1.map { (fx, fy) -> fx to (fy * 0.5f + if (fy > 0.5f) 0.5f else 0f) })
     val nova = simbolosDe(b, 1).firstOrNull() ?: "B"
@@ -140,7 +141,7 @@ internal fun DrawScope.bracoDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w:
 }
 
 /** Linha longa: a caixa entra pela esquerda, abre no meio e as fichas saem em duas fileiras. */
-internal fun DrawScope.armarioDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.armario(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u
     laje(p, x, y, w, h, LAJE_2X2.map { (fx, fy) -> fy to fx })
     val s = simbolosDe(b, 6)

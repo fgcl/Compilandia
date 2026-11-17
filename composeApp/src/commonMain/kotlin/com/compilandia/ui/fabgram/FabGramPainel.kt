@@ -57,7 +57,7 @@ private val VIDRO = Color(0xE6202328)
 @Composable
 internal fun Painel(
     e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<String, Int>,
-    onPacote: (Pacote) -> Unit = {}, onFechar: () -> Unit,
+    onFechar: () -> Unit,
 ) {
     val fonts = LocalFonts.current
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -66,7 +66,6 @@ internal fun Painel(
             Text(tx("fabgram_fechar"), color = Palette.inkSoft, style = MaterialTheme.typography.labelLarge, modifier = Modifier.clip(RoundedCornerShape(6.dp)).clickable { onFechar() }.padding(8.dp))
         }
         ListaMissoes(e, feitas, estrelas)
-        EscolhaDePacote(onPacote)
         BasicTextField(
             e.texto, { e.livre(); e.textoDaPlanta = null; e.texto = it; e.corrida = null; e.sel = null },
             Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(10.dp).testTag("fabgram-texto"),
@@ -90,24 +89,6 @@ internal fun Painel(
         val m = e.planta?.blocos?.firstOrNull { it.id == e.sel }?.prod
         Text(if (m != null) tx("fabgram_maquina_1", m.lhs + " → " + m.rhs.joinToString(" ").ifEmpty { "ε" }) else tx("fabgram_toque"), color = Palette.inkSoft, style = MaterialTheme.typography.bodyMedium)
         Sinais(laudo)
-    }
-}
-
-/** O pacote de textura: a mesma fábrica desenhada de outro jeito. A escolha vai para o save. */
-@Composable
-private fun EscolhaDePacote(onPacote: (Pacote) -> Unit) {
-    Text(tx("fabgram_pacote"), style = MaterialTheme.typography.titleSmall, color = Palette.ink)
-    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        for (k in Pacotes.todos) {
-            val on = PacoteAtual.pacote == k
-            Text(
-                tx("fabgram_pacote_${k.id}"), color = Palette.ink,
-                fontWeight = if (on) FontWeight.Bold else FontWeight.Normal,
-                modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(if (on) AC2 else Palette.paperDark)
-                    .clickable { PacoteAtual.pacote = k; onPacote(k) }.padding(horizontal = 10.dp, vertical = 8.dp)
-                    .testTag("fabgram-pacote-${k.id}"),
-            )
-        }
     }
 }
 

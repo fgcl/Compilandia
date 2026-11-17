@@ -26,13 +26,6 @@ import kotlin.math.sin
 // Pixel com frente (Y01) + luz e sombra projetada (Z4). O palco é sempre a oficina escura,
 // em qualquer tema: é a cena do jogo, como a sala.
 internal val OL = Color(0xFF0F1114)
-internal val TOPO = Color(0xFF5B636E)
-internal val TOPO_L = Color(0xFF7C858F)
-internal val TOPO_D = Color(0xFF454C55)
-internal val FRENTE = Color(0xFF363C44)
-internal val FRENTE_D = Color(0xFF2A2F35)
-internal val EST = Color(0xFF30353D)
-internal val EST_L = Color(0xFF4C535D)
 internal val AC = Color(0xFFE8A33A)
 internal val AC2 = Color(0xFFFFCF6E)
 internal val CAIXA = Color(0xFFD9B77E)
@@ -40,8 +33,6 @@ internal val CAIXA_D = Color(0xFFA8844F)
 internal val CAIXA_OL = Color(0xFF5E4320)
 internal val PECA = Color(0xFFE3E8EC)
 internal val VERDE = Color(0xFF5EE08A)
-internal val TELA = Color(0xFF0E3B38)
-internal val TELA_L = Color(0xFF5FF2D2)
 internal val VERMELHO = Color(0xFFE0553C)
 internal val PLACA = Color(0xFFF1EAD8)
 

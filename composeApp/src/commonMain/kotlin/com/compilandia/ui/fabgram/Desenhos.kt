@@ -69,7 +69,6 @@ internal class Pincel(
 private const val GIRO_ATIVO = 9f
 private const val GIRO_PARADO = 0.6f
 private const val VAIVEM = 10f
-private const val PARAFUSO = 2.5f
 
 internal fun interface Desenho {
     fun DrawScope.pinta(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float)
@@ -77,22 +76,21 @@ internal fun interface Desenho {
 
 internal object Desenhos {
     val porTipo: Map<String, Desenho> = mapOf(
-        Blocos.FONTE.id to Desenho { p, b, x, y, w, h -> fonte(p, b, x, y, w, h) },
-        Blocos.MONTADORA.id to Desenho { p, _, x, y, w, h -> montadora(p, x, y, w, h) },
+        Blocos.FONTE.id to Desenho(DrawScope::fonte),
+        Blocos.MONTADORA.id to Desenho(DrawScope::montadora),
         Blocos.CESTO.id to Desenho { p, _, x, y, w, h -> cesto(p, x, y, w, h) },
         Blocos.ESTEIRA.id to Desenho { p, _, x, y, w, h -> iconeEsteira(p, x, y, w, h) },
-        Blocos.SEPARADOR.id to Desenho { p, b, x, y, w, h -> separador(p, b, x, y, w, h) },
+        Blocos.SEPARADOR.id to Desenho(DrawScope::separador),
         Blocos.ROTEADOR.id to Desenho { p, b, x, y, w, h -> roteador(p, b, x, y, w, h) },
         Blocos.JUNCAO.id to Desenho { p, _, x, y, w, h -> juncao(p, x, y, w, h) },
-        Blocos.COFRE.id to Desenho { p, _, x, y, w, h -> cofre(p, x, y, w, h) },
-        Blocos.PRENSA.id to Desenho { p, _, x, y, w, h -> prensa(p, x, y, w, h) },
-        Blocos.BRACO.id to Desenho { p, _, x, y, w, h -> braco(p, x, y, w, h) },
-        Blocos.ARMARIO.id to Desenho { p, b, x, y, w, h -> armario(p, b, x, y, w, h) },
+        Blocos.COFRE.id to Desenho(DrawScope::cofre),
+        Blocos.PRENSA.id to Desenho(DrawScope::prensa),
+        Blocos.BRACO.id to Desenho(DrawScope::braco),
+        Blocos.ARMARIO.id to Desenho(DrawScope::armario),
     )
 
-    /** O desenho do tipo: a variante escolhida (Variantes.kt), ou o desenho original. */
-    fun de(t: BlocoTipo): Desenho = Variantes.escolhida(t.id)?.desenho
-        ?: porTipo[t.id] ?: Desenho { p, _, x, y, w, h -> chassi(p, x, y, w, h, p.faixa(t)) }
+    /** O desenho do tipo; um tipo sem desenho registrado sai como o chassi com a faixa da categoria. */
+    fun de(t: BlocoTipo): Desenho = porTipo[t.id] ?: Desenho { p, _, x, y, w, h -> chassi(p, x, y, w, h, p.faixa(t)) }
 }
 
 /** A cor da faixa no pacote em uso: distribuição, produção ou núcleo. Para o menu e os cartões. */
@@ -114,73 +112,27 @@ internal fun DrawScope.rotulo(p: Pincel, texto: String, cx: Float, cy: Float, ta
     drawText(lay, topLeft = Offset(cx - lay.size.width / 2f, cy - lay.size.height / 2f))
 }
 
-private fun DrawScope.fonte(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.nucleo)
-    val cx = x + w / 2; val cy = y + h / 2 - u
-    rotate(p.giro * 8f, Offset(cx, cy)) {
-        for (i in 0 until 8) {
-            val a = i * PI.toFloat() / 4
-            disco(p, cx + cos(a) * 15 * u, cy + sin(a) * 15 * u, 1.6f * u, k.nucleo)
-        }
-    }
-    disco(p, cx, cy, 12 * u, k.linha); disco(p, cx, cy, 11 * u, k.escuro)
-    caixaP(p, cx, cy, 16 * u)
-    rotulo(p, b.nt ?: "S", cx, cy, 10 * u, if (k.contorno) k.linha else TINTA_CAIXA)
-}
-
-private fun DrawScope.montadora(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.ok)
-    val n = 3
-    val passo = (w - 14 * u) / n
-    for (i in 0 until n) forma(p, x + 7 * u + i * passo, y + h / 2 - 9 * u, passo - 3 * u, 16 * u, k.escuro)
-    // a seta que mostra para onde a frase sai
-    for (j in 0 until 4) detalhe(p, x + w / 2 - (4 - j) * u, y + 8 * u + j * u, 2 * (4 - j) * u, u, k.ok)
-}
-
 private fun DrawScope.cesto(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val k = p.pk
     chassi(p, x, y, w, h, k.alerta)
     val cx = x + w / 2; val cy = y + h / 2 - u
-    disco(p, cx, cy, 17 * u, if (k.contorno) k.alerta else BOCA_CESTO)
+    disco(p, cx, cy, 17 * u, BOCA_CESTO)
     disco(p, cx, cy, 14 * u, k.alerta.copy(alpha = 0.25f + 0.15f * ((sin(p.relogio * 2f) + 1f) / 2f)))
-    for (i in -2..2) detalhe(p, cx + i * 6 * u - u, cy - 14 * u, 2 * u, 28 * u, if (k.contorno) k.alerta else k.escuro)
+    for (i in -2..2) detalhe(p, cx + i * 6 * u - u, cy - 14 * u, 2 * u, 28 * u, k.escuro)
 }
 
 private fun DrawScope.iconeEsteira(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val k = p.pk
-    forma(p, x + 2 * u, y + 6 * u, w - 4 * u, h - 12 * u, if (k.contorno) k.esteiraBorda else k.linha)
-    if (!k.contorno) forma(p, x + 2 * u, y + 7 * u, w - 4 * u, h - 14 * u, k.esteira)
+    forma(p, x + 2 * u, y + 6 * u, w - 4 * u, h - 12 * u, k.linha)
+    forma(p, x + 2 * u, y + 7 * u, w - 4 * u, h - 14 * u, k.esteira)
     for (i in 0 until 3) chevron(p, x + (8 + i * 8) * u, y + h / 2, k.seta)
 }
 
 /** Uma seta em V apontando para a direita, centrada em ([cx], [cy]). */
 internal fun DrawScope.chevron(p: Pincel, cx: Float, cy: Float, cor: Color) {
     val u = p.u
-    if (p.pk.pixel) {
-        // no pixel a seta é um triângulo cheio: em V, ela vira pontinhos soltos
-        for (j in 0 until 3) detalhe(p, cx - 2 * u + j * 2 * u, cy - (3 - j) * 2 * u, 2 * u, 2 * (3 - j) * 2 * u, cor)
-        return
-    }
     linha(p, Offset(cx - 2 * u, cy - 4 * u), Offset(cx + 2 * u, cy), cor, 1.6f * u)
     linha(p, Offset(cx + 2 * u, cy), Offset(cx - 2 * u, cy + 4 * u), cor, 1.6f * u)
-}
-
-private fun DrawScope.separador(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    val cor = if (p.alerta) k.alerta else k.distribuicao
-    chassi(p, x, y, w, h, cor)
-    val cel = 32 * u
-    val linhas = (h / cel).toInt().coerceAtLeast(1)
-    if (linhas > 1) for (i in 0 until linhas) {
-        chevron(p, x + w - 8 * u, y + i * cel + cel / 2, CORES_NUMERO[i % CORES_NUMERO.size])
-    }
-    val cy = y + h / 2
-    val cx = x + w / 2 - if (linhas > 1) 3 * u else 0f
-    disco(p, cx, cy, 9 * u, k.linha)
-    disco(p, cx, cy, 8 * u, cor)
-    rotulo(p, b.nt ?: "?", cx, cy, 10 * u, p.tintaSobre())
 }
 
 private fun DrawScope.roteador(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
@@ -201,69 +153,8 @@ private fun DrawScope.juncao(p: Pincel, x: Float, y: Float, w: Float, h: Float) 
     val u = p.u; val k = p.pk
     chassi(p, x, y, w, h, k.distribuicao)
     val cx = x + w / 2; val cy = y + h / 2 - u
-    forma(p, cx - 5 * u, y + 5 * u, 10 * u, h - 11 * u, if (k.contorno) k.esteiraBorda else k.esteira)
-    forma(p, x + 5 * u, cy - 5 * u, w - 10 * u, 10 * u, if (k.contorno) k.esteiraBorda else k.esteira)
+    forma(p, cx - 5 * u, y + 5 * u, 10 * u, h - 11 * u, k.esteira)
+    forma(p, x + 5 * u, cy - 5 * u, w - 10 * u, 10 * u, k.esteira)
     for (d in 0 until 4) rotate(d * 90f, Offset(cx, cy)) { chevron(p, cx + 10 * u, cy, k.seta) }
 }
 
-private fun DrawScope.cofre(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.producao)
-    val cx = x + w / 2; val cy = y + h / 2 - u
-    disco(p, cx, cy, 10 * u, k.linha); disco(p, cx, cy, 9 * u, k.claro); disco(p, cx, cy, 7 * u, k.corpo)
-    rotate(p.giro * 20f, Offset(cx, cy)) {
-        for (i in 0 until 3) {
-            val a = i * 2 * PI.toFloat() / 3
-            linha(p, Offset(cx, cy), Offset(cx + cos(a) * 6 * u, cy + sin(a) * 6 * u), k.producao, 1.6f * u)
-        }
-    }
-    disco(p, cx, cy, 1.6f * u, k.distribuicao)
-}
-
-private fun DrawScope.prensa(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.producao)
-    val cx = x + w / 2; val cy = y + h / 2 - 2 * u
-    val curso = p.vaivem * 7 * u
-    // dois pistões que fecham no meio
-    for (lado in listOf(-1f, 1f)) {
-        val px0 = if (lado < 0) x + 6 * u + curso else x + w - 22 * u - curso
-        forma(p, px0, cy - 9 * u, 16 * u, 18 * u, k.linha)
-        forma(p, px0 + u, cy - 8 * u, 14 * u, 16 * u, k.claro)
-        for (i in 0 until 3) detalhe(p, px0 + (3 + i * 4) * u, cy - 6 * u, u, 12 * u, k.escuro)
-    }
-    disco(p, cx, cy, 7 * u, k.linha); disco(p, cx, cy, 6 * u, k.producao)
-    rotate(p.giro * 30f, Offset(cx, cy)) {
-        linha(p, Offset(cx, cy - 4 * u), Offset(cx, cy + 4 * u), k.linha, u)
-        linha(p, Offset(cx - 4 * u, cy), Offset(cx + 4 * u, cy), k.linha, u)
-    }
-}
-
-private fun DrawScope.braco(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.producao)
-    val bx = x + w / 2; val by = y + h - 16 * u
-    disco(p, bx, by, 7 * u, k.linha); disco(p, bx, by, 6 * u, k.claro)
-    val ang = -90f + if (p.ativo && !p.reduz) sin(p.relogio * 6f) * 35f else 0f
-    rotate(ang, Offset(bx, by)) {
-        linha(p, Offset(bx, by), Offset(bx + 27 * u, by), k.linha, 6 * u)
-        linha(p, Offset(bx, by), Offset(bx + 27 * u, by), k.producao, 4 * u)
-        linha(p, Offset(bx + 27 * u, by - 5 * u), Offset(bx + 27 * u, by + 5 * u), k.claro, 2 * u)
-    }
-    disco(p, bx, by, 2 * u, k.distribuicao)
-}
-
-private fun DrawScope.armario(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u; val k = p.pk
-    chassi(p, x, y, w, h, k.producao)
-    forma(p, x + 7 * u, y + 7 * u, w - 14 * u, h - 24 * u, k.linha)
-    forma(p, x + 8 * u, y + 8 * u, w - 16 * u, h - 26 * u, k.tela)
-    val linhas = 4
-    for (i in 0 until linhas) {
-        val acesa = p.ativo && !p.reduz && ((p.relogio * 6).toInt() + i) % linhas == 0
-        val largura = (w - 22 * u) * (0.4f + 0.15f * ((i + b.id) % linhas))
-        detalhe(p, x + 11 * u, y + (12 + i * 7) * u, largura, 2 * u, k.telaLuz.copy(alpha = if (acesa) 1f else 0.55f))
-    }
-    val luzes = listOf(k.distribuicao, k.alerta, k.ok)
-    for (i in 0 until 6) disco(p, x + (10 + i * 8) * u, y + h - 12 * u, 1.5f * u, luzes[i % luzes.size])
-}

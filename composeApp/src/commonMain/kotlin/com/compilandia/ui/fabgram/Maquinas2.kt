@@ -9,12 +9,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import com.compilandia.tutor.FabGram.Bloco
 import kotlin.math.sin
 
-/** Separador, fonte e montadora da linha "diagrama", com o que acontece dentro delas (ConceitosAnimados.kt). */
+/** Separador, fonte e montadora no desenho "diagrama", com o que acontece dentro delas (como em Maquinas.kt). */
 
 private const val APAGADA = 0.22f
 
 /** Desvio: uma seta por saída, na cor do número da máquina. Passando caixa, só a seta da saída escolhida acende. */
-internal fun DrawScope.separadorDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.separador(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cel = CELULA_ARTE * u
     val n = (h / cel).toInt().coerceAtLeast(1)
     laje(p, x, y, w, h, listOf(0.08f to 0.02f, 0.80f to 0.02f, 0.96f to 0.5f / n, 0.80f to 0.98f, 0.08f to 0.98f))
@@ -29,7 +29,7 @@ internal fun DrawScope.separadorDiagrama(p: Pincel, b: Bloco, x: Float, y: Float
 }
 
 /** Pilha de caixas com a letra inicial. Soltando, a caixa de cima escorrega pela seta e outra aparece no lugar. */
-internal fun DrawScope.fonteDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.fonte(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cx = x + w / 2
     laje(p, x, y, w, h, LAJE_2X2.map { (fx, fy) -> fx to 1f - fy })
     val letra = b.nt ?: "S"
@@ -53,7 +53,7 @@ internal fun DrawScope.fonteDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w:
  * Impressora de frase: as peças caem pelo funil de cima e o cabeçote imprime cada uma na fita de papel,
  * na casa dela. Com a frase inteira, um selo verde aparece no canto.
  */
-internal fun DrawScope.montadoraDiagrama(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
+internal fun DrawScope.montadora(p: Pincel, b: Bloco, x: Float, y: Float, w: Float, h: Float) {
     val u = p.u; val cx = x + w / 2
     corpoDaImpressora(p, x, y, w, h)
     val frase = p.frase.ifEmpty { listOf("a", "a", "b", "b") }

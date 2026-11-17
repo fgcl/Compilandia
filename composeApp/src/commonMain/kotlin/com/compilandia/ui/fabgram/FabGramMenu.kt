@@ -109,13 +109,21 @@ private fun BotaoBloco(t: BlocoTipo, on: Boolean, tem: Boolean, onClick: () -> U
     ) {
         Box(contentAlignment = Alignment.Center) {
             Miniatura(t, Modifier.size(40.dp).alpha(if (tem) 1f else 0.4f))
-            if (!tem) Text(
-                "⚙${t.preco}", color = AC2, fontSize = 11.sp, fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.BottomEnd).clip(RoundedCornerShape(4.dp)).background(OL)
-                    .padding(horizontal = 3.dp),
-            )
+            if (!tem) Preco(t.preco, Modifier.align(Alignment.BottomEnd))
         }
         Text(nomeBloco(t), color = PLACA, fontSize = 10.sp, textAlign = TextAlign.Center, maxLines = 1)
+    }
+}
+
+/** O preço do bloco trancado: a engrenagem desenhada (a fonte do site não tem o glifo) e o número. */
+@Composable
+private fun Preco(preco: Int, modifier: Modifier) {
+    Row(
+        modifier.clip(RoundedCornerShape(4.dp)).background(OL).padding(horizontal = 3.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        com.compilandia.ui.GearIcon(AC2, Modifier.size(11.dp))
+        Text("$preco", color = AC2, fontSize = 11.sp, fontWeight = FontWeight.Bold)
     }
 }
 
@@ -145,7 +153,23 @@ internal fun nomeCategoria(c: Categoria): String = when (c) {
 }
 
 @Composable
-internal fun nomeBloco(t: BlocoTipo): String = tx("fabgram_bloco_${t.id}")
+internal fun nomeBloco(t: BlocoTipo): String = when (t) {
+    Blocos.FONTE -> tx("fabgram_bloco_fonte"); Blocos.MONTADORA -> tx("fabgram_bloco_montadora")
+    Blocos.CESTO -> tx("fabgram_bloco_cesto"); Blocos.ESTEIRA -> tx("fabgram_bloco_esteira")
+    Blocos.SEPARADOR -> tx("fabgram_bloco_separador"); Blocos.ROTEADOR -> tx("fabgram_bloco_roteador")
+    Blocos.JUNCAO -> tx("fabgram_bloco_juncao"); Blocos.COFRE -> tx("fabgram_bloco_cofre")
+    Blocos.PRENSA -> tx("fabgram_bloco_prensa"); Blocos.BRACO -> tx("fabgram_bloco_braco")
+    Blocos.ARMARIO -> tx("fabgram_bloco_armario")
+    else -> t.id
+}
 
 @Composable
-internal fun descricaoBloco(t: BlocoTipo): String = tx("fabgram_bloco_${t.id}_desc")
+internal fun descricaoBloco(t: BlocoTipo): String = when (t) {
+    Blocos.FONTE -> tx("fabgram_bloco_fonte_desc"); Blocos.MONTADORA -> tx("fabgram_bloco_montadora_desc")
+    Blocos.CESTO -> tx("fabgram_bloco_cesto_desc"); Blocos.ESTEIRA -> tx("fabgram_bloco_esteira_desc")
+    Blocos.SEPARADOR -> tx("fabgram_bloco_separador_desc"); Blocos.ROTEADOR -> tx("fabgram_bloco_roteador_desc")
+    Blocos.JUNCAO -> tx("fabgram_bloco_juncao_desc"); Blocos.COFRE -> tx("fabgram_bloco_cofre_desc")
+    Blocos.PRENSA -> tx("fabgram_bloco_prensa_desc"); Blocos.BRACO -> tx("fabgram_bloco_braco_desc")
+    Blocos.ARMARIO -> tx("fabgram_bloco_armario_desc")
+    else -> ""
+}

@@ -104,7 +104,7 @@
     <string name="fabgram_bloco_armario">Cabinet</string>
     <string name="fabgram_bloco_armario_desc">Long rule, with up to six symbols.</string>
     <string name="fabgram_loja_titulo">Factory shop</string>
-    <string name="fabgram_loja_comprar_1">Buy for %1$s ⚙</string>
+    <string name="fabgram_loja_comprar_1">Buy for %1$s gears</string>
     <string name="fabgram_loja_saldo_1">You have %1$s gears.</string>
     <string name="fabgram_loja_caro_1">You need %1$s more gears. Missions and challenges pay more.</string>
     <string name="fabgram_loja_trancado_1">Unlock first: %1$s.</string>
@@ -112,7 +112,6 @@
     <string name="fabgram_cfg_regra">This machine's rule</string>
     <string name="fabgram_cfg_separador">This sorter's letter</string>
     <string name="fabgram_cfg_fonte">Start letter</string>
-    <string name="fabgram_cfg_cabe_2">%1$s of %2$s symbols. Tap a symbol in the rule to remove it.</string>
     <string name="fabgram_cfg_so_letra">The arm only swaps the letter: put in a single box.</string>
     <string name="fabgram_cfg_novo">Add</string>
     <string name="fabgram_cfg_pronto">Done</string>
@@ -129,10 +128,4 @@
     <string name="fabgram_cfg_pecas">Pieces (terminals)</string>
     <string name="fabgram_cfg_caixas">Boxes (letters)</string>
     <string name="fabgram_cfg_outra">+ another piece</string>
-    <string name="fabgram_pacote">Factory look</string>
-    <string name="fabgram_pacote_metal">Metal</string>
-    <string name="fabgram_pacote_pixel">Pixel</string>
-    <string name="fabgram_pacote_planta">Blueprint</string>
-    <string name="fabgram_pacote_neon">Neon</string>
-    <string name="fabgram_pacote_desenho">Cartoon</string>
 </resources>

@@ -15,7 +15,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 /**
- * Peças de desenho que as máquinas novas (Conceitos*.kt) dividem. A regra da máquina aparece no desenho:
+ * Peças de desenho que as máquinas (Maquinas.kt, Maquinas2.kt) dividem. A regra da máquina aparece no desenho:
  * a prensa de S → a S b mostra as fichas a, S e b na saída. Quem olha a fábrica lê a gramática.
  */
 
@@ -36,7 +36,7 @@ internal fun DrawScope.ficha(p: Pincel, cx: Float, cy: Float, lado: Float, s: St
         else -> pilula(p, canto, Size(largura, lado), p.pk.linha, PECA, lado / 2)
     }
     val fonte = lado * if (s.length > 2) FONTE_LONGA else FONTE_DA_FICHA
-    rotulo(p, s, cx, cy, fonte, if (p.pk.contorno) p.pk.linha else OL)
+    rotulo(p, s, cx, cy, fonte, OL)
 }
 
 /** Uma pílula com borda: [borda] por fora, [miolo] por dentro, cantos de raio [raio]. */
@@ -80,74 +80,7 @@ internal fun DrawScope.funil(p: Pincel, cx: Float, topo: Float, largura: Float, 
     detalhe(p, cx - largura / 2 + 2 * u, topo + u, largura - 4 * u, u, p.pk.claro)
 }
 
-/** Engrenagem de [dentes] dentes, girada [graus]. */
-internal fun DrawScope.engrenagem(p: Pincel, c: Offset, r: Float, dentes: Int, graus: Float, cor: Color) {
-    val cx = c.x; val cy = c.y
-    val caminho = Path()
-    val n = dentes * 2
-    for (i in 0 until n) {
-        val a = graus * PI.toFloat() / MEIA_VOLTA + i * PI.toFloat() / dentes
-        val raio = if (i % 2 == 0) r else r * DENTE
-        val px = cx + cos(a) * raio; val py = cy + sin(a) * raio
-        if (i == 0) caminho.moveTo(px, py) else caminho.lineTo(px, py)
-    }
-    caminho.close()
-    drawPath(caminho, cor)
-    drawPath(caminho, p.pk.linha, style = Stroke(p.pk.traco.coerceAtLeast(1f) * p.u))
-    disco(p, cx, cy, r * MIOLO, p.pk.linha)
-}
 
-private const val DENTE = 0.78f
-private const val MEIA_VOLTA = 180f
-private const val MIOLO = 0.28f
-
-/** Faixa de perigo amarela e preta, em diagonal. */
-internal fun DrawScope.listras(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val u = p.u
-    drawRect(p.pk.distribuicao, Offset(x, y), Size(w, h))
-    var i = -h
-    while (i < w) {
-        val faixa = Path().apply {
-            moveTo(x + i, y + h); lineTo(x + i + h, y)
-            lineTo(x + i + h + 2 * u, y); lineTo(x + i + 2 * u, y + h); close()
-        }
-        drawPath(faixa, p.pk.linha)
-        i += 5 * u
-    }
-}
-
-/** A boca de entrada num lado do bloco: um recorte escuro com uma seta para dentro. */
-internal fun DrawScope.boca(p: Pincel, cx: Float, cy: Float, larga: Float, curta: Float) {
-    drawRoundRect(p.pk.linha, Offset(cx - larga / 2, cy - curta / 2), Size(larga, curta), CornerRadius(p.u))
-}
-
-/** Base comum dos conceitos: uma chapa com sombra, menor que a célula, para a silhueta da máquina aparecer. */
-internal fun DrawScope.chapa(p: Pincel, x: Float, y: Float, w: Float, h: Float, cor: Color) {
-    val u = p.u; val k = p.pk
-    val canto = CornerRadius(k.raio * u)
-    drawRoundRect(k.sombra, Offset(x + 2 * u, y + 3 * u), Size(w, h), canto)
-    drawRoundRect(cor, Offset(x, y), Size(w, h), canto)
-    drawRoundRect(k.linha, Offset(x, y), Size(w, h), canto, Stroke(k.traco.coerceAtLeast(1f) * u))
-    detalhe(p, x + 2 * u, y + u, w - 4 * u, u, k.claro.copy(alpha = 0.7f))
-}
-
-/** O corpo do Mindustry: retângulo de cantos cortados a 45°, a borda na cor da categoria ([acento]). */
-internal fun DrawScope.chanfrado(p: Pincel, x: Float, y: Float, w: Float, h: Float, acento: Color) {
-    val u = p.u; val c = minOf(w, h) * CORTE
-    fun oct(m: Float) = Path().apply {
-        moveTo(x + c + m, y + m); lineTo(x + w - c - m, y + m)
-        lineTo(x + w - m, y + c + m); lineTo(x + w - m, y + h - c - m)
-        lineTo(x + w - c - m, y + h - m); lineTo(x + c + m, y + h - m)
-        lineTo(x + m, y + h - c - m); lineTo(x + m, y + c + m); close()
-    }
-    translate(2 * u, 3 * u) { drawPath(oct(0f), p.pk.sombra) }
-    drawPath(oct(0f), p.pk.linha)
-    drawPath(oct(u), acento)
-    drawPath(oct(2.5f * u), p.pk.corpo)
-    drawPath(oct(5 * u), p.pk.fundo)
-}
-
-private const val CORTE = 0.22f
 
 /** Uma laje de forma livre (o corpo do shapez): [pontos] em frações do bloco, preenchida e com contorno grosso. */
 internal fun DrawScope.laje(p: Pincel, x: Float, y: Float, w: Float, h: Float, pontos: List<Pair<Float, Float>>) {
@@ -181,12 +114,30 @@ internal fun DrawScope.seta(p: Pincel, a: Offset, b: Offset, cor: Color) {
     drawPath(ponta, cor)
 }
 
-/** Respiro de calor: grade escura que fica laranja quando a máquina trabalha. */
-internal fun DrawScope.respiro(p: Pincel, x: Float, y: Float, w: Float, h: Float) {
-    val quente = if (p.ativo) QUENTE else FRIO
-    detalhe(p, x, y, w, h, p.pk.linha)
-    detalhe(p, x + p.u, y + p.u, w - 2 * p.u, h - 2 * p.u, p.pk.nucleo.copy(alpha = quente))
+
+/** As lajes recortadas, em frações do bloco: os dentes ficam onde o item entra e sai. */
+internal val LAJE_2X2 = listOf(
+    0.04f to 0.14f, 0.30f to 0.14f, 0.30f to 0.05f, 0.70f to 0.05f, 0.70f to 0.14f, 0.96f to 0.14f,
+    0.96f to 0.88f, 0.62f to 0.88f, 0.62f to 0.97f, 0.38f to 0.97f, 0.38f to 0.88f, 0.04f to 0.88f,
+)
+internal val LAJE_1X1 = listOf(
+    0.08f to 0.16f, 0.34f to 0.16f, 0.34f to 0.06f, 0.66f to 0.06f, 0.66f to 0.16f, 0.92f to 0.16f,
+    0.92f to 0.86f, 0.64f to 0.86f, 0.64f to 0.96f, 0.36f to 0.96f, 0.36f to 0.86f, 0.08f to 0.86f,
+)
+
+/** Uma caixa de papelão de tampa aberta: as duas abas para fora. */
+internal fun DrawScope.caixaAberta(p: Pincel, cx: Float, cy: Float, lado: Float) {
+    val u = p.u
+    caixaP(p, cx, cy, lado)
+    for (lado2 in listOf(-1f, 1f)) {
+        val aba = Path().apply {
+            moveTo(cx + lado2 * lado / 2, cy - lado / 2)
+            lineTo(cx + lado2 * (lado / 2 + 5 * u), cy - lado / 2 - 5 * u)
+            lineTo(cx + lado2 * 2 * u, cy - lado / 2 - 5 * u)
+            lineTo(cx, cy - lado / 2); close()
+        }
+        drawPath(aba, CAIXA); drawPath(aba, CAIXA_OL, style = Stroke(u))
+    }
 }
 
-private const val QUENTE = 0.9f
-private const val FRIO = 0.25f
+internal const val CELULA_ARTE = 32f

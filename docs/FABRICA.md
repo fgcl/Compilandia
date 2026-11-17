@@ -16,7 +16,8 @@ O Mindustry é código aberto (github.com/Anuken/Mindustry). Ele não é feito d
 | Os módulos de um `Building` (`ItemModule`, `PowerModule`...), ligados por flags no `Block` | `Papel`: o que o bloco faz na corrida | `fabrica/Conteudo.kt`, `tutor/FabGramCorrida.kt` |
 | `acceptItem`/`handleItem`/`dump`: o item só entra no bloco para onde a esteira aponta | `rota()` e `segue()` | `tutor/FabGramCorrida.kt` |
 | Sorter configurável (escolhe o item) | Máquina e separador configuráveis (escolhem regra e letra) | `ui/fabgram/FabGramConfig.kt` |
-| Sprites por bloco | `Desenhos.porTipo` (desenho por `id`) | `ui/fabgram/Desenhos.kt` |
+| Sprites por bloco, com animação | `Desenhos.porTipo` (desenho por `id`), animado por `Pincel.progresso` | `ui/fabgram/Desenhos.kt`, `Maquinas.kt`, `Maquinas2.kt` |
+| `Conveyor.junctionReplacement`: arrastar esteira por cima de outra põe uma junção | `Planta.estende` e `fimDoTraco` | `tutor/FabGram.kt`, `ui/fabgram/FabGramEditor.kt` |
 
 Diferença de propósito: o Mindustry roda uma simulação a cada tique. Aqui a corrida é calculada de uma vez a partir da árvore de derivação (a frase é o produto) e depois animada. Isso deixa o resultado exato e testável, que é o que importa para ensinar.
 
@@ -49,15 +50,43 @@ Exemplo: uma "Ponte" que leva o item três células adiante.
 
 1. `fabrica/Conteudo.kt`: `val PONTE = BlocoTipo("ponte", Papel.PONTE, Categoria.DISTRIBUICAO, 1, 1, preco = 25, requer = JUNCAO)` e ponha em `todos`.
 2. Se o papel é novo: acrescente `PONTE` em `Papel` e trate em `segue()` (`tutor/FabGramCorrida.kt`), como a `JUNCAO`.
-3. `ui/fabgram/Desenhos.kt`: escreva `ponte(...)` e registre em `Desenhos.porTipo`.
+3. `ui/fabgram/Desenhos.kt`: escreva `ponte(...)` seguindo as regras do desenho (seção Visual) e registre em `Desenhos.porTipo`.
 4. Textos: `fabgram_bloco_ponte` e `fabgram_bloco_ponte_desc` nos dois idiomas.
 5. Teste de comportamento em `ConteudoFabricaTest.kt` (veja `aJuncaoDeixaOItemAtravessar`).
 
 O `ConteudoFabricaTest` reclama sozinho se faltar o desenho, um texto, se o id repetir ou se a árvore da loja fechar um ciclo.
 
+## Visual
+
+O visual foi escolhido pelo dono em três rodadas de prancha (pacote, desenho de cada máquina, animação). O que ficou:
+
+- **Pacote Metal** (`CoresPacotes.kt`): chão de placas escuras, esteiras com setas em V e uma cor por categoria
+  (âmbar distribuição, turquesa produção, cobre núcleo). Toda cor de desenho sai de `Pincel.pk`.
+  Também foram testados Pixel, Planta azul, Neon e Desenho animado. O dono rejeitou os três primeiros e escolheu o Metal.
+- **Desenho "diagrama"** nas máquinas de regra, no jeito do shapez (`Maquinas.kt`, `Maquinas2.kt`):
+  laje recortada onde o item entra e sai, ícone grande da função e setas do caminho por cima.
+  Cesto, roteador e junção seguem o chassi de metal (`Desenhos.kt`, `Chassi.kt`).
+- **A máquina mostra a própria regra.** A prensa de `S → a S b` exibe as fichas a, S e b; por isso a máquina não tem
+  plaquinha de texto. Caixa (letra) é quadrada e cor de papelão; peça é redonda e clara; símbolo longo vira pílula.
+- **Animação de dentro.** `Pincel.progresso` vai de 0 a 1 durante o trabalho (`FABGRAM_TRABALHO`, 1,2 s).
+  A caixa sobe, treme, a tampa abre e as fichas saltam uma a uma (`fichasSaltando`). O braço carimba a etiqueta nova,
+  o cofre solta fumaça na regra ε, o separador acende só a seta da saída, a fonte solta a caixa de cima,
+  e a montadora é uma impressora que imprime cada peça na casa dela e põe um selo verde na frase pronta.
+
+### Regras do desenho
+
+1. A silhueta conta a função: nada de quadrado com um enfeite no meio.
+2. A célula tem 32 "pixels" da arte (`Pincel.u`); desenhe em `u`, nunca em pixel de tela.
+3. Use as peças prontas de `MaquinasBase.kt` (`laje`, `ficha`, `fileira`, `seta`, `funil`, `caixaAberta`) e as
+   cores do pacote. Cor nova vai para `CoresPacotes.kt` ou `CoresFabrica.kt`.
+4. Parada, a máquina mostra a regra inteira; trabalhando, anima a partir de `p.progresso` com `fase` e `suave`
+   (`Maquinas.kt`). Com `p.reduz` (movimento reduzido), nada treme nem gira.
+5. `FabricaAnimacaoTest` tira os quadros de cada animação e da fábrica rodando: olhe as fotos antes de dar por pronto.
+
 ## Economia
 
 - Comprar na loja destrava o tipo para sempre e custa engrenagens (as mesmas da sala). Construir no chão não custa: a dificuldade está em montar, não em juntar dinheiro.
+- Braço (15) e Armário (30, pede a Prensa) se compram. A junção é grátis: ela entra sozinha quando uma esteira cruza outra.
 - A planta automática (a que nasce do texto do painel) pode usar qualquer bloco. A loja limita só o que o jogador põe à mão.
 - Missões rendem 5 engrenagens na primeira vez; desafios, 5 por estrela nova (`Learner.cumpreMissaoFabrica`).
 

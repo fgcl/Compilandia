@@ -87,7 +87,6 @@ private fun plantaDoTexto(app: AppState, e: EstadoFabrica, l: Laudo) {
 fun FabGramScreen(app: AppState) {
     val reduz = ThemeState.reduceMotion
     val e = remember { estadoInicial(app).also { EstadoParaTeste.atual = it } }
-    remember { app.ls.fabGramPacote.takeIf { it.isNotEmpty() }?.let { PacoteAtual.pacote = Pacotes.porId(it) } }
     val escopo = rememberCoroutineScope()
     val ctl = remember { ControleFabrica(app, e, escopo) }
     val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
@@ -226,9 +225,8 @@ private fun PainelDeBaixo(app: AppState, e: EstadoFabrica, laudo: Laudo?) {
 
 @Composable
 private fun PainelDaFabrica(app: AppState, e: EstadoFabrica, laudo: Laudo?) =
-    Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas, { guardaPacote(app, it) }) { e.painel = false }
+    Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas) { e.painel = false }
 
-private fun guardaPacote(app: AppState, k: Pacote) { app.learner.setFabGramPacote(k.id); app.commit() }
 
 /** A tela aberta agora, para o teste que joga a fábrica pela tela. Fora dos testes ninguém lê. */
 internal object EstadoParaTeste { var atual: EstadoFabrica? = null }

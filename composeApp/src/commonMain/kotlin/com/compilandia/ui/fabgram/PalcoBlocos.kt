@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
@@ -80,9 +79,8 @@ private fun DrawScope.sinaisDaMaquina(cena: Cena, b: Bloco, x: Float, y: Float, 
         rotulo(cena.pincel(), "?", x + w / 2, y + h / 2 - u, 10 * u, OL)
         return
     }
-    // nos desenhos novos as fichas da regra ficam em cima; o número vai para o canto de baixo
-    val seloY = if (Variantes.escolhida(b.def.id) != null) y + h - 7 * u else y + 7 * u
-    FabGram.numero(cena.pl.g, p)?.let { numero(cena, it, x + 7 * u, seloY, 5.5f * u) }
+    // as fichas da regra ficam em cima da máquina; o número dela vai para o canto de baixo
+    FabGram.numero(cena.pl.g, p)?.let { numero(cena, it, x + 7 * u, y + h - 7 * u, 5.5f * u) }
     // a regra que começa por uma letra pisca (recursão à esquerda, direta ou indireta)
     val comecaPorLetra = p.rhs.firstOrNull()?.let { cena.pl.g.isNonTerminal(it) } == true
     val recursiva = comecaPorLetra && cena.tem(b.nt, Falha.RECURSAO, Falha.RECURSAO_INDIRETA)
@@ -109,38 +107,26 @@ private const val FUMACA = 5
 
 private fun px(v: Float, density: Float) = TextUnit(v / density, TextUnitType.Sp)
 
-/** A plaqueta: a regra da máquina dentro dela, embaixo; o nome dos outros blocos, logo abaixo do bloco. */
+/** O nome do bloco numa plaquinha logo abaixo dele. A máquina não tem: as fichas dela já mostram a regra. */
 internal fun DrawScope.placa(cena: Cena, b: Bloco) {
     val cel = cena.cel; val u = cena.u
     if (cel < 18f * density) return
-    // a plaquinha creme fica dentro da máquina grande; na de uma célula ela iria cobrir o desenho
-    val maq = b.tipo == Papel.MAQUINA && b.w > 1 && b.h > 1
     val texto = textoDaPlaca(cena, b) ?: return
-    val est = TextStyle(
-        color = if (maq) PacoteAtual.pacote.placaTinta else PLACA,
-        fontSize = px(cel * if (maq) 0.21f else 0.19f, density),
-        fontWeight = FontWeight.Bold, fontFamily = if (maq) FontFamily.Monospace else FontFamily.Default,
-    )
-    val maxW = if (maq) (b.w * cel - 4 * u) else (b.w * cel + cel)
+    val est = TextStyle(color = PLACA, fontSize = px(cel * TAMANHO_DA_PLACA, density), fontWeight = FontWeight.Bold)
     val lay = cena.medidor.measure(
         texto, est, overflow = TextOverflow.Ellipsis, softWrap = false, maxLines = 1,
-        constraints = Constraints(maxWidth = maxW.toInt().coerceAtLeast(1)),
+        constraints = Constraints(maxWidth = (b.w * cel + cel).toInt().coerceAtLeast(1)),
     )
     val px0 = b.cx * cel - lay.size.width / 2f
-    val py = if (maq) (b.y + b.h) * cel - 5 * u - lay.size.height else (b.y + b.h) * cel + 2 * u
-    if (maq) {
-        ret(px0 - 2 * u, py - u / 2, lay.size.width + 4 * u, lay.size.height + u, PacoteAtual.pacote.linha)
-        ret(px0 - 1.5f * u, py, lay.size.width + 3 * u, lay.size.height.toFloat(), PacoteAtual.pacote.placa)
-    } else {
-        ret(px0 - 3 * u, py, lay.size.width + 6 * u, lay.size.height.toFloat(), FUNDO_PLACA)
-    }
+    val py = (b.y + b.h) * cel + 2 * u
+    ret(px0 - 3 * u, py, lay.size.width + 6 * u, lay.size.height.toFloat(), FUNDO_PLACA)
     drawText(lay, topLeft = Offset(px0, py))
 }
 
+private const val TAMANHO_DA_PLACA = 0.19f
+
 private fun textoDaPlaca(cena: Cena, b: Bloco): String? = when (b.tipo) {
-    // os desenhos novos (Variantes.kt) mostram a regra nas fichas; a plaquinha ficaria por cima
-    Papel.MAQUINA -> if (Variantes.escolhida(b.def.id) != null) null
-    else b.prod?.let { it.lhs + "→" + it.rhs.joinToString(" ").ifEmpty { "ε" } }
+    Papel.MAQUINA -> null
     Papel.FONTE -> cena.nomes.fonte
     Papel.SEPARADOR -> cena.nomes.separador(b.nt ?: "?")
     Papel.MONTADORA -> cena.nomes.montadora

@@ -117,8 +117,6 @@ data class LearnerState(
     val fabGramEstrelas: Map<String, Int> = emptyMap(),
     /** Blocos da fábrica comprados na loja, pelo id (os de preço 0 já vêm e não entram aqui). */
     val fabGramBlocos: List<String> = emptyList(),
-    /** O pacote de textura da fábrica, pelo id (metal, pixel, planta, neon, desenho). */
-    val fabGramPacote: String = "",
 )
 
 /** O próximo passo sugerido: ver a aula animada do assunto ou jogar. */
@@ -367,7 +365,6 @@ class Learner(initial: LearnerState = LearnerState(), private val rnd: Random = 
         state = state.copy(gears = state.gears - preco, fabGramBlocos = state.fabGramBlocos + id)
         return true
     }
-    fun setFabGramPacote(id: String) { state = state.copy(fabGramPacote = id) }
     fun setFabGramMissoes(n: Int) { state = state.copy(fabGramMissoes = maxOf(state.fabGramMissoes, n)) }
     fun setFabGramPlanta(texto: String, planta: String) { state = state.copy(fabGramTexto = texto, fabGramPlanta = planta) }
 
