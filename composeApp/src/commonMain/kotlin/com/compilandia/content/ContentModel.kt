@@ -11,6 +11,7 @@ enum class Speaker(val displayName: String, val emoji: String) {
     LEXI(tx("contentmodel_lexi"), "🦊"),          // a raposa ninja do léxico — rápida, corta tudo em tokens
     PILHA(tx("contentmodel_pilha"), "🗿"),        // o golem-pilha — só enxerga o topo, fala devagar
     NARRADOR(tx("contentmodel_narrador"), "📜"),
+    BUG(tx("contentmodel_bug"), "🐞"),            // o besouro que rói o compilador: no fecho, afirma e às vezes acerta
 }
 
 enum class CalloutKind(val title: String, val emoji: String) {

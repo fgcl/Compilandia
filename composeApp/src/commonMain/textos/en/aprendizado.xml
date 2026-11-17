@@ -187,17 +187,17 @@
     <string name="skills_jeito_que_cai_na_prova">The way it shows up on the exam</string>
     <string name="skills_truque_memoria">Memory trick</string>
     <string name="skills_ganchos_para_nunca_esquecer">Hooks so you never forget</string>
-    <string name="skills_abajur_bancada">Bench lamp</string>
-    <string name="skills_planta">Plant</string>
-    <string name="skills_cadeira">Chair</string>
+    <string name="skills_abajur_bancada">Desk lamp</string>
+    <string name="skills_planta">Potted plant</string>
+    <string name="skills_cadeira">Teacher's chair</string>
     <string name="skills_lixeira_bugs">Bug bin</string>
-    <string name="skills_quadro_automato">Automaton board</string>
-    <string name="skills_luminaria">Lamp</string>
+    <string name="skills_quadro_automato">Automaton poster</string>
+    <string name="skills_luminaria">Wall fan</string>
     <string name="skills_ursinho_byte">Byte's teddy bear</string>
-    <string name="skills_caixinha_som">Little speaker</string>
+    <string name="skills_caixinha_som">Speaker</string>
     <string name="skills_estante">Bookshelf</string>
-    <string name="skills_radio">Radio</string>
-    <string name="skills_cantinho_cafe">Coffee corner</string>
-    <string name="skills_sofa">Couch</string>
+    <string name="skills_radio">Wall clock</string>
+    <string name="skills_cantinho_cafe">Coffee thermos</string>
+    <string name="skills_sofa">Air conditioner</string>
     <string name="solta_skills_1">NFA → DFA (subset construction)</string>
 </resources>

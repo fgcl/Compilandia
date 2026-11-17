@@ -38,7 +38,10 @@ import kotlin.test.Test
 open class RenderBase {
     protected val out = File("build/screenshots").apply { mkdirs() }
 
-    init { com.compilandia.ui.voice.Narrator.silent = true }
+    init {
+        com.compilandia.ui.voice.Narrator.silent = true
+        com.compilandia.ui.room.AberturaDoCampus.ligada = false
+    }
 
     protected fun shot(name: String?, w: Int = 412, h: Int = 900, content: @Composable () -> Unit) {
         val scene = ImageComposeScene(w * 2, h * 2, Density(2f)) { content() }

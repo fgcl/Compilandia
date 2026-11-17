@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia. A chave é o que o código usa em tx("chave"); %1$s, %2$s são trocados pelos valores. -->
+<resources>
+    <!-- EpPraticaLacunas2.kt: o herdado na descida -->
+    <string name="hd_titulo">O herdado na descida</string>
+    <string name="hd_01">Na aula de atributos, o tipo descia pela árvore como atributo herdado. Na descida recursiva, cada não-terminal vira uma função. Veja como o herdado chega nela.</string>
+    <string name="hd_02">O sintetizado volta no return: a função T devolve o tipo. O herdado vai como parâmetro: a função L recebe o h. O id casa o identificador e devolve o nome dele.</string>
+    <string name="hd_03">Na entrada float a, b, qual linha põe o b na tabela? Toque.</string>
+    <string name="hd_03_dica">O a vem logo depois do tipo, e o b vem depois da vírgula. Quem casa a vírgula?</string>
+    <string name="hd_03_ok">O L põe o a. O b vem depois da vírgula, e quem casa a vírgula é o R. O h chegou ao R como parâmetro, pela chamada que o L fez.</string>
+    <string name="hd_t_devolve" translatable="false">T() → %1$s</string>
+    <string name="hd_04">Este é o rastro das chamadas. O mesmo float passa de função em função, como parâmetro, até chegar a cada id.</string>
+    <string name="hd_05">Um esquema de tradução é a gramática com ações entre chaves dentro das regras. A ação roda quando o parser passa por aquele ponto da regra.</string>
+    <string name="hd_06">A ação passa o tipo de T para o herdado de L. Em que ponto da regra do D ela pode ficar? Toque.</string>
+    <string name="hd_06_dica">A ação lê o tipo do T. E o L precisa do herdado pronto quando começa.</string>
+    <string name="hd_06_ok">Antes do T, o tipo ainda não existe. Depois do L, o a e o b já entraram na tabela sem tipo. Só entre o T e o L dá certo.</string>
+    <string name="hd_07">Na função D, a ação do meio é a chamada do L com o t. Ela roda depois do T e antes do L. O herdado vira parâmetro, e o sintetizado vira retorno.</string>
+
+    <!-- EpPraticaLacunas2.kt: funções na tabela -->
+    <string name="fts_titulo">Funções na tabela</string>
+    <string name="fts_01">Até aqui, a tabela de símbolos guardava variáveis. Agora o programa tem funções. Cada função abre uma tabela própria, filha da global.</string>
+    <string name="fts_02">Os parâmetros a e b entram em qual tabela? Toque.</string>
+    <string name="fts_02_dica">Quem pode usar o a? Só o código de dentro da soma.</string>
+    <string name="fts_02_ok">Na tabela da soma, junto com o s. Fora da soma, ninguém enxerga o a nem o b.</string>
+    <string name="fts_linha_param">%1$s: %2$s, parâmetro</string>
+    <string name="fts_03">A função entra na tabela global. A entrada guarda o tipo que ela devolve e os tipos dos parâmetros. Os parâmetros entram na tabela da própria função.</string>
+    <string name="fts_04">Dentro do main, alguém escreve x igual a a. O que a busca pelo a encontra? Toque.</string>
+    <string name="fts_op_a_soma">O a da tabela da soma</string>
+    <string name="fts_op_a_global">Um a na tabela global</string>
+    <string name="fts_op_nada">Nada: o compilador dá erro</string>
+    <string name="fts_04_dica">A busca sai do main e sobe para o pai. A tabela da soma está nesse caminho?</string>
+    <string name="fts_04_ok">Do main, a busca sobe para a global, e lá não há nenhum a. A tabela da soma é irmã da tabela do main, e não mãe. Então o compilador dá erro.</string>
+    <string name="fts_05">Numa chamada, o compilador procura a função na tabela global. Depois compara a entrada dela com o que a chamada manda. O que a chamada manda são os argumentos.</string>
+    <string name="fts_06">Qual chamada o compilador recusa? Toque.</string>
+    <string name="fts_06_dica">Conte os argumentos e compare com a entrada da soma.</string>
+    <string name="fts_06_ok">A soma pede dois parâmetros, e essa chamada manda um argumento só. A quantidade não bate.</string>
+    <string name="fts_07">Por isso a função guarda os tipos dos parâmetros na tabela global. Sem essa entrada, o compilador não teria com o que comparar a chamada.</string>
+
+    <!-- EpPraticaLacunas2.kt: acesso a vetor -->
+    <string name="vet_titulo">Acesso a vetor</string>
+    <string name="vet_01">Um vetor guarda os elementos lado a lado na memória. Cada int ocupa 4 bytes. Por isso os endereços pulam de 4 em 4.</string>
+    <string name="vet_02">O vetor v começa no endereço 1000. Onde mora o elemento de índice 2? Toque.</string>
+    <string name="vet_02_dica">O índice começa no zero. Antes do elemento de índice 2, quantos elementos há?</string>
+    <string name="vet_02_ok">Antes dele há dois elementos, de 4 bytes cada. Então 1000 mais 4 vezes 2 dá 1008.</string>
+    <string name="vet_03">No código de três endereços, o compilador calcula primeiro o deslocamento. Deslocamento é a distância, em bytes, do começo do vetor até o elemento.</string>
+    <string name="vet_04">Por que o compilador multiplica o índice por 4? Toque.</string>
+    <string name="vet_op_tamanho">O vetor tem 4 elementos</string>
+    <string name="vet_op_bytes">Cada int ocupa 4 bytes</string>
+    <string name="vet_op_conta">O índice conta de 4 em 4</string>
+    <string name="vet_04_dica">Pense no tamanho de cada elemento, e não no tamanho do vetor.</string>
+    <string name="vet_04_ok">O 4 vem do tamanho do int. Num vetor de cem elementos, o i também seria multiplicado por 4.</string>
+    <string name="vet_05">No MIPS, o la carrega o endereço onde o vetor começa. O lw traz o valor do i para um registrador.</string>
+    <string name="vet_06">Qual linha faz o i vezes 4? Toque.</string>
+    <string name="vet_06_dica">Não há mul aqui. Procure a linha que mexe nos bits do i.</string>
+    <string name="vet_06_ok">O sll empurra os bits duas casas para a esquerda. Cada casa dobra o número, então duas casas multiplicam por 4. E custa menos que o mul.</string>
+    <string name="vet_07">O add soma o começo do vetor com o deslocamento. O lw lê a palavra nesse endereço. Com o i valendo 2, o x fica com 30.</string>
+    <string name="vet_08">Para escrever no vetor, a conta do endereço é a mesma. Só muda o fim: um sw no lugar do lw.</string>
+
+    <!-- EpEmC.kt: Em C 1, as cenas juntadas e o erro comum -->
+    <string name="emc1_digito">É dígito, então entra no if, e o v começa em zero. A primeira volta do while junta o quatro.</string>
+    <string name="emc1_ungetc_ok">O laço para. Só que o mais já saiu da entrada: foi lido um a mais. O ungetc devolve ele.</string>
+    <string name="emc1_erro_titulo">Sem o ungetc</string>
+    <string name="emc1_erro">Um erro comum é esquecer o ungetc. Veja o mesmo código sem essa linha, lendo outra entrada: sete vezes treze.</string>
+    <string name="emc1_erro_q">Que tokens saem dessa entrada, agora sem o ungetc? Toque.</string>
+    <string name="emc1_erro_dica">O while para porque leu o vezes. Sem o ungetc, quem devolve o vezes?</string>
+    <string name="emc1_erro_ok">O vezes foi lido para parar o while, e ninguém devolveu. Ele some, e o parser recebe dois números seguidos.</string>
+</resources>

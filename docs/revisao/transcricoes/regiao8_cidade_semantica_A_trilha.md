@@ -15,7 +15,7 @@ BYTE: "Antes da aula: os parênteses entram na AST?"
 Opções: sim | ✔não | só um
 Depois: "Não. A forma da árvore já mostra o agrupamento."
 
-#### AULA ANIMADA BÁSICA: "A árvore enxuta" (22 cenas, ~155s)
+#### AULA ANIMADA BÁSICA: "A árvore enxuta" (22 cenas, ~154s)
 
 1. TELA: # AST ⏎ a + ( b )
    BYTE: "O parser segue a árvore de derivação. Ela tem um nó para cada símbolo das regras usadas, e fica enorme."
@@ -96,16 +96,16 @@ Depois: "Não. A forma da árvore já mostra o agrupamento."
    se acertar: "O parêntese manda fazer o menos antes. O vezes usa o resultado dele."
 
 20. TELA: # Erros comuns ⏎ A AST de a * (b - 2) não tem nó para os parênteses. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma da árvore já agrupa. ⏎ Certo: parêntese nunca muda a conta. ⏎ Errado: sem o nó, o menos roda depois.
-   BYTE: "Os parênteses aparecem na AST? Um colega desenhou sem eles. Certo ou errado?"
+   BUG: "Desenhei a AST sem os parênteses. Comi os dois. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: a forma da árvore já agrupa. ; errado = Certo: parêntese nunca muda a conta. | Errado: sem o nó, o menos roda depois.
    se errar: "O parêntese muda a forma da árvore. Depois disso, ele ainda serve?"
    se acertar: "Boa. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes."
 
 21. TELA: # Erros comuns ⏎ Certo: A AST de a * (b - 2) não tem nó para os parênteses. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
-   BYTE: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
+   PROF: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
 
 22. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. O filho é calculado antes do pai.
-   BYTE: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
+   PROF: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
 
 #### PEGADINHA: "O parêntese não vira nó" (6 cenas, ~32s)
 
@@ -166,7 +166,7 @@ Flashcards:
 
 ## ASSUNTO SCOPE_SYMBOLS: Escopo e tabela de símbolos
 Pré-requisitos no jogo: Fases de um compilador
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Quem é esse x?» → Programar o Byte → Pegadinha «A sombra da variável» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Quem é esse x?» → Programar o Byte → Prática: você pilota «Funções na tabela» → Pegadinha «A sombra da variável» → Desafio
 Jogos que treinam: Detetive de Erros (classificar quem pega cada erro), Esconde-Esconde do Escopo (ligar cada uso à sua declaração)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: Carteiro do escopo
 
@@ -177,7 +177,7 @@ BYTE: "Antes da aula: esse x igual a um mexe em qual x?"
 Opções: ✔o de dentro | o de fora | nos dois
 Depois: "No de dentro. A busca começa pelo bloco mais próximo."
 
-#### AULA ANIMADA BÁSICA: "Quem é esse x?" (23 cenas, ~167s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Quem é esse x?" (23 cenas, ~165s) [1º exemplo começa na cena 5]
 
 1. TELA: # Escopo ⏎ void f() { ⏎   int i; ⏎ } ⏎ void g() { ⏎   float i; ⏎ }
    BYTE: "Duas funções declaram uma variável i. Cada uma quer a sua."
@@ -264,16 +264,16 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
    se acertar: "A busca começa no topo da pilha, o bloco de dentro. O x está ali, então ela para."
 
 21. TELA: # Erros comuns ⏎ Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: é outro escopo, e a busca acha o de dentro. ⏎ Certo: o x de fora é apagado. ⏎ Errado: um nome só pode ser declarado uma vez.
-   BYTE: "Já existe um x fora. Posso declarar outro x dentro do bloco? Um colega disse isto. Certo ou errado?"
+   BUG: "Com um x lá fora, eu declaro outro x no bloco. Pode isso? Certo ou errado?"
    PERGUNTA (toque): certo = Certo: é outro escopo, e a busca acha o de dentro. ; errado = Certo: o x de fora é apagado. | Errado: um nome só pode ser declarado uma vez.
    se errar: "A declaração nova entra na tabela do topo, que ainda não tem x."
    se acertar: "Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco."
 
 22. TELA: # Erros comuns ⏎ Certo: Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ *Errado: Buscar o nome só na tabela do topo.* ⏎ *Certo: A busca desce do topo até a tabela global. Erro só se nenhuma tiver.*
-   BYTE: "Um erro comum: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
+   PROF: "Um erro comum: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
 
 23. TELA: # Resumo ⏎ Tabela de símbolos: nome, tipo e onde cada coisa foi declarada. ⏎ Uma tabela por bloco, numa pilha. Abriu bloco, empilha; fechou, desempilha. ⏎ Uso: busca do topo para baixo. O mais interno esconde o de fora.
-   BYTE: "Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo."
+   PROF: "Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo."
 
 #### PEGADINHA: "A sombra da variável" (5 cenas, ~27s)
 
@@ -297,6 +297,38 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
 
 5. TELA: # Dois x ⏎ int x = 1; ⏎ { ⏎   int x = 2; ⏎   print(x); ⏎ } ⏎ print(x); ⏎ 2 ⏎ 1
    BYTE: "Saída do programa: dois, depois um."
+
+#### PRATICA: "Funções na tabela" (7 cenas, ~63s)
+
+1. TELA: # Funções na tabela ⏎ int soma(int a, int b) { ⏎   int s = a + b; ⏎   return s; ⏎ } ⏎ void main() { ⏎   int x = soma(1, 2); ⏎   int y = soma(x); ⏎   int z = soma(x, y); ⏎ }
+   BYTE: "Até aqui, a tabela de símbolos guardava variáveis. Agora o programa tem funções. Cada função abre uma tabela própria, filha da global."
+
+2. TELA: # Funções na tabela ⏎ *int soma(int a, int b) {* ⏎   int s = a + b; ⏎   return s; ⏎ } ⏎ void main() { ⏎   int x = soma(1, 2); ⏎   int y = soma(x); ⏎   int z = soma(x, y); ⏎ } ⏎ global ⏎ main ⏎ soma
+   BYTE: "Os parâmetros a e b entram em qual tabela? Toque."
+   PERGUNTA (toque): certo = soma ; errado = global | main
+   se errar: "Quem pode usar o a? Só o código de dentro da soma."
+   se acertar: "Na tabela da soma, junto com o s. Fora da soma, ninguém enxerga o a nem o b."
+
+3. TELA: # Funções na tabela ⏎ global{soma: int (int, int); main: void ()} ⏎ soma{a: int, parâmetro; b: int, parâmetro; s: int} ⏎ main{x: int; y: int; z: int}
+   PROF: "A função entra na tabela global. A entrada guarda o tipo que ela devolve e os tipos dos parâmetros. Os parâmetros entram na tabela da própria função."
+
+4. TELA: # Funções na tabela ⏎ *global{soma: int (int, int); main: void ()}* ⏎ soma{a: int, parâmetro; b: int, parâmetro; s: int} ⏎ *main{x: int; y: int; z: int}* ⏎ O a da tabela da soma ⏎ Um a na tabela global ⏎ Nada: o compilador dá erro
+   BYTE: "Dentro do main, alguém escreve x igual a a. O que a busca pelo a encontra? Toque."
+   PERGUNTA (toque): certo = Nada: o compilador dá erro ; errado = O a da tabela da soma | Um a na tabela global
+   se errar: "A busca sai do main e sobe para o pai. A tabela da soma está nesse caminho?"
+   se acertar: "Do main, a busca sobe para a global, e lá não há nenhum a. A tabela da soma é irmã da tabela do main, e não mãe. Então o compilador dá erro."
+
+5. TELA: # Funções na tabela ⏎ *global{soma: int (int, int); main: void ()}* ⏎ int x = soma(1, 2); ⏎ int y = soma(x); ⏎ int z = soma(x, y);
+   BYTE: "Numa chamada, o compilador procura a função na tabela global. Depois compara a entrada dela com o que a chamada manda. O que a chamada manda são os argumentos."
+
+6. TELA: # Funções na tabela ⏎ global{soma: int (int, int); main: void ()} ⏎ int x = soma(1, 2); ⏎ int y = soma(x); ⏎ int z = soma(x, y);
+   BYTE: "Qual chamada o compilador recusa? Toque."
+   PERGUNTA (toque): certo = int y = soma(x); ; errado = int x = soma(1, 2); | int z = soma(x, y);
+   se errar: "Conte os argumentos e compare com a entrada da soma."
+   se acertar: "A soma pede dois parâmetros, e essa chamada manda um argumento só. A quantidade não bate."
+
+7. TELA: # Funções na tabela ⏎ *global{soma: int (int, int); main: void ()}* ⏎ int x = soma(1, 2); ⏎ *int y = soma(x);* ⏎ int z = soma(x, y);
+   PROF: "Por isso a função guarda os tipos dos parâmetros na tabela global. Sem essa entrada, o compilador não teria com o que comparar a chamada."
 
 #### CLIPE 30s: "Tabela de símbolos" (2 cenas, ~9s)
 
@@ -334,7 +366,7 @@ Flashcards:
 
 ## ASSUNTO ATTRIBUTES_TYPES: Atributos e verificação de tipos
 Pré-requisitos no jogo: Gramáticas e derivações
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Tipos sobem pela árvore» → Fazer com ajuda → Prática: você pilota «Suba os tipos» → Prática: você pilota «O tipo que desce» → Prática: você pilota «Tipos nos comandos» → Pegadinha «Sintetizado sobe, herdado desce» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Tipos sobem pela árvore» → Fazer com ajuda → Prática: você pilota «Suba os tipos» → Prática: você pilota «O tipo que desce» → Prática: você pilota «Tipos nos comandos» → Prática: você pilota «O herdado na descida» → Pegadinha «Sintetizado sobe, herdado desce» → Desafio
 Jogos que treinam: Detetive de Erros (classificar quem pega cada erro), Árvore Anotada (calcular atributos de baixo para cima), Fábrica de AST (montar a AST com new BinOp(...))
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -345,7 +377,7 @@ BYTE: "Antes da aula: qual é o tipo do resultado?"
 Opções: int | ✔float | erro
 Depois: "Float. O compilador converte o inteiro antes da conta."
 
-#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (30 cenas, ~220s) [1º exemplo começa na cena 7]
+#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (30 cenas, ~219s) [1º exemplo começa na cena 7]
 
 1. TELA: # Forma certa, sentido errado ⏎ a + ok ⏎ a: int ⏎ ok: bool ⏎ nome + nome: o parser aceita
    BYTE: "O parser confere a forma. A mais ok tem a forma certa: nome, mais, nome. Mas ok é um bool, verdadeiro ou falso."
@@ -465,16 +497,16 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
    se acertar: "O real guarda a ordem de grandeza do inteiro. O compilador converte, e a soma vira real."
 
 28. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: sintetizado sobe dos filhos. ⏎ Errado: sintetizado vem dos irmãos. ⏎ Certo: o pai passa o tipo para os filhos.
-   BYTE: "De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?"
+   BUG: "Para mim, o sintetizado vem do pai, igual herança. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: sintetizado sobe dos filhos. ; errado = Errado: sintetizado vem dos irmãos. | Certo: o pai passa o tipo para os filhos.
    se errar: "Nesta aula, os tipos subiram ou desceram pela árvore?"
    se acertar: "Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado."
 
 29. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
-   BYTE: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
+   PROF: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
 
 30. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
-   BYTE: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
+   PROF: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
 
 #### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~34s)
 
@@ -586,6 +618,35 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
 
 8. TELA: # Tipos nos comandos ⏎ *n: int    x: float    ok: bool* ⏎ float media(int a, int b) ⏎ return a + b; ⏎ media(x, 2); ⏎ media(1, 2);
    BYTE: "Atribuição, condição, chamada e return. Em todos, o comando compara o tipo que subiu com o tipo que ele espera."
+
+#### PRATICA: "O herdado na descida" (7 cenas, ~72s)
+
+1. TELA: # O herdado na descida ⏎ void D() { ⏎   Tipo t = T(); ⏎   L(t); ⏎   casa(';'); ⏎ } ⏎ void L(Tipo h) { ⏎   addtipo(id(), h); ⏎   R(h); ⏎ } ⏎ void R(Tipo h) { ⏎   if (tok.tipo == ',') { ⏎     casa(','); addtipo(id(), h); ⏎     R(h); ⏎   } ⏎ }
+   BYTE: "Na aula de atributos, o tipo descia pela árvore como atributo herdado. Na descida recursiva, cada não-terminal vira uma função. Veja como o herdado chega nela."
+
+2. TELA: # O herdado na descida ⏎ void D() { ⏎ *  Tipo t = T();* ⏎   L(t); ⏎   casa(';'); ⏎ } ⏎ *void L(Tipo h) {* ⏎   addtipo(id(), h); ⏎   R(h); ⏎ } ⏎ void R(Tipo h) { ⏎   if (tok.tipo == ',') { ⏎     casa(','); addtipo(id(), h); ⏎     R(h); ⏎   } ⏎ }
+   PROF: "O sintetizado volta no return: a função T devolve o tipo. O herdado vai como parâmetro: a função L recebe o h. O id casa o identificador e devolve o nome dele."
+
+3. TELA: # O herdado na descida ⏎ void D() { ⏎   Tipo t = T(); ⏎   L(t); ⏎   casa(';'); ⏎ } ⏎ void L(Tipo h) { ⏎   addtipo(id(), h); ⏎   R(h); ⏎ } ⏎ void R(Tipo h) { ⏎   if (tok.tipo == ',') { ⏎     casa(','); addtipo(id(), h); ⏎     R(h); ⏎   } ⏎ }
+   BYTE: "Na entrada float a, b, qual linha põe o b na tabela? Toque."
+   PERGUNTA (toque): certo =     casa(','); addtipo(id(), h); ; errado =   addtipo(id(), h); |   L(t); |   R(h);
+   se errar: "O a vem logo depois do tipo, e o b vem depois da vírgula. Quem casa a vírgula?"
+   se acertar: "O L põe o a. O b vem depois da vírgula, e quem casa a vírgula é o R. O h chegou ao R como parâmetro, pela chamada que o L fez."
+
+4. TELA: # O herdado na descida ⏎ T() → float ⏎ L(float) ⏎   addtipo(a, float) ⏎ R(float) ⏎   addtipo(b, float) ⏎ R(float)
+   BYTE: "Este é o rastro das chamadas. O mesmo float passa de função em função, como parâmetro, até chegar a cada id."
+
+5. TELA: # O herdado na descida ⏎ D → T L ; ⏎ L → id R ⏎ R → , id R  |  ε
+   PROF: "Um esquema de tradução é a gramática com ações entre chaves dentro das regras. A ação roda quando o parser passa por aquele ponto da regra."
+
+6. TELA: # O herdado na descida ⏎ D → T L ; ⏎ L → id R ⏎ R → , id R  |  ε ⏎ D → { L.h = T.tipo } T L ; ⏎ D → T L { L.h = T.tipo } ; ⏎ D → T { L.h = T.tipo } L ;
+   BYTE: "A ação passa o tipo de T para o herdado de L. Em que ponto da regra do D ela pode ficar? Toque."
+   PERGUNTA (toque): certo = D → T { L.h = T.tipo } L ; ; errado = D → { L.h = T.tipo } T L ; | D → T L { L.h = T.tipo } ;
+   se errar: "A ação lê o tipo do T. E o L precisa do herdado pronto quando começa."
+   se acertar: "Antes do T, o tipo ainda não existe. Depois do L, o a e o b já entraram na tabela sem tipo. Só entre o T e o L dá certo."
+
+7. TELA: # O herdado na descida ⏎ void D() { ⏎ *  Tipo t = T();* ⏎ *  L(t);* ⏎   casa(';'); ⏎ } ⏎ *D → T { L.h = T.tipo } L ;*
+   PROF: "Na função D, a ação do meio é a chamada do L com o t. Ela roda depois do T e antes do L. O herdado vira parâmetro, e o sintetizado vira retorno."
 
 #### CLIPE 30s: "Atributo sintetizado e herdado" (2 cenas, ~8s)
 

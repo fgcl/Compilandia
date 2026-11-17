@@ -14,6 +14,7 @@ import com.compilandia.content.pilha
 import com.compilandia.content.rastroDescida
 import com.compilandia.content.rotulo
 import com.compilandia.content.titulo
+import com.compilandia.engine.ErrosDaSerieC
 import com.compilandia.learning.Skill
 import com.compilandia.textos.tx
 
@@ -66,6 +67,7 @@ internal val emC2 by lazy {
         val palco = PalcoDescida(this)
         codigoDaDescida()
         rodaComParenteses(palco)
+        recursaoAEsquerda()
         brinquedo(
             tx("epemc_agora_voce_processador_chame_case"),
             tx("epemc_chame_quando_topo_precisa_outra"),
@@ -76,11 +78,11 @@ internal val emC2 by lazy {
 
 /** As três funções na tela: expr com o while, termo igual, e o fator que abre parêntese. */
 private fun EpisodeBuilder.codigoDaDescida() {
-    cena(tx("epemc_na_descida_recursiva_em_c")) {
+    cena(tx("emc2_abre")) {
         add(titulo("parser.c"))
         add(codigo("s", CODIGO_EXPR, 70f, x = 40f, passo = 26f, size = 14f))
+        hot("s1", "s2")
     }
-    cena(tx("epemc_expr_chama_termo_while_repete")) { hot("s1", "s2") }
     cena(tx("epemc_termo_igual_com_vezes_fator")) {
         add(codigo("t", CODIGO_TERMO_FATOR, 250f, x = 14f, passo = 21f, size = 12f))
         hot("t4", "t5")
@@ -90,13 +92,13 @@ private fun EpisodeBuilder.codigoDaDescida() {
 /** A pilha de 2 * ( 3 + 4 ): o fator chama expr, e o while explica o E' do Templo. */
 private fun EpisodeBuilder.rodaComParenteses(palco: PalcoDescida) {
     val k = segundoExpr(palco.rastro)
-    cena(tx("emc2p_rodar")) {
+    cena(tx("emc2_rodar")) {
         dropAll("s"); dropAll("t")
         add(rotulo("rp", tx("comum_pilha_chamadas"), 100f, 400f))
-        add(codigo("g", listOf(tx("comum_expr_termo_termo"), tx("comum_termo_fator_fator"), tx("emc2p_g_fator")), 180f, x = 180f, passo = 30f, size = 11f))
-        palco.mostra(0)
+        val regras = listOf(tx("comum_expr_termo_termo"), tx("comum_termo_fator_fator"), tx("emc2p_g_fator"))
+        add(codigo("g", regras, 180f, x = 180f, passo = 30f, size = 11f))
+        palco.mostra(2)
     }
-    cena(tx("epemc_expr_chama_termo_termo_chama")) { palco.mostra(2) }
     cena(tx("epemc_no_vezes_quem_casa_termo"), who = PROF) { palco.mostra(palco.passo("casar", "*")) }
     pergunta(tx("emc2p_q"), setOf("f${palco.rastro[k].pilha.lastIndex - 1}"), setOf("f1", "f2"), tx("emc2p_q_dica"), tx("emc2p_q_ok")) { palco.mostra(k) }
     cena(tx("emc2p_fecha")) { palco.mostra(palco.passo("casar", ")")); hot() }
@@ -106,5 +108,28 @@ private fun EpisodeBuilder.rodaComParenteses(palco: PalcoDescida) {
         add(Box("tp", "E' → + T E' | ε", 180f, 110f, 260f, 44f, Look.CELL, size = 18f))
         add(codigo("w", listOf("while (tok.tipo == '+') {", "  casa('+'); termo();", "}"), 200f, x = 50f, passo = 28f, size = 14f))
         hot("tp", "w0")
+    }
+}
+
+/** O expr escrito como a regra E → E + T, ao pé da letra: chama a si mesmo antes de ler qualquer token. */
+val EMC2_ERRO = listOf("void expr(void) {", "  expr();", "  casa('+');", "  termo();", "}")
+val EMC2_ERRO_ENTRADA = listOf("2", "+", "3")
+
+/** Erro comum (professor do bloco 6): a recursão à esquerda copiada para o C. A pilha só cresce. */
+private fun EpisodeBuilder.recursaoAEsquerda() {
+    val r = ErrosDaSerieC.exprComRecursaoAEsquerda(EMC2_ERRO_ENTRADA)
+    // As opções: a certa (estoura, a última) só se o motor disser que estourou sem ler nada.
+    val certa = if (r.estourou && r.lidos == 0) "k2" else "k0"
+    cena(tx("emc2_erro")) {
+        clear()
+        add(titulo(tx("emc2_erro_titulo"), size = 22f))
+        add(Box("tp", "E → E + T  |  T", 180f, 100f, 260f, 40f, Look.CELL, size = 17f))
+        add(codigo("x", EMC2_ERRO, 160f, x = 70f, passo = 30f, size = 15f))
+        hot("x1")
+    }
+    val textos = listOf(tx("emc2_op_le_2"), tx("emc2_op_igual"), tx("emc2_op_estoura"))
+    val erradas = setOf("k0", "k1", "k2") - certa
+    pergunta(tx("emc2_erro_q"), setOf(certa), erradas, tx("emc2_erro_dica"), tx("emc2_erro_ok")) {
+        textos.forEachIndexed { k, t -> add(Box("k$k", t, 180f, 312f + k * 38f, 300f, 34f, Look.TOKEN, Tint.YELLOW)) }
     }
 }

@@ -264,10 +264,9 @@ private fun ResultView(app: AppState, s: Screen.Play, score: Double, confidence:
 
 @Composable
 private fun RoomOffer(item: com.compilandia.learning.RoomItem, onPlace: () -> Unit) {
-    val layer = com.compilandia.ui.room.roomLayers[item.id]
     PaperCard(Modifier.fillMaxWidth(), color = Palette.yellow.copy(alpha = 0.12f), border = Palette.yellow) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (layer != null) androidx.compose.foundation.Image(org.jetbrains.compose.resources.painterResource(layer.art), null, Modifier.size(72.dp))
+            com.compilandia.ui.room.MovelIcone(item.id, Modifier.size(72.dp))
             Spacer(Modifier.width(10.dp))
             androidx.compose.foundation.layout.Column(Modifier.weight(1f)) {
                 Text(tx("playscreen_novo_na_oficina"), style = MaterialTheme.typography.labelMedium, color = Palette.yellow)

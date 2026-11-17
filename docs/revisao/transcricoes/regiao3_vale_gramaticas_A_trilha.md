@@ -135,16 +135,16 @@ Depois: "Vale a c b. S vira a S b, e o S de dentro vira c."
    se acertar: "As duas usam as mesmas regras. A árvore mostra quais regras, não a ordem das trocas."
 
 28. TELA: # Erros comuns ⏎ Na derivação mais à esquerda, posso trocar qualquer não-terminal em cada passo. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: só se troca o símbolo inicial. ⏎ Certo: a ordem das trocas não importa. ⏎ Errado: troca-se sempre o mais à esquerda.
-   BYTE: "Um colega descreveu assim a derivação mais à esquerda. Certo ou errado? Toque."
+   BUG: "Na mais à esquerda, eu troco o não-terminal que eu quiser. Certo ou errado? Toque."
    PERGUNTA (toque): certo = Errado: troca-se sempre o mais à esquerda. ; errado = Errado: só se troca o símbolo inicial. | Certo: a ordem das trocas não importa.
    se errar: "O nome diz qual não-terminal é trocado."
    se acertar: "Em cada passo, troca-se sempre o não-terminal mais à esquerda. Na mais à direita, sempre o da direita."
 
 29. TELA: # Erros comuns ⏎ Certo: Mais à esquerda: troque sempre o primeiro não-terminal da forma. ⏎ *Errado: Trocar um terminal por uma regra.* ⏎ *Certo: Só não-terminal fica do lado esquerdo. Terminal é token e não muda.*
-   BYTE: "Outro erro: tentar trocar um terminal. Terminal é token, não tem regra. Só não-terminal fica do lado esquerdo de uma produção."
+   PROF: "Outro erro: tentar trocar um terminal. Terminal é token, não tem regra. Só não-terminal fica do lado esquerdo de uma produção."
 
 30. TELA: # Resumo ⏎ Gramática: terminais, não-terminais, produções e um símbolo inicial. ⏎ Derivar: começar no inicial e trocar não-terminais até sobrar só terminal. ⏎ A frase está na linguagem se existe uma derivação para ela.
-   BYTE: "Resumindo: a gramática livre de contexto gera as frases por trocas. Derivar é aplicar produções a partir do símbolo inicial, e a árvore registra essas trocas."
+   PROF: "Resumindo: a gramática livre de contexto gera as frases por trocas. Derivar é aplicar produções a partir do símbolo inicial, e a árvore registra essas trocas."
 
 #### PEGADINHA: "Duas derivações, uma árvore" (5 cenas, ~28s)
 
@@ -342,16 +342,16 @@ Depois: "Vinte. Duas árvores, dois resultados."
    BYTE: "Um nível para cada precedência: o operador que liga mais forte fica no nível de baixo. É a gramática que a Ponte vai consertar a seguir."
 
 24. TELA: # Erros comuns ⏎ Achei duas derivações diferentes para a frase. Então a gramática é ambígua. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: as duas podem ter a mesma árvore. ⏎ Errado: só contas diferentes provam ambiguidade. ⏎ Certo: duas derivações já são duas árvores.
-   BYTE: "Duas derivações diferentes da mesma frase provam ambiguidade? Certo ou errado?"
+   BUG: "Hehe, achei duas derivações para a mesma frase. Ambígua, né? Certo ou errado?"
    PERGUNTA (toque): certo = Errado: as duas podem ter a mesma árvore. ; errado = Errado: só contas diferentes provam ambiguidade. | Certo: duas derivações já são duas árvores.
    se errar: "A mais à esquerda e a mais à direita podem desenhar a mesma árvore."
    se acertar: "O que conta são duas árvores diferentes, ou duas derivações mais à esquerda. Mudar só a ordem das trocas não prova nada."
 
 25. TELA: # Erros comuns ⏎ Certo: Ambígua: uma frase com duas árvores, ou duas derivações mais à esquerda. ⏎ *Errado: Testei três frases, cada uma deu uma árvore. Logo, não é ambígua.* ⏎ *Certo: Exemplos não provam que não há ambiguidade. Um contraexemplo prova que há.*
-   BYTE: "Outro erro: concluir que a gramática não é ambígua porque algumas frases deram uma árvore só. Só o contraexemplo prova, e ele prova a ambiguidade."
+   PROF: "Outro erro: concluir que a gramática não é ambígua porque algumas frases deram uma árvore só. Só o contraexemplo prova, e ele prova a ambiguidade."
 
 26. TELA: # Resumo ⏎ Ambiguidade: alguma frase tem duas árvores de derivação. ⏎ Para provar, mostre uma frase e as duas árvores. ⏎ Conserto: um nível por precedência, e a recursão do lado da associatividade.
-   BYTE: "Resumindo: gramática ambígua dá duas árvores para a mesma frase, e duas árvores são duas contas. Conserta-se com níveis de precedência e com a recursão do lado certo."
+   PROF: "Resumindo: gramática ambígua dá duas árvores para a mesma frase, e duas árvores são duas contas. Conserta-se com níveis de precedência e com a recursão do lado certo."
 
 #### PEGADINHA: "O else solto" (6 cenas, ~39s)
 

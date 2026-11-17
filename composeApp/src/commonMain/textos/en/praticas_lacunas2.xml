@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EpPraticaLacunas2.kt: the inherited attribute in recursive descent -->
+    <string name="hd_titulo">Inherited in the descent</string>
+    <string name="hd_01">In the attributes lesson, the type went down the tree as an inherited attribute. In recursive descent, each nonterminal becomes a function. See how the inherited attribute reaches it.</string>
+    <string name="hd_02">The synthesized attribute comes back in the return: function T gives back the type. The inherited one goes as a parameter: function L receives h. id matches the identifier and gives back its name.</string>
+    <string name="hd_03">With the input float a, b, which line puts b in the table? Tap it.</string>
+    <string name="hd_03_dica">a comes right after the type, and b comes after the comma. Who matches the comma?</string>
+    <string name="hd_03_ok">L puts a. b comes after the comma, and R is the one that matches the comma. h reached R as a parameter, through the call L made.</string>
+    <string name="hd_04">This is the trace of the calls. The same float goes from function to function, as a parameter, until it reaches each id.</string>
+    <string name="hd_05">A translation scheme is the grammar with actions in braces inside the rules. The action runs when the parser goes through that point of the rule.</string>
+    <string name="hd_06">The action passes T's type to L's inherited attribute. Where in the rule for D can it go? Tap it.</string>
+    <string name="hd_06_dica">The action reads T's type. And L needs the inherited attribute ready when it starts.</string>
+    <string name="hd_06_ok">Before T, the type doesn't exist yet. After L, a and b are already in the table with no type. Only between T and L does it work.</string>
+    <string name="hd_07">In function D, the action in the middle of the rule is the call to L with t. It runs after T and before L. The inherited attribute becomes a parameter, and the synthesized one becomes the return value.</string>
+
+    <!-- EpPraticaLacunas2.kt: functions in the table -->
+    <string name="fts_titulo">Functions in the table</string>
+    <string name="fts_01">Up to now, the symbol table held variables. Now the program has functions. Each function opens its own table, a child of the global one.</string>
+    <string name="fts_02">Which table do the parameters a and b go into? Tap it.</string>
+    <string name="fts_02_dica">Who can use a? Only the code inside soma.</string>
+    <string name="fts_02_ok">Into soma's table, together with s. Outside soma, nobody sees a or b.</string>
+    <string name="fts_linha_param">%1$s: %2$s, parameter</string>
+    <string name="fts_03">The function goes into the global table. The entry keeps the type it returns and the types of its parameters. The parameters go into the function's own table.</string>
+    <string name="fts_04">Inside main, someone writes x equals a. What does the lookup for a find? Tap it.</string>
+    <string name="fts_op_a_soma">The a in soma's table</string>
+    <string name="fts_op_a_global">An a in the global table</string>
+    <string name="fts_op_nada">Nothing: the compiler reports an error</string>
+    <string name="fts_04_dica">The lookup leaves main and goes up to the parent. Is soma's table on that path?</string>
+    <string name="fts_04_ok">From main, the lookup goes up to the global table, and there is no a there. soma's table is a sibling of main's table, not its parent. So the compiler reports an error.</string>
+    <string name="fts_05">In a call, the compiler looks the function up in the global table. Then it compares that entry with what the call sends. What the call sends are the arguments.</string>
+    <string name="fts_06">Which call does the compiler reject? Tap it.</string>
+    <string name="fts_06_dica">Count the arguments and compare with soma's entry.</string>
+    <string name="fts_06_ok">soma asks for two parameters, and this call sends only one argument. The count doesn't match.</string>
+    <string name="fts_07">That's why the function keeps its parameter types in the global table. Without that entry, the compiler would have nothing to compare the call with.</string>
+
+    <!-- EpPraticaLacunas2.kt: array access -->
+    <string name="vet_titulo">Array access</string>
+    <string name="vet_01">An array keeps its elements side by side in memory. Each int takes 4 bytes. That's why the addresses jump by 4.</string>
+    <string name="vet_02">Array v starts at address 1000. Where does the element with index 2 live? Tap it.</string>
+    <string name="vet_02_dica">The index starts at zero. How many elements come before the one with index 2?</string>
+    <string name="vet_02_ok">Two elements come before it, 4 bytes each. So 1000 plus 4 times 2 gives 1008.</string>
+    <string name="vet_03">In three-address code, the compiler first computes the offset. The offset is the distance, in bytes, from the start of the array to the element.</string>
+    <string name="vet_04">Why does the compiler multiply the index by 4? Tap it.</string>
+    <string name="vet_op_tamanho">The array has 4 elements</string>
+    <string name="vet_op_bytes">Each int takes 4 bytes</string>
+    <string name="vet_op_conta">The index counts by 4</string>
+    <string name="vet_04_dica">Think about the size of each element, not the size of the array.</string>
+    <string name="vet_04_ok">The 4 comes from the size of an int. In an array of a hundred elements, i would also be multiplied by 4.</string>
+    <string name="vet_05">In MIPS, la loads the address where the array starts. lw brings the value of i into a register.</string>
+    <string name="vet_06">Which line does i times 4? Tap it.</string>
+    <string name="vet_06_dica">There is no mul here. Look for the line that moves the bits of i.</string>
+    <string name="vet_06_ok">sll pushes the bits two places to the left. Each place doubles the number, so two places multiply by 4. And it costs less than mul.</string>
+    <string name="vet_07">add adds the start of the array and the offset. lw reads the word at that address. With i equal to 2, x ends up with 30.</string>
+    <string name="vet_08">To write into the array, the address math is the same. Only the end changes: an sw instead of the lw.</string>
+
+    <!-- EpEmC.kt: In C 1, the merged scenes and the common mistake -->
+    <string name="emc1_digito">It's a digit, so it enters the if, and v starts at zero. The first turn of the while adds the four.</string>
+    <string name="emc1_ungetc_ok">The loop stops. But the plus has already left the input: it was read one too many. ungetc puts it back.</string>
+    <string name="emc1_erro_titulo">Without ungetc</string>
+    <string name="emc1_erro">A common mistake is forgetting ungetc. See the same code without that line, reading another input: seven times thirteen.</string>
+    <string name="emc1_erro_q">Which tokens come out of this input, now without ungetc? Tap it.</string>
+    <string name="emc1_erro_dica">The while stops because it read the times sign. Without ungetc, who puts it back?</string>
+    <string name="emc1_erro_ok">The times sign was read to stop the while, and nobody put it back. It disappears, and the parser gets two numbers in a row.</string>
+</resources>

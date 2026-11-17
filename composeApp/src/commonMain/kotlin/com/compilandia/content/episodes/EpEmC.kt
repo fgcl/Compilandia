@@ -2,6 +2,7 @@ package com.compilandia.content.episodes
 
 import com.compilandia.content.Box
 import com.compilandia.content.EpMood
+import com.compilandia.content.EpisodeBuilder
 import com.compilandia.content.Look
 import com.compilandia.content.Speaker.PROF
 import com.compilandia.content.Temporada.EM_C
@@ -16,7 +17,9 @@ import com.compilandia.content.registro
 import com.compilandia.content.rotulo
 import com.compilandia.content.structsDaExpr
 import com.compilandia.content.titulo
+import com.compilandia.engine.ErrosDaSerieC
 import com.compilandia.engine.ExprParser
+import com.compilandia.engine.LexerC
 import com.compilandia.engine.MiniBison
 import com.compilandia.engine.MiniLexer
 import com.compilandia.engine.Mips
@@ -50,7 +53,7 @@ private val CODIGO_NOVO = listOf(
 )
 
 /** O expr da aula 2, agora devolvendo a árvore: o e antigo vira o filho da esquerda. */
-private val CODIGO_EXPR_ARVORE = listOf(
+internal val CODIGO_EXPR_ARVORE = listOf(
     "Node *expr(void) {",
     "  Node *e = termo();",
     "  while (tok.tipo == '+') {",
@@ -119,11 +122,8 @@ val serieEmC by lazy {
                 hot("s0"); tint("c0", Tint.YELLOW)
                 add(vars("'4'", "?"))
             }
-            cena(tx("epemc_digito_entra_no_if_valor")) {
-                hot("s1", "s2"); add(vars("'4'", "0"))
-            }
-            cena(tx("epemc_cada_volta_while_junta_digito")) {
-                hot("s4"); add(vars("'4'", "4"))
+            cena(tx("emc1_digito")) {
+                hot("s1", "s2", "s4"); add(vars("'4'", "4"))
             }
             cena(tx("epemc_le_2_quatro_vezes_dez")) {
                 hot("s4", "s5"); tint("c1", Tint.YELLOW); add(vars("'2'", "42"))
@@ -132,13 +132,13 @@ val serieEmC by lazy {
                 tx("epemc_agora_chegou_mais_qual_linha"),
                 setOf("s7"), setOf("s4", "s5", "s1"),
                 tx("epemc_mais_nao_digito_while_para"),
-                tx("epemc_isso_laco_para_ungetc_devolve"),
+                tx("emc1_ungetc_ok"),
             ) { hot(); tint("c2", Tint.ORANGE); add(vars("'+'", "42")) }
-            cena(tx("epemc_mais_foi_lido_mais_ungetc")) { hot("s7"); tint("c2", Tint.NONE) }
             cena(tx("epemc_sai_token_ele_struct_com"), mood = EpMood.HAPPY) {
-                hot("s8")
+                hot("s8"); tint("c2", Tint.NONE)
                 add(registro("tok", tx("comum_token"), listOf(tx("epemc_tipo_num"), tx("epemc_valor_1", primeiro)), 265f, 352f, 140f, Tint.TEAL, 13f))
             }
+            emC1SemUngetc(c)
             brinquedo(
                 tx("epemc_agora_corte_linha_inteira_como"),
                 tx("epemc_maior_casamento_estique_pedaco_enquanto"),
@@ -160,8 +160,7 @@ val serieEmC by lazy {
                 add(titulo("struct Node"))
                 add(codigo("s", listOf("typedef struct Node {", "  char op;", "  int val;", "  char *nome;", "  struct Node *esq, *dir;", "} Node;"), 112f, x = 60f, passo = 28f, size = 15f))
             }
-            cena(tx("epemc_op_guarda_operador_val_guarda")) { hot("s1", "s2", "s3") }
-            cena(tx("epemc_esq_dir_sao_ponteiros_eles")) { hot("s4") }
+            cena(tx("emc3_campos")) { hot("s1", "s2", "s3", "s4") }
             // Revisor professor do bloco 6: o código que cria os nós, e de onde vem a associatividade à esquerda.
             cena(tx("epemc_novo_cria_no")) {
                 dropAll("s")
@@ -172,12 +171,11 @@ val serieEmC by lazy {
                 dropAll("s")
                 add(codigo("s", CODIGO_EXPR_ARVORE, 96f, x = 14f, passo = 26f, size = 12f))
             }
-            cena(tx("epemc_para_dois_mais_tres_vezes")) {
-                dropAll("s")
+            emC3SemGuardar()
+            cena(tx("emc3_folhas")) {
+                clear()
                 add(titulo("2 + 3 * 4"))
                 add(nos.filter { it.id in folhas })
-            }
-            cena(tx("epemc_primeiro_folhas_no_para_cada")) {
                 add(nos.filter { it.id == vezes })
                 wires(ponteiros.filter { it.from == vezes })
                 hot(vezes)
@@ -262,13 +260,10 @@ val serieEmC by lazy {
                 add(titulo(tx("epemc_flex_bison_c")))
                 add(l, y, m)
             }
-            cena(tx("epemc_main_chama_yyparse_parser_que")) {
+            cena(tx("emc5_chamadas")) {
                 wire(Wire("main", "y", "yyparse()", hot = true))
-                lit("main", 2)
-            }
-            cena(tx("epemc_sempre_que_precisa_token_parser")) {
-                lit("main", -1)
                 wire(Wire("y", "l", "yylex()", hot = true, bend = 16f))
+                lit("main", 2)
             }
             cena(tx("epemc_yylex_devolve_tipo_valor_vai")) {
                 clearWires()
@@ -282,15 +277,14 @@ val serieEmC by lazy {
                 tx("epemc_quem_pede_tokens_parser"),
                 tx("epemc_isso_parser_pede_token_por"),
             ) { lit("l", -1) }
-            cena(tx("epemc_bison_flex_escrevem_arquivos_c")) {
-                add(registro("gcc", "terminal", listOf(tx("epemc_bison_d_calc_y"), tx("epemc_flex_calc_l"), tx("epemc_gcc_c_calc")), 92f, 368f, 172f, Tint.NONE, 13f))
-                hot("gcc")
-            }
-            cena(tx("epemc_roda_calc_digita_conta_sai"), mood = EpMood.HAPPY) {
+            cena(tx("emc5_compila_e_roda"), mood = EpMood.HAPPY) {
+                val passos = listOf(tx("epemc_bison_d_calc_y"), tx("epemc_flex_calc_l"), tx("epemc_gcc_c_calc"))
+                add(registro("gcc", "terminal", passos, 92f, 368f, 172f, Tint.NONE, 13f))
                 add(registro("run", "./calc", listOf(conta, "= $valor"), 272f, 368f, 150f, Tint.GREEN, 14f, lit = 1))
                 wire(Wire("gcc", "run"))
-                hot("run")
+                hot("gcc", "run")
             }
+            emC5SemLeft()
             // Revisor professor do bloco 6: os arquivos da tela eram resumo e não compilavam. Aqui, o que falta.
             cena(tx("epemc_calc_l_inteiro"), who = PROF) {
                 clear(); clearWires()

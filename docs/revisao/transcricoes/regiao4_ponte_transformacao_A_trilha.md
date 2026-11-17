@@ -129,16 +129,16 @@ Depois: "Gira sem ler nada. Ele troca E por E para sempre."
    se acertar: "O beta é o id, a alternativa sem laço. Toda lista começa por ele."
 
 27. TELA: # Erros comuns ⏎ Para tirar a recursão de A → A α | β, basta escrever A → α A | β. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a regra nova não começa com A. ⏎ Errado: os alfas vão parar antes do beta. ⏎ Errado: falta só o ε no fim.
-   BYTE: "Um colega consertou a recursão à esquerda assim. Certo ou errado? Toque."
+   BUG: "Consertei a recursão à esquerda num piscar de antenas. Certo ou errado? Toque."
    PERGUNTA (toque): certo = Errado: os alfas vão parar antes do beta. ; errado = Errado: falta só o ε no fim. | Certo: a regra nova não começa com A.
    se errar: "Gere uma frase com as duas versões. O beta fica no começo ou no fim?"
-   se acertar: "A original gera beta seguido de vários alfas. A do colega gera os alfas antes do beta. A linguagem mudou."
+   se acertar: "A original gera beta seguido de vários alfas. A do Bug gera os alfas antes do beta. A linguagem mudou."
 
 28. TELA: # Erros comuns ⏎ Certo: A → β A' e A' → α A' | ε. O β continua no começo. ⏎ *Errado: Esquecer o ε na regra nova A'.* ⏎ *Certo: Sem A' → ε a repetição nunca termina, e nenhuma frase é gerada.*
-   BYTE: "Outro erro: esquecer o épsilon em A linha. É ele que encerra a repetição. Sem ele, a derivação nunca chega só em terminais."
+   PROF: "Outro erro: esquecer o épsilon em A linha. É ele que encerra a repetição. Sem ele, a derivação nunca chega só em terminais."
 
 29. TELA: # Resumo ⏎ Recursão à esquerda: A → A α. O parser descendente entra em laço. ⏎ Conserto: A → β A' e A' → α A' | ε. ⏎ A linguagem não muda; a árvore muda. O laço do parser mantém a conta certa.
-   BYTE: "Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon."
+   PROF: "Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon."
 
 #### PEGADINHA: "A recursão escondida" (10 cenas, ~68s)
 
@@ -356,16 +356,16 @@ Depois: "Não dá. As duas começam igual."
    se acertar: "No if sem else, nada vem depois do if S. Só o épsilon deixa S linha virar nada."
 
 24. TELA: # Erros comuns ⏎ Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: a fatoração tira as frases com prefixo. ⏎ Certo: só muda o momento da escolha. ⏎ Certo: a gramática fica com menos regras.
-   BYTE: "Fatorar à esquerda muda a linguagem? Um colega disse isto. Certo ou errado?"
+   BUG: "Fatorar à esquerda muda a linguagem? Eu tenho opinião. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: só muda o momento da escolha. ; errado = Certo: a gramática fica com menos regras. | Errado: a fatoração tira as frases com prefixo.
    se errar: "Derive a b e a c com a gramática fatorada. Sai alguma frase nova?"
    se acertar: "É isso. A → a A' e A' → b | c geram a b e a c, as mesmas frases. A fatoração só muda o momento da escolha."
 
 25. TELA: # Erros comuns ⏎ Certo: Fatorar A → a b | a c não muda as frases que a gramática gera. ⏎ *Errado: Pôr em evidência só uma parte do prefixo comum.* ⏎ *Certo: Use o maior prefixo comum, e repita se sobrar começo igual.*
-   BYTE: "Um erro comum: fatorar pela metade. Se as alternativas novas ainda começam igual, o conflito continua. Repita até não sobrar prefixo comum."
+   PROF: "Um erro comum: fatorar pela metade. Se as alternativas novas ainda começam igual, o conflito continua. Repita até não sobrar prefixo comum."
 
 26. TELA: # Resumo ⏎ Prefixo comum: duas alternativas do mesmo não-terminal começam igual. ⏎ Fatorar: A → α A', e A' recebe o resto de cada alternativa. ⏎ Não muda a linguagem. É um dos preparos para a gramática ser LL(1).
-   BYTE: "Resumindo: prefixo comum impede a escolha com um token. A fatoração põe o prefixo em evidência e adia a decisão, sem mudar a linguagem."
+   PROF: "Resumindo: prefixo comum impede a escolha com um token. A fatoração põe o prefixo em evidência e adia a decisão, sem mudar a linguagem."
 
 #### PEGADINHA: "Quando fatorar não basta" (5 cenas, ~31s)
 

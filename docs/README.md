@@ -9,4 +9,6 @@
 | [LACUNAS.md](LACUNAS.md) | O que faltava em cada mudança e o que foi feito |
 | [CURRICULO.md](CURRICULO.md) | A disciplina da PUC Minas e onde cada assunto está no jogo |
 | `revisao/` | Roteiros dos revisores, relatórios completos e transcrições das aulas |
-| `licenses/` | Licenças dos assets de terceiros |
+| [LICENCA-CONTEUDO.md](LICENCA-CONTEUDO.md) | A licença das aulas, dos textos e da arte própria (CC BY 4.0) |
+| `licenses/` | Textos das licenças dos materiais de terceiros (ver também [CREDITOS.md](../CREDITOS.md) e [AVISO-LEGAL.md](../AVISO-LEGAL.md)) |
+| `imagens/` | As imagens do README |
