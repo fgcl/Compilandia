@@ -34,7 +34,7 @@ if os.path.exists('/usr/lib64/libespeak-ng.so.1'):
 from kokoro import KPipeline  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
-VOZES = {'BYTE': 'pm_santa', 'NARRADOR': 'pm_santa', 'PROF': 'pf_dora', 'LEXI': 'pf_dora', 'PILHA': 'pm_alex'}
+VOZES = {'BYTE': 'pm_santa', 'NARRADOR': 'pm_santa', 'PROF': 'pf_dora', 'LEXI': 'pf_dora', 'PILHA': 'pm_alex', 'BUG': 'pm_alex'}
 AMOSTRAS = 24000
 QUADRO = 600  # uma unidade de pred_dur são 600 amostras (25 ms)
 

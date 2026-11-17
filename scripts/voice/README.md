@@ -30,5 +30,6 @@ python scripts/voice/qa.py                                      # escuta tudo co
 |---|---|
 | Byte, narrador | `pm_santa` |
 | Profª Gramática | `pf_dora` |
+| Bug | `pm_alex` |
 
 Modelo: [Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M), licença Apache 2.0.

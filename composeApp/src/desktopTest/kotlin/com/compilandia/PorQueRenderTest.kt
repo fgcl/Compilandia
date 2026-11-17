@@ -30,7 +30,7 @@ class PorQueRenderTest : RenderBase() {
     @Test fun bloco5() = fotos("bloco5", listOf("ast_l_13", "ast_l_14", "epbackend_fat_dois_chama_fat_outro", "epbackend_pinto_grafo_vizinhos_nunca_tem"))
 
     /** As cenas da série Em C que o revisor professor do bloco 6 fez mudar. */
-    @Test fun bloco6() = fotos("bloco6", listOf("epemc_termo_igual_com_vezes_fator", "epemc_esq_dir_sao_ponteiros_eles", "epemc_mais_usa_resultado_vezes_que", "epemc_main_chama_yyparse_parser_que", "epemc_calc_l_inteiro", "epemc_calc_y_falta", "epemc_novo_cria_no", "epemc_qual_linha_cria_no", "epemc_acao_monta_no"))
+    @Test fun bloco6() = fotos("bloco6", listOf("epemc_termo_igual_com_vezes_fator", "emc3_campos", "epemc_mais_usa_resultado_vezes_que", "emc5_chamadas", "epemc_calc_l_inteiro", "epemc_calc_y_falta", "epemc_novo_cria_no", "epemc_qual_linha_cria_no", "epemc_acao_monta_no"))
 
     private fun fotos(prefixo: String, chaves: List<String>) {
         for (c in chaves) {

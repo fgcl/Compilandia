@@ -41,7 +41,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Um nome por conceito: cadeia (o que o autômato lê), frase (o que a gramática gera), palavra só no sentido de todo dia
 - [x] Tirar das regiões 3 e 4 os termos das regiões 5 e 6 (LL(1), pilha, `$`, FOLLOW, LR), ou avisar "você vai ver no Templo"
 - [x] Ficha e Bugs cobram só o que a aula animada ensina, ou marcam "vem da aula de texto" (`FichaDoTexto`)
-- [ ] Dar falas à professora e ao Bug nas aulas animadas
+- [x] Dar falas à professora e ao Bug nas aulas animadas: o Bug lança o desafio do fecho (o julgamento que era do colega) e a professora fala o segundo erro e o resumo nas 29 aulas básicas (`ElencoTest`)
 - [x] Série em C 5: os fios `yyparse()` e `NUM 42` saem do alto das caixas, e o rótulo fica no vão
 
 ## 3. O aluno produz a resposta
@@ -119,7 +119,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Prompt de trabalho para o Opus 5.5 em [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md)
 - [x] Revisor professor do bloco 5 (Semântica e Forja), e os erros técnicos dele consertados
 - [x] Revisor professor do bloco 6 (Seu compilador), e os erros técnicos dele consertados
-- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`) (de novo em 17/11, com as seis práticas novas, a Em C 1 e a Em C 4)
+- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`) (de novo em 17/11, com as seis práticas novas, a série Em C e as falas do Bug e da professora)
 - [ ] Teste com aluno de verdade: olhar o que o botão "Não entendi" guardou
 
 ## 7. O que os professores dos blocos 5 e 6 pediram e ainda falta
@@ -156,11 +156,11 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
 - [x] Em C 4: erro comum (pai antes dos filhos) e o MIPS de `a * b + c` no brinquedo; a pergunta da Em C 2, cena 7, já tem três opções
 - [x] Em C 1: erro comum (esquecer o `ungetc`) com a segunda entrada `7*13`; duas cenas juntadas para caber nos 10 passos
-- [ ] Série Em C: segundo exemplo e erro comum nas aulas 2, 3 e 5 (todas no teto de 10 passos; será preciso juntar cenas, como na Em C 1)
+- [x] Série Em C: erro comum e segundo exemplo nas aulas 2 (`E → E + T` ao pé da letra estoura a pilha), 3 (`novo` sem o `e =`, com `1 + 2 + 3`) e 5 (sem o `%left`, `2*3+4` dá 14); duas cenas juntadas em cada uma para caber nos 10 passos
 - [x] Em C 4, cena 6: o `gera` saiu de baixo da árvore e foi para o lugar do MIPS, com uma chamada por linha
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison
 
 ## 8. Ferramentas do agente (15/11/2026)
 
-- [ ] Sala desenhada por código, sem imagem renderizada: o Blender saiu do projeto (`scripts/art/room.py` apagado) e móvel
-  novo hoje não tem como entrar na sala. O visual aprovado (Oficina do Byte) continua a referência; a troca passa pela Bancada.
+- [x] Sala desenhada por código, sem imagem renderizada (`ui/room/art`): a sala vazia, os quatro móveis-botão e os 12 móveis da loja em projeção isométrica, nos lugares da arte aprovada. Móvel novo entra com um desenho, um centro e um tamanho em `MoveisArte.kt`; `SalaDesenhadaTest` fotografa a sala e os ícones.
+- [ ] Apagar as imagens antigas da sala (`room_base`, `room_item_*`, `room_ghost_*`), o `RoomLayers.kt` e o `scripts/art/layers.py`, que não são mais usados (esperando o dono confirmar)

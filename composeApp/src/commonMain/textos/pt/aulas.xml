@@ -184,12 +184,8 @@
     <string name="epemc_tokens_que_voce_cortou_sao">Os tokens que você cortou são os que o seu lexer devolveria.</string>
     <string name="epemc_corte_linha_em_tokens">Corte a linha em tokens.</string>
     <string name="epemc_em_c_2_funcao_por">Em C 2: uma função por regra</string>
-    <string name="epemc_na_descida_recursiva_em_c">Na descida recursiva em C, cada regra da gramática vira uma função.</string>
-    <string name="epemc_expr_chama_termo_while_repete">expr chama termo. O while repete enquanto vier um mais.</string>
     <string name="epemc_termo_igual_com_vezes_fator">termo é igual, com o vezes. O fator casa um número ou abre um parêntese.</string>
-    <string name="epemc_expr_chama_termo_termo_chama">expr chama termo, e termo chama fator. A pilha cresce.</string>
     <string name="epemc_no_vezes_quem_casa_termo">No vezes, quem casa é termo. Cada função cuida do seu operador.</string>
-    <string name="emc2p_rodar">Vamos rodar dois vezes, abre parêntese, três mais quatro, fecha parêntese.</string>
     <string name="emc2p_g_fator" translatable="false">fator: NUM | '(' expr ')'</string>
     <string name="emc2p_q">Abriu o parêntese. Quem chamou o expr do topo da pilha? Toque.</string>
     <string name="emc2p_q_dica">Qual função tem o parêntese no código?</string>
@@ -203,10 +199,6 @@
     <string name="epemc_rode_1_2_3_ate">Rode 1 * 2 + 3 até a pilha esvaziar.</string>
     <string name="epemc_em_c_3_struct_node">Em C 3: o struct Node</string>
     <string name="epemc_na_ast_em_c_cada">Na AST em C, cada nó da árvore é um struct.</string>
-    <string name="epemc_op_guarda_operador_val_guarda">op guarda o operador, val guarda o número, e nome guarda a variável.</string>
-    <string name="epemc_esq_dir_sao_ponteiros_eles">esq e dir são ponteiros. Eles apontam para os filhos.</string>
-    <string name="epemc_para_dois_mais_tres_vezes">Para dois mais três vezes quatro, o parser cria os nós de baixo para cima.</string>
-    <string name="epemc_primeiro_folhas_no_para_cada">Primeiro as folhas, um nó para cada número. Depois vem o vezes.</string>
     <string name="epemc_por_ultimo_mais_que_vira">Por último o mais, que vira a raiz da árvore.</string>
     <string name="epemc_para_qual_no_aponta_ponteiro">Para qual nó aponta o ponteiro dir da raiz? Toque nele.</string>
     <string name="epemc_siga_fio_que_sai_linha">Siga o fio que sai da linha dir.</string>
@@ -237,17 +229,13 @@
     <string name="epemc_yylval_atoi_yytext" translatable="false">yylval = atoi(yytext)</string>
     <string name="epemc_compilador_em_c_verdade_costuma">Um compilador em C de verdade costuma ter três arquivos.</string>
     <string name="epemc_flex_bison_c">flex + bison + C</string>
-    <string name="epemc_main_chama_yyparse_parser_que">O main chama o yyparse, o parser que o Bison escreveu.</string>
-    <string name="epemc_sempre_que_precisa_token_parser">Sempre que precisa de um token, o parser chama o yylex.</string>
     <string name="epemc_yylex_devolve_tipo_valor_vai">O yylex devolve o tipo. O valor vai junto, em yylval.</string>
     <string name="epemc_quem_chama_yylex_toque_no">Quem chama o yylex? Toque no arquivo.</string>
     <string name="epemc_quem_pede_tokens_parser">Quem pede tokens é o parser.</string>
     <string name="epemc_isso_parser_pede_token_por">O parser pede um token por vez.</string>
-    <string name="epemc_bison_flex_escrevem_arquivos_c">O Bison e o Flex escrevem arquivos C. O gcc junta tudo num programa.</string>
     <string name="epemc_bison_d_calc_y" translatable="false">bison -d calc.y</string>
     <string name="epemc_flex_calc_l" translatable="false">flex calc.l</string>
     <string name="epemc_gcc_c_calc" translatable="false">gcc *.c -o calc</string>
-    <string name="epemc_roda_calc_digita_conta_sai">Roda o calc, digita a conta, e sai o resultado.</string>
     <!-- EpGramatica.kt -->
     <string name="epgramatica_regras_troca">Regras de troca</string>
     <string name="epgramatica_gramatica_lista_trocas_pode_virar">Cada regra, ou produção, diz que o símbolo da esquerda pode ser trocado pelo lado direito. Aqui, E pode virar E mais E, ou pode virar n.</string>

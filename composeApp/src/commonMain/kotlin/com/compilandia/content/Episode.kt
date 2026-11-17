@@ -174,6 +174,23 @@ class EpisodeBuilder(val skill: Skill, private val title: String, private val te
         passos += Passo(shot(), Fala(who, fala), Ask(right, wrong, Fala(who, dica), Fala(who, acerto)), EpMood.THINK)
     }
 
+    /**
+     * O Bug desafia: ele faz a afirmação e a pergunta; o Byte dá a dica e comemora o acerto.
+     * O Bug não erra sempre, então a resposta certa não é "errado" de cor.
+     */
+    fun desafioDoBug(
+        fala: String,
+        right: Set<String>,
+        wrong: Set<String>,
+        dica: String,
+        acerto: String,
+        change: EpisodeBuilder.() -> Unit,
+    ) {
+        change()
+        val ask = Ask(right, wrong, Fala(Speaker.BYTE, dica), Fala(Speaker.BYTE, acerto))
+        passos += Passo(shot(), Fala(Speaker.BUG, fala), ask, EpMood.THINK)
+    }
+
     /** A palavra cai letra por letra, e uma frase curta fica embaixo dela. */
     fun palavra(termo: String, fala: String, who: Speaker = Speaker.BYTE, mood: EpMood = EpMood.SURPRISED, change: EpisodeBuilder.() -> Unit = {}) {
         clear()
@@ -295,14 +312,15 @@ fun EpisodeBuilder.fecho(f: Fecho) {
     // O "diga por quê" fecha a Sua vez, logo antes dos erros comuns.
     PorQues.suaVez[skill]?.let { porQue(it) }
     julgamento(f, PorQues.fecho[skill])
-    cena(f.fala2) {
+    // A professora fecha a aula: o segundo erro comum e o resumo são dela.
+    cena(f.fala2, who = Speaker.PROF) {
         drop("cuS", "cuN", "cuS2", "cuN2", "cuQ")
         change(CUIDADO_ID) { it.copy(text = tx("aula_certo_prefixo", f.certo), tint = Tint.GREEN, y = 104f) }
         add(cartao("cu2", tx("aula_errado_prefixo", f.erro2), 206f, Tint.RED))
         add(cartao("cu3", tx("aula_certo_prefixo", f.certo2), 284f, Tint.GREEN))
         hot("cu2", "cu3")
     }
-    cena(f.falaResumo, mood = EpMood.HAPPY) {
+    cena(f.falaResumo, who = Speaker.PROF, mood = EpMood.HAPPY) {
         clear()
         add(titulo(tx("aula_titulo_resumo")))
         f.resumo.forEachIndexed { i, t -> add(cartao("z${i + 1}", t, 100f + i * 78f, h = 68f)) }
@@ -310,13 +328,14 @@ fun EpisodeBuilder.fecho(f: Fecho) {
 }
 
 /**
- * O colega diz uma frase, e a pessoa escolhe o veredito com o motivo (pergunta de dois níveis).
+ * O Bug diz uma frase, e a pessoa escolhe o veredito com o motivo (pergunta de dois níveis).
+ * O Bug faz o papel que era do colega: acerta em parte das aulas (OrdemDasOpcoesTest).
  * A certa tem o id cuS quando a frase vale e cuN quando não vale; a segunda errada tem o veredito certo e o motivo errado.
  */
 private fun EpisodeBuilder.julgamento(f: Fecho, r: RazaoDoFecho?) {
     val (sim, nao) = if (f.vale) "cuS" to "cuN" else "cuN" to "cuS"
     val ids = if (r == null) listOf(sim, nao) else listOf(sim, "${sim}2", nao)
-    pergunta(f.pergunta, setOf(sim), ids.drop(1).toSet(), f.dica, f.porque) {
+    desafioDoBug(f.pergunta, setOf(sim), ids.drop(1).toSet(), f.dica, f.porque) {
         clear()
         add(titulo(tx("aula_titulo_erros")))
         add(cartao(CUIDADO_ID, f.afirmacao, 130f))

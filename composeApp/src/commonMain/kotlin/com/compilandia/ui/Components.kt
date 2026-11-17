@@ -349,7 +349,7 @@ fun SpeechBubble(emoji: String, name: String, text: String, color: Color = Palet
 /** [emoji] só escolhe o desenho do personagem; sem desenho, aparece a [inicial] do nome. */
 fun Avatar(emoji: String, size: Dp = 44.dp, inicial: String = "") {
     val art = characterArt(emoji)
-    val cast = emoji == "🤖" || emoji == "🦉"
+    val cast = emoji == "🤖" || emoji == "🦉" || emoji == "🐞"
     Box(
         Modifier.size(size).clip(RoundedCornerShape(50)).background(if (art != null || cast) Palette.paperDark else Palette.yellow).border(2.dp, Palette.ink, RoundedCornerShape(50)),
         contentAlignment = Alignment.Center,
@@ -357,6 +357,7 @@ fun Avatar(emoji: String, size: Dp = 44.dp, inicial: String = "") {
         when {
             emoji == "🤖" -> com.compilandia.ui.cast.ByteFigure(Modifier.height(size * 0.86f), animate = false)
             emoji == "🦉" -> com.compilandia.ui.cast.ProfFigure(Modifier.size(size * 0.86f), animate = false)
+            emoji == "🐞" -> com.compilandia.ui.cast.BugFigure(Modifier.width(size * 0.86f))
             art != null -> androidx.compose.foundation.Image(org.jetbrains.compose.resources.painterResource(art), emoji, Modifier.size(size * 0.82f))
             else -> Text(inicial, fontSize = (size.value * 0.45f).sp, fontWeight = FontWeight.Bold, color = Palette.inkOnLight)
         }

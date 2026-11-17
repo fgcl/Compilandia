@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EpEmC.kt, EpEmC2Parenteses.kt e EpEmCErros.kt: cenas juntadas e os erros comuns das Em C 2, 3 e 5 -->
+    <string name="emc2_abre">Na descida recursiva em C, cada regra vira uma função. O expr chama o termo, e o while repete enquanto vier um mais.</string>
+    <string name="emc2_rodar">Vamos rodar dois vezes, abre parêntese, três mais quatro, fecha parêntese. O expr chama o termo, e o termo chama o fator.</string>
+    <string name="emc2_erro_titulo">A regra ao pé da letra</string>
+    <string name="emc2_erro">Um erro comum é copiar a regra E, E mais T, como ela está. Assim, o expr chama a si mesmo antes de ler qualquer token.</string>
+    <string name="emc2_erro_q">O que acontece quando esse expr roda dois mais três? Toque.</string>
+    <string name="emc2_op_le_2">Lê o 2 e para no +</string>
+    <string name="emc2_op_estoura">A pilha cresce até estourar</string>
+    <string name="emc2_op_igual">Funciona igual ao while</string>
+    <string name="emc2_erro_dica">Antes de chamar o expr de novo, ele lê algum token?</string>
+    <string name="emc2_erro_ok">Cada expr chama outro expr sem ler nada. A entrada não anda, e a pilha estoura. Por isso o Templo tira a recursão à esquerda.</string>
+    <string name="emc3_campos">O op guarda o operador, o val guarda o número, e o nome guarda a variável. O esq e o dir são ponteiros para os filhos.</string>
+    <string name="emc3_erro_titulo">Sem o e igual</string>
+    <string name="emc3_erro">Um erro comum é esquecer o e igual na linha do novo. Veja o que sai com outra conta: um mais dois mais três.</string>
+    <string name="emc3_erro_q">Se a linha não guarda o nó no e, que árvore o expr devolve? Toque.</string>
+    <string name="emc3_erro_dica">No fim, o expr devolve o e. Para onde o e aponta?</string>
+    <string name="emc3_erro_ok">O nó do mais nasce, mas ninguém guarda o endereço dele. O e continua na folha 1. Com o e igual, sai um mais dois, mais três.</string>
+    <string name="emc3_folhas">Para dois mais três vezes quatro, o parser cria os nós de baixo para cima. Primeiro as folhas, depois o vezes.</string>
+    <string name="emc5_chamadas">O main chama o yyparse, o parser que o Bison escreveu. Sempre que precisa de um token, o parser chama o yylex.</string>
+    <string name="emc5_compila_e_roda">O Bison e o Flex escrevem arquivos C, e o gcc junta tudo. Roda o calc, digita a conta, e sai o resultado.</string>
+    <string name="emc5_erro_titulo">Sem o %left</string>
+    <string name="emc5_erro">Um erro comum é esquecer as linhas do %left. O Bison avisa os conflitos de empilha-reduz e escolhe empilhar.</string>
+    <string name="emc5_aviso">calc.y: %1$s conflitos de empilha-reduz</string>
+    <string name="emc5_erro_q">Sem o %left, quanto dá dois vezes três mais quatro? Toque.</string>
+    <string name="emc5_op_nao_compila">Não compila</string>
+    <string name="emc5_erro_dica">Conflito é só aviso. Quando o Bison empilha o mais, qual conta fica para o fim?</string>
+    <string name="emc5_erro_ok">Empilhando, o Bison reduz o mais primeiro: três mais quatro, sete. Depois, dois vezes sete, catorze. Com o %left, o vezes vem antes e dá dez.</string>
+</resources>

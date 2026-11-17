@@ -64,7 +64,6 @@ import com.compilandia.platform.Sound
 import com.compilandia.platform.nowMs
 import com.compilandia.resources.Res
 import com.compilandia.resources.prop_gear
-import com.compilandia.resources.room_base
 import androidx.compose.foundation.layout.fillMaxHeight
 import com.compilandia.ui.AppState
 import com.compilandia.ui.BigButton
@@ -257,11 +256,11 @@ private fun RoomScene(app: AppState, side: Dp, desafioPendente: Boolean, onJogar
     val scope = rememberCoroutineScope()
     var hop by remember { mutableIntStateOf(0) }
     Box(Modifier.requiredSize(side)) {
-        Image(painterResource(Res.drawable.room_base), tx("roomscreen_oficina_byte"), Modifier.fillMaxSize(), contentScale = ContentScale.FillBounds)
+        SalaDesenhada(tx("roomscreen_oficina_byte"))
         // Só o que você já tem. O que falta comprar fica na Loja, não no meio da sala.
-        for ((id, layer) in roomLayers) {
+        for (id in com.compilandia.ui.room.art.moveisArte.keys) {
             val item = RoomItem.entries.firstOrNull { it.id == id } ?: continue
-            if (l.owns(item)) RoomLayerImage(layer, side, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
+            if (l.owns(item)) MovelNaSala(id, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
         }
         // os móveis são os botões: gaveteiro, monitor, quadro e caixas
         MoveisDaSala(app, side, desafioPendente, onJogar)
@@ -290,23 +289,6 @@ private fun RoomScene(app: AppState, side: Dp, desafioPendente: Boolean, onJogar
     }
 }
 
-@Composable
-private fun RoomLayerImage(layer: RoomLayer, side: Dp, popIn: Boolean, onDone: () -> Unit) {
-    val s = remember { Animatable(if (popIn) 0f else 1f) }
-    LaunchedEffect(popIn) {
-        if (popIn) {
-            Juice.levelUp()
-            s.animateTo(1f, spring(Spring.DampingRatioMediumBouncy, Spring.StiffnessLow))
-            onDone()
-        }
-    }
-    Image(
-        painterResource(layer.art), null,
-        Modifier.offset(side * layer.x, side * layer.y).size(side * layer.w, side * layer.h).scale(s.value),
-        contentScale = ContentScale.FillBounds,
-    )
-}
-
 /** Loja da oficina: cada peça entra na sala assim que você compra. */
 @Composable
 fun ShopScreen(app: AppState) {
@@ -330,10 +312,9 @@ fun ShopScreen(app: AppState) {
             }
             for (item in RoomItem.entries) {
                 val owned = l.owns(item)
-                val layer = roomLayers[item.id]
                 PaperCard(Modifier.fillMaxWidth(), border = if (owned) Palette.green else Palette.ink) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (layer != null) Image(painterResource(layer.art), null, Modifier.size(56.dp), contentScale = ContentScale.Fit)
+                        MovelIcone(item.id, Modifier.size(56.dp))
                         Spacer(Modifier.width(10.dp))
                         Text(item.title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
                         if (owned) Text(tx("roomscreen_na_sala"), color = Palette.green, style = MaterialTheme.typography.labelMedium)

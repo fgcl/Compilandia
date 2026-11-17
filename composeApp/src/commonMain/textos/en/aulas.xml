@@ -175,12 +175,8 @@
     <string name="epemc_tokens_que_voce_cortou_sao">The tokens you cut are the ones your lexer would return.</string>
     <string name="epemc_corte_linha_em_tokens">Cut the line into tokens.</string>
     <string name="epemc_em_c_2_funcao_por">In C 2: one function per rule</string>
-    <string name="epemc_na_descida_recursiva_em_c">In recursive descent in C, each grammar rule becomes a function.</string>
-    <string name="epemc_expr_chama_termo_while_repete">expr calls termo. The while repeats as long as a plus comes in.</string>
     <string name="epemc_termo_igual_com_vezes_fator">termo is the same, with times. fator matches a number or opens a parenthesis.</string>
-    <string name="epemc_expr_chama_termo_termo_chama">expr calls termo, and termo calls fator. The stack grows.</string>
     <string name="epemc_no_vezes_quem_casa_termo">For times, termo does the matching. Each function takes care of its own operator.</string>
-    <string name="emc2p_rodar">Let's run two times, open parenthesis, three plus four, close parenthesis.</string>
     <string name="emc2p_q">The parenthesis opened. Who called the expr on top of the stack? Tap it.</string>
     <string name="emc2p_q_dica">Which function has the parenthesis in its code?</string>
     <string name="emc2p_q_ok">Right. fator called expr. Now expr shows up twice on the stack.</string>
@@ -193,7 +189,6 @@
     <string name="epemc_rode_1_2_3_ate">Run 1 * 2 + 3 until the stack is empty.</string>
     <string name="epemc_em_c_3_struct_node">In C 3: the Node struct</string>
     <string name="epemc_na_ast_em_c_cada">In an AST in C, each tree node is a struct.</string>
-    <string name="epemc_op_guarda_operador_val_guarda">op holds the operator, val holds the number, and nome holds the variable.</string>
     <string name="epemc_novo_cria_no">The function novo creates each node. It asks for memory and links the two children.</string>
     <string name="epemc_while_monta_no">In the parser, each turn of the while creates a node. The old e becomes the left child, so the sum groups to the left.</string>
     <string name="epemc_acao_monta_no">In a real compiler, the Bison action builds the node. Then the gera from lesson four writes the MIPS.</string>
@@ -202,9 +197,6 @@
     <string name="epemc_qual_linha_cria_no_dica">Look for the call to the function novo.</string>
     <string name="epemc_calc_l_inteiro">On screen, the files were shortened. This is the whole calc.l, and it compiles.</string>
     <string name="epemc_calc_y_falta">In calc.y, the header, the rule that prints the result and yyerror are missing.</string>
-    <string name="epemc_esq_dir_sao_ponteiros_eles">esq and dir are pointers. They point to the children.</string>
-    <string name="epemc_para_dois_mais_tres_vezes">For two plus three times four, the parser creates the nodes from the bottom up.</string>
-    <string name="epemc_primeiro_folhas_no_para_cada">First the leaves, one node for each number. Then comes the times.</string>
     <string name="epemc_por_ultimo_mais_que_vira">Last comes the plus, which becomes the root of the tree.</string>
     <string name="epemc_para_qual_no_aponta_ponteiro">Which node does the root's dir pointer point to? Tap it.</string>
     <string name="epemc_siga_fio_que_sai_linha">Follow the wire leaving the dir line.</string>
@@ -225,14 +217,10 @@
     <string name="epemc_em_c_5_flex_bison">In C 5: flex, bison and main</string>
     <string name="epemc_compilador_em_c_verdade_costuma">A real compiler in C usually has three files.</string>
     <string name="epemc_flex_bison_c">flex + bison + C</string>
-    <string name="epemc_main_chama_yyparse_parser_que">main calls yyparse, the parser Bison wrote.</string>
-    <string name="epemc_sempre_que_precisa_token_parser">Whenever it needs a token, the parser calls yylex.</string>
     <string name="epemc_yylex_devolve_tipo_valor_vai">yylex returns the type. The value goes along, in yylval.</string>
     <string name="epemc_quem_chama_yylex_toque_no">Who calls yylex? Tap the file.</string>
     <string name="epemc_quem_pede_tokens_parser">The one asking for tokens is the parser.</string>
     <string name="epemc_isso_parser_pede_token_por">The parser asks for one token at a time.</string>
-    <string name="epemc_bison_flex_escrevem_arquivos_c">Bison and Flex write C files. gcc puts it all together into a program.</string>
-    <string name="epemc_roda_calc_digita_conta_sai">Run calc, type the math, and out comes the result.</string>
     <string name="epgramatica_regras_troca">Replacement rules</string>
     <string name="epgramatica_gramatica_lista_trocas_pode_virar">Each rule, or production, says the symbol on the left can be replaced by the right-hand side. Here, E can become E plus E, or it can become n.</string>
     <string name="epgramatica_gramatica">Grammar</string>

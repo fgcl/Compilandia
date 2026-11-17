@@ -85,6 +85,9 @@ import com.compilandia.ui.Screen
 import com.compilandia.ui.cast.BugFigure
 import com.compilandia.ui.cast.ByteFigure
 import com.compilandia.ui.cast.Mood
+import com.compilandia.ui.cast.CONVIDADOS
+import com.compilandia.ui.cast.ConvidadoPop
+import com.compilandia.ui.cast.noAltoDoPainel
 import com.compilandia.ui.cast.ProfFigure
 import com.compilandia.ui.motion.MotionStage
 import com.compilandia.ui.motion.STAGE_W
@@ -268,7 +271,7 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
     val inScene = shot.actor != null
     val line = speaking ?: passo.fala
     val showText = !Narrator.canSpeak(line) || app.ls.captionsOn || legendaForcada
-    val profFala = line.who == Speaker.PROF
+    val profFala = line.who in CONVIDADOS
 
     // A fala escrita (ou as barrinhas do som) e o "não entendi". Igual nos dois arranjos.
     val falaEscrita: @Composable (Modifier, Boolean) -> Unit = { mod, estreito ->
@@ -428,9 +431,9 @@ fun EpisodeScreen(app: AppState, s: Screen.Episode, onStep: Int = 0, abertura: B
                 hop = hop, armsUp = armsUp,
             )
             if (ladoALado) {
-                ProfPop(profFala, Modifier.align(Alignment.TopEnd).offset(y = topoDoPainel).padding(end = 10.dp, top = 4.dp))
+                ConvidadoPop(line.who, PROF_W, Modifier.align(Alignment.TopEnd).noAltoDoPainel(topoDoPainel))
             } else {
-                ProfPop(profFala, Modifier.align(Alignment.BottomEnd).padding(end = 6.dp, bottom = 2.dp))
+                ConvidadoPop(line.who, PROF_W, Modifier.align(Alignment.BottomEnd).padding(end = 6.dp, bottom = 2.dp))
             }
             if (finished) EpisodeEnd(app, s, ep, onReplay = { index = 0; finished = false }) { goPractice(app, s) }
         }
@@ -553,13 +556,6 @@ private fun BugAbertura(a: Abertura, onDone: () -> Unit) {
             RichText(a.depois.text, Modifier.widthIn(max = com.compilandia.ui.TEXTO_MAX), style = MaterialTheme.typography.bodyLarge)
             BigButton(tx("episodescreen_agora_aula"), Modifier.fillMaxWidth().widthIn(max = com.compilandia.ui.LISTA_MAX)) { Narrator.stop(); onDone() }
         }
-    }
-}
-
-@Composable
-private fun ProfPop(visible: Boolean, modifier: Modifier) {
-    AnimatedVisibility(visible, modifier, enter = slideInVertically { it } + fadeIn(), exit = slideOutVertically { it } + fadeOut()) {
-        ProfFigure(Modifier.size(PROF_W), lookX = -0.5f)
     }
 }
 

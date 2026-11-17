@@ -36,12 +36,12 @@ import com.compilandia.ui.Palette
 import com.compilandia.ui.Screen
 
 /**
- * Um móvel que se toca: a área cobre o desenho do móvel em room_base, como fração do lado da sala.
+ * Um móvel que se toca: a área cobre o desenho do móvel na sala (ui/room/art), como fração do lado da sala.
  * A plaquinha fica presa no próprio móvel, em ([px], [py]).
  */
 private data class Movel(val x: Float, val y: Float, val w: Float, val h: Float, val px: Float, val py: Float, val tag: String)
 
-// Medido na arte da sala (scripts/art): quadro de ferramentas, mesa com monitor, gaveteiro e caixas.
+// Medido na arte aprovada da sala, que hoje é desenhada por código em ui/room/art: quadro de ferramentas, mesa com monitor, gaveteiro e caixas.
 private val moveis = listOf(
     Movel(0.10f, 0.20f, 0.20f, 0.27f, 0.20f, 0.23f, "movel-jogar"),
     Movel(0.16f, 0.33f, 0.28f, 0.31f, 0.34f, 0.35f, "movel-lab"),
