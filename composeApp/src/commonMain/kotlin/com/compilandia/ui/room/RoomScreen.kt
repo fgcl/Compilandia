@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -63,6 +64,7 @@ import com.compilandia.ui.BigButton
 import com.compilandia.ui.GearIcon
 import com.compilandia.ui.Header
 import com.compilandia.ui.Juice
+import com.compilandia.ui.LISTA_MAX
 import com.compilandia.ui.LocalFonts
 import com.compilandia.ui.Palette
 import com.compilandia.ui.PaperCard
@@ -170,7 +172,8 @@ private fun GavetaJogar(app: AppState, now: Long, onFechar: () -> Unit) {
     val hoje = now / 86_400_000L
     Box(Modifier.fillMaxSize().background(androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.55f)).clickable(remember { MutableInteractionSource() }, null) { onFechar() }) {
         Column(
-            Modifier.align(Alignment.BottomCenter).fillMaxWidth().clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            Modifier.align(Alignment.BottomCenter).widthIn(max = LISTA_MAX).fillMaxWidth()
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                 .background(Palette.paper).clickable(remember { MutableInteractionSource() }, null) {}.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
