@@ -20,6 +20,8 @@ PADRAO = {"arquivo": 400, "funcao": 50, "complexidade": 12, "aninhamento": 3, "p
 KOTLIN, PYTHON, JS = (".kt", ".kts"), (".py",), (".js", ".jsx", ".ts", ".tsx", ".mjs")
 CONTROLE = re.compile(r"^\s*(\}\s*)?(if|else if|else|for|while|when|try|catch|do|elif|except|with|match|switch)\b")
 DECISAO = re.compile(r"\b(if|for|while|catch|case|elif|except)\b|&&|\|\||\?:| and | or ")
+BOTAO_LARGO = re.compile(r"\b(BigButton|Button|OutlinedButton|TextButton)\(|\.clickable\b")
+LARGURA_LIMITADA = re.compile(r"widthIn\(|larguraDeLeitura\(|\.width\(")
 TEMA = re.compile(r"(?i)(/theme/|tema|paleta|palette|cores|colors?\.kt|/art/)")
 
 
@@ -61,6 +63,20 @@ def sem_strings_e_comentarios(linha, ext):
     linha = re.sub(r'"(?:\\.|[^"\\])*"', '""', linha)
     linha = re.sub(r"'(?:\\.|[^'\\])*'", "''", linha)
     return re.split(r"#" if ext in PYTHON else r"//", linha)[0]
+
+
+def nulo_forcado(n, cod):
+    if "!!" in cod:
+        return [f"linha {n}: '!!' derruba o app se vier nulo; use ?.let, ?: ou requireNotNull com mensagem"]
+    return []
+
+
+def botao_esticado(n, cod):
+    """Botão com fillMaxWidth() e sem teto de largura: no monitor vira uma faixa de borda a borda."""
+    if BOTAO_LARGO.search(cod) and "fillMaxWidth()" in cod and not LARGURA_LIMITADA.search(cod):
+        return [f"linha {n}: botão com fillMaxWidth() estica de borda a borda no monitor; limite ele "
+                "(ou a coluna/gaveta dele) com widthIn(max = LISTA_MAX) e rode o BotaoEsticadoTest"]
+    return []
 
 
 # ---------- funções ----------
@@ -228,13 +244,13 @@ def confere(caminho):
         if len(re.findall(r"&&|\|\|| and | or ", cod)) + 1 > lim["condicao"]:
             erros.append(f"linha {n}: condição com mais de {lim['condicao']} partes; dê nome a ela numa val ou função")
         if ext in KOTLIN:
-            if "!!" in cod:
-                erros.append(f"linha {n}: '!!' derruba o app se vier nulo; use ?.let, ?: ou requireNotNull com mensagem")
+            erros += nulo_forcado(n, cod)
             if not TEMA.search(rel):
                 if re.search(r"\bText\(\s*\"[^\"$]*[A-Za-zÀ-ÿ]{2}", l) or re.search(r"contentDescription\s*=\s*\"[^\"]*[A-Za-z]", l):
                     erros.append(f"linha {n}: texto escrito na tela; ponha no arquivo de textos e chame pela chave")
                 if re.search(r"\bColor\(\s*0x|\bColor\.(White|Black|Red|Green|Blue|Gray|Yellow|Cyan|Magenta|DarkGray|LightGray)\b", l):
                     erros.append(f"linha {n}: cor fixa; use a paleta do tema (um papel novo nela, se faltar)")
+            avisos += botao_esticado(n, cod)
         if re.search(r"catch\s*\([^)]*\)\s*\{\s*\}|except[^:]*:\s*pass\b", cod) or (ext in PYTHON and re.match(r"except\s*:", s)):
             erros.append(f"linha {n}: erro engolido; registre no log ou trate")
         if not re.search(r"\b(const val|val [A-Z_][A-Z0-9_]*\s*[:=]|[A-Z_][A-Z0-9_]*\s*=|import|package|@)", cod):
