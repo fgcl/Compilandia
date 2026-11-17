@@ -73,6 +73,8 @@ internal class Cena(
     val u: Float get() = gr.cel / 32f
     val pisca: Boolean get() = !reduz && ((relogio * 2.5f).toInt() % 2 == 0)
     fun tem(nt: String?, vararg f: Falha) = laudo?.problemas.orEmpty().any { it.nt == nt && it.falha in f }
+    /** O pincel do pacote de textura em uso, para o chão e as esteiras. */
+    fun pincel(ativo: Boolean = false) = Pincel(u, relogio, reduz, ativo, medidor)
     fun trabalhando(id: Int) = c?.trabalhos?.any { it.bloco == id && t in it.t0..it.t1 } == true
 }
 
@@ -95,7 +97,7 @@ private fun noCaminho(pts: List<Pair<Float, Float>>, u: Float): Pair<Float, Floa
 }
 
 internal fun DrawScope.desenhaFabrica(cena: Cena) {
-    drawRect(PISO[0])
+    drawRect(PacoteAtual.pacote.chao)
     translate(cena.gr.ox - cena.gr.x0 * cena.cel, cena.gr.oy - cena.gr.y0 * cena.cel) {
         chao(cena)
         esteiras(cena)
@@ -110,58 +112,6 @@ internal fun DrawScope.desenhaFabrica(cena: Cena) {
     }
     drawRect(Brush.radialGradient(listOf(Color.Transparent, Color(0x40050310)), center = center, radius = size.maxDimension * 0.75f))
 }
-
-/** O chão: placas de metal de 2×2 células, com junta fina entre as células e junta forte entre as placas. */
-private fun DrawScope.chao(cena: Cena) {
-    val cel = cena.cel; val u = cena.u
-    val construindo = cena.ferramenta != Ferramenta.MOVER
-    for (x in cena.gr.x0 until cena.gr.x0 + cena.gr.cols) for (y in cena.gr.y0 until cena.gr.y0 + cena.gr.rows) {
-        val placa = x.mod(2) + y.mod(2) * 2
-        r(x * cel, y * cel, cel, cel, PISO[(hsh(x / 2, y / 2) * PISO.size).toInt().coerceIn(0, PISO.size - 1)])
-        val junta = if (construindo) AC.copy(alpha = 0.18f) else PISO_JUNTA
-        r(x * cel, y * cel, cel, u, if (placa < 2) PISO_JUNTA_FORTE else junta)
-        r(x * cel, y * cel, u, cel, if (placa % 2 == 0) PISO_JUNTA_FORTE else junta)
-    }
-}
-
-/** Esteiras: cada célula liga o centro ao lado de onde vem e ao lado para onde vai, então curvas e junções se fecham. */
-private fun DrawScope.esteiras(cena: Cena) {
-    val pl = cena.pl; val cel = cena.cel; val u = cena.u
-    val passo = if (cena.reduz) 0f else (cena.relogio * com.compilandia.tutor.FABGRAM_VEL) % 1f
-    val meia = 9 * u
-    for ((c, d) in pl.esteiras) {
-        val x = c.x * cel; val y = c.y * cel
-        val mx = x + cel / 2; val my = y + cel / 2
-        val lados = Dir.entries.filter { s -> s == d || (c + s).let { n -> pl.esteiras[n]?.let { n + it == c } == true || pl.blocoEm(n)?.let { c - d == n } == true } }
-        fun braco(s: Dir, cor: Color, esp: Float, dx: Float = 0f, dy: Float = 0f) {
-            if (s.dx != 0) r(minOf(mx, mx + s.dx * cel / 2) + dx, my - esp + dy, cel / 2, 2 * esp, cor)
-            else r(mx - esp + dx, minOf(my, my + s.dy * cel / 2) + dy, 2 * esp, cel / 2, cor)
-        }
-        for (s in lados) braco(s, Color.Black.copy(alpha = 0.25f), meia + u, 2 * u, 3 * u)
-        for (s in lados) braco(s, OL, meia + u)
-        r(mx - meia - u, my - meia - u, 2 * meia + 2 * u, 2 * meia + 2 * u, OL)
-        for (s in lados) braco(s, EST, meia - u)
-        r(mx - meia + u, my - meia + u, 2 * meia - 2 * u, 2 * meia - 2 * u, EST)
-        // trilhos claros nas bordas e setas em V que andam no sentido da esteira
-        if (d.dx != 0) { r(x, my - meia + u, cel, u, EST_L); r(x, my + meia - 2 * u, cel, u, EST_L) }
-        else { r(mx - meia + u, y, u, cel, EST_L); r(mx + meia - 2 * u, y, u, cel, EST_L) }
-        for (k in 0 until 2) {
-            val f = ((passo + k / 2f) % 1f) - 0.5f
-            rotate(d.graus(), Offset(mx, my)) { chevron(mx + f * cel, my, u, AC.copy(alpha = 0.9f)) }
-        }
-        // fim de esteira: faixa de perigo
-        val prox = c + d
-        if (prox !in pl.esteiras && pl.blocoEm(prox) == null) {
-            val ex = mx + d.dx * (cel / 2 - 3 * u); val ey = my + d.dy * (cel / 2 - 3 * u)
-            for (i in -2..1) {
-                val cor = if (i % 2 == 0) AC else OL
-                if (d.dx != 0) r(ex - u, ey + i * 4 * u, 3 * u, 4 * u, cor) else r(ex + i * 4 * u, ey - u, 4 * u, 3 * u, cor)
-            }
-        }
-    }
-}
-
-private fun Dir.opposite(): Dir = oposta()
 
 /** O ângulo para girar um desenho que aponta para a direita. */
 internal fun Dir.graus(): Float = ordinal * QUARTO_DE_VOLTA

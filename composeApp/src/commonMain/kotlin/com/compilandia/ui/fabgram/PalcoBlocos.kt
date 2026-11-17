@@ -59,7 +59,7 @@ private fun DrawScope.sinaisDaMaquina(cena: Cena, b: Bloco, x: Float, y: Float, 
         val a = if (cena.pisca || cena.reduz) 1f else 0.5f
         drawCircle(OL, 8 * u, Offset(x + w / 2, y + h / 2 - u))
         drawCircle(AC2.copy(alpha = a), 7 * u, Offset(x + w / 2, y + h / 2 - u))
-        rotulo(Pincel(u, cena.relogio, cena.reduz, false, cena.medidor), "?", x + w / 2, y + h / 2 - u, 10 * u, OL)
+        rotulo(cena.pincel(), "?", x + w / 2, y + h / 2 - u, 10 * u, OL)
         return
     }
     FabGram.numero(cena.pl.g, p)?.let { numero(cena, it, x + 7 * u, y + 7 * u, 5.5f * u) }
@@ -97,7 +97,8 @@ internal fun DrawScope.placa(cena: Cena, b: Bloco) {
     val maq = b.tipo == Papel.MAQUINA && b.w > 1 && b.h > 1
     val texto = textoDaPlaca(cena, b) ?: return
     val est = TextStyle(
-        color = if (maq) OL else PLACA, fontSize = px(cel * if (maq) 0.21f else 0.19f, density),
+        color = if (maq) PacoteAtual.pacote.placaTinta else PLACA,
+        fontSize = px(cel * if (maq) 0.21f else 0.19f, density),
         fontWeight = FontWeight.Bold, fontFamily = if (maq) FontFamily.Monospace else FontFamily.Default,
     )
     val maxW = if (maq) (b.w * cel - 4 * u) else (b.w * cel + cel)
@@ -108,8 +109,8 @@ internal fun DrawScope.placa(cena: Cena, b: Bloco) {
     val px0 = b.cx * cel - lay.size.width / 2f
     val py = if (maq) (b.y + b.h) * cel - 5 * u - lay.size.height else (b.y + b.h) * cel + 2 * u
     if (maq) {
-        ret(px0 - 2 * u, py - u / 2, lay.size.width + 4 * u, lay.size.height + u, OL)
-        ret(px0 - 1.5f * u, py, lay.size.width + 3 * u, lay.size.height.toFloat(), PLACA)
+        ret(px0 - 2 * u, py - u / 2, lay.size.width + 4 * u, lay.size.height + u, PacoteAtual.pacote.linha)
+        ret(px0 - 1.5f * u, py, lay.size.width + 3 * u, lay.size.height.toFloat(), PacoteAtual.pacote.placa)
     } else {
         ret(px0 - 3 * u, py, lay.size.width + 6 * u, lay.size.height.toFloat(), FUNDO_PLACA)
     }

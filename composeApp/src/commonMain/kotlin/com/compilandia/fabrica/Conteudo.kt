@@ -82,7 +82,7 @@ object Blocos {
     val ESTEIRA = BlocoTipo("esteira", Papel.JUNCAO, Categoria.DISTRIBUICAO, 1, 1)
     val SEPARADOR = BlocoTipo("separador", Papel.SEPARADOR, Categoria.DISTRIBUICAO, 1, 1, esticavel = true)
     val ROTEADOR = BlocoTipo("roteador", Papel.ROTEADOR, Categoria.DISTRIBUICAO, 1, 1, esticavel = true)
-    val JUNCAO = BlocoTipo("juncao", Papel.JUNCAO, Categoria.DISTRIBUICAO, 1, 1, preco = 20)
+    val JUNCAO = BlocoTipo("juncao", Papel.JUNCAO, Categoria.DISTRIBUICAO, 1, 1)
 
     /** ε ou uma peça só. */
     val COFRE = BlocoTipo("cofre", Papel.MAQUINA, Categoria.PRODUCAO, 1, 1, capacidade = 1)
@@ -109,8 +109,8 @@ object Blocos {
 
     fun porId(id: String): BlocoTipo? = todos.firstOrNull { it.id == id }
 
-    /** O que vai no menu de construção: tudo menos o núcleo, por aba. */
-    fun doMenu(c: Categoria): List<BlocoTipo> = todos.filter { it.categoria == c && !it.nucleo }
+    /** O que vai no menu de construção: tudo menos o núcleo e a esteira (que é ferramenta, ao lado de Mover). */
+    fun doMenu(c: Categoria): List<BlocoTipo> = todos.filter { it.categoria == c && !it.nucleo && it != ESTEIRA }
 
     /** Os blocos que já vêm destravados. */
     val iniciais: Set<String> = todos.filter { it.preco == 0 }.map { it.id }.toSet()

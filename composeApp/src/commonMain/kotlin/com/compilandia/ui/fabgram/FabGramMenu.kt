@@ -64,7 +64,10 @@ private fun LinhaDeFerramentas(e: EstadoFabrica, onArrumar: () -> Unit) {
         Modifier.horizontalScroll(rememberScrollState()),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        for ((f, nome) in listOf(Ferramenta.MOVER to tx("fabgram_mover"), Ferramenta.APAGAR to tx("fabgram_apagar"))) {
+        val ferramentas = listOf(
+            Ferramenta.MOVER to tx("fabgram_mover"), Ferramenta.ESTEIRA to tx("fabgram_esteira"), Ferramenta.APAGAR to tx("fabgram_apagar"),
+        )
+        for ((f, nome) in ferramentas) {
             Botao(nome, e.ferramenta == f, "fabgram-${f.name.lowercase()}") { e.ferramenta = f; e.construindo = null }
         }
         Icone(Forma.VOLTA, e.desfazer.isNotEmpty(), tx("fabgram_desfazer"), "fabgram-desfazer") { e.volta() }

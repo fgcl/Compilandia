@@ -158,6 +158,21 @@ object FabGram {
             return Planta(blocos, esteiras + (c to d))
         }
 
+        /**
+         * O dedo arrastando esteira passa por [c] indo para [d]. Como no Mindustry, cruzar de lado
+         * uma esteira que já existe põe uma junção ali, e as duas linhas seguem sem se misturar.
+         * Uma junção que já está no caminho fica. Nulo se a célula é de outro bloco.
+         */
+        fun estende(c: Cel, d: Dir): Planta? {
+            val existente = esteiras[c]
+            val cruza = existente != null && (existente.dx == 0) != (d.dx == 0)
+            return when {
+                blocoEm(c)?.def == Blocos.JUNCAO -> this
+                cruza -> semEsteira(c).constroi(Blocos.JUNCAO, c)
+                else -> comEsteira(c, d)
+            }
+        }
+
         fun semEsteira(c: Cel): Planta = if (c in esteiras) Planta(blocos, esteiras - c) else this
 
         fun gira(c: Cel): Planta = esteiras[c]?.let { Planta(blocos, esteiras + (c to it.gira())) } ?: this

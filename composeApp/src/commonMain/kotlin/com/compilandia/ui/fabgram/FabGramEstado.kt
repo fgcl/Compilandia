@@ -62,6 +62,8 @@ internal class EstadoFabrica(texto0: String, frase0: String) {
     var oferta by mutableStateOf<BlocoTipo?>(null)
     /** O bloco cujo painel de configurar está aberto. */
     var config by mutableStateOf<Int?>(null)
+    /** Onde a grade está na tela agora. O teste que joga a fábrica usa para achar a célula. */
+    var grade: Grade? = null
     /** O texto que saiu da planta: quando o painel mostra este texto, a planta não precisa ser refeita. */
     var textoDaPlanta: String? = null
 

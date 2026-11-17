@@ -33,6 +33,8 @@ import com.compilandia.ui.AppState
 import com.compilandia.ui.Screen
 import com.compilandia.ui.fabgram.Desenhos
 import com.compilandia.ui.fabgram.Pincel
+import com.compilandia.ui.fabgram.PacoteAtual
+import com.compilandia.ui.fabgram.Pacotes
 import com.compilandia.ui.voice.Narrator
 import java.io.File
 import javax.imageio.ImageIO
@@ -55,7 +57,7 @@ class FabricaVisualTest {
         val tipo = androidx.compose.runtime.mutableStateOf(Blocos.todos.first())
         setContent {
             val medidor = rememberTextMeasurer()
-            Row(Modifier.background(Color(0xFF2C3037)).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            Row(Modifier.background(PacoteAtual.pacote.chao).padding(10.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 for (ativo in listOf(false, true)) Canvas(Modifier.size(112.dp, 128.dp)) {
                     val cel = 128f * density / 2.2f
                     val t = tipo.value
@@ -65,7 +67,11 @@ class FabricaVisualTest {
                 }
             }
         }
-        for (t in Blocos.todos) { tipo.value = t; anda(100); foto("bloco_${t.id}") }
+        for (k in Pacotes.todos) {
+            PacoteAtual.pacote = k
+            for (t in Blocos.todos) { tipo.value = t; anda(100); foto("bloco_${k.id}_${t.id}") }
+        }
+        PacoteAtual.pacote = Pacotes.METAL
     }
 
     private fun estado() = AppState(
@@ -78,14 +84,13 @@ class FabricaVisualTest {
         setContent { App(app) }
         anda(1500); anda(500)
         foto("1_livre")
-        onNodeWithTag("fabgram-aba-distribuicao").performClick(); anda(200)
-        onNodeWithTag("fabgram-bloco-juncao").performClick(); anda(300)
+        onNodeWithTag("fabgram-bloco-braco").performClick(); anda(300)
         foto("2_loja")
         onNodeWithTag("fabgram-loja").assertExists()
         onNodeWithTag("fabgram-palco").assertExists()
-        onNodeWithText("Comprar por 20 ⚙").performClick(); anda(300)
+        onNodeWithText("Comprar por 15 ⚙").performClick(); anda(300)
         foto("2b_comprada")
-        assertTrue("juncao" in app.learner.state.fabGramBlocos)
+        assertTrue("braco" in app.learner.state.fabGramBlocos)
         onNodeWithTag("fabgram-aba-producao").performClick(); anda(200)
         onNodeWithTag("fabgram-bloco-prensa").performClick(); anda(200)
         onNodeWithTag("fabgram-palco").performTouchInput { click(Offset(width * 0.06f, height * 0.45f)) }
@@ -95,5 +100,52 @@ class FabricaVisualTest {
         onNodeWithTag("fabgram-cfg-poe-a").performClick(); anda(100)
         onNodeWithTag("fabgram-cfg-poe-b").performClick(); anda(100)
         foto("4_regra_montada")
+    }
+
+    /** Uma folha com todas as máquinas do pacote, no chão dele: o que a prancha mostra para escolher. */
+    @Test fun folhaDeCadaPacote() = runDesktopComposeUiTest(980, 430, testTimeout = 3.minutes) {
+        mainClock.autoAdvance = false
+        val pacote = androidx.compose.runtime.mutableStateOf(Pacotes.METAL)
+        val tipos = listOf(Blocos.PRENSA, Blocos.COFRE, Blocos.BRACO, Blocos.ARMARIO, Blocos.SEPARADOR, Blocos.ROTEADOR,
+            Blocos.JUNCAO, Blocos.FONTE, Blocos.MONTADORA, Blocos.CESTO)
+        setContent {
+            val medidor = rememberTextMeasurer()
+            Canvas(Modifier.size(980.dp, 430.dp)) {
+                val k = pacote.value
+                PacoteAtual.pacote = k
+                drawRect(k.chao)
+                val cel = 88f * density
+                var x = 16f * density
+                var y = 16f * density
+                for ((i, t) in tipos.withIndex()) {
+                    val w = t.w * cel; val h = t.h * cel
+                    if (x + w > size.width - 8) { x = 16f * density; y += 2 * cel + 24f * density }
+                    val b = FabGram.Bloco(1, t, 0, 0, nt = "S", prod = com.compilandia.engine.Production(0, "S", listOf("a")))
+                    with(Desenhos.de(t)) { pinta(Pincel(cel / 32f, 0.35f, false, i % 2 == 0, medidor, pk = k), b, x, y + (2 * cel - h) / 2, w, h) }
+                    x += w + 18f * density
+                }
+            }
+        }
+        for (k in Pacotes.todos) { pacote.value = k; anda(150); foto("folha_${k.id}") }
+        PacoteAtual.pacote = Pacotes.METAL
+    }
+
+    /** A fábrica de a a b b rodando, com caixas e peças nas esteiras, em cada pacote. */
+    @Test fun fabricaEmCadaPacote() = runDesktopComposeUiTest(900, 760, testTimeout = 4.minutes) {
+        mainClock.autoAdvance = false
+        val app = estado(); app.stack.add(Screen.FabGram)
+        setContent { App(app) }
+        anda(1500)
+        onNodeWithTag("fabgram-painel").performClick(); anda(300)
+        com.compilandia.ui.fabgram.EstadoParaTeste.atual!!.zoom = 1.9f
+        com.compilandia.ui.fabgram.EstadoParaTeste.atual!!.pan = androidx.compose.ui.geometry.Offset(0f, 120f)
+        anda(200)
+        for (k in Pacotes.todos) {
+            PacoteAtual.pacote = k
+            onNodeWithText("Ligar").performClick()
+            repeat(40) { anda(60) }
+            foto("cena_${k.id}")
+        }
+        PacoteAtual.pacote = Pacotes.METAL
     }
 }

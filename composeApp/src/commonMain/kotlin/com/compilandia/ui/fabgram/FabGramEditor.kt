@@ -107,7 +107,7 @@ internal fun PalcoEditavel(
         val celMax = with(LocalDensity.current) { 88.dp.toPx() }
         val base = remember(planta.x0, planta.y0, planta.x1, planta.y1, w, h, topo) { gradePara(planta, w, h, topo, baixo, celMax) }
         val gr = base.comZoom(e.zoom, e.pan, w, h)
-        val grAtual by rememberUpdatedState(gr)
+        val grAtual by rememberUpdatedState(gr.also { e.grade = it })
         fun zoom(z: Float, p: Offset) {
             val nz = (e.zoom * z).coerceIn(ZOOM_MIN, ZOOM_MAX)
             e.zoom = nz; e.pan += p
@@ -160,7 +160,7 @@ internal fun PalcoEditavel(
                         when {
                             dois || panChao && moveu -> {}
                             ferramenta == Ferramenta.MOVER && alvo != null -> base0.move(alvo.first, alvo.second.x, alvo.second.y, g0.area)?.let(aoMudar)
-                            moveu && ferramenta != Ferramenta.MOVER -> aoMudar(r)
+                            moveu && ferramenta != Ferramenta.MOVER -> aoMudar(fimDoTraco(ferramenta, base0, r, ult))
                             !moveu -> when (val t = toque(ferramenta, base0, c0, g0.dentro(c0))) {
                                 is Toque.Muda -> aoMudar(t.planta)
                                 is Toque.Toca -> aoTocar(t.bloco)
@@ -200,6 +200,18 @@ private fun Modifier.rodaDoMouse(onZoom: (Float) -> Unit): Modifier = pointerInp
 private const val ZOOM_RODA_AFASTA = 0.9f
 private const val ZOOM_RODA_APROXIMA = 1.1f
 
+/**
+ * O dedo soltou em [fim]. Se ali o traço tinha posto uma junção em cima de uma esteira que já existia,
+ * o jogador não atravessou: ele parou na outra linha para juntar a sua nela. A esteira antiga volta.
+ */
+internal fun fimDoTraco(f: Ferramenta, antes: Planta, depois: Planta, fim: Cel): Planta {
+    val virouJuncao = depois.blocoEm(fim)?.def == com.compilandia.fabrica.Blocos.JUNCAO && antes.blocoEm(fim) == null
+    val antiga = antes.esteiras[fim]
+    if (f != Ferramenta.ESTEIRA || !virouJuncao || antiga == null) return depois
+    val semJuncao = depois.blocoEm(fim)?.let { depois.desmonta(it.id) } ?: return depois
+    return semJuncao.comEsteira(fim, antiga) ?: depois
+}
+
 /** O que um toque sem arrastar faz. */
 internal sealed interface Toque {
     data class Muda(val planta: Planta) : Toque
@@ -236,9 +248,10 @@ internal fun desenha(pl: Planta, de: Cel, ate: Cel): Planta {
     while (c != ate) {
         val dx = (ate.x - c.x).sign
         val d = if (dx != 0) Dir.de(dx, 0)!! else Dir.de(0, (ate.y - c.y).sign)!!
-        r = r.comEsteira(c, d) ?: r
+        // a célula de onde o dedo sai aponta para a nova; a nova pode virar junção se cruzar outra esteira
+        if (r.blocoEm(c) == null) r = r.comEsteira(c, d) ?: r
         c += d
-        r = r.comEsteira(c, d) ?: r
+        r = r.estende(c, d) ?: r
     }
     return r
 }

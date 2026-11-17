@@ -74,9 +74,9 @@ class ConteudoFabricaTest {
 
     @Test fun lojaCobraESegueAArvore() {
         assertEquals(Loja.Situacao.TEM, Loja.situacao(Blocos.PRENSA, emptyList(), 0))
-        assertEquals(Loja.Situacao.CARO, Loja.situacao(Blocos.JUNCAO, emptyList(), 5))
-        assertEquals(Loja.Situacao.COMPRA, Loja.situacao(Blocos.JUNCAO, emptyList(), 50))
-        assertEquals(Loja.Situacao.TEM, Loja.situacao(Blocos.JUNCAO, listOf("juncao"), 0))
+        assertEquals(Loja.Situacao.CARO, Loja.situacao(Blocos.BRACO, emptyList(), 5))
+        assertEquals(Loja.Situacao.COMPRA, Loja.situacao(Blocos.BRACO, emptyList(), 50))
+        assertEquals(Loja.Situacao.TEM, Loja.situacao(Blocos.BRACO, listOf("braco"), 0))
     }
 }
 

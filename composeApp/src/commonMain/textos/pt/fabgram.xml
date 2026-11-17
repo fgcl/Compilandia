@@ -114,7 +114,7 @@
     <string name="fabgram_cfg_separador">Letra deste separador</string>
     <string name="fabgram_cfg_fonte">Letra inicial</string>
     <string name="fabgram_cfg_cabe_2">%1$s de %2$s símbolos. Toque num símbolo da regra para tirar.</string>
-    <string name="fabgram_cfg_so_letra">O braço só troca a letra: escolha uma letra só.</string>
+    <string name="fabgram_cfg_so_letra">O braço só troca a letra: ponha uma caixa só.</string>
     <string name="fabgram_cfg_novo">Pôr</string>
     <string name="fabgram_cfg_pronto">Pronto</string>
     <string name="fabgram_dica_construir_1">Toque no chão para pôr: %1$s.</string>
@@ -123,4 +123,17 @@
     <string name="fabgram_m_regra_objetivo">Toque na prensa sem regra e monte S → a b.</string>
     <string name="fabgram_m_construir_titulo">Construa a prensa</string>
     <string name="fabgram_m_construir_objetivo">Pegue a prensa no menu, ponha no contorno azul, dê a regra S → a b e ligue as esteiras.</string>
+    <string name="fabgram_cfg_entra">Caixa que entra</string>
+    <string name="fabgram_cfg_vira">Vira</string>
+    <string name="fabgram_cfg_vazia">Casas vazias: a regra é ε (a caixa some sem soltar nada).</string>
+    <string name="fabgram_cfg_tira">Toque numa casa cheia para esvaziar.</string>
+    <string name="fabgram_cfg_pecas">Peças (terminais)</string>
+    <string name="fabgram_cfg_caixas">Caixas (letras)</string>
+    <string name="fabgram_cfg_outra">+ outra peça</string>
+    <string name="fabgram_pacote">Visual da fábrica</string>
+    <string name="fabgram_pacote_metal">Metal</string>
+    <string name="fabgram_pacote_pixel">Pixel</string>
+    <string name="fabgram_pacote_planta">Planta azul</string>
+    <string name="fabgram_pacote_neon">Neon</string>
+    <string name="fabgram_pacote_desenho">Desenho animado</string>
 </resources>

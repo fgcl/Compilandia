@@ -113,7 +113,7 @@
     <string name="fabgram_cfg_separador">This sorter's letter</string>
     <string name="fabgram_cfg_fonte">Start letter</string>
     <string name="fabgram_cfg_cabe_2">%1$s of %2$s symbols. Tap a symbol in the rule to remove it.</string>
-    <string name="fabgram_cfg_so_letra">The arm only swaps the letter: pick one letter.</string>
+    <string name="fabgram_cfg_so_letra">The arm only swaps the letter: put in a single box.</string>
     <string name="fabgram_cfg_novo">Add</string>
     <string name="fabgram_cfg_pronto">Done</string>
     <string name="fabgram_dica_construir_1">Tap the floor to place: %1$s.</string>
@@ -122,4 +122,17 @@
     <string name="fabgram_m_regra_objetivo">Tap the press with no rule and build S → a b.</string>
     <string name="fabgram_m_construir_titulo">Build the press</string>
     <string name="fabgram_m_construir_objetivo">Take the press from the menu, place it on the blue outline, give it the rule S → a b and connect the belts.</string>
+    <string name="fabgram_cfg_entra">Box that goes in</string>
+    <string name="fabgram_cfg_vira">Becomes</string>
+    <string name="fabgram_cfg_vazia">Empty slots: the rule is ε (the box vanishes, dropping nothing).</string>
+    <string name="fabgram_cfg_tira">Tap a filled slot to empty it.</string>
+    <string name="fabgram_cfg_pecas">Pieces (terminals)</string>
+    <string name="fabgram_cfg_caixas">Boxes (letters)</string>
+    <string name="fabgram_cfg_outra">+ another piece</string>
+    <string name="fabgram_pacote">Factory look</string>
+    <string name="fabgram_pacote_metal">Metal</string>
+    <string name="fabgram_pacote_pixel">Pixel</string>
+    <string name="fabgram_pacote_planta">Blueprint</string>
+    <string name="fabgram_pacote_neon">Neon</string>
+    <string name="fabgram_pacote_desenho">Cartoon</string>
 </resources>

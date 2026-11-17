@@ -86,7 +86,8 @@ private fun plantaDoTexto(app: AppState, e: EstadoFabrica, l: Laudo) {
 @Composable
 fun FabGramScreen(app: AppState) {
     val reduz = ThemeState.reduceMotion
-    val e = remember { estadoInicial(app) }
+    val e = remember { estadoInicial(app).also { EstadoParaTeste.atual = it } }
+    remember { app.ls.fabGramPacote.takeIf { it.isNotEmpty() }?.let { PacoteAtual.pacote = Pacotes.porId(it) } }
     val escopo = rememberCoroutineScope()
     val ctl = remember { ControleFabrica(app, e, escopo) }
     val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
@@ -107,7 +108,7 @@ fun FabGramScreen(app: AppState) {
             Row(Modifier.weight(1f).fillMaxWidth()) {
                 Palco(app, e, ctl, laudo, relogio, reduz, Modifier.weight(1f).fillMaxHeight())
                 if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) {
-                    Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas) { e.painel = false }
+                    PainelDaFabrica(app, e, laudo)
                 }
             }
         }
@@ -174,7 +175,7 @@ private fun Palco(app: AppState, e: EstadoFabrica, ctl: ControleFabrica, laudo: 
             mood = com.compilandia.ui.cast.Mood.HAPPY,
         )
         MenuConstrucao(e, app.ls.fabGramBlocos, Modifier.align(Alignment.BottomCenter)) { ctl.arruma(laudo?.g) }
-        Cartoes(app, e, ctl, Modifier.align(Alignment.Center))
+        Cartoes(app, e, ctl)
     }
 }
 
@@ -196,15 +197,20 @@ private fun Topo(e: EstadoFabrica, ctl: ControleFabrica, laudo: Laudo?, modifier
     }
 }
 
-/** A loja e o painel de configurar, no meio do palco. */
+/** A loja no meio do palco; o painel de configurar no pé. */
 @Composable
-private fun Cartoes(app: AppState, e: EstadoFabrica, ctl: ControleFabrica, modifier: Modifier) {
+private fun androidx.compose.foundation.layout.BoxScope.Cartoes(app: AppState, e: EstadoFabrica, ctl: ControleFabrica) {
+    val modifier = Modifier.align(Alignment.Center)
     e.oferta?.let { t ->
         CartaoLoja(t, app.ls.fabGramBlocos, app.ls.gears, modifier, onComprar = { ctl.compra(t) }, onFechar = { e.oferta = null })
     }
     val pl = e.planta ?: return
     val b = pl.blocos.firstOrNull { it.id == e.config } ?: return
-    ConfigBloco(pl, b, modifier, onPronto = { ctl.guarda(it); e.config = null }, onFechar = { e.config = null })
+    // o painel de configurar fica no pé, por cima do menu: a fábrica continua à vista
+    ConfigBloco(
+        pl, b, Modifier.align(Alignment.BottomCenter),
+        onPronto = { ctl.guarda(it); e.config = null }, onFechar = { e.config = null },
+    )
 }
 
 @Composable
@@ -214,8 +220,17 @@ private fun PainelDeBaixo(app: AppState, e: EstadoFabrica, laudo: Laudo?) {
         Column(
             Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.72f)
                 .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)).background(Palette.paper),
-        ) { Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas) { e.painel = false } }
+        ) { PainelDaFabrica(app, e, laudo) }
     }
 }
+
+@Composable
+private fun PainelDaFabrica(app: AppState, e: EstadoFabrica, laudo: Laudo?) =
+    Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas, { guardaPacote(app, it) }) { e.painel = false }
+
+private fun guardaPacote(app: AppState, k: Pacote) { app.learner.setFabGramPacote(k.id); app.commit() }
+
+/** A tela aberta agora, para o teste que joga a fábrica pela tela. Fora dos testes ninguém lê. */
+internal object EstadoParaTeste { var atual: EstadoFabrica? = null }
 
 private val FUNDO_TELA = Color(0xFF16181B)

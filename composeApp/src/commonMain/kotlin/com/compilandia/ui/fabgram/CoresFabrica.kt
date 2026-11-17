@@ -30,3 +30,5 @@ internal val FUNDO_PLACA = Color(0xE00E1013)
 /** O vidro escuro do menu de construção. */
 internal val VIDRO_MENU = Color(0xEB1B1E22)
 internal val BOTAO_APAGADO = Color(0x14FFFFFF)
+/** O painel de configurar cobre o menu: precisa ser opaco para o menu não aparecer por trás. */
+internal val PAINEL_OPACO = Color(0xFF1B1E22)
