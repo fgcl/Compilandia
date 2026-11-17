@@ -108,16 +108,16 @@ Depois: "Reduz. Não há mais nada para empilhar."
    se acertar: "A regra pede o fecha parêntese no fim. Sem ele, a pilha nunca reduz até um S só."
 
 23. TELA: # Erros comuns ⏎ Todo lado direito de regra no topo da pilha é um handle. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: lado direito no topo sempre reduz. ⏎ Errado: às vezes reduzir leva a um beco sem saída. ⏎ Errado: handle só se forma no meio da pilha.
-   BYTE: "Sempre que o topo casa com um lado direito, eu reduzo? Certo ou errado? Toque."
+   BUG: "O topo casou com um lado direito, então eu reduzo. Sempre. Certo ou errado? Toque."
    PERGUNTA (toque): certo = Errado: às vezes reduzir leva a um beco sem saída. ; errado = Errado: handle só se forma no meio da pilha. | Certo: lado direito no topo sempre reduz.
    se errar: "Pense em id mais id vezes id. Com E mais T no topo e vezes na entrada, reduzir estraga a conta."
    se acertar: "Só é handle se a redução leva de volta ao símbolo inicial. Às vezes o certo é empilhar mais, e quem decide é a tabela."
 
 24. TELA: # Erros comuns ⏎ Certo: Handle é o lado direito cuja redução faz parte da derivação mais à direita. ⏎ *Errado: Procurar um handle no meio da pilha.* ⏎ *Certo: O handle aparece sempre no topo. O parser nunca mexe no meio.*
-   BYTE: "Outro erro: procurar handle no meio da pilha. No empilha-reduz, o handle sempre se forma no topo."
+   PROF: "Outro erro: procurar handle no meio da pilha. No empilha-reduz, o handle sempre se forma no topo."
 
 25. TELA: # Resumo ⏎ Empilhar (shift): o token vai para o topo. Reduzir (reduce): o handle vira o lado esquerdo. ⏎ Aceita com só o símbolo inicial na pilha e $ na entrada. ⏎ As reduções, de trás para a frente, dão a derivação mais à direita.
-   BYTE: "Resumindo: o empilha-reduz lê primeiro e decide depois. Ele empilha até formar um handle no topo, reduz, e repete até sobrar o símbolo inicial."
+   PROF: "Resumindo: o empilha-reduz lê primeiro e decide depois. Ele empilha até formar um handle no topo, reduz, e repete até sobrar o símbolo inicial."
 
 #### PEGADINHA: "Reduzir cedo demais" (6 cenas, ~44s)
 
@@ -217,7 +217,7 @@ BYTE: "Antes da aula: o que a máquina espera ler agora?"
 Opções: ✔+ | E | T
 Depois: "O mais. O ponto fica logo antes dele."
 
-#### AULA ANIMADA BÁSICA: "O ponto que anda" (26 cenas, ~209s)
+#### AULA ANIMADA BÁSICA: "O ponto que anda" (26 cenas, ~208s)
 
 1. TELA: # LR(0) ⏎ E ⏎ + ⏎ E -> E + n
    BYTE: "O parser empilhou E e mais. Para saber se empilha ou reduz, ele precisa lembrar em que ponto de cada regra está."
@@ -316,16 +316,16 @@ Depois: "O mais. O ponto fica logo antes dele."
    se acertar: "Não sobrou símbolo depois do ponto. Sem não-terminal ali, não há regra para juntar."
 
 24. TELA: # Erros comuns ⏎ No closure, entram as regras de todo símbolo depois do ponto, terminal ou não. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: só o não-terminal logo depois do ponto conta. ⏎ Errado: o closure nunca junta regras. ⏎ Certo: todo símbolo depois do ponto puxa regras.
-   BYTE: "Quando o closure puxa regras novas? Um colega disse isto. Certo ou errado?"
+   BUG: "Eu sei quando o closure puxa regras novas. Assim. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: só o não-terminal logo depois do ponto conta. ; errado = Errado: o closure nunca junta regras. | Certo: todo símbolo depois do ponto puxa regras.
    se errar: "Terminal não tem regras. Só não-terminal tem."
    se acertar: "O closure só age quando o ponto está logo antes de um não-terminal. E só o símbolo logo depois do ponto conta."
 
 25. TELA: # Erros comuns ⏎ Certo: Closure: só para o não-terminal que vem logo depois do ponto. ⏎ *Errado: Andar o ponto no goto e esquecer o closure.* ⏎ *Certo: Todo goto termina com closure. Sem ele, faltam itens no estado.*
-   BYTE: "Outro erro: andar o ponto e parar. Se o ponto novo ficou antes de um não-terminal, as regras dele entram no estado."
+   PROF: "Outro erro: andar o ponto e parar. Se o ponto novo ficou antes de um não-terminal, as regras dele entram no estado."
 
 26. TELA: # Resumo ⏎ Item: regra com um ponto. Antes dele já foi lido; depois dele ainda se espera. ⏎ Closure puxa regras; goto anda o ponto e fecha. Cada conjunto é um estado. ⏎ Ponto no fim é item completo: sinal de redução.
-   BYTE: "Resumindo: o item marca o progresso numa regra. Closure e goto montam os estados, e o item completo avisa a redução."
+   PROF: "Resumindo: o item marca o progresso numa regra. Closure e goto montam os estados, e o item completo avisa a redução."
 
 #### PEGADINHA: "O fecho que puxa regras" (5 cenas, ~29s)
 
@@ -428,7 +428,7 @@ BYTE: "Antes da aula: uma casa com as duas ações é o quê?"
 Opções: ✔conflito | erro léxico | normal
 Depois: "Conflito. A tabela deu duas ordens de uma vez."
 
-#### AULA ANIMADA BÁSICA: "Quando reduzir?" (26 cenas, ~207s)
+#### AULA ANIMADA BÁSICA: "Quando reduzir?" (26 cenas, ~206s)
 
 1. TELA: # SLR(1) ⏎ E -> n • ⏎ ?
    BYTE: "Este estado tem o item completo E vai para n, ponto. O LR(0) reduziria sempre. Mas reduzir agora está certo?"
@@ -527,16 +527,16 @@ Depois: "Conflito. A tabela deu duas ordens de uma vez."
    se acertar: "Abre parêntese não vem depois de S. E nenhum item do estado espera por ele."
 
 24. TELA: # Erros comuns ⏎ Estado com A → α •: escrevo r em todas as colunas. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: item completo reduz com qualquer token. ⏎ Errado: r entra só nas colunas do FOLLOW de A. ⏎ Errado: r entra só na coluna do $.
-   BYTE: "Onde entra a redução na tabela SLR? Um colega preencheu assim. Certo ou errado?"
+   BUG: "Preenchi a redução na tabela SLR do meu jeito. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: r entra só nas colunas do FOLLOW de A. ; errado = Errado: r entra só na coluna do $. | Certo: item completo reduz com qualquer token.
    se errar: "Isso é o que o LR(0) faz. O SLR olha um conjunto antes."
    se acertar: "Exato. No SLR, a redução entra só nas colunas do FOLLOW de A. Encher a linha inteira cria conflitos que não existem."
 
 25. TELA: # Erros comuns ⏎ Certo: No SLR, r entra só nas colunas do FOLLOW(A). ⏎ *Errado: Escrever s (shift) na coluna de um não-terminal.* ⏎ *Certo: Coluna de não-terminal é a parte GOTO: só o número do estado.*
-   BYTE: "Outro erro: pôr shift em coluna de não-terminal. Ninguém lê não-terminal da entrada. Ali vai só o estado de destino, o goto."
+   PROF: "Outro erro: pôr shift em coluna de não-terminal. Ninguém lê não-terminal da entrada. Ali vai só o estado de destino, o goto."
 
 26. TELA: # Resumo ⏎ Terminal depois do ponto: s (empilha) e vai para o estado do goto. ⏎ Item completo A → α •: r nas colunas do FOLLOW(A). ⏎ Duas ações na mesma casa: conflito. Sem conflito, a gramática é SLR(1).
-   BYTE: "Resumindo: a tabela SLR sai do autômato LR(0) e do FOLLOW. Os gotos viram shift, os itens completos viram reduce no FOLLOW, e casa vazia é erro."
+   PROF: "Resumindo: a tabela SLR sai do autômato LR(0) e do FOLLOW. Os gotos viram shift, os itens completos viram reduce no FOLLOW, e casa vazia é erro."
 
 #### PEGADINHA: "Conflito não é ambiguidade" (5 cenas, ~36s)
 
@@ -642,7 +642,7 @@ BYTE: "Antes da aula: qual deles costuma ter mais estados?"
 Opções: ✔LR(1) | LALR | SLR
 Depois: "O LR(1). O LALR nasce juntando estados dele."
 
-#### AULA ANIMADA BÁSICA: "Mais precisão, mesma tabela" (28 cenas, ~227s)
+#### AULA ANIMADA BÁSICA: "Mais precisão, mesma tabela" (28 cenas, ~226s)
 
 1. TELA: # LALR ⏎ E -> n • ⏎ FOLLOW(E) = { +, ), $ } ⏎ r ?
    BYTE: "Há gramáticas sem ambiguidade em que a tabela SLR tem conflito. O FOLLOW manda reduzir onde não devia."
@@ -744,16 +744,16 @@ Depois: "O LR(1). O LALR nasce juntando estados dele."
    se acertar: "Sem os lookaheads, os itens são os mesmos. Mesmo núcleo, então podem juntar."
 
 26. TELA: # Erros comuns ⏎ Toda gramática LALR(1) é LR(1), mas nem toda LR(1) é LALR(1). ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: o LALR usa o FOLLOW, como o SLR. ⏎ Errado: os dois aceitam as mesmas gramáticas. ⏎ Certo: juntar estados pode criar conflito.
-   BYTE: "LALR e LR(1) têm a mesma força? Um colega disse isto. Certo ou errado?"
+   BUG: "LALR e LR(1) têm a mesma força? Eu já respondi. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: juntar estados pode criar conflito. ; errado = Certo: o LALR usa o FOLLOW, como o SLR. | Errado: os dois aceitam as mesmas gramáticas.
    se errar: "Juntar estados de mesmo núcleo pode misturar lookaheads que o LR(1) mantinha separados."
    se acertar: "Acertou. A fusão pode criar um conflito reduce-reduce que o LR(1) não tinha. Por isso o LALR fica entre o SLR e o LR(1)."
 
 27. TELA: # Erros comuns ⏎ Certo: Toda gramática LALR(1) é LR(1), mas nem toda LR(1) é LALR(1). ⏎ *Errado: Usar o FOLLOW para preencher as reduções da tabela LALR.* ⏎ *Certo: No LALR, a redução entra nas colunas dos lookaheads do item.*
-   BYTE: "Um erro comum: usar o FOLLOW no LALR. FOLLOW é coisa do SLR. No LALR e no LR(1), quem decide a coluna é o lookahead do item."
+   PROF: "Um erro comum: usar o FOLLOW no LALR. FOLLOW é coisa do SLR. No LALR e no LR(1), quem decide a coluna é o lookahead do item."
 
 28. TELA: # Resumo ⏎ Item LR(1): regra, ponto e lookahead. ⏎ LALR: junta estados LR(1) de núcleo igual e une os lookaheads. ⏎ Tamanho da SLR, força entre SLR e LR(1). É o método do Bison.
-   BYTE: "Resumindo: o LR(1) guarda o lookahead em cada item. O LALR junta os estados de mesmo núcleo. Fica pequeno como o SLR e quase tão forte quanto o LR(1)."
+   PROF: "Resumindo: o LR(1) guarda o lookahead em cada item. O LALR junta os estados de mesmo núcleo. Fica pequeno como o SLR e quase tão forte quanto o LR(1)."
 
 #### PEGADINHA: "Juntar estados tem preço" (5 cenas, ~33s)
 

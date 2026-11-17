@@ -15,7 +15,7 @@ BYTE: "Antes da aula: quantos tokens tem esta linha?"
 Opções: 2 | ✔3 | 5
 Depois: "Três: x, maior ou igual, e dez."
 
-#### AULA ANIMADA BÁSICA: "Cortar a linha" (23 cenas, ~176s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "Cortar a linha" (23 cenas, ~175s) [1º exemplo começa na cena 4]
 
 1. TELA: # Letras demais ⏎ i ⏎ f ⏎ ( ⏎ x ⏎ 1 ⏎ > ⏎ = ⏎ 1 ⏎ 0 ⏎ )
    BYTE: "A fase seguinte é o analisador sintático, que todo mundo chama de parser. Ele trabalha com palavras, como nomes e operadores. Mas o arquivo chega caractere por caractere."
@@ -102,16 +102,16 @@ Depois: "Três: x, maior ou igual, e dez."
    se acertar: "Pelo maior casamento. O mais mais casa inteiro, então não vira dois mais."
 
 21. TELA: # Erros comuns ⏎ Em x>=10, o scanner gera os tokens x, >, = e 10. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: pelo maior casamento, >= é um token só. ⏎ Errado: o 10 vira dois tokens, um por dígito. ⏎ Certo: cada símbolo vira um token.
-   BYTE: "Como o scanner corta este trecho? Um colega cortou assim. Certo ou errado?"
+   BUG: "Cortei este trecho em tokens do meu jeito. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: pelo maior casamento, >= é um token só. ; errado = Errado: o 10 vira dois tokens, um por dígito. | Certo: cada símbolo vira um token.
    se errar: "O scanner pega sempre o pedaço mais longo que forma um token."
    se acertar: "Pelo maior casamento, maior ou igual é um token só. São três tokens, não quatro."
 
 22. TELA: # Erros comuns ⏎ Certo: x>=10 dá três tokens: x, >= e 10. É o maior casamento. ⏎ *Errado: Token e lexema são a mesma coisa.* ⏎ *Certo: Lexema é o texto (conta2). O token leva a classe (ID) e o lexema.*
-   BYTE: "Outro erro: confundir token com lexema. Lexema é o texto que estava no arquivo. Token é o que o parser recebe: a classe, com o lexema junto."
+   PROF: "Outro erro: confundir token com lexema. Lexema é o texto que estava no arquivo. Token é o que o parser recebe: a classe, com o lexema junto."
 
 23. TELA: # Resumo ⏎ O scanner lê caracteres e entrega tokens ao parser. ⏎ Maior casamento: sempre o pedaço mais longo que forma token. ⏎ Lexema é o texto; o token leva a classe e o lexema. Espaço e comentário somem.
-   BYTE: "Resumindo: a análise léxica transforma caracteres em tokens. Ela usa o maior casamento, separa lexema de classe e joga fora espaços e comentários."
+   PROF: "Resumindo: a análise léxica transforma caracteres em tokens. Ela usa o maior casamento, separa lexema de classe e joga fora espaços e comentários."
 
 #### PEGADINHA: "Por que ifa não é if" (6 cenas, ~39s)
 
@@ -221,7 +221,7 @@ BYTE: "Antes da aula: qual cadeia casa com ela?"
 Opções: ba | ✔aab | abb
 Depois: "Vale a a b. Quantos a quiser, e um b no fim."
 
-#### AULA ANIMADA BÁSICA: "O trem do autômato" (29 cenas, ~229s) [1º exemplo começa na cena 3]
+#### AULA ANIMADA BÁSICA: "O trem do autômato" (29 cenas, ~230s) [1º exemplo começa na cena 3]
 
 1. TELA: # Nomes sem fim ⏎ x1 ⏎ conta ⏎ 1x ⏎ total2
    BYTE: "Existem infinitos nomes de variável. Não dá para listar todos. É preciso descrever o formato deles."
@@ -335,16 +335,16 @@ Depois: "Vale a a b. Quantos a quiser, e um b no fim."
    se acertar: "Toda cadeia de a, b estrela, c acaba em c. Parar antes do c é rejeitar."
 
 27. TELA: # Erros comuns ⏎ A cadeia passou por um estado final no meio do caminho, então foi aceita. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: só aceita quem passa por todos os estados. ⏎ Certo: tocar num final já aceita. ⏎ Errado: vale só o estado onde a leitura termina.
-   BYTE: "Quando o autômato aceita? Um colega disse isto. Certo ou errado?"
+   BUG: "Passei por um estado final no meio do caminho. Aceita, né? Certo ou errado?"
    PERGUNTA (toque): certo = Errado: vale só o estado onde a leitura termina. ; errado = Errado: só aceita quem passa por todos os estados. | Certo: tocar num final já aceita.
    se errar: "O que importa é onde o trem está quando a cadeia termina."
    se acertar: "Só vale o estado em que a leitura termina. Passar por um final no meio não aceita nada."
 
 28. TELA: # Erros comuns ⏎ Certo: Aceita só se a cadeia inteira foi lida e parou num estado final. ⏎ *Errado: A expressão a* exige pelo menos um a.* ⏎ *Certo: A estrela aceita zero vezes. Para uma ou mais, use a a* (ou a+).*
-   BYTE: "Outro erro: achar que a estrela exige ao menos uma repetição. Estrela é zero ou mais. A cadeia vazia também casa."
+   PROF: "Outro erro: achar que a estrela exige ao menos uma repetição. Estrela é zero ou mais. A cadeia vazia também casa."
 
 29. TELA: # Resumo ⏎ A expressão regular descreve o formato; o autômato confere. ⏎ AFD: um estado inicial, uma seta por símbolo em cada estado, estados finais. ⏎ Aceita se leu tudo e parou num final. Sem transição, rejeita.
-   BYTE: "Resumindo: a expressão regular descreve o formato de um token, e o autômato finito confere cadeia por cadeia. Aceitar é terminar a leitura num estado final."
+   PROF: "Resumindo: a expressão regular descreve o formato de um token, e o autômato finito confere cadeia por cadeia. Aceitar é terminar a leitura num estado final."
 
 #### PEGADINHA: "Estrela, mais e interrogação" (5 cenas, ~31s)
 
@@ -593,16 +593,16 @@ Depois: "Para os dois. O AFD guarda esse conjunto como um estado só."
    se acertar: "Cada estado do AFD é um subconjunto dos n estados. E existem dois elevado a n subconjuntos."
 
 28. TELA: # Erros comuns ⏎ O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: o 0 é sempre final. ⏎ Errado: todos os estados do conjunto precisam ser finais. ⏎ Certo: basta um caminho do AFN aceitar.
-   BYTE: "Quando um conjunto é final no AFD? Um colega disse isto. Certo ou errado?"
+   BUG: "Eu, o Bug, sei quando um conjunto é final no AFD. Olha só. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: basta um caminho do AFN aceitar. ; errado = Certo: o 0 é sempre final. | Errado: todos os estados do conjunto precisam ser finais.
    se errar: "O AFN aceita se algum caminho chega a um final. Precisa ser todos?"
    se acertar: "Basta um estado final dentro do conjunto. O AFN aceita quando pelo menos um caminho dá certo."
 
 29. TELA: # Erros comuns ⏎ Certo: O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN. ⏎ *Errado: Calcular o move e esquecer o ε-fecho do resultado.* ⏎ *Certo: Depois de cada move, aplique o ε-fecho. Senão faltam estados.*
-   BYTE: "Um erro comum: esquecer o épsilon fecho depois de ler o símbolo. Os estados alcançados por épsilon também fazem parte do conjunto."
+   PROF: "Um erro comum: esquecer o épsilon fecho depois de ler o símbolo. Os estados alcançados por épsilon também fazem parte do conjunto."
 
 30. TELA: # Resumo ⏎ Cada estado do AFD é um conjunto de estados do AFN. ⏎ Começa no ε-fecho do inicial. Para cada símbolo: move e ε-fecho. ⏎ Conjunto com algum final é final. Acaba quando não surge conjunto novo.
-   BYTE: "Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar."
+   PROF: "Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar."
 
 #### PEGADINHA: "O fecho esquecido" (5 cenas, ~35s)
 
@@ -802,16 +802,16 @@ Depois: "Juntar. Um estado só faz o mesmo trabalho."
    se acertar: "Sem ler letra nenhuma, um aceita e o outro não. A cadeia vazia separa os dois."
 
 28. TELA: # Erros comuns ⏎ Com b, um par vai para A e para C. A e C são estados diferentes, então o par se separa. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: A e C não formam um par marcado. ⏎ Errado: com b, nenhum par se separa. ⏎ Certo: destinos diferentes já separam o par.
-   BYTE: "Basta os destinos serem estados diferentes para marcar o par? Certo ou errado?"
+   BUG: "Para marcar o par, basta os destinos serem diferentes. Fácil. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: A e C não formam um par marcado. ; errado = Errado: com b, nenhum par se separa. | Certo: destinos diferentes já separam o par.
    se errar: "No AFD do livro, A com C ficou em branco no fim."
    se acertar: "Só separa quando os destinos formam um par já marcado. A e C são equivalentes, então não separam ninguém."
 
 29. TELA: # Erros comuns ⏎ Certo: Marque o par só quando os destinos formam um par já marcado. ⏎ *Errado: Parar depois da primeira rodada de destinos.* ⏎ *Certo: Repita até uma rodada inteira não marcar nenhum par.*
-   BYTE: "Outro erro: parar cedo. Uma marca nova pode revelar outra diferença. Só acabe quando uma rodada passar em branco."
+   PROF: "Outro erro: parar cedo. Uma marca nova pode revelar outra diferença. Só acabe quando uma rodada passar em branco."
 
 30. TELA: # Resumo ⏎ Estados equivalentes aceitam e rejeitam as mesmas continuações. ⏎ Marque final com não final. Depois, os pares que vão a pares marcados. ⏎ Pares sem marca no fim são equivalentes: junte.
-   BYTE: "Resumindo: a minimização separa o que é diferente e junta o que sobra. Começa por final contra não final, propaga pelas transições e para quando nada muda."
+   PROF: "Resumindo: a minimização separa o que é diferente e junta o que sobra. Começa por final contra não final, propaga pelas transições e para quando nada muda."
 
 #### PEGADINHA: "Juntar gêmeos de mentira" (6 cenas, ~33s)
 
@@ -872,7 +872,7 @@ BYTE: "Antes da aula: a palavra if vira qual token?"
 Opções: ✔ID | IF | erro
 Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
 
-#### AULA ANIMADA BÁSICA: "O Flex escreve o scanner" (21 cenas, ~160s) [1º exemplo começa na cena 3]
+#### AULA ANIMADA BÁSICA: "O Flex escreve o scanner" (21 cenas, ~159s) [1º exemplo começa na cena 3]
 
 1. TELA: # Scanner à mão ⏎ if (isalpha(c)) { ⏎   while (isalnum(c)) ... ⏎ } else if (isdigit(c)) { ⏎   while (isdigit(c)) ... ⏎ } else if (c == '=') ...
    BYTE: "Escrito à mão, o scanner tem um teste para cada classe de token, e um autômato por trás de cada teste."
@@ -953,16 +953,16 @@ Depois: "Vira ID. No empate, ganha a regra que vem primeiro."
    se acertar: "Empate: as duas casam o while inteiro. No empate, vence a regra de cima."
 
 19. TELA: # Erros comuns ⏎ No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: a regra de cima sempre vence. ⏎ Certo: por isso o ifa vira nome, e não if. ⏎ Certo: o Flex lê as regras de baixo para cima.
-   BYTE: "Quem vence quando duas regras casam? Um colega disse isto. Certo ou errado?"
+   BUG: "Quando duas regras casam, eu sei quem vence. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: por isso o ifa vira nome, e não if. ; errado = Certo: o Flex lê as regras de baixo para cima. | Errado: a regra de cima sempre vence.
    se errar: "Lembre do ifa: qual regra ganhou, a de cima ou a mais longa?"
    se acertar: "É isso. O ifa casa inteiro como nome, e isso é mais longo que o if. Só no empate de tamanho vence a regra de cima."
 
 20. TELA: # Erros comuns ⏎ Certo: No Flex, ganha o casamento mais longo. A ordem das regras só desempata. ⏎ *Errado: Pôr a regra de identificador antes das palavras reservadas.* ⏎ *Certo: Palavra reservada primeiro. Senão while e if viram ID.*
-   BYTE: "Um erro comum: pôr a regra de identificador em cima. Aí if e while empatam no tamanho, perdem na ordem e viram nomes comuns."
+   PROF: "Um erro comum: pôr a regra de identificador em cima. Aí if e while empatam no tamanho, perdem na ordem e viram nomes comuns."
 
 21. TELA: # Resumo ⏎ Arquivo .l: padrão (expressão regular) e ação em C. ⏎ Vence o casamento mais longo; no empate, a regra de cima. ⏎ Ação sem return descarta o texto. É assim que os espaços somem.
-   BYTE: "Resumindo: o Flex gera o scanner a partir de padrões e ações. O mais longo vence, a ordem desempata, e as palavras reservadas ficam em cima."
+   PROF: "Resumindo: o Flex gera o scanner a partir de padrões e ações. O mais longo vence, a ordem desempata, e as palavras reservadas ficam em cima."
 
 #### PEGADINHA: "A ordem das regras no Flex" (5 cenas, ~32s)
 

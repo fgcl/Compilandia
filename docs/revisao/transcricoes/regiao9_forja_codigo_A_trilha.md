@@ -15,7 +15,7 @@ BYTE: "Antes da aula: quantas linhas de três endereços dá isso?"
 Opções: 1 | ✔2 | 3
 Depois: "Duas. Uma conta por linha."
 
-#### AULA ANIMADA BÁSICA: "Uma conta por linha" (23 cenas, ~158s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "Uma conta por linha" (23 cenas, ~157s) [1º exemplo começa na cena 4]
 
 1. TELA: # TAC ⏎ a + b * c ⏎ processador ⏎ uma conta por vez
    BYTE: "O processador faz uma conta por vez, sempre com dois valores."
@@ -105,16 +105,16 @@ Depois: "Duas. Uma conta por linha."
    se acertar: "O vezes usa o t1 e o t2. Ele só roda depois que os dois existem."
 
 21. TELA: # Erros comuns ⏎ A conta a + b * c precisa de duas linhas de três endereços. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: são três linhas, uma por variável. ⏎ Certo: são duas contas, uma por linha. ⏎ Certo: cada linha guarda três variáveis.
-   BYTE: "Quantas linhas de três endereços esta conta precisa? Um colega disse isto. Certo ou errado?"
+   BUG: "Contei quantas linhas de três endereços esta conta precisa. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: são duas contas, uma por linha. ; errado = Certo: cada linha guarda três variáveis. | Errado: são três linhas, uma por variável.
    se errar: "Conte os operadores. Cada linha leva no máximo um."
    se acertar: "Exato. São duas contas: t1 = b * c, depois t2 = a + t1. Cada linha leva um operador e no máximo três endereços."
 
 22. TELA: # Erros comuns ⏎ Certo: A conta a + b * c precisa de duas linhas de três endereços. ⏎ *Errado: Reusar o mesmo temporário para duas contas diferentes.* ⏎ *Certo: Cada operador ganha um temporário novo: t1, t2, t3...*
-   BYTE: "Um erro comum: reaproveitar o t1 na segunda conta. Se o valor antigo ainda for usado, ele se perde. Cada resultado ganha um temporário novo."
+   PROF: "Um erro comum: reaproveitar o t1 na segunda conta. Se o valor antigo ainda for usado, ele se perde. Cada resultado ganha um temporário novo."
 
 23. TELA: # Resumo ⏎ Três endereços: resultado = operando operador operando. ⏎ Gere os filhos antes do pai; cada conta guarda num temporário novo. ⏎ É código intermediário: não depende do processador.
-   BYTE: "Resumindo: o código de três endereços quebra a expressão em contas simples. A árvore dá a ordem, e cada resultado parcial ganha um temporário."
+   PROF: "Resumindo: o código de três endereços quebra a expressão em contas simples. A árvore dá a ordem, e cada resultado parcial ganha um temporário."
 
 #### PEGADINHA: "A ordem dos temporários" (5 cenas, ~23s)
 
@@ -221,7 +221,7 @@ BYTE: "Antes da aula: o compilador pode fazer essa conta sozinho?"
 Opções: ✔sim | não | só em C
 Depois: "Pode. Ele já escreve seis no código."
 
-#### AULA ANIMADA BÁSICA: "Conta feita antes" (28 cenas, ~205s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Conta feita antes" (28 cenas, ~206s) [1º exemplo começa na cena 5]
 
 1. TELA: # Otimização ⏎ for (i = 0; i < 1000; i++) ⏎ *  x = 2 * 3 + y;*
    BYTE: "Esta linha roda mil vezes dentro de um laço."
@@ -326,16 +326,16 @@ Depois: "Pode. Ele já escreve seis no código."
    se acertar: "Antes, no lugar do seis havia uma conta. Só número com número se dobra."
 
 26. TELA: # Erros comuns ⏎ Com x lido do teclado, o compilador dobra x * 2 para um número. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o x só tem valor quando o programa roda. ⏎ Errado: multiplicação nunca se dobra. ⏎ Certo: o 2 já é constante, então a conta dobra.
-   BYTE: "Dá para dobrar esta conta? Um colega disse que sim. Certo ou errado?"
+   BUG: "Eu dobrei esta conta antes de o programa rodar. Pode? Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o x só tem valor quando o programa roda. ; errado = Errado: multiplicação nunca se dobra. | Certo: o 2 já é constante, então a conta dobra.
    se errar: "O valor de x já existe na hora de compilar?"
    se acertar: "O valor de x só aparece quando o programa roda. A dobra de constantes só vale para o que o compilador já conhece."
 
 27. TELA: # Erros comuns ⏎ Certo: Só se dobra conta com constantes conhecidas na compilação. ⏎ *Errado: Aceitar uma otimização que muda o resultado em algum caso.* ⏎ *Certo: Otimização válida dá o mesmo resultado para toda entrada.*
-   BYTE: "Outro erro: achar que vale ganhar velocidade mudando o resultado em algum caso raro. Não vale. A otimização tem que preservar o resultado sempre."
+   PROF: "Outro erro: achar que vale ganhar velocidade mudando o resultado em algum caso raro. Não vale. A otimização tem que preservar o resultado sempre."
 
 28. TELA: # Resumo ⏎ Otimizar: código mais rápido ou menor, com o mesmo resultado. ⏎ Dobra de constantes: conta só com constantes é feita na compilação. ⏎ Com variável, a conta fica para o tempo de execução.
-   BYTE: "Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável."
+   PROF: "Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável."
 
 #### PEGADINHA: "Otimizar sem mudar o resultado" (5 cenas, ~26s)
 
@@ -432,7 +432,7 @@ BYTE: "Antes da aula: essa instrução vale em MIPS?"
 Opções: sim | ✔não | só com sw
 Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 
-#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (28 cenas, ~213s)
+#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (28 cenas, ~210s)
 
 1. TELA: # MIPS ⏎ total ⏎ $t0
    BYTE: "O processador não conhece variáveis. Ele só conhece registradores, que são poucos e rápidos, e posições de memória."
@@ -537,16 +537,16 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
    se acertar: "No MIPS, a conta só acontece entre registradores. O lw traz cada variável para um deles."
 
 26. TELA: # Erros comuns ⏎ Para somar a e b, basta: add a, b direto na memória. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só o sw no fim. ⏎ Certo: o add busca as variáveis sozinho. ⏎ Errado: o add só soma registradores.
-   BYTE: "No MIPS, dá para somar duas variáveis direto na memória? Um colega escreveu assim. Certo ou errado?"
+   BUG: "No MIPS, eu somo duas variáveis direto na memória. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o add só soma registradores. ; errado = Errado: falta só o sw no fim. | Certo: o add busca as variáveis sozinho.
    se errar: "O add do MIPS só aceita registradores."
    se acertar: "É isso. Primeiro o lw carrega cada variável num registrador. Só então o add faz a conta."
 
 27. TELA: # Erros comuns ⏎ Certo: lw, lw, add, sw: a conta acontece só entre registradores. ⏎ *Errado: Terminar no add e esquecer o sw.* ⏎ *Certo: Sem sw, a variável na memória continua com o valor antigo.*
-   BYTE: "Outro erro: parar na conta. O resultado está no registrador, mas a variável mora na memória. Sem o sw, ela não muda."
+   PROF: "Outro erro: parar na conta. O resultado está no registrador, mas a variável mora na memória. Sem o sw, ela não muda."
 
 28. TELA: # Resumo ⏎ lw: da memória para o registrador. sw: do registrador para a memória. ⏎ add, sub e mul operam só entre registradores. ⏎ Cada linha de três endereços vira: carrega, opera, guarda.
-   BYTE: "Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw."
+   PROF: "Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw."
 
 #### PEGADINHA: "O if vira desvio" (5 cenas, ~36s)
 
@@ -669,7 +669,7 @@ BYTE: "Antes da aula: quem sai primeiro da pilha?"
 Opções: f(3) | ✔f(2) | nenhum
 Depois: "F de dois. O último a entrar sai primeiro."
 
-#### AULA ANIMADA BÁSICA: "A pilha de chamadas" (25 cenas, ~168s) [1º exemplo começa na cena 4]
+#### AULA ANIMADA BÁSICA: "A pilha de chamadas" (25 cenas, ~167s) [1º exemplo começa na cena 4]
 
 1. TELA: # fat(2) ⏎ int fat(int n) { ⏎   if (n <= 1) return 1; ⏎ *  return n * fat(n - 1);* ⏎ } ⏎ n = 2
    BYTE: "A função fat chama a si mesma, com um n menor."
@@ -765,16 +765,16 @@ Depois: "F de dois. O último a entrar sai primeiro."
    se acertar: "Quando o g sai, o registro do f volta ao topo. Ele continua de onde parou."
 
 23. TELA: # Erros comuns ⏎ Numa recursão, cada chamada tem o seu próprio n, no seu registro de ativação. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o n mora num lugar só, global. ⏎ Certo: cada chamada empilha um registro. ⏎ Certo: o n fica num registrador fixo.
-   BYTE: "Onde mora o n de cada chamada do fat? Um colega disse isto. Certo ou errado?"
+   BUG: "Onde mora o n de cada chamada do fat? Eu sei. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: cada chamada empilha um registro. ; errado = Certo: o n fica num registrador fixo. | Errado: o n mora num lugar só, global.
    se errar: "Quantos registros de ativação havia na pilha quando o fat de um rodava?"
    se acertar: "Acertou. Cada chamada empilha um registro com o seu n. O n chega em $a0, mas a próxima chamada escreve por cima. Por isso ele vai para o quadro."
 
 24. TELA: # Erros comuns ⏎ Certo: Numa recursão, cada chamada tem o seu próprio n, no seu registro de ativação. ⏎ *Errado: As funções retornam na ordem em que foram chamadas.* ⏎ *Certo: É uma pilha: a última chamada é a primeira a retornar.*
-   BYTE: "Um erro comum: achar que a primeira chamada retorna primeiro. É o contrário. A pilha devolve na ordem inversa das chamadas."
+   PROF: "Um erro comum: achar que a primeira chamada retorna primeiro. É o contrário. A pilha devolve na ordem inversa das chamadas."
 
 25. TELA: # Resumo ⏎ Registro de ativação: parâmetros, variáveis locais e endereço de retorno. ⏎ Chamada empilha um registro; retorno desempilha. ⏎ Só o registro do topo está executando.
-   BYTE: "Resumindo: cada chamada ganha um registro de ativação na pilha, com seus parâmetros, suas locais e o endereço de retorno. A última chamada é a primeira a voltar."
+   PROF: "Resumindo: cada chamada ganha um registro de ativação na pilha, com seus parâmetros, suas locais e o endereço de retorno. A última chamada é a primeira a voltar."
 
 #### PEGADINHA: "Cada chamada, um registro" (5 cenas, ~29s)
 
@@ -950,16 +950,16 @@ Depois: "Não podem. Um apagaria o outro."
    se acertar: "As leituras que importam estão mais abaixo. Começando do fim, cada linha já sabe o que vem depois."
 
 19. TELA: # Erros comuns ⏎ Quatro temporários podem caber em menos de quatro registradores. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: cada registrador guarda dois valores ao mesmo tempo. ⏎ Errado: é um registrador por temporário. ⏎ Certo: quem não convive divide registrador.
-   BYTE: "Quantos registradores este código precisa? Um colega contou os temporários. Certo ou errado?"
+   BUG: "Quantos registradores este código precisa? Eu contei os temporários. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: quem não convive divide registrador. ; errado = Certo: cada registrador guarda dois valores ao mesmo tempo. | Errado: é um registrador por temporário.
    se errar: "No exemplo, quatro temporários couberam em quantos registradores?"
    se acertar: "O que conta é quantos estão vivos ao mesmo tempo. Quem nunca convive pode dividir o registrador."
 
 20. TELA: # Erros comuns ⏎ Certo: Quatro temporários podem caber em menos de quatro registradores. ⏎ *Errado: Calcular a vivacidade de cima para baixo.* ⏎ *Certo: A vivacidade anda de baixo para cima: vivo é quem ainda será lido.*
-   BYTE: "Um erro comum: calcular a vivacidade de cima para baixo. Vivo é quem ainda vai ser lido adiante, então a análise começa no fim."
+   PROF: "Um erro comum: calcular a vivacidade de cima para baixo. Vivo é quem ainda vai ser lido adiante, então a análise começa no fim."
 
 21. TELA: # Resumo ⏎ Vivo: o valor ainda será lido mais abaixo. ⏎ Grafo de interferência: aresta entre quem está vivo ao mesmo tempo. ⏎ Colorir: vizinhos com cores diferentes. Faltou cor, spill para a memória.
-   BYTE: "Resumindo: a alocação decide quem fica em registrador. A vivacidade mostra quem convive, o grafo liga os que convivem, e a coloração distribui os registradores."
+   PROF: "Resumindo: a alocação decide quem fica em registrador. A vivacidade mostra quem convive, o grafo liga os que convivem, e a coloração distribui os registradores."
 
 #### PEGADINHA: "Quem vive junto briga" (5 cenas, ~31s)
 

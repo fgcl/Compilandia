@@ -15,7 +15,7 @@ BYTE: "Antes da aula: os parênteses entram na AST?"
 Opções: sim | ✔não | só um
 Depois: "Não. A forma da árvore já mostra o agrupamento."
 
-#### AULA ANIMADA BÁSICA: "A árvore enxuta" (22 cenas, ~155s)
+#### AULA ANIMADA BÁSICA: "A árvore enxuta" (22 cenas, ~154s)
 
 1. TELA: # AST ⏎ a + ( b )
    BYTE: "O parser segue a árvore de derivação. Ela tem um nó para cada símbolo das regras usadas, e fica enorme."
@@ -96,16 +96,16 @@ Depois: "Não. A forma da árvore já mostra o agrupamento."
    se acertar: "O parêntese manda fazer o menos antes. O vezes usa o resultado dele."
 
 20. TELA: # Erros comuns ⏎ A AST de a * (b - 2) não tem nó para os parênteses. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma da árvore já agrupa. ⏎ Certo: parêntese nunca muda a conta. ⏎ Errado: sem o nó, o menos roda depois.
-   BYTE: "Os parênteses aparecem na AST? Um colega desenhou sem eles. Certo ou errado?"
+   BUG: "Desenhei a AST sem os parênteses. Comi os dois. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: a forma da árvore já agrupa. ; errado = Certo: parêntese nunca muda a conta. | Errado: sem o nó, o menos roda depois.
    se errar: "O parêntese muda a forma da árvore. Depois disso, ele ainda serve?"
    se acertar: "Boa. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes."
 
 21. TELA: # Erros comuns ⏎ Certo: A AST de a * (b - 2) não tem nó para os parênteses. ⏎ *Errado: Pôr na raiz o primeiro operador que aparece na expressão.* ⏎ *Certo: Na raiz fica a última operação a ser calculada.*
-   BYTE: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
+   PROF: "Um erro comum: pôr na raiz o primeiro operador da linha. A raiz é a última conta. A primeira conta fica no fundo da árvore."
 
 22. TELA: # Resumo ⏎ Árvore de derivação: um nó por regra. AST: só operações e operandos. ⏎ Operador vira nó interno; nome e valor viram folha. ⏎ Parêntese e regra de passagem somem. O filho é calculado antes do pai.
-   BYTE: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
+   PROF: "Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas."
 
 #### PEGADINHA: "O parêntese não vira nó" (6 cenas, ~32s)
 
@@ -177,7 +177,7 @@ BYTE: "Antes da aula: esse x igual a um mexe em qual x?"
 Opções: ✔o de dentro | o de fora | nos dois
 Depois: "No de dentro. A busca começa pelo bloco mais próximo."
 
-#### AULA ANIMADA BÁSICA: "Quem é esse x?" (23 cenas, ~167s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Quem é esse x?" (23 cenas, ~165s) [1º exemplo começa na cena 5]
 
 1. TELA: # Escopo ⏎ void f() { ⏎   int i; ⏎ } ⏎ void g() { ⏎   float i; ⏎ }
    BYTE: "Duas funções declaram uma variável i. Cada uma quer a sua."
@@ -264,16 +264,16 @@ Depois: "No de dentro. A busca começa pelo bloco mais próximo."
    se acertar: "A busca começa no topo da pilha, o bloco de dentro. O x está ali, então ela para."
 
 21. TELA: # Erros comuns ⏎ Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: é outro escopo, e a busca acha o de dentro. ⏎ Certo: o x de fora é apagado. ⏎ Errado: um nome só pode ser declarado uma vez.
-   BYTE: "Já existe um x fora. Posso declarar outro x dentro do bloco? Um colega disse isto. Certo ou errado?"
+   BUG: "Com um x lá fora, eu declaro outro x no bloco. Pode isso? Certo ou errado?"
    PERGUNTA (toque): certo = Certo: é outro escopo, e a busca acha o de dentro. ; errado = Certo: o x de fora é apagado. | Errado: um nome só pode ser declarado uma vez.
    se errar: "A declaração nova entra na tabela do topo, que ainda não tem x."
    se acertar: "Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco."
 
 22. TELA: # Erros comuns ⏎ Certo: Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora. ⏎ *Errado: Buscar o nome só na tabela do topo.* ⏎ *Certo: A busca desce do topo até a tabela global. Erro só se nenhuma tiver.*
-   BYTE: "Um erro comum: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
+   PROF: "Um erro comum: procurar só no bloco atual. A busca desce por todas as tabelas da pilha, do bloco mais interno até o global."
 
 23. TELA: # Resumo ⏎ Tabela de símbolos: nome, tipo e onde cada coisa foi declarada. ⏎ Uma tabela por bloco, numa pilha. Abriu bloco, empilha; fechou, desempilha. ⏎ Uso: busca do topo para baixo. O mais interno esconde o de fora.
-   BYTE: "Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo."
+   PROF: "Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo."
 
 #### PEGADINHA: "A sombra da variável" (5 cenas, ~27s)
 
@@ -377,7 +377,7 @@ BYTE: "Antes da aula: qual é o tipo do resultado?"
 Opções: int | ✔float | erro
 Depois: "Float. O compilador converte o inteiro antes da conta."
 
-#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (30 cenas, ~220s) [1º exemplo começa na cena 7]
+#### AULA ANIMADA BÁSICA: "Tipos sobem pela árvore" (30 cenas, ~219s) [1º exemplo começa na cena 7]
 
 1. TELA: # Forma certa, sentido errado ⏎ a + ok ⏎ a: int ⏎ ok: bool ⏎ nome + nome: o parser aceita
    BYTE: "O parser confere a forma. A mais ok tem a forma certa: nome, mais, nome. Mas ok é um bool, verdadeiro ou falso."
@@ -497,16 +497,16 @@ Depois: "Float. O compilador converte o inteiro antes da conta."
    se acertar: "O real guarda a ordem de grandeza do inteiro. O compilador converte, e a soma vira real."
 
 28. TELA: # Erros comuns ⏎ Atributo sintetizado é o que o nó recebe do pai. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: sintetizado sobe dos filhos. ⏎ Errado: sintetizado vem dos irmãos. ⏎ Certo: o pai passa o tipo para os filhos.
-   BYTE: "De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?"
+   BUG: "Para mim, o sintetizado vem do pai, igual herança. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: sintetizado sobe dos filhos. ; errado = Errado: sintetizado vem dos irmãos. | Certo: o pai passa o tipo para os filhos.
    se errar: "Nesta aula, os tipos subiram ou desceram pela árvore?"
    se acertar: "Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado."
 
 29. TELA: # Erros comuns ⏎ Certo: Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos. ⏎ *Errado: int + float é erro de tipo.* ⏎ *Certo: Há coerção: o int vira float. Erro é misturar bool com número.*
-   BYTE: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
+   PROF: "Outro erro: tratar toda mistura de tipos como erro. Inteiro com real tem coerção. Erro é quando nenhuma conversão faz sentido."
 
 30. TELA: # Resumo ⏎ Atributo: informação num nó da árvore, calculada por regras semânticas. ⏎ O tipo é sintetizado: sobe das folhas para a raiz. ⏎ int com float sofre coerção para float. Sem conversão possível: erro semântico.
-   BYTE: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
+   PROF: "Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro."
 
 #### PEGADINHA: "Sintetizado sobe, herdado desce" (5 cenas, ~34s)
 
