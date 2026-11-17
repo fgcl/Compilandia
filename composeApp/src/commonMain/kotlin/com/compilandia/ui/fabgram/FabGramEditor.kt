@@ -32,7 +32,11 @@ import kotlin.math.floor
 import kotlin.math.sign
 
 /** O que o dedo faz no palco. */
-internal enum class Ferramenta { MOVER, ESTEIRA, APAGAR }
+internal enum class Ferramenta {
+    MOVER, ESTEIRA, APAGAR,
+    /** Pôr no chão o bloco escolhido no menu (EstadoFabrica.construindo). */
+    CONSTRUIR,
+}
 
 /**
  * Onde a grade fica na tela: [cols] × [rows] células de [cel] px; a célula ([x0], [y0]) começa em ([ox], [oy]).
@@ -71,6 +75,9 @@ internal fun Grade.comZoom(z: Float, pan: Offset, w: Float, h: Float): Grade {
     return Grade(ceil(w / c2).toInt() + 2, ceil(h / c2).toInt() + 2, c2, w / 2 + pan.x - (wcx - nx0) * c2, h / 2 + pan.y - (wcy - ny0) * c2, nx0, ny0)
 }
 
+/** O menu de construção ocupa o pé do palco: a fábrica centraliza acima dele. */
+private val ALTURA_DO_MENU = 170.dp
+
 private const val ZOOM_MIN = 0.5f
 private const val ZOOM_MAX = 3f
 
@@ -82,7 +89,7 @@ private const val ZOOM_MAX = 3f
 @Composable
 internal fun PalcoEditavel(
     planta: Planta, e: EstadoFabrica, laudo: Laudo?, relogio: Float, reduz: Boolean, nomes: NomesBlocos,
-    onPlanta: (Planta) -> Unit, onToque: (FabGram.Bloco?) -> Unit,
+    onPlanta: (Planta) -> Unit, onToque: (FabGram.Bloco?) -> Unit, onConstruir: (Cel, FabGram.Area) -> Unit,
 ) {
     val medidor = rememberTextMeasurer()
     var rascunho by remember { mutableStateOf<Planta?>(null) }
@@ -90,12 +97,13 @@ internal fun PalcoEditavel(
     val atual by rememberUpdatedState(planta)
     val aoMudar by rememberUpdatedState(onPlanta)
     val aoTocar by rememberUpdatedState(onToque)
+    val construir by rememberUpdatedState(onConstruir)
     val ferramenta = e.ferramenta
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val w = constraints.maxWidth.toFloat()
         val h = constraints.maxHeight.toFloat()
         val topo = with(LocalDensity.current) { (when { e.missao?.missao?.desafio == true -> 200.dp; e.missao != null -> 150.dp; else -> 70.dp }).toPx() }
-        val baixo = with(LocalDensity.current) { 72.dp.toPx() }
+        val baixo = with(LocalDensity.current) { ALTURA_DO_MENU.toPx() }
         val celMax = with(LocalDensity.current) { 88.dp.toPx() }
         val base = remember(planta.x0, planta.y0, planta.x1, planta.y1, w, h, topo) { gradePara(planta, w, h, topo, baixo, celMax) }
         val gr = base.comZoom(e.zoom, e.pan, w, h)
@@ -106,18 +114,7 @@ internal fun PalcoEditavel(
         }
         Canvas(
             Modifier.fillMaxSize().clipToBounds().testTag("fabgram-palco")
-                .pointerInput(Unit) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val ev = awaitPointerEvent()
-                            if (ev.type == PointerEventType.Scroll) {
-                                val dy = ev.changes.firstOrNull()?.scrollDelta?.y ?: 0f
-                                if (dy != 0f) zoom(if (dy > 0) 0.9f else 1.1f, Offset.Zero)
-                                ev.changes.forEach { it.consume() }
-                            }
-                        }
-                    }
-                }
+                .rodaDoMouse { z -> zoom(z, Offset.Zero) }
                 .pointerInput(ferramenta) {
                     awaitEachGesture {
                         val down = awaitFirstDown()
@@ -130,6 +127,7 @@ internal fun PalcoEditavel(
                         var r = base0
                         val bloco = base0.blocoEm(c0)
                         val panChao = ferramenta == Ferramenta.MOVER && bloco == null
+                        fun aoConstruir(c: Cel) = construir(c, g0.area)
                         var antes = down.position
                         while (true) {
                             val ev = awaitPointerEvent()
@@ -152,6 +150,7 @@ internal fun PalcoEditavel(
                                 Ferramenta.MOVER -> if (bloco != null) fantasma = bloco.id to Cel(bloco.x + c.x - c0.x, bloco.y + c.y - c0.y)
                                 Ferramenta.ESTEIRA -> { r = desenha(r, ult, c); rascunho = r }
                                 Ferramenta.APAGAR -> { r = r.semEsteira(c); rascunho = r }
+                                Ferramenta.CONSTRUIR -> {}
                             }
                             ult = c
                         }
@@ -162,11 +161,11 @@ internal fun PalcoEditavel(
                             dois || panChao && moveu -> {}
                             ferramenta == Ferramenta.MOVER && alvo != null -> base0.move(alvo.first, alvo.second.x, alvo.second.y, g0.area)?.let(aoMudar)
                             moveu && ferramenta != Ferramenta.MOVER -> aoMudar(r)
-                            !moveu && bloco != null -> aoTocar(bloco)
-                            !moveu && ferramenta == Ferramenta.ESTEIRA && g0.dentro(c0) ->
-                                aoMudar(if (c0 in base0.esteiras) base0.gira(c0) else base0.comEsteira(c0, Dir.DIREITA) ?: base0)
-                            !moveu && ferramenta == Ferramenta.APAGAR -> aoMudar(base0.semEsteira(c0))
-                            !moveu -> aoTocar(null)
+                            !moveu -> when (val t = toque(ferramenta, base0, c0, g0.dentro(c0))) {
+                                is Toque.Muda -> aoMudar(t.planta)
+                                is Toque.Toca -> aoTocar(t.bloco)
+                                Toque.Constroi -> aoConstruir(c0)
+                            }
                         }
                     }
                 },
@@ -176,12 +175,55 @@ internal fun PalcoEditavel(
             desenhaFabrica(
                 Cena(
                     pl, gr, laudo, c, if (c == null) 0f else e.t, relogio, e.sel, reduz, ferramenta, fantasma, medidor, nomes,
-                    guia = e.missao?.guiaEsteiras.orEmpty() + e.dicaGuia, guiaBloco = e.missao?.guiaBloco, mao = e.mostrarMao && rascunho == null && fantasma == null,
+                    guia = e.missao?.guiaEsteiras.orEmpty() + e.dicaGuia, guiaBloco = e.missao?.guiaBloco,
+                    guiaConstruir = e.missao?.guiaConstruir,
+                    mao = e.mostrarMao && rascunho == null && fantasma == null,
                 ),
             )
         }
     }
 }
+
+/** A roda do mouse dá zoom: [onZoom] recebe o fator (menos de 1 afasta). */
+private fun Modifier.rodaDoMouse(onZoom: (Float) -> Unit): Modifier = pointerInput(Unit) {
+    awaitPointerEventScope {
+        while (true) {
+            val ev = awaitPointerEvent()
+            if (ev.type != PointerEventType.Scroll) continue
+            val dy = ev.changes.firstOrNull()?.scrollDelta?.y ?: 0f
+            if (dy != 0f) onZoom(if (dy > 0) ZOOM_RODA_AFASTA else ZOOM_RODA_APROXIMA)
+            ev.changes.forEach { it.consume() }
+        }
+    }
+}
+
+private const val ZOOM_RODA_AFASTA = 0.9f
+private const val ZOOM_RODA_APROXIMA = 1.1f
+
+/** O que um toque sem arrastar faz. */
+internal sealed interface Toque {
+    data class Muda(val planta: Planta) : Toque
+    data class Toca(val bloco: FabGram.Bloco?) : Toque
+    data object Constroi : Toque
+}
+
+/**
+ * Um toque em [c]: construir põe o bloco do menu; apagar desmonta o bloco ou tira a esteira;
+ * esteira põe ou gira; tocar num bloco abre o painel dele.
+ */
+internal fun toque(f: Ferramenta, pl: Planta, c: Cel, dentro: Boolean): Toque {
+    val bloco = pl.blocoEm(c)
+    return when {
+        f == Ferramenta.CONSTRUIR -> Toque.Constroi
+        f == Ferramenta.APAGAR -> Toque.Muda(bloco?.let { pl.desmonta(it.id) } ?: pl.semEsteira(c))
+        bloco != null -> Toque.Toca(bloco)
+        f == Ferramenta.ESTEIRA && dentro -> Toque.Muda(poeOuGira(pl, c))
+        else -> Toque.Toca(null)
+    }
+}
+
+private fun poeOuGira(pl: Planta, c: Cel): Planta =
+    if (c in pl.esteiras) pl.gira(c) else pl.comEsteira(c, Dir.DIREITA) ?: pl
 
 /**
  * Estende a esteira de [de] até [ate], um passo de cada vez (primeiro na horizontal).

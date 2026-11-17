@@ -13,7 +13,7 @@ class FabGramMissoesTest {
             val p = FabGram.prepara(m)
             val c = FabGram.corrida(p.planta, frase(m))
             if (m == Missao.LIGAR) assertTrue(c.saiu, "$m já devia funcionar")
-            else { assertNotNull(c.quebra, "$m devia travar antes de consertar"); assertTrue(!c.saiu) }
+            else assertTrue(!c.saiu, "$m devia falhar antes de consertar")
         }
     }
 
@@ -31,6 +31,21 @@ class FabGramMissoesTest {
             assertTrue(p.guiaEsteiras.size <= 4, "$m pede ${p.guiaEsteiras.size} esteiras: é tutorial, peça pouco")
             assertTrue(p.guiaEsteiras.isEmpty() || p.guiaBloco == null, "$m mistura duas tarefas")
         }
+    }
+
+    @Test fun naMissaoDaRegraAFabricaComecaSemGramatica() {
+        val p = FabGram.prepara(Missao.REGRA)
+        assertTrue(p.planta.g.productions.isEmpty())
+        assertNotNull(p.guiaRegra)
+    }
+
+    @Test fun naMissaoDeConstruirAMaquinaFaltaEOContornoMostraOnde() {
+        val p = FabGram.prepara(Missao.CONSTRUIR)
+        val (tipo, onde) = assertNotNull(p.guiaConstruir)
+        assertTrue(p.planta.blocos.none { it.def == tipo })
+        val construida = assertNotNull(p.planta.constroi(tipo, onde))
+        // posta no lugar mas sem regra, ainda não faz nada
+        assertTrue(!FabGram.corrida(construida, listOf("a", "b")).saiu)
     }
 
     @Test fun separadorCarimbaONumeroDaRegra() {
@@ -54,7 +69,7 @@ class FabGramDesafiosTest {
     }
 
     @Test fun oTutorialVemAntesDosDesafios() {
-        kotlin.test.assertEquals(6, TUTORIAL)
+        kotlin.test.assertEquals(8, TUTORIAL)
         assertTrue(Missao.entries.take(TUTORIAL).none { it.desafio })
     }
 }
@@ -69,7 +84,7 @@ class FabGramDicaTest {
                 val d = FabGram.dica(p, pl)
                 assertTrue(d.isNotEmpty(), "$m: sem dica e ainda sem cumprir")
                 assertTrue(d.size <= 4, "$m: a dica mostrou ${d.size} esteiras de uma vez")
-                pl = FabGram.Planta(pl.g, pl.blocos, pl.esteiras + d)
+                pl = FabGram.Planta(pl.blocos, pl.esteiras + d)
                 vezes++
             }
             assertTrue(FabGram.cumpre(p, pl), "$m: seguindo só as dicas a fábrica devia funcionar")

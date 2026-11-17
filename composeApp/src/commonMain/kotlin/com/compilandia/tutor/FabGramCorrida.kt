@@ -4,6 +4,7 @@ import com.compilandia.engine.DerivationHelper
 import com.compilandia.engine.EPS
 import com.compilandia.engine.Grammar
 import com.compilandia.engine.ParseNode
+import com.compilandia.fabrica.Papel
 import com.compilandia.tutor.FabGram.Bloco
 import com.compilandia.tutor.FabGram.Cel
 import com.compilandia.tutor.FabGram.Planta
@@ -29,10 +30,12 @@ enum class Motivo {
     BATE,
     /** A esteira fecha um círculo sem passar pelo destino. */
     VOLTA,
+    /** A caixa tem uma letra que não tem separador na fábrica. */
+    SEM_SEPARADOR,
 }
 
-/** O item [simbolo] parou em [cel] a caminho de [destino]. */
-data class Quebra(val simbolo: String, val caixa: Boolean, val cel: Cel, val motivo: Motivo, val destino: Bloco)
+/** O item [simbolo] parou em [cel] a caminho de [destino] (nulo quando o destino nem existe). */
+data class Quebra(val simbolo: String, val caixa: Boolean, val cel: Cel, val motivo: Motivo, val destino: Bloco?)
 
 data class Corrida(
     /** A frase pedida. */
@@ -60,6 +63,8 @@ const val FABGRAM_TRABALHO = 0.6f   // segundos de máquina por caixa
 
 fun FabGram.corrida(pl: Planta, frase: List<String>): Corrida {
     val g = pl.g
+    // sem máquina para a letra inicial, a fábrica não monta nada (e o motor de derivação nem começa)
+    if (g.productionsOf(g.start).isEmpty()) return Animador(pl, frase, null, false, false).roda(null)
     val dv = DerivationHelper.leftmostDerivations(g, frase, limit = 2)
     if (dv.isNotEmpty()) return Animador(pl, frase, frase, true, dv.size > 1).roda(DerivationHelper.treeOf(g, dv[0]))
     val perto = maisPerto(g, frase)
@@ -102,18 +107,52 @@ private fun Planta.segue(inicio: Cel, para: Bloco, vistos: Set<Int>): Rota {
     while (true) {
         if (!vistas.add(c)) return Rota.Trava(caminho, Motivo.VOLTA)
         caminho += c
-        val prox = c + esteiras.getValue(c)
-        val b = blocoEm(prox)
-        if (b != null) {
-            if (b.id == para.id) return Rota.Chega(caminho)
-            if (b.tipo != FabGram.TipoBloco.ROTEADOR || b.id in vistos) return Rota.Trava(caminho, Motivo.BATE)
-            return when (val r = rota(b, para, vistos)) {
-                is Rota.Chega -> Rota.Chega(caminho + dentro(prox, r.celulas.first()) + r.celulas)
-                is Rota.Trava -> Rota.Trava(caminho + (r.celulas.firstOrNull()?.let { dentro(prox, it) } ?: listOf(prox)) + r.celulas, r.motivo)
-            }
+        when (val p = passo(c, para, vistos, caminho, vistas)) {
+            is Passo.Anda -> c = p.prox
+            is Passo.Fim -> return p.rota
         }
-        if (prox !in esteiras) return Rota.Trava(caminho, Motivo.ACABA)
-        c = prox
+    }
+}
+
+/** Um passo do item na esteira: anda para a próxima célula, ou a rota termina (chegou ou travou). */
+private sealed interface Passo {
+    data class Anda(val prox: Cel) : Passo
+    data class Fim(val rota: Rota) : Passo
+}
+
+private fun Planta.passo(
+    c: Cel, para: Bloco, vistos: Set<Int>, caminho: MutableList<Cel>, vistas: MutableSet<Cel>,
+): Passo {
+    val prox = c + esteiras.getValue(c)
+    val b = blocoEm(prox)
+    return when {
+        b == null -> if (prox in esteiras) Passo.Anda(prox) else Passo.Fim(Rota.Trava(caminho, Motivo.ACABA))
+        b.tipo == Papel.JUNCAO && b.id != para.id -> atravessa(c, prox, caminho, vistas)
+        else -> Passo.Fim(entra(b, prox, para, vistos, caminho))
+    }
+}
+
+/** A junção não muda a direção: o item atravessa e continua na célula do outro lado. */
+private fun Planta.atravessa(c: Cel, juncao: Cel, caminho: MutableList<Cel>, vistas: MutableSet<Cel>): Passo {
+    caminho += juncao
+    val alem = juncao + esteiras.getValue(c)
+    return when {
+        alem !in esteiras -> Passo.Fim(Rota.Trava(caminho, if (blocoEm(alem) == null) Motivo.ACABA else Motivo.BATE))
+        !vistas.add(juncao) -> Passo.Fim(Rota.Trava(caminho, Motivo.VOLTA))
+        else -> Passo.Anda(alem)
+    }
+}
+
+/** O item chega no bloco [b]: é o destino, é um roteador (passa por ele) ou bateu. */
+private fun Planta.entra(b: Bloco, prox: Cel, para: Bloco, vistos: Set<Int>, caminho: List<Cel>): Rota {
+    if (b.id == para.id) return Rota.Chega(caminho)
+    if (b.tipo != Papel.ROTEADOR || b.id in vistos) return Rota.Trava(caminho, Motivo.BATE)
+    return when (val r = rota(b, para, vistos)) {
+        is Rota.Chega -> Rota.Chega(caminho + dentro(prox, r.celulas.first()) + r.celulas)
+        is Rota.Trava -> {
+            val miolo = r.celulas.firstOrNull()?.let { dentro(prox, it) } ?: listOf(prox)
+            Rota.Trava(caminho + miolo + r.celulas, r.motivo)
+        }
     }
 }
 
@@ -160,11 +199,17 @@ private class Animador(val pl: Planta, val pedida: List<String>, val feita: List
         }
     }
 
+    /** Leva a caixa [nt] até o separador da letra dela. Nulo se não tem separador ou se travou no caminho. */
+    private fun chegaAoSeparador(nt: String, de: Bloco): Bloco? {
+        val sep = pl.separadorDe(nt)
+        if (sep == null) quebra = Quebra(nt, true, Cel(de.x, de.y), Motivo.SEM_SEPARADOR, null)
+        return sep?.takeIf { leva(nt, true, de, it) }
+    }
+
     /** A caixa [no] sai de [de]; [casa0] é a casa da frase onde cai a primeira peça dela. */
     private fun processa(no: ParseNode, de: Bloco, casa0: Int): Boolean {
         val nt = no.symbol
-        val sep = pl.separadorDe(nt)
-        if (!leva(nt, true, de, sep)) return false
+        val sep = chegaAoSeparador(nt, de) ?: return false
         val filhos = no.children.filter { it.symbol != EPS }
         val p = pl.g.productionsOf(nt).first { pr -> pr.rhs == filhos.map { it.symbol } }
         val m = pl.maquinaDe(p)

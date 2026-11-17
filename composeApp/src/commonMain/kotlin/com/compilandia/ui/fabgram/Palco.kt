@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
@@ -24,8 +25,6 @@ import kotlin.math.sin
 
 // Pixel com frente (Y01) + luz e sombra projetada (Z4). O palco é sempre a oficina escura,
 // em qualquer tema: é a cena do jogo, como a sala.
-internal val CHAO = listOf(Color(0xFFB4B2AA), Color(0xFFB8B6AE), Color(0xFFB0AEA6))
-internal val LINHA = Color(0xFFA6A49C)
 internal val OL = Color(0xFF0F1114)
 internal val TOPO = Color(0xFF5B636E)
 internal val TOPO_L = Color(0xFF7C858F)
@@ -64,6 +63,8 @@ internal class Cena(
     val medidor: TextMeasurer, val nomes: NomesBlocos,
     /** O que a missão pede para montar: esteiras e o lugar de um bloco. */
     val guia: Map<Cel, Dir> = emptyMap(), val guiaBloco: Pair<Int, Cel>? = null,
+    /** O bloco que a missão pede para construir e onde. */
+    val guiaConstruir: Pair<com.compilandia.fabrica.BlocoTipo, Cel>? = null,
     /** Mostrar a mãozinha fazendo o gesto da missão. */
     val mao: Boolean = false,
 ) {
@@ -94,7 +95,7 @@ private fun noCaminho(pts: List<Pair<Float, Float>>, u: Float): Pair<Float, Floa
 }
 
 internal fun DrawScope.desenhaFabrica(cena: Cena) {
-    drawRect(CHAO[0])
+    drawRect(PISO[0])
     translate(cena.gr.ox - cena.gr.x0 * cena.cel, cena.gr.oy - cena.gr.y0 * cena.cel) {
         chao(cena)
         esteiras(cena)
@@ -110,12 +111,16 @@ internal fun DrawScope.desenhaFabrica(cena: Cena) {
     drawRect(Brush.radialGradient(listOf(Color.Transparent, Color(0x40050310)), center = center, radius = size.maxDimension * 0.75f))
 }
 
+/** O chão: placas de metal de 2×2 células, com junta fina entre as células e junta forte entre as placas. */
 private fun DrawScope.chao(cena: Cena) {
     val cel = cena.cel; val u = cena.u
-    val grade = if (cena.ferramenta == Ferramenta.MOVER) LINHA else Color(0xFF8F8D85)
+    val construindo = cena.ferramenta != Ferramenta.MOVER
     for (x in cena.gr.x0 until cena.gr.x0 + cena.gr.cols) for (y in cena.gr.y0 until cena.gr.y0 + cena.gr.rows) {
-        r(x * cel, y * cel, cel, cel, CHAO[(hsh(x, y) * 3).toInt().coerceIn(0, 2)])
-        r(x * cel, y * cel, cel, u, grade); r(x * cel, y * cel, u, cel, grade)
+        val placa = x.mod(2) + y.mod(2) * 2
+        r(x * cel, y * cel, cel, cel, PISO[(hsh(x / 2, y / 2) * PISO.size).toInt().coerceIn(0, PISO.size - 1)])
+        val junta = if (construindo) AC.copy(alpha = 0.18f) else PISO_JUNTA
+        r(x * cel, y * cel, cel, u, if (placa < 2) PISO_JUNTA_FORTE else junta)
+        r(x * cel, y * cel, u, cel, if (placa % 2 == 0) PISO_JUNTA_FORTE else junta)
     }
 }
 
@@ -137,18 +142,13 @@ private fun DrawScope.esteiras(cena: Cena) {
         r(mx - meia - u, my - meia - u, 2 * meia + 2 * u, 2 * meia + 2 * u, OL)
         for (s in lados) braco(s, EST, meia - u)
         r(mx - meia + u, my - meia + u, 2 * meia - 2 * u, 2 * meia - 2 * u, EST)
-        // ripas que andam no sentido da esteira
-        val reta = d.opposite() in lados
-        var k = passo * 8f - 8f
-        while (k < 32f) {
-            val pos = k * u
-            if ((reta || k >= 12f) && k > -2f) {
-                if (d.dx != 0) { val px = if (d.dx > 0) x + pos else x + cel - pos - 2 * u; r(px, my - meia + 2 * u, 2 * u, 2 * meia - 4 * u, EST_L) }
-                else { val py = if (d.dy > 0) y + pos else y + cel - pos - 2 * u; r(mx - meia + 2 * u, py, 2 * meia - 4 * u, 2 * u, EST_L) }
-            }
-            k += 8f
+        // trilhos claros nas bordas e setas em V que andam no sentido da esteira
+        if (d.dx != 0) { r(x, my - meia + u, cel, u, EST_L); r(x, my + meia - 2 * u, cel, u, EST_L) }
+        else { r(mx - meia + u, y, u, cel, EST_L); r(mx + meia - 2 * u, y, u, cel, EST_L) }
+        for (k in 0 until 2) {
+            val f = ((passo + k / 2f) % 1f) - 0.5f
+            rotate(d.graus(), Offset(mx, my)) { chevron(mx + f * cel, my, u, AC.copy(alpha = 0.9f)) }
         }
-        seta(mx, my, d, u)
         // fim de esteira: faixa de perigo
         val prox = c + d
         if (prox !in pl.esteiras && pl.blocoEm(prox) == null) {
@@ -161,15 +161,12 @@ private fun DrawScope.esteiras(cena: Cena) {
     }
 }
 
-private fun Dir.opposite(): Dir = Dir.entries[(ordinal + 2) % 4]
+private fun Dir.opposite(): Dir = oposta()
 
-private fun DrawScope.seta(mx: Float, my: Float, d: Dir, u: Float) {
-    for (j in 0 until 4) {
-        val ax = mx + d.dx * (j - 1) * u; val ay = my + d.dy * (j - 1) * u
-        val l = (4 - j) * u
-        if (d.dx != 0) r(ax, ay - l, u * 1.2f, 2 * l, AC) else r(ax - l, ay, 2 * l, u * 1.2f, AC)
-    }
-}
+/** O ângulo para girar um desenho que aponta para a direita. */
+internal fun Dir.graus(): Float = ordinal * QUARTO_DE_VOLTA
+
+private const val QUARTO_DE_VOLTA = 90f
 
 /** O fantasma da missão: esteira tracejada com a seta, e o contorno de onde o bloco deve ficar. */
 private fun DrawScope.guia(cena: Cena) {
@@ -188,11 +185,19 @@ private fun DrawScope.guia(cena: Cena) {
             if (d.dx != 0) r(ax, ay - l, 1.6f * u, 2 * l, AZUL_GUIA.copy(alpha = a)) else r(ax - l, ay, 2 * l, 1.6f * u, AZUL_GUIA.copy(alpha = a))
         }
     }
+    cena.guiaConstruir?.let { (t, alvo) ->
+        val feito = cena.pl.blocos.any { it.def == t && it.x == alvo.x && it.y == alvo.y }
+        if (!feito) contorno(alvo, t.w, t.h, cel, a, traco)
+    }
     val (id, alvo) = cena.guiaBloco ?: return
     val b = cena.pl.blocos.firstOrNull { it.id == id } ?: return
     if (b.x == alvo.x && b.y == alvo.y) return
-    drawRect(AZUL_GUIA.copy(alpha = 0.18f * a), Offset(alvo.x * cel, alvo.y * cel), Size(b.w * cel, b.h * cel))
-    drawRect(AZUL_GUIA.copy(alpha = a), Offset(alvo.x * cel, alvo.y * cel), Size(b.w * cel, b.h * cel), style = traco)
+    contorno(alvo, b.w, b.h, cel, a, traco)
+}
+
+private fun DrawScope.contorno(alvo: Cel, w: Int, h: Int, cel: Float, a: Float, traco: Stroke) {
+    drawRect(AZUL_GUIA.copy(alpha = 0.18f * a), Offset(alvo.x * cel, alvo.y * cel), Size(w * cel, h * cel))
+    drawRect(AZUL_GUIA.copy(alpha = a), Offset(alvo.x * cel, alvo.y * cel), Size(w * cel, h * cel), style = traco)
 }
 
 private val AZUL_GUIA = Color(0xFF2F7FE0)
@@ -272,7 +277,7 @@ internal fun DrawScope.numero(cena: Cena, n: Int, cx: Float, cy: Float, raio: Fl
     drawText(lay, topLeft = Offset(cx - lay.size.width / 2f, cy - lay.size.height / 2f))
 }
 
-private val CORES_NUMERO = listOf(Color(0xFF2F7FE0), Color(0xFFD9533B), Color(0xFF2E9E5B), Color(0xFF8E5BD0), Color(0xFFCC8A12))
+internal val CORES_NUMERO = listOf(Color(0xFF2F7FE0), Color(0xFFD9533B), Color(0xFF2E9E5B), Color(0xFF8E5BD0), Color(0xFFCC8A12))
 
 private val Float.sp get() = androidx.compose.ui.unit.TextUnit(this, androidx.compose.ui.unit.TextUnitType.Sp)
 

@@ -97,7 +97,8 @@ class FabGramFlowTest {
         setContent { App(app) }
         anda(1500); Thread.sleep(300); anda(500)
         foto("6_editor_mover")
-        onNodeWithTag("fabgram-esteira").performClick(); anda(200)
+        onNodeWithTag("fabgram-aba-distribuicao").performClick(); anda(200)
+        onNodeWithTag("fabgram-bloco-esteira").performClick(); anda(200)
         val antes = app.learner.state.fabGramPlanta
         onNodeWithTag("fabgram-palco").performTouchInput { swipe(Offset(width * 0.85f, height * 0.2f), Offset(width * 0.85f, height * 0.6f), 400) }
         anda(400)
