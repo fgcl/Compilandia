@@ -27,7 +27,7 @@ internal fun DrawScope.bloco(cena: Cena, b: Bloco, brilhos: MutableList<Triple<O
     val x = b.x * cel; val y = b.y * cel; val w = b.w * cel; val h = b.h * cel
     val ativo = cena.trabalhando(b.id)
     val alerta = b.tipo == Papel.SEPARADOR && cena.tem(b.nt, Falha.CONFLITO_LL, Falha.CONFLITO_SLR)
-    val pincel = Pincel(u, cena.relogio, cena.reduz, ativo, cena.medidor, alerta)
+    val pincel = pincelDo(cena, b, ativo, alerta)
     with(Desenhos.de(b.def)) { pinta(pincel, b, x, y, w, h) }
     if (b.tipo == Papel.MAQUINA || b.tipo == Papel.SEPARADOR) {
         brilhos += Triple(Offset(x + w / 2, y + h / 2), if (ativo) 26 * u else 12 * u, corDaCategoria(b.def))
@@ -38,6 +38,24 @@ internal fun DrawScope.bloco(cena: Cena, b: Bloco, brilhos: MutableList<Triple<O
     if (cena.fantasma?.first == b.id) ret(x, y, w, h, VEU_ARRASTO)
     if (ativo) lampada(u, x + 6 * u, y + 6 * u, VERDE)
 }
+
+/** O pincel com o que acontece dentro do bloco agora: quanto do trabalho foi, por onde sai, a frase montada. */
+private fun pincelDo(cena: Cena, b: Bloco, ativo: Boolean, alerta: Boolean): Pincel {
+    val saindo = cena.saindoDe(b)
+    val progresso = when (b.tipo) {
+        Papel.MAQUINA -> cena.progresso(b.id)
+        Papel.FONTE -> saindo?.second?.takeIf { it < SAIDA_DA_FONTE }?.let { it / SAIDA_DA_FONTE }
+        else -> null
+    }
+    val saida = if (b.tipo == Papel.SEPARADOR) saindo?.first?.marca ?: saindo?.let { 1 } else null
+    val frase = if (b.tipo == Papel.MONTADORA) cena.frase() else emptyList()
+    return Pincel(
+        cena.u, cena.relogio, cena.reduz, ativo, cena.medidor, alerta,
+        progresso = progresso, saida = saida, frase = frase,
+    )
+}
+
+private const val SAIDA_DA_FONTE = 0.35f
 
 /** Sem esteira de saída, o bloco não tem para onde mandar o que faz. */
 private fun precisaSair(b: Bloco): Boolean = when (b.tipo) {

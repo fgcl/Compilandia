@@ -59,7 +59,7 @@ data class Corrida(
 }
 
 const val FABGRAM_VEL = 7f          // células por segundo
-const val FABGRAM_TRABALHO = 0.6f   // segundos de máquina por caixa
+const val FABGRAM_TRABALHO = 1.2f   // segundos de máquina por caixa: dá tempo de ver a caixa abrir
 
 fun FabGram.corrida(pl: Planta, frase: List<String>): Corrida {
     val g = pl.g

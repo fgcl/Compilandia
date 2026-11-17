@@ -57,6 +57,8 @@ internal fun corSinal(f: Falha): Color = when (f) {
 internal data class NomesBlocos(val fonte: String, val separador: (String) -> String, val montadora: String, val cesto: String, val roteador: String)
 
 /** Tudo que um quadro do palco precisa. */
+private const val MINIMO = 1e-3f
+
 internal class Cena(
     val pl: Planta, val gr: Grade, val laudo: Laudo?, val c: Corrida?, val t: Float, val relogio: Float,
     val sel: Int?, val reduz: Boolean, val ferramenta: Ferramenta, val fantasma: Pair<Int, Cel>?,
@@ -75,6 +77,22 @@ internal class Cena(
     fun tem(nt: String?, vararg f: Falha) = laudo?.problemas.orEmpty().any { it.nt == nt && it.falha in f }
     /** O pincel do pacote de textura em uso, para o chão e as esteiras. */
     fun pincel(ativo: Boolean = false) = Pincel(u, relogio, reduz, ativo, medidor)
+    /** A fração do trabalho do bloco [id] agora (0 a 1), ou nulo se ele não está trabalhando. */
+    fun progresso(id: Int): Float? = c?.trabalhos?.firstOrNull { it.bloco == id && t in it.t0..it.t1 }
+        ?.let { ((t - it.t0) / (it.t1 - it.t0).coerceAtLeast(MINIMO)).coerceIn(0f, 1f) }
+
+    /** O trecho que está saindo do bloco [b] agora e quanto dele já andou: a fonte soltando, o separador mandando. */
+    fun saindoDe(b: com.compilandia.tutor.FabGram.Bloco): Pair<com.compilandia.tutor.Trecho, Float>? = c?.trechos
+        ?.firstOrNull { tr -> t in tr.t0..tr.t1 && tr.pontos.first() == (b.cx to b.cy) }
+        ?.let { tr -> tr to ((t - tr.t0) / (tr.t1 - tr.t0).coerceAtLeast(MINIMO)) }
+
+    /** A frase na montadora agora, casa por casa. */
+    fun frase(): List<String?> {
+        val corrida = c ?: return emptyList()
+        val chegou = corrida.chegadas.filter { it.t <= t }
+        return List(corrida.pedida.size) { i -> chegou.firstOrNull { it.casa == i }?.simbolo }
+    }
+
     fun trabalhando(id: Int) = c?.trabalhos?.any { it.bloco == id && t in it.t0..it.t1 } == true
 }
 

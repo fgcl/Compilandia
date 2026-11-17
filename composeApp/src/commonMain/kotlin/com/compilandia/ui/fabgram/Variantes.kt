@@ -35,8 +35,15 @@ internal object Variantes {
     const val DIAGRAMA = "diagrama"
     const val INDUSTRIAL = "industrial"
 
-    /** O id da variante escolhida para cada tipo; tipo fora do mapa usa o desenho original. */
-    val escolhas = mutableStateMapOf<String, String>()
+    /**
+     * A escolha do dono na prancha (rodada 2): diagrama em quase tudo; o cesto e o roteador
+     * ficaram com o desenho de antes, então não entram aqui.
+     */
+    val PADRAO: Map<String, String> = listOf("prensa", "cofre", "braco", "armario", "separador", "fonte", "montadora")
+        .associateWith { DIAGRAMA }
+
+    /** A variante em uso por tipo; começa com a escolha do dono. */
+    val escolhas = mutableStateMapOf<String, String>().apply { putAll(PADRAO) }
 
     fun escolhida(tipo: String): Variante? = escolhas[tipo]?.let { id -> porTipo[tipo]?.firstOrNull { it.id == id } }
 }

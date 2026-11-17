@@ -42,6 +42,12 @@ internal class Pincel(
     val alerta: Boolean = false,
     /** O pacote de textura com que se desenha. */
     val pk: Pacote = PacoteAtual.pacote,
+    /** Quanto do trabalho já foi feito, de 0 a 1; nulo quando a máquina está parada. A animação de dentro segue isto. */
+    val progresso: Float? = null,
+    /** Separador: o número da saída por onde a caixa está saindo agora. */
+    val saida: Int? = null,
+    /** Montadora: a frase até agora, casa por casa (nulo é casa ainda vazia). */
+    val frase: List<String?> = emptyList(),
 ) {
     /** A cor da faixa do tipo, no pacote. */
     fun faixa(t: BlocoTipo): Color = when (t.categoria) {
