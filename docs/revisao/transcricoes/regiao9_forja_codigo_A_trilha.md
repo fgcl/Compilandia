@@ -210,7 +210,7 @@ Flashcards:
 
 ## ASSUNTO OPTIMIZATION: Otimização (dobra de constantes)
 Pré-requisitos no jogo: Código de três endereços
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Conta feita antes» → Fazer com ajuda → Pegadinha «Otimizar sem mudar o resultado» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Conta feita antes» → Fazer com ajuda → Prática: você pilota «O DAG do bloco» → Pegadinha «Otimizar sem mudar o resultado» → Desafio
 Jogos que treinam: Árvore Anotada (calcular atributos de baixo para cima), Linha de Montagem TAC (montar código de três endereços)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -356,6 +356,38 @@ Depois: "Pode. Ele já escreve seis no código."
 
 5. TELA: # Pode trocar? ⏎ 2 * 3   vira   6 ⏎ x * 1   vira   x ⏎ x + 0   vira   x ⏎ x / x   vira   1
    BYTE: "Na dúvida, o compilador deixa como está."
+
+#### PRATICA: "O DAG do bloco" (8 cenas, ~62s)
+
+1. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d
+   BYTE: "Dentro de um bloco básico, o compilador pode montar um DAG. DAG é um grafo em que as setas nunca voltam."
+
+2. TELA: # O DAG do bloco ⏎ *a = b + c* ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ *+  a*
+   PROF: "Cada folha guarda o valor de entrada da variável: b zero e c zero. A conta da linha um vira um nó com dois filhos. O nó ganha o nome a."
+
+3. TELA: # O DAG do bloco ⏎ a = b + c ⏎ *b = a - d* ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b*
+   BYTE: "A linha dois faz a menos d. Ela usa o nó do a, que já existe, e uma folha nova, d zero."
+
+4. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ *d = a - d* ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ -  b
+   BYTE: "A linha quatro também faz a menos d. Qual linha já calculou esse valor? Toque."
+   PERGUNTA (toque): certo = b = a - d ; errado = a = b + c | c = b + c
+   se errar: "Procure a mesma conta, sem o a e o d mudarem no meio."
+   se acertar: "Entre as duas, nem o a nem o d mudaram. O nó do menos ganha mais um nome, o d, e nenhum nó novo nasce."
+
+5. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b, d*
+   BYTE: "Agora o nó do menos tem dois nomes: b e d."
+
+6. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ *c = b + c* ⏎ d = a - d ⏎ Sim: é o mesmo b + c ⏎ Não: o b mudou na linha 2 ⏎ Não: o c está à esquerda
+   BYTE: "E a linha três, c igual a b mais c? Ela repete a conta da linha um?"
+   PERGUNTA (toque): certo = Não: o b mudou na linha 2 ; errado = Sim: é o mesmo b + c | Não: o c está à esquerda
+   se errar: "Olhe o que a linha dois fez com o b."
+   se acertar: "Mesmo texto, valor diferente. Agora o b é o nó do menos. Então o mais da linha três é um nó novo."
+
+7. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ -  b, d ⏎ *+  c*
+   BYTE: "Quatro linhas, três contas. A linha quatro vira só d igual a b, sem conta nenhuma."
+
+8. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b, d* ⏎ +  c
+   PROF: "O DAG só junta nós com o mesmo operador e os mesmos filhos. É assim que ele acha a subexpressão comum."
 
 #### CLIPE 30s: "Dobra de constantes" (2 cenas, ~9s)
 
@@ -794,7 +826,7 @@ Flashcards:
 
 ## ASSUNTO REG_ALLOC: Alocação de registradores
 Pré-requisitos no jogo: Geração de código MIPS
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Fazer com ajuda → Pegadinha «Quem vive junto briga» → Questão de prova → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Fazer com ajuda → Prática: você pilota «Vivas no laço» → Pegadinha «Quem vive junto briga» → Questão de prova → Desafio
 Jogos que treinam: Montadora MIPS (traduzir TAC para assembly e rodar), Coloração de Registradores (vivacidade + colorir o grafo de interferência)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -913,6 +945,32 @@ Depois: "Não podem. Um apagaria o outro."
 
 5. TELA: !!INTERFERÊNCIA!!
    PROF: "Dois registradores bastam. Colorir o grafo é só isso."
+
+#### PRATICA: "Vivas no laço" (6 cenas, ~51s)
+
+1. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s
+   BYTE: "Este é o laço da soma em três endereços. A vivacidade que você viu andava de baixo para cima, num bloco sem desvio."
+
+2. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ *goto enquanto0* ⏎ fimenq0: ⏎ print s
+   PROF: "Uma variável está viva se alguém ainda vai ler o valor dela. Num laço, o que vem depois do goto fica lá em cima."
+
+3. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ *i = t3* ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s
+   BYTE: "Depois que o i recebe o t3, qual linha lê o i primeiro? Toque."
+   PERGUNTA (toque): certo = t1 = i < n ; errado = goto enquanto0 | fimenq0: | print s
+   se errar: "Siga o goto. Ele volta para o rótulo do laço."
+   se acertar: "O goto volta, e o teste do laço lê o i. Então o i ainda está vivo no fim do corpo."
+
+4. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ *i = t3* ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s ⏎ { s } ⏎ { i, n, s } ⏎ { i }
+   BYTE: "Quem está vivo depois que o i recebe o t3?"
+   PERGUNTA (toque): certo = { i, n, s } ; errado = { s } | { i }
+   se errar: "Depois dessa linha vem o goto, e ele leva de volta ao teste."
+   se acertar: "O teste lê o i e o n, e o corpo ainda vai ler o s. Os três seguem vivos."
+
+5. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ *goto enquanto0* ⏎ fimenq0: ⏎ print s ⏎ { i, n, s }
+   BYTE: "O goto não cai na linha de baixo. Por isso a análise repete as passadas até nada mudar. Aqui, duas mudam algo, e a terceira só confere."
+
+6. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s ⏎ *{ i, n, s }* ⏎ *{ i, n, s }*
+   PROF: "No topo do laço, i, n e s estão vivos juntos. No grafo, os três brigam, e cada um precisa do seu registrador."
 
 #### CLIPE 30s: "O que é spill" (2 cenas, ~10s)
 

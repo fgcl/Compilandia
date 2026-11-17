@@ -119,7 +119,7 @@ Marque com `[x]` ao terminar. A origem de cada item está em [REVISAO-AULAS.md](
 - [x] Prompt de trabalho para o Opus 5.5 em [PROMPT-TRABALHO.md](PROMPT-TRABALHO.md)
 - [x] Revisor professor do bloco 5 (Semântica e Forja), e os erros técnicos dele consertados
 - [x] Revisor professor do bloco 6 (Seu compilador), e os erros técnicos dele consertados
-- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`)
+- [x] Gerar as transcrições de novo depois das correções (`TranscricoesTest`) (de novo em 17/11, com as três práticas novas e a Em C 4)
 - [ ] Teste com aluno de verdade: olhar o que o botão "Não entendi" guardou
 
 ## 7. O que os professores dos blocos 5 e 6 pediram e ainda falta
@@ -154,5 +154,5 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
 - [x] Em C 4: erro comum (pai antes dos filhos) e o MIPS de `a * b + c` no brinquedo; a pergunta da Em C 2, cena 7, já tem três opções
 - [ ] Série Em C: segundo exemplo e erro comum nas aulas 1, 2, 3 e 5 (as três últimas já têm 10 cenas, o teto da série)
-- [ ] Em C 4, cena 6: o código do `gera` fica por cima das folhas da árvore
+- [x] Em C 4, cena 6: o `gera` saiu de baixo da árvore e foi para o lugar do MIPS, com uma chamada por linha
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison

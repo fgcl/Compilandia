@@ -110,7 +110,7 @@
 10. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    PROF: "A árvore é isso: structs ligados por ponteiros."
 
-#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~45s)
+#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (9 cenas, ~61s)
 
 1. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c}
    BYTE: "O gerador anda na árvore e escreve MIPS, uma linha por vez."
@@ -130,11 +130,20 @@
 5. TELA: # a + b * c ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ *lw $t1, a* ⏎ *lw $t2, tmp1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, tmp2*
    BYTE: "O mais usa o resultado do vezes, que já está guardado na memória."
 
-6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ void gera(Node *n) { ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
+6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ void gera(Node *n) { ⏎   if (n->op) { ⏎ *    gera(n->esq);* ⏎ *    gera(n->dir);* ⏎   } ⏎   emite(n); ⏎ }
    PROF: "Em C, é uma função recursiva: gera os filhos e depois o pai."
 
-7. TELA: a + b * c ⏎ próxima instrução
-   BYTE: "Agora monte o MIPS na ordem certa, instrução por instrução."
+7. TELA: # Pai antes dos filhos ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1
+   BYTE: "Um erro comum: escrever o pai antes dos filhos. Veja o mesmo MIPS com os blocos trocados."
+
+8. TELA: # Pai antes dos filhos ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1
+   BYTE: "Qual linha lê um valor que ainda não foi guardado? Toque."
+   PERGUNTA (toque): certo = lw $t2, tmp1 ; errado = lw $t1, a | lw $t1, b | lw $t2, c
+   se errar: "Procure o tmp1. Que linha o guarda?"
+   se acertar: "Só a última linha guarda o tmp1. Por isso o gerador visita os filhos primeiro."
+
+9. TELA: a * b + c ⏎ próxima instrução
+   BYTE: "Agora outra árvore: a vezes b mais c. O vezes ficou à esquerda. Monte o MIPS na ordem certa."
    BRINQUEDO: dica "Antes de calcular, os dois valores precisam estar nos registradores." / acerto "É exatamente o que o seu gerador em C escreveria."
 
 #### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (10 cenas, ~59s)

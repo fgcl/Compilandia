@@ -226,8 +226,10 @@ val serieEmC by lazy {
                 add(linhas(mips.size)); hot(raiz, *(porOp until mips.size).map { "m$it" }.toTypedArray())
             }
             cena(tx("epemc_em_c_funcao_recursiva_gera"), who = PROF) {
-                add(codigo("c", listOf("void gera(Node *n) {", "  if (n->op) { gera(n->esq); gera(n->dir); }", "  emite(n);", "}"), 300f, x = 14f, passo = 22f, size = 12f))
-                hot("c1")
+                // O gera fica no lugar do MIPS, ao lado da árvore: embaixo, ele cobria as folhas.
+                dropAll("m")
+                add(codigo("c", listOf("void gera(Node *n) {", "  if (n->op) {", "    gera(n->esq);", "    gera(n->dir);", "  }", "  emite(n);", "}"), 84f, x = 186f, passo = 26f, size = 12f))
+                hot("c2", "c3")
             }
             // Erro comum (professor do bloco 6): o pai antes dos filhos. Os mesmos blocos de quatro linhas, na ordem trocada.
             val trocado = mips.chunked(porOp).reversed().flatten()
