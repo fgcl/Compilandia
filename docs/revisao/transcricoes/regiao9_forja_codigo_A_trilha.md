@@ -421,7 +421,7 @@ Flashcards:
 
 ## ASSUNTO CODEGEN_MIPS: Geração de código MIPS
 Pré-requisitos no jogo: Código de três endereços
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Carrega, opera, guarda» → Fazer com ajuda → Programar o Byte → Prática: você pilota «Monte o MIPS» → Pegadinha «O if vira desvio» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Carrega, opera, guarda» → Fazer com ajuda → Programar o Byte → Prática: você pilota «Monte o MIPS» → Prática: você pilota «Acesso a vetor» → Pegadinha «O if vira desvio» → Desafio
 Jogos que treinam: Linha de Montagem TAC (montar código de três endereços), Montadora MIPS (traduzir TAC para assembly e rodar), Labirinto de Desvios (completar os desvios do if/while e rodar no MARS)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: Robô MIPS
 
@@ -585,6 +585,41 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 
 5. TELA: # a + b ⏎ lw ⏎ add ⏎ sw
    BYTE: "Cada linha de três endereços vira esse mesmo trio."
+
+#### PRATICA: "Acesso a vetor" (8 cenas, ~64s)
+
+1. TELA: # Acesso a vetor ⏎ x = v[i]; ⏎ 10 ⏎ 1000 ⏎ 20 ⏎ 1004 ⏎ 30 ⏎ 1008 ⏎ 40 ⏎ 1012
+   BYTE: "Um vetor guarda os elementos lado a lado na memória. Cada int ocupa 4 bytes. Por isso os endereços pulam de 4 em 4."
+
+2. TELA: # Acesso a vetor ⏎ x = v[i]; ⏎ 10 ⏎ 1000 ⏎ 20 ⏎ 1004 ⏎ 30 ⏎ 1008 ⏎ 40 ⏎ 1012
+   BYTE: "O vetor v começa no endereço 1000. Onde mora o elemento de índice 2? Toque."
+   PERGUNTA (toque): certo = 30 ; errado = 10 | 20 | 40
+   se errar: "O índice começa no zero. Antes do elemento de índice 2, quantos elementos há?"
+   se acertar: "Antes dele há dois elementos, de 4 bytes cada. Então 1000 mais 4 vezes 2 dá 1008."
+
+3. TELA: # Acesso a vetor ⏎ x = v[i]; ⏎ 10 ⏎ 1000 ⏎ 20 ⏎ 1004 ⏎ 30 ⏎ 1008 ⏎ 40 ⏎ 1012 ⏎ *t1 = i * 4* ⏎ t2 = v[t1] ⏎ x = t2
+   BYTE: "No código de três endereços, o compilador calcula primeiro o deslocamento. Deslocamento é a distância, em bytes, do começo do vetor até o elemento."
+
+4. TELA: # Acesso a vetor ⏎ x = v[i]; ⏎ *t1 = i * 4* ⏎ t2 = v[t1] ⏎ x = t2 ⏎ O vetor tem 4 elementos ⏎ Cada int ocupa 4 bytes ⏎ O índice conta de 4 em 4
+   BYTE: "Por que o compilador multiplica o índice por 4? Toque."
+   PERGUNTA (toque): certo = Cada int ocupa 4 bytes ; errado = O vetor tem 4 elementos | O índice conta de 4 em 4
+   se errar: "Pense no tamanho de cada elemento, e não no tamanho do vetor."
+   se acertar: "O 4 vem do tamanho do int. Num vetor de cem elementos, o i também seria multiplicado por 4."
+
+5. TELA: # Acesso a vetor ⏎ *la $t0, v* ⏎ *lw $t1, i* ⏎ sll $t1, $t1, 2 ⏎ add $t0, $t0, $t1 ⏎ lw $t2, 0($t0) ⏎ sw $t2, x
+   BYTE: "No MIPS, o la carrega o endereço onde o vetor começa. O lw traz o valor do i para um registrador."
+
+6. TELA: # Acesso a vetor ⏎ la $t0, v ⏎ lw $t1, i ⏎ sll $t1, $t1, 2 ⏎ add $t0, $t0, $t1 ⏎ lw $t2, 0($t0) ⏎ sw $t2, x
+   BYTE: "Qual linha faz o i vezes 4? Toque."
+   PERGUNTA (toque): certo = sll $t1, $t1, 2 ; errado = la $t0, v | add $t0, $t0, $t1 | lw $t2, 0($t0)
+   se errar: "Não há mul aqui. Procure a linha que mexe nos bits do i."
+   se acertar: "O sll empurra os bits duas casas para a esquerda. Cada casa dobra o número, então duas casas multiplicam por 4. E custa menos que o mul."
+
+7. TELA: # Acesso a vetor ⏎ la $t0, v ⏎ lw $t1, i ⏎ sll $t1, $t1, 2 ⏎ *add $t0, $t0, $t1* ⏎ *lw $t2, 0($t0)* ⏎ sw $t2, x ⏎ x = 30
+   BYTE: "O add soma o começo do vetor com o deslocamento. O lw lê a palavra nesse endereço. Com o i valendo 2, o x fica com 30."
+
+8. TELA: # Acesso a vetor ⏎ la $t0, v ⏎ lw $t1, i ⏎ sll $t1, $t1, 2 ⏎ add $t0, $t0, $t1 ⏎ lw $t2, 0($t0) ⏎ *sw $t2, x* ⏎ x = 30
+   PROF: "Para escrever no vetor, a conta do endereço é a mesma. Só muda o fim: um sw no lugar do lw."
 
 #### CLIPE 30s: "Registrador e memória" (2 cenas, ~9s)
 

@@ -1,6 +1,6 @@
 # Série "Seu compilador" em C (aulas animadas EM_C, na ordem)
 
-#### EM_C / TOKENS: "Em C 1: o laço do getchar" (10 cenas, ~65s)
+#### EM_C / TOKENS: "Em C 1: o laço do getchar" (10 cenas, ~71s)
 
 1. TELA: # Em C aqui, Java no TP ⏎ série: C, com árvore ⏎ Guia do TP: Java, sem árvore ⏎ uma função por regra
    PROF: "Esta série escreve o compilador em C e monta a árvore. O Guia do TP faz o trabalho em Java, sem árvore. A ideia é a mesma: uma função por regra. O guia traz a tabela dos nomes."
@@ -11,26 +11,29 @@
 3. TELA: # lexer.c ⏎ *int c = getchar();* ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = ?}
    BYTE: "O getchar lê um caractere por vez. Chegou o 4."
 
-4. TELA: # lexer.c ⏎ int c = getchar(); ⏎ *if (isdigit(c)) {* ⏎ *  int v = 0;* ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = 0}
-   BYTE: "É dígito. Entra no if, e o valor começa em zero."
+4. TELA: # lexer.c ⏎ int c = getchar(); ⏎ *if (isdigit(c)) {* ⏎ *  int v = 0;* ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = 4}
+   BYTE: "É dígito, então entra no if, e o v começa em zero. A primeira volta do while junta o quatro."
 
-5. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '4'; v = 4}
-   BYTE: "Cada volta do while junta um dígito. Agora v vale quatro."
-
-6. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎ *    c = getchar();* ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '2'; v = 42}
+5. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎ *    v = v * 10 + (c - '0');* ⏎ *    c = getchar();* ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '2'; v = 42}
    BYTE: "Lê o 2. Quatro vezes dez, mais dois, dá quarenta e dois."
 
-7. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
+6. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
    BYTE: "Chegou o mais, e o while para. Qual linha roda em seguida? Toque nela."
    PERGUNTA (toque): certo =   ungetc(c, stdin); ; errado =     v = v * 10 + (c - '0'); |     c = getchar(); | if (isdigit(c)) {
    se errar: "O mais não é dígito. O while para."
-   se acertar: "O laço para e o ungetc devolve o mais."
+   se acertar: "O laço para. Só que o mais já saiu da entrada: foi lido um a mais. O ungetc devolve ele."
 
-8. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎ *  ungetc(c, stdin);* ⏎   return (Token){NUM, v}; ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42}
-   BYTE: "O mais foi lido a mais. O ungetc devolve ele para a entrada."
-
-9. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎ *  return (Token){NUM, v};* ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42} ⏎ Token{tipo: NUM; valor: 42}
+7. TELA: # lexer.c ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   ungetc(c, stdin); ⏎ *  return (Token){NUM, v};* ⏎ } ⏎ 4 ⏎ 2 ⏎ + ⏎ 7 ⏎ variáveis{c = '+'; v = 42} ⏎ Token{tipo: NUM; valor: 42}
    BYTE: "E sai o token. Ele é um struct com o tipo e o valor."
+
+8. TELA: # Sem o ungetc ⏎ int c = getchar(); ⏎ if (isdigit(c)) { ⏎   int v = 0; ⏎   while (isdigit(c)) { ⏎     v = v * 10 + (c - '0'); ⏎     c = getchar(); ⏎   } ⏎   return (Token){NUM, v}; ⏎ } ⏎ 7 ⏎ * ⏎ 1 ⏎ 3
+   BYTE: "Um erro comum é esquecer o ungetc. Veja o mesmo código sem essa linha, lendo outra entrada: sete vezes treze."
+
+9. TELA: # Sem o ungetc ⏎ 7 ⏎ * ⏎ 1 ⏎ 3 ⏎ NUM 7   *   NUM 13 ⏎ NUM 7   NUM 13 ⏎ NUM 713
+   BYTE: "Que tokens saem dessa entrada, agora sem o ungetc? Toque."
+   PERGUNTA (toque): certo = NUM 7   NUM 13 ; errado = NUM 7   *   NUM 13 | NUM 713
+   se errar: "O while para porque leu o vezes. Sem o ungetc, quem devolve o vezes?"
+   se acertar: "O vezes foi lido para parar o while, e ninguém devolveu. Ele some, e o parser recebe dois números seguidos."
 
 10. TELA: *x* ⏎ 1 ⏎ = ⏎ 4 ⏎ 2 ⏎ + ⏎ y ⏎ ;
    BYTE: "Agora corte uma linha inteira, como o seu lexer em C faria."
