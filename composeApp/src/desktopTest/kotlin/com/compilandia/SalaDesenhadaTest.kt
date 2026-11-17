@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.compilandia.learning.RoomItem
 import com.compilandia.ui.room.MovelIcone
-import com.compilandia.ui.room.MovelNaSala
+import com.compilandia.ui.room.PecasDaSala
 import com.compilandia.ui.room.SalaDesenhada
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.Campus
@@ -31,11 +31,16 @@ class SalaDesenhadaTest : RenderBase() {
     }
 
     @Test fun fotos() {
-        shot("sala_vazia", LADO, LADO) { Box(Modifier.fillMaxSize()) { SalaDesenhada("sala") } }
+        shot("sala_vazia", LADO, LADO) {
+            Box(Modifier.fillMaxSize()) {
+                SalaDesenhada("sala")
+                PecasDaSala({ false }, null) {}
+            }
+        }
         shot("sala_cheia_sozinha", LADO, LADO) {
             Box(Modifier.fillMaxSize()) {
                 SalaDesenhada("sala")
-                for (id in moveisArte.keys) MovelNaSala(id, popIn = false) {}
+                PecasDaSala({ true }, null) {}
             }
         }
         shot("campus", LADO, LADO) {

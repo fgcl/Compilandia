@@ -14,7 +14,7 @@ import kotlin.math.sin
  * Os ids continuam os da oficina, para quem já comprou não perder nada: o "sofa" virou o ar-condicionado.
  * Cada peça fica onde nada do que é pintado depois cobre ela (as peças são pintadas por cima da sala).
  */
-class MovelArte(val centro: P3, val tamanho: Float, val desenha: DrawScope.(Iso) -> Unit)
+class MovelArte(val centro: P3, val tamanho: Float, val atras: Boolean = false, val desenha: DrawScope.(Iso) -> Unit)
 
 private object Cores {
     val vaso = Color(0xFFC0643C)
@@ -45,8 +45,8 @@ val moveisArte: Map<String, MovelArte> = linkedMapOf(
     "quadro" to MovelArte(P3(0f, 4.9f, 2.05f), 1.4f) { cartazDoAutomato(it) },
     "lixeira" to MovelArte(P3(0.45f, 2.25f, 0.4f), 0.9f) { lixeira(it) },
     "planta" to MovelArte(P3(10.55f, 0.55f, 1.0f), 1.3f) { planta(it) },
-    "abajur" to MovelArte(P3(8.45f, 2.1f, 1.3f), 0.9f) { abajur(it) },
-    "cadeira" to MovelArte(P3(10.4f, 2.95f, 0.8f), 1.3f) { cadeiraDoProfessor(it) },
+    "cadeira" to MovelArte(P3(9.3f, 1.4f, 0.8f), 1.3f, atras = true) { cadeiraDoProfessor(it) },
+    "abajur" to MovelArte(P3(8.15f, 1.95f, 1.3f), 0.9f) { abajur(it) },
     "cafe" to MovelArte(P3(0.35f, 7.45f, 0.9f), 1.4f) { cafe(it) },
 )
 
@@ -158,8 +158,8 @@ private fun DrawScope.planta(iso: Iso) {
 
 /** A luminária da mesa do professor, de braço articulado, acesa. */
 private fun DrawScope.abajur(iso: Iso) {
-    caixaLuz(iso, P3(8.3f, 1.98f, 0.82f), P3(0.25f, 0.25f, 0.04f), Cores.escuro)
-    val (a, b, c) = Triple(iso.p(8.42f, 2.1f, 0.86f), iso.p(8.45f, 2.0f, 1.45f), iso.p(8.7f, 1.95f, 1.3f))
+    caixaLuz(iso, P3(8.0f, 2.42f, 0.82f), P3(0.22f, 0.22f, 0.04f), Cores.escuro)
+    val (a, b, c) = Triple(iso.p(8.11f, 2.53f, 0.86f), iso.p(8.12f, 2.4f, 1.45f), iso.p(8.3f, 2.2f, 1.3f))
     drawLine(Cores.escuro, a, b, iso.lado * 0.0025f)
     drawLine(Cores.escuro, b, c, iso.lado * 0.0025f)
     val r = iso.lado * 0.012f
@@ -168,9 +168,9 @@ private fun DrawScope.abajur(iso: Iso) {
     poligono(Cores.amarelo, cupula.map { c + it })
 }
 
-/** A cadeira giratória do professor, ao lado da mesa. */
+/** A cadeira giratória do professor, atrás da mesa, virada para a turma: o encosto fica do lado do quadro. */
 private fun DrawScope.cadeiraDoProfessor(iso: Iso) {
-    val (u, v) = 10.4f to 2.95f
+    val (u, v) = 9.3f to 1.4f
     sombra(iso, P3(u, v), 0.6f, 0.22f)
     for (k in 0 until 5) {
         val a = k * 1.256f
@@ -178,8 +178,8 @@ private fun DrawScope.cadeiraDoProfessor(iso: Iso) {
         drawLine(Cores.escuro, iso.p(u, v, 0.08f), pe, iso.lado * 0.003f)
     }
     caixaLuz(iso, P3(u - 0.03f, v - 0.03f, 0.08f), P3(0.06f, 0.06f, 0.4f), Cores.lixeira)
+    caixaLuz(iso, P3(u - 0.3f, v - 0.4f, 0.6f), P3(0.6f, 0.1f, 0.8f), Cores.estofado)
     caixaLuz(iso, P3(u - 0.32f, v - 0.3f, 0.48f), P3(0.64f, 0.6f, 0.12f), Cores.estofado)
-    caixaLuz(iso, P3(u + 0.25f, v - 0.28f, 0.6f), P3(0.1f, 0.56f, 0.75f), Cores.estofado)
 }
 
 /** A garrafa térmica e as canecas numa mesinha perto da porta. */

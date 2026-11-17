@@ -242,10 +242,8 @@ private fun RoomScene(app: AppState, side: Dp, desafioPendente: Boolean, onJogar
     Box(Modifier.requiredSize(side)) {
         SalaDesenhada(tx("roomscreen_oficina_byte"))
         // Só o que você já tem. O que falta comprar fica na Loja, não no meio da sala.
-        for (id in com.compilandia.ui.room.art.moveisArte.keys) {
-            val item = RoomItem.entries.firstOrNull { it.id == id } ?: continue
-            if (l.owns(item)) MovelNaSala(id, popIn = app.justBought == id) { if (app.justBought == id) app.justBought = null }
-        }
+        val tem = { id: String -> RoomItem.entries.firstOrNull { it.id == id }?.let { l.owns(it) } == true }
+        PecasDaSala(tem, app.justBought) { app.justBought = null }
         // os móveis são os botões: computador, quadro, tela de projeção e mural
         MoveisDaSala(app, side, desafioPendente, onJogar)
         GenteDaSala(app, side)

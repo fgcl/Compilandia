@@ -17,12 +17,26 @@ import androidx.compose.ui.semantics.semantics
 import com.compilandia.ui.Juice
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.moveisArte
+import com.compilandia.ui.room.art.frenteDaSala
 import com.compilandia.ui.room.art.salaDeAula
 
 /** A sala de aula sem as peças da loja, desenhada por código (ui/room/art). */
 @Composable
 internal fun SalaDesenhada(descricao: String, modifier: Modifier = Modifier) {
     Canvas(modifier.fillMaxSize().semantics { contentDescription = descricao }) { salaDeAula(Iso.aula(size.width)) }
+}
+
+/**
+ * As peças compradas e a frente da sala, na ordem de pintura: as peças que ficam atrás da mesa do professor,
+ * a mesa com as cadeiras diante dela, e as outras peças. [tem] diz se a peça foi comprada; [chegando] é a que acabou
+ * de chegar e entra pulando.
+ */
+@Composable
+internal fun PecasDaSala(tem: (String) -> Boolean, chegando: String?, onChegou: () -> Unit) {
+    val (atras, frente) = moveisArte.entries.partition { it.value.atras }
+    for ((id, _) in atras) if (tem(id)) MovelNaSala(id, popIn = chegando == id, onChegou)
+    Canvas(Modifier.fillMaxSize()) { frenteDaSala(Iso.aula(size.width)) }
+    for ((id, _) in frente) if (tem(id)) MovelNaSala(id, popIn = chegando == id, onChegou)
 }
 
 /** Um móvel comprado, no lugar dele na sala. Ao chegar ([popIn]), ele cresce a partir do próprio centro. */

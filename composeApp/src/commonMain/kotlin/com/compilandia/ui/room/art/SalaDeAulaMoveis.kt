@@ -16,12 +16,12 @@ object NaAula {
     val QUADRO = P3(1.6f, 0f, 1.3f) to P3(5f, 0.2f, 1.8f)
     val TELA = P3(7.2f, 0f, 1.5f) to P3(2.7f, 0.25f, 2.5f)
     val MURAL = P3(0f, 1.9f, 1.3f) to P3(0.2f, 2.4f, 1.4f)
-    val COMPUTADOR = P3(9.2f, 1.45f, 0.8f) to P3(0.7f, 0.9f, 0.9f)
-    val BYTE = P3(8.65f, 1.9f, 0.82f)
+    val COMPUTADOR = P3(8.9f, 1.7f, 0.8f) to P3(1.1f, 0.8f, 0.85f)
+    val BYTE = P3(8.45f, 2.3f, 0.82f)
     val PROFESSOR = P3(6.95f, 1.0f)
-    val TELA_DO_MONITOR = P3(9.31f, 1.9f, 1.36f)
+    val TELA_DO_MONITOR = P3(9.42f, 2.36f, 1.32f)
     val CENTRO_DA_TELA = P3(8.55f, 0.1f, 2.65f)
-    val ABAJUR = P3(8.4f, 2.1f, 1.5f)
+    val ABAJUR = P3(8.3f, 1.9f, 1.5f)
 }
 
 /** Quadro branco com o mapa de aulas, crucifixo em cima e tela de projeção ao lado. */
@@ -128,13 +128,22 @@ private fun DrawScope.porta(iso: Iso) {
     caixaLuz(iso, P3(0f, a - 0.45f, 1.3f), P3(0.04f, 0.16f, 0.24f), Color(0xFFF7F7F4))
 }
 
-/** Cadeiras e a mesa do professor, pintadas de trás para a frente. */
-internal fun DrawScope.moveisDaAula(iso: Iso) {
+/**
+ * Cadeiras e a mesa do professor, pintadas de trás para a frente. A sala sai em duas camadas: o [fundo] (o que fica
+ * atrás da mesa) e a frente (a mesa e as cadeiras diante dela). Entre as duas entra a cadeira do professor, que a
+ * loja vende e que fica atrás da mesa (RoomScreen.kt).
+ */
+internal fun DrawScope.moveisDaAula(iso: Iso, fundo: Boolean) {
     val itens = mutableListOf<Pair<Float, () -> Unit>>()
     for (u in COLUNAS) for (v in FILEIRAS) itens += (u + v + 0.6f) to { cadeira(iso, u, v) }
-    itens += 11.3f to { mesa(iso) }
-    for ((_, desenha) in itens.sortedBy { it.first }) desenha()
+    itens += PROFUNDIDADE_DA_MESA to { mesa(iso) }
+    for ((k, desenha) in itens.sortedBy { it.first }) if ((k < PROFUNDIDADE_DA_MESA) == fundo) desenha()
 }
+
+/** A frente da sala: a mesa do professor e o que está diante dela. */
+fun DrawScope.frenteDaSala(iso: Iso) = moveisDaAula(iso, fundo = false)
+
+private const val PROFUNDIDADE_DA_MESA = 11.2f
 
 val COLUNAS = listOf(0.9f, 2.55f, 4.2f, 5.85f, 7.5f, 9.15f)
 val FILEIRAS = listOf(3.7f, 5.1f, 6.5f)
@@ -168,23 +177,31 @@ private fun DrawScope.encosto(iso: Iso, u: Float, v: Float) {
     drawLine(c.tom(0.4f), iso.p(u + 0.02f, v + 0.7f, 1.16f), iso.p(u + 0.7f, v + 0.7f, 1.16f), iso.lado * 0.0018f)
 }
 
-/** A mesa do professor: tampo de madeira, pés pretos, o computador virado para a sala e um caderno. */
+/**
+ * A mesa do professor, na frente à direita, como na foto: tampo de madeira, pés pretos e painel na frente.
+ * O professor senta atrás dela, entre a mesa e o quadro, então o monitor fica virado para ele e daqui se vê as costas.
+ */
 private fun DrawScope.mesa(iso: Iso) {
     val c = CoresDaAula
-    sombra(iso, P3(9.3f, 1.85f), 1.5f, 0.2f)
-    for ((u, v) in listOf(8.15f to 1.35f, 10.38f to 1.35f, 8.15f to 2.28f, 10.38f to 2.28f)) {
+    sombra(iso, P3(9.2f, 2.3f), 1.5f, 0.2f)
+    for ((u, v) in listOf(7.95f to 1.75f, 10.18f to 1.75f, 7.95f to 2.58f, 10.18f to 2.58f)) {
         caixaLuz(iso, P3(u, v, 0f), P3(0.07f, 0.07f, 0.76f), c.preto)
     }
-    drawPath(caminho(faceV(iso, 2.32f, 8.2f, 10.4f, 0.32f, 0.74f)), c.preto.tom(0.08f))
-    caixaLuz(iso, P3(8.1f, 1.3f, 0.76f), P3(2.4f, 1.1f, 0.06f), c.madeira)
-    caixaLuz(iso, P3(8.35f, 1.45f, 0.82f), P3(0.55f, 0.4f, 0.05f), Color(0xFFC8432A))
-    caixaLuz(iso, P3(9.05f, 1.72f, 0.82f), P3(0.3f, 0.36f, 0.03f), c.preto)
-    caixaLuz(iso, P3(9.15f, 1.85f, 0.85f), P3(0.07f, 0.1f, 0.3f), c.preto)
-    caixaLuz(iso, P3(9.22f, 1.45f, 1.02f), P3(0.07f, 0.9f, 0.68f), c.preto)
-    degrade(faceU(iso, 9.3f, 1.5f, 2.3f, 1.07f, 1.65f), iso.p(9.3f, 1.5f, 1.65f), iso.p(9.3f, 2.3f, 1.07f),
-        listOf(c.tela.tom(0.25f), c.tela))
-    val play = listOf(iso.p(9.31f, 1.78f, 1.2f), iso.p(9.31f, 1.78f, 1.52f), iso.p(9.31f, 2.06f, 1.36f))
-    drawPath(caminho(play), c.amarelo)
-    caixaLuz(iso, P3(9.55f, 1.55f, 0.82f), P3(0.32f, 0.72f, 0.03f), Color(0xFFE3E4E0))
-    caixaLuz(iso, P3(9.7f, 2.4f - 0.1f, 0.82f), P3(0.14f, 0.09f, 0.03f), Color(0xFFE3E4E0))
+    drawPath(caminho(faceV(iso, 2.62f, 8.0f, 10.2f, 0.3f, 0.74f)), c.preto.tom(0.08f))
+    caixaLuz(iso, P3(7.9f, 1.7f, 0.76f), P3(2.4f, 1.0f, 0.06f), c.madeira)
+    caixaLuz(iso, P3(9.0f, 1.8f, 0.82f), P3(0.8f, 0.28f, 0.03f), Color(0xFFE3E4E0))
+    caixaLuz(iso, P3(9.95f, 1.85f, 0.82f), P3(0.09f, 0.14f, 0.03f), Color(0xFFE3E4E0))
+    caixaLuz(iso, P3(8.0f, 1.8f, 0.82f), P3(0.4f, 0.55f, 0.05f), Color(0xFFC8432A))
+    monitor(iso)
+}
+
+/** O monitor visto de trás: base, haste, a carcaça escura e a luz da tela vazando pelas bordas (a tela é do professor). */
+private fun DrawScope.monitor(iso: Iso) {
+    val c = CoresDaAula
+    caixaLuz(iso, P3(9.25f, 2.22f, 0.82f), P3(0.36f, 0.28f, 0.03f), c.preto)
+    caixaLuz(iso, P3(9.4f, 2.4f, 0.85f), P3(0.06f, 0.07f, 0.22f), c.preto)
+    val tela = P3(8.95f, 2.32f, 1.0f)
+    drawPath(caminho(faceV(iso, tela.v, tela.u - 0.03f, tela.u + 0.98f, tela.z - 0.03f, tela.z + 0.65f)), c.tela.tom(0.5f))
+    caixaLuz(iso, tela, P3(0.95f, 0.08f, 0.62f), Color(0xFF3A4044))
+    drawCircle(Color(0xFF6B7276), iso.lado * 0.0025f, iso.p(9.42f, 2.41f, 1.31f))
 }

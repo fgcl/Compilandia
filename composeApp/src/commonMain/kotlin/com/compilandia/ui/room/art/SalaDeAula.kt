@@ -40,7 +40,7 @@ internal object CoresDaAula {
     val amarelo = Color(0xFFF5B700)
 }
 
-/** A sala sem as peças da loja e sem o professor (que é um composable por cima). */
+/** O fundo da sala, sem as peças da loja, sem a mesa (frenteDaSala) e sem o professor (um composable por cima). */
 fun DrawScope.salaDeAula(iso: Iso) {
     sombraDaLaje(iso)
     laje(iso)
@@ -49,7 +49,7 @@ fun DrawScope.salaDeAula(iso: Iso) {
     luzDaPorta(iso)
     paredeDaDireita(iso)
     paredeDaEsquerda(iso)
-    moveisDaAula(iso)
+    moveisDaAula(iso, fundo = true)
 }
 
 /** A sombra do diorama, embaixo da laje: larga e macia. */
