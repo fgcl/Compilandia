@@ -16,6 +16,11 @@ import com.compilandia.ui.room.art.Campus
 import com.compilandia.ui.room.art.ambienteDaSala
 import com.compilandia.ui.room.art.besouro
 import com.compilandia.ui.room.art.campus
+import com.compilandia.ui.cast.art.Humor
+import com.compilandia.ui.cast.art.poseDoProfessor
+import com.compilandia.ui.cast.art.professorRecortado
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.scale
 import com.compilandia.ui.room.art.moveisArte
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -56,6 +61,15 @@ class SalaDesenhadaTest : RenderBase() {
                     val iso = Iso.aula(size.width)
                     ambienteDaSala(iso, 1.2f) { true }
                     besouro(iso.p(5f, 7.7f), size.width * 0.011f, 15f, 1f)
+                }
+            }
+        }
+        shot("professor_poses", 4 * 200, 320) {
+            Row {
+                for ((h, t) in listOf(Humor.PARADO to 0.3f, Humor.ANDANDO to 0.15f, Humor.ALEGRIA to 0.5f, Humor.CONTENTE to 1f)) {
+                    androidx.compose.foundation.Canvas(Modifier.size(200.dp, 320.dp)) {
+                        scale(size.width / 200f, size.width / 200f, Offset.Zero) { professorRecortado(poseDoProfessor(h, t, false), t) }
+                    }
                 }
             }
         }

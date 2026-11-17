@@ -17,7 +17,6 @@ import com.compilandia.ui.AppState
 import com.compilandia.ui.Juice
 import com.compilandia.ui.cast.ByteFigure
 import com.compilandia.ui.cast.Mood
-import com.compilandia.ui.cast.ProfessorFigure
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.NaAula
 import com.compilandia.ui.voice.Narrator
@@ -28,28 +27,19 @@ import kotlinx.coroutines.launch
  * computador (o dono decidiu: o Byte segue narrando as aulas, mas na sala quem fica de pé é o professor).
  */
 
-/** Altura do professor e largura do Byte, em fração do lado da sala. */
-private const val ALTURA_PROFESSOR = 0.115f
+/** Largura do Byte, em fração do lado da sala. */
 private const val LARGURA_BYTE = 0.05f
 
-/** Onde fica o pé de cada um no desenho de 200 x 400 do professor e no de 400 x 480 do Byte. */
-private const val PE_PROFESSOR = 0.955f
+/** Onde fica o pé no desenho de 400 x 480 do Byte. */
 private const val PE_BYTE = 0.93f
 private const val BYTE_ALTURA_POR_LARGURA = 1.2f
 
 @Composable
 internal fun GenteDaSala(app: AppState, side: Dp) {
     val scope = rememberCoroutineScope()
-    var pulo by remember { mutableIntStateOf(0) }
     var puloByte by remember { mutableIntStateOf(0) }
     val iso = Iso.aula(1f)
-    val pe = iso.p(NaAula.PROFESSOR)
-    val h = side * ALTURA_PROFESSOR
-    ProfessorFigure(
-        Modifier.offset(side * pe.x - h / 4, side * pe.y - h * PE_PROFESSOR).width(h / 2)
-            .clickable(remember { MutableInteractionSource() }, null) { pulo++; Juice.click() },
-        hop = pulo,
-    )
+    ProfessorNaSala(side)
     val mesa = iso.p(NaAula.BYTE)
     val w = side * LARGURA_BYTE
     ByteFigure(
