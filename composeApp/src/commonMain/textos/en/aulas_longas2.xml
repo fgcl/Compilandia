@@ -243,6 +243,21 @@
     <string name="mips_l_10_dica">The result has to go back to memory.</string>
     <string name="mips_l_10_ok">The sw stores the result.</string>
     <string name="mips_l_11">Now you can translate any three-address line into MIPS: two lw, the operation and one sw.</string>
+    <string name="mips_d_01">What about the if? MIPS has no if. The comparison becomes a calculation. slt leaves 1 in $t0 if a is less than b. If not, it leaves 0.</string>
+    <string name="mips_d_02">Which line skips x = 1 when the result was 0? Tap it.</string>
+    <string name="mips_d_02_dica">Look for the line that compares $t0 with zero.</string>
+    <string name="mips_d_02_ok">Exactly. beq jumps when $t0 is zero. That happens when a less than b is false. It lands on fimse0, after the body.</string>
+    <string name="mips_d_03">This is the scheme for the whole trail. The condition becomes 0 or 1, and beq with zero jumps when it is false. In TAC, the same pair is called ifFalse.</string>
+    <string name="mips_d_04">The while uses the same pair. The label enquanto0 marks the test, at the top of the loop.</string>
+    <string name="mips_d_05">At the end of the body, j always jumps. Which line does it go back to? Tap it.</string>
+    <string name="mips_d_05_dica">On every lap, the condition has to be tested again.</string>
+    <string name="mips_d_05_ok">j goes back to enquanto0, and the test runs again.</string>
+    <string name="mips_d_06">When i reaches n, slt gives 0. Then beq leaves the loop for fimenq0.</string>
+    <string name="mips_d_07">Now a condition with and. Each comparison gets its own slt and beq pair. Both beq jump to the same fimse0.</string>
+    <string name="mips_d_08">With a equal to 9 and b equal to 2, a less than b gives 0. How many lines of the c less than d calculation actually run?</string>
+    <string name="mips_d_08_dica">Follow the first beq: where does it jump?</string>
+    <string name="mips_d_08_ok">None. The first beq already jumps to fimse0. The four lines of c less than d are skipped.</string>
+    <string name="mips_d_09">This is called short-circuit. With one side false, the and is already false, and the rest doesn't even run. In TAC, it is two ifFalse in a row, to the same label.</string>
     <string name="mips_l_r1">1. lw: load each operand into a register.</string>
     <string name="mips_l_r2">2. Math between registers: add, sub, mul.</string>
     <string name="mips_l_r3">3. sw: store the result in memory.</string>

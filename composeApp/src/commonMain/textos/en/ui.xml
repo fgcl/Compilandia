@@ -385,7 +385,7 @@
     <string name="gamesv3_complete">▢▢▢ ← fill in</string>
     <string name="gamesv3_desvios_completos_agora_rode_no">Jumps complete! Now run it on pocket MARS and see the result:</string>
     <string name="gamesv3_qual_instrucao_vai_no_marcado">Which instruction goes in the marked ▢?</string>
-    <string name="gamesv3_no_if_while_desvio_pula">In if/while the jump fires when the condition is FALSE: for (a &lt; b) we use bge (a ≥ b).</string>
+    <string name="gamesv3_no_if_while_desvio_pula">In if/while, slt leaves 1 or 0, and beq with $zero jumps when the condition is FALSE (it gave 0).</string>
     <string name="gamesv3_no_fim_corpo_while_volte">At the end of the while body, go back to the TEST label; at the end of the then part, skip the else.</string>
     <string name="gamesv3_nao_1">No… %1$s</string>
     <string name="machine_grande_compilador">Great Compiler</string>

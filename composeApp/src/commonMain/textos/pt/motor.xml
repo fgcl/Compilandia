@@ -167,7 +167,8 @@
     <string name="mipsvm_instrucao_1_nao_suportada_no">instrução '%1$s' não suportada no MARS de bolso</string>
     <string name="mipsvm_esperava_1_mas_veio_2">esperava '%1$s' mas veio '%2$s'</string>
     <string name="mipsvm_condicao_precisa_ser_comparacao">condição precisa ser uma comparação</string>
-    <string name="mipsvm_se_condicao_1_for_falsa">se a condição (%1$s) for FALSA, pula para %2$s, por isso o desvio usa o teste INVERSO de '%3$s'</string>
+    <string name="mipsvm_se_condicao_1_for_falsa">a comparação %1$s deixa 0 quando é FALSA, e o beq com $zero pula para %2$s</string>
+    <string name="mipsvm_se_condicao_verdadeira">no ||, se %1$s já deu 1 (verdadeira), o bne pula direto para %2$s, sem testar o resto</string>
     <string name="mipsvm_terminou_entao_pula_senao">terminou o ENTÃO: pula o SENÃO</string>
     <string name="mipsvm_fim_corpo_volta_para_testar">fim do corpo: volta para testar a condição de novo</string>
     <string name="mipsvm_1_word_2" translatable="false">%1$s: .word %2$s</string>

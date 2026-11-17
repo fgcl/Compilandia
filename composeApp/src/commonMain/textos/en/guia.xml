@@ -189,7 +189,7 @@
     <string name="tpguideb_esqueceu_casatoken_tipotoken_eof_no">Forgot `casaToken(TipoToken.EOF)` at the end of `programa()`? Then `programa t { } lixo lixo lixo` compiles 'successfully'. That's one of the first tests the grader runs.</string>
     <string name="tpguideb_chamar_lexico_proximo_direto_em">Calling `lexico.proximo()` directly in several places 'loses' tokens: you move ahead twice without noticing. Golden rule: ONLY `avanca()` (and `casaToken`, which uses it) touches `tok`.</string>
     <string name="tpguideb_agora_com_comandos_byteiro_veja">Now with Byteiro's statements: see the if/else of `Cmd` testing the FIRST sets of each alternative.</string>
-    <string name="tpguideb_p_se_enunciado_pedir_para">Q: What if the assignment asks to keep going after the first error? A: Panic mode: on an error, record the message and drop tokens until a safe point (`;` or `}`), then continue. For most projects, stopping at the first error is what's asked; check it.</string>
+    <string name="tpguideb_p_se_enunciado_pedir_para">Q: What if the assignment asks to keep going after the first error? A: Panic mode: on an error, record the message and drop tokens until a safe point (`;` or `}`), then continue. For most projects, stopping at the first error is what's asked; check it. Chapter 10 shows the code.</string>
     <string name="tpguideb_atribuicao_sem_expressao_parser_reclama">Assignment with no expression: the parser complains, skips to a sync token and goes on to the escreva.</string>
     <string name="tpguideb_parsers_gcc_c_c_clang">The parsers of GCC (C/C++), Clang, javac and Go are hand-written recursive descent, exactly the technique of your project. It gives full control over the error messages, and that's why professional compilers went back to it.</string>
     <string name="tpguideb_questao_classica_escreva_procedimento_descid">Classic question: 'write the recursive descent procedure for nonterminal X'. Follow the recipe: one if per alternative (with the FIRST sets), casaToken on terminals, a call on nonterminals, and an else with an error.</string>
@@ -408,4 +408,68 @@
     <string name="tp_nsl_10_2">How will the professor run your compiler: which command, in which folder?</string>
     <string name="tp_nsl_10_3">Which three oral-exam questions about YOUR grammar would you practice?</string>
     <string name="tp_teste_10">**Test for this step:** in a new folder, clone the repository and follow only the README: compile, run a test and open it in MARS. If you need any step that is not written there, the README is incomplete.</string>
+    <string name="tp_estenda_1">**Extend Byteiro.** The assignment asks for a new command, `repita { ... } ate (condition);`, which runs the body at least once. Which of the five parts of the compiler change?</string>
+    <string name="tp_estenda_1_r">The lexer gets two keywords, `repita` and `ate`. The parser gets one more alternative in `comando`. The semantic analysis checks that the condition is `logico`. The generator gets one label and one jump. `Main` doesn't change. The end of each chapter takes `repita` one step further.</string>
+    <string name="tp_estenda_2">**Extend Byteiro.** Write the `repita` line in the language card and its EBNF rule.</string>
+    <string name="tp_estenda_2_r">New keywords: `repita` and `ate`. Rule: `comando → repita bloco ate ( expr ) ;`. The difference from `enquanto`: the test comes after the body, and the loop stops when the condition becomes **true**.</string>
+    <string name="tp_estenda_3">**Extend Byteiro.** Replace the comparison `=` with `==`. What changes in the DFA and in `proximo()`?</string>
+    <string name="tp_estenda_3_r">`=` leaves `simples()` and gets its own state, like `&lt;`. In that state, another `=` returns IGUAL with the lexeme `==`. Any other character is a lexical error ("use == to compare"). If the assignment also changes from `&lt;-` to `=`, a lone `=` becomes ATRIB, and maximal munch separates the two.</string>
+    <string name="tp_estenda_4">**Extend Byteiro.** Add `Cmd -&gt; repita Bloco ate ( Expr ) ;` to the BNF grammar. Is it still LL(1)?</string>
+    <string name="tp_estenda_4_r">It is, and the game engine checks it. The FIRST of the new alternative is { `repita` }, which no other alternative of Cmd has. `ate` only enters the FOLLOW of Bloco, and no rule that can vanish has that FOLLOW: no cell gets two rules.</string>
+    <string name="tp_estenda_5">**Extend Byteiro.** Write the `repita()` method and what changes in `comando()`.</string>
+    <string name="tp_estenda_5_r">In `comando()`, the case `case REPITA -&gt; repita();`, and `TipoToken.REPITA` in `comecaComando()`. The method has one line per symbol of the rule, in order: `casaToken(TipoToken.REPITA); bloco(); casaToken(TipoToken.ATE); casaToken(TipoToken.ABRE_PAR); expr(); casaToken(TipoToken.FECHA_PAR); casaToken(TipoToken.PONTO_VIRGULA);`.</string>
+    <string name="tp_estenda_6">**Extend Byteiro.** In `repita { inteiro y; y &lt;- 1; } ate (y &gt; 0);`, does the condition see the `y` declared in the body?</string>
+    <string name="tp_estenda_6_r">No. `bloco()` closes the scope at `}`, before `ate`, and `usa()` reports "'y' não foi declarado". C's `do { } while` works the same way. If the assignment wants the condition to see it, `repita()` opens the scope, reads the commands without calling `bloco()`, and closes it only after the condition.</string>
+    <string name="tp_estenda_7">**Extend Byteiro.** Add the power operator `^`, stronger than `*` and right-associative. Which types does it accept, and where does it go in the grammar?</string>
+    <string name="tp_estenda_7_r">The same as `*`: two numbers (inteiro or caractere), and the result is inteiro. With `logico`, a semantic error. `exprMul` now calls `exprPot`, with `exprPot → exprUn [ ^ exprPot ]`. The call to `exprPot` on the right side makes `^` right-associative: `2 ^ 3 ^ 2` is `2 ^ 9`.</string>
+    <string name="tp_estenda_8">**Extend Byteiro.** Write the MIPS template for `repita` and the Java that generates it. How many labels does it need?</string>
+    <string name="tp_estenda_8_r">Just one, at the start: `repitaN:`, the body code, the condition in `$t0`, and `beq $t0, $zero, repitaN` (false: repeat). In Java: `String ini = novoRotulo("repita"); rotulo(ini); bloco(); casaToken(TipoToken.ATE); String c = condicao(); emite("beq " + c + ", $zero, " + ini); casaToken(TipoToken.PONTO_VIRGULA);`. `enquanto` needs two because it tests before the body.</string>
+    <string name="tp_estenda_9">**Extend Byteiro.** Which tests does the suite gain with `repita`?</string>
+    <string name="tp_estenda_9_r">One that runs the body once with the condition already true: `x &lt;- 5; repita { escreva(x); x &lt;- x + 1; } ate (x &gt; 0);` prints 5. One that loops several times. One without `ate` (syntax error) and one with an integer condition (semantic error). With constant folding, `ate (verdadeiro)` runs the body once and doesn't even generate the `beq`.</string>
+    <string name="tp_estenda_10">**Extend Byteiro.** With this chapter's recovery, how many messages come out for `repita { x &lt;- ; } ate (x &gt; 3);`?</string>
+    <string name="tp_estenda_10_r">One. The error is at the `;` of `x &lt;- ;`. The command inside the block records the message and consumes that `;`. The block closes at `}`, and `ate (x &gt; 3);` is read normally.</string>
+    <string name="tprec_titulo">Showing every error: panic mode</string>
+    <string name="tprec_intro">Many assignments ask for all the errors, not just the first. The chapter 5 parser stops at the first one, because `casaToken` throws an exception. To keep going, use **panic mode**: record the message, discard tokens up to a safe point, and continue.</string>
+    <string name="tprec_codigo_legenda">Sintatico.java: the command gets a safety net, and the block repeats until }</string>
+    <string name="tprec_follow">The safe point is the **FOLLOW of comando**: the start of another command (the FIRST, which `comecaComando()` already tests), the `}` of the block, or the end of the file. The `;` ends the broken command, so it is consumed. The block now repeats until `}`: a stray token at the start of a command becomes an error and is skipped, instead of closing the block.</string>
+    <string name="tprec_compila_legenda">compila() and Main.java: with an error, no .asm is written</string>
+    <string name="tprec_teste_legenda">testes/erro/tres_erros.byt and the expected output: three errors, three lines</string>
+    <string name="tprec_preveja">How many messages come out for `x &lt;- (x + ) x;`?</string>
+    <string name="tprec_preveja_1">One: the one at `)`</string>
+    <string name="tprec_preveja_2">Two: the one at `)` and a false one at the next `x`</string>
+    <string name="tprec_preveja_3">Three: one for each skipped token</string>
+    <string name="tprec_preveja_exp">The error is at `)`. Panic mode skips the `)` and stops at `x`, which starts a command. That `x` without `&lt;-` produces a second error that doesn't really exist. That is the price of panic mode: sometimes one error drags another along. So fix them from the top down.</string>
+    <string name="tprec_cuidado">Lexical errors and end of file still stop the compilation: the lexer can't skip the bad character, and at the end of the file there is nothing to hold on to. And `proxTemp = 0` in the `catch` frees the registers the broken expression didn't release.</string>
+    <string name="tpfun_titulo">Optional: arrays and functions</string>
+    <string name="tpfun_resumo">For when the assignment asks: arrays with .space and base + 4·i, functions with jal, $ra and the frame on the stack.</string>
+    <string name="tpfun_abre">This chapter is optional. Do it after chapter 8, and only if your assignment asks for arrays or functions.</string>
+    <string name="tpfun_vetor_texto">**Arrays.** `inteiro v[5];` reserves 5 integers in a row in memory. Each integer takes 4 bytes, so `.data` gets `v_0: .space 20`. The element `v[i]` lives at address **base + 4·i**: the start address of the array plus 4 times the index.</string>
+    <string name="tpfun_gramatica_legenda">What changes in the grammar (each [ ] in the EBNF still becomes an if in the parser)</string>
+    <string name="tpfun_vetor_preveja">If v_0 starts at address 1000, where is v[3]?</string>
+    <string name="tpfun_vetor_preveja_exp">1000 + 4 · 3 = 1012. 1003 forgets that each integer has 4 bytes. 1016 counts from 1, as if v[0] didn't exist.</string>
+    <string name="tpfun_vetor_java_legenda">Arrays in the chapter 8 generator: the .space, the address with sll, and lw/sw at the address</string>
+    <string name="tpfun_vetor_cuidado">MARS doesn't check the index. `v[5]` in an array of 5 writes over the next variable in `.data`, with no error at all. If the assignment asks, compare the index with the size before the `sw` and jump to an error message. `sll $t0, $t0, 2` shifts 2 bits to the left: the same as multiplying by 4, and cheaper than `mul`.</string>
+    <string name="tpfun_vetor_byt_legenda">vetor.byt: stores the squares from 0 to 4 and adds them up</string>
+    <string name="tpfun_vetor_asm_legenda">The .asm the generator writes. In MARS, it prints soma = 30</string>
+    <string name="tpfun_funcao_texto">**Functions.** `jal f_fat` jumps to the function and stores in `$ra` the address of the line below. `jr $ra` goes back there. The problem: a function that calls another (or itself) writes another value into `$ra`. So each call gets a **frame** on the stack, with `$ra` and the parameter.</string>
+    <string name="tpfun_convencao_titulo">The agreement between the caller and the function (the calling convention)</string>
+    <string name="tpfun_convencao_1">**The caller** puts the argument in `$a0`, saves the busy `$t` registers on the stack and does `jal`.</string>
+    <string name="tpfun_convencao_2">**The function** opens the frame: `addi $sp, $sp, -8`, stores `$ra` at `4($sp)` and the parameter at `0($sp)`. Inside it, the parameter is read with `lw $t0, 0($sp)`.</string>
+    <string name="tpfun_convencao_3">**retorne** puts the result in `$v0` and jumps to the end of the function, which reads `$ra` back, closes the frame and does `jr $ra`.</string>
+    <string name="tpfun_convencao_4">**The caller** restores the saved `$t` registers and copies `$v0` into one of its own registers.</string>
+    <string name="tpfun_funcao_java_legenda">Functions in the generator: their code goes after main. TabelaSimbolos gets a declaraComRotulo(nome, tipo, linha, rotulo), like declara but with the given label</string>
+    <string name="tpfun_ra_preveja">Why does the function save $ra on the stack as soon as it starts?</string>
+    <string name="tpfun_ra_op_1">Because MARS requires it</string>
+    <string name="tpfun_ra_op_2">Because a jal inside it writes another address into $ra</string>
+    <string name="tpfun_ra_op_3">To free $ra for calculations</string>
+    <string name="tpfun_ra_preveja_exp">The `jal f_fat` inside `fat` replaces `$ra` with the return address of the new call. Without the copy on the stack, the first call would never find its way back to `main`.</string>
+    <string name="tpfun_fat_byt_legenda">fatorial.byt: the function comes before the main block</string>
+    <string name="tpfun_fat_asm_legenda">The generated .asm. In MARS, it prints fat(5) = 120, and $sp returns to its starting value</string>
+    <string name="tpfun_funcao_cuidado">In this scheme, only the parameter lives on the stack. A variable declared inside the function stays in `.data`, and in a recursive function each call would write over it. If the assignment asks for recursion with local variables, keep the locals in the frame too, each with its own offset.</string>
+    <string name="tpfun_reveal_q">In n * fat(n - 1), $t0 holds n when the jal happens. Who makes sure it comes back intact?</string>
+    <string name="tpfun_reveal_r">The caller. `chamada()` saves the busy `$t` registers on the stack (`$t0` with n and `$t1` with the argument), does the `jal` and reads both back. The function uses the `$t` registers freely.</string>
+    <string name="tp_nsl_11_1">Does your assignment ask for arrays? Of what size, and does the index start at 0 or 1?</string>
+    <string name="tp_nsl_11_2">How many parameters do functions take, and of which types? Each one gets an offset in the frame.</string>
+    <string name="tp_nsl_11_3">Is recursion allowed? If so, where do local variables live?</string>
+    <string name="tp_teste_11">**Test for this stage:** `vetor.byt` prints `soma = 30`, and `fatorial.byt` prints `fat(5) = 120`. Also test `v[5]` in an array of 5, to see what your compiler does.</string>
 </resources>
