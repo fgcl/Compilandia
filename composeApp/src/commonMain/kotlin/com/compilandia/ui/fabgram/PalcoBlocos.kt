@@ -80,7 +80,9 @@ private fun DrawScope.sinaisDaMaquina(cena: Cena, b: Bloco, x: Float, y: Float, 
         rotulo(cena.pincel(), "?", x + w / 2, y + h / 2 - u, 10 * u, OL)
         return
     }
-    FabGram.numero(cena.pl.g, p)?.let { numero(cena, it, x + 7 * u, y + 7 * u, 5.5f * u) }
+    // nos desenhos novos as fichas da regra ficam em cima; o número vai para o canto de baixo
+    val seloY = if (Variantes.escolhida(b.def.id) != null) y + h - 7 * u else y + 7 * u
+    FabGram.numero(cena.pl.g, p)?.let { numero(cena, it, x + 7 * u, seloY, 5.5f * u) }
     // a regra que começa por uma letra pisca (recursão à esquerda, direta ou indireta)
     val comecaPorLetra = p.rhs.firstOrNull()?.let { cena.pl.g.isNonTerminal(it) } == true
     val recursiva = comecaPorLetra && cena.tem(b.nt, Falha.RECURSAO, Falha.RECURSAO_INDIRETA)
