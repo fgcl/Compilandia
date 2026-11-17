@@ -72,7 +72,6 @@ private fun DrawScope.relogio(iso: Iso) {
     val m = iso.p(c + P3(0f, 0.02f, 0f))
     drawLine(Cores.escuro, m, iso.p(c + P3(0f, 0.02f, 0.22f)), iso.lado * 0.002f)
     drawLine(Cores.escuro, m, iso.p(c + P3(0.15f, 0.02f, 0f)), iso.lado * 0.0025f)
-    drawLine(Cores.bug, m, iso.p(c + P3(-0.12f, 0.02f, -0.15f)), iso.lado * 0.001f)
 }
 
 private fun DrawScope.caixaDeSom(iso: Iso) {

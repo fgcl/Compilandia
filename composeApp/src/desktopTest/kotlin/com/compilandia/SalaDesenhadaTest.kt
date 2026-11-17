@@ -13,6 +13,8 @@ import com.compilandia.ui.room.PecasDaSala
 import com.compilandia.ui.room.SalaDesenhada
 import com.compilandia.ui.room.art.Iso
 import com.compilandia.ui.room.art.Campus
+import com.compilandia.ui.room.art.ambienteDaSala
+import com.compilandia.ui.room.art.besouro
 import com.compilandia.ui.room.art.campus
 import com.compilandia.ui.room.art.moveisArte
 import kotlin.test.Test
@@ -45,6 +47,17 @@ class SalaDesenhadaTest : RenderBase() {
         }
         shot("campus", LADO, LADO) {
             Box(Modifier.fillMaxSize()) { androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) { campus(Campus.iso(size.width)) } }
+        }
+        shot("sala_ambiente", LADO, LADO) {
+            Box(Modifier.fillMaxSize()) {
+                SalaDesenhada("sala")
+                PecasDaSala({ true }, null) {}
+                androidx.compose.foundation.Canvas(Modifier.fillMaxSize()) {
+                    val iso = Iso.aula(size.width)
+                    ambienteDaSala(iso, 1.2f) { true }
+                    besouro(iso.p(5f, 7.7f), size.width * 0.011f, 15f, 1f)
+                }
+            }
         }
         shot("campus_abertura") { com.compilandia.ui.room.AberturaDoCampus {} }
         shot("sala_icones", ICONE * 6, ICONE * 2) {
