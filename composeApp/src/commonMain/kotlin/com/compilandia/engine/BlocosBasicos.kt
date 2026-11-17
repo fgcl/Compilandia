@@ -10,12 +10,13 @@ object BlocosBasicos {
     private fun desvio(l: String) = l.startsWith("goto ") || l.startsWith("ifFalse ") || l.startsWith("if ")
 
     fun lideres(code: List<String>): Set<Int> {
-        val out = sortedSetOf(0)
+        // sortedSetOf só existe na JVM e quebra a versão do navegador: junta e ordena no fim
+        val out = mutableSetOf(0)
         code.forEachIndexed { i, l ->
             if (rotulo(l)) out += i
             if (desvio(l) && i + 1 < code.size) out += i + 1
         }
-        return out
+        return out.sorted().toSet()
     }
 
     /** Os blocos, como faixas de linhas. */
