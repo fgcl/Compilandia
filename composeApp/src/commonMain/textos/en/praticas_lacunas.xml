@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EpPraticaLacunas.kt: types in statements -->
+    <string name="tcm_titulo">Types in statements</string>
+    <string name="tcm_01">The expression already knows how to pass its type up. Now the statement checks whether that type works for it.</string>
+    <string name="tcm_02">In an assignment, the type on the right has to fit the variable. An int fits a float, with a coercion. A float doesn't fit an int, because the fractional part would be lost.</string>
+    <string name="tcm_03">Which assignment does the checker reject? Tap it.</string>
+    <string name="tcm_03_dica">Look for a float going into an int.</string>
+    <string name="tcm_03_ok">x times 2 goes up as float, and n is int. As in Java, that's an error. In the second one, the int becomes a float and passes.</string>
+    <string name="tcm_04">In an if or a while, the condition has to be bool. Our language works like Java here: a number is not a condition.</string>
+    <string name="tcm_05">Which condition does the checker reject? Tap it.</string>
+    <string name="tcm_05_dica">Which one goes up as int?</string>
+    <string name="tcm_05_ok">On its own, n goes up as int. C would accept it, but here the condition has to be bool. To test the number, compare it: n greater than zero.</string>
+    <string name="tcm_06">In a call, each argument has to fit the parameter in the same position. In a return, the expression has to fit the type the function promises.</string>
+    <string name="tcm_07">Which line does the checker reject? Tap it.</string>
+    <string name="tcm_07_dica">Check each argument against the parameter in the same place.</string>
+    <string name="tcm_07_ok">The first parameter is int, and x is float. The return of a plus b passes: the int becomes a float, as in the assignment.</string>
+    <string name="tcm_08">Assignment, condition, call and return. In all of them, the statement compares the type that came up with the type it expects.</string>
+
+    <!-- EpPraticaLacunas.kt: the block's DAG -->
+    <string name="dag_titulo">The block's DAG</string>
+    <string name="dag_01">Inside a basic block, the compiler can build a DAG. A DAG is a graph whose arrows never loop back.</string>
+    <string name="dag_02">Each leaf holds the variable's value on entry: b zero and c zero. Line one's sum becomes a node with two children. The node gets the name a.</string>
+    <string name="dag_03">Line two computes a minus d. It uses a's node, which already exists, and a new leaf, d zero.</string>
+    <string name="dag_04">Line four also computes a minus d. Which line already computed that value? Tap it.</string>
+    <string name="dag_04_dica">Look for the same operation, with neither a nor d changing in between.</string>
+    <string name="dag_04_ok">Between the two, neither a nor d changed. The minus node gets one more name, d, and no new node is born.</string>
+    <string name="dag_05">Now the minus node has two names: b and d.</string>
+    <string name="dag_06">And line three, c equals b plus c? Does it repeat line one's operation?</string>
+    <string name="dag_op_sim">Yes: it's the same b + c</string>
+    <string name="dag_op_b_mudou">No: b changed on line 2</string>
+    <string name="dag_op_esquerda">No: c is on the left</string>
+    <string name="dag_06_dica">Look at what line two did to b.</string>
+    <string name="dag_06_ok">Same text, different value. b is now the minus node. So line three's plus is a new node.</string>
+    <string name="dag_07">Four lines, three operations. Line four becomes just d equals b, with no operation at all.</string>
+    <string name="dag_08">The DAG only merges nodes with the same operator and the same children. That's how it finds the common subexpression.</string>
+
+    <!-- EpPraticaLacunas.kt: live in the loop -->
+    <string name="vlc_titulo">Live in the loop</string>
+    <string name="vlc_01">This is the sum loop in three-address code. The liveness you saw went bottom-up, in a block without jumps.</string>
+    <string name="vlc_02">A variable is live if someone will still read its value. In a loop, what comes after the goto is up at the top.</string>
+    <string name="vlc_03">After i receives t3, which line reads i first? Tap it.</string>
+    <string name="vlc_03_dica">Follow the goto. It goes back to the loop's label.</string>
+    <string name="vlc_03_ok">The goto goes back, and the loop test reads i. So i is still live at the end of the body.</string>
+    <string name="vlc_04">Who is live after i receives t3?</string>
+    <string name="vlc_04_dica">After that line comes the goto, and it leads back to the test.</string>
+    <string name="vlc_04_ok">The test reads i and n, and the body will still read s. All three stay live.</string>
+    <string name="vlc_05">The goto doesn't fall to the line below. So the analysis repeats its passes until nothing changes. Here, two change something, and the third only confirms.</string>
+    <string name="vlc_06">At the top of the loop, i, n and s are live together. In the graph, the three fight, and each one needs its own register.</string>
+
+    <!-- EpEmC.kt: In C 4, the common mistake and the second example -->
+    <string name="emc4_erro">A common mistake: writing the parent before the children. Here is the same MIPS with the blocks swapped.</string>
+    <string name="emc4_erro_titulo">Parent before children</string>
+    <string name="emc4_erro_q">Which line reads a value that hasn't been stored yet? Tap it.</string>
+    <string name="emc4_erro_dica">Look for tmp1. Which line stores it?</string>
+    <string name="emc4_erro_ok">Only the last line stores tmp1. That's why the generator visits the children first.</string>
+    <string name="emc4_segunda">Now another tree: a times b plus c. The times is on the left now. Build the MIPS in the right order.</string>
+</resources>

@@ -150,7 +150,8 @@
     <string name="mipsvm_instrucao_1_nao_suportada_no">instruction '%1$s' not supported in pocket MARS</string>
     <string name="mipsvm_esperava_1_mas_veio_2">expected '%1$s' but got '%2$s'</string>
     <string name="mipsvm_condicao_precisa_ser_comparacao">the condition must be a comparison</string>
-    <string name="mipsvm_se_condicao_1_for_falsa">if the condition (%1$s) is FALSE, jump to %2$s; that's why the branch uses the OPPOSITE test of '%3$s'</string>
+    <string name="mipsvm_se_condicao_1_for_falsa">the comparison %1$s leaves 0 when it is FALSE, and beq with $zero jumps to %2$s</string>
+    <string name="mipsvm_se_condicao_verdadeira">in ||, if %1$s already gave 1 (true), bne jumps straight to %2$s without testing the rest</string>
     <string name="mipsvm_terminou_entao_pula_senao">the THEN part ended: skip the ELSE</string>
     <string name="mipsvm_fim_corpo_volta_para_testar">end of the body: go back and test the condition again</string>
     <string name="semantics_literal_1_2">literal %1$s is %2$s</string>

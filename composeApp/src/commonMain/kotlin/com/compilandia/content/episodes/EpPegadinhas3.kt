@@ -13,6 +13,7 @@ import com.compilandia.content.pilha
 import com.compilandia.content.rotulo
 import com.compilandia.content.titulo
 import com.compilandia.learning.Skill
+import com.compilandia.engine.MiniLang
 import com.compilandia.textos.tx
 
 /** Pegadinhas de prova: semântica e geração de código. */
@@ -130,19 +131,22 @@ val pegadinhasFim by lazy {
         },
 
         episodio(Skill.CODEGEN_MIPS, tx("eppegadinhas3_if_vira_desvio"), PEGADINHA) {
+            // O mesmo esquema da aula de MIPS e do Guia do TP: slt deixa 0 ou 1, beq com $zero pula quando é falso.
+            val se = MiniLang.corpo(MIPS_IF)
+            val fim = "c${se.lastIndex}"
             cena(tx("eppegadinhas3_mips_nao_tem_if_tem")) {
                 add(titulo("if (a < b) x = 1;", size = 22f))
-                add(codigo("c", listOf("lw  \$t0, a", "lw  \$t1, b", "bge \$t0, \$t1, fim", "li  \$t2, 1", "sw  \$t2, x", "fim:"), 80f, x = 76f, passo = 32f, size = 15f))
+                add(codigo("c", se, 80f, x = 76f, passo = 32f, size = 15f))
             }
-            cena(tx("eppegadinhas3_carrega_b_nos_registradores")) { hot("c0", "c1") }
-            cena(tx("eppegadinhas3_aqui_esta_truque_if_pede")) { hot("c2") }
+            cena(tx("eppegadinhas3_carrega_b_nos_registradores")) { hot("c0", "c1", "c2") }
+            cena(tx("eppegadinhas3_aqui_esta_truque_if_pede")) { hot("c3") }
             pergunta(
                 tx("eppegadinhas3_se_for_maior_ou_igual"),
-                setOf("c5"), setOf("c3", "c4"),
+                setOf(fim), setOf("c4", "c5"),
                 tx("eppegadinhas3_com_condicao_falsa_corpo_if"),
                 tx("eppegadinhas3_isso_ele_pula_corpo_cai"),
             ) { hot() }
-            cena(tx("eppegadinhas3_teste_invertido_desvio_descreve_quando"), who = PROF, mood = EpMood.HAPPY) { hot("c2", "c5") }
+            cena(tx("eppegadinhas3_teste_invertido_desvio_descreve_quando"), who = PROF, mood = EpMood.HAPPY) { hot("c3", fim) }
         },
 
         episodio(Skill.REG_ALLOC, tx("eppegadinhas3_quem_vive_junto_briga"), PEGADINHA) {

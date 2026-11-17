@@ -653,6 +653,8 @@ object Sims {
             Skill.SHIFT_REDUCE, Skill.SLR_TABLE -> GrammarBank.exprLeftRec.grammar.let { g -> parseLR(g, SentenceGenerator.generate(g, rnd, maxTokens = 7) ?: listOf("id")) }
             Skill.LR0_ITEMS -> lr0(Grammar.parse(PerguntasGuiadas.LR0.random(rnd)))
             Skill.TAC, Skill.ATTRIBUTES_TYPES, Skill.AST_BUILD, Skill.CODEGEN_MIPS, Skill.OPTIMIZATION -> expressao(ExprGenerator.random(rnd, 2))
+            // Fazer com ajuda da Alocação (professor do bloco 5): a tabela de vivacidade, as arestas e as cores.
+            Skill.REG_ALLOC -> ExprGenerator.random(rnd, 3).takeIf { it.count { c -> c in "+-*" } >= 2 }?.let { ProvaForja.vivacidade(it, prova = false) }
             else -> null
         }
     } catch (e: Exception) {

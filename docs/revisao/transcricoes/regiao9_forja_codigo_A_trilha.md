@@ -4,7 +4,7 @@
 
 ## ASSUNTO TAC: Código de três endereços
 Pré-requisitos no jogo: Árvore sintática abstrata (AST) com classes, Atributos e verificação de tipos
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Uma conta por linha» → Fazer com ajuda → Prática: você pilota «if e while viram desvios» → Pegadinha «A ordem dos temporários» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Uma conta por linha» → Fazer com ajuda → Prática: você pilota «if e while viram desvios» → Pegadinha «A ordem dos temporários» → Questão de prova → Desafio
 Jogos que treinam: Árvore Anotada (calcular atributos de baixo para cima), Linha de Montagem TAC (montar código de três endereços)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -210,7 +210,7 @@ Flashcards:
 
 ## ASSUNTO OPTIMIZATION: Otimização (dobra de constantes)
 Pré-requisitos no jogo: Código de três endereços
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Conta feita antes» → Fazer com ajuda → Pegadinha «Otimizar sem mudar o resultado» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Conta feita antes» → Fazer com ajuda → Prática: você pilota «O DAG do bloco» → Pegadinha «Otimizar sem mudar o resultado» → Desafio
 Jogos que treinam: Árvore Anotada (calcular atributos de baixo para cima), Linha de Montagem TAC (montar código de três endereços)
 Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
@@ -221,7 +221,7 @@ BYTE: "Antes da aula: o compilador pode fazer essa conta sozinho?"
 Opções: ✔sim | não | só em C
 Depois: "Pode. Ele já escreve seis no código."
 
-#### AULA ANIMADA BÁSICA: "Conta feita antes" (21 cenas, ~150s) [1º exemplo começa na cena 5]
+#### AULA ANIMADA BÁSICA: "Conta feita antes" (28 cenas, ~205s) [1º exemplo começa na cena 5]
 
 1. TELA: # Otimização ⏎ for (i = 0; i < 1000; i++) ⏎ *  x = 2 * 3 + y;*
    BYTE: "Esta linha roda mil vezes dentro de um laço."
@@ -292,22 +292,49 @@ Depois: "Pode. Ele já escreve seis no código."
 17. TELA: # ( 10 - 2 * 3 ) * x ⏎ * ⏎ 4 ⏎ x ⏎ *t1 = 4 * x*
    BYTE: "O resultado é o mesmo para qualquer x. Só o caminho encurtou. Outras otimizações clássicas: propagar cópias e eliminar código morto."
 
-18. TELA: # Diga por quê ⏎ 10 - 2 * 3   →   10 - 6   →   4 ⏎ O menos sempre espera o vezes. ⏎ O compilador dobra da direita para a esquerda. ⏎ Antes, no lugar do seis havia uma conta.
+18. TELA: # Blocos básicos ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   BYTE: "A dobra olha uma conta só. Para ir além, o compilador corta o TAC em blocos básicos: trechos sem desvio no meio."
+
+19. TELA: # Blocos básicos ⏎ *i = 0* ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   PROF: "Um bloco começa num líder. A primeira linha é líder. Um rótulo é líder, porque alguém pode pular para ele. E a linha logo depois de um desvio também é."
+
+20. TELA: # Blocos básicos ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0:
+   BYTE: "Toque nas quatro linhas que são líderes."
+   PERGUNTA (toque): certo = i = 0 | enquanto0: | t2 = s + i | fimenq0: ; errado = s = 0 | t1 = i < n | ifFalse t1 goto fimenq0 | s = t2 | t3 = i + 1 | i = t3 | goto enquanto0
+   se errar: "Procure a primeira linha e os rótulos. Depois, a linha logo abaixo de um goto ou de um ifFalse."
+   se acertar: "Cada líder abre um bloco, que vai até a linha antes do próximo líder."
+
+21. TELA: # Blocos básicos ⏎ *i = 0* ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ *t2 = s + i* ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ *fimenq0:*
+   BYTE: "Quatro blocos. Dentro de um bloco, as linhas rodam sempre todas, em ordem. Por isso a otimização ali é segura."
+
+22. TELA: # Código morto ⏎ t1 = a + b ⏎ t2 = a * b ⏎ x = t1
+   BYTE: "Agora um bloco sem desvio. Depois dele, o programa só lê o x."
+
+23. TELA: # Código morto ⏎ t1 = a + b ⏎ t2 = a * b ⏎ x = t1
+   BYTE: "Qual linha pode sair sem mudar o x? Toque nela."
+   PERGUNTA (toque): certo = t2 = a * b ; errado = t1 = a + b | x = t1
+   se errar: "Procure um resultado que nenhuma linha de baixo lê."
+   se acertar: "O t2 nasce e ninguém lê. É código morto: a linha sai, e o x fica igual."
+
+24. TELA: # Código morto ⏎ t1 = a + b ⏎ x = t1
+   PROF: "Para achar o código morto, ande de baixo para cima, como na vivacidade. Na prova, comece pelos líderes."
+
+25. TELA: # Diga por quê ⏎ 10 - 2 * 3   →   10 - 6   →   4 ⏎ O menos sempre espera o vezes. ⏎ O compilador dobra da direita para a esquerda. ⏎ Antes, no lugar do seis havia uma conta.
    BYTE: "Dez menos seis só deu para dobrar depois do dois vezes três. Por quê?"
    PERGUNTA (toque): certo = Antes, no lugar do seis havia uma conta. ; errado = O menos sempre espera o vezes. | O compilador dobra da direita para a esquerda.
    se errar: "Antes da primeira dobra, o que estava no lugar do seis?"
    se acertar: "Antes, no lugar do seis havia uma conta. Só número com número se dobra."
 
-19. TELA: # Erros comuns ⏎ Com x lido do teclado, o compilador dobra x * 2 para um número. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o x só tem valor quando o programa roda. ⏎ Errado: multiplicação nunca se dobra. ⏎ Certo: o 2 já é constante, então a conta dobra.
+26. TELA: # Erros comuns ⏎ Com x lido do teclado, o compilador dobra x * 2 para um número. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: o x só tem valor quando o programa roda. ⏎ Errado: multiplicação nunca se dobra. ⏎ Certo: o 2 já é constante, então a conta dobra.
    BYTE: "Dá para dobrar esta conta? Um colega disse que sim. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o x só tem valor quando o programa roda. ; errado = Errado: multiplicação nunca se dobra. | Certo: o 2 já é constante, então a conta dobra.
    se errar: "O valor de x já existe na hora de compilar?"
    se acertar: "O valor de x só aparece quando o programa roda. A dobra de constantes só vale para o que o compilador já conhece."
 
-20. TELA: # Erros comuns ⏎ Certo: Só se dobra conta com constantes conhecidas na compilação. ⏎ *Errado: Aceitar uma otimização que muda o resultado em algum caso.* ⏎ *Certo: Otimização válida dá o mesmo resultado para toda entrada.*
+27. TELA: # Erros comuns ⏎ Certo: Só se dobra conta com constantes conhecidas na compilação. ⏎ *Errado: Aceitar uma otimização que muda o resultado em algum caso.* ⏎ *Certo: Otimização válida dá o mesmo resultado para toda entrada.*
    BYTE: "Outro erro: achar que vale ganhar velocidade mudando o resultado em algum caso raro. Não vale. A otimização tem que preservar o resultado sempre."
 
-21. TELA: # Resumo ⏎ Otimizar: código mais rápido ou menor, com o mesmo resultado. ⏎ Dobra de constantes: conta só com constantes é feita na compilação. ⏎ Com variável, a conta fica para o tempo de execução.
+28. TELA: # Resumo ⏎ Otimizar: código mais rápido ou menor, com o mesmo resultado. ⏎ Dobra de constantes: conta só com constantes é feita na compilação. ⏎ Com variável, a conta fica para o tempo de execução.
    BYTE: "Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável."
 
 #### PEGADINHA: "Otimizar sem mudar o resultado" (5 cenas, ~26s)
@@ -329,6 +356,38 @@ Depois: "Pode. Ele já escreve seis no código."
 
 5. TELA: # Pode trocar? ⏎ 2 * 3   vira   6 ⏎ x * 1   vira   x ⏎ x + 0   vira   x ⏎ x / x   vira   1
    BYTE: "Na dúvida, o compilador deixa como está."
+
+#### PRATICA: "O DAG do bloco" (8 cenas, ~62s)
+
+1. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d
+   BYTE: "Dentro de um bloco básico, o compilador pode montar um DAG. DAG é um grafo em que as setas nunca voltam."
+
+2. TELA: # O DAG do bloco ⏎ *a = b + c* ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ *+  a*
+   PROF: "Cada folha guarda o valor de entrada da variável: b zero e c zero. A conta da linha um vira um nó com dois filhos. O nó ganha o nome a."
+
+3. TELA: # O DAG do bloco ⏎ a = b + c ⏎ *b = a - d* ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b*
+   BYTE: "A linha dois faz a menos d. Ela usa o nó do a, que já existe, e uma folha nova, d zero."
+
+4. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ *d = a - d* ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ -  b
+   BYTE: "A linha quatro também faz a menos d. Qual linha já calculou esse valor? Toque."
+   PERGUNTA (toque): certo = b = a - d ; errado = a = b + c | c = b + c
+   se errar: "Procure a mesma conta, sem o a e o d mudarem no meio."
+   se acertar: "Entre as duas, nem o a nem o d mudaram. O nó do menos ganha mais um nome, o d, e nenhum nó novo nasce."
+
+5. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b, d*
+   BYTE: "Agora o nó do menos tem dois nomes: b e d."
+
+6. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ *c = b + c* ⏎ d = a - d ⏎ Sim: é o mesmo b + c ⏎ Não: o b mudou na linha 2 ⏎ Não: o c está à esquerda
+   BYTE: "E a linha três, c igual a b mais c? Ela repete a conta da linha um?"
+   PERGUNTA (toque): certo = Não: o b mudou na linha 2 ; errado = Sim: é o mesmo b + c | Não: o c está à esquerda
+   se errar: "Olhe o que a linha dois fez com o b."
+   se acertar: "Mesmo texto, valor diferente. Agora o b é o nó do menos. Então o mais da linha três é um nó novo."
+
+7. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ -  b, d ⏎ *+  c*
+   BYTE: "Quatro linhas, três contas. A linha quatro vira só d igual a b, sem conta nenhuma."
+
+8. TELA: # O DAG do bloco ⏎ a = b + c ⏎ b = a - d ⏎ c = b + c ⏎ d = a - d ⏎ b0 ⏎ c0 ⏎ +  a ⏎ d0 ⏎ *-  b, d* ⏎ +  c
+   PROF: "O DAG só junta nós com o mesmo operador e os mesmos filhos. É assim que ele acha a subexpressão comum."
 
 #### CLIPE 30s: "Dobra de constantes" (2 cenas, ~9s)
 
@@ -373,7 +432,7 @@ BYTE: "Antes da aula: essa instrução vale em MIPS?"
 Opções: sim | ✔não | só com sw
 Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 
-#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (19 cenas, ~136s)
+#### AULA ANIMADA BÁSICA: "Carrega, opera, guarda" (28 cenas, ~213s)
 
 1. TELA: # MIPS ⏎ total ⏎ $t0
    BYTE: "O processador não conhece variáveis. Ele só conhece registradores, que são poucos e rápidos, e posições de memória."
@@ -435,43 +494,79 @@ Depois: "Não vale. O add só usa registradores. O x precisa vir antes com lw."
 15. TELA: # preco + taxa ⏎ add $t3, $t1, $t2 ⏎ lw $t1, preco ⏎ sw $t3, total ⏎ lw $t2, taxa
    BYTE: "Agora você traduz qualquer linha de três endereços para MIPS: dois lw, a conta e um sw."
 
-16. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O add lê a memória, mas devagar.
+16. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ *slt $t0, $t0, $t1* ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "E o if? O MIPS não tem if. A comparação vira conta. O slt deixa 1 em $t0 se a for menor que b. Se não for, deixa 0."
+
+17. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Qual linha pula o x = 1 quando a conta deu 0? Toque nela."
+   PERGUNTA (toque): certo = beq $t0, $zero, fimse0 ; errado = slt $t0, $t0, $t1 | li $t0, 1 | sw $t0, x
+   se errar: "Procure a linha que compara $t0 com zero."
+   se acertar: "Exato. O beq pula quando $t0 vale zero. Isso acontece quando a menor que b é falso. Ele cai em fimse0, depois do corpo."
+
+18. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ *slt $t0, $t0, $t1* ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0: ⏎ TAC ⏎ *t1 = a < b* ⏎ *ifFalse t1 goto fimse0*
+   PROF: "Esse é o esquema de toda a trilha. A condição vira 0 ou 1, e o beq com zero pula quando ela é falsa. No TAC, o mesmo par se chama ifFalse."
+
+19. TELA: # while (i < n) i = i + 1; ⏎ *enquanto0:* ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimenq0 ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ j enquanto0 ⏎ fimenq0:
+   BYTE: "O while usa o mesmo par. O rótulo enquanto0 marca o teste, no topo do laço."
+
+20. TELA: # while (i < n) i = i + 1; ⏎ enquanto0: ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimenq0 ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ *j enquanto0* ⏎ fimenq0:
+   BYTE: "No fim do corpo, o j pula sempre. Para qual linha ele volta? Toque nela."
+   PERGUNTA (toque): certo = enquanto0: ; errado = fimenq0: | lw $t0, i | beq $t0, $zero, fimenq0
+   se errar: "A cada volta, a condição precisa ser testada de novo."
+   se acertar: "O j volta para enquanto0, e o teste roda outra vez."
+
+21. TELA: # while (i < n) i = i + 1; ⏎ enquanto0: ⏎ lw $t0, i ⏎ lw $t1, n ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimenq0* ⏎ lw $t0, i ⏎ li $t1, 1 ⏎ add $t0, $t0, $t1 ⏎ sw $t0, i ⏎ j enquanto0 ⏎ *fimenq0:*
+   BYTE: "Quando i chega a n, o slt dá 0. Aí o beq sai do laço para fimenq0."
+
+22. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ lw $t0, c ⏎ lw $t1, d ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Agora uma condição com e. Cada comparação ganha o seu par de slt e beq. Os dois beq pulam para o mesmo fimse0."
+
+23. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ lw $t0, c ⏎ lw $t1, d ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0: ⏎ 0 ⏎ 2 ⏎ 4
+   BYTE: "Com a valendo 9 e b valendo 2, a menor que b dá 0. Quantas linhas da conta c menor que d chegam a rodar?"
+   PERGUNTA (toque): certo = 0 ; errado = 2 | 4
+   se errar: "Siga o primeiro beq: para onde ele pula?"
+   se acertar: "Nenhuma. O primeiro beq já pula para fimse0. As quatro linhas de c menor que d ficam para trás."
+
+24. TELA: # if (a < b && c < d) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ *lw $t0, c* ⏎ *lw $t1, d* ⏎ *slt $t0, $t0, $t1* ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   PROF: "Isso se chama curto-circuito. Com um lado falso, o e já é falso, e o resto nem roda. No TAC, são dois ifFalse seguidos, para o mesmo rótulo."
+
+25. TELA: # Diga por quê ⏎ lw   lw   add   sw ⏎ A ordem tanto faz. É só costume. ⏎ O add só faz conta entre registradores. ⏎ O add lê a memória, mas devagar.
    BYTE: "Os dois lw vêm antes do add. Por quê?"
    PERGUNTA (toque): certo = O add só faz conta entre registradores. ; errado = O add lê a memória, mas devagar. | A ordem tanto faz. É só costume.
    se errar: "Onde o add pode buscar os números dele?"
    se acertar: "No MIPS, a conta só acontece entre registradores. O lw traz cada variável para um deles."
 
-17. TELA: # Erros comuns ⏎ Para somar a e b, basta: add a, b direto na memória. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só o sw no fim. ⏎ Certo: o add busca as variáveis sozinho. ⏎ Errado: o add só soma registradores.
+26. TELA: # Erros comuns ⏎ Para somar a e b, basta: add a, b direto na memória. ⏎ Escolha o veredito com o motivo certo. ⏎ Errado: falta só o sw no fim. ⏎ Certo: o add busca as variáveis sozinho. ⏎ Errado: o add só soma registradores.
    BYTE: "No MIPS, dá para somar duas variáveis direto na memória? Um colega escreveu assim. Certo ou errado?"
    PERGUNTA (toque): certo = Errado: o add só soma registradores. ; errado = Errado: falta só o sw no fim. | Certo: o add busca as variáveis sozinho.
    se errar: "O add do MIPS só aceita registradores."
    se acertar: "É isso. Primeiro o lw carrega cada variável num registrador. Só então o add faz a conta."
 
-18. TELA: # Erros comuns ⏎ Certo: lw, lw, add, sw: a conta acontece só entre registradores. ⏎ *Errado: Terminar no add e esquecer o sw.* ⏎ *Certo: Sem sw, a variável na memória continua com o valor antigo.*
+27. TELA: # Erros comuns ⏎ Certo: lw, lw, add, sw: a conta acontece só entre registradores. ⏎ *Errado: Terminar no add e esquecer o sw.* ⏎ *Certo: Sem sw, a variável na memória continua com o valor antigo.*
    BYTE: "Outro erro: parar na conta. O resultado está no registrador, mas a variável mora na memória. Sem o sw, ela não muda."
 
-19. TELA: # Resumo ⏎ lw: da memória para o registrador. sw: do registrador para a memória. ⏎ add, sub e mul operam só entre registradores. ⏎ Cada linha de três endereços vira: carrega, opera, guarda.
+28. TELA: # Resumo ⏎ lw: da memória para o registrador. sw: do registrador para a memória. ⏎ add, sub e mul operam só entre registradores. ⏎ Cada linha de três endereços vira: carrega, opera, guarda.
    BYTE: "Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw."
 
-#### PEGADINHA: "O if vira desvio" (5 cenas, ~28s)
+#### PEGADINHA: "O if vira desvio" (5 cenas, ~36s)
 
-1. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "MIPS não tem if. Tem pulo. O teste sai ao contrário."
+1. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "MIPS não tem if. Tem pulo. E o pulo acontece quando a condição é falsa."
 
-2. TELA: # if (a < b) x = 1; ⏎ *lw  $t0, a* ⏎ *lw  $t1, b* ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "Carrega a e b nos registradores."
+2. TELA: # if (a < b) x = 1; ⏎ *lw $t0, a* ⏎ *lw $t1, b* ⏎ *slt $t0, $t0, $t1* ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Carrega a e b nos registradores. O slt deixa 1 em $t0 se a for menor que b. Se não for, deixa 0."
 
-3. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ *bge $t0, $t1, fim* ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
-   BYTE: "Aqui está o truque. O if pede a menor que b, e o desvio testa a maior ou igual."
+3. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
+   BYTE: "Aqui está o truque. O beq compara com zero. Ele pula quando a conta deu 0: a menor que b é falso."
 
-4. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ bge $t0, $t1, fim ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ fim:
+4. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ beq $t0, $zero, fimse0 ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ fimse0:
    BYTE: "Se a for maior ou igual a b, para onde o programa pula? Toque."
-   PERGUNTA (toque): certo = fim: ; errado = li  $t2, 1 | sw  $t2, x
+   PERGUNTA (toque): certo = fimse0: ; errado = li $t0, 1 | sw $t0, x
    se errar: "Com a condição falsa, o corpo do if não pode rodar."
-   se acertar: "Ele pula o corpo e cai em fim."
+   se acertar: "Ele pula o corpo e cai em fimse0."
 
-5. TELA: # if (a < b) x = 1; ⏎ lw  $t0, a ⏎ lw  $t1, b ⏎ *bge $t0, $t1, fim* ⏎ li  $t2, 1 ⏎ sw  $t2, x ⏎ *fim:*
-   PROF: "Teste invertido: o desvio descreve quando pular o corpo."
+5. TELA: # if (a < b) x = 1; ⏎ lw $t0, a ⏎ lw $t1, b ⏎ slt $t0, $t0, $t1 ⏎ *beq $t0, $zero, fimse0* ⏎ li $t0, 1 ⏎ sw $t0, x ⏎ *fimse0:*
+   PROF: "Um esquema só. A condição vira 0 ou 1. Se der 0, o beq com zero pula o corpo."
 
 #### PRATICA: "Monte o MIPS" (5 cenas, ~27s)
 
@@ -731,9 +826,9 @@ Flashcards:
 
 ## ASSUNTO REG_ALLOC: Alocação de registradores
 Pré-requisitos no jogo: Geração de código MIPS
-Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Pegadinha «Quem vive junto briga» → Desafio
+Trilha (ordem das etapas): Abertura com o Bug → Ver a aula animada «Colorir o grafo» → Fazer com ajuda → Prática: você pilota «Vivas no laço» → Pegadinha «Quem vive junto briga» → Questão de prova → Desafio
 Jogos que treinam: Montadora MIPS (traduzir TAC para assembly e rodar), Coloração de Registradores (vivacidade + colorir o grafo de interferência)
-Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): false ; robô da Bancada: não
+Tem "Fazer com ajuda" (4 problemas gerados, ajuda decrescente): true ; robô da Bancada: não
 
 #### ABERTURA COM O BUG (10 s, antes da aula)
 Manchete: O Bug sumiu com um registrador
@@ -850,6 +945,32 @@ Depois: "Não podem. Um apagaria o outro."
 
 5. TELA: !!INTERFERÊNCIA!!
    PROF: "Dois registradores bastam. Colorir o grafo é só isso."
+
+#### PRATICA: "Vivas no laço" (6 cenas, ~51s)
+
+1. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s
+   BYTE: "Este é o laço da soma em três endereços. A vivacidade que você viu andava de baixo para cima, num bloco sem desvio."
+
+2. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ *goto enquanto0* ⏎ fimenq0: ⏎ print s
+   PROF: "Uma variável está viva se alguém ainda vai ler o valor dela. Num laço, o que vem depois do goto fica lá em cima."
+
+3. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ *i = t3* ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s
+   BYTE: "Depois que o i recebe o t3, qual linha lê o i primeiro? Toque."
+   PERGUNTA (toque): certo = t1 = i < n ; errado = goto enquanto0 | fimenq0: | print s
+   se errar: "Siga o goto. Ele volta para o rótulo do laço."
+   se acertar: "O goto volta, e o teste do laço lê o i. Então o i ainda está vivo no fim do corpo."
+
+4. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ *i = t3* ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s ⏎ { s } ⏎ { i, n, s } ⏎ { i }
+   BYTE: "Quem está vivo depois que o i recebe o t3?"
+   PERGUNTA (toque): certo = { i, n, s } ; errado = { s } | { i }
+   se errar: "Depois dessa linha vem o goto, e ele leva de volta ao teste."
+   se acertar: "O teste lê o i e o n, e o corpo ainda vai ler o s. Os três seguem vivos."
+
+5. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ *enquanto0:* ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ *goto enquanto0* ⏎ fimenq0: ⏎ print s ⏎ { i, n, s }
+   BYTE: "O goto não cai na linha de baixo. Por isso a análise repete as passadas até nada mudar. Aqui, duas mudam algo, e a terceira só confere."
+
+6. TELA: # Vivas no laço ⏎ i = 0 ⏎ s = 0 ⏎ enquanto0: ⏎ t1 = i < n ⏎ ifFalse t1 goto fimenq0 ⏎ t2 = s + i ⏎ s = t2 ⏎ t3 = i + 1 ⏎ i = t3 ⏎ goto enquanto0 ⏎ fimenq0: ⏎ print s ⏎ *{ i, n, s }* ⏎ *{ i, n, s }*
+   PROF: "No topo do laço, i, n e s estão vivos juntos. No grafo, os três brigam, e cada um precisa do seu registrador."
 
 #### CLIPE 30s: "O que é spill" (2 cenas, ~10s)
 

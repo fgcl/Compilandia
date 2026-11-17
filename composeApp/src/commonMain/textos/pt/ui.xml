@@ -418,7 +418,7 @@
     <string name="gamesv3_complete">▢▢▢ ← complete</string>
     <string name="gamesv3_desvios_completos_agora_rode_no">Desvios completos! Agora rode no MARS de bolso e veja o resultado:</string>
     <string name="gamesv3_qual_instrucao_vai_no_marcado">Qual instrução vai no ▢ marcado?</string>
-    <string name="gamesv3_no_if_while_desvio_pula">No if/while o desvio pula quando a condição é FALSA: para (a &lt; b) usamos bge (a ≥ b).</string>
+    <string name="gamesv3_no_if_while_desvio_pula">No if/while, o slt deixa 1 ou 0, e o beq com $zero pula quando a condição é FALSA (deu 0).</string>
     <string name="gamesv3_no_fim_corpo_while_volte">No fim do corpo do while, volte para o rótulo do TESTE; no fim do então, pule o senão.</string>
     <string name="gamesv3_nao_1">Não… %1$s</string>
     <!-- Machine.kt -->

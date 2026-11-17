@@ -110,7 +110,7 @@
 10. TELA: # 2 + 3 * 4 ⏎ Node{val: 2} ⏎ Node{val: 3} ⏎ Node{val: 4} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{op: '+'; esq ●; dir ●}
    PROF: "A árvore é isso: structs ligados por ponteiros."
 
-#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (7 cenas, ~45s)
+#### EM_C / CODEGEN_MIPS: "Em C 4: da árvore ao MIPS" (9 cenas, ~61s)
 
 1. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c}
    BYTE: "O gerador anda na árvore e escreve MIPS, uma linha por vez."
@@ -130,11 +130,20 @@
 5. TELA: # a + b * c ⏎ *Node{op: '+'; esq ●; dir ●}* ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ *lw $t1, a* ⏎ *lw $t2, tmp1* ⏎ *add $t3, $t1, $t2* ⏎ *sw $t3, tmp2*
    BYTE: "O mais usa o resultado do vezes, que já está guardado na memória."
 
-6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1 ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ void gera(Node *n) { ⏎ *  if (n->op) { gera(n->esq); gera(n->dir); }* ⏎   emite(n); ⏎ }
+6. TELA: # a + b * c ⏎ Node{op: '+'; esq ●; dir ●} ⏎ Node{nome: a} ⏎ Node{op: '*'; esq ●; dir ●} ⏎ Node{nome: b} ⏎ Node{nome: c} ⏎ void gera(Node *n) { ⏎   if (n->op) { ⏎ *    gera(n->esq);* ⏎ *    gera(n->dir);* ⏎   } ⏎   emite(n); ⏎ }
    PROF: "Em C, é uma função recursiva: gera os filhos e depois o pai."
 
-7. TELA: a + b * c ⏎ próxima instrução
-   BYTE: "Agora monte o MIPS na ordem certa, instrução por instrução."
+7. TELA: # Pai antes dos filhos ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1
+   BYTE: "Um erro comum: escrever o pai antes dos filhos. Veja o mesmo MIPS com os blocos trocados."
+
+8. TELA: # Pai antes dos filhos ⏎ lw $t1, a ⏎ lw $t2, tmp1 ⏎ add $t3, $t1, $t2 ⏎ sw $t3, tmp2 ⏎ lw $t1, b ⏎ lw $t2, c ⏎ mul $t3, $t1, $t2 ⏎ sw $t3, tmp1
+   BYTE: "Qual linha lê um valor que ainda não foi guardado? Toque."
+   PERGUNTA (toque): certo = lw $t2, tmp1 ; errado = lw $t1, a | lw $t1, b | lw $t2, c
+   se errar: "Procure o tmp1. Que linha o guarda?"
+   se acertar: "Só a última linha guarda o tmp1. Por isso o gerador visita os filhos primeiro."
+
+9. TELA: a * b + c ⏎ próxima instrução
+   BYTE: "Agora outra árvore: a vezes b mais c. O vezes ficou à esquerda. Monte o MIPS na ordem certa."
    BRINQUEDO: dica "Antes de calcular, os dois valores precisam estar nos registradores." / acerto "É exatamente o que o seu gerador em C escreveria."
 
 #### EM_C / YACC_BISON: "Em C 5: flex, bison e o main" (10 cenas, ~59s)
@@ -339,6 +348,8 @@ git merge lexico
     · Qual é o nome da sua linguagem e a extensão dos arquivos-fonte?
     · Em que linguagem o compilador deve ser escrito, e o que ele deve gerar (MIPS para o MARS, ou outra coisa)?
     · Quantas semanas faltam para a entrega? Escolha o cronograma de 8 ou o de 3 semanas.
+- REVELAR: **Estenda a Byteiro.** O enunciado pede um comando novo, `repita { ... } ate (condição);`, que roda o corpo pelo menos uma vez. Quais das cinco partes do compilador mudam?
+    → O léxico ganha duas palavras reservadas, `repita` e `ate`. O sintático ganha uma alternativa em `comando`. O semântico confere que a condição é `logico`. O gerador ganha um rótulo e um desvio. O `Main` não muda. O fim de cada capítulo leva o `repita` um passo adiante.
 
 ## Capítulo 2: Definindo a linguagem Byteiro [TOKENS]
 Antes do Java: tokens, precedência e uma gramática informal de uma linguagem pequena e completa.
@@ -438,6 +449,8 @@ leia       = "leia" "(" ID ")" ";"
     · Como se escrevem a atribuição e a comparação de igualdade? Se forem parecidas (`=` e `==`), o léxico vai precisar do maior casamento.
     · Qual é a precedência dos seus operadores, do mais fraco ao mais forte?
 - TEXTO: **Teste desta etapa:** os 10 programas-exemplo (5 certos e 5 com um erro cada) estão na pasta `testes/`, e cada um tem a saída esperada anotada ao lado. Eles são a bateria do capítulo 9 começando.
+- REVELAR: **Estenda a Byteiro.** Escreva a linha do `repita` na ficha técnica e a regra dele em EBNF.
+    → Palavras reservadas novas: `repita` e `ate`. Regra: `comando → repita bloco ate ( expr ) ;`. A diferença para o `enquanto`: o teste vem depois do corpo, e o laço para quando a condição fica **verdadeira**.
 
 ## Capítulo 3: Do regex ao AFD: o analisador léxico [REGEX_DFA]
 Cada token é uma regex, cada regex é um AFD, todos viram UM autômato, escrito em Java com switch.
@@ -704,6 +717,8 @@ public class TesteLexico {
 javac -d out src/*.java
 java -cp out TesteLexico
 ```
+- REVELAR: **Estenda a Byteiro.** Troque o `=` de comparação por `==`. O que muda no AFD e no `proximo()`?
+    → O `=` sai do `simples()` e ganha um estado, como o `<`. Nesse estado, outro `=` devolve IGUAL com o lexema `==`. Qualquer outro caractere é erro léxico ("use == para comparar"). Se o enunciado também trocar a atribuição `<-` por `=`, o `=` sozinho vira ATRIB, e é o maior casamento que separa os dois.
 
 ## Capítulo 4: A gramática LL(1) da Byteiro [LL1_TABLE]
 Tirar recursão à esquerda, fatorar e provar com FIRST/FOLLOW que um token basta para decidir.
@@ -822,6 +837,8 @@ Prim -> ( Expr ) | id | num | char
     · Quais alternativas começam com o mesmo token?
     · Onde você usou `{ }` e `[ ]`? Em cada um, o FIRST de dentro cruza com o que pode vir depois?
 - TEXTO: **Teste desta etapa:** a tabela FIRST e FOLLOW da sua gramática inteira, como a da Byteiro acima, com as duas condições conferidas: os FIRST das alternativas não se cruzam, e cada parte que pode sumir não cruza com o FOLLOW. Nenhuma casa da tabela LL(1) fica com duas regras. Essa tabela vai para o relatório.
+- REVELAR: **Estenda a Byteiro.** Acrescente `Cmd -> repita Bloco ate ( Expr ) ;` à gramática em BNF. Ela continua LL(1)?
+    → Continua, e o motor do jogo confere. O FIRST da alternativa nova é { `repita` }, que nenhuma outra alternativa de Cmd tem. O `ate` só entra no FOLLOW de Bloco, e nenhuma regra que pode sumir tem esse FOLLOW: nenhuma casa ganha duas regras.
 
 ## Capítulo 5: O parser descendente recursivo [RECURSIVE_DESCENT]
 Um método por não-terminal, casaToken para terminais, if/while no token atual, e erros com linha.
@@ -1043,7 +1060,7 @@ programa t {
 - CAIXA [Cuidado!]: Esqueceu o `casaToken(TipoToken.EOF)` no fim de `programa()`? Então `programa t { } lixo lixo lixo` compila 'com sucesso'. Esse é um dos primeiros testes que o corretor faz.
 - CAIXA [Cuidado!]: Chamar `lexico.proximo()` direto em vários lugares 'perde' tokens: você avança duas vezes sem perceber. Regra de ouro: SÓ o `avanca()` (e o `casaToken`, que usa ele) mexe em `tok`.
 - WIDGET DESCENT_CODE gramática=«Cmd -> id <- E ; | se ( E ) Bloco Senao | enquanto ( E ) Bloco | escreva ( E ) ; ⏎ Senao -> senao Bloco | ε ⏎ Bloco -> { Cmds } ⏎ Cmds -> Cmd Cmds | ε ⏎ E -> id | num» entrada=«se ( id ) { }» legenda: Agora com os comandos da Byteiro: veja o if/else de `Cmd` testando os FIRST de cada alternativa.
-- CAIXA [Não existem perguntas idiotas]: P: E se o enunciado pedir para continuar depois do primeiro erro? R: Modo pânico: ao errar, registre a mensagem e descarte tokens até um ponto seguro (`;` ou `}`), depois continue. Para a maioria dos TPs, parar no primeiro erro já é o pedido, confira.
+- CAIXA [Não existem perguntas idiotas]: P: E se o enunciado pedir para continuar depois do primeiro erro? R: Modo pânico: ao errar, registre a mensagem e descarte tokens até um ponto seguro (`;` ou `}`), depois continue. Para a maioria dos TPs, parar no primeiro erro já é o pedido, confira. O capítulo 10 mostra o código.
 - WIDGET PANIC gramática=«Cmds -> Cmd Cmds | ε ⏎ Cmd -> id <- E ; | escreva ( E ) ; ⏎ E -> id | num» entrada=«id <- ; escreva ( id ) ;» legenda: Atribuição sem expressão: o parser reclama, pula até um token de sincronização e segue para o escreva.
 - CAIXA [No mundo real]: Os parsers do GCC (C/C++), do Clang, do javac e do Go são descida recursiva escrita à mão, exatamente a técnica do seu TP. Ela dá controle total sobre as mensagens de erro, e é por isso que os compiladores profissionais voltaram a ela.
 - CAIXA [Dica de prova]: Questão clássica: 'escreva o procedimento da descida recursiva para o não-terminal X'. Siga a receita: um if por alternativa (com os FIRST), casaToken nos terminais, chamada nos não-terminais, e um else com erro.
@@ -1063,6 +1080,8 @@ programa t {
 java -cp out Main testes/erro/falta_ponto_virgula.byt
 linha 3: erro sintático: esperava ';', encontrou 'x'
 ```
+- REVELAR: **Estenda a Byteiro.** Escreva o método `repita()` e o que muda no `comando()`.
+    → No `comando()`, o caso `case REPITA -> repita();`, e o `TipoToken.REPITA` no `comecaComando()`. O método tem uma linha por símbolo da regra, na ordem: `casaToken(TipoToken.REPITA); bloco(); casaToken(TipoToken.ATE); casaToken(TipoToken.ABRE_PAR); expr(); casaToken(TipoToken.FECHA_PAR); casaToken(TipoToken.PONTO_VIRGULA);`.
 
 ## Capítulo 6: Tabela de símbolos e escopos [SCOPE_SYMBOLS]
 Uma pilha de HashMaps: abre bloco = push, declara = put no topo, usa = busca do topo para baixo.
@@ -1216,6 +1235,8 @@ programa t { x <- 1; }
 programa t { inteiro a; caractere a; }
   -> linha 1: erro semântico: 'a' já foi declarado neste escopo (linha 1)
 ```
+- REVELAR: **Estenda a Byteiro.** Em `repita { inteiro y; y <- 1; } ate (y > 0);`, a condição enxerga o `y` declarado no corpo?
+    → Não. O `bloco()` fecha o escopo no `}`, antes do `ate`, e o `usa()` dá "'y' não foi declarado". O `do { } while` do C funciona igual. Se o enunciado quiser que a condição enxergue, o `repita()` abre o escopo, lê os comandos sem chamar `bloco()` e só fecha depois da condição.
 
 ## Capítulo 7: Verificação de tipos [ATTRIBUTES_TYPES]
 Cada método de expressão devolve o TIPO do que reconheceu; atribuição e condição conferem as regras.
@@ -1394,6 +1415,8 @@ programa t { inteiro a; caractere a; }
     · A condição do se e do enquanto precisa ser lógica, ou número vale?
     · Guardar um tipo numa variável de outro tipo converte ou é erro?
 - TEXTO: **Teste desta etapa:** os cinco testes semânticos acima, cada um em `testes/erro/`, imprimem exatamente a mensagem ao lado deles.
+- REVELAR: **Estenda a Byteiro.** Acrescente a potência `^`, mais forte que `*` e associativa à direita. Que tipos ela aceita, e onde entra na gramática?
+    → Os mesmos do `*`: dois números (inteiro ou caractere), e o resultado é inteiro. Com `logico`, erro semântico. O `exprMul` passa a chamar `exprPot`, com `exprPot → exprUn [ ^ exprPot ]`. A chamada a `exprPot` do lado direito deixa o `^` associativo à direita: `2 ^ 3 ^ 2` é `2 ^ 9`.
 
 ## Capítulo 8: Gerando MIPS para o MARS [CODEGEN_MIPS]
 Expressões em registradores temporários, variáveis no .data, rótulos para se/enquanto, syscalls para escrever.
@@ -1827,6 +1850,8 @@ javac -d out src/*.java
 java -cp out Main testes/ok/contagem.byt
 java -jar Mars4_5.jar nc saida.asm
 ```
+- REVELAR: **Estenda a Byteiro.** Escreva o molde MIPS do `repita` e o Java que o gera. Quantos rótulos ele precisa?
+    → Um só, no começo: `repitaN:`, o código do corpo, a condição em `$t0` e `beq $t0, $zero, repitaN` (falsa: repete). Em Java: `String ini = novoRotulo("repita"); rotulo(ini); bloco(); casaToken(TipoToken.ATE); String c = condicao(); emite("beq " + c + ", $zero, " + ini); casaToken(TipoToken.PONTO_VIRGULA);`. O `enquanto` precisa de dois porque testa antes do corpo.
 
 ## Capítulo 9: Otimizações simples e bateria de testes [OPTIMIZATION]
 Dobrar constantes, cortar código morto, um peephole de leve, e testes que provam que nada quebrou.
@@ -1999,6 +2024,8 @@ echo "$passou passaram, $falhou falharam"
 ./roda_testes.sh
 10 passaram, 0 falharam      # com a sua contagem de testes
 ```
+- REVELAR: **Estenda a Byteiro.** Que testes a bateria ganha com o `repita`?
+    → Um que roda o corpo uma vez com a condição já verdadeira: `x <- 5; repita { escreva(x); x <- x + 1; } ate (x > 0);` imprime 5. Um que dá várias voltas. Um sem o `ate` (erro sintático) e um com condição inteira (erro semântico). Com o dobramento, `ate (verdadeiro)` roda o corpo uma vez e nem gera o `beq`.
 
 ## Capítulo 10: Checklist de entrega e erros que tiram ponto [ERROR_RECOVERY]
 O que conferir na véspera, o que vai no relatório e as perguntas da arguição.
@@ -2022,6 +2049,77 @@ O que conferir na véspera, o que vai no relatório e as perguntas da arguição
     · Esquemas de tradução: o molde MIPS de cada comando (se, enquanto, escreva…).
     · Otimizações implementadas, com exemplo antes/depois.
     · Testes: tabela com programa, saída esperada e saída obtida. E as limitações conhecidas (ex.: 10 registradores).
+- TEXTO: **Mostrar todos os erros: modo pânico.** Muitos enunciados pedem todos os erros, e não só o primeiro. O parser do capítulo 5 para no primeiro, porque o `casaToken` lança uma exceção. Para seguir, use o **modo pânico**: registre a mensagem, descarte tokens até um ponto seguro e continue.
+- CÓDIGO (Sintatico.java: o comando ganha uma rede, e o bloco repete até o }):
+```
+    private final List<String> erros = new ArrayList<>();   // import java.util.*;
+    public List<String> erros() { return erros; }
+
+    private void bloco() {                     // agora repete até o '}', e não só enquanto vem comando
+        casaToken(TipoToken.ABRE_CHAVE);
+        tabela.abreEscopo();
+        while (!eh(TipoToken.FECHA_CHAVE, TipoToken.EOF)) comando();
+        tabela.fechaEscopo();
+        casaToken(TipoToken.FECHA_CHAVE);
+    }
+
+    private void comando() {                   // o switch do cap. 5 virou comandoSemRede()
+        try {
+            comandoSemRede();
+        } catch (ErroCompilacao e) {
+            if (eh(TipoToken.EOF) || e.getMessage().contains("erro léxico"))
+                throw e;                       // não há onde se segurar: o compila() registra e para
+            erros.add(e.getMessage());
+            proxTemp = 0;                      // a expressão quebrada não liberou os registradores
+            sincroniza();
+        }
+    }
+
+    private void sincroniza() {                // modo pânico: descarta até o FOLLOW de comando
+        while (!comecaComando() && !eh(TipoToken.FECHA_CHAVE, TipoToken.EOF)) {
+            if (eh(TipoToken.PONTO_VIRGULA)) { avanca(); return; }   // o ';' fecha o comando quebrado
+            avanca();
+        }
+    }
+```
+- TEXTO: O ponto seguro é o **FOLLOW de comando**: o começo de outro comando (o FIRST, que o `comecaComando()` já testa), o `}` do bloco ou o fim do arquivo. O `;` termina o comando quebrado, por isso ele é consumido. O bloco agora repete até o `}`: um token estranho no começo de um comando vira erro e é pulado, em vez de fechar o bloco.
+- CÓDIGO (compila() e Main.java: com erro, nenhum .asm é gravado):
+```
+    public String compila() {
+        try {
+            programa();
+        } catch (ErroCompilacao e) {           // erro léxico, fim de arquivo, ou o '{' e o '}' do programa
+            erros.add(e.getMessage());
+        }
+        // ... daqui para baixo, igual ao capítulo 8
+    }
+
+// Main.java, dentro do try: com erro, nenhum .asm é gravado
+            String asm = s.compila();
+            if (!s.erros().isEmpty()) {
+                s.erros().forEach(System.out::println);
+                System.exit(1);
+            }
+            Files.writeString(Path.of(saida), asm);
+```
+- CÓDIGO (testes/erro/tres_erros.byt e a saída esperada: três erros, três linhas):
+```
+programa erros {
+    inteiro x;
+    x <- 3 escreva(x);
+    se (x > ) { escreva(x); }
+    x <- x + ;
+    escreva("fim");
+}
+
+linha 3: erro sintático: esperava ';', encontrou 'escreva'
+linha 4: erro sintático: esperava uma expressão, encontrou ')'
+linha 5: erro sintático: esperava uma expressão, encontrou ';'
+```
+- PREVEJA: Quantas mensagens saem para `x <- (x + ) x;`?
+    opções: Uma: a do `)` | ✔Duas: a do `)` e uma falsa no `x` seguinte | Três: uma para cada token pulado
+    explicação: O erro está no `)`. O modo pânico pula o `)` e para no `x`, que começa um comando. Esse `x` sem `<-` gera um segundo erro, que não existe de verdade. É o preço do modo pânico: às vezes um erro puxa outro. Por isso, conserte de cima para baixo.
+- CAIXA [Cuidado!]: Erro léxico e fim de arquivo ainda param a compilação: o léxico não sabe pular o caractere ruim, e no fim do arquivo não há onde se segurar. E o `proxTemp = 0` no `catch` devolve os registradores que a expressão quebrada não liberou.
 - CAIXA [Cuidado!]: **Linha errada nas mensagens.** O erro mais comum de todos. Causas: não contar '\n' dentro de comentário de bloco, contar '\r' também, ou usar a linha do token ANTERIOR quando o enunciado quer a do token encontrado (ou vice-versa). Tenha um teste de erro DEPOIS de um comentário de várias linhas.
 - CAIXA [Cuidado!]: **Registradores vazando.** Esquecer um `liberaTemp()` não quebra programas pequenos… até o 11º comando, quando aparece 'faltaram registradores' do nada. Teste com um programa de 30 atribuições seguidas.
 - CÓDIGO (Uma linha de 'assert' que economiza uma noite de depuração):
@@ -2067,3 +2165,293 @@ private void comando() {
     · Como o professor vai rodar o seu compilador: que comando, em que pasta?
     · Que três perguntas da arguição você treinaria sobre a SUA gramática?
 - TEXTO: **Teste desta etapa:** numa pasta nova, clone o repositório e siga só o README: compilar, rodar um teste e abrir no MARS. Se faltar qualquer passo que não está escrito, o README está incompleto.
+- REVELAR: **Estenda a Byteiro.** Com a recuperação deste capítulo, quantas mensagens saem para `repita { x <- ; } ate (x > 3);`?
+    → Uma. O erro é no `;` do `x <- ;`. O comando de dentro do bloco registra a mensagem e consome esse `;`. O bloco fecha no `}`, e o `ate (x > 3);` é lido normalmente.
+
+## Capítulo 11: Opcional: vetores e funções [RUNTIME]
+Para quando o enunciado pede: vetor com .space e base + 4·i, função com jal, $ra e o quadro na pilha.
+
+- PROF: Este capítulo é opcional. Faça depois do capítulo 8, e só se o seu enunciado pedir vetor ou função.
+- TEXTO: **Vetores.** `inteiro v[5];` reserva 5 inteiros seguidos na memória. Cada inteiro ocupa 4 bytes, então o `.data` ganha `v_0: .space 20`. O elemento `v[i]` mora no endereço **base + 4·i**: o endereço do começo do vetor mais 4 vezes o índice.
+- CÓDIGO (O que muda na gramática (cada [ ] da EBNF ainda vira um if no parser)):
+```
+declaracao → tipo ID [ "[" NUM "]" ] { , ID [ "[" NUM "]" ] } ;
+comando    → ID [ "[" expr "]" ] <- expr ;      (atribuição, agora com índice)
+primario   → ID [ "[" expr "]" ] | ...
+```
+- PREVEJA: Se v_0 começa no endereço 1000, onde fica v[3]?
+    opções: 1003 | ✔1012 | 1016 | 1004
+    explicação: 1000 + 4 · 3 = 1012. O 1003 esquece que cada inteiro tem 4 bytes. O 1016 conta a partir do 1, como se v[0] não existisse.
+- CÓDIGO (Vetores no gerador do capítulo 8: o .space, o endereço com sll e o lw/sw no endereço):
+```
+    // Simbolo ganha: public int tamanho = 0;   (0 = variável comum)
+    // Lexico: '[' e ']' viram ABRE_COL e FECHA_COL no simples()
+
+    private void declaraUm(TipoDado t) {
+        Token id = casaToken(TipoToken.ID);
+        Simbolo s = tabela.declara(id.lexema, t, id.linha);
+        if (eh(TipoToken.ABRE_COL)) {                     // inteiro v[5];
+            avanca();
+            s.tamanho = Integer.parseInt(casaToken(TipoToken.NUM).lexema);
+            casaToken(TipoToken.FECHA_COL);
+            dados.append(s.rotulo).append(": .space ").append(4 * s.tamanho).append('\n');
+        } else {
+            dados.append(s.rotulo).append(": .word 0\n");
+        }
+    }
+
+    private String endereco(Simbolo s) {                  // [ expr ]: devolve o registrador com base + 4·i
+        casaToken(TipoToken.ABRE_COL);
+        int linha = tok.linha;
+        Res i = expr();
+        exige(i.tipo() == TipoDado.INTEIRO, linha, "o índice de '" + s.nome + "' precisa ser inteiro");
+        casaToken(TipoToken.FECHA_COL);
+        String base = novoTemp();
+        emite("sll " + i.reg() + ", " + i.reg() + ", 2");   // i * 4: cada inteiro ocupa 4 bytes
+        emite("la " + base + ", " + s.rotulo);              // o endereço do começo do vetor
+        emite("add " + i.reg() + ", " + base + ", " + i.reg());
+        liberaTemp();                                       // a base já foi somada
+        return i.reg();
+    }
+
+    // primario(), no caso do ID:            v[i] lê a memória no endereço
+    //     if (s.tamanho > 0) { String r = endereco(s); emite("lw " + r + ", 0(" + r + ")"); return new Res(s.tipo, r); }
+    // atribuicao(), logo depois do usa(id): o endereço primeiro, o valor depois
+    //     String end = s.tamanho > 0 ? endereco(s) : null;
+    //     ... casaToken(ATRIB); Res v = expr(); ...
+    //     emite(end != null ? "sw " + v.reg() + ", 0(" + end + ")" : "sw " + v.reg() + ", " + s.rotulo);
+    //     liberaTemp(); if (end != null) liberaTemp();
+```
+- CAIXA [Cuidado!]: O MARS não confere o índice. `v[5]` num vetor de 5 escreve por cima da variável seguinte do `.data`, sem erro nenhum. Se o enunciado pedir, compare o índice com o tamanho antes do `sw` e pule para uma mensagem de erro. O `sll $t0, $t0, 2` desloca 2 bits para a esquerda: é o mesmo que multiplicar por 4, e mais barato que o `mul`.
+- CÓDIGO (vetor.byt: guarda os quadrados de 0 a 4 e soma tudo):
+```
+programa vetor {
+    inteiro v[5], i, soma;
+    i <- 0;
+    enquanto (i < 5) { v[i] <- i * i; i <- i + 1; }
+    i <- 0;
+    soma <- 0;
+    enquanto (i < 5) { soma <- soma + v[i]; i <- i + 1; }
+    escreva("soma = ", soma);
+}
+```
+- CÓDIGO (O .asm que o gerador escreve. No MARS, imprime soma = 30):
+```
+# gerado pelo compilador Byteiro
+.data
+v_0: .space 20
+i_1: .word 0
+soma_2: .word 0
+str0: .asciiz "soma = "
+.text
+main:
+    li $t0, 0
+    sw $t0, i_1
+enquanto0:
+    lw $t0, i_1
+    li $t1, 5
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimenq1
+    lw $t0, i_1
+    sll $t0, $t0, 2
+    la $t1, v_0
+    add $t0, $t1, $t0
+    lw $t1, i_1
+    lw $t2, i_1
+    mul $t1, $t1, $t2
+    sw $t1, 0($t0)
+    lw $t0, i_1
+    li $t1, 1
+    add $t0, $t0, $t1
+    sw $t0, i_1
+    j enquanto0
+fimenq1:
+    li $t0, 0
+    sw $t0, i_1
+    li $t0, 0
+    sw $t0, soma_2
+enquanto2:
+    lw $t0, i_1
+    li $t1, 5
+    slt $t0, $t0, $t1
+    beq $t0, $zero, fimenq3
+    lw $t0, soma_2
+    lw $t1, i_1
+    sll $t1, $t1, 2
+    la $t2, v_0
+    add $t1, $t2, $t1
+    lw $t1, 0($t1)
+    add $t0, $t0, $t1
+    sw $t0, soma_2
+    lw $t0, i_1
+    li $t1, 1
+    add $t0, $t0, $t1
+    sw $t0, i_1
+    j enquanto2
+fimenq3:
+    la $a0, str0
+    li $v0, 4
+    syscall
+    lw $t0, soma_2
+    move $a0, $t0
+    li $v0, 1
+    syscall
+    li $a0, 10
+    li $v0, 11
+    syscall
+    li $v0, 10
+    syscall
+```
+- TEXTO: **Funções.** O `jal f_fat` pula para a função e guarda em `$ra` o endereço da linha de baixo. O `jr $ra` volta para lá. O problema: uma função que chama outra (ou a si mesma) escreve outro valor em `$ra`. Por isso cada chamada ganha um **quadro** na pilha, com o `$ra` e o parâmetro.
+- CÓDIGO (O que muda na gramática (cada [ ] da EBNF ainda vira um if no parser)):
+```
+programa → programa ID { funcao } bloco
+funcao   → funcao ID ( inteiro ID ) bloco
+comando  → retorne expr ; | ...
+primario → ID ( expr ) | ID [ "[" expr "]" ] | ...
+```
+- PASSOS (A combinação entre quem chama e a função (a convenção de chamada)):
+    · **Quem chama** põe o argumento em `$a0`, guarda na pilha os `$t` ocupados e faz `jal`.
+    · **A função** abre o quadro: `addi $sp, $sp, -8`, guarda o `$ra` em `4($sp)` e o parâmetro em `0($sp)`. Dentro dela, o parâmetro é lido com `lw $t0, 0($sp)`.
+    · **O retorne** põe o resultado em `$v0` e pula para o fim da função, que lê o `$ra` de volta, fecha o quadro e faz `jr $ra`.
+    · **Quem chama** devolve os `$t` guardados e copia o `$v0` para um registrador seu.
+- CÓDIGO (Funções no gerador: o código delas vai para depois do main. A TabelaSimbolos ganha um declaraComRotulo(nome, tipo, linha, rotulo), igual ao declara mas com o rótulo dado):
+```
+    private final StringBuilder funcoes = new StringBuilder();   // vai depois do main, no compila()
+    private StringBuilder saida = codigo;                         // emite() e rotulo() escrevem em 'saida'
+    private final Set<String> nomesDeFuncao = new HashSet<>();
+    private String fimDaFuncao = null;                            // null: estamos no main
+
+    private void funcao() {                       // funcao id ( inteiro id ) bloco
+        casaToken(TipoToken.FUNCAO);
+        Token nome = casaToken(TipoToken.ID);
+        nomesDeFuncao.add(nome.lexema);           // antes do corpo: a função pode chamar a si mesma
+        casaToken(TipoToken.ABRE_PAR);
+        casaToken(TipoToken.INTEIRO);
+        Token p = casaToken(TipoToken.ID);
+        casaToken(TipoToken.FECHA_PAR);
+        saida = funcoes;
+        fimDaFuncao = "fim_" + nome.lexema;
+        rotulo("f_" + nome.lexema);
+        emite("addi $sp, $sp, -8");               // o quadro: o parâmetro e o $ra
+        emite("sw $ra, 4($sp)");
+        emite("sw $a0, 0($sp)");
+        tabela.abreEscopo();
+        tabela.declaraComRotulo(p.lexema, TipoDado.INTEIRO, p.linha, "0($sp)");   // o n mora na pilha
+        bloco();
+        tabela.fechaEscopo();
+        rotulo(fimDaFuncao);
+        emite("lw $ra, 4($sp)");
+        emite("addi $sp, $sp, 8");
+        emite("jr $ra");
+        saida = codigo;
+        fimDaFuncao = null;
+    }
+
+    private void retorne() {                      // retorne expr ;
+        Token r = casaToken(TipoToken.RETORNE);
+        exige(fimDaFuncao != null, r.linha, "'retorne' fora de função");
+        Res v = expr();
+        emite("move $v0, " + v.reg());            // o resultado volta em $v0
+        liberaTemp();
+        emite("j " + fimDaFuncao);
+        casaToken(TipoToken.PONTO_VIRGULA);
+    }
+
+    private Res chamada(Token nome) {             // id ( expr ), chamada pelo primario() quando vem '('
+        exige(nomesDeFuncao.contains(nome.lexema), nome.linha, "'" + nome.lexema + "' não é função");
+        casaToken(TipoToken.ABRE_PAR);
+        Res arg = expr();
+        casaToken(TipoToken.FECHA_PAR);
+        emite("move $a0, " + arg.reg());
+        int ocupados = proxTemp;                  // a função vai usar os $t: guarde os que estão ocupados
+        emite("addi $sp, $sp, " + (-4 * ocupados));
+        for (int k = 0; k < ocupados; k++) emite("sw $t" + k + ", " + (4 * k) + "($sp)");
+        emite("jal f_" + nome.lexema);            // pula e guarda em $ra a linha de baixo
+        for (int k = 0; k < ocupados; k++) emite("lw $t" + k + ", " + (4 * k) + "($sp)");
+        emite("addi $sp, $sp, " + (4 * ocupados));
+        emite("move " + arg.reg() + ", $v0");     // o resultado ocupa o registrador do argumento
+        return new Res(TipoDado.INTEIRO, arg.reg());
+    }
+```
+- PREVEJA: Por que a função guarda o $ra na pilha logo que começa?
+    opções: Porque o MARS exige | ✔Porque um jal dentro dela escreve outro endereço em $ra | Para liberar o $ra para as contas
+    explicação: O `jal f_fat` de dentro do `fat` troca o `$ra` pelo endereço de volta da chamada nova. Sem a cópia na pilha, a primeira chamada nunca acharia o caminho para o `main`.
+- CÓDIGO (fatorial.byt: a função vem antes do bloco principal):
+```
+programa fatorial
+funcao fat(inteiro n) {
+    se (n <= 1) { retorne 1; }
+    retorne n * fat(n - 1);
+}
+{
+    escreva("fat(5) = ", fat(5));
+}
+```
+- CÓDIGO (O .asm gerado. No MARS, imprime fat(5) = 120, e o $sp volta ao valor do começo):
+```
+# gerado pelo compilador Byteiro
+.data
+str0: .asciiz "fat(5) = "
+.text
+main:
+    la $a0, str0
+    li $v0, 4
+    syscall
+    li $t0, 5
+    move $a0, $t0
+    addi $sp, $sp, -4
+    sw $t0, 0($sp)
+    jal f_fat
+    lw $t0, 0($sp)
+    addi $sp, $sp, 4
+    move $t0, $v0
+    move $a0, $t0
+    li $v0, 1
+    syscall
+    li $a0, 10
+    li $v0, 11
+    syscall
+    li $v0, 10
+    syscall
+f_fat:
+    addi $sp, $sp, -8
+    sw $ra, 4($sp)
+    sw $a0, 0($sp)
+    lw $t0, 0($sp)
+    li $t1, 1
+    sle $t0, $t0, $t1
+    beq $t0, $zero, senao0
+    li $t0, 1
+    move $v0, $t0
+    j fim_fat
+senao0:
+    lw $t0, 0($sp)
+    lw $t1, 0($sp)
+    li $t2, 1
+    sub $t1, $t1, $t2
+    move $a0, $t1
+    addi $sp, $sp, -8
+    sw $t0, 0($sp)
+    sw $t1, 4($sp)
+    jal f_fat
+    lw $t0, 0($sp)
+    lw $t1, 4($sp)
+    addi $sp, $sp, 8
+    move $t1, $v0
+    mul $t0, $t0, $t1
+    move $v0, $t0
+    j fim_fat
+fim_fat:
+    lw $ra, 4($sp)
+    addi $sp, $sp, 8
+    jr $ra
+```
+- CAIXA [Cuidado!]: Neste esquema, só o parâmetro mora na pilha. Uma variável declarada dentro da função continua no `.data`, e numa função recursiva cada chamada escreveria por cima dela. Se o enunciado pedir recursão com variável local, guarde as locais no quadro também, cada uma com o seu deslocamento.
+- REVELAR: Em n * fat(n - 1), o $t0 guarda o n quando o jal acontece. Quem garante que ele volta intacto?
+    → Quem chama. A `chamada()` guarda na pilha os `$t` ocupados (`$t0` com o n e `$t1` com o argumento), faz o `jal` e lê os dois de volta. A função usa os `$t` à vontade.
+- PASSOS (Na sua linguagem):
+    · O seu enunciado pede vetor? De que tamanho, e o índice começa em 0 ou em 1?
+    · As funções recebem quantos parâmetros, e de quais tipos? Cada um ganha um deslocamento no quadro.
+    · Pode haver recursão? Se pode, onde ficam as variáveis locais?
+- TEXTO: **Teste desta etapa:** o `vetor.byt` imprime `soma = 30`, e o `fatorial.byt` imprime `fat(5) = 120`. Teste também `v[5]` num vetor de 5, para ver o que o seu compilador faz.

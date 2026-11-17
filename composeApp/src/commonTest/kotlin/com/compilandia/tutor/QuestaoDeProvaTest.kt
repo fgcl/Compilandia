@@ -17,7 +17,7 @@ class QuestaoDeProvaTest {
         val etapas = Trilha.passos(Skill.LL1_TABLE).map { it.etapa }
         assertTrue(Etapa.PROVA in etapas)
         assertEquals(etapas.indexOf(Etapa.DESAFIO) - 1, etapas.indexOf(Etapa.PROVA))
-        val comProva = setOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION)
+        val comProva = setOf(Skill.LL1_TABLE, Skill.SLR_TABLE, Skill.NFA_TO_DFA, Skill.DFA_MINIMIZATION, Skill.TAC, Skill.REG_ALLOC)
         assertEquals(comProva, Skill.entries.filter { s -> Trilha.passos(s).any { it.etapa == Etapa.PROVA } }.toSet())
     }
 

@@ -243,6 +243,21 @@
     <string name="mips_l_10_dica">O resultado precisa voltar para a memória.</string>
     <string name="mips_l_10_ok">O sw guarda o resultado.</string>
     <string name="mips_l_11">Agora você traduz qualquer linha de três endereços para MIPS: dois lw, a conta e um sw.</string>
+    <string name="mips_d_01">E o if? O MIPS não tem if. A comparação vira conta. O slt deixa 1 em $t0 se a for menor que b. Se não for, deixa 0.</string>
+    <string name="mips_d_02">Qual linha pula o x = 1 quando a conta deu 0? Toque nela.</string>
+    <string name="mips_d_02_dica">Procure a linha que compara $t0 com zero.</string>
+    <string name="mips_d_02_ok">Exato. O beq pula quando $t0 vale zero. Isso acontece quando a menor que b é falso. Ele cai em fimse0, depois do corpo.</string>
+    <string name="mips_d_03">Esse é o esquema de toda a trilha. A condição vira 0 ou 1, e o beq com zero pula quando ela é falsa. No TAC, o mesmo par se chama ifFalse.</string>
+    <string name="mips_d_04">O while usa o mesmo par. O rótulo enquanto0 marca o teste, no topo do laço.</string>
+    <string name="mips_d_05">No fim do corpo, o j pula sempre. Para qual linha ele volta? Toque nela.</string>
+    <string name="mips_d_05_dica">A cada volta, a condição precisa ser testada de novo.</string>
+    <string name="mips_d_05_ok">O j volta para enquanto0, e o teste roda outra vez.</string>
+    <string name="mips_d_06">Quando i chega a n, o slt dá 0. Aí o beq sai do laço para fimenq0.</string>
+    <string name="mips_d_07">Agora uma condição com e. Cada comparação ganha o seu par de slt e beq. Os dois beq pulam para o mesmo fimse0.</string>
+    <string name="mips_d_08">Com a valendo 9 e b valendo 2, a menor que b dá 0. Quantas linhas da conta c menor que d chegam a rodar?</string>
+    <string name="mips_d_08_dica">Siga o primeiro beq: para onde ele pula?</string>
+    <string name="mips_d_08_ok">Nenhuma. O primeiro beq já pula para fimse0. As quatro linhas de c menor que d ficam para trás.</string>
+    <string name="mips_d_09">Isso se chama curto-circuito. Com um lado falso, o e já é falso, e o resto nem roda. No TAC, são dois ifFalse seguidos, para o mesmo rótulo.</string>
     <string name="mips_l_r1">1. lw: carregue cada operando num registrador.</string>
     <string name="mips_l_r2">2. Conta entre registradores: add, sub, mul.</string>
     <string name="mips_l_r3">3. sw: guarde o resultado na memória.</string>
