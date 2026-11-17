@@ -56,5 +56,8 @@ object Falas {
     )
 
     /** Toda fala solta, para gerar os áudios. */
-    fun todas(): List<Fala> = toqueNoByte + acerto + erro + vitoria + derrota + confianca + retomada + guiado + prova + boas + comoJogar.values + Robos.falas()
+    /** O bordão do professor careca da sala, quando alguém toca nele. */
+    val professor = Fala(Speaker.PROFESSOR, tx("sala_prof_alegria"))
+
+    fun todas(): List<Fala> = listOf(professor) + toqueNoByte + acerto + erro + vitoria + derrota + confianca + retomada + guiado + prova + boas + comoJogar.values + Robos.falas()
 }

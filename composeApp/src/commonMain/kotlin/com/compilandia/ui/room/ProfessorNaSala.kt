@@ -27,7 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.compilandia.textos.tx
+import com.compilandia.content.Falas
+import com.compilandia.ui.voice.Narrator
 import com.compilandia.ui.Juice
 import com.compilandia.ui.Palette
 import com.compilandia.ui.ThemeState
@@ -40,10 +41,10 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 /*
- * O professor vive na frente do quadro: para, anda até outro ponto, de vez em quando fica contente (e diz isso),
- * e comemora com alegria quando é tocado. A rotina recomeça depois de cada comemoração.
+ * O professor vive na frente do quadro: para, anda até outro ponto, de vez em quando fica contente e solta o bordão
+ * ("Alegria e contentamento!", só no balão), e quando é tocado comemora e diz o bordão em voz alta. A rotina recomeça depois de cada comemoração.
  */
-private class Professor(inicio: Float, val alegria: String, val contente: String) {
+private class Professor(inicio: Float, val bordao: String) {
     val u = Animatable(inicio)
     var humor by mutableStateOf(Humor.PARADO)
     var paraEsquerda by mutableStateOf(false)
@@ -51,7 +52,8 @@ private class Professor(inicio: Float, val alegria: String, val contente: String
 
     suspend fun comemora() {
         humor = Humor.ALEGRIA
-        fala = alegria
+        fala = bordao
+        Narrator.say(Falas.professor)
         delay(COMEMORA_MS)
         fala = null
     }
@@ -66,7 +68,7 @@ private class Professor(inicio: Float, val alegria: String, val contente: String
 
     private suspend fun fica() {
         humor = Humor.CONTENTE
-        fala = contente
+        fala = bordao
         delay(CONTENTE_MS)
         fala = null
     }
@@ -80,9 +82,8 @@ private class Professor(inicio: Float, val alegria: String, val contente: String
 
 @Composable
 internal fun ProfessorNaSala(side: Dp) {
-    val alegria = tx("sala_prof_alegria")
-    val contente = tx("sala_prof_contente")
-    val prof = remember { Professor(NaAula.PROFESSOR.u, alegria, contente) }
+    val bordao = Falas.professor.text
+    val prof = remember { Professor(NaAula.PROFESSOR.u, bordao) }
     var toques by remember { mutableIntStateOf(0) }
     LaunchedEffect(toques) {
         if (toques > 0) prof.comemora()

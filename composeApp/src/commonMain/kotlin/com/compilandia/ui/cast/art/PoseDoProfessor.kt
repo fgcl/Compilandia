@@ -32,7 +32,6 @@ data class PoseProf(
     val rosto: Rosto = Rosto.NORMAL,
     val sombra: Float = 1f,
     val brilhos: Boolean = false,
-    val coracoes: Boolean = false,
 )
 
 fun poseDoProfessor(humor: Humor, t: Float, piscando: Boolean): PoseProf {
@@ -89,13 +88,13 @@ private fun alegria(t: Float): PoseProf {
     )
 }
 
-/** Braços cruzados na barriga, cabeça de lado, olhos fechados sorrindo e um balanço lento. */
+/** Braços cruzados na barriga, cabeça de lado, olhos fechados sorrindo e um balanço lento. Sem enfeite. */
 private fun contente(t: Float): PoseProf {
     val b = sin(t * 1.6f)
     return PoseProf(
         tudo = Junta(giro = b * 2.5f), cabeca = Junta(giro = 8f + b * 3f),
         tronco = Junta(sy = 1f + sin(t * 2f) * 0.012f),
-        bracoE = -16f, bracoD = 16f, anteE = -78f, anteD = 78f, rosto = Rosto.CONTENTE, coracoes = true,
+        bracoE = -16f, bracoD = 16f, anteE = -78f, anteD = 78f, rosto = Rosto.CONTENTE,
     )
 }
 

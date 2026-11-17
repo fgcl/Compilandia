@@ -33,7 +33,6 @@ internal object Papel {
     val tacha = Color(0xFFB9A27A)
     val lente = Color(0x47C8E6FA)
     val brilho = Color(0xFFF5B700)
-    val coracao = Color(0xFFE86F8A)
     val sombra = Color(0x38000000)
 }
 
@@ -98,7 +97,7 @@ private fun DrawScope.camada(desenha: DrawScope.(Tinta) -> Unit) {
     desenha(Tinta(false))
 }
 
-/** O professor inteiro na pose [p]; [t] anima os brilhos e os corações. */
+/** O professor inteiro na pose [p]; [t] anima os brilhos da alegria. */
 fun DrawScope.professorRecortado(p: PoseProf, t: Float) {
     drawOval(Papel.sombra, Offset(CX - 46 * p.sombra, PE - 5), Size(92 * p.sombra, 14f))
     junta(p.tudo, Offset(CX, PE)) {
@@ -109,7 +108,6 @@ fun DrawScope.professorRecortado(p: PoseProf, t: Float) {
         camada { braco(it, CX + 30, p.bracoD, p.anteD) }
     }
     if (p.brilhos) brilhos(t)
-    if (p.coracoes) coracoes(t)
 }
 
 private fun DrawScope.perna(tt: Tinta, x: Float, j: Junta) = junta(j, Offset(x, QUADRIL)) {

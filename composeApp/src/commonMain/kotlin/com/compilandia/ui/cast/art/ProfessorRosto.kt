@@ -7,10 +7,9 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import kotlin.math.PI
 import kotlin.math.sin
 
-/* O rosto do professor de papel (olhos, sobrancelhas, nariz, boca, óculos) e os efeitos de alegria e contentamento. */
+/* O rosto do professor de papel (olhos, sobrancelhas, nariz, boca, óculos) e os brilhos da alegria. */
 
 private const val EX = 13.1f
 private const val EY = CABECA_Y + 2.1f
@@ -89,19 +88,5 @@ internal fun DrawScope.brilhos(t: Float) {
             lineTo(x, y + 9f); lineTo(x - 2.5f, y + 2.5f); lineTo(x - 9f, y); lineTo(x - 2.5f, y - 2.5f); close()
         }
         drawPath(p, Papel.brilho.copy(alpha = alfa))
-    }
-}
-
-/** Dois corações subindo devagar, no contentamento. */
-internal fun DrawScope.coracoes(t: Float) {
-    val sobe = (t * 0.45f) % 1f
-    val alfa = sin(sobe * PI.toFloat())
-    for ((x, y) in listOf(160f to 60f, 40f to 84f)) {
-        val yy = y - sobe * 26f
-        val p = Path().apply {
-            moveTo(x, yy); relativeCubicTo(-5f, -7f, -14f, 0f, -7f, 7f); relativeLineTo(7f, 7f); relativeLineTo(7f, -7f)
-            relativeCubicTo(7f, -7f, -2f, -14f, -7f, -7f); close()
-        }
-        drawPath(p, Papel.coracao.copy(alpha = alfa))
     }
 }
