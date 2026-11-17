@@ -545,10 +545,15 @@
     <!-- SimPlayer.kt -->
     <string name="simplayer_prever">Prever</string>
     <!-- RoomScreen.kt -->
-    <string name="roomscreen_oficina_byte">Oficina do Byte</string>
+    <string name="sala_prof_alegria">Alegria e contentamento!</string>
+    <string name="campus_titulo">Campus de Poços de Caldas</string>
+    <string name="campus_descricao">O campus visto de cima, com o prédio das salas marcado</string>
+    <string name="campus_toque">Toque para entrar na sala</string>
+    <string name="campus_sua_sala">Sua sala</string>
+    <string name="roomscreen_oficina_byte">Sala de aula</string>
     <string name="roomscreen_mapa">Mapa</string>
     <string name="roomscreen_loja">Loja</string>
-    <string name="roomscreen_loja_oficina">Loja da oficina</string>
+    <string name="roomscreen_loja_oficina">Loja da sala</string>
     <string name="roomscreen_voce_tem_1_engrenagens">Você tem %1$s engrenagens</string>
     <string name="roomscreen_trava_sequencia">Trava da sequência</string>
     <string name="roomscreen_guarda_sua_sequencia_se_faltar">Guarda sua sequência se faltar um dia. Você tem %1$s.</string>

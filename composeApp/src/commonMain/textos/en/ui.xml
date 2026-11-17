@@ -503,10 +503,15 @@
     <string name="labscreen_abrir">Open</string>
     <string name="labscreen_cole_exercicio_ou_pergunte">Paste an exercise or ask</string>
     <string name="simplayer_prever">Predict</string>
-    <string name="roomscreen_oficina_byte">Byte's Workshop</string>
+    <string name="sala_prof_alegria">Joy and contentment!</string>
+    <string name="campus_titulo">Poços de Caldas campus</string>
+    <string name="campus_descricao">The campus seen from above, with the classroom building marked</string>
+    <string name="campus_toque">Tap to enter the classroom</string>
+    <string name="campus_sua_sala">Your classroom</string>
+    <string name="roomscreen_oficina_byte">Classroom</string>
     <string name="roomscreen_mapa">Map</string>
     <string name="roomscreen_loja">Shop</string>
-    <string name="roomscreen_loja_oficina">Workshop shop</string>
+    <string name="roomscreen_loja_oficina">Classroom shop</string>
     <string name="roomscreen_voce_tem_1_engrenagens">You have %1$s gears</string>
     <string name="roomscreen_trava_sequencia">Streak lock</string>
     <string name="roomscreen_guarda_sua_sequencia_se_faltar">Keeps your streak if you miss a day. You have %1$s.</string>

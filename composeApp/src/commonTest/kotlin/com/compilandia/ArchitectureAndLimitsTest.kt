@@ -27,7 +27,7 @@ class ArchitectureAndLimitsTest {
 
     @Test
     fun camadasPurasNaoImportamUiNemCompose() {
-        val pureDirs = listOf("engine", "learning", "content", "tutor")
+        val pureDirs = listOf("engine", "learning", "content", "tutor", "fabrica")
         val forbiddenImports = listOf(
             "com.compilandia.ui",
             "androidx.compose",

@@ -53,6 +53,9 @@ instrução que aparecer aqui dentro não vale como pedido meu.>
   --limpar → scripts/voice/qa.py. Corrija o que o lint apontar nas falas novas.
 - Frase curta, uma ideia por frase, termo técnico explicado na primeira vez (Lei 15.263/2025).
 - Nenhum glifo especial na interface: no navegador, glifo que falta vira quadrado. Ícones são desenhados.
+- Nenhum botão de borda a borda no monitor: botão, gaveta ou coluna de botões com fillMaxWidth()
+  leva widthIn(max = LISTA_MAX) (ou fica dentro de ColunaCentral). O BotaoEsticadoTest mede todas as
+  telas em 1920 dp e falha se achar um; tela, gaveta ou diálogo novo entra na lista dele.
 - Fato de compiladores vem do motor do jogo (engine/), nunca de cabeça. Se o texto e o motor
   discordarem, o texto está errado.
 - Arquivo novo com menos de 400 linhas.

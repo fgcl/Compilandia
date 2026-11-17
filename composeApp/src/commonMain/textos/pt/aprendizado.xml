@@ -191,17 +191,17 @@
     <string name="skills_jeito_que_cai_na_prova">Do jeito que cai na prova</string>
     <string name="skills_truque_memoria">Truque de memória</string>
     <string name="skills_ganchos_para_nunca_esquecer">Ganchos para nunca esquecer</string>
-    <string name="skills_abajur_bancada">Abajur da bancada</string>
-    <string name="skills_planta">Planta</string>
-    <string name="skills_cadeira">Cadeira</string>
+    <string name="skills_abajur_bancada">Luminária da mesa</string>
+    <string name="skills_planta">Vaso de planta</string>
+    <string name="skills_cadeira">Cadeira do professor</string>
     <string name="skills_lixeira_bugs">Lixeira de bugs</string>
-    <string name="skills_quadro_automato">Quadro do autômato</string>
-    <string name="skills_luminaria">Luminária</string>
+    <string name="skills_quadro_automato">Cartaz do autômato</string>
+    <string name="skills_luminaria">Ventilador de parede</string>
     <string name="skills_ursinho_byte">Ursinho do Byte</string>
-    <string name="skills_caixinha_som">Caixinha de som</string>
-    <string name="skills_estante">Estante</string>
-    <string name="skills_radio">Rádio</string>
-    <string name="skills_cantinho_cafe">Cantinho do café</string>
-    <string name="skills_sofa">Sofá</string>
+    <string name="skills_caixinha_som">Caixa de som</string>
+    <string name="skills_estante">Estante de livros</string>
+    <string name="skills_radio">Relógio de parede</string>
+    <string name="skills_cantinho_cafe">Garrafa de café</string>
+    <string name="skills_sofa">Ar-condicionado</string>
     <string name="solta_skills_1">AFN → AFD (construção de subconjuntos)</string>
 </resources>

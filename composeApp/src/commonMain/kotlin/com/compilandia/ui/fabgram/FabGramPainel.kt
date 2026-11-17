@@ -42,7 +42,7 @@ import com.compilandia.engine.tokensOf
 import com.compilandia.textos.tx
 import com.compilandia.tutor.Corrida
 import com.compilandia.tutor.FabGram
-import com.compilandia.tutor.FabGram.TipoBloco
+import com.compilandia.fabrica.Papel
 import com.compilandia.tutor.Falha
 import com.compilandia.tutor.Laudo
 import com.compilandia.tutor.Motivo
@@ -55,7 +55,10 @@ private val VIDRO = Color(0xE6202328)
 
 /** O painel da gramática: o texto, os exemplos, a frase e os sinais. */
 @Composable
-internal fun Painel(e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<String, Int>, onFechar: () -> Unit) {
+internal fun Painel(
+    e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<String, Int>,
+    onFechar: () -> Unit,
+) {
     val fonts = LocalFonts.current
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -64,7 +67,7 @@ internal fun Painel(e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<
         }
         ListaMissoes(e, feitas, estrelas)
         BasicTextField(
-            e.texto, { e.livre(); e.texto = it; e.corrida = null; e.sel = null },
+            e.texto, { e.livre(); e.textoDaPlanta = null; e.texto = it; e.corrida = null; e.sel = null },
             Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp)).background(Palette.codeBg).padding(10.dp).testTag("fabgram-texto"),
             textStyle = TextStyle(fontFamily = fonts.mono, fontSize = 15.sp, color = TINTA_CODIGO), cursorBrush = SolidColor(Palette.yellow),
         )
@@ -80,7 +83,7 @@ internal fun Painel(e: EstadoFabrica, laudo: Laudo?, feitas: Int, estrelas: Map<
             for ((g, f) in FabGram.exemplos) Text(
                 g.lines().first(), fontFamily = fonts.mono, fontSize = 13.sp, color = Palette.ink,
                 modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(Palette.paperDark)
-                    .clickable { e.livre(); e.texto = g; e.frase = f; e.corrida = null; e.sel = null }.padding(horizontal = 10.dp, vertical = 8.dp),
+                    .clickable { e.livre(); e.textoDaPlanta = null; e.texto = g; e.frase = f; e.corrida = null; e.sel = null }.padding(horizontal = 10.dp, vertical = 8.dp),
             )
         }
         val m = e.planta?.blocos?.firstOrNull { it.id == e.sel }?.prod
@@ -147,7 +150,9 @@ internal fun Aviso(e: EstadoFabrica, l: Laudo?) {
         c != null -> tx("fabgram_nenhuma_1", c.pedida.joinToString(" "))
         e.missao != null -> null
         else -> when (e.ferramenta) {
-            Ferramenta.MOVER -> tx("fabgram_dica_mover"); Ferramenta.ESTEIRA -> tx("fabgram_dica_esteira"); Ferramenta.APAGAR -> tx("fabgram_dica_apagar")
+            Ferramenta.MOVER -> tx("fabgram_dica_mover"); Ferramenta.ESTEIRA -> tx("fabgram_dica_esteira")
+            Ferramenta.APAGAR -> tx("fabgram_dica_apagar")
+            Ferramenta.CONSTRUIR -> tx("fabgram_dica_construir_1", e.construindo?.let { nomeBloco(it) }.orEmpty())
         }
     } ?: return
     val ruim = q != null || (c != null && e.terminou && !c.aceita) || e.extraFalhou != null
@@ -161,10 +166,11 @@ internal fun Aviso(e: EstadoFabrica, l: Laudo?) {
 @Composable
 private fun textoQuebra(q: Quebra): String {
     val quem = if (q.caixa) tx("fabgram_caixa_1", q.simbolo) else tx("fabgram_peca_1", q.simbolo)
-    val d = q.destino
+    val d = q.destino ?: return tx("fabgram_quebra_sem_separador_1", q.simbolo)
+    val regra = d.prod?.let { it.lhs + " → " + it.rhs.joinToString(" ").ifEmpty { "ε" } }.orEmpty()
     val para = when (d.tipo) {
-        TipoBloco.SEPARADOR -> tx("fabgram_destino_separador_1", d.nt.orEmpty())
-        TipoBloco.MAQUINA -> tx("fabgram_destino_maquina_1", d.prod!!.lhs + " → " + d.prod.rhs.joinToString(" ").ifEmpty { "ε" })
+        Papel.SEPARADOR -> tx("fabgram_destino_separador_1", d.nt.orEmpty())
+        Papel.MAQUINA -> tx("fabgram_destino_maquina_1", regra)
         else -> tx("fabgram_destino_montadora")
     }
     return when (q.motivo) {
@@ -172,35 +178,15 @@ private fun textoQuebra(q: Quebra): String {
         Motivo.ACABA -> tx("fabgram_quebra_acaba_2", quem, para)
         Motivo.BATE -> tx("fabgram_quebra_bate_2", quem, para)
         Motivo.VOLTA -> tx("fabgram_quebra_volta_2", quem, para)
+        Motivo.SEM_SEPARADOR -> tx("fabgram_quebra_sem_separador_1", q.simbolo)
     }
 }
 
-/** A barra de baixo: o que o dedo faz, desfazer, refazer e arrumar. O Ligar fica no alto, ao lado da frase. */
-@Composable
-internal fun Ferramentas(e: EstadoFabrica, modifier: Modifier, onArrumar: () -> Unit) {
-    Row(
-        modifier.padding(6.dp).clip(RoundedCornerShape(12.dp)).background(VIDRO).horizontalScroll(rememberScrollState()).padding(5.dp),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
-    ) {
-        for ((f, nome) in listOf(Ferramenta.MOVER to tx("fabgram_mover"), Ferramenta.ESTEIRA to tx("fabgram_esteira"), Ferramenta.APAGAR to tx("fabgram_apagar"))) {
-            val on = e.ferramenta == f
-            Text(
-                nome, color = if (on) OL else PLACA, style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(if (on) AC2 else Color.White.copy(alpha = 0.08f))
-                    .clickable { e.ferramenta = f }.padding(horizontal = 9.dp, vertical = 9.dp).testTag("fabgram-${f.name.lowercase()}"),
-            )
-        }
-        Icone(Forma.VOLTA, ativo = e.desfazer.isNotEmpty(), descricao = tx("fabgram_desfazer"), tag = "fabgram-desfazer") { e.volta() }
-        Icone(Forma.AVANCA, ativo = e.refazer.isNotEmpty(), descricao = tx("fabgram_refazer"), tag = "fabgram-refazer") { e.avanca() }
-        Icone(Forma.RECOMECA, ativo = true, descricao = tx("fabgram_arrumar"), tag = "fabgram-arrumar") { onArrumar() }
-    }
-}
-
-private enum class Forma { VOLTA, AVANCA, RECOMECA }
+internal enum class Forma { VOLTA, AVANCA, RECOMECA }
 
 /** Ícone desenhado: no Wasm, um glifo que falta na fonte vira um quadrado. */
 @Composable
-private fun Icone(forma: Forma, ativo: Boolean, descricao: String, tag: String, onClick: () -> Unit) {
+internal fun Icone(forma: Forma, ativo: Boolean, descricao: String, tag: String, onClick: () -> Unit) {
     val cor = if (ativo) PLACA else PLACA.copy(alpha = 0.3f)
     Box(
         Modifier.size(34.dp).clip(RoundedCornerShape(8.dp)).background(Color.White.copy(alpha = 0.08f))

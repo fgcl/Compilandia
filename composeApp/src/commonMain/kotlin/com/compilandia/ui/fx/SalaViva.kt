@@ -22,18 +22,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.unit.Dp
 import com.compilandia.platform.Sfx
 import com.compilandia.platform.Sound
 import com.compilandia.platform.nowMs
 import com.compilandia.ui.AppState
 import com.compilandia.ui.ThemeState
-import com.compilandia.ui.cast.BugFigure
+import com.compilandia.ui.room.art.Iso
+import com.compilandia.ui.room.art.NaAula
+import com.compilandia.ui.room.art.P3
+import com.compilandia.ui.room.art.ambienteDaSala
+import com.compilandia.ui.room.art.besouro
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.unit.dp
+import kotlin.math.PI
+import kotlin.math.atan2
 import kotlinx.coroutines.delay
 import kotlin.math.cos
 import kotlin.math.sin
@@ -41,55 +49,81 @@ import kotlin.random.Random
 import com.compilandia.textos.tx
 
 private val MONITOR = Color(0xFF8FF5E2)
-private val SOLDA = Color(0xFFF5B700)
 private val LAMPADA = Color(0xFFFFD98A)
 
-/** A oficina respira: monitor pisca, solda solta faísca, poeira sobe e um Bug passeia. */
+/** Um ciclo longo para o relógio e o avião de papel: 10 minutos, múltiplo de 60 s e do voo. */
+private const val CICLO_S = 595f
+
+/**
+ * A sala respira: o monitor pisca, o projetor tremula, a poeira sobe na luz da porta, a aula de agora pulsa no quadro,
+ * passa um avião de papel, e as peças compradas se mexem (ventilador, relógio, café). E um besouro passeia.
+ */
 @Composable
 fun SalaViva(app: AppState, side: Dp) {
     if (ThemeState.reduceMotion) return
     val inf = rememberInfiniteTransition()
     val t by inf.animateFloat(0f, 1f, infiniteRepeatable(tween(9000, easing = LinearEasing), RepeatMode.Restart))
-    val temLuz = "luminaria" in app.ls.roomItems
+    val segundos by inf.animateFloat(0f, CICLO_S, infiniteRepeatable(tween((CICLO_S * 1000).toInt(), easing = LinearEasing)))
+    val itens = app.ls.roomItems
+    val temAbajur = "abajur" in itens
     Canvas(Modifier.fillMaxSize()) {
+        val iso = Iso.aula(size.width)
         val w = size.width
-        // brilho do monitor, com o tremor de uma tela velha
         val tremor = 0.22f + 0.1f * sin(t * 90f) + 0.06f * sin(t * 241f)
-        val cm = Offset(w * 0.31f, w * 0.39f)
-        drawCircle(Brush.radialGradient(listOf(MONITOR.copy(alpha = tremor), Color.Transparent), cm, w * 0.13f), w * 0.13f, cm)
-        if (temLuz) {
-            val cl = Offset(w * 0.76f, w * 0.36f)
-            val a = 0.2f + 0.05f * sin(t * 30f)
-            drawCircle(Brush.radialGradient(listOf(LAMPADA.copy(alpha = a), Color.Transparent), cl, w * 0.17f), w * 0.17f, cl)
-        }
-        // solda: rajadas curtas no quadro de ferramentas
-        val ciclo = (t * 7f) % 1f
-        if (ciclo < 0.3f) {
-            val base = Offset(w * 0.215f, w * 0.335f)
-            val rnd = Random((t * 7f).toInt() + 1)
-            repeat(12) {
-                val a = 0.6f + rnd.nextFloat() * 2f
-                val v = (0.018f + rnd.nextFloat() * 0.05f) * w
-                val k = ciclo / 0.3f
-                val q = base + Offset(cos(a), sin(a)) * (v * k) + Offset(0f, w * 0.03f * k * k)
-                drawLine(SOLDA.copy(alpha = 1f - k), q, q + Offset(cos(a), sin(a)) * (w * 0.006f), w * 0.0022f)
-            }
-            drawCircle(Color.White.copy(alpha = 0.7f * (1f - ciclo / 0.3f)), w * 0.008f, base)
-        }
-        // poeira subindo devagar pela luz
-        val rnd = Random(5)
-        repeat(14) {
-            val x = 0.2f + rnd.nextFloat() * 0.62f
-            val y0 = 0.3f + rnd.nextFloat() * 0.45f
-            val fase = (t + rnd.nextFloat()) % 1f
-            val y = y0 - fase * 0.2f
-            drawCircle(Color.White.copy(alpha = 0.22f * sin(fase * 3.14f)), w * 0.0022f, Offset(w * (x + 0.012f * sin(fase * 8f + it)), w * y))
-        }
+        brilho(MONITOR.copy(alpha = tremor), iso.p(NaAula.TELA_DO_MONITOR), w * 0.07f)
+        brilho(LAMPADA.copy(alpha = 0.1f + 0.03f * sin(t * 50f)), iso.p(NaAula.CENTRO_DA_TELA), w * 0.12f)
+        if (temAbajur) brilho(LAMPADA.copy(alpha = 0.3f + 0.05f * sin(t * 30f)), iso.p(NaAula.ABAJUR), w * 0.08f)
+        poeira(iso, t)
+        ambienteDaSala(iso, segundos) { it in itens }
     }
     BugPasseando(app, side)
 }
 
-/** De vez em quando um Bug atravessa o chão. Tocou, esmagou: uma engrenagem, até o limite do dia. */
+private fun DrawScope.brilho(cor: Color, c: Offset, r: Float) =
+    drawCircle(Brush.radialGradient(listOf(cor, Color.Transparent), c, r), r, c)
+
+/** Poeira subindo devagar na luz que entra pela porta. */
+private fun DrawScope.poeira(iso: Iso, t: Float) {
+    val rnd = Random(5)
+    repeat(14) {
+        val u = rnd.nextFloat() * 3f
+        val v = 5.6f + rnd.nextFloat() * 1.6f
+        val fase = (t + rnd.nextFloat()) % 1f
+        val q = iso.p(u, v, 0.4f + fase * 2.4f)
+        val cor = Color.White.copy(alpha = 0.5f * sin(fase * 3.14f))
+        drawCircle(cor, size.width * 0.0022f, q + Offset(size.width * 0.01f * sin(fase * 8f + it), 0f))
+    }
+}
+
+/** O caminho do besouro no chão da sala: entra pela porta, passa na frente das carteiras e volta pelo corredor. */
+private val ROTA = listOf(
+    P3(0.3f, 6.3f), P3(1.6f, 7.6f), P3(6f, 7.7f), P3(10.5f, 7.4f),
+    P3(10.6f, 3.3f), P3(7f, 3.05f), P3(3f, 3.1f), P3(0.4f, 3f),
+)
+
+/** Raio do besouro em fração do lado da sala, e quantos passos ele dá na volta inteira. */
+private const val BESOURO = 0.011f
+private const val PASSOS = 260f
+
+/** Onde o besouro está em [k] (0 a 1 da rota), em fração do quadrado, e para onde aponta, em graus na tela. */
+private fun naRota(k: Float): Pair<Offset, Float> {
+    val iso = Iso.aula(1f)
+    val pts = ROTA.map { iso.p(it) }
+    val trechos = pts.zipWithNext { a, b -> (b - a).getDistance() }
+    var falta = trechos.sum() * k.coerceIn(0f, 1f)
+    for ((i, d) in trechos.withIndex()) {
+        val (a, b) = pts[i] to pts[i + 1]
+        if (falta <= d || i == trechos.lastIndex) {
+            val f = if (d > 0f) (falta / d).coerceIn(0f, 1f) else 0f
+            val rumo = (atan2(b.y - a.y, b.x - a.x) * 180f / PI).toFloat()
+            return (a + (b - a) * f) to rumo
+        }
+        falta -= d
+    }
+    return pts.last() to 0f
+}
+
+/** De vez em quando um besouro atravessa o chão. Tocou, esmagou: uma engrenagem, até o limite do dia. */
 @Composable
 private fun BugPasseando(app: AppState, side: Dp) {
     var vivo by remember { mutableStateOf(false) }
@@ -101,21 +135,18 @@ private fun BugPasseando(app: AppState, side: Dp) {
             delay(5000L + Random.nextLong(9000))
             vivo = true
             p.snapTo(0f)
-            p.animateTo(1f, tween(9000, easing = LinearEasing))
+            p.animateTo(1f, tween(16000, easing = LinearEasing))
             vivo = false
         }
     }
-    // caminho no chão, na direção das tábuas
-    val x0 = 0.26f
-    val y0 = 0.74f
-    val dx = 0.5f
-    val dy = -0.24f
-    val fx = x0 + dx * p.value
-    val fy = y0 + dy * p.value
-    val w = side * 0.075f
+    val (onde, rumo) = naRota(p.value)
+    val fx = onde.x
+    val fy = onde.y
+    val alvo = 44.dp
     if (vivo) {
+        Canvas(Modifier.fillMaxSize()) { besouro(onde * size.width, size.width * BESOURO, rumo, p.value * PASSOS) }
         Box(
-            Modifier.offset(side * fx - w / 2, side * fy - w / 2).width(w).rotate(64f)
+            Modifier.offset(side * fx - alvo / 2, side * fy - alvo / 2).size(alvo)
                 .clickable(remember { MutableInteractionSource() }, null) {
                     vivo = false
                     esmagado++
@@ -124,7 +155,7 @@ private fun BugPasseando(app: AppState, side: Dp) {
                     app.commit()
                     if (pagou > 0) app.say(tx("salaviva_bug_esmagado_1_engrenagem"))
                 },
-        ) { BugFigure(Modifier.width(w)) }
+        )
     }
     LaunchedEffect(esmagado) {
         if (esmagado > 0) { poca.snapTo(0f); poca.animateTo(1f, tween(600)) }

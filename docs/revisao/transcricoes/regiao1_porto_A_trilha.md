@@ -108,16 +108,16 @@ Depois: "A sintática. Os tokens viram árvore antes de checar o sentido."
    se acertar: "Cada token está certo. Faltou o par do parêntese, e isso é a forma da frase."
 
 23. TELA: # Erros comuns ⏎ Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ Escolha o veredito com o motivo certo. ⏎ Certo: a forma vale, e falta a declaração. ⏎ Certo: o scanner não reconhece o nome. ⏎ Errado: quem confere declaração é a sintática.
-   BYTE: "Em que fase cai este erro? Um colega respondeu assim. Certo ou errado?"
+   BUG: "Eu sei em que fase cai este erro. Duvido você discordar. Certo ou errado?"
    PERGUNTA (toque): certo = Certo: a forma vale, e falta a declaração. ; errado = Certo: o scanner não reconhece o nome. | Errado: quem confere declaração é a sintática.
    se errar: "A gramática aceita o comando mesmo sem a declaração. Quem confere o que o nome significa?"
    se acertar: "A sintática só olha a forma. Quem confere se o nome tem declaração é a análise semântica."
 
 24. TELA: # Erros comuns ⏎ Certo: Variável usada sem declarar é erro semântico: a frase tem a forma certa. ⏎ *Errado: O compilador executa o programa.* ⏎ *Certo: O compilador só traduz. Quem executa é o processador, ou um interpretador.*
-   BYTE: "Um erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo."
+   PROF: "Um erro comum: achar que o compilador roda o programa. Ele só traduz. O interpretador é que executa direto, sem gerar o arquivo."
 
 25. TELA: # Resumo ⏎ Análise: léxica → tokens; sintática → árvore; semântica → tipos; e o código intermediário. ⏎ Síntese: otimização e geração do código da máquina. ⏎ Erro léxico: caractere. Sintático: forma. Semântico: sentido.
-   BYTE: "Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro."
+   PROF: "Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro."
 
 #### PEGADINHA: "Quem pega este erro?" (5 cenas, ~36s)
 

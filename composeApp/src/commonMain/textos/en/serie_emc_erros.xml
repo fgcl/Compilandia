@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- EpEmC.kt, EpEmC2Parenteses.kt e EpEmCErros.kt: cenas juntadas e os erros comuns das Em C 2, 3 e 5 -->
+    <string name="emc2_abre">In recursive descent in C, each rule becomes a function. expr calls termo, and the while repeats as long as a plus comes.</string>
+    <string name="emc2_rodar">Let's run two times, open paren, three plus four, close paren. expr calls termo, and termo calls fator.</string>
+    <string name="emc2_erro_titulo">The rule taken literally</string>
+    <string name="emc2_erro">A common mistake is copying the rule E, E plus T, as it is. Then expr calls itself before reading any token.</string>
+    <string name="emc2_erro_q">What happens when this expr runs two plus three? Tap it.</string>
+    <string name="emc2_op_le_2">Reads the 2 and stops at +</string>
+    <string name="emc2_op_estoura">The stack grows until it overflows</string>
+    <string name="emc2_op_igual">Works the same as the while</string>
+    <string name="emc2_erro_dica">Before calling expr again, does it read any token?</string>
+    <string name="emc2_erro_ok">Each expr calls another expr without reading anything. The input doesn't move, and the stack overflows. That's why the Temple removes left recursion.</string>
+    <string name="emc3_campos">op holds the operator, val holds the number, and nome holds the variable. esq and dir are pointers to the children.</string>
+    <string name="emc3_erro_titulo">Without e =</string>
+    <string name="emc3_erro">A common mistake is forgetting the e equals on the novo line. See what comes out with another sum: one plus two plus three.</string>
+    <string name="emc3_erro_q">If the line does not keep the node in e, which tree does expr return? Tap it.</string>
+    <string name="emc3_erro_dica">At the end, expr returns e. Where does e point?</string>
+    <string name="emc3_erro_ok">The plus node is born, but nobody keeps its address. e stays on leaf 1. With e equals, you get one plus two, plus three.</string>
+    <string name="emc3_folhas">For two plus three times four, the parser creates the nodes from the bottom up. First the leaves, then the times.</string>
+    <string name="emc5_chamadas">main calls yyparse, the parser Bison wrote. Whenever it needs a token, the parser calls yylex.</string>
+    <string name="emc5_compila_e_roda">Bison and Flex write C files, and gcc puts it all together. Run calc, type the math, and out comes the result.</string>
+    <string name="emc5_erro_titulo">Without %left</string>
+    <string name="emc5_erro">A common mistake is forgetting the %left lines. Bison warns about the shift-reduce conflicts and chooses to shift.</string>
+    <string name="emc5_aviso">calc.y: %1$s shift/reduce conflicts</string>
+    <string name="emc5_erro_q">Without %left, what does two times three plus four give? Tap it.</string>
+    <string name="emc5_op_nao_compila">It doesn't compile</string>
+    <string name="emc5_erro_dica">A conflict is only a warning. When Bison shifts the plus, which operation is left for the end?</string>
+    <string name="emc5_erro_ok">Shifting, Bison reduces the plus first: three plus four, seven. Then two times seven, fourteen. With %left, the times comes first and gives ten.</string>
+</resources>

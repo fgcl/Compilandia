@@ -57,167 +57,178 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** Estado da tela: a gramática escrita, a planta montada, a missão do tutorial e a corrida que está passando. */
-internal class EstadoFabrica(texto0: String, frase0: String) {
-    var texto by mutableStateOf(texto0)
-    var frase by mutableStateOf(frase0)
-    var planta by mutableStateOf<Planta?>(null)
-    var corrida by mutableStateOf<Corrida?>(null)
-    var t by mutableFloatStateOf(0f)
-    var sel by mutableStateOf<Int?>(null)
-    var ferramenta by mutableStateOf(Ferramenta.MOVER)
-    var painel by mutableStateOf<Boolean?>(null)
-    /** A missão do tutorial em jogo; nulo é o modo livre. */
-    var missao by mutableStateOf<MissaoPronta?>(null)
-    var zoom by mutableFloatStateOf(1f)
-    var pan by mutableStateOf(Offset.Zero)
-    val desfazer = mutableStateListOf<Planta>()
-    val refazer = mutableStateListOf<Planta>()
-    /** Dicas pedidas no desafio: cada uma tira uma estrela. */
-    var dicas by mutableStateOf(0)
-    var dicaGuia by mutableStateOf<Map<FabGram.Cel, FabGram.Dir>>(emptyMap())
-    /** Engrenagens que a missão cumprida rendeu agora. */
-    var ganhou by mutableStateOf(0)
-    /** O robô testou as frases extras do desafio: nulo enquanto testa. */
-    var extrasOk by mutableStateOf<Boolean?>(null)
-    /** A primeira frase extra que não saiu. */
-    var extraFalhou by mutableStateOf<String?>(null)
-    val terminou: Boolean get() = corrida?.let { t >= it.duracao } == true
-    val cumpriu: Boolean get() = missao != null && terminou && corrida?.saiu == true && (missao?.missao?.extras.isNullOrEmpty() || extrasOk == true)
-    /** O tutorial mostra o gesto até o jogador mexer na fábrica. */
-    val mostrarMao: Boolean get() = missao.let { m -> m != null && !m.missao.desafio && desfazer.isEmpty() && corrida == null && (m.guiaEsteiras.isNotEmpty() || m.guiaBloco != null) }
-    /** O Byte aparece no canto enquanto há um gesto para ensinar ou a primeira missão espera o Ligar. */
-    val mostrarByte: Boolean get() = mostrarMao || (missao?.missao == Missao.LIGAR && corrida == null)
-    /** Desafio: estrelas pelo número de esteiras usadas. */
-    val estrelas: Int get() = (missao?.estrelas(planta?.esteiras?.size ?: 0) ?: 0).let { if (it == 0) 0 else maxOf(1, it - dicas) }
+/** A tela abre no tutorial, na missão em que o jogador parou, ou na missão que a trilha pediu. */
+private fun estadoInicial(app: AppState): EstadoFabrica {
+    val ls = app.ls
+    val e = EstadoFabrica(
+        ls.fabGramTexto.ifBlank { FabGram.exemplos[0].first },
+        ls.fabGramFrase.ifBlank { FabGram.exemplos[0].second },
+    )
+    val pedida = app.fabGramPedida?.let { n -> Missao.entries.firstOrNull { m -> m.name == n } }
+    app.fabGramPedida = null
+    if (pedida != null) e.abre(pedida)
+    else if (ls.fabGramMissoes < Missao.entries.size && ls.fabGramPlanta.isBlank()) e.abre(Missao.entries[ls.fabGramMissoes])
+    return e
+}
 
-    /** Troca a planta guardando a anterior para o Desfazer. */
-    fun troca(pl: Planta) {
-        planta?.let { desfazer += it; if (desfazer.size > 60) desfazer.removeAt(0) }
-        refazer.clear()
-        planta = pl; corrida = null
-    }
-    fun volta() { val a = desfazer.removeLastOrNull() ?: return; planta?.let { refazer += it }; planta = a; corrida = null }
-    fun avanca() { val a = refazer.removeLastOrNull() ?: return; planta?.let { desfazer += it }; planta = a; corrida = null }
-    fun recomeca(pl: Planta?) { desfazer.clear(); refazer.clear(); planta = pl; corrida = null; sel = null; zoom = 1f; pan = Offset.Zero }
-
-    fun abre(m: Missao) {
-        val p = FabGram.prepara(m)
-        missao = p; texto = m.gramatica; frase = m.frase; dicas = 0; dicaGuia = emptyMap(); ganhou = 0
-        ferramenta = when (m) { Missao.MOVER, Missao.LIGAR -> Ferramenta.MOVER; else -> Ferramenta.ESTEIRA }
-        recomeca(p.planta)
-    }
-
-    fun livre() { missao = null; ferramenta = Ferramenta.MOVER }
+/**
+ * Texto novo no painel: a planta segue, a não ser que o texto tenha saído da própria planta
+ * (o jogador mexeu numa máquina) ou seja o de uma missão. Texto com erro não apaga a fábrica.
+ */
+private fun plantaDoTexto(app: AppState, e: EstadoFabrica, l: Laudo) {
+    if (e.missao?.missao?.gramatica == e.texto || e.textoDaPlanta == e.texto) return
+    val g = l.g ?: return
+    val salva = if (app.ls.fabGramTexto == e.texto) FabGram.carrega(app.ls.fabGramPlanta) else null
+    e.recomeca(runCatching { salva ?: FabGram.planta(g) }.getOrNull())
 }
 
 /** Fábrica de Gramáticas: o palco é a tela; a gramática fica num painel que abre e fecha. */
 @Composable
 fun FabGramScreen(app: AppState) {
     val reduz = ThemeState.reduceMotion
-    val ls = app.ls
-    val e = remember {
-        EstadoFabrica(ls.fabGramTexto.ifBlank { FabGram.exemplos[0].first }, ls.fabGramFrase.ifBlank { FabGram.exemplos[0].second }).also {
-            // a trilha pode pedir uma missão; quem chega pela primeira vez cai no tutorial, na missão em que parou
-            val pedida = app.fabGramPedida?.let { n -> Missao.entries.firstOrNull { m -> m.name == n } }
-            app.fabGramPedida = null
-            if (pedida != null) it.abre(pedida)
-            else if (ls.fabGramMissoes < Missao.entries.size && ls.fabGramPlanta.isBlank()) it.abre(Missao.entries[ls.fabGramMissoes])
-        }
-    }
-    val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
-    LaunchedEffect(laudo) {
-        val l = laudo ?: return@LaunchedEffect
-        if (e.missao?.missao?.gramatica == e.texto) return@LaunchedEffect
-        val g = l.g ?: run { e.planta = null; return@LaunchedEffect }
-        e.recomeca(runCatching { (if (app.ls.fabGramTexto == e.texto) FabGram.carrega(g, app.ls.fabGramPlanta) else null) ?: FabGram.planta(g) }.getOrNull())
-    }
+    val e = remember { estadoInicial(app).also { EstadoParaTeste.atual = it } }
     val escopo = rememberCoroutineScope()
+    val ctl = remember { ControleFabrica(app, e, escopo) }
+    val laudo by produceState<Laudo?>(null, e.texto) { value = withContext(Dispatchers.Default) { Diagnostico.analisa(e.texto) } }
+    LaunchedEffect(laudo) { laudo?.let { plantaDoTexto(app, e, it) } }
+    val relogio = relogioDoPalco(reduz)
+    TempoDaCorrida(e, reduz)
+    LaunchedEffect(e.cumpriu) {
+        val m = e.missao ?: return@LaunchedEffect
+        if (!e.cumpriu) return@LaunchedEffect
+        e.ganhou = app.learner.cumpreMissaoFabrica(m.missao.name, m.missao.ordinal, if (m.missao.desafio) e.estrelas else 0)
+        app.commit()
+    }
+    val largo = LocalJanela.current.ladoALado
+    val painelAberto = e.painel ?: (largo && e.missao == null)
+    Box(Modifier.fillMaxSize().background(FUNDO_TELA)) {
+        Column(Modifier.fillMaxSize()) {
+            Cabecalho(e, painelAberto)
+            Row(Modifier.weight(1f).fillMaxWidth()) {
+                Palco(app, e, ctl, laudo, relogio, reduz, Modifier.weight(1f).fillMaxHeight())
+                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) {
+                    PainelDaFabrica(app, e, laudo)
+                }
+            }
+        }
+        if (!largo && painelAberto) PainelDeBaixo(app, e, laudo)
+    }
+}
+
+@Composable
+private fun relogioDoPalco(reduz: Boolean): Float {
     var relogio by remember { mutableFloatStateOf(0f) }
     LaunchedEffect(reduz) {
         if (reduz) return@LaunchedEffect
         var antes = 0L
-        while (true) withFrameNanos { n -> if (antes != 0L) relogio += (n - antes) / 1e9f; antes = n }
+        while (true) withFrameNanos { n -> if (antes != 0L) relogio += (n - antes) / NANO; antes = n }
     }
+    return relogio
+}
+
+@Composable
+private fun TempoDaCorrida(e: EstadoFabrica, reduz: Boolean) {
     LaunchedEffect(e.corrida, reduz) {
         val c = e.corrida ?: return@LaunchedEffect
         if (reduz) { e.t = c.duracao; return@LaunchedEffect }
         e.t = 0f
         var antes = 0L
-        while (e.t < c.duracao) withFrameNanos { n -> if (antes != 0L) e.t = (e.t + (n - antes) / 1e9f).coerceAtMost(c.duracao); antes = n }
-    }
-    LaunchedEffect(e.cumpriu) {
-        val m = e.missao ?: return@LaunchedEffect
-        if (e.cumpriu) {
-            e.ganhou = app.learner.cumpreMissaoFabrica(m.missao.name, m.missao.ordinal, if (m.missao.desafio) e.estrelas else 0)
-            app.commit()
-        }
-    }
-    fun guarda(pl: Planta) {
-        e.troca(pl)
-        if (e.missao == null) { app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
-    }
-    fun liga() {
-        val pl = e.planta ?: return
-        val toks = tokensOf(e.frase)
-        if (toks.isEmpty()) return
-        if (e.missao == null) { app.learner.setFabGram(e.texto, e.frase); app.learner.setFabGramPlanta(e.texto, FabGram.salva(pl)); app.commit() }
-        val m = e.missao
-        e.extrasOk = null; e.extraFalhou = null
-        escopo.launch {
-            e.corrida = withContext(Dispatchers.Default) { FabGram.corrida(pl, toks) }
-            if (m != null && m.missao.extras.isNotEmpty()) {
-                val falha = withContext(Dispatchers.Default) { m.missao.extras.firstOrNull { !FabGram.corrida(pl, tokensOf(it)).saiu } }
-                e.extraFalhou = falha; e.extrasOk = falha == null
-            }
-        }
-    }
-    val largo = LocalJanela.current.ladoALado
-    val painelAberto = e.painel ?: (largo && e.missao == null)
-    val nomes = NomesBlocos(tx("fabgram_fonte"), { tx("fabgram_separador_1", it) }, tx("fabgram_montadora"), tx("fabgram_cesto"), tx("fabgram_roteador"))
-
-    Box(Modifier.fillMaxSize().background(Color(0xFF16181B))) {
-        Column(Modifier.fillMaxSize()) {
-            Header(tx("comum_fabrica_gramaticas"), null, Palette.drawer) {
-                Text(
-                    tx("fabgram_gramatica"), color = Palette.onAccent, style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White.copy(alpha = if (painelAberto) 0.28f else 0.14f))
-                        .clickable { e.painel = !painelAberto }.padding(horizontal = 12.dp, vertical = 8.dp).testTag("fabgram-painel"),
-                )
-            }
-            Row(Modifier.weight(1f).fillMaxWidth()) {
-                Box(Modifier.weight(1f).fillMaxHeight()) {
-                    val pl = e.planta
-                    if (pl != null) PalcoEditavel(
-                        pl, e, laudo, relogio, reduz, nomes,
-                        onPlanta = { guarda(it) }, onToque = { e.sel = it?.takeIf { b -> b.tipo == FabGram.TipoBloco.MAQUINA }?.id },
-                    )
-                    Column(Modifier.align(Alignment.TopCenter).padding(8.dp).widthIn(max = 640.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Box(Modifier.weight(1f, fill = false)) { Casas(e.corrida, e.corrida?.pedida ?: tokensOf(e.frase), if (e.corrida == null) 0f else e.t) }
-                            BigButton(tx("fabgram_ligar"), enabled = e.planta != null, small = true) { liga() }
-                        }
-                        if (e.missao != null) CartaoMissao(e) { prox -> if (prox == null) { e.livre(); laudo?.g?.let { e.recomeca(FabGram.planta(it)) } } else e.abre(prox) }
-                        Aviso(e, laudo)
-                    }
-                    if (e.mostrarByte) com.compilandia.ui.cast.ByteFigure(
-                        Modifier.align(Alignment.BottomStart).padding(start = 10.dp, bottom = 64.dp).width(54.dp),
-                        mood = com.compilandia.ui.cast.Mood.HAPPY,
-                    )
-                    Ferramentas(e, Modifier.align(Alignment.BottomCenter), onArrumar = {
-                        val m = e.missao
-                        if (m != null) e.abre(m.missao) else laudo?.g?.let { guarda(FabGram.planta(it)); e.zoom = 1f; e.pan = Offset.Zero }
-                    })
-                }
-                if (largo && painelAberto) Column(Modifier.width(340.dp).fillMaxHeight().background(Palette.paper)) { Painel(e, laudo, ls.fabGramMissoes, ls.fabGramEstrelas) { e.painel = false } }
-            }
-        }
-        if (!largo && painelAberto) {
-            Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)).clickable { e.painel = false })
-            Column(
-                Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.72f)
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)).background(Palette.paper),
-            ) { Painel(e, laudo, ls.fabGramMissoes, ls.fabGramEstrelas) { e.painel = false } }
+        while (e.t < c.duracao) withFrameNanos { n ->
+            if (antes != 0L) e.t = (e.t + (n - antes) / NANO).coerceAtMost(c.duracao)
+            antes = n
         }
     }
 }
+
+private const val NANO = 1e9f
+
+@Composable
+private fun Cabecalho(e: EstadoFabrica, painelAberto: Boolean) {
+    Header(tx("comum_fabrica_gramaticas"), null, Palette.drawer) {
+        Text(
+            tx("fabgram_gramatica"), color = Palette.onAccent, style = MaterialTheme.typography.labelLarge,
+            modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White.copy(alpha = if (painelAberto) 0.28f else 0.14f))
+                .clickable { e.painel = !painelAberto }.padding(horizontal = 12.dp, vertical = 8.dp).testTag("fabgram-painel"),
+        )
+    }
+}
+
+@Composable
+private fun nomesDosBlocos() = NomesBlocos(
+    tx("fabgram_fonte"), { tx("fabgram_separador_1", it) }, tx("fabgram_montadora"), tx("fabgram_cesto"), tx("fabgram_roteador"),
+)
+
+/** O palco com tudo que flutua sobre ele: a frase e o Ligar no alto, o menu embaixo, e os cartões. */
+@Composable
+private fun Palco(app: AppState, e: EstadoFabrica, ctl: ControleFabrica, laudo: Laudo?, relogio: Float, reduz: Boolean, modifier: Modifier) {
+    Box(modifier) {
+        e.planta?.let { pl ->
+            PalcoEditavel(
+                pl, e, laudo, relogio, reduz, nomesDosBlocos(),
+                onPlanta = { ctl.guarda(it) }, onToque = { ctl.toca(it) }, onConstruir = { c, area -> ctl.constroi(c, area) },
+            )
+        }
+        Topo(e, ctl, laudo, Modifier.align(Alignment.TopCenter))
+        if (e.mostrarByte) com.compilandia.ui.cast.ByteFigure(
+            Modifier.align(Alignment.BottomStart).padding(start = 10.dp, bottom = 170.dp).width(54.dp),
+            mood = com.compilandia.ui.cast.Mood.HAPPY,
+        )
+        MenuConstrucao(e, app.ls.fabGramBlocos, Modifier.align(Alignment.BottomCenter)) { ctl.arruma(laudo?.g) }
+        Cartoes(app, e, ctl)
+    }
+}
+
+@Composable
+private fun Topo(e: EstadoFabrica, ctl: ControleFabrica, laudo: Laudo?, modifier: Modifier) {
+    Column(
+        modifier.padding(8.dp).widthIn(max = 640.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Box(Modifier.weight(1f, fill = false)) { Casas(e.corrida, e.corrida?.pedida ?: tokensOf(e.frase), if (e.corrida == null) 0f else e.t) }
+            BigButton(tx("fabgram_ligar"), enabled = e.planta != null, small = true) { ctl.liga() }
+        }
+        if (e.missao != null) CartaoMissao(e) { prox ->
+            if (prox != null) e.abre(prox)
+            else { e.livre(); laudo?.g?.let { e.recomeca(FabGram.planta(it)) } }
+        }
+        Aviso(e, laudo)
+    }
+}
+
+/** A loja no meio do palco; o painel de configurar no pé. */
+@Composable
+private fun androidx.compose.foundation.layout.BoxScope.Cartoes(app: AppState, e: EstadoFabrica, ctl: ControleFabrica) {
+    val modifier = Modifier.align(Alignment.Center)
+    e.oferta?.let { t ->
+        CartaoLoja(t, app.ls.fabGramBlocos, app.ls.gears, modifier, onComprar = { ctl.compra(t) }, onFechar = { e.oferta = null })
+    }
+    val pl = e.planta ?: return
+    val b = pl.blocos.firstOrNull { it.id == e.config } ?: return
+    // o painel de configurar fica no pé, por cima do menu: a fábrica continua à vista
+    ConfigBloco(
+        pl, b, Modifier.align(Alignment.BottomCenter),
+        onPronto = { ctl.guarda(it); e.config = null }, onFechar = { e.config = null },
+    )
+}
+
+@Composable
+private fun PainelDeBaixo(app: AppState, e: EstadoFabrica, laudo: Laudo?) {
+    Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)).clickable { e.painel = false })
+        Column(
+            Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.72f)
+                .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)).background(Palette.paper),
+        ) { PainelDaFabrica(app, e, laudo) }
+    }
+}
+
+@Composable
+private fun PainelDaFabrica(app: AppState, e: EstadoFabrica, laudo: Laudo?) =
+    Painel(e, laudo, app.ls.fabGramMissoes, app.ls.fabGramEstrelas) { e.painel = false }
+
+
+/** A tela aberta agora, para o teste que joga a fábrica pela tela. Fora dos testes ninguém lê. */
+internal object EstadoParaTeste { var atual: EstadoFabrica? = null }
+
+private val FUNDO_TELA = Color(0xFF16181B)

@@ -271,6 +271,8 @@
     <string name="contentmodel_lexi" translatable="false">Lexi</string>
     <string name="contentmodel_pilha">Pilha</string>
     <string name="contentmodel_narrador">Narrador</string>
+    <string name="contentmodel_bug">Bug</string>
+    <string name="contentmodel_professor">Professor</string>
     <string name="contentmodel_nao_existem_perguntas_idiotas">Não existem perguntas idiotas</string>
     <string name="contentmodel_poder_cerebro">Poder do cérebro</string>
     <string name="contentmodel_cuidado">Cuidado!</string>

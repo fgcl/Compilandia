@@ -11,7 +11,7 @@
     <string name="first_l_r4">4. Todos anuláveis: ε entra. Repita até parar.</string>
     <string name="first_l_08b">Passo quatro: se todos os símbolos da regra são anuláveis, entra o épsilon. Depois repita tudo, até uma rodada não mudar nada.</string>
     <string name="first_f_af">FIRST(S) = { a, ε, c }, porque A começa com a ou some.</string>
-    <string name="first_f_q">Um colega calculou assim o FIRST de S. Está certo ou errado? Toque.</string>
+    <string name="first_f_q">Calculei o FIRST de S em dez segundos. Confere? Certo ou errado? Toque.</string>
     <string name="first_f_dica">A é anulável, mas depois dele vem o b, que nunca some.</string>
     <string name="first_f_ok">O épsilon só entra se a regra inteira pode sumir. Aqui o b sempre fica, então quem entra é o b.</string>
     <string name="first_f_certo">FIRST(S) = { a, b, c }. O ε de A não passa para S.</string>
@@ -25,7 +25,7 @@
     <string name="follow_l_r4">4. Repita até uma rodada não mudar nada.</string>
     <string name="follow_l_08b">Passo quatro: um FOLLOW depende de outro. Repita os passos até uma rodada inteira não acrescentar nada.</string>
     <string name="follow_f_af">FOLLOW(F) = { *, ε }, porque depois de F vem Y.</string>
-    <string name="follow_f_q">Um colega copiou o FIRST de Y inteiro para o FOLLOW de F. Certo ou errado? Toque.</string>
+    <string name="follow_f_q">Copiei o FIRST de Y inteiro para o FOLLOW de F. Esperto, né? Certo ou errado? Toque.</string>
     <string name="follow_f_dica">FOLLOW só tem terminais e o cifrão.</string>
     <string name="follow_f_ok">Certo. Épsilon nunca entra em FOLLOW. Quando Y some, o que entra é o FOLLOW de T.</string>
     <string name="follow_f_certo">FOLLOW(F) = { *, +, ), $ }. Nunca há ε em FOLLOW.</string>
@@ -37,7 +37,7 @@
     <string name="follow_f_z3">Nunca tem ε. O símbolo inicial sempre tem $.</string>
     <string name="follow_f_resumo">Resumindo: FOLLOW é o que pode vir depois. Ele sai do FIRST do vizinho e do FOLLOW de quem está à esquerda da seta. Épsilon nunca entra.</string>
     <string name="ll_f_af">A regra R → ε vai nas colunas do FOLLOW(R) na tabela LL(1).</string>
-    <string name="ll_f_q">Um colega disse onde vai a regra que some. Certo ou errado? Toque.</string>
+    <string name="ll_f_q">Eu sei onde vai a regra que some. Olha aqui. Certo ou errado? Toque.</string>
     <string name="ll_f_dica">Ninguém lê épsilon. O parser usa a regra que some quando o próximo token pode vir depois de R.</string>
     <string name="ll_f_ok">R some quando o próximo token pode vir depois dele. Esses tokens são o FOLLOW de R. Não existe coluna épsilon.</string>
     <string name="ll_f_erro2">Olhar só o FIRST para dizer que a gramática é LL(1).</string>
@@ -48,7 +48,7 @@
     <string name="ll_f_z3">Duas regras numa casa: conflito. Casa vazia: erro de sintaxe.</string>
     <string name="ll_f_resumo">Resumindo: a tabela guarda, para cada não-terminal e cada token, a regra a usar. O FIRST preenche quase tudo. O FOLLOW cuida das regras que somem.</string>
     <string name="pred_f_af">Para trocar E por T X, empilho primeiro o X e depois o T.</string>
-    <string name="pred_f_q">Em que ordem o lado direito entra na pilha? Um colega fez assim. Certo ou errado?</string>
+    <string name="pred_f_q">Empilhei o lado direito assim. Confia no Bug. Certo ou errado?</string>
     <string name="pred_f_dica">Quem precisa ser lido primeiro tem que ficar no topo. Qual dos dois é?</string>
     <string name="pred_f_ok">Empilha de trás para a frente: primeiro X, depois T. Assim T fica no topo, e o parser trata dele antes.</string>
     <string name="pred_f_erro2">Ao usar X → ε, avançar a entrada.</string>
@@ -59,7 +59,7 @@
     <string name="pred_f_z3">$ com $ aceita. Casa vazia ou terminal diferente é erro.</string>
     <string name="pred_f_resumo">Resumindo: o preditivo olha o topo e um token. A tabela escolhe a regra, o casamento consome a entrada, e cifrão com cifrão aceita.</string>
     <string name="desc_f_af">E → E + T vira: void E() { E(); casa('+'); T(); }</string>
-    <string name="desc_f_q">Um colega traduziu uma regra com recursão à esquerda direto para código. Certo ou errado?</string>
+    <string name="desc_f_q">Traduzi a recursão à esquerda direto para código. Rapidinho. Certo ou errado?</string>
     <string name="desc_f_dica">Veja a primeira coisa que a função E faz, antes de ler qualquer token.</string>
     <string name="desc_f_ok">E chama E sem consumir nada, e a recursão nunca termina. Antes de descer, elimine a recursão à esquerda.</string>
     <string name="desc_f_certo">Recursão à esquerda trava a descida. Elimine antes: E → T X.</string>
@@ -71,7 +71,7 @@
     <string name="desc_f_z3">Só vale para gramática LL(1). Sem recursão e fatorada não basta: a tabela não pode ter conflito.</string>
     <string name="desc_f_resumo">Resumindo: a descida recursiva é o preditivo em forma de código. Uma função por não-terminal, um if por regra, e a pilha de chamadas faz o papel da pilha.</string>
     <string name="erro_f_af">No modo pânico, o parser conserta o programa e gera o código.</string>
-    <string name="erro_f_q">O que a recuperação entrega no fim? Um colega disse isto. Certo ou errado?</string>
+    <string name="erro_f_q">Eu sei o que o modo pânico entrega no fim. Certo ou errado?</string>
     <string name="erro_f_dica">Ele jogou tokens fora. O que sobrou não é mais o seu programa.</string>
     <string name="erro_f_ok">A recuperação serve para achar mais erros. Com erro de sintaxe, o compilador não gera código.</string>
     <string name="erro_f_certo">A recuperação só serve para avisar mais erros na mesma compilação.</string>
@@ -83,7 +83,7 @@
     <string name="erro_f_z3">Meta: avisar vários erros de uma vez, sem erros em cascata.</string>
     <string name="erro_f_resumo">Resumindo: no erro, o parser avisa, descarta até um token seguro e segue. O FOLLOW dá os tokens seguros. O objetivo é mostrar todos os erros numa compilação.</string>
     <string name="sr_f_af">Todo lado direito de regra no topo da pilha é um handle.</string>
-    <string name="sr_f_q">Sempre que o topo casa com um lado direito, eu reduzo? Certo ou errado? Toque.</string>
+    <string name="sr_f_q">O topo casou com um lado direito, então eu reduzo. Sempre. Certo ou errado? Toque.</string>
     <string name="sr_f_dica">Pense em id mais id vezes id. Com E mais T no topo e vezes na entrada, reduzir estraga a conta.</string>
     <string name="sr_f_ok">Só é handle se a redução leva de volta ao símbolo inicial. Às vezes o certo é empilhar mais, e quem decide é a tabela.</string>
     <string name="sr_f_certo">Handle é o lado direito cuja redução faz parte da derivação mais à direita.</string>
@@ -95,7 +95,7 @@
     <string name="sr_f_z3">As reduções, de trás para a frente, dão a derivação mais à direita.</string>
     <string name="sr_f_resumo">Resumindo: o empilha-reduz lê primeiro e decide depois. Ele empilha até formar um handle no topo, reduz, e repete até sobrar o símbolo inicial.</string>
     <string name="lr_f_af">No closure, entram as regras de todo símbolo depois do ponto, terminal ou não.</string>
-    <string name="lr_f_q">Quando o closure puxa regras novas? Um colega disse isto. Certo ou errado?</string>
+    <string name="lr_f_q">Eu sei quando o closure puxa regras novas. Assim. Certo ou errado?</string>
     <string name="lr_f_dica">Terminal não tem regras. Só não-terminal tem.</string>
     <string name="lr_f_ok">O closure só age quando o ponto está logo antes de um não-terminal. E só o símbolo logo depois do ponto conta.</string>
     <string name="lr_f_certo">Closure: só para o não-terminal que vem logo depois do ponto.</string>
@@ -107,7 +107,7 @@
     <string name="lr_f_z3">Ponto no fim é item completo: sinal de redução.</string>
     <string name="lr_f_resumo">Resumindo: o item marca o progresso numa regra. Closure e goto montam os estados, e o item completo avisa a redução.</string>
     <string name="slr_f_af">Estado com A → α •: escrevo r em todas as colunas.</string>
-    <string name="slr_f_q">Onde entra a redução na tabela SLR? Um colega preencheu assim. Certo ou errado?</string>
+    <string name="slr_f_q">Preenchi a redução na tabela SLR do meu jeito. Certo ou errado?</string>
     <string name="slr_f_dica">Isso é o que o LR(0) faz. O SLR olha um conjunto antes.</string>
     <string name="slr_f_ok">Exato. No SLR, a redução entra só nas colunas do FOLLOW de A. Encher a linha inteira cria conflitos que não existem.</string>
     <string name="slr_f_certo">No SLR, r entra só nas colunas do FOLLOW(A).</string>
@@ -119,7 +119,7 @@
     <string name="slr_f_z3">Duas ações na mesma casa: conflito. Sem conflito, a gramática é SLR(1).</string>
     <string name="slr_f_resumo">Resumindo: a tabela SLR sai do autômato LR(0) e do FOLLOW. Os gotos viram shift, os itens completos viram reduce no FOLLOW, e casa vazia é erro.</string>
     <string name="lalr_f_af">Toda gramática LALR(1) é LR(1), mas nem toda LR(1) é LALR(1).</string>
-    <string name="lalr_f_q">LALR e LR(1) têm a mesma força? Um colega disse isto. Certo ou errado?</string>
+    <string name="lalr_f_q">LALR e LR(1) têm a mesma força? Eu já respondi. Certo ou errado?</string>
     <string name="lalr_f_dica">Juntar estados de mesmo núcleo pode misturar lookaheads que o LR(1) mantinha separados.</string>
     <string name="lalr_f_ok">Acertou. A fusão pode criar um conflito reduce-reduce que o LR(1) não tinha. Por isso o LALR fica entre o SLR e o LR(1).</string>
     <string name="lalr_f_erro2">Usar o FOLLOW para preencher as reduções da tabela LALR.</string>
@@ -130,7 +130,7 @@
     <string name="lalr_f_z3">Tamanho da SLR, força entre SLR e LR(1). É o método do Bison.</string>
     <string name="lalr_f_resumo">Resumindo: o LR(1) guarda o lookahead em cada item. O LALR junta os estados de mesmo núcleo. Fica pequeno como o SLR e quase tão forte quanto o LR(1).</string>
     <string name="bison_f_af">No Bison, a linha de precedência que vem por último liga mais forte.</string>
-    <string name="bison_f_q">A ordem das linhas de precedência importa. Um colega disse isto. Certo ou errado?</string>
+    <string name="bison_f_q">A ordem das linhas de precedência importa, eu juro. Certo ou errado?</string>
     <string name="bison_f_dica">Na calculadora, o vezes foi declarado depois do mais, e o vezes liga mais forte.</string>
     <string name="bison_f_ok">A última linha tem a maior precedência. Por isso o vezes vem depois do mais.</string>
     <string name="bison_f_erro2">Ignorar o aviso de conflito porque o parser foi gerado.</string>
@@ -141,7 +141,7 @@
     <string name="bison_f_z3">%left e %right resolvem conflitos. A última linha tem mais precedência.</string>
     <string name="bison_f_resumo">Resumindo: o Bison gera a tabela LALR a partir do arquivo ponto y. As ações calculam valores na redução, e as linhas de precedência resolvem os conflitos.</string>
     <string name="fases_f_af">Variável usada sem declarar é erro semântico: a frase tem a forma certa.</string>
-    <string name="fases_f_q">Em que fase cai este erro? Um colega respondeu assim. Certo ou errado?</string>
+    <string name="fases_f_q">Eu sei em que fase cai este erro. Duvido você discordar. Certo ou errado?</string>
     <string name="fases_f_dica">A gramática aceita o comando mesmo sem a declaração. Quem confere o que o nome significa?</string>
     <string name="fases_f_ok">A sintática só olha a forma. Quem confere se o nome tem declaração é a análise semântica.</string>
     <string name="fases_f_erro2">O compilador executa o programa.</string>
@@ -152,7 +152,7 @@
     <string name="fases_f_z3">Erro léxico: caractere. Sintático: forma. Semântico: sentido.</string>
     <string name="fases_f_resumo">Resumindo: o compilador traduz em seis fases. Três analisam o código-fonte, três constroem o código de máquina. Cada fase pega um tipo de erro.</string>
     <string name="tok_f_af">Em x&gt;=10, o scanner gera os tokens x, &gt;, = e 10.</string>
-    <string name="tok_f_q">Como o scanner corta este trecho? Um colega cortou assim. Certo ou errado?</string>
+    <string name="tok_f_q">Cortei este trecho em tokens do meu jeito. Certo ou errado?</string>
     <string name="tok_f_dica">O scanner pega sempre o pedaço mais longo que forma um token.</string>
     <string name="tok_f_ok">Pelo maior casamento, maior ou igual é um token só. São três tokens, não quatro.</string>
     <string name="tok_f_certo">x&gt;=10 dá três tokens: x, &gt;= e 10. É o maior casamento.</string>
@@ -164,7 +164,7 @@
     <string name="tok_f_z3">Lexema é o texto; o token leva a classe e o lexema. Espaço e comentário somem.</string>
     <string name="tok_f_resumo">Resumindo: a análise léxica transforma caracteres em tokens. Ela usa o maior casamento, separa lexema de classe e joga fora espaços e comentários.</string>
     <string name="regex_f_af">A cadeia passou por um estado final no meio do caminho, então foi aceita.</string>
-    <string name="regex_f_q">Quando o autômato aceita? Um colega disse isto. Certo ou errado?</string>
+    <string name="regex_f_q">Passei por um estado final no meio do caminho. Aceita, né? Certo ou errado?</string>
     <string name="regex_f_dica">O que importa é onde o trem está quando a cadeia termina.</string>
     <string name="regex_f_ok">Só vale o estado em que a leitura termina. Passar por um final no meio não aceita nada.</string>
     <string name="regex_f_certo">Aceita só se a cadeia inteira foi lida e parou num estado final.</string>
@@ -176,7 +176,7 @@
     <string name="regex_f_z3">Aceita se leu tudo e parou num final. Sem transição, rejeita.</string>
     <string name="regex_f_resumo">Resumindo: a expressão regular descreve o formato de um token, e o autômato finito confere cadeia por cadeia. Aceitar é terminar a leitura num estado final.</string>
     <string name="afn_f_af">O conjunto {0, 2} é final no AFD se o 0 ou o 2 for final no AFN.</string>
-    <string name="afn_f_q">Quando um conjunto é final no AFD? Um colega disse isto. Certo ou errado?</string>
+    <string name="afn_f_q">Eu, o Bug, sei quando um conjunto é final no AFD. Olha só. Certo ou errado?</string>
     <string name="afn_f_dica">O AFN aceita se algum caminho chega a um final. Precisa ser todos?</string>
     <string name="afn_f_ok">Basta um estado final dentro do conjunto. O AFN aceita quando pelo menos um caminho dá certo.</string>
     <string name="afn_f_erro2">Calcular o move e esquecer o ε-fecho do resultado.</string>
@@ -187,7 +187,7 @@
     <string name="afn_f_z3">Conjunto com algum final é final. Acaba quando não surge conjunto novo.</string>
     <string name="afn_f_resumo">Resumindo: a construção de subconjuntos anda com todos os estados possíveis de uma vez. Cada conjunto vira um estado do AFD, e basta um final dentro para aceitar.</string>
     <string name="min_f_af">Com b, um par vai para A e para C. A e C são estados diferentes, então o par se separa.</string>
-    <string name="min_f_q">Basta os destinos serem estados diferentes para marcar o par? Certo ou errado?</string>
+    <string name="min_f_q">Para marcar o par, basta os destinos serem diferentes. Fácil. Certo ou errado?</string>
     <string name="min_f_dica">No AFD do livro, A com C ficou em branco no fim.</string>
     <string name="min_f_ok">Só separa quando os destinos formam um par já marcado. A e C são equivalentes, então não separam ninguém.</string>
     <string name="min_f_certo">Marque o par só quando os destinos formam um par já marcado.</string>
@@ -199,7 +199,7 @@
     <string name="min_f_z3">Pares sem marca no fim são equivalentes: junte.</string>
     <string name="min_f_resumo">Resumindo: a minimização separa o que é diferente e junta o que sobra. Começa por final contra não final, propaga pelas transições e para quando nada muda.</string>
     <string name="flex_f_af">No Flex, ganha o casamento mais longo. A ordem das regras só desempata.</string>
-    <string name="flex_f_q">Quem vence quando duas regras casam? Um colega disse isto. Certo ou errado?</string>
+    <string name="flex_f_q">Quando duas regras casam, eu sei quem vence. Certo ou errado?</string>
     <string name="flex_f_dica">Lembre do ifa: qual regra ganhou, a de cima ou a mais longa?</string>
     <string name="flex_f_ok">É isso. O ifa casa inteiro como nome, e isso é mais longo que o if. Só no empate de tamanho vence a regra de cima.</string>
     <string name="flex_f_erro2">Pôr a regra de identificador antes das palavras reservadas.</string>
@@ -210,7 +210,7 @@
     <string name="flex_f_z3">Ação sem return descarta o texto. É assim que os espaços somem.</string>
     <string name="flex_f_resumo">Resumindo: o Flex gera o scanner a partir de padrões e ações. O mais longo vence, a ordem desempata, e as palavras reservadas ficam em cima.</string>
     <string name="cfg_f_af">Na derivação mais à esquerda, posso trocar qualquer não-terminal em cada passo.</string>
-    <string name="cfg_f_q">Um colega descreveu assim a derivação mais à esquerda. Certo ou errado? Toque.</string>
+    <string name="cfg_f_q">Na mais à esquerda, eu troco o não-terminal que eu quiser. Certo ou errado? Toque.</string>
     <string name="cfg_f_dica">O nome diz qual não-terminal é trocado.</string>
     <string name="cfg_f_ok">Em cada passo, troca-se sempre o não-terminal mais à esquerda. Na mais à direita, sempre o da direita.</string>
     <string name="cfg_f_certo">Mais à esquerda: troque sempre o primeiro não-terminal da forma.</string>
@@ -222,7 +222,7 @@
     <string name="cfg_f_z3">A frase está na linguagem se existe uma derivação para ela.</string>
     <string name="cfg_f_resumo">Resumindo: a gramática livre de contexto gera as frases por trocas. Derivar é aplicar produções a partir do símbolo inicial, e a árvore registra essas trocas.</string>
     <string name="amb_f_af">Achei duas derivações diferentes para a frase. Então a gramática é ambígua.</string>
-    <string name="amb_f_q">Duas derivações diferentes da mesma frase provam ambiguidade? Certo ou errado?</string>
+    <string name="amb_f_q">Hehe, achei duas derivações para a mesma frase. Ambígua, né? Certo ou errado?</string>
     <string name="amb_f_dica">A mais à esquerda e a mais à direita podem desenhar a mesma árvore.</string>
     <string name="amb_f_ok">O que conta são duas árvores diferentes, ou duas derivações mais à esquerda. Mudar só a ordem das trocas não prova nada.</string>
     <string name="amb_f_certo">Ambígua: uma frase com duas árvores, ou duas derivações mais à esquerda.</string>
@@ -234,9 +234,9 @@
     <string name="amb_f_z3">Conserto: um nível por precedência, e a recursão do lado da associatividade.</string>
     <string name="amb_f_resumo">Resumindo: gramática ambígua dá duas árvores para a mesma frase, e duas árvores são duas contas. Conserta-se com níveis de precedência e com a recursão do lado certo.</string>
     <string name="rec_f_af">Para tirar a recursão de A → A α | β, basta escrever A → α A | β.</string>
-    <string name="rec_f_q">Um colega consertou a recursão à esquerda assim. Certo ou errado? Toque.</string>
+    <string name="rec_f_q">Consertei a recursão à esquerda num piscar de antenas. Certo ou errado? Toque.</string>
     <string name="rec_f_dica">Gere uma frase com as duas versões. O beta fica no começo ou no fim?</string>
-    <string name="rec_f_ok">A original gera beta seguido de vários alfas. A do colega gera os alfas antes do beta. A linguagem mudou.</string>
+    <string name="rec_f_ok">A original gera beta seguido de vários alfas. A do Bug gera os alfas antes do beta. A linguagem mudou.</string>
     <string name="rec_f_certo">A → β A' e A' → α A' | ε. O β continua no começo.</string>
     <string name="rec_f_erro2">Esquecer o ε na regra nova A'.</string>
     <string name="rec_f_certo2">Sem A' → ε a repetição nunca termina, e nenhuma frase é gerada.</string>
@@ -246,7 +246,7 @@
     <string name="rec_f_z3">A linguagem não muda; a árvore muda. O laço do parser mantém a conta certa.</string>
     <string name="rec_f_resumo">Resumindo: recursão à esquerda trava o parser descendente. O conserto põe o beta na frente e empurra a repetição para um não-terminal novo, que termina com épsilon.</string>
     <string name="fat_f_af">Fatorar A → a b | a c não muda as frases que a gramática gera.</string>
-    <string name="fat_f_q">Fatorar à esquerda muda a linguagem? Um colega disse isto. Certo ou errado?</string>
+    <string name="fat_f_q">Fatorar à esquerda muda a linguagem? Eu tenho opinião. Certo ou errado?</string>
     <string name="fat_f_dica">Derive a b e a c com a gramática fatorada. Sai alguma frase nova?</string>
     <string name="fat_f_ok">É isso. A → a A' e A' → b | c geram a b e a c, as mesmas frases. A fatoração só muda o momento da escolha.</string>
     <string name="fat_f_erro2">Pôr em evidência só uma parte do prefixo comum.</string>
@@ -257,7 +257,7 @@
     <string name="fat_f_z3">Não muda a linguagem. É um dos preparos para a gramática ser LL(1).</string>
     <string name="fat_f_resumo">Resumindo: prefixo comum impede a escolha com um token. A fatoração põe o prefixo em evidência e adia a decisão, sem mudar a linguagem.</string>
     <string name="attr_f_af">Atributo sintetizado é o que o nó recebe do pai.</string>
-    <string name="attr_f_q">De onde vem o atributo sintetizado? Um colega disse isto. Certo ou errado?</string>
+    <string name="attr_f_q">Para mim, o sintetizado vem do pai, igual herança. Certo ou errado?</string>
     <string name="attr_f_dica">Nesta aula, os tipos subiram ou desceram pela árvore?</string>
     <string name="attr_f_ok">Sintetizado sobe: o nó calcula a partir dos filhos. O que vem do pai ou dos irmãos é o atributo herdado.</string>
     <string name="attr_f_certo">Sintetizado: calculado a partir dos filhos. Herdado: vem do pai ou dos irmãos.</string>
@@ -269,7 +269,7 @@
     <string name="attr_f_z3">int com float sofre coerção para float. Sem conversão possível: erro semântico.</string>
     <string name="attr_f_resumo">Resumindo: a análise semântica anota a árvore com atributos. O tipo é um atributo sintetizado, que sobe dos filhos. No caminho, o compilador aplica coerção ou acusa erro.</string>
     <string name="esc_f_af">Com um x fora, posso declarar outro x num bloco interno: o de dentro esconde o de fora.</string>
-    <string name="esc_f_q">Já existe um x fora. Posso declarar outro x dentro do bloco? Um colega disse isto. Certo ou errado?</string>
+    <string name="esc_f_q">Com um x lá fora, eu declaro outro x no bloco. Pode isso? Certo ou errado?</string>
     <string name="esc_f_dica">A declaração nova entra na tabela do topo, que ainda não tem x.</string>
     <string name="esc_f_ok">Em outro escopo pode. O x de dentro esconde o de fora. Erro é declarar duas vezes no mesmo bloco.</string>
     <string name="esc_f_erro2">Buscar o nome só na tabela do topo.</string>
@@ -280,7 +280,7 @@
     <string name="esc_f_z3">Uso: busca do topo para baixo. O mais interno esconde o de fora.</string>
     <string name="esc_f_resumo">Resumindo: o escopo diz onde cada declaração vale. A pilha de tabelas de símbolos resolve cada nome, sempre do bloco mais interno para o mais externo.</string>
     <string name="ast_f_af">A AST de a * (b - 2) não tem nó para os parênteses.</string>
-    <string name="ast_f_q">Os parênteses aparecem na AST? Um colega desenhou sem eles. Certo ou errado?</string>
+    <string name="ast_f_q">Desenhei a AST sem os parênteses. Comi os dois. Certo ou errado?</string>
     <string name="ast_f_dica">O parêntese muda a forma da árvore. Depois disso, ele ainda serve?</string>
     <string name="ast_f_ok">Boa. O parêntese só agrupa. Na AST, o agrupamento já está na forma: o menos fica embaixo do vezes.</string>
     <string name="ast_f_erro2">Pôr na raiz o primeiro operador que aparece na expressão.</string>
@@ -291,7 +291,7 @@
     <string name="ast_f_z3">Parêntese e regra de passagem somem. O filho é calculado antes do pai.</string>
     <string name="ast_f_resumo">Resumindo: a AST é a árvore de derivação sem o que só serve à gramática. Ficam os operadores, os operandos e a ordem das contas.</string>
     <string name="tac_f_af">A conta a + b * c precisa de duas linhas de três endereços.</string>
-    <string name="tac_f_q">Quantas linhas de três endereços esta conta precisa? Um colega disse isto. Certo ou errado?</string>
+    <string name="tac_f_q">Contei quantas linhas de três endereços esta conta precisa. Certo ou errado?</string>
     <string name="tac_f_dica">Conte os operadores. Cada linha leva no máximo um.</string>
     <string name="tac_f_ok">Exato. São duas contas: t1 = b * c, depois t2 = a + t1. Cada linha leva um operador e no máximo três endereços.</string>
     <string name="tac_f_erro2">Reusar o mesmo temporário para duas contas diferentes.</string>
@@ -302,7 +302,7 @@
     <string name="tac_f_z3">É código intermediário: não depende do processador.</string>
     <string name="tac_f_resumo">Resumindo: o código de três endereços quebra a expressão em contas simples. A árvore dá a ordem, e cada resultado parcial ganha um temporário.</string>
     <string name="otim_f_af">Com x lido do teclado, o compilador dobra x * 2 para um número.</string>
-    <string name="otim_f_q">Dá para dobrar esta conta? Um colega disse que sim. Certo ou errado?</string>
+    <string name="otim_f_q">Eu dobrei esta conta antes de o programa rodar. Pode? Certo ou errado?</string>
     <string name="otim_f_dica">O valor de x já existe na hora de compilar?</string>
     <string name="otim_f_ok">O valor de x só aparece quando o programa roda. A dobra de constantes só vale para o que o compilador já conhece.</string>
     <string name="otim_f_certo">Só se dobra conta com constantes conhecidas na compilação.</string>
@@ -314,7 +314,7 @@
     <string name="otim_f_z3">Com variável, a conta fica para o tempo de execução.</string>
     <string name="otim_f_resumo">Resumindo: a otimização melhora o código sem mudar o que ele faz. A dobra de constantes resolve na compilação tudo o que não depende de variável.</string>
     <string name="rt_f_af">Numa recursão, cada chamada tem o seu próprio n, no seu registro de ativação.</string>
-    <string name="rt_f_q">Onde mora o n de cada chamada do fat? Um colega disse isto. Certo ou errado?</string>
+    <string name="rt_f_q">Onde mora o n de cada chamada do fat? Eu sei. Certo ou errado?</string>
     <string name="rt_f_dica">Quantos registros de ativação havia na pilha quando o fat de um rodava?</string>
     <string name="rt_f_ok">Acertou. Cada chamada empilha um registro com o seu n. O n chega em $a0, mas a próxima chamada escreve por cima. Por isso ele vai para o quadro.</string>
     <string name="rt_f_erro2">As funções retornam na ordem em que foram chamadas.</string>
@@ -325,7 +325,7 @@
     <string name="rt_f_z3">Só o registro do topo está executando.</string>
     <string name="rt_f_resumo">Resumindo: cada chamada ganha um registro de ativação na pilha, com seus parâmetros, suas locais e o endereço de retorno. A última chamada é a primeira a voltar.</string>
     <string name="mips_f_af">Para somar a e b, basta: add a, b direto na memória.</string>
-    <string name="mips_f_q">No MIPS, dá para somar duas variáveis direto na memória? Um colega escreveu assim. Certo ou errado?</string>
+    <string name="mips_f_q">No MIPS, eu somo duas variáveis direto na memória. Certo ou errado?</string>
     <string name="mips_f_dica">O add do MIPS só aceita registradores.</string>
     <string name="mips_f_ok">É isso. Primeiro o lw carrega cada variável num registrador. Só então o add faz a conta.</string>
     <string name="mips_f_certo">lw, lw, add, sw: a conta acontece só entre registradores.</string>
@@ -337,7 +337,7 @@
     <string name="mips_f_z3">Cada linha de três endereços vira: carrega, opera, guarda.</string>
     <string name="mips_f_resumo">Resumindo: gerar código é traduzir cada linha de três endereços para a máquina. No MIPS, isso é carregar com lw, operar entre registradores e guardar com sw.</string>
     <string name="reg_f_af">Quatro temporários podem caber em menos de quatro registradores.</string>
-    <string name="reg_f_q">Quantos registradores este código precisa? Um colega contou os temporários. Certo ou errado?</string>
+    <string name="reg_f_q">Quantos registradores este código precisa? Eu contei os temporários. Certo ou errado?</string>
     <string name="reg_f_dica">No exemplo, quatro temporários couberam em quantos registradores?</string>
     <string name="reg_f_ok">O que conta é quantos estão vivos ao mesmo tempo. Quem nunca convive pode dividir o registrador.</string>
     <string name="reg_f_erro2">Calcular a vivacidade de cima para baixo.</string>

@@ -91,6 +91,23 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 17/11 (trigésima rodada)
+
+Os três itens que sobravam da lista, menos o teste com aluno de verdade.
+
+1. **O Bug e a professora falam nas aulas animadas** (padrão 5, "personagens sem vida"). Nas 29 aulas básicas, o Byte tinha 737 falas, a professora 22 e o Bug nenhuma. Agora o Bug faz o papel do colega no julgamento do fecho: ele afirma, em primeira pessoa e provocando, e a pessoa decide se está certo. Ele acerta nas mesmas 13 aulas em que o colega acertava, então "errado" não vira resposta decorada. A dica e a fala de acerto continuam com o Byte. A professora fecha cada aula com o segundo erro comum e o resumo (80 falas no total). O Bug sobe no canto da faixa, como a professora (`ui/cast/Convidado.kt`), e fala com a voz `pm_alex`.
+2. **Série Em C 2, 3 e 5: erro comum e segundo exemplo** (professor do bloco 6). Em cada aula, duas cenas viraram uma, para o erro caber nos 10 passos. Em C 2: o `expr` escrito como `E → E + T`, que chama a si mesmo antes de ler um token; a pilha estoura, e a fala liga ao Templo. Em C 3: o `novo(...)` sem o `e =`; com `1 + 2 + 3`, sobra só a folha 1, e a certa é `(1 + 2) + 3`. Em C 5: o `calc.y` sem o `%left`; o Bison avisa 4 conflitos de empilha-reduz, empilha, e `2*3+4` dá 14 em vez de 10. Tudo vem de `ErrosDaSerieC` e do `MiniBison` (`SerieEmCErrosTest`). A resposta certa muda de posição entre as aulas da série.
+3. **A sala desenhada por código.** A arte renderizada no Blender virou desenho em Compose (`ui/room/art`): projeção isométrica medida na arte aprovada, a sala com o quadro de ferramentas, a mesa, o gaveteiro, a plataforma e as caixas, e os 12 móveis da loja feitos de caixas, discos e cilindros. Os toques dos móveis e o lugar do Byte ficaram onde estavam. A loja e a oferta do fim de partida desenham o ícone do mesmo móvel.
+
+## Feito em 17/11 (vigésima nona rodada)
+
+As três lacunas que sobravam do professor do bloco 5 viraram aulas de prática, e a Em C 1 ganhou o erro comum com uma segunda entrada. Cada fato vem de um motor novo, conferido em `PraticaLacunas2Test`.
+
+1. **O herdado na descida** (prática de Atributos, `engine/HerdadoNaDescida.kt`). A descida de `D → T L ;`, `L → id R`, `R → , id R | ε` em C: o T devolve o tipo no return, e o L e o R recebem o herdado `h` como parâmetro. A pessoa toca a linha que põe o b na tabela (o `addtipo` do R) e vê o rastro das chamadas com o mesmo float. Depois vem a ação no meio da regra: entre `{ L.h = T.tipo }` antes do T, depois do L ou entre os dois, só a do meio deixa os ids com tipo. O motor roda a descida com a ação em cada lugar.
+2. **Funções na tabela** (prática de Escopo, `engine/TabelaComFuncoes.kt`). A função `soma` entra na tabela global com o retorno e os tipos dos parâmetros; `a` e `b` entram na tabela da soma, filha da global. Do `main`, a busca pelo `a` sobe para a global e não acha nada. Entre três chamadas, o compilador recusa `soma(x)`, porque a quantidade de argumentos não bate. A aula fica na região 8 antes de Atributos, então não usa "verificador" nem "coerção".
+3. **Acesso a vetor** (prática de MIPS, `engine/AcessoVetor.kt`). O vetor `10 20 30 40` a partir do endereço 1000: v[2] mora no 1008. No TAC, `t1 = i * 4` e `t2 = v[t1]`, com a pergunta de onde vem o 4. No MIPS, `la`, `lw`, `sll $t1, $t1, 2`, `add` e `lw 0($t0)`: a pessoa acha a linha que multiplica por 4 sem `mul`. O MIPS roda na `MipsVM`, e o x fica com 30, como a fala diz.
+4. **Em C 1: esquecer o `ungetc`.** A aula estava no teto de 10 passos, então as cenas "entra no if" e "cada volta junta um dígito" viraram uma só, e o "lido a mais" foi para a fala de acerto da pergunta do `ungetc`. Nos dois passos que sobraram, o mesmo código sem o `ungetc` lê `7*13`, e a pessoa escolhe os tokens: `NUM 7  NUM 13` (o vezes some) contra `NUM 7  *  NUM 13` e `NUM 713` (`engine/LexerC.kt`).
+
 ## Feito em 17/11 (vigésima oitava rodada)
 
 Três lacunas do professor do bloco 5 viraram aulas de prática, e a Em C 4 ganhou o erro comum e o segundo exemplo. Cada fato vem de um motor novo, conferido em `PraticaLacunasTest`.
@@ -269,7 +286,7 @@ Conferidos, com o estado de cada um:
 2. **"Erros comuns" tinha sempre a resposta "errado"**: 29 de 29. Feito (item 8 acima).
 3. **92 das 192 perguntas das aulas animadas têm duas opções.** Feito: em 14/11 eram 106; ficaram 90 na vigésima rodada e 50 na vigésima primeira.
 4. **234 das 239 falas de acerto começam com "Isso".** Pendente. O lugar mais barato é `LessonScreen.kt`, que escreve "**Isso!**" no código, e as chaves `*_ok` dos textos.
-5. **Personagens sem vida**: nas trilhas o Byte tem 870 falas, a professora 63 e o Bug nenhuma. As aulas animadas soam secas; as de texto, engraçadas. Pendente.
+5. **Personagens sem vida**: nas trilhas o Byte tem 870 falas, a professora 63 e o Bug nenhuma. As aulas animadas soam secas; as de texto, engraçadas. Feito em parte (trigésima rodada): o Bug lança o desafio do fecho e a professora fecha cada aula.
 6. **Trechos longos só ouvindo**: até 6 cenas seguidas sem interação. Em FIRST, FOLLOW, tabela LL(1), descida recursiva, itens LR(0) e tabela SLR, a primeira interação vem na cena 6 ou 7. Pendente.
 7. **Termos usados antes de serem ensinados** (os quatro alunos acharam): LL(1), pilha e `$`, "empilhar", FOLLOW, LR e "ambiguidade" aparecem nas regiões 3 e 4 antes da 5 e da 6; Thompson, estado morto, `yytext`, front-end e back-end, prefixo viável, `error`, `yyerrok`, Chaitin e blocos básicos aparecem na ficha ou nos Bugs sem estar na aula animada. Pendente.
 8. **Nomes demais para a mesma coisa**: `casa`, `casaToken` e `match`; `X`, `E'` e `A'`; closure, fecho e fechamento; goto e desvio; ok, acc e aceita; cadeia, palavra, frase e sentença; regra, produção, alternativa e opção; "else solto" e "else pendurado"; "núcleo" para kernel e para core; cinco nomes para o parser descendente. Pendente.
