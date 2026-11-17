@@ -79,11 +79,8 @@ fun AberturaDoCampus(onFim: () -> Unit) {
         }
     }
     LaunchedEffect(Unit) { delay(AberturaDoCampus.PARADO_MS); entrar() }
-    val fundo = Modifier.fillMaxSize()
-        .graphicsLayer { alpha = 1f - ((zoom.value - 0.5f) / 0.5f).coerceIn(0f, 1f) }
-        .background(Palette.paperDark)
-        .clickable(remember { MutableInteractionSource() }, null) { entrar() }
-    BoxWithConstraints(fundo, contentAlignment = Alignment.Center) {
+    val toque = remember { MutableInteractionSource() }
+    BoxWithConstraints(Modifier.fundo(zoom.value).clickable(toque, null) { entrar() }, contentAlignment = Alignment.Center) {
         val lado = minOf(maxWidth * LARGURA, maxHeight)
         val alvo = Campus.iso(1f).p(Campus.ALVO)
         val e = zoom.value
@@ -109,6 +106,12 @@ private fun BoxScope.Legendas() {
         modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp),
     )
 }
+
+/** O fundo some na segunda metade da descida, mostrando a sala que já está por baixo. */
+@Composable
+private fun Modifier.fundo(e: Float) = fillMaxSize()
+    .graphicsLayer { alpha = 1f - ((e - 0.5f) / 0.5f).coerceIn(0f, 1f) }
+    .background(Palette.paperDark)
 
 /** A câmera desce no ponto [alvo] (fração do quadrado), trazendo ele para o meio enquanto aproxima. */
 private fun Modifier.camera(alvo: Offset, e: Float) = graphicsLayer {
