@@ -225,7 +225,6 @@
     <string name="epemc_isso_agora_vez_raiz">Agora é a vez da raiz.</string>
     <string name="epemc_mais_usa_resultado_vezes_que">O mais usa o resultado do vezes, que já está guardado na memória.</string>
     <string name="epemc_em_c_funcao_recursiva_gera">Em C, é uma função recursiva: gera os filhos e depois o pai.</string>
-    <string name="epemc_agora_monte_mips_na_ordem">Agora monte o MIPS na ordem certa, instrução por instrução.</string>
     <string name="epemc_antes_calcular_dois_valores_precisam">Antes de calcular, os dois valores precisam estar nos registradores.</string>
     <string name="epemc_exatamente_que_seu_gerador_em">É exatamente o que o seu gerador em C escreveria.</string>
     <string name="epemc_monte_mips_1">Monte o MIPS de %1$s.</string>

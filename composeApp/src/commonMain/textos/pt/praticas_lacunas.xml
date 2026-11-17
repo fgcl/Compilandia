@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos do Compilândia. A chave é o que o código usa em tx("chave"); %1$s, %2$s são trocados pelos valores. -->
+<resources>
+    <!-- EpPraticaLacunas.kt: tipos nos comandos -->
+    <string name="tcm_titulo">Tipos nos comandos</string>
+    <string name="tcm_01">A expressão já sabe subir o tipo. Agora o comando confere se esse tipo serve para ele.</string>
+    <string name="tcm_02">Na atribuição, o tipo da direita precisa caber na variável. Um int cabe num float, com coerção. Um float não cabe num int, porque a parte quebrada se perderia.</string>
+    <string name="tcm_03">Qual atribuição o verificador recusa? Toque.</string>
+    <string name="tcm_03_dica">Procure um float indo para um int.</string>
+    <string name="tcm_03_ok">O x vezes 2 sobe como float, e o n é int. Como em Java, é erro. Na segunda, o int vira float e passa.</string>
+    <string name="tcm_04">No if e no while, a condição precisa ser bool. Na nossa linguagem é como em Java: número não serve de condição.</string>
+    <string name="tcm_05">Qual condição o verificador recusa? Toque.</string>
+    <string name="tcm_05_dica">Qual delas sobe como int?</string>
+    <string name="tcm_05_ok">Sozinho, o n sobe como int. Em C passaria, mas aqui a condição precisa ser bool. Para testar o número, compare: n maior que zero.</string>
+    <string name="tcm_06">Na chamada, cada argumento precisa caber no parâmetro da mesma posição. No return, a expressão precisa caber no tipo que a função promete.</string>
+    <string name="tcm_07">Qual linha o verificador recusa? Toque.</string>
+    <string name="tcm_07_dica">Confira cada argumento com o parâmetro do mesmo lugar.</string>
+    <string name="tcm_07_ok">O primeiro parâmetro é int, e o x é float. Já o return de a mais b passa: o int vira float, como na atribuição.</string>
+    <string name="tcm_08">Atribuição, condição, chamada e return. Em todos, o comando compara o tipo que subiu com o tipo que ele espera.</string>
+
+    <!-- EpPraticaLacunas.kt: o DAG do bloco -->
+    <string name="dag_titulo">O DAG do bloco</string>
+    <string name="dag_01">Dentro de um bloco básico, o compilador pode montar um DAG. DAG é um grafo em que as setas nunca voltam.</string>
+    <string name="dag_02">Cada folha guarda o valor de entrada da variável: b zero e c zero. A conta da linha um vira um nó com dois filhos. O nó ganha o nome a.</string>
+    <string name="dag_03">A linha dois faz a menos d. Ela usa o nó do a, que já existe, e uma folha nova, d zero.</string>
+    <string name="dag_04">A linha quatro também faz a menos d. Qual linha já calculou esse valor? Toque.</string>
+    <string name="dag_04_dica">Procure a mesma conta, sem o a e o d mudarem no meio.</string>
+    <string name="dag_04_ok">Entre as duas, nem o a nem o d mudaram. O nó do menos ganha mais um nome, o d, e nenhum nó novo nasce.</string>
+    <string name="dag_05">Agora o nó do menos tem dois nomes: b e d.</string>
+    <string name="dag_06">E a linha três, c igual a b mais c? Ela repete a conta da linha um?</string>
+    <string name="dag_op_sim">Sim: é o mesmo b + c</string>
+    <string name="dag_op_b_mudou">Não: o b mudou na linha 2</string>
+    <string name="dag_op_esquerda">Não: o c está à esquerda</string>
+    <string name="dag_06_dica">Olhe o que a linha dois fez com o b.</string>
+    <string name="dag_06_ok">Mesmo texto, valor diferente. Agora o b é o nó do menos. Então o mais da linha três é um nó novo.</string>
+    <string name="dag_07">Quatro linhas, três contas. A linha quatro vira só d igual a b, sem conta nenhuma.</string>
+    <string name="dag_08">O DAG só junta nós com o mesmo operador e os mesmos filhos. É assim que ele acha a subexpressão comum.</string>
+
+    <!-- EpPraticaLacunas.kt: vivas no laço -->
+    <string name="vlc_titulo">Vivas no laço</string>
+    <string name="vlc_01">Este é o laço da soma em três endereços. A vivacidade que você viu andava de baixo para cima, num bloco sem desvio.</string>
+    <string name="vlc_02">Uma variável está viva se alguém ainda vai ler o valor dela. Num laço, o que vem depois do goto fica lá em cima.</string>
+    <string name="vlc_03">Depois que o i recebe o t3, qual linha lê o i primeiro? Toque.</string>
+    <string name="vlc_03_dica">Siga o goto. Ele volta para o rótulo do laço.</string>
+    <string name="vlc_03_ok">O goto volta, e o teste do laço lê o i. Então o i ainda está vivo no fim do corpo.</string>
+    <string name="vlc_04">Quem está vivo depois que o i recebe o t3?</string>
+    <string name="vlc_04_dica">Depois dessa linha vem o goto, e ele leva de volta ao teste.</string>
+    <string name="vlc_04_ok">O teste lê o i e o n, e o corpo ainda vai ler o s. Os três seguem vivos.</string>
+    <string name="vlc_05">O goto não cai na linha de baixo. Por isso a análise repete as passadas até nada mudar. Aqui, duas mudam algo, e a terceira só confere.</string>
+    <string name="vlc_06">No topo do laço, i, n e s estão vivos juntos. No grafo, os três brigam, e cada um precisa do seu registrador.</string>
+
+    <!-- EpEmC.kt: Em C 4, o erro comum e o segundo exemplo -->
+    <string name="emc4_erro">Um erro comum: escrever o pai antes dos filhos. Veja o mesmo MIPS com os blocos trocados.</string>
+    <string name="emc4_erro_titulo">Pai antes dos filhos</string>
+    <string name="emc4_erro_q">Qual linha lê um valor que ainda não foi guardado? Toque.</string>
+    <string name="emc4_erro_dica">Procure o tmp1. Que linha o guarda?</string>
+    <string name="emc4_erro_ok">Só a última linha guarda o tmp1. Por isso o gerador visita os filhos primeiro.</string>
+    <string name="emc4_segunda">Agora outra árvore: a vezes b mais c. O vezes ficou à esquerda. Monte o MIPS na ordem certa.</string>
+</resources>

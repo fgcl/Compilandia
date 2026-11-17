@@ -91,6 +91,15 @@ Os 12 relatórios estão completos (cada um termina em "As 5 coisas/melhorias").
 2. **A tabela SLR nasce das caixas de itens.** Quatro passos com os seis estados de `S → ( S ) | id`, os mesmos da aula de itens LR(0), e as regras numeradas na tela. O aluno põe o empilhar do estado do `(` com id e os r1 do estado do `)` nas colunas do FOLLOW; a tabela inteira sai do `LRTable`, sem conflito.
 3. **E/T na aula de ambiguidade.** O primeiro exemplo, `n + n * n`, ganha o conserto em dois níveis (`E → E + T | T`, `T → T * n | n`), a árvore única e a pergunta "por que o vezes fica sempre mais fundo?". O motor confere que só há uma derivação e que a árvore da tela é ela.
 
+## Feito em 17/11 (vigésima oitava rodada)
+
+Três lacunas do professor do bloco 5 viraram aulas de prática, e a Em C 4 ganhou o erro comum e o segundo exemplo. Cada fato vem de um motor novo, conferido em `PraticaLacunasTest`.
+
+1. **Tipos nos comandos** (prática de Atributos, `engine/TiposComandos.kt`). Atribuição, condição, chamada e return, um grupo de três linhas por vez, e a pessoa toca a que o verificador recusa: `n = x * 2;`, `if (n) ...` e `media(x, 2);`. A regra é a da Byteiro, estilo Java: int cabe em float com coerção, float não cabe em int, e a condição precisa ser bool. O acerto do if diz que em C passaria.
+2. **O DAG do bloco** (prática de Otimização, `engine/DagDoBloco.kt`). O bloco do Dragão, `a = b + c`, `b = a - d`, `c = b + c`, `d = a - d`, montado nó a nó. A linha 4 reaproveita o nó da linha 2; a linha 3 tem o mesmo texto da 1, mas o b mudou, e o engano "é o mesmo b + c" está entre as opções. São três contas para quatro linhas.
+3. **Vivas no laço** (prática de Alocação, `engine/VivacidadeComLaco.kt`). O laço da soma em TAC, com rótulos. Depois de `i = t3`, a pessoa segue o goto até o teste e escolhe quem está vivo: `{ i, n, s }`, contra `{ s }` (ler o goto como texto) e `{ i }`. A análise repete as passadas: duas mudam algo, a terceira confere. Sem desvio, ela dá o mesmo que o `RegAlloc`.
+4. **Em C 4: pai antes dos filhos e `a * b + c`.** O MIPS da aula com os blocos trocados, e a pergunta "qual linha lê um valor que ainda não foi guardado?" (`Mips.leAntesDeGuardar`). O brinquedo do fim pede o MIPS de `a * b + c`, em que o vezes fica à esquerda. A pergunta da Em C 2 que o professor citou já tinha três opções desde a troca para `2 * ( 3 + 4 )`.
+
 ## Feito em 15/11 (vigésima sétima rodada)
 
 Três pedidos do professor do bloco 5 e um do bloco 6, da seção 7 de [TAREFAS.md](TAREFAS.md):

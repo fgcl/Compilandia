@@ -223,7 +223,6 @@
     <string name="epemc_isso_agora_vez_raiz">Now it's the root's turn.</string>
     <string name="epemc_mais_usa_resultado_vezes_que">The plus uses the result of the times, which is already stored in memory.</string>
     <string name="epemc_em_c_funcao_recursiva_gera">In C, it's a recursive function: it generates the children and then the parent.</string>
-    <string name="epemc_agora_monte_mips_na_ordem">Now build the MIPS in the right order, instruction by instruction.</string>
     <string name="epemc_antes_calcular_dois_valores_precisam">Before computing, both values have to be in registers.</string>
     <string name="epemc_exatamente_que_seu_gerador_em">It's exactly what your generator in C would write.</string>
     <string name="epemc_monte_mips_1">Build the MIPS for %1$s.</string>

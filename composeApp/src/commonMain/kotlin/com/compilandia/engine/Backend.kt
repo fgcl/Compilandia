@@ -164,6 +164,12 @@ object Mips {
      */
     fun nomeiaTemporarios(linhas: List<String>): List<String> = linhas.map { it.replace(Regex("(?<![\$\\w])t(\\d+)\\b"), "tmp$1") }
 
+    /** As linhas `lw` que leem um tmp antes do `sw` que o guarda: o erro de gerar o pai antes dos filhos. */
+    fun leAntesDeGuardar(linhas: List<String>): List<Int> = linhas.indices.filter { i ->
+        val p = linhas[i].split(Regex("[ ,]+"))
+        p[0] == "lw" && p[2].startsWith("tmp") && linhas.indexOfFirst { it.startsWith("sw ") && it.endsWith(", ${p[2]}") } > i
+    }
+
     data class State(val regs: Map<String, Long>, val mem: Map<String, Long>)
 
     /** Executa li/lw/sw/add/sub/mul/div/move. Devolve o estado após cada instrução. */

@@ -137,7 +137,10 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Ambientes: na fala de acerto do colega, "o n chega em `$a0`, mas a próxima chamada escreve por cima"
 - [x] Alocação: "Fazer com ajuda" ou prática com a tabela de vivacidade
 - [x] Otimização: blocos básicos, líderes e código morto numa aula animada (hoje só nos textos)
-- [ ] Lacunas: acesso a vetor (`t = i * 4`, `la`/`sll`), verificação de tipos em comandos (atribuição, condição do if, chamada, return), tabela de símbolos com funções, vivacidade com laço, ação no meio da regra e herdado como parâmetro na descida, DAG de bloco básico
+- [x] Lacunas: verificação de tipos em comandos (atribuição, condição do if, chamada, return), na prática "Tipos nos comandos"
+- [x] Lacunas: DAG de bloco básico, na prática "O DAG do bloco"
+- [x] Lacunas: vivacidade com laço, na prática "Vivas no laço"
+- [ ] Lacunas que faltam: acesso a vetor (`t = i * 4`, `la`/`sll`) nas aulas animadas, tabela de símbolos com funções, ação no meio da regra e herdado como parâmetro na descida
 
 **Seu compilador (bloco 6)**
 - [x] Guia do TP: um "Estenda a Byteiro" por capítulo, com a resposta escondida (`==`, `repita … ate`, o método `repita()`, os tipos de `^`, o molde MIPS de `para`)
@@ -149,5 +152,7 @@ Origem: `docs/revisao/relatorios/professor_5_semantica_forja.md` e `professor_6_
 - [x] Guia do TP: bordas do MARS (`\` e acento no `.asciiz`, identificador acentuado virando rótulo)
 - [x] Em C 2 com `( expr )`, para a descida chamar a si mesma, e a ponte com `X -> + T X | ε` do Templo
 - [x] Em C 3 com o código que cria os nós (`e = novo('+', e, termo())`)
-- [ ] Série Em C: segundo exemplo e erro comum em cada aula; na Em C 4, pedir o MIPS de `a * b + c`; a pergunta da Em C 2, cena 7, com três opções
+- [x] Em C 4: erro comum (pai antes dos filhos) e o MIPS de `a * b + c` no brinquedo; a pergunta da Em C 2, cena 7, já tem três opções
+- [ ] Série Em C: segundo exemplo e erro comum nas aulas 1, 2, 3 e 5 (as três últimas já têm 10 cenas, o teto da série)
+- [ ] Em C 4, cena 6: o código do `gera` fica por cima das folhas da árvore
 - [x] Em C 5: uma fala de fecho ligando o `gera` da aula 4 às ações `{ }` do Bison
