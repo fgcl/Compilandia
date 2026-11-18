@@ -38,6 +38,15 @@
         "AGENTS.md#gradle@kit": "ca49dcc2867a162e",
         "scripts/parar-gradle.sh": "5684904f442b1423"
       }
+    },
+    "maquina": {
+      "versao": 1,
+      "arquivos": {
+        "AGENTS.md#maquina": "7e7c25fdab74d23b",
+        "AGENTS.md#maquina@kit": "7e7c25fdab74d23b",
+        "tools/preparar-maquina.sh": "39d7b0317076a235",
+        "tools/py.sh": "18298c84b1a0e22e"
+      }
     }
   },
   "stack": "kmp",
